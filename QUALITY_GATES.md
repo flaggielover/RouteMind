@@ -7,6 +7,7 @@ restart test; event-delivery changes do.
 
 - Control plane: `./scripts/verify.ps1`
 - Compose: `docker compose config --quiet`
+- Infrastructure health: `./scripts/infra.ps1 up`
 - Java: formatter, compiler, static analysis, migration validation
 - Python: formatter/linter, type checker, package and schema validation
 - Web: formatter, linter, type checker, production build

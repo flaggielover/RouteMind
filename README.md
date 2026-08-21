@@ -28,6 +28,17 @@ Inspect local prerequisites:
 ./scripts/doctor.ps1
 ```
 
+Start the local platform dependencies:
+
+```powershell
+./scripts/infra.ps1 up
+```
+
+This exposes PostgreSQL on `127.0.0.1:15432`, RabbitMQ AMQP on
+`127.0.0.1:15673`, RabbitMQ Management on `http://127.0.0.1:15674`, and Redis on
+`127.0.0.1:16379` by default. Local credentials come from `.env` or the safe
+development placeholders in `.env.example`; they are not production defaults.
+
 Large datasets and generated research artifacts belong in the external data
 boundary configured by `ROUTEMIND_DATA_ROOT`, not in Git.
 

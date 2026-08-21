@@ -27,6 +27,17 @@ try {
         throw "Task graph validation failed"
     }
 
+    if (Test-Path -LiteralPath "compose.yaml") {
+        if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+            throw "Docker is required to validate compose.yaml"
+        }
+        docker compose config --quiet
+        if ($LASTEXITCODE -ne 0) {
+            throw "Compose configuration validation failed"
+        }
+        Write-Host "PASS: Compose configuration"
+    }
+
     $scripts = Get-ChildItem -LiteralPath scripts -Filter "*.ps1"
     foreach ($script in $scripts) {
         $tokens = $null

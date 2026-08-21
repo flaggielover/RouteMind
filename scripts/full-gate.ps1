@@ -1,20 +1,24 @@
 [CmdletBinding()]
 param(
+    [switch] $Infrastructure,
     [switch] $KeepInfrastructure
 )
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
+$infrastructureWasRunning = $false
 
 Push-Location $root
 try {
     & (Join-Path $PSScriptRoot "verify.ps1")
 
-    if (Test-Path -LiteralPath "compose.yaml") {
-        docker compose config --quiet
+    if ($Infrastructure) {
+        $runningServices = @(docker compose ps --status running -q)
         if ($LASTEXITCODE -ne 0) {
-            throw "Compose configuration validation failed"
+            throw "Unable to inspect existing infrastructure state"
         }
+        $infrastructureWasRunning = $runningServices.Count -gt 0
+        & (Join-Path $PSScriptRoot "infra.ps1") -Action up
     }
 
     if (Test-Path -LiteralPath "services/business-api/mvnw.cmd") {
@@ -34,5 +38,8 @@ try {
     Write-Host "PASS: RouteMind full available gate"
 }
 finally {
+    if ($Infrastructure -and -not $KeepInfrastructure -and -not $infrastructureWasRunning) {
+        & (Join-Path $PSScriptRoot "infra.ps1") -Action down
+    }
     Pop-Location
 }
