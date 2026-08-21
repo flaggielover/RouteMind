@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: P1 Core Domain
 
-Current Task: RM-021 - Implement Inbox and idempotent consumer semantics
+Current Task: RM-022 - Implement Redis GEO courier projection
 
 Task Status: passed
 
@@ -37,6 +37,9 @@ RM-020 implements the versioned event envelope, transactional order command and
 Outbox write, pessimistic claim, stable event IDs, bounded retry, and RabbitMQ
 publisher confirms. Flyway V4 and real PostgreSQL/RabbitMQ health/persistence
 validation passed.
+RM-021 implements durable event-ID deduplication, processing-before-ack
+semantics, bounded retries, and observable dead-letter state. Flyway V5 and real
+PostgreSQL validation passed.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -62,6 +65,9 @@ The RM-011 commit `9872d76` passed all three GitHub Actions jobs in run
 RM-020 passed 27 Java tests, full available gates, Flyway V4/Hibernate
 validation on PostgreSQL 18.6, RabbitMQ health via the Compose-mapped port, and
 transactional order-to-Outbox persistence.
+RM-021 passed 30 Java tests, full available gates, Flyway V5/Hibernate
+validation on PostgreSQL 18.6, duplicate suppression, and persisted
+`DEAD_LETTER` attempt/error evidence.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
@@ -76,10 +82,10 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Execute RM-021 Inbox and idempotent consumer semantics
-with durable deduplication, acknowledgement ordering, retry, and DLQ paths.
+Next Recommended Action: Execute RM-022 Redis GEO courier projection with
+rebuildable projections, nearby queries, and outage degradation behavior.
 
-Next Candidate Task: RM-021 - Implement Inbox and idempotent consumer semantics
+Next Candidate Task: RM-022 - Implement Redis GEO courier projection
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

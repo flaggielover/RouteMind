@@ -2,11 +2,11 @@
 
 Current Phase: P1 Core Domain
 
-Overall: 9 / 20 tasks passed
+Overall: 10 / 20 tasks passed
 
-Current Task: RM-021 - Implement Inbox and idempotent consumer semantics
+Current Task: RM-022 - Implement Redis GEO courier projection
 
-Last Completed: RM-020 - Implement transactional Outbox publishing
+Last Completed: RM-021 - Implement Inbox and idempotent consumer semantics
 
 CI: PASS - GitHub Actions run 32498473119
 
