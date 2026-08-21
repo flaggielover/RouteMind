@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: P1 Core Domain
 
-Current Task: RM-050 - Implement seeded Digital Twin scenario kernel
+Current Task: RM-060 - Bootstrap role-aware web application
 
 Task Status: passed
 
@@ -51,6 +51,9 @@ registry, including rectangular matrix assignment and benchmark provenance.
 RM-040 implements point and matrix travel-time provider contracts, a
 deterministic local Haversine estimator, and timeout/error fallback with
 explicit provider and fallback metadata.
+RM-050 implements an immutable seeded scenario manifest, deterministic event
+kernel, dispatch/travel integration, replayable state transitions, and a
+canonical SHA-256 replay digest.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -97,6 +100,9 @@ The RM-030 commit `2a9b3de` passed all three GitHub Actions jobs in run
 RM-040 passed the full available gate with 29 Python tests and 97.24% total
 statement/branch coverage. Point/matrix estimates are deterministic and
 primary provider failures or timeouts are marked as fallback results.
+RM-050 passed the full available gate with 32 Python tests and 97.92% total
+statement/branch coverage. Repeated runs with the same manifest and seed are
+byte-identical; changed seed or inputs produce a different replay digest.
 The RM-040 commit `cf71191` passed all three GitHub Actions jobs in run
 `32504045099`.
 
@@ -113,10 +119,10 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Implement RM-050 seeded Digital Twin scenario kernel
-with deterministic replay and decision provenance.
+Next Recommended Action: Bootstrap RM-060 role-aware web application surfaces
+without duplicating the Java/Python runtime boundaries.
 
-Next Candidate Task: RM-050 - Implement seeded Digital Twin scenario kernel
+Next Candidate Task: RM-060 - Bootstrap role-aware web application
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

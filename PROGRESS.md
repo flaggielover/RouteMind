@@ -2,13 +2,13 @@
 
 Current Phase: P1 Core Domain
 
-Overall: 14 / 20 tasks passed
+Overall: 15 / 20 tasks passed
 
-Current Task: RM-050 - Implement seeded Digital Twin scenario kernel
+Current Task: RM-060 - Bootstrap role-aware web application
 
-Last Completed: RM-040 - Implement travel-model provider abstraction
+Last Completed: RM-050 - Implement seeded Digital Twin scenario kernel
 
-CI: PASS - GitHub Actions run 32504045099
+CI: PASS - local full gate; GitHub Actions pending RM-050 push
 
 Regression: PASS - Java, Python, locked install, and 4 schemas / 12 contract fixtures
 
