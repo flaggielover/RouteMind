@@ -5,6 +5,13 @@ spring:
     url: ${ROUTEMIND_POSTGRES_URL:jdbc:postgresql://127.0.0.1:${POSTGRES_PORT:15432}/${POSTGRES_DB:routemind}}
     username: ${POSTGRES_USER:routemind}
     password: ${POSTGRES_PASSWORD:change-me-local-only}
+  rabbitmq:
+    host: ${RABBITMQ_HOST:127.0.0.1}
+    port: ${RABBITMQ_AMQP_PORT:15673}
+    username: ${RABBITMQ_DEFAULT_USER:routemind}
+    password: ${RABBITMQ_DEFAULT_PASS:change-me-local-only}
+    publisher-confirm-type: correlated
+    publisher-returns: true
   flyway:
     create-schemas: true
     default-schema: routemind
@@ -33,3 +40,8 @@ management:
     web:
       exposure:
         include: health,info
+
+routemind:
+  rabbit:
+    publisher:
+      enabled: ${ROUTEMIND_RABBIT_PUBLISHER_ENABLED:true}

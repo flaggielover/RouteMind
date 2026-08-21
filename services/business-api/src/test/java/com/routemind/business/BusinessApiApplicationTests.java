@@ -43,9 +43,9 @@ class BusinessApiApplicationTests {
 	@Test
 	void flywayOwnsTheApplicationSchema() {
 		Integer migrationCount = jdbcTemplate.queryForObject(
-				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3') and success = true",
+				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4') and success = true",
 				Integer.class);
 
-		assertThat(migrationCount).isEqualTo(3);
+		assertThat(migrationCount).isEqualTo(4);
 	}
 }

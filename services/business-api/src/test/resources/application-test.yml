@@ -3,3 +3,13 @@ spring:
     url: jdbc:h2:mem:routemind;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
     username: sa
     password: ""
+
+routemind:
+  rabbit:
+    publisher:
+      enabled: false
+
+management:
+  health:
+    rabbit:
+      enabled: false

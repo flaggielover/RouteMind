@@ -2,11 +2,11 @@
 
 Current Phase: P1 Core Domain
 
-Overall: 8 / 20 tasks passed
+Overall: 9 / 20 tasks passed
 
-Current Task: RM-020 - Implement transactional Outbox publishing
+Current Task: RM-021 - Implement Inbox and idempotent consumer semantics
 
-Last Completed: RM-011 - Implement order lifecycle state machine
+Last Completed: RM-020 - Implement transactional Outbox publishing
 
 CI: PASS - GitHub Actions run 32498473119
 

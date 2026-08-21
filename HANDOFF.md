@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: P1 Core Domain
 
-Current Task: RM-010 - Implement core identity and party model
+Current Task: RM-021 - Implement Inbox and idempotent consumer semantics
 
 Task Status: passed
 
@@ -33,6 +33,10 @@ repository tests and a real PostgreSQL 18.6 migration/constraint probe passed.
 RM-011 implements the order lifecycle state machine, immutable transition audit,
 JPA persistence, Flyway V3, and optimistic database versioning. Domain and
 repository tests plus a real PostgreSQL migration/persistence probe passed.
+RM-020 implements the versioned event envelope, transactional order command and
+Outbox write, pessimistic claim, stable event IDs, bounded retry, and RabbitMQ
+publisher confirms. Flyway V4 and real PostgreSQL/RabbitMQ health/persistence
+validation passed.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -55,6 +59,9 @@ coverage, Flyway V3/Hibernate validation on PostgreSQL 18.6, and persisted
 transition audit rows.
 The RM-011 commit `9872d76` passed all three GitHub Actions jobs in run
 `32498473119`.
+RM-020 passed 27 Java tests, full available gates, Flyway V4/Hibernate
+validation on PostgreSQL 18.6, RabbitMQ health via the Compose-mapped port, and
+transactional order-to-Outbox persistence.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
@@ -69,10 +76,10 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Execute RM-020 transactional Outbox publishing with
-atomic aggregate updates, relay confirmation, and bounded retry.
+Next Recommended Action: Execute RM-021 Inbox and idempotent consumer semantics
+with durable deduplication, acknowledgement ordering, retry, and DLQ paths.
 
-Next Candidate Task: RM-020 - Implement transactional Outbox publishing
+Next Candidate Task: RM-021 - Implement Inbox and idempotent consumer semantics
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
