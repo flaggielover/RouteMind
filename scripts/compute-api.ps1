@@ -9,8 +9,10 @@ $uvVersion = "0.12.5"
 $root = Split-Path -Parent $PSScriptRoot
 $serviceRoot = Join-Path $root "services/compute-api"
 $toolRoot = Join-Path $root ".tools/uv"
-$toolPython = Join-Path $toolRoot "Scripts/python.exe"
-$uv = Join-Path $toolRoot "Scripts/uv.exe"
+$onWindows = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT
+$toolBin = if ($onWindows) { Join-Path $toolRoot "Scripts" } else { Join-Path $toolRoot "bin" }
+$toolPython = Join-Path $toolBin $(if ($onWindows) { "python.exe" } else { "python" })
+$uv = Join-Path $toolBin $(if ($onWindows) { "uv.exe" } else { "uv" })
 
 function Get-RepositoryPython {
     $python = Get-Command python -ErrorAction SilentlyContinue

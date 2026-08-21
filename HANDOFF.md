@@ -8,7 +8,7 @@ Current Phase: P0 Foundation
 
 Current Task: RM-005 - Create continuous integration baseline
 
-Task Status: ready
+Task Status: validating
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -24,6 +24,9 @@ strict boundary/type/lint gates, and loopback-only health/system endpoints.
 RM-004 added independently versioned JSON Schema 2020-12 API/event contracts,
 a conservative compatibility policy, positive/negative fixtures, permanent v1
 compatibility baselines, and an executable validator in the frozen Python gate.
+RM-005 has a least-privilege GitHub Actions workflow with independent control,
+Java, and Python/contract jobs. The Python bootstrap is now portable across
+Windows and Linux PowerShell.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -44,15 +47,19 @@ The first Python dependency sync took several minutes because uv's cache and the
 workspace are on filesystems that do not support hardlinks. The script now fixes
 copy mode; subsequent frozen syncs are incremental.
 
-Known Blockers: NONE
+Known Blockers: RM-005 requires its first remote GitHub Actions run.
+
+External Validation Blocker: No Git remote is configured. The RM-005 workflow
+cannot receive a real GitHub Actions run until a remote repository is provided or
+authorized. Local gates pass, but RM-005 must not be marked passed yet.
 
 Important Context: Keep Java business correctness separate from Python compute and
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Execute RM-005 with CI jobs for control-plane/Compose,
-Java, frozen Python and contract gates. Keep dependency caches performance-only
-and preserve clear per-job evidence.
+Next Recommended Action: Configure an authorized GitHub remote, push `main`, and
+observe all three CI jobs. On green, record run evidence and mark RM-005 passed;
+on failure, repair the workflow without weakening gates.
 
 Next Candidate Task: RM-005 - Create continuous integration baseline
 

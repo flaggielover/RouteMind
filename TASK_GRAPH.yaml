@@ -74,12 +74,12 @@
       "phase": "P0",
       "priority": "high",
       "depends_on": ["RM-002", "RM-003", "RM-004"],
-      "status": "ready",
+      "status": "validating",
       "acceptance": ["Static, unit, and contract gates run in CI", "Dependency caches do not hide correctness", "Evidence distinguishes local and CI validation"],
       "gates": ["L1-ci", "L2-ci"],
       "evidence": [],
       "blocked_by": [],
-      "notes": "Do not weaken gates to obtain green status."
+      "notes": "Workflow implemented locally; no Git remote exists, so external CI execution is not yet observable. Do not weaken gates to obtain green status."
     },
     {
       "id": "RM-010",
