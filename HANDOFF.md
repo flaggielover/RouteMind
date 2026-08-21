@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: P1 Core Domain
 
-Current Task: RM-031 - Implement weighted greedy and Hungarian baselines
+Current Task: RM-040 - Implement travel-model provider abstraction
 
 Task Status: passed
 
@@ -46,6 +46,8 @@ real PostgreSQL/Redis validation, and Redis-outage durability tests passed.
 RM-030 implements the versioned Python dispatch result, a replaceable strategy
 registry, and a deterministic Haversine nearest baseline with tie-breaking,
 latency, and decision metadata.
+RM-031 implements weighted-greedy and Hungarian baselines through the same
+registry, including rectangular matrix assignment and benchmark provenance.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -81,6 +83,10 @@ RM-030 passed the full compute gate: 23 Python tests, strict mypy, Ruff, all
 contract fixtures, and 100% statement/branch coverage. The nearest baseline
 selects by `(distance_km, courier_id)` and the registry records solve latency,
 strategy version, candidate count, and assignment status.
+RM-031 passed the full available gate with 26 Python tests and 96.43% total
+statement/branch coverage. Weighted-greedy and Hungarian results share the
+versioned registry contract; a smoke benchmark records strategy, version,
+latency, selected courier, and provenance.
 The RM-030 commit `2a9b3de` passed all three GitHub Actions jobs in run
 `32502960806`.
 
@@ -97,10 +103,10 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Implement RM-031 weighted greedy and Hungarian
-baselines through the RM-030 registry contract.
+Next Recommended Action: Implement RM-040 travel-model provider abstraction
+with deterministic local estimates and explicit timeout/fallback behavior.
 
-Next Candidate Task: RM-031 - Implement weighted greedy and Hungarian baselines
+Next Candidate Task: RM-040 - Implement travel-model provider abstraction
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

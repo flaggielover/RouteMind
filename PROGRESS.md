@@ -2,13 +2,13 @@
 
 Current Phase: P1 Core Domain
 
-Overall: 12 / 20 tasks passed
+Overall: 13 / 20 tasks passed
 
-Current Task: RM-031 - Implement weighted greedy and Hungarian baselines
+Current Task: RM-040 - Implement travel-model provider abstraction
 
-Last Completed: RM-030 - Implement dispatch strategy registry and nearest baseline
+Last Completed: RM-031 - Implement weighted greedy and Hungarian baselines
 
-CI: PASS - GitHub Actions run 32502960806
+CI: PASS - local full gate; GitHub Actions pending RM-031 push
 
 Regression: PASS - Java, Python, locked install, and 4 schemas / 12 contract fixtures
 

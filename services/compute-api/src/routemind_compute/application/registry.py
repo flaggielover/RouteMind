@@ -54,3 +54,10 @@ class StrategyRegistry:
             latency_millis=elapsed_millis,
             metadata=metadata,
         )
+
+
+def default_registry() -> StrategyRegistry:
+    from routemind_compute.application.baselines import HungarianStrategy, WeightedGreedyStrategy
+    from routemind_compute.application.nearest import NearestStrategy
+
+    return StrategyRegistry((NearestStrategy(), WeightedGreedyStrategy(), HungarianStrategy()))
