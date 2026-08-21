@@ -139,7 +139,7 @@
       "phase": "P2",
       "priority": "high",
       "depends_on": ["RM-010", "RM-020"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Courier location projection is rebuildable", "Nearby query behavior is tested", "Redis outage preserves durable writes and exposes degradation"],
       "gates": ["L3-redis", "L5-degradation"],
       "evidence": ["evidence/gates/RM-022/2026-08-22-redis-geo.md"],
