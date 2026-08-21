@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: P1 Core Domain
 
-Current Task: RM-040 - Implement travel-model provider abstraction
+Current Task: RM-050 - Implement seeded Digital Twin scenario kernel
 
 Task Status: passed
 
@@ -48,6 +48,9 @@ registry, and a deterministic Haversine nearest baseline with tie-breaking,
 latency, and decision metadata.
 RM-031 implements weighted-greedy and Hungarian baselines through the same
 registry, including rectangular matrix assignment and benchmark provenance.
+RM-040 implements point and matrix travel-time provider contracts, a
+deterministic local Haversine estimator, and timeout/error fallback with
+explicit provider and fallback metadata.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -91,6 +94,9 @@ The RM-031 commit `bf44e12` passed all three GitHub Actions jobs in run
 `32503389125`.
 The RM-030 commit `2a9b3de` passed all three GitHub Actions jobs in run
 `32502960806`.
+RM-040 passed the full available gate with 29 Python tests and 97.24% total
+statement/branch coverage. Point/matrix estimates are deterministic and
+primary provider failures or timeouts are marked as fallback results.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
@@ -105,10 +111,10 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Implement RM-040 travel-model provider abstraction
-with deterministic local estimates and explicit timeout/fallback behavior.
+Next Recommended Action: Implement RM-050 seeded Digital Twin scenario kernel
+with deterministic replay and decision provenance.
 
-Next Candidate Task: RM-040 - Implement travel-model provider abstraction
+Next Candidate Task: RM-050 - Implement seeded Digital Twin scenario kernel
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

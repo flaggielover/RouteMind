@@ -2,13 +2,13 @@
 
 Current Phase: P1 Core Domain
 
-Overall: 13 / 20 tasks passed
+Overall: 14 / 20 tasks passed
 
-Current Task: RM-040 - Implement travel-model provider abstraction
+Current Task: RM-050 - Implement seeded Digital Twin scenario kernel
 
-Last Completed: RM-031 - Implement weighted greedy and Hungarian baselines
+Last Completed: RM-040 - Implement travel-model provider abstraction
 
-CI: PASS - GitHub Actions run 32503389125
+CI: PASS - local full gate; GitHub Actions pending RM-040 push
 
 Regression: PASS - Java, Python, locked install, and 4 schemas / 12 contract fixtures
 
