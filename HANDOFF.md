@@ -30,6 +30,9 @@ Windows and Linux PowerShell.
 RM-010 implements sealed customer, merchant, and courier identities, audited
 party aggregates, Flyway V2 persistence, and a JPA repository adapter. H2
 repository tests and a real PostgreSQL 18.6 migration/constraint probe passed.
+RM-011 implements the order lifecycle state machine, immutable transition audit,
+JPA persistence, Flyway V3, and optimistic database versioning. Domain and
+repository tests plus a real PostgreSQL migration/persistence probe passed.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -47,6 +50,9 @@ caught Windows-specific Java wrapper paths; commit `de5e608` made JDK and wrappe
 discovery portable, after which control, Java, and Python/contract jobs passed.
 RM-010 passed 18 Java tests, architecture checks, Flyway V2/Hibernate validation
 on PostgreSQL 18.6, health `UP`, role-scoped uniqueness, and audit-order checks.
+RM-011 passed 22 Java tests, explicit happy/forbidden/repeated/stale command
+coverage, Flyway V3/Hibernate validation on PostgreSQL 18.6, and persisted
+transition audit rows.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
@@ -61,10 +67,10 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Execute RM-011 order lifecycle state machine with
-explicit transitions, concurrency behavior, and auditability.
+Next Recommended Action: Execute RM-020 transactional Outbox publishing with
+atomic aggregate updates, relay confirmation, and bounded retry.
 
-Next Candidate Task: RM-011 - Implement order lifecycle state machine
+Next Candidate Task: RM-020 - Implement transactional Outbox publishing
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

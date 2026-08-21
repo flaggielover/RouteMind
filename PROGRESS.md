@@ -2,11 +2,11 @@
 
 Current Phase: P1 Core Domain
 
-Overall: 7 / 20 tasks passed
+Overall: 8 / 20 tasks passed
 
-Current Task: RM-011 - Implement order lifecycle state machine
+Current Task: RM-020 - Implement transactional Outbox publishing
 
-Last Completed: RM-010 - Implement core identity and party model
+Last Completed: RM-011 - Implement order lifecycle state machine
 
 CI: PASS - GitHub Actions run 32496271644
 
@@ -16,7 +16,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-011
+Next Candidates: RM-020
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
