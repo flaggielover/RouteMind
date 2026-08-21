@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.routemind.local/api/v1/dispatch-decision.schema.json",
+  "title": "RouteMind Dispatch Decision v1",
+  "type": "object",
+  "required": ["requestId", "strategy", "strategyVersion", "courierId", "score", "rationale"],
+  "properties": {
+    "requestId": {"type": "string", "format": "uuid"},
+    "strategy": {"type": "string", "minLength": 1},
+    "strategyVersion": {"type": "string", "minLength": 1},
+    "courierId": {"type": ["string", "null"], "format": "uuid"},
+    "score": {"type": ["number", "null"]},
+    "rationale": {"type": "array", "items": {"type": "string"}}
+  },
+  "allOf": [
+    {"if": {"properties": {"courierId": {"type": "null"}}}, "then": {"properties": {"score": {"type": "null"}}}}
+  ],
+  "additionalProperties": false
+}

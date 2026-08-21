@@ -2,21 +2,21 @@
 
 Current Phase: P0 Foundation
 
-Overall: 4 / 20 tasks passed
+Overall: 5 / 20 tasks passed
 
-Current Task: RM-004 - Establish versioned API and event contracts
+Current Task: RM-005 - Create continuous integration baseline
 
-Last Completed: RM-003 - Bootstrap Python compute service
+Last Completed: RM-004 - Establish versioned API and event contracts
 
 CI: NOT CONFIGURED
 
-Regression: PASS - static, Java, Python lint/type/test, locked install, and live HTTP
+Regression: PASS - Java, Python, locked install, and 4 schemas / 12 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-004
+Next Candidates: RM-005
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

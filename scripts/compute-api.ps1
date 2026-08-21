@@ -81,9 +81,10 @@ try {
         }
         "check" {
             Invoke-Uv @("sync", "--frozen", "--python", $pythonPath)
-            Invoke-Uv @("run", "--frozen", "ruff", "check", ".")
-            Invoke-Uv @("run", "--frozen", "ruff", "format", "--check", ".")
-            Invoke-Uv @("run", "--frozen", "mypy", "src", "tests")
+            Invoke-Uv @("run", "--frozen", "ruff", "check", ".", "../../scripts/validate_contracts.py")
+            Invoke-Uv @("run", "--frozen", "ruff", "format", "--check", ".", "../../scripts/validate_contracts.py")
+            Invoke-Uv @("run", "--frozen", "mypy", "src", "tests", "../../scripts/validate_contracts.py")
+            Invoke-Uv @("run", "--frozen", "python", "../../scripts/validate_contracts.py")
             Invoke-Uv @("run", "--frozen", "pytest")
         }
         "run" {

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.routemind.local/api/v1/health.schema.json",
+  "title": "RouteMind Health v1",
+  "type": "object",
+  "required": ["status"],
+  "properties": {"status": {"const": "UP"}},
+  "additionalProperties": false
+}

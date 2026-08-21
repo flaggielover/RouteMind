@@ -1,0 +1,13 @@
+{
+  "specVersion": "1.0",
+  "eventId": "duplicate-friendly-id",
+  "eventType": "Dispatch Decision",
+  "occurredAt": "yesterday",
+  "producer": "compute-api",
+  "aggregateId": "11111111-1111-4111-8111-111111111111",
+  "aggregateVersion": 0,
+  "correlationId": "44444444-4444-4444-8444-444444444444",
+  "causationId": null,
+  "traceId": "short",
+  "payload": {}
+}

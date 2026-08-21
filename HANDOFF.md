@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: P0 Foundation
 
-Current Task: RM-004 - Establish versioned API and event contracts
+Current Task: RM-005 - Create continuous integration baseline
 
 Task Status: ready
 
@@ -21,6 +21,9 @@ schema ownership.
 RM-003 added the Python 3.12-3.14/FastAPI compute runtime, an isolated pinned uv
 bootstrap, a hash-bearing lock file, framework-free dispatch strategy contracts,
 strict boundary/type/lint gates, and loopback-only health/system endpoints.
+RM-004 added independently versioned JSON Schema 2020-12 API/event contracts,
+a conservative compatibility policy, positive/negative fixtures, permanent v1
+compatibility baselines, and an executable validator in the frozen Python gate.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -31,6 +34,8 @@ and Flyway history `1:true`. RouteMind processes and containers were stopped.
 RM-003 passed Ruff, format, strict mypy, 16 tests with 100% statement/branch
 coverage, locked synchronization, and a live Uvicorn HTTP probe. The Python
 process was stopped cleanly.
+RM-004 validated four schemas and twelve fixtures, including UUID/date-time
+formats, dispatch invariants, and stable event/correlation/causation/trace fields.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
@@ -45,16 +50,17 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Execute RM-004 by defining independently versioned HTTP
-and event contracts, compatibility rules, validation fixtures, and correlation /
-causation / trace / event identity fields.
+Next Recommended Action: Execute RM-005 with CI jobs for control-plane/Compose,
+Java, frozen Python and contract gates. Keep dependency caches performance-only
+and preserve clear per-job evidence.
 
-Next Candidate Task: RM-004 - Establish versioned API and event contracts
+Next Candidate Task: RM-005 - Create continuous integration baseline
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
 `scripts/compute-api.ps1`, `services/business-api/README.md`,
-`services/compute-api/README.md`, `docs/runbooks/local-development.md`
+`services/compute-api/README.md`, `contracts/README.md`,
+`docs/runbooks/local-development.md`
 
 Do Not Do: Do not collapse the dual runtime, treat Redis as durable truth, bypass
 Outbox/Inbox reliability, put large data in Git, or mark tasks passed without gates.
