@@ -3,8 +3,15 @@
 ## Prerequisites
 
 Use PowerShell 7 or Windows PowerShell with Git, Python, Java, Node.js, Docker
-Desktop, and the Docker Compose plugin. Java builds will use a repository wrapper
-once RM-002 creates the business service, so global Maven/Gradle is not required.
+Desktop, and the Docker Compose plugin. Java builds use the repository Maven
+Wrapper, so a global Maven installation is not required.
+
+The Java command derives `JAVA_HOME` from the active JDK on `PATH`; this avoids a
+stale machine-level `JAVA_HOME` selecting a different runtime:
+
+```powershell
+./scripts/business-api.ps1 test
+```
 
 Run:
 

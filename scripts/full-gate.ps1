@@ -22,10 +22,7 @@ try {
     }
 
     if (Test-Path -LiteralPath "services/business-api/mvnw.cmd") {
-        & "services/business-api/mvnw.cmd" -q test
-        if ($LASTEXITCODE -ne 0) {
-            throw "Java tests failed"
-        }
+        & (Join-Path $PSScriptRoot "business-api.ps1") -Action test
     }
 
     if (Test-Path -LiteralPath "services/compute-api/pyproject.toml") {

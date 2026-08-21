@@ -34,6 +34,13 @@ Start the local platform dependencies:
 ./scripts/infra.ps1 up
 ```
 
+Build or run the durable Java business service:
+
+```powershell
+./scripts/business-api.ps1 test
+./scripts/business-api.ps1 run
+```
+
 This exposes PostgreSQL on `127.0.0.1:15432`, RabbitMQ AMQP on
 `127.0.0.1:15673`, RabbitMQ Management on `http://127.0.0.1:15674`, and Redis on
 `127.0.0.1:16379` by default. Local credentials come from `.env` or the safe

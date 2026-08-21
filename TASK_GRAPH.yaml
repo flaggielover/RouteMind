@@ -35,10 +35,10 @@
       "phase": "P0",
       "priority": "critical",
       "depends_on": ["RM-001"],
-      "status": "ready",
+      "status": "passed",
       "acceptance": ["Java service builds with repository wrapper", "Health endpoint and layered module boundaries are tested", "PostgreSQL migration tooling is configured"],
       "gates": ["L1-java", "L2-java"],
-      "evidence": [],
+      "evidence": ["evidence/gates/RM-002/2026-08-21-business-api.md"],
       "blocked_by": [],
       "notes": "Java owns durable business and transactional paths."
     },
