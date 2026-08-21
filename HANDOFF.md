@@ -81,6 +81,8 @@ RM-030 passed the full compute gate: 23 Python tests, strict mypy, Ruff, all
 contract fixtures, and 100% statement/branch coverage. The nearest baseline
 selects by `(distance_km, courier_id)` and the registry records solve latency,
 strategy version, candidate count, and assignment status.
+The RM-030 commit `2a9b3de` passed all three GitHub Actions jobs in run
+`32502960806`.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.

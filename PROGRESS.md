@@ -8,7 +8,7 @@ Current Task: RM-031 - Implement weighted greedy and Hungarian baselines
 
 Last Completed: RM-030 - Implement dispatch strategy registry and nearest baseline
 
-CI: PASS - local compute gate; GitHub Actions pending RM-030 push
+CI: PASS - GitHub Actions run 32502960806
 
 Regression: PASS - Java, Python, locked install, and 4 schemas / 12 contract fixtures
 
