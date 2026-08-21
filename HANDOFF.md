@@ -8,7 +8,7 @@ Current Phase: P1 Core Domain
 
 Current Task: RM-010 - Implement core identity and party model
 
-Task Status: ready
+Task Status: passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -27,6 +27,9 @@ compatibility baselines, and an executable validator in the frozen Python gate.
 RM-005 has a least-privilege GitHub Actions workflow with independent control,
 Java, and Python/contract jobs. The Python bootstrap is now portable across
 Windows and Linux PowerShell.
+RM-010 implements sealed customer, merchant, and courier identities, audited
+party aggregates, Flyway V2 persistence, and a JPA repository adapter. H2
+repository tests and a real PostgreSQL 18.6 migration/constraint probe passed.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -42,6 +45,8 @@ formats, dispatch invariants, and stable event/correlation/causation/trace field
 RM-005 passed all three jobs in GitHub Actions run 32496271644. The first run
 caught Windows-specific Java wrapper paths; commit `de5e608` made JDK and wrapper
 discovery portable, after which control, Java, and Python/contract jobs passed.
+RM-010 passed 18 Java tests, architecture checks, Flyway V2/Hibernate validation
+on PostgreSQL 18.6, health `UP`, role-scoped uniqueness, and audit-order checks.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
@@ -56,11 +61,10 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Execute RM-010 with explicit customer, merchant, and
-courier invariants, migration-owned persistence, audit metadata, repository
-tests, and a real PostgreSQL integration gate.
+Next Recommended Action: Execute RM-011 order lifecycle state machine with
+explicit transitions, concurrency behavior, and auditability.
 
-Next Candidate Task: RM-010 - Implement core identity and party model
+Next Candidate Task: RM-011 - Implement order lifecycle state machine
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
