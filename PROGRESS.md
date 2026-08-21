@@ -8,7 +8,7 @@ Current Task: RM-040 - Implement travel-model provider abstraction
 
 Last Completed: RM-031 - Implement weighted greedy and Hungarian baselines
 
-CI: PASS - local full gate; GitHub Actions pending RM-031 push
+CI: PASS - GitHub Actions run 32503389125
 
 Regression: PASS - Java, Python, locked install, and 4 schemas / 12 contract fixtures
 

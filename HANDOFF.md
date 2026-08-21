@@ -87,6 +87,8 @@ RM-031 passed the full available gate with 26 Python tests and 96.43% total
 statement/branch coverage. Weighted-greedy and Hungarian results share the
 versioned registry contract; a smoke benchmark records strategy, version,
 latency, selected courier, and provenance.
+The RM-031 commit `bf44e12` passed all three GitHub Actions jobs in run
+`32503389125`.
 The RM-030 commit `2a9b3de` passed all three GitHub Actions jobs in run
 `32502960806`.
 
