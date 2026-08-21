@@ -41,6 +41,13 @@ Build or run the durable Java business service:
 ./scripts/business-api.ps1 run
 ```
 
+Validate or run the stateless Python compute service:
+
+```powershell
+./scripts/compute-api.ps1 check
+./scripts/compute-api.ps1 run
+```
+
 This exposes PostgreSQL on `127.0.0.1:15432`, RabbitMQ AMQP on
 `127.0.0.1:15673`, RabbitMQ Management on `http://127.0.0.1:15674`, and Redis on
 `127.0.0.1:16379` by default. Local credentials come from `.env` or the safe

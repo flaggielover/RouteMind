@@ -13,6 +13,13 @@ stale machine-level `JAVA_HOME` selecting a different runtime:
 ./scripts/business-api.ps1 test
 ```
 
+The Python command installs pinned `uv` into the ignored `.tools` directory and
+syncs the compute environment strictly from `uv.lock`:
+
+```powershell
+./scripts/compute-api.ps1 check
+```
+
 Run:
 
 ```powershell
@@ -42,6 +49,8 @@ Default endpoints:
 - RabbitMQ AMQP: `127.0.0.1:15673`
 - RabbitMQ Management: `http://127.0.0.1:15674`
 - Redis: `127.0.0.1:16379`
+- Business API: `http://127.0.0.1:18080`
+- Compute API: `http://127.0.0.1:18081`
 
 All published ports bind to loopback. Applications inside the Compose project use
 service DNS names (`postgres`, `rabbitmq`, `redis`) and container ports.

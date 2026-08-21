@@ -26,10 +26,7 @@ try {
     }
 
     if (Test-Path -LiteralPath "services/compute-api/pyproject.toml") {
-        python -m pytest services/compute-api
-        if ($LASTEXITCODE -ne 0) {
-            throw "Python tests failed"
-        }
+        & (Join-Path $PSScriptRoot "compute-api.ps1") -Action check
     }
 
     Write-Host "PASS: RouteMind full available gate"

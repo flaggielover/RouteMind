@@ -1,0 +1,97 @@
+[CmdletBinding()]
+param(
+    [ValidateSet("sync", "test", "check", "run", "lock")]
+    [string] $Action = "check"
+)
+
+$ErrorActionPreference = "Stop"
+$uvVersion = "0.12.5"
+$root = Split-Path -Parent $PSScriptRoot
+$serviceRoot = Join-Path $root "services/compute-api"
+$toolRoot = Join-Path $root ".tools/uv"
+$toolPython = Join-Path $toolRoot "Scripts/python.exe"
+$uv = Join-Path $toolRoot "Scripts/uv.exe"
+
+function Get-RepositoryPython {
+    $python = Get-Command python -ErrorAction SilentlyContinue
+    if (-not $python) {
+        throw "Python 3.12 or newer is required"
+    }
+
+    $versionText = & $python.Source -c "import platform; print(platform.python_version())"
+    if ($LASTEXITCODE -ne 0 -or $versionText -notmatch '^(\d+)\.(\d+)') {
+        throw "Unable to inspect Python at $($python.Source)"
+    }
+
+    $major = [int]$Matches[1]
+    $minor = [int]$Matches[2]
+    if ($major -ne 3 -or $minor -lt 12 -or $minor -ge 15) {
+        throw "Python 3.12 through 3.14 is required; found $versionText"
+    }
+
+    return $python.Source
+}
+
+function Initialize-Uv([string] $PythonPath) {
+    $installedVersion = $null
+    if (Test-Path -LiteralPath $uv) {
+        $installedVersion = ((& $uv --version) -split '\s+')[1]
+    }
+
+    if ($installedVersion -eq $uvVersion) {
+        return
+    }
+
+    & $PythonPath -m venv --clear $toolRoot
+    if ($LASTEXITCODE -ne 0) {
+        throw "Unable to create the isolated uv tool environment"
+    }
+
+    & $toolPython -m pip install --disable-pip-version-check --no-input "uv==$uvVersion"
+    if ($LASTEXITCODE -ne 0) {
+        throw "Unable to install uv $uvVersion"
+    }
+}
+
+function Invoke-Uv([string[]] $Arguments) {
+    & $uv @Arguments
+    if ($LASTEXITCODE -ne 0) {
+        throw "uv command failed: $($Arguments -join ' ')"
+    }
+}
+
+if (-not (Test-Path -LiteralPath (Join-Path $serviceRoot "pyproject.toml"))) {
+    throw "Compute API pyproject.toml is missing"
+}
+
+$pythonPath = Get-RepositoryPython
+Initialize-Uv $pythonPath
+$env:UV_LINK_MODE = "copy"
+$runtimeVersion = & $pythonPath --version
+Write-Host "Using $runtimeVersion and uv $uvVersion"
+
+Push-Location $serviceRoot
+try {
+    switch ($Action) {
+        "lock" { Invoke-Uv @("lock", "--python", $pythonPath) }
+        "sync" { Invoke-Uv @("sync", "--frozen", "--python", $pythonPath) }
+        "test" {
+            Invoke-Uv @("sync", "--frozen", "--python", $pythonPath)
+            Invoke-Uv @("run", "--frozen", "pytest")
+        }
+        "check" {
+            Invoke-Uv @("sync", "--frozen", "--python", $pythonPath)
+            Invoke-Uv @("run", "--frozen", "ruff", "check", ".")
+            Invoke-Uv @("run", "--frozen", "ruff", "format", "--check", ".")
+            Invoke-Uv @("run", "--frozen", "mypy", "src", "tests")
+            Invoke-Uv @("run", "--frozen", "pytest")
+        }
+        "run" {
+            Invoke-Uv @("sync", "--frozen", "--python", $pythonPath)
+            Invoke-Uv @("run", "--frozen", "routemind-compute-api")
+        }
+    }
+}
+finally {
+    Pop-Location
+}
