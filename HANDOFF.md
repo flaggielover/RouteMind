@@ -97,6 +97,8 @@ The RM-030 commit `2a9b3de` passed all three GitHub Actions jobs in run
 RM-040 passed the full available gate with 29 Python tests and 97.24% total
 statement/branch coverage. Point/matrix estimates are deterministic and
 primary provider failures or timeouts are marked as fallback results.
+The RM-040 commit `cf71191` passed all three GitHub Actions jobs in run
+`32504045099`.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
