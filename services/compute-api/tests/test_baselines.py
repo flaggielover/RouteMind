@@ -39,6 +39,12 @@ def test_hungarian_assignment_solves_rectangular_and_transposed_matrices() -> No
 def test_weighted_greedy_rejects_invalid_weights_and_benchmark_records_provenance() -> None:
     with pytest.raises(ValueError, match="positive"):
         WeightedGreedyStrategy(0).solve(make_problem())
+    with pytest.raises(ValueError, match="positive"):
+        WeightedGreedyStrategy(float("inf")).solve(make_problem())
+
+    empty = DispatchProblem("empty", GeoPoint(0, 0), ())
+    assert WeightedGreedyStrategy().solve(empty).courier_id is None
+    assert HungarianStrategy().solve(empty).courier_id is None
 
     records = benchmark_problem(
         StrategyRegistry((NearestStrategy(), WeightedGreedyStrategy())),
