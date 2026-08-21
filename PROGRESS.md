@@ -2,13 +2,13 @@
 
 Current Phase: P1 Core Domain
 
-Overall: 10 / 20 tasks passed
+Overall: 11 / 20 tasks passed
 
-Current Task: RM-022 - Implement Redis GEO courier projection
+Current Task: RM-030 - Implement dispatch strategy registry and nearest baseline
 
-Last Completed: RM-021 - Implement Inbox and idempotent consumer semantics
+Last Completed: RM-022 - Implement Redis GEO courier projection
 
-CI: PASS - GitHub Actions run 32498473119
+CI: PASS - local full gate; GitHub Actions pending RM-022 push
 
 Regression: PASS - Java, Python, locked install, and 4 schemas / 12 contract fixtures
 

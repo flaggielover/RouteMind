@@ -12,6 +12,11 @@ spring:
     password: ${RABBITMQ_DEFAULT_PASS:change-me-local-only}
     publisher-confirm-type: correlated
     publisher-returns: true
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:16379}
+      password: ${REDIS_PASSWORD:change-me-local-only}
   flyway:
     create-schemas: true
     default-schema: routemind

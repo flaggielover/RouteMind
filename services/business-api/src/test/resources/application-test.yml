@@ -8,8 +8,13 @@ routemind:
   rabbit:
     publisher:
       enabled: false
+  redis:
+    projection:
+      enabled: false
 
 management:
   health:
     rabbit:
+      enabled: false
+    redis:
       enabled: false

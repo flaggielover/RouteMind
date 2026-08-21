@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: P1 Core Domain
 
-Current Task: RM-022 - Implement Redis GEO courier projection
+Current Task: RM-030 - Implement dispatch strategy registry and nearest baseline
 
 Task Status: passed
 
@@ -40,6 +40,9 @@ validation passed.
 RM-021 implements durable event-ID deduplication, processing-before-ack
 semantics, bounded retries, and observable dead-letter state. Flyway V5 and real
 PostgreSQL validation passed.
+RM-022 implements durable courier locations, a rebuildable Redis GEO projection,
+nearby queries, and explicit `PROJECTED`/`DEGRADED` write outcomes. Flyway V6,
+real PostgreSQL/Redis validation, and Redis-outage durability tests passed.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -68,6 +71,9 @@ transactional order-to-Outbox persistence.
 RM-021 passed 30 Java tests, full available gates, Flyway V5/Hibernate
 validation on PostgreSQL 18.6, duplicate suppression, and persisted
 `DEAD_LETTER` attempt/error evidence.
+RM-022 passed 33 Java tests, full available gates, Flyway V6/Hibernate
+validation on PostgreSQL 18.6, authenticated Redis GEOSEARCH, durable courier
+location persistence, and degradation behavior when the projection is unavailable.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
@@ -82,10 +88,10 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Execute RM-022 Redis GEO courier projection with
-rebuildable projections, nearby queries, and outage degradation behavior.
+Next Recommended Action: Implement RM-030 dispatch strategy registry and the
+deterministic nearest baseline, including versioned decision metadata.
 
-Next Candidate Task: RM-022 - Implement Redis GEO courier projection
+Next Candidate Task: RM-030 - Implement dispatch strategy registry and nearest baseline
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
