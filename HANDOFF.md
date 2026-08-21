@@ -53,6 +53,8 @@ on PostgreSQL 18.6, health `UP`, role-scoped uniqueness, and audit-order checks.
 RM-011 passed 22 Java tests, explicit happy/forbidden/repeated/stale command
 coverage, Flyway V3/Hibernate validation on PostgreSQL 18.6, and persisted
 transition audit rows.
+The RM-011 commit `9872d76` passed all three GitHub Actions jobs in run
+`32498473119`.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
