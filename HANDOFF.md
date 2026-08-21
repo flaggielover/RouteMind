@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: P0 Foundation
+Current Phase: P1 Core Domain
 
-Current Task: RM-005 - Create continuous integration baseline
+Current Task: RM-010 - Implement core identity and party model
 
-Task Status: validating
+Task Status: ready
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -39,6 +39,9 @@ coverage, locked synchronization, and a live Uvicorn HTTP probe. The Python
 process was stopped cleanly.
 RM-004 validated four schemas and twelve fixtures, including UUID/date-time
 formats, dispatch invariants, and stable event/correlation/causation/trace fields.
+RM-005 passed all three jobs in GitHub Actions run 32496271644. The first run
+caught Windows-specific Java wrapper paths; commit `de5e608` made JDK and wrapper
+discovery portable, after which control, Java, and Python/contract jobs passed.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
@@ -47,21 +50,17 @@ The first Python dependency sync took several minutes because uv's cache and the
 workspace are on filesystems that do not support hardlinks. The script now fixes
 copy mode; subsequent frozen syncs are incremental.
 
-Known Blockers: RM-005 requires its first remote GitHub Actions run.
-
-External Validation Blocker: No Git remote is configured. The RM-005 workflow
-cannot receive a real GitHub Actions run until a remote repository is provided or
-authorized. Local gates pass, but RM-005 must not be marked passed yet.
+Known Blockers: NONE
 
 Important Context: Keep Java business correctness separate from Python compute and
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Configure an authorized GitHub remote, push `main`, and
-observe all three CI jobs. On green, record run evidence and mark RM-005 passed;
-on failure, repair the workflow without weakening gates.
+Next Recommended Action: Execute RM-010 with explicit customer, merchant, and
+courier invariants, migration-owned persistence, audit metadata, repository
+tests, and a real PostgreSQL integration gate.
 
-Next Candidate Task: RM-005 - Create continuous integration baseline
+Next Candidate Task: RM-010 - Implement core identity and party model
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

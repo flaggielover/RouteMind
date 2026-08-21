@@ -35,8 +35,6 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
-          cache: maven
-          cache-dependency-path: services/business-api/pom.xml
       - name: Run clean Java gate
         shell: pwsh
         run: ./scripts/business-api.ps1 test

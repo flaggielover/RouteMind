@@ -1,22 +1,22 @@
 # RouteMind Progress
 
-Current Phase: P0 Foundation
+Current Phase: P1 Core Domain
 
-Overall: 5 / 20 tasks passed
+Overall: 6 / 20 tasks passed
 
-Current Task: RM-005 - Create continuous integration baseline
+Current Task: RM-010 - Implement core identity and party model
 
-Last Completed: RM-004 - Establish versioned API and event contracts
+Last Completed: RM-005 - Create continuous integration baseline
 
-CI: CONFIGURED LOCALLY - AWAITING FIRST REMOTE RUN
+CI: PASS - GitHub Actions run 32496271644
 
 Regression: PASS - Java, Python, locked install, and 4 schemas / 12 contract fixtures
 
-Blocked: RM-005 external validation - repository has no Git remote
+Blocked: NONE
 
-Human Action Required: YES - provide or authorize a remote repository for CI execution
+Human Action Required: NO
 
-Next Candidates: RM-005
+Next Candidates: RM-010
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
