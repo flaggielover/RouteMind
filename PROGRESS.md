@@ -2,13 +2,13 @@
 
 Current Phase: P1 Core Domain
 
-Overall: 11 / 20 tasks passed
+Overall: 12 / 20 tasks passed
 
-Current Task: RM-030 - Implement dispatch strategy registry and nearest baseline
+Current Task: RM-031 - Implement weighted greedy and Hungarian baselines
 
-Last Completed: RM-022 - Implement Redis GEO courier projection
+Last Completed: RM-030 - Implement dispatch strategy registry and nearest baseline
 
-CI: PASS - local full gate; GitHub Actions pending RM-022 push
+CI: PASS - local compute gate; GitHub Actions pending RM-030 push
 
 Regression: PASS - Java, Python, locked install, and 4 schemas / 12 contract fixtures
 

@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: P1 Core Domain
 
-Current Task: RM-030 - Implement dispatch strategy registry and nearest baseline
+Current Task: RM-031 - Implement weighted greedy and Hungarian baselines
 
 Task Status: passed
 
@@ -43,6 +43,9 @@ PostgreSQL validation passed.
 RM-022 implements durable courier locations, a rebuildable Redis GEO projection,
 nearby queries, and explicit `PROJECTED`/`DEGRADED` write outcomes. Flyway V6,
 real PostgreSQL/Redis validation, and Redis-outage durability tests passed.
+RM-030 implements the versioned Python dispatch result, a replaceable strategy
+registry, and a deterministic Haversine nearest baseline with tie-breaking,
+latency, and decision metadata.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -74,6 +77,10 @@ validation on PostgreSQL 18.6, duplicate suppression, and persisted
 RM-022 passed 33 Java tests, full available gates, Flyway V6/Hibernate
 validation on PostgreSQL 18.6, authenticated Redis GEOSEARCH, durable courier
 location persistence, and degradation behavior when the projection is unavailable.
+RM-030 passed the full compute gate: 23 Python tests, strict mypy, Ruff, all
+contract fixtures, and 100% statement/branch coverage. The nearest baseline
+selects by `(distance_km, courier_id)` and the registry records solve latency,
+strategy version, candidate count, and assignment status.
 
 Known Failures: Global `JAVA_HOME` points to JDK 8 while the active `PATH` JDK is
 17. Repository Java commands deliberately resolve and validate the active JDK.
@@ -88,10 +95,10 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Implement RM-030 dispatch strategy registry and the
-deterministic nearest baseline, including versioned decision metadata.
+Next Recommended Action: Implement RM-031 weighted greedy and Hungarian
+baselines through the RM-030 registry contract.
 
-Next Candidate Task: RM-030 - Implement dispatch strategy registry and nearest baseline
+Next Candidate Task: RM-031 - Implement weighted greedy and Hungarian baselines
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

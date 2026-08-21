@@ -75,3 +75,11 @@ def test_dispatch_decision_rejects_blank_identifiers() -> None:
 def test_unassigned_decision_rejects_a_score() -> None:
     with pytest.raises(ValueError, match="cannot have a score"):
         DispatchDecision("request-1", "test", None, 1.0)
+
+
+def test_dispatch_decision_rejects_invalid_latency_and_version() -> None:
+    with pytest.raises(ValueError, match="latency"):
+        DispatchDecision("request-1", "test", None, None, latency_millis=-1.0)
+
+    with pytest.raises(ValueError, match="version"):
+        DispatchDecision("request-1", "test", None, None, strategy_version=" ")

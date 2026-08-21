@@ -47,12 +47,19 @@ class DispatchDecision:
     courier_id: str | None
     score: float | None
     rationale: tuple[str, ...] = ()
+    strategy_version: str = "1.0.0"
+    latency_millis: float = 0.0
+    metadata: tuple[tuple[str, str], ...] = ()
 
     def __post_init__(self) -> None:
         if not self.request_id.strip():
             raise ValueError("request_id must not be blank")
         if not self.strategy.strip():
             raise ValueError("strategy must not be blank")
+        if not self.strategy_version.strip():
+            raise ValueError("strategy_version must not be blank")
+        if not (0 <= self.latency_millis < 1e308):
+            raise ValueError("latency_millis must be finite and non-negative")
         if self.courier_id is None and self.score is not None:
             raise ValueError("an unassigned decision cannot have a score")
 
