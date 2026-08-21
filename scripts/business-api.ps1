@@ -7,6 +7,9 @@ param(
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 $serviceRoot = Join-Path $root "services/business-api"
+$onWindows = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT
+$wrapperName = if ($onWindows) { "mvnw.cmd" } else { "mvnw" }
+$wrapper = Join-Path $serviceRoot $wrapperName
 
 function Set-RepositoryJavaHome {
     $java = Get-Command java -ErrorAction SilentlyContinue
@@ -31,7 +34,9 @@ function Set-RepositoryJavaHome {
     $javaHome = ($homeLine -replace '^\s*java\.home\s*=\s*', '').Trim()
     $javaVersion = ($versionLine -replace '^\s*java\.version\s*=\s*', '').Trim()
     $major = if ($javaVersion -match '^1\.(\d+)') { [int]$Matches[1] } elseif ($javaVersion -match '^(\d+)') { [int]$Matches[1] } else { 0 }
-    if ($major -lt 17 -or -not (Test-Path -LiteralPath (Join-Path $javaHome "bin/javac.exe"))) {
+    $javacName = if ($onWindows) { "javac.exe" } else { "javac" }
+    $javac = Join-Path (Join-Path $javaHome "bin") $javacName
+    if ($major -lt 17 -or -not (Test-Path -LiteralPath $javac)) {
         throw "A full JDK 17 or newer is required; found Java $javaVersion at $javaHome"
     }
 
@@ -39,7 +44,7 @@ function Set-RepositoryJavaHome {
     Write-Host "Using Java $javaVersion from $javaHome"
 }
 
-if (-not (Test-Path -LiteralPath (Join-Path $serviceRoot "mvnw.cmd"))) {
+if (-not (Test-Path -LiteralPath $wrapper)) {
     throw "Business API Maven Wrapper is missing"
 }
 
@@ -47,9 +52,9 @@ Set-RepositoryJavaHome
 Push-Location $serviceRoot
 try {
     switch ($Action) {
-        "test" { & ".\mvnw.cmd" "clean" "test" }
-        "package" { & ".\mvnw.cmd" "clean" "package" }
-        "run" { & ".\mvnw.cmd" "spring-boot:run" }
+        "test" { & $wrapper "clean" "test" }
+        "package" { & $wrapper "clean" "package" }
+        "run" { & $wrapper "spring-boot:run" }
     }
     if ($LASTEXITCODE -ne 0) {
         throw "Business API $Action failed with exit code $LASTEXITCODE"
