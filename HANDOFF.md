@@ -103,8 +103,8 @@ primary provider failures or timeouts are marked as fallback results.
 RM-050 passed the full available gate with 32 Python tests and 97.92% total
 statement/branch coverage. Repeated runs with the same manifest and seed are
 byte-identical; changed seed or inputs produce a different replay digest.
-The RM-050 commit `595a221` passed all three GitHub Actions jobs in run
-`32504786839`.
+The RM-050 commit `595a221` and follow-up baseline coverage commit `ccce5fa`
+passed all three GitHub Actions jobs in run `32505030208`.
 The RM-040 commit `cf71191` passed all three GitHub Actions jobs in run
 `32504045099`.
 
