@@ -664,7 +664,7 @@
       "gates": ["L2-vrptw", "L6-route-correctness"],
       "evidence": ["evidence/gates/RM-133/vrptw.md"],
       "blocked_by": [],
-      "notes": "Large-scale optimization may remain a measured external-compute extension."
+      "notes": "Local L2/L6 evidence passes with deterministic bounded insertion, capacity/service/time-window checks, stable infeasibility reasons, and a two-stop reference baseline. Remote Actions validation is pending; large-scale optimization may remain a measured external-compute extension."
     },
     {
       "id": "RM-134",

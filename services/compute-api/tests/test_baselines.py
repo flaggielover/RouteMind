@@ -25,6 +25,7 @@ def test_baselines_conform_to_registry_and_are_versioned() -> None:
         "nearest",
         "partitioned-assignment",
         "risk-aware",
+        "vrptw",
         "weighted-greedy",
     )
     results = [registry.solve(name, make_problem()) for name in registry.names()]

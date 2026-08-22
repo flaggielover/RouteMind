@@ -8,7 +8,7 @@ Current Phase: Round 2 P16 Strategy Laboratory
 
 Current Task: RM-133 - Implement VRP and VRPTW strategy baseline
 
-Task Status: RM-133 is in progress; RM-163 is the last fully validated task
+Task Status: RM-133 implementation and local/full gates complete; remote Actions validation pending
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -514,10 +514,18 @@ schemas/15 fixtures. The task graph now activates RM-133, the VRP/VRPTW
 strategy baseline; RM-155 remains dependency-blocked until RM-133 and RM-152
 pass.
 
+RM-133 implementation is locally complete. It adds the bounded deterministic
+`VrptwRoutePlanner`, the `vrptw` registry strategy, explicit capacity/service/
+time-window/availability checks, stable unassigned reason codes, and a
+two-stop reproducible reference baseline. Compute check passes 119 tests at
+95.57%; full available gates pass Java 60, Web 38 unit/build, and 5 schemas/15
+fixtures. Evidence is recorded at `evidence/gates/RM-133/vrptw.md`; remote
+Actions validation is pending before the graph marks RM-133 passed.
+
 
 ## Current Resume Capsule
-- Resume at RM-133; do not redo completed RM-123 through RM-163 gates.
-- Local compute evidence: 109 tests passed, 95.39% coverage, Ruff clean.
-- Full gate passed Java 60, Python 109 at 95.39%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
-- Next action: read the dispatch/flow/travel boundaries and implement a bounded VRP/VRPTW baseline with deterministic infeasibility reasons.
+- Resume by observing RM-133's remote Actions run; do not redo completed RM-123 through RM-163 gates.
+- Local compute evidence: 119 tests passed, 95.57% coverage, Ruff/format/mypy/contracts clean.
+- Full gate passed Java 60, Python 119 at 95.57%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
+- After RM-133 remote validation passes, activate RM-134 dynamic insertion or RM-152 according to the refreshed task graph.
 - External data remains governed by ROUTEMIND_DATA_ROOT; no external data path was hardcoded.

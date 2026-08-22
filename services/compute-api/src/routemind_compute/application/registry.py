@@ -141,6 +141,7 @@ def default_registry() -> StrategyRegistry:
     )
     from routemind_compute.application.nearest import NearestStrategy
     from routemind_compute.application.risk_aware import RiskAwareScoringStrategy
+    from routemind_compute.application.vrptw import VrptwStrategy
 
     return StrategyRegistry(
         (
@@ -150,5 +151,6 @@ def default_registry() -> StrategyRegistry:
             RiskAwareScoringStrategy(),
             MinimumCostFlowStrategy(),
             PartitionedAssignmentStrategy(),
+            VrptwStrategy(),
         )
     )
