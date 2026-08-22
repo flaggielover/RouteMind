@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P10 Live Product Foundation
 
-Current Task: RM-103 - Expose bounded Python dispatch snapshot API
+Current Task: RM-104 - Connect web live data source with explicit modes
 
-Task Status: implemented (local full gate passed; GitHub Actions validation pending)
+Task Status: implemented (local web/static/browser gates passed; GitHub Actions validation pending)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -270,9 +270,9 @@ Round 2 gap audit: `docs/reviews/ROUND_2_GAP_AUDIT.md`.
 Round 2 foundation design:
 `docs/superpowers/specs/2026-08-22-round2-live-product-foundation-design.md`.
 The graph now contains 48 Round 2 tasks (RM-100 through RM-190); Round 1 tasks
-remain passed and RM-103 is the current active task.
+remain passed and RM-104 is the current active task.
 
-Next Candidate Task: RM-103 - push and observe implementation CI, then continue RM-104.
+Next Candidate Task: RM-104 - push and observe implementation CI, then continue RM-105.
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
@@ -297,4 +297,7 @@ expected-version conflicts, and transactional Outbox commands. Checkpoint
 RM-103 adds bounded candidate validation, versioned strategy decisions, travel
 provider metadata, and explicit 503 strategy/travel failure responses. Local
 full gate passed; evidence is in `evidence/gates/RM-103/dispatch-api.md`.
-Push and observe CI, then continue with RM-104.
+Checkpoint `7506a5d` and Actions run `32563779670` passed all five jobs.
+Continue with RM-104. The web source boundary has local evidence in
+`evidence/gates/RM-104/web-live-data-source.md`; push and observe CI, then
+continue with RM-105.

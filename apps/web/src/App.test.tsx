@@ -1,6 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 import { demoDataSource } from "./data/demoSnapshot";
 import type { ServiceHealth } from "./domain/model";
@@ -35,6 +35,10 @@ describe("role-aware application", () => {
     window.history.replaceState({}, "", "/operations");
   });
 
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("shows the operations lifecycle and an explicit demo source", async () => {
     renderApp();
 
@@ -67,5 +71,21 @@ describe("role-aware application", () => {
 
     expect(screen.getByRole("heading", { name: "RM-2042 lifecycle" })).toBeInTheDocument();
     expect(screen.getByRole("list", { name: "Lifecycle for RM-2042" })).toBeInTheDocument();
+  });
+
+  it("keeps live failure explicit while switching through demo and replay modes", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
+    render(<App healthProbe={vi.fn().mockResolvedValue(healthyServices)} />);
+
+    expect(await screen.findByText("Live unavailable")).toBeInTheDocument();
+    const source = screen.getByRole("combobox", { name: "Data source mode" });
+    await user.selectOptions(source, "demo");
+    expect(await screen.findByText("Demo snapshot")).toBeInTheDocument();
+    await user.selectOptions(source, "replay");
+    expect(
+      await screen.findByText("Replay", { selector: ".source-status span" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Select a verified replay artifact")).toBeInTheDocument();
   });
 });

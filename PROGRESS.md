@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P10 Live Product Foundation
 
-Round 2 Progress: 3 / 48 tasks passed
+Round 2 Progress: 4 / 48 tasks passed
 
-Repository Total: 31 / 76 tasks passed
+Repository Total: 32 / 76 tasks passed
 
-Current Task: RM-103 - Expose bounded Python dispatch snapshot API
+Current Task: RM-104 - Connect web live data source with explicit modes
 
 Last Completed: RM-088 - Define deployment and edge-security adapter boundary
 
-Current Gate: RM-103 local full gate passed; implementation CI pending
+Current Gate: RM-104 local web/static/browser gates passed; implementation CI pending
 
-CI: PASS - RM-102 run 32563322826; all five jobs passed
+CI: PASS - RM-103 run 32563779670; all five jobs passed
 
 Regression: PASS - Java 53, Python 59 / 96.13%, Web 8 unit + build, E2E 16, and 4 schemas / 12 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-103 (implemented; push and observe CI), then RM-104
+Next Candidates: RM-104 (implemented; push and observe CI), then RM-105
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -65,6 +65,9 @@ RM-101 local read API evidence is recorded in
 RM-102 local command API evidence is recorded in
 `evidence/gates/RM-102/order-command-api.md`; checkpoint `ad988bc` and Actions
 run `32563322826` passed all five jobs. RM-103 is now the active implementation.
-RM-103 local dispatch API evidence is recorded in
-`evidence/gates/RM-103/dispatch-api.md`; the implementation checkpoint is ready
-for Actions validation.
+RM-103 dispatch API evidence is recorded in
+`evidence/gates/RM-103/dispatch-api.md`; checkpoint `7506a5d` and Actions run
+`32563779670` passed all five jobs. RM-104 is now the active web validation.
+RM-104 web source-mode evidence is recorded in
+`evidence/gates/RM-104/web-live-data-source.md`; local static and browser gates
+passed and the implementation checkpoint is ready for Actions validation.

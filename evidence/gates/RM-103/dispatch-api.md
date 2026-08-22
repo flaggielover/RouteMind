@@ -1,7 +1,7 @@
 # RM-103 Bounded Python Dispatch Snapshot API
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint recorded by the accompanying commit
+- Revision: `7506a5d`
 - Boundary: Python stateless dispatch computation, strategy registry, and travel metadata
 
 ## Contract
@@ -18,6 +18,9 @@ does not write durable business state; Java remains the order authority.
 2. `./scripts/full-gate.ps1` -> PASS; control, security, Compose, Java (53
    tests), Python, contract, Web static/unit/build, and resilience gates passed.
 3. `python scripts/validate_control_plane.py` -> PASS.
+4. GitHub Actions run `32563779670` -> PASS; all five jobs passed: Java
+   business runtime, Python compute and contracts, role-aware web application,
+   bounded degradation and resilience, and control plane and Compose.
 
 ## Failure and fallback behavior
 
