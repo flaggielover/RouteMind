@@ -151,3 +151,31 @@ def test_dispatch_snapshot_applies_constraints_and_exposes_infeasibility_metadat
     assert blocked_body["selected_courier"] is None
     assert "small:capacity_insufficient=2.000" in blocked_body["rationale"]
     assert dict(blocked_body["metadata"])["eligible_candidate_count"] == "0"
+
+
+def test_dispatch_snapshot_runs_versioned_risk_aware_scoring() -> None:
+    response = client.post(
+        "/api/v1/dispatch/snapshot",
+        json={
+            "request_id": "ops-risk-1",
+            "strategy": "risk-aware",
+            "pickup": {"latitude": 31.2304, "longitude": 121.4737},
+            "candidates": [
+                {
+                    "courier_id": "risk-aware-courier",
+                    "location": {"latitude": 31.231, "longitude": 121.474},
+                    "capacity_units": 4,
+                    "service_risk": 0.1,
+                    "overtime_risk": 0.2,
+                }
+            ],
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["strategy_version"] == "1.0.0"
+    assert body["selected_courier"] == "risk-aware-courier"
+    metadata = dict(body["metadata"])
+    assert metadata["weight_service_risk"] == "2.000"
+    assert metadata["score_units"] == "weighted-normalized"

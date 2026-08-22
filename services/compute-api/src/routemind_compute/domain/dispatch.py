@@ -44,6 +44,7 @@ class CourierCandidate:
     available_until_seconds: float | None = None
     state: CourierState = "available"
     service_risk: float = 0.0
+    overtime_risk: float = 0.0
     estimated_travel_seconds: float = 0.0
 
     def __post_init__(self) -> None:
@@ -66,6 +67,8 @@ class CourierCandidate:
             raise ValueError("state must be a supported courier state")
         if not _is_finite(self.service_risk) or not 0 <= self.service_risk <= 1:
             raise ValueError("service_risk must be between 0 and 1")
+        if not _is_finite(self.overtime_risk) or not 0 <= self.overtime_risk <= 1:
+            raise ValueError("overtime_risk must be between 0 and 1")
         if not _is_finite(self.estimated_travel_seconds) or self.estimated_travel_seconds < 0:
             raise ValueError("estimated_travel_seconds must be finite and non-negative")
 

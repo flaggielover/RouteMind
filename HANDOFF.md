@@ -399,6 +399,15 @@ registered baseline strategies use the shared eligibility boundary and return
 stable infeasibility reasons; the API exposes eligible counts and reason metadata.
 Local full gate passed with Java 60 tests, Python 65 tests at 96.47% coverage, Web
 38 unit tests/build, and 5 schemas/15 fixtures. Evidence is recorded at
-`evidence/gates/RM-130/constraint-dispatch-model.md`; checkpoint is awaiting remote
-Actions validation. RM-131 capacity, preparation, and risk-aware scoring is now the
-active task.
+`evidence/gates/RM-130/constraint-dispatch-model.md`; Actions run `32575824899`
+passed all five jobs. RM-131 capacity, preparation, and risk-aware scoring is now
+the active task.
+RM-131 registers the versioned `risk-aware` strategy with deterministic weights for
+distance, pickup readiness, overtime risk, service risk, and courier load balance.
+The same constrained fixtures remain available to nearest, weighted-greedy,
+Hungarian, and risk-aware strategies; rationale and weight metadata are recorded
+in each decision. Local full gate passed with Java 60 tests, Python 69 tests at
+96.57% coverage, Web 38 unit tests/build, and 5 schemas/15 fixtures. Evidence is
+recorded at `evidence/gates/RM-131/risk-aware-scoring.md`; checkpoint is awaiting
+remote Actions validation. RM-132 minimum-cost flow and partitioned assignment is
+now the active task.

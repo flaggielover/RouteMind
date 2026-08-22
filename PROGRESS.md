@@ -2,25 +2,25 @@
 
 Current Phase: Round 2 P13 Advanced Dispatch
 
-Round 2 Progress: 20 / 48 tasks passed
+Round 2 Progress: 21 / 48 tasks passed
 
-Repository Total: 48 / 76 tasks passed
+Repository Total: 49 / 76 tasks passed
 
-Current Task: RM-131 - Add capacity, preparation, and risk-aware scoring
+Current Task: RM-132 - Implement minimum-cost flow and partitioned assignment
 
-Last Completed: RM-130 - Define constraint-aware dispatch model
+Last Completed: RM-131 - Add capacity, preparation, and risk-aware scoring
 
-Current Gate: RM-130 local/full gates passed; checkpoint is awaiting remote CI validation
+Current Gate: RM-131 local/full gates passed; checkpoint is awaiting remote CI validation
 
-CI: PASS - RM-124 run 32575052384; all five jobs passed. RM-123 run 32574390001 also passed all five jobs.
+CI: PASS - RM-130 checkpoint run 32575824899; all five jobs passed. RM-124 run 32575052384 also passed all five jobs.
 
-Regression: PASS - Java 60, Python 65 / 96.47%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 69 / 96.57%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-131 - add capacity, preparation, and risk-aware scoring
+Next Candidates: RM-132 - implement minimum-cost flow and partitioned assignment
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

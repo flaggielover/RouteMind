@@ -65,5 +65,13 @@ class StrategyRegistry:
 def default_registry() -> StrategyRegistry:
     from routemind_compute.application.baselines import HungarianStrategy, WeightedGreedyStrategy
     from routemind_compute.application.nearest import NearestStrategy
+    from routemind_compute.application.risk_aware import RiskAwareScoringStrategy
 
-    return StrategyRegistry((NearestStrategy(), WeightedGreedyStrategy(), HungarianStrategy()))
+    return StrategyRegistry(
+        (
+            NearestStrategy(),
+            WeightedGreedyStrategy(),
+            HungarianStrategy(),
+            RiskAwareScoringStrategy(),
+        )
+    )

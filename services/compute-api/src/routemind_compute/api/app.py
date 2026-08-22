@@ -68,6 +68,7 @@ class CourierCandidateRequest(BaseModel):
     available_until_seconds: float | None = Field(default=None, ge=0)
     state: Literal["available", "on_route", "offline", "paused"] = "available"
     service_risk: float = Field(default=0.0, ge=0, le=1)
+    overtime_risk: float = Field(default=0.0, ge=0, le=1)
     estimated_travel_seconds: float = Field(default=0.0, ge=0)
 
 
@@ -147,6 +148,7 @@ def dispatch_snapshot(
                     available_until_seconds=candidate.available_until_seconds,
                     state=candidate.state,
                     service_risk=candidate.service_risk,
+                    overtime_risk=candidate.overtime_risk,
                     estimated_travel_seconds=candidate.estimated_travel_seconds,
                 )
                 for candidate in payload.candidates

@@ -30,5 +30,6 @@ Date: 2026-08-22
 
 ## Gate decision
 
-Local L2 dispatch-model and L6 dispatch-correctness evidence is complete. Remote
-Actions validation is required before the task is finally closed.
+Local L2 dispatch-model and L6 dispatch-correctness evidence is complete. Actions
+run `32575824899` passed all five jobs, including Python compute/contracts and the
+bounded degradation gate. RM-130 is fully validated.

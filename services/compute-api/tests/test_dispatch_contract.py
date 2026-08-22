@@ -162,6 +162,8 @@ def test_constraint_model_rejects_non_finite_and_invalid_candidate_bounds() -> N
         CourierCandidate("bad-state", point, state="unknown")  # type: ignore[arg-type]
     with pytest.raises(ValueError, match="service_risk"):
         CourierCandidate("bad-risk", point, service_risk=2)
+    with pytest.raises(ValueError, match="overtime_risk"):
+        CourierCandidate("bad-overtime", point, overtime_risk=2)
     with pytest.raises(ValueError, match="estimated_travel"):
         CourierCandidate("bad-travel", point, estimated_travel_seconds=-1)
 

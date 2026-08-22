@@ -41,6 +41,7 @@
           "availableUntilSeconds": {"type": ["number", "null"], "minimum": 0},
           "state": {"enum": ["available", "on_route", "offline", "paused"]},
           "serviceRisk": {"type": "number", "minimum": 0, "maximum": 1},
+          "overtimeRisk": {"type": "number", "minimum": 0, "maximum": 1},
           "estimatedTravelSeconds": {"type": "number", "minimum": 0}
         },
         "additionalProperties": false
