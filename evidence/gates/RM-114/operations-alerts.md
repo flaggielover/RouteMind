@@ -1,7 +1,7 @@
 # RM-114 Operations Exceptions, Imbalance, and Alerts
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint pending
+- Revision: `550f2a2`; Actions run `32568845070`
 - Boundary: Web alert projection derived from recorded operations snapshot data
 
 ## Alert behavior

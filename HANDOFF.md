@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P11 Operations Command Center
 
-Current Task: RM-114 - Add operations exceptions, imbalance, and alerts
+Current Task: RM-120 - Implement customer order creation and tracking workflow
 
-Task Status: implemented (RM-114 operations exceptions, imbalance, and alerts; awaiting CI)
+Task Status: in_progress (RM-120 customer order creation and tracking workflow)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -349,3 +349,5 @@ supply/demand imbalance, and an explicit unavailable overtime-risk state. Local 
 gate passed with 24 Web unit tests, 16 Playwright tests, Java 57 tests, Python 59
 tests at 96.13% coverage, and 5 schemas/15 fixtures. Checkpoint is awaiting Actions
 validation.
+Checkpoint `550f2a2` and Actions run `32568845070` passed all five jobs. RM-114 is
+now passed; continue with RM-120.

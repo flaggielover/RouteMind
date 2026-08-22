@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P11 Operations Command Center
 
-Round 2 Progress: 13 / 48 tasks passed
+Round 2 Progress: 14 / 48 tasks passed
 
-Repository Total: 41 / 76 tasks passed
+Repository Total: 42 / 76 tasks passed
 
-Current Task: RM-114 - Add operations exceptions, imbalance, and alerts
+Current Task: RM-120 - Implement customer order creation and tracking workflow
 
 Last Completed: RM-110 - Build operations command-center data projection
 
-Current Gate: RM-114 local/full/browser/CI gates passed locally; awaiting Actions validation
+Current Gate: RM-114 local/full/browser/CI gates passed; RM-120 is the highest-priority unblocked task
 
-CI: PASS - RM-113 run 32568470723; all five jobs passed. RM-114 local implementation is awaiting CI.
+CI: PASS - RM-114 run 32568845070; all five jobs passed. RM-113 run 32568470723 also passed.
 
 Regression: PASS - Java 57, Python 59 / 96.13%, Web 24 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-114 - operations exceptions, imbalance, and alerts; push and observe CI
+Next Candidates: RM-120 - customer order creation and tracking workflow
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -120,3 +120,5 @@ RM-114 local alert evidence is recorded in `evidence/gates/RM-114/operations-ale
 Recorded exception queue, order-linked alerts, snapshot-derived supply/demand gap,
 and explicit unavailable overtime risk pass local full and browser gates; checkpoint
 is awaiting Actions validation.
+RM-114 checkpoint `550f2a2` and Actions run `32568845070` passed all five jobs.
+The task is now passed and RM-120 is the active implementation.
