@@ -269,10 +269,10 @@
       "phase": "P8",
       "priority": "high",
       "depends_on": ["RM-001", "RM-005", "RM-080", "RM-082"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Recovery artifacts have explicit service, checksum, size, path, and restore-order invariants", "Local rehearsal validates package integrity and bounded failure reasons", "Rollback metadata is reproducible and live restore limitations are explicit"],
       "gates": ["L3-recovery-contract", "L5-recovery-rehearsal", "security-review"],
-      "evidence": [],
+      "evidence": ["evidence/gates/RM-083/2026-08-22-recovery-contract.md"],
       "blocked_by": [],
       "notes": "Live service restore requires Docker/service credentials and is deferred_external when unavailable."
     },

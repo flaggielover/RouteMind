@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: P9 Research and Experimentation
 
-Current Task: RM-083 - Define recovery artifacts and rollback rehearsal validator
+Current Task: NONE - current task graph baseline complete
 
-Task Status: in_progress
+Task Status: passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -135,6 +135,16 @@ regression, and security checks. Evidence is in
 The RM-082 checkpoint commit `5498fee` passed all five GitHub Actions jobs in
 run `32556047734`.
 
+RM-083 defines immutable PostgreSQL/RabbitMQ/Redis recovery artifacts with
+relative paths, SHA-256, byte size, source revision, and contiguous restore order.
+The local rehearsal validator verifies fixture package integrity and reports
+bounded ready/blocked reasons; rollback metadata is reproducible and requires
+explicit acknowledgement without executing a state change. Local full gate
+passed with Java 34 tests, Python 56 tests at 96.05% coverage, Web regression,
+security checks, and four recovery-contract self-tests. Live service restore is
+explicitly not claimed and remains deferred_external. Evidence is in
+`evidence/gates/RM-083/2026-08-22-recovery-contract.md`.
+
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
 cross-`down/up` persistence for all three services, and the unified infrastructure
@@ -201,13 +211,12 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Implement RM-083's portable recovery artifact
-contract, checksum/path/order rehearsal validator, and reproducible rollback
-metadata. Keep live service restore explicitly deferred_external while Docker
-or service credentials are unavailable; then record evidence, commit, push, and
-observe GitHub Actions.
+Next Recommended Action: Commit and push the RM-083 checkpoint, observe the real
+GitHub Actions run, and autonomously fix any CI failure. The current task graph
+will then be complete; extend it from the next highest-priority production
+capability before further implementation.
 
-Next Candidate Task: RM-083 - Define recovery artifacts and rollback rehearsal validator
+Next Candidate Task: NONE IN CURRENT TASK GRAPH
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

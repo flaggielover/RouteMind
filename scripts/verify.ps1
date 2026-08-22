@@ -37,6 +37,11 @@ try {
         throw "Security gate self-tests failed"
     }
 
+    python scripts/recovery_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Recovery contract self-tests failed"
+    }
+
     if (Test-Path -LiteralPath "compose.yaml") {
         if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
             throw "Docker is required to validate compose.yaml"
