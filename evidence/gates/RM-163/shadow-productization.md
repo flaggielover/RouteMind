@@ -25,5 +25,5 @@
 ## Gate decision
 
 Local L2 shadow contract, L4 product-facing evaluation, and L5 isolation
-evidence is complete. Remote Actions validation is required before RM-163 is
-marked passed.
+evidence is complete. GitHub Actions run `32601227912` passed all five
+required jobs, so RM-163 is fully validated.

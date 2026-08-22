@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Round 2 Progress: 32 / 48 tasks passed
+Round 2 Progress: 33 / 48 tasks passed
 
-Repository Total: 60 / 76 tasks passed
+Repository Total: 61 / 76 tasks passed
 
-Current Task: RM-163 - Productize Shadow Mode comparison and promotion gate
+Current Task: RM-133 - Implement VRP and VRPTW strategy baseline
 
-Last Completed: RM-161 - Add strategy parameter schemas and experiments
+Last Completed: RM-163 - Productize Shadow Mode comparison and promotion gate
 
-Current Gate: RM-163 local/full gates passed; checkpoint is awaiting remote Actions validation
+Current Gate: RM-163 local/full gates and remote Actions run 32601227912 passed; RM-133 is the next unblocked high-priority critical-path task
 
-CI: PASS - RM-161 run 32600780985; RM-163 remote validation is pending.
+CI: PASS - RM-163 run 32601227912; RM-161 run 32600780985 also passed all five jobs.
 
 Regression: PASS - Java 60, Python 111 / 95.41%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-163 remote validation; RM-162 remains blocked by RM-156; RM-155 remains blocked by RM-152 (which depends on RM-133)
+Next Candidates: RM-133 - implement VRP and VRPTW strategy baseline; RM-162 remains blocked by RM-156; RM-155/RM-152 depend on RM-133
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -144,6 +144,13 @@ The task is now passed and RM-120 is the active implementation.
 - Added a RouteBench experiment API that records scenario/seed/configuration,
   manifest/output/replay digests, runtime observations, and assignment metrics.
 - Local compute and full repository gates pass; remote Actions validation is pending.
+
+### RM-163 completion - 2026-08-23
+- Shadow Mode productization is fully validated with active/candidate comparison,
+  deterministic promote/hold assessment, stable digests, and explicit candidate
+  isolation; remote Actions run `32601227912` passed all five jobs.
+- RM-133 is now active because RM-130 and RM-140 are passed; this unlocks the
+  courier-motion and Digital Twin control path downstream.
 
 ### RM-161 completion - 2026-08-23
 - Parameter schemas and configured baseline execution are fully validated.

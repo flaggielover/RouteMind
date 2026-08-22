@@ -659,7 +659,7 @@
       "phase": "P13",
       "priority": "high",
       "depends_on": ["RM-130", "RM-140"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Routes respect vehicle capacity, service times, and time windows", "Infeasible routes have stable explanations", "Small reproducible instances compare against a verified baseline"],
       "gates": ["L2-vrptw", "L6-route-correctness"],
       "evidence": ["evidence/gates/RM-133/vrptw.md"],
@@ -919,12 +919,12 @@
       "phase": "P16",
       "priority": "high",
       "depends_on": ["RM-160", "RM-081", "RM-107"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Active/candidate strategy, window, disagreement, quality delta, and failure rate are inspectable", "Promotion/hold/rollback uses the existing deterministic gate", "Candidate decisions never gain authority without an explicit validated boundary"],
       "gates": ["L2-shadow-ui-contract", "L4-shadow-lab", "L5-shadow-isolation"],
       "evidence": ["evidence/gates/RM-163/shadow-productization.md"],
       "blocked_by": [],
-      "notes": "Existing Shadow Mode isolation remains authoritative."
+      "notes": "Read-only shadow evaluation exposes active/candidate metrics, deterministic promote/hold reasons, digests, and explicit candidate authority none; local full gates pass and remote Actions run 32601227912 passed all five jobs. Existing Shadow Mode isolation remains authoritative."
     },
     {
       "id": "RM-170",

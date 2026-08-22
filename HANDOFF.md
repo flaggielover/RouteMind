@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-163 - Productize Shadow Mode comparison and promotion gate
+Current Task: RM-133 - Implement VRP and VRPTW strategy baseline
 
-Task Status: RM-163 is in progress; RM-161 is the last fully validated task
+Task Status: RM-133 is in progress; RM-163 is the last fully validated task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -503,18 +503,21 @@ RouteBench/ScenarioKernel. Compute check passes 109 tests at 95.39%; full
 available gates pass Java 60, Web 38 unit/build, and 5 schemas/15 fixtures.
 The task graph now activates RM-163; RM-162 remains blocked by RM-156.
 
-RM-163 is locally complete and awaiting remote validation. The new shadow
+RM-163 is fully validated after remote Actions run `32601227912` passed all
+five jobs. The new shadow
 evaluation endpoint exposes active/candidate comparisons, ordered observations,
 assignment/disagreement/failure metrics, promote/hold reasons, manifest/run
 digests, and `candidate_authority: none`, while preserving active-strategy
 authority and bounded candidate failures. Compute check passes 111 tests at
 95.41%; full available gates pass Java 60, Web 38 unit/build, and 5
-schemas/15 fixtures.
+schemas/15 fixtures. The task graph now activates RM-133, the VRP/VRPTW
+strategy baseline; RM-155 remains dependency-blocked until RM-133 and RM-152
+pass.
 
 
 ## Current Resume Capsule
-- Resume at RM-163; do not redo completed RM-123 through RM-161 gates.
+- Resume at RM-133; do not redo completed RM-123 through RM-163 gates.
 - Local compute evidence: 109 tests passed, 95.39% coverage, Ruff clean.
 - Full gate passed Java 60, Python 109 at 95.39%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
-- Next action: read the existing Shadow Mode evaluator and implement RM-163's product-facing comparison/promotion contract.
+- Next action: read the dispatch/flow/travel boundaries and implement a bounded VRP/VRPTW baseline with deterministic infeasibility reasons.
 - External data remains governed by ROUTEMIND_DATA_ROOT; no external data path was hardcoded.
