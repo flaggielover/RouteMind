@@ -10,17 +10,17 @@ Current Task: RM-157 - Implement verified replay playback
 
 Last Completed: RM-156 - Build Digital Twin control surface
 
-Current Gate: RM-156 local/full/browser gates and remote Actions run 32605590683 passed; RM-157 is now active
+Current Gate: RM-157 local/full/browser gates passed; implementation checkpoint is pending remote Actions validation
 
-CI: PASS - RM-156 run 32605590683 and RM-155 run 32604701074 passed all five jobs; RM-152 run 32603896737 also passed.
+CI: PASS - RM-156 run 32605590683, RM-155 run 32604701074, and RM-152 run 32603896737 passed all five jobs; RM-157 remote validation is pending.
 
-Regression: PASS - Java 60, Python 139 / 95.71%, Web 42 unit + build, E2E 19 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 139 / 95.71%, Web 43 unit + build, E2E 21 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-157 - implement verified replay playback; RM-162 remains blocked by RM-161
+Next Candidates: RM-157 - complete remote Evidence Gate; RM-158 is next after RM-157 passes; RM-162 remains blocked by RM-161
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -267,3 +267,15 @@ The task is now passed and RM-120 is the active implementation.
   route reuse, metrics, exceptions, events, and replay digest visibility.
 - RM-156 is now passed (39/48 Round 2, 67/76 repository); RM-157 verified
   replay playback is activated next.
+
+### RM-157 checkpoint - 2026-08-23
+- Added deterministic replay artifact loading with canonical SHA-256 digest
+  verification, scenario/seed/provenance display, and explicit unavailable,
+  verifying, ready, playing, paused, and invalid states.
+- Added bounded Play, Pause, Reset, Seek, Step, Speed, and event inspection
+  controls. Visible events are derived from the replay cursor and remain
+  separate from live and simulation state.
+- Local full gate passes Java 60, Python 139 at 95.71%, Web 43 unit/build, 21
+  browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures.
+  Remote Actions validation is the remaining Evidence Gate before marking
+  RM-157 passed.

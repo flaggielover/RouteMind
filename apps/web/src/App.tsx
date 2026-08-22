@@ -18,7 +18,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { BrowserRouter, Navigate, Route as RouterRoute, Routes } from "react-router-dom";
 import { demoDataSource } from "./data/demoSnapshot";
 import { probeServices } from "./data/health";
-import { liveDataSource, replayDataSource } from "./data/liveSnapshot";
+import { liveDataSource } from "./data/liveSnapshot";
+import { replayDataSource } from "./data/replay";
 import { simulationDataSource } from "./data/simulation";
 import {
   createCustomerOrder,
@@ -38,6 +39,7 @@ import {
 import type {
   DataSourceMode,
   OperationsDataSource,
+  ReplayCommand,
   ServiceHealth,
   SimulationCommand,
 } from "./domain/model";
@@ -48,6 +50,7 @@ import { MetricCell } from "./components/MetricCell";
 import { OperationsMap } from "./components/OperationsMap";
 import { ActivityStream } from "./components/ActivityStream";
 import { SimulationControlPanel } from "./components/SimulationControlPanel";
+import { ReplayPlaybackPanel } from "./components/ReplayPlaybackPanel";
 import { StatusPill } from "./components/StatusPill";
 import type { Order, OperationsSnapshot } from "./domain/model";
 import "./styles.css";
@@ -155,6 +158,14 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
     [activeDataSource],
   );
 
+  const controlReplay = useCallback(
+    async (command: ReplayCommand) => {
+      if (!activeDataSource.controlReplay) return;
+      setSnapshot(await activeDataSource.controlReplay(command));
+    },
+    [activeDataSource],
+  );
+
   useEffect(() => {
     void refreshHealth();
   }, [refreshHealth]);
@@ -175,6 +186,7 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
           realtime={realtime}
           health={health}
           onSimulationControl={controlSimulation}
+          onReplayControl={controlReplay}
         />
       </AppShell>
       {isRefreshing && (
@@ -191,11 +203,13 @@ export function AppRoutes({
   realtime,
   health,
   onSimulationControl,
+  onReplayControl,
 }: {
   snapshot: OperationsSnapshot;
   realtime: RealtimeConnectionState;
   health: readonly ServiceHealth[];
   onSimulationControl?: (command: SimulationCommand) => Promise<void>;
+  onReplayControl?: (command: ReplayCommand) => Promise<void>;
 }) {
   return (
     <Routes>
@@ -207,6 +221,7 @@ export function AppRoutes({
             realtime={realtime}
             health={health}
             onSimulationControl={onSimulationControl}
+            onReplayControl={onReplayControl}
           />
         }
       />
@@ -227,11 +242,13 @@ function OperationsView({
   realtime,
   health,
   onSimulationControl,
+  onReplayControl,
 }: {
   snapshot: OperationsSnapshot;
   realtime: RealtimeConnectionState;
   health: readonly ServiceHealth[];
   onSimulationControl?: (command: SimulationCommand) => Promise<void>;
+  onReplayControl?: (command: ReplayCommand) => Promise<void>;
 }) {
   const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0]?.id ?? "");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -356,6 +373,9 @@ function OperationsView({
           trafficLabel="seeded 1.0x"
           onControl={onSimulationControl}
         />
+      )}
+      {snapshot.source === "replay" && snapshot.replay && onReplayControl && (
+        <ReplayPlaybackPanel snapshot={snapshot.replay} onControl={onReplayControl} />
       )}
       <section className="operations-health" aria-label="Operations projection health">
         <div>

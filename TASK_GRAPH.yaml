@@ -859,7 +859,7 @@
       "gates": ["L2-replay-verification", "L4-replay-browser"],
       "evidence": ["evidence/gates/RM-157/replay.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-156 and RM-155 passed. Replay is not presented as live state."
+      "notes": "Activated after RM-156 and RM-155 passed. Local full gate passes Java 60, Python 139 at 95.71%, Web 43 unit/build, 21 browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures. Replay digest verification, playback controls, cursor-derived event visibility, provenance, and event inspection are covered. Replay is not presented as live state. Remote Actions validation is pending."
     },
     {
       "id": "RM-158",

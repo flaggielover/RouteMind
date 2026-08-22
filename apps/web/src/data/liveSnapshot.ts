@@ -7,6 +7,7 @@ import type {
   OrderEvent,
   OrderStatus,
 } from "../domain/model";
+export { replayDataSource } from "./replay";
 
 interface LiveOrder {
   id: string;
@@ -226,8 +227,4 @@ export const liveDataSource: OperationsDataSource = {
     availability: "loading",
   }),
   loadSnapshot: () => loadLiveSnapshot(),
-};
-
-export const replayDataSource: OperationsDataSource = {
-  getSnapshot: () => emptySnapshot("replay", "Select a verified replay artifact"),
 };

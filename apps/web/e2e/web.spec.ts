@@ -89,6 +89,23 @@ test.describe("role-aware web smoke", () => {
     await page.screenshot({ path: "test-results/simulation-control.png", fullPage: true });
   });
 
+  test("loads and inspects a verified replay artifact", async ({ page }) => {
+    await page.goto("/operations");
+    await page.getByRole("combobox", { name: "Data source mode" }).selectOption("replay");
+    await expect(page.getByRole("heading", { name: "Inspect the recorded run." })).toBeVisible();
+    await expect(page.getByText(/Digest verified/)).toBeVisible();
+    await expect(page.getByText("1 visible of 3 events")).toBeVisible();
+    await page.getByRole("spinbutton", { name: "Replay step seconds" }).fill("30");
+    await page.getByRole("button", { name: /Step/ }).click();
+    await expect(page.getByText("2 visible of 3 events")).toBeVisible();
+    await expect(page.getByText("order.created")).toBeVisible();
+    await expect(page.getByText("dispatch.decision.recorded")).toBeVisible();
+
+    await page.getByRole("button", { name: "order.created" }).click();
+    await expect(page.locator(".replay-event-detail")).toContainText("order_id: order-1");
+    await page.screenshot({ path: "test-results/replay-playback.png", fullPage: true });
+  });
+
   for (const [path, heading] of roles) {
     test(`renders the ${path} role surface`, async ({ page }) => {
       await page.goto(`/${path}`);

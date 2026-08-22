@@ -87,7 +87,7 @@ export interface SimulationEvent {
   eventType: string;
   simulatedTimeSeconds: number;
   commandId: string;
-  details: readonly [string, string][];
+  details: readonly (readonly [string, string])[];
 }
 
 export interface SimulationSnapshot {
@@ -106,6 +106,31 @@ export interface SimulationSnapshot {
   events: readonly SimulationEvent[];
 }
 
+export type ReplayStatus = "verifying" | "ready" | "playing" | "paused" | "invalid";
+
+export interface ReplayEvent {
+  eventId: string;
+  eventType: string;
+  simulatedTimeSeconds: number;
+  details: readonly (readonly [string, string])[];
+}
+
+export interface ReplaySnapshot {
+  artifactId: string;
+  scenarioId: string;
+  seed: number;
+  status: ReplayStatus;
+  verified: boolean;
+  cursorSeconds: number;
+  durationSeconds: number;
+  speed: number;
+  replayDigest: string;
+  provenance: string;
+  events: readonly ReplayEvent[];
+  visibleEvents: readonly ReplayEvent[];
+  verificationError: string | null;
+}
+
 export interface OperationsSnapshot {
   source: DataSourceMode;
   availability: DataAvailability;
@@ -117,12 +142,14 @@ export interface OperationsSnapshot {
   dispatch: DispatchDecision;
   health: readonly ServiceHealth[];
   simulation?: SimulationSnapshot;
+  replay?: ReplaySnapshot;
 }
 
 export interface OperationsDataSource {
   getSnapshot(): OperationsSnapshot;
   loadSnapshot?: () => Promise<OperationsSnapshot>;
   controlSimulation?: (command: SimulationCommand) => Promise<OperationsSnapshot>;
+  controlReplay?: (command: ReplayCommand) => Promise<OperationsSnapshot>;
 }
 
 export type SimulationAction =
@@ -136,4 +163,13 @@ export interface SimulationCommand {
   scenarioId?: string;
   seed?: number;
   strategy?: string;
+}
+
+export type ReplayAction = "play" | "pause" | "seek" | "step" | "speed" | "reset";
+
+export interface ReplayCommand {
+  commandId: string;
+  action: ReplayAction;
+  seconds?: number;
+  speed?: number;
 }

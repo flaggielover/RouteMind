@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-157 - Implement verified replay playback
+Current Task: RM-157 - Implement verified replay playback (remote Evidence Gate pending)
 
-Task Status: RM-157 is in progress; RM-156 is the last fully validated task
+Task Status: RM-157 local/full/browser gates passed; implementation checkpoint is ready for commit, push, and Actions observation
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -581,15 +581,23 @@ simulation control flow. Evidence is recorded at
 five jobs, including browser smoke; RM-156 is fully validated and RM-157 is now
 active.
 
+RM-157 local implementation is complete. The replay source verifies a
+canonical SHA-256 artifact before enabling playback, exposes scenario/seed/
+provenance and explicit replay-vs-live labeling, and supports play, pause,
+reset, seek, step, speed, and event detail inspection. Web check passes 43
+unit tests/build; browser smoke passes 21 desktop/mobile tests with one
+existing desktop-only skip; the full available gate passes Java 60, Python 139
+at 95.71%, and 5 schemas/15 fixtures. Evidence is recorded at
+`evidence/gates/RM-157/replay.md`. The implementation is uncommitted and remote
+Actions validation is pending.
+
 ## Current Resume Capsule
-- Resume at RM-157 verified replay playback; do not redo completed RM-123
-  through RM-163 gates or RM-133/RM-134/RM-135/RM-152/RM-155/RM-156 green
-  Actions runs.
-- RM-156 evidence: Java 60, Python 139 at 95.71%, Web 42 unit/build, browser
-  smoke 19 passed plus one desktop-only skip, and 5 schemas/15 fixtures.
-- RM-156 implementation Actions run `32605590683` passed all five jobs. Round 2
-  is 39/48 and repository total is 67/76.
-- Next action: inspect the existing simulation state/event provenance and build
-  verified replay loading, digest validation, playback controls, seek/step,
-  event inspection, and explicit replay-vs-live labeling. RM-162 remains
-  blocked by RM-161.
+- Resume at RM-157 commit, push, and observe the real GitHub Actions run; do not
+  redo completed RM-133/RM-134/RM-135/RM-152/RM-155/RM-156 green runs.
+- RM-157 local evidence: Java 60, Python 139 at 95.71%, Web 43 unit/build,
+  browser smoke 21 passed plus one existing desktop-only skip, and 5 schemas/
+  15 fixtures. Replay digest is
+  `8614e7962a3a2f341d8a90729642dbb49311f095293a0661c89e92d57d0f0a63`.
+- Round 2 is 39/48 and repository total is 67/76 until RM-157's remote gate
+  passes. After that, close RM-157 and activate RM-158 What-if comparison;
+  RM-162 remains blocked by RM-161.

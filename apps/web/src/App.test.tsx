@@ -197,7 +197,10 @@ describe("role-aware application", () => {
     expect(
       await screen.findByText("Replay", { selector: ".source-status span" }),
     ).toBeInTheDocument();
-    expect(screen.getAllByText("Select a verified replay artifact").length).toBeGreaterThan(0);
+    expect(
+      await screen.findByRole("heading", { name: "Inspect the recorded run." }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/Digest verified/)).toBeInTheDocument();
   });
 
   it("disables role writes and explains degraded live state", async () => {
