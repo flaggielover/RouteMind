@@ -10,17 +10,17 @@ Current Task: RM-135 - Implement dynamic replanning policy
 
 Last Completed: RM-134 - Implement dynamic insertion
 
-Current Gate: RM-134 local/full gates and remote Actions run 32602785200 passed; RM-135 is now the next active P13 critical-path task
+Current Gate: RM-135 local/full gates passed (Python 131 / 95.66%); remote Actions validation is pending before closing the task
 
-CI: PASS - RM-134 run 32602785200; RM-133 run 32602269612 also passed all five jobs.
+CI: PASS - RM-134 run 32602785200; RM-135 remote validation is pending.
 
-Regression: PASS - Java 60, Python 122 / 95.56%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 131 / 95.66%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-135 - implement dynamic replanning; RM-152 is also unblocked; RM-162 remains blocked by RM-156
+Next Candidates: RM-135 remote validation; after it passes, RM-152 becomes the next unblocked high-priority task; RM-162 remains blocked by RM-156
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -193,3 +193,10 @@ The task is now passed and RM-120 is the active implementation.
   reasons.
 - RM-134 is now passed (35/48 Round 2, 63/76 repository); RM-135 dynamic
   replanning is activated on the P13 critical path.
+
+### RM-135 checkpoint - 2026-08-23
+- Added the pure compute-owned dynamic replanning policy with arrival,
+  lateness, incident, courier-loss, and material-change triggers; deterministic
+  improvement gating; immutable generation state; and debounce/cooldown guards.
+- Local compute/full gates pass with Python 131 tests at 95.66%; remote Actions
+  validation is the remaining Evidence Gate before marking RM-135 passed.

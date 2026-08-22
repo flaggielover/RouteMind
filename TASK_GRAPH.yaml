@@ -690,7 +690,7 @@
       "gates": ["L2-replanning", "L5-replanning-resilience", "L6-replanning-benchmark"],
       "evidence": ["evidence/gates/RM-135/dynamic-replanning.md"],
       "blocked_by": [],
-      "notes": "Java validates resulting commands before durable application. RM-135 is the next active P13 critical-path task after RM-134 passed."
+      "notes": "Local L2/L5 evidence passes with all five trigger kinds, deterministic improvement gating, debounced/cooldown state, trace and before/after metrics. Remote Actions validation is pending; Java validates resulting commands before durable application."
     },
     {
       "id": "RM-136",

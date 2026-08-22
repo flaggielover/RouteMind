@@ -8,7 +8,7 @@ Current Phase: Round 2 P16 Strategy Laboratory
 
 Current Task: RM-135 - Implement dynamic replanning policy
 
-Task Status: RM-135 is in progress; RM-134 is the last fully validated task
+Task Status: RM-135 implementation and local/full gates complete; remote Actions validation pending
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -536,10 +536,8 @@ blocked by RM-156.
 
 
 ## Current Resume Capsule
-- Resume at RM-135; do not redo completed RM-123 through RM-163 gates or RM-133/RM-134 green Actions runs.
-- Local compute evidence: 122 tests passed, 95.56% coverage, Ruff/format/mypy/contracts clean.
-- Full gate passed Java 60, Python 122 at 95.56%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
-- Next action: inspect twin/perturbation and dispatch boundaries, then implement
-  debounced dynamic replanning with explicit trigger, reason, and before/after
-  metrics.
+- Resume by observing RM-135's remote Actions run; do not redo completed RM-123 through RM-163 gates or RM-133/RM-134 green Actions runs.
+- Local compute evidence: 131 tests passed, 95.66% coverage, Ruff/format/mypy/contracts clean.
+- Full gate passed Java 60, Python 131 at 95.66%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
+- After RM-135 remote validation passes, activate RM-152 courier motion as the next unblocked high-priority task.
 - External data remains governed by ROUTEMIND_DATA_ROOT; no external data path was hardcoded.
