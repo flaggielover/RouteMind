@@ -685,12 +685,12 @@
       "phase": "P13",
       "priority": "high",
       "depends_on": ["RM-134", "RM-105"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Replanning triggers on arrivals, lateness, incidents, courier loss, and material state changes", "Debounce, cooldown, and authority boundaries prevent thrashing", "Replan decisions include reason, trace, and before/after metrics"],
       "gates": ["L2-replanning", "L5-replanning-resilience", "L6-replanning-benchmark"],
       "evidence": ["evidence/gates/RM-135/dynamic-replanning.md"],
       "blocked_by": [],
-      "notes": "Local L2/L5 evidence passes with all five trigger kinds, deterministic improvement gating, debounced/cooldown state, trace and before/after metrics. Remote Actions validation is pending; Java validates resulting commands before durable application."
+      "notes": "Local L2/L5 evidence passes with all five trigger kinds, deterministic improvement gating, debounced/cooldown state, trace and before/after metrics. Remote Actions run 32603303249 passed all five jobs; Java validates resulting commands before durable application."
     },
     {
       "id": "RM-136",
@@ -789,12 +789,12 @@
       "phase": "P15",
       "priority": "high",
       "depends_on": ["RM-150", "RM-133"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Couriers move along routes with simulated progress and availability", "Pickup, delivery, and arrival transitions are emitted as events", "Location projection can feed Redis GEO in platform scenarios"],
       "gates": ["L2-courier-motion", "L6-motion-replay"],
       "evidence": ["evidence/gates/RM-152/courier-motion.md"],
       "blocked_by": [],
-      "notes": "Redis remains a rebuildable projection."
+      "notes": "Redis remains a rebuildable projection. RM-152 is the next active high-priority task after RM-135 passed."
     },
     {
       "id": "RM-153",

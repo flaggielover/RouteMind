@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Round 2 Progress: 35 / 48 tasks passed
+Round 2 Progress: 36 / 48 tasks passed
 
-Repository Total: 63 / 76 tasks passed
+Repository Total: 64 / 76 tasks passed
 
-Current Task: RM-135 - Implement dynamic replanning policy
+Current Task: RM-152 - Implement courier motion and service progress
 
-Last Completed: RM-134 - Implement dynamic insertion
+Last Completed: RM-135 - Implement dynamic replanning policy
 
-Current Gate: RM-135 local/full gates passed (Python 131 / 95.66%); remote Actions validation is pending before closing the task
+Current Gate: RM-135 local/full gates and remote Actions run 32603303249 passed; RM-152 is now the next active high-priority task
 
-CI: PASS - RM-134 run 32602785200; RM-135 remote validation is pending.
+CI: PASS - RM-135 run 32603303249; RM-134 run 32602785200 also passed all five jobs.
 
 Regression: PASS - Java 60, Python 131 / 95.66%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-135 remote validation; after it passes, RM-152 becomes the next unblocked high-priority task; RM-162 remains blocked by RM-156
+Next Candidates: RM-152 - implement courier motion and service progress; RM-162 remains blocked by RM-156
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -200,3 +200,10 @@ The task is now passed and RM-120 is the active implementation.
   improvement gating; immutable generation state; and debounce/cooldown guards.
 - Local compute/full gates pass with Python 131 tests at 95.66%; remote Actions
   validation is the remaining Evidence Gate before marking RM-135 passed.
+
+### RM-135 completion - 2026-08-23
+- Dynamic replanning passed local/full gates and remote Actions run `32603303249`
+  (all five jobs green), with trigger-specific reasons, debounced/cooldown
+  state, trace, and before/after metrics.
+- RM-135 is now passed (36/48 Round 2, 64/76 repository); RM-152 courier motion
+  is activated as the next high-priority task.

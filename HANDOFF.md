@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-135 - Implement dynamic replanning policy
+Current Task: RM-152 - Implement courier motion and service progress
 
-Task Status: RM-135 implementation and local/full gates complete; remote Actions validation pending
+Task Status: RM-152 is in progress; RM-135 is the last fully validated task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -535,9 +535,19 @@ RM-135 dynamic replanning; RM-152 is also unblocked while RM-162 remains
 blocked by RM-156.
 
 
+RM-135 is fully validated after remote Actions run `32603303249` passed all
+five jobs. `DynamicReplanningPolicy` covers arrival, lateness, incident,
+courier-loss, and material-change triggers with deterministic improvement
+gating, debounce/cooldown state, trace, and before/after metrics. Compute check
+passes 131 tests at 95.66%; full available gates pass Java 60, Web 38
+unit/build, and 5 schemas/15 fixtures. The task graph now activates RM-152
+courier motion; RM-162 remains blocked by RM-156.
+
 ## Current Resume Capsule
-- Resume by observing RM-135's remote Actions run; do not redo completed RM-123 through RM-163 gates or RM-133/RM-134 green Actions runs.
+- Resume at RM-152; do not redo completed RM-123 through RM-163 gates or RM-133/RM-134/RM-135 green Actions runs.
 - Local compute evidence: 131 tests passed, 95.66% coverage, Ruff/format/mypy/contracts clean.
 - Full gate passed Java 60, Python 131 at 95.66%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
-- After RM-135 remote validation passes, activate RM-152 courier motion as the next unblocked high-priority task.
+- Next action: inspect `ScenarioKernel` and travel-provider boundaries, then
+  implement deterministic courier movement, service progress, event emission,
+  and replay-safe location projection without durable-state mutation.
 - External data remains governed by ROUTEMIND_DATA_ROOT; no external data path was hardcoded.
