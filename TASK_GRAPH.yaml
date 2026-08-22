@@ -204,7 +204,7 @@
       "phase": "P6",
       "priority": "medium",
       "depends_on": ["RM-011", "RM-030"],
-      "status": "ready",
+      "status": "in_progress",
       "acceptance": ["Operations and role workflows share maintainable foundations", "Core end-to-end state is visible", "Accessibility and responsive smoke gates pass"],
       "gates": ["L1-web", "L2-web", "L4-e2e-smoke"],
       "evidence": [],

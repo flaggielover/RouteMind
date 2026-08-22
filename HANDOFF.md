@@ -8,7 +8,7 @@ Current Phase: P1 Core Domain
 
 Current Task: RM-060 - Bootstrap role-aware web application
 
-Task Status: passed
+Task Status: in_progress
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
