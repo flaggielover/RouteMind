@@ -1,7 +1,7 @@
 # RM-101 Java Authoritative Operations Read API
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint recorded by the accompanying commit
+- Revision: `3237144` implementation checkpoint
 - Boundary: Java read-only API over durable repositories and the courier location projection
 
 ## Contract
@@ -40,3 +40,9 @@ not a claim about external production infrastructure health.
 This gate does not claim order commands, SSE/realtime freshness, production
 availability, or a live Redis/RabbitMQ deployment. Those behaviors remain later
 tasks or external gates.
+
+## GitHub Actions
+
+- Implementation run `32562416957` passed all five jobs: control plane and
+  Compose, Java business runtime, Python compute and contracts, Role-aware web
+  application, and bounded degradation and resilience.

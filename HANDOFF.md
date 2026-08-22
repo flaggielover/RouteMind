@@ -8,7 +8,7 @@ Current Phase: Round 2 P10 Live Product Foundation
 
 Current Task: RM-101 - Expose Java authoritative operations read API
 
-Task Status: implemented (local full gate passed; GitHub Actions validation pending)
+Task Status: passed (local full gate and GitHub Actions run 32562416957 passed)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -272,7 +272,7 @@ Round 2 foundation design:
 The graph now contains 48 Round 2 tasks (RM-100 through RM-190); Round 1 tasks
 remain passed and RM-101 is the current active task.
 
-Next Candidate Task: RM-101 - push and observe implementation CI, then continue RM-102/RM-103.
+Next Candidate Task: RM-102 - implement the idempotent Java order command API.
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
@@ -285,10 +285,9 @@ Outbox/Inbox reliability, put large data in Git, or mark tasks passed without ga
 
 RM-100 implementation checkpoint `8b70f9e` passed local gates and all five jobs
 in Actions run `32561918020`; evidence is in
-`evidence/gates/RM-100/2026-08-22-live-product-foundation.md`. RM-101 is now
-implemented locally: the Java operations snapshot has a `v1` schema marker,
-explicit merchant/courier projections, and a bounded health summary while
-preserving durable ownership. Evidence is in
-`evidence/gates/RM-101/operations-read-api.md`. Push this checkpoint, observe all
-Actions jobs, mark RM-101 `passed` only after CI is green, then continue with the
-next highest-priority unblocked task.
+`evidence/gates/RM-100/2026-08-22-live-product-foundation.md`. RM-101 checkpoint
+`3237144` added the Java v1 operations read response with explicit
+merchant/courier projections and bounded health summary. Local gates and all
+five Actions jobs in run `32562416957` passed; evidence is in
+`evidence/gates/RM-101/operations-read-api.md`. Continue with RM-102, preserving
+transactional Outbox ownership and command idempotency.

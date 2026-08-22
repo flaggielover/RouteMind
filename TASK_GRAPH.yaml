@@ -386,7 +386,7 @@
       "phase": "P10",
       "priority": "high",
       "depends_on": ["RM-100"],
-      "status": "implemented",
+      "status": "passed",
       "acceptance": ["Read-only operations snapshot is served from Java-owned repositories", "Order, merchant, courier, and health fields have stable versioned response shapes", "Empty durable state is represented explicitly without fixture substitution"],
       "gates": ["L2-java-read-api", "L3-java-read-api"],
       "evidence": ["evidence/gates/RM-101/operations-read-api.md"],
