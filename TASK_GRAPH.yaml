@@ -724,12 +724,12 @@
       "phase": "P14",
       "priority": "high",
       "depends_on": ["RM-140"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Local provider computes route geometry and matrix estimates over a small network fixture", "Zone/edge metadata and fallback behavior are explicit", "Provider remains replaceable and bounded"],
       "gates": ["L2-network-travel", "L6-route-correctness"],
       "evidence": ["evidence/gates/RM-141/network-travel.md"],
       "blocked_by": [],
-      "notes": "Local L2/L6 network fixture evidence passes with deterministic shortest paths, route metadata, and bounded fallback; remote Actions validation is required before closure. Large road graphs live under ROUTEMIND_DATA_ROOT."
+      "notes": "Local L2/L6 network fixture evidence passes with deterministic shortest paths, route metadata, and bounded fallback; remote Actions run 32577972174 passed all five jobs. Large road graphs live under ROUTEMIND_DATA_ROOT."
     },
     {
       "id": "RM-142",

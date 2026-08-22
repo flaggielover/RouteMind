@@ -25,4 +25,4 @@ Date: 2026-08-22
 ## Gate decision
 
 Local L2 network-travel and L6 route-correctness evidence is complete. Remote
-Actions validation is required before RM-141 is finally marked passed.
+Actions run `32577972174` passed all five jobs; RM-141 is fully validated.
