@@ -833,7 +833,7 @@
       "gates": ["L3-twin-api", "L4-twin-control", "L5-twin-control-failure"],
       "evidence": ["evidence/gates/RM-155/twin-control-api.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-151/RM-152/RM-153/RM-154 passed. No new service unless scaling/failure isolation is demonstrated."
+      "notes": "Activated after RM-151/RM-152/RM-153/RM-154 passed. Local compute/full gates pass 139 Python tests at 95.71% with bounded idempotent controls, simulated-time state, events, and replay digest; remote Actions validation is pending. No new service unless scaling/failure isolation is demonstrated."
     },
     {
       "id": "RM-156",

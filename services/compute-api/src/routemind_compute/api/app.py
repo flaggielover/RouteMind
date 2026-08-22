@@ -23,6 +23,14 @@ from routemind_compute.application.travel import (
     DeterministicLocalTravelProvider,
     FallbackTravelTimeProvider,
 )
+from routemind_compute.application.twin_control import (
+    TwinAction,
+    TwinCommandConflict,
+    TwinControlCommand,
+    TwinControlEvent,
+    TwinControlService,
+    TwinControlState,
+)
 from routemind_compute.domain.dispatch import (
     CourierCandidate,
     DispatchProblem,
@@ -58,6 +66,7 @@ REGISTRY: StrategyRegistry = default_registry()
 TRAVEL_PROVIDER = FallbackTravelTimeProvider(
     DeterministicLocalTravelProvider(), DeterministicLocalTravelProvider()
 )
+TWIN_CONTROL = TwinControlService(REGISTRY, TRAVEL_PROVIDER)
 
 
 class GeoPointRequest(BaseModel):
@@ -311,6 +320,58 @@ class ShadowEvaluateResponse(BaseModel):
     candidate_authority: Literal["none"]
 
 
+class TwinControlRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    command_id: str = Field(min_length=1, max_length=128)
+    action: TwinAction
+    seconds: float | None = Field(default=None, ge=1, le=3600)
+    speed: float | None = Field(default=None, ge=0.1, le=10)
+    scenario_id: str | None = Field(default=None, min_length=1, max_length=128)
+    seed: int | None = Field(default=None, ge=0, le=2_147_483_647)
+    strategy: str | None = Field(default=None, min_length=1, max_length=64)
+
+
+class TwinStateResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["simulation"]
+    scenario_id: str
+    seed: int
+    strategy: str
+    strategy_version: str
+    status: Literal["paused", "running", "completed"]
+    speed: float
+    simulated_time_seconds: float
+    tick: int
+    generation: int
+    event_count: int
+    last_command_id: str | None
+    replay_digest: str
+    trace_id: str
+
+
+class TwinEventResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    event_id: str
+    event_type: str
+    simulated_time_seconds: float
+    command_id: str
+    details: tuple[tuple[str, str], ...]
+
+
+class TwinControlResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["simulation"]
+    command_id: str
+    replayed: bool
+    state: TwinStateResponse
+    events: tuple[TwinEventResponse, ...]
+    trace_id: str
+
+
 @app.get("/healthz", response_model=HealthResponse)
 def health() -> HealthResponse:
     return HealthResponse(status="UP")
@@ -328,6 +389,71 @@ def system_info() -> SystemInfoResponse:
         runtime="python",
         architecture_version="v1",
         durable_state_owner=False,
+    )
+
+
+def _twin_state_response(state: TwinControlState, trace_id: str) -> TwinStateResponse:
+    return TwinStateResponse(
+        source="simulation",
+        scenario_id=state.scenario_id,
+        seed=state.seed,
+        strategy=state.strategy,
+        strategy_version=state.strategy_version,
+        status=state.status,
+        speed=state.speed,
+        simulated_time_seconds=state.simulated_time_seconds,
+        tick=state.tick,
+        generation=state.generation,
+        event_count=state.event_count,
+        last_command_id=state.last_command_id,
+        replay_digest=state.replay_digest,
+        trace_id=trace_id,
+    )
+
+
+def _twin_event_response(event: TwinControlEvent) -> TwinEventResponse:
+    return TwinEventResponse(
+        event_id=event.event_id,
+        event_type=event.event_type,
+        simulated_time_seconds=event.simulated_time_seconds,
+        command_id=event.command_id,
+        details=event.details,
+    )
+
+
+@app.get("/api/v1/twin/state", response_model=TwinStateResponse)
+def twin_state(request: Request) -> TwinStateResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    return _twin_state_response(TWIN_CONTROL.snapshot().state, trace_id)
+
+
+@app.post("/api/v1/twin/control", response_model=TwinControlResponse)
+def twin_control(payload: TwinControlRequest, request: Request) -> TwinControlResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        command = TwinControlCommand(
+            command_id=payload.command_id,
+            action=payload.action,
+            seconds=payload.seconds,
+            speed=payload.speed,
+            scenario_id=payload.scenario_id,
+            seed=payload.seed,
+            strategy=payload.strategy,
+        )
+        result = TWIN_CONTROL.apply(command)
+    except TwinCommandConflict as error:
+        raise HTTPException(status_code=409, detail=str(error)) from error
+    except KeyError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return TwinControlResponse(
+        source="simulation",
+        command_id=result.command_id or payload.command_id,
+        replayed=result.replayed,
+        state=_twin_state_response(result.state, trace_id),
+        events=tuple(_twin_event_response(event) for event in result.events),
+        trace_id=trace_id,
     )
 
 

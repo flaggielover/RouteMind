@@ -10,17 +10,17 @@ Current Task: RM-155 - Expose Digital Twin control and replay API
 
 Last Completed: RM-152 - Implement courier motion and service progress
 
-Current Gate: RM-152 local/full gates and remote Actions run 32603896737 passed; RM-155 is now active
+Current Gate: RM-155 local/full gates passed; implementation remote Actions validation is pending
 
-CI: PASS - RM-152 run 32603896737 passed all five jobs; RM-135 run 32603303249 and RM-134 run 32602785200 also passed.
+CI: PENDING - RM-155 implementation checkpoint is ready to push; design run 32604205211 and RM-152 run 32603896737 passed all five jobs.
 
-Regression: PASS - Java 60, Python 135 / 95.46%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 139 / 95.71%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-155 - expose Digital Twin control and replay API; RM-162 remains blocked by RM-156
+Next Candidates: RM-155 remote validation; after green, RM-156 Digital Twin control surface; RM-162 remains blocked by RM-156
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -226,3 +226,15 @@ The task is now passed and RM-120 is the active implementation.
   projection.
 - RM-152 is now passed (37/48 Round 2, 65/76 repository); critical RM-155
   Digital Twin control/replay API is activated.
+
+### RM-155 checkpoint - 2026-08-23
+- Added the bounded process-local Twin control service and thin FastAPI
+  adapters for start, pause, resume, step, reset, speed, scenario, seed, and
+  strategy controls. Commands are explicit simulated-time operations and never
+  mutate durable business state.
+- State and event responses include strategy/scenario provenance, simulated
+  seconds/tick, generation, deterministic event IDs, replay digest, and a
+  recent command-id idempotency window with explicit conflict handling.
+- Local compute/full gates pass with Python 139 tests at 95.71% coverage, Java
+  60 tests, Web 38 unit/build, and 5 schemas/15 fixtures. Remote Actions
+  validation is the remaining Evidence Gate before marking RM-155 passed.
