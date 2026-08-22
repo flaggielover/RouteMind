@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P10 Live Product Foundation
 
-Current Task: RM-105 - Define realtime event stream and cursor contract
+Current Task: RM-106 - Implement Java business event SSE feed
 
-Task Status: implemented (local contract gate passed; GitHub Actions validation pending)
+Task Status: pending (RM-104 and RM-105 passed local and GitHub Actions validation)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -270,9 +270,9 @@ Round 2 gap audit: `docs/reviews/ROUND_2_GAP_AUDIT.md`.
 Round 2 foundation design:
 `docs/superpowers/specs/2026-08-22-round2-live-product-foundation-design.md`.
 The graph now contains 48 Round 2 tasks (RM-100 through RM-190); Round 1 tasks
-remain passed and RM-104 is the current active task.
+remain passed and RM-106 is the current active task.
 
-Next Candidate Task: RM-105 - push and observe implementation CI, then continue RM-106.
+Next Candidate Task: RM-106 - implement bounded Java business event SSE feed and record evidence.
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
@@ -304,5 +304,5 @@ continue with RM-105.
 RM-105 defines the v1 event-stream item schema, monotonic decimal cursor,
 exclusive `Last-Event-ID` reconnect, replay provenance, stale-state semantics,
 and supported event types. Local contract evidence is in
-`evidence/gates/RM-105/realtime-contract.md`; push and observe CI, then continue
-with RM-106.
+`evidence/gates/RM-105/realtime-contract.md`; checkpoint `3c218e5` and Actions
+run `32564387503` passed all five jobs. Continue with RM-106.

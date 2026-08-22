@@ -1,7 +1,7 @@
 # RM-105 Realtime Event Stream and Cursor Contract
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint recorded by the accompanying commit
+- Revision: `3c218e5`
 - Boundary: versioned event-stream item contract consumed by future SSE adapters
 
 ## Contract
@@ -30,6 +30,8 @@ stale-state metadata. Supported event types cover `order`, `dispatch`,
    fixtures validated, plus 59 Python tests and 96.13% coverage.
 2. `python scripts/validate_control_plane.py` -> PASS.
 3. `git diff --check` -> PASS.
+4. GitHub Actions run `32564387503` -> PASS; all five jobs passed, including
+   the Python contract gate that validated 5 schemas and 15 fixtures.
 
 ## Evidence limits
 

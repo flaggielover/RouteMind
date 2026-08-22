@@ -1,7 +1,7 @@
 # RM-104 Web Live Data Source With Explicit Modes
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint recorded by the accompanying commit
+- Revision: `c44c80c`
 - Boundary: browser data-source selection and truthful source availability
 
 ## Contract
@@ -20,6 +20,8 @@ an unavailable LIVE snapshot and never silently substitutes DEMO data.
    and mobile projects, including all five role routes, source-mode selection,
    viewport containment, and accessibility checks.
 3. `python scripts/validate_control_plane.py` and `git diff --check` -> PASS.
+4. GitHub Actions run `32564042862` -> PASS; all five jobs passed, including
+   the role-aware web browser smoke gate.
 
 ## Failure semantics
 
