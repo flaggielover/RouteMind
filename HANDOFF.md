@@ -121,6 +121,8 @@ assignment-rate drop, and disagreement thresholds produce `promote` or `hold`
 with stable reason codes. Local full gate passed with 56 Python tests at 96.05%
 coverage, Java 34 tests, and Web/control regression. Evidence is in
 `evidence/gates/RM-081/2026-08-22-shadow-regression.md`.
+The RM-081 checkpoint commit `8b92bf0` passed all five GitHub Actions jobs in
+run `32555440040`.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
