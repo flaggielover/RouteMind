@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-155 - Expose Digital Twin control and replay API
+Current Task: RM-156 - Build Digital Twin control surface
 
-Task Status: RM-155 implementation and local/full gates are complete; remote Actions validation is pending
+Task Status: RM-156 is in progress; RM-155 is the last fully validated task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -565,15 +565,20 @@ explicit 409 conflicts. State/events carry strategy version, simulated time,
 generation, deterministic event IDs, and canonical replay digest. Compute check
 passes 139 tests at 95.71%; full available gates pass Java 60, Web 38
 unit/build, and 5 schemas/15 fixtures. Evidence is recorded at
-`evidence/gates/RM-155/twin-control-api.md`; remote Actions validation is
-pending.
+`evidence/gates/RM-155/twin-control-api.md`. GitHub Actions run `32604701074`
+passed all five jobs, including browser smoke; RM-155 is fully validated and
+RM-156 is now active.
 
 ## Current Resume Capsule
-- Resume by committing and pushing RM-155, then observe its real Actions run
-  until all five jobs pass; do not mark the task passed on local evidence alone.
-- Local compute/full evidence: Python 139 tests at 95.71%, Java 60, Web 38
+- Resume at RM-156, the high-priority Digital Twin control surface task; do
+  not redo completed RM-123 through RM-163 gates or RM-133/RM-134/RM-135/
+  RM-152/RM-155 green Actions runs.
+- RM-155 local/full evidence: Python 139 tests at 95.71%, Java 60, Web 38
   unit/build, browser smoke 17 passed plus one desktop-only skip, and 5
   schemas/15 fixtures.
-- After RM-155 is green, close it and activate RM-156 Digital Twin control
-  surface; RM-157 replay playback is also unblocked, while RM-162 remains
-  blocked by RM-156.
+- RM-155 implementation Actions run `32604701074` passed all five jobs. Round 2
+  is 38/48 and repository total is 66/76.
+- Next action: inspect the existing web role surfaces and live/demo/replay data
+  boundary, then implement simulation controls, live map/routes/events/metrics,
+  explicit loading/empty/error/degraded states, and browser evidence for
+  simulation mode. RM-162 remains blocked by RM-156.

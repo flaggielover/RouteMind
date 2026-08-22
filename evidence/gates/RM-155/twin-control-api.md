@@ -35,11 +35,11 @@ Date: 2026-08-23
   Web format/lint/typecheck, 38 unit tests, production build, and 5
   schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only
   skip.
-- Design checkpoint Actions run `32604205211` passed all five jobs; the
-  implementation checkpoint still requires its own remote Evidence Gate.
+- Design checkpoint Actions run `32604205211` passed all five jobs, and
+  implementation checkpoint run `32604701074` passed all five jobs, including
+  browser smoke.
 
 ## Gate decision
 
 Local L3 twin API, L4 control, and L5 control-failure evidence is complete.
-Remote GitHub Actions validation is required before `TASK_GRAPH.yaml` changes
-RM-155 to `passed`.
+Remote GitHub Actions validation is complete; RM-155 is fully validated.
