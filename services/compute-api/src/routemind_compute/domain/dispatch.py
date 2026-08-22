@@ -46,6 +46,7 @@ class CourierCandidate:
     service_risk: float = 0.0
     overtime_risk: float = 0.0
     estimated_travel_seconds: float = 0.0
+    zone: str = ""
 
     def __post_init__(self) -> None:
         if not self.courier_id.strip():

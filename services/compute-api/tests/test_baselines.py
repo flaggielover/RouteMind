@@ -19,7 +19,14 @@ def make_problem() -> DispatchProblem:
 
 def test_baselines_conform_to_registry_and_are_versioned() -> None:
     registry = default_registry()
-    assert registry.names() == ("hungarian", "nearest", "risk-aware", "weighted-greedy")
+    assert registry.names() == (
+        "hungarian",
+        "minimum-cost-flow",
+        "nearest",
+        "partitioned-assignment",
+        "risk-aware",
+        "weighted-greedy",
+    )
     results = [registry.solve(name, make_problem()) for name in registry.names()]
     assert {result.strategy_version for result in results} == {"1.0.0"}
     assert {result.courier_id for result in results} == {"courier-b"}

@@ -410,4 +410,13 @@ in each decision. Local full gate passed with Java 60 tests, Python 69 tests at
 96.57% coverage, Web 38 unit tests/build, and 5 schemas/15 fixtures. Evidence is
 recorded at `evidence/gates/RM-131/risk-aware-scoring.md`; remote Actions run
 `32576213676` passed all five jobs. RM-132 minimum-cost flow and partitioned
-assignment is now the active task.
+assignment is now locally complete.
+RM-132 adds a bounded successive-shortest-augmenting-path solver for rectangular
+request/courier matrices, courier capacity, deterministic residual rematching, and
+explicit unassigned reasons. `partitioned-assignment` reuses the solver per zone
+without crossing courier partitions; single-order calls remain registry-compatible
+and record assignment mode/count metadata. Local full gate passed with Java 60
+tests, Python 74 tests at 96.03% coverage, Web 38 unit tests/build, and 5
+schemas/15 fixtures. Evidence is recorded at
+`evidence/gates/RM-132/flow-assignment.md`; checkpoint is awaiting remote Actions
+validation. RM-140 dynamic travel model contract is now the active task.

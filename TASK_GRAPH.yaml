@@ -646,12 +646,12 @@
       "phase": "P13",
       "priority": "high",
       "depends_on": ["RM-130"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Flow and partitioned strategies handle rectangular workloads and deterministic ties", "Capacity and infeasibility are explicit", "Runtime and assignment quality are recorded through the registry"],
       "gates": ["L2-flow-assignment", "L6-dispatch-benchmark"],
       "evidence": ["evidence/gates/RM-132/flow-assignment.md"],
       "blocked_by": [],
-      "notes": "No fabricated performance claims. Deterministic flow and partitioned assignment are now the active implementation focus."
+      "notes": "No fabricated performance claims. Deterministic flow and partitioned assignment are recorded; remote CI validation is required for the checkpoint."
     },
     {
       "id": "RM-133",
@@ -711,12 +711,12 @@
       "phase": "P14",
       "priority": "high",
       "depends_on": ["RM-040", "RM-050"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Travel estimates accept simulated time, traffic context, and incident updates", "Point and matrix results preserve provider/fallback metadata", "Fixed inputs remain reproducible"],
       "gates": ["L1-travel-contract", "L2-dynamic-travel"],
       "evidence": ["evidence/gates/RM-140/dynamic-travel.md"],
       "blocked_by": [],
-      "notes": "No real traffic claim without a live provider."
+      "notes": "No real traffic claim without a live provider. Dynamic time and traffic context are now the active contract focus."
     },
     {
       "id": "RM-141",

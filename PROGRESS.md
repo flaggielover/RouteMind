@@ -1,26 +1,26 @@
 # RouteMind Progress
 
-Current Phase: Round 2 P13 Advanced Dispatch
+Current Phase: Round 2 P14 Dynamic Travel
 
-Round 2 Progress: 21 / 48 tasks passed
+Round 2 Progress: 22 / 48 tasks passed
 
-Repository Total: 49 / 76 tasks passed
+Repository Total: 50 / 76 tasks passed
 
-Current Task: RM-132 - Implement minimum-cost flow and partitioned assignment
+Current Task: RM-140 - Define dynamic travel model contract
 
-Last Completed: RM-131 - Add capacity, preparation, and risk-aware scoring
+Last Completed: RM-132 - Implement minimum-cost flow and partitioned assignment
 
-Current Gate: RM-131 local/full/CI gates passed in run 32576213676; RM-132 flow assignment implementation is in progress
+Current Gate: RM-132 local/full gates passed; checkpoint is awaiting remote CI validation
 
 CI: PASS - RM-131 run 32576213676; all five jobs passed. RM-130 run 32575824899 also passed all five jobs.
 
-Regression: PASS - Java 60, Python 69 / 96.57%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 74 / 96.03%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-132 - implement minimum-cost flow and partitioned assignment
+Next Candidates: RM-140 - define dynamic travel model contract
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
