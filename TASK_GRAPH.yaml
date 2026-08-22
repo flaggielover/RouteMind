@@ -373,7 +373,7 @@
       "phase": "P10",
       "priority": "critical",
       "depends_on": ["RM-060", "RM-080", "RM-088", "RM-090"],
-      "status": "implemented",
+      "status": "passed",
       "acceptance": ["Typed frontend data modes distinguish LIVE, DEMO, and REPLAY without silent fallback", "Operations snapshot contract preserves service ownership, source metadata, and explicit degraded or unavailable states", "Java read state and Python dispatch state remain separate and bounded"],
       "gates": ["L1-live-contract", "L2-data-boundary", "security-review"],
       "evidence": ["evidence/gates/RM-100/2026-08-22-live-product-foundation.md"],

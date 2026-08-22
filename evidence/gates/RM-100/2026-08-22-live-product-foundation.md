@@ -1,7 +1,7 @@
 # RM-100 Live Product Foundation Gate
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint recorded by the accompanying commit
+- Revision: `8b70f9e` implementation checkpoint
 - Worktree: implementation changes only; no unrelated files
 - Boundary: local service and browser validation; no production deployment or live provider claim
 
@@ -47,3 +47,9 @@ This gate proves the local contract and ownership boundary only. It does not
 claim production availability, real courier traffic, a verified replay artifact,
 SSE/realtime delivery, or end-to-end command execution; those are later tasks in
 the Round 2 graph.
+
+## GitHub Actions
+
+- Implementation run `32561918020` passed all five jobs: control plane and
+  Compose, Java business runtime, Python compute and contracts, Role-aware web
+  application, and bounded degradation and resilience.

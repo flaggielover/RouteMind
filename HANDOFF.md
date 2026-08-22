@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P10 Live Product Foundation
 
-Current Task: RM-100 - Define live, demo, and replay data boundary
+Current Task: RM-101 - Expose Java authoritative operations read API
 
-Task Status: implemented (local gates passed; GitHub Actions validation pending)
+Task Status: pending (all dependencies passed; begin implementation)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -272,7 +272,7 @@ Round 2 foundation design:
 The graph now contains 48 Round 2 tasks (RM-100 through RM-190); Round 1 tasks
 remain passed and RM-100 is the only active eligible task.
 
-Next Candidate Task: RM-100 - push and observe implementation CI, then RM-101.
+Next Candidate Task: RM-101 - harden the Java authoritative operations read API.
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
@@ -283,8 +283,9 @@ Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 Do Not Do: Do not collapse the dual runtime, treat Redis as durable truth, bypass
 Outbox/Inbox reliability, put large data in Git, or mark tasks passed without gates.
 
-RM-100 implementation is present in the working tree and has passed the local
-full gate plus 16 desktop/mobile Playwright checks with axe. Evidence is in
-`evidence/gates/RM-100/2026-08-22-live-product-foundation.md`. Push the coherent
-checkpoint, observe all Actions jobs, mark RM-100 `passed` only after CI is
-green, and continue immediately with RM-101.
+RM-100 implementation checkpoint `8b70f9e` passed local gates and all five jobs
+in Actions run `32561918020`; evidence is in
+`evidence/gates/RM-100/2026-08-22-live-product-foundation.md`. RM-101 is now the
+highest-priority unblocked task. Extend the Java read API with stable health and
+merchant/courier response semantics, validate locally, and keep the ownership
+boundary explicit before committing.
