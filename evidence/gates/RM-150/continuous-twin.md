@@ -26,4 +26,5 @@ Date: 2026-08-22
 ## Gate decision
 
 Local L2 twin-kernel and L6 simulation-reproducibility evidence is complete.
-Remote Actions validation is required before RM-150 is finally marked passed.
+Remote Actions run `32579369219` passed all five jobs; RM-150 is fully
+validated.
