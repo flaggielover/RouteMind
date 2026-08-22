@@ -30,5 +30,5 @@ Date: 2026-08-22
 
 ## Gate decision
 
-Local L2 demand-generator and L6 demand-replay evidence is complete. The
-checkpoint is awaiting remote Actions validation.
+Local L2 demand-generator and L6 demand-replay evidence is complete. Remote
+Actions run `32581545061` passed all five jobs; RM-151 is fully validated.

@@ -776,12 +776,12 @@
       "phase": "P15",
       "priority": "high",
       "depends_on": ["RM-150"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Demand supports rate, time-of-day, zone, merchant, burst, and order profiles", "Stochastic model and seed are recorded", "Generated arrivals can be replayed exactly"],
       "gates": ["L2-demand-generator", "L6-demand-replay"],
       "evidence": ["evidence/gates/RM-151/demand-arrivals.md"],
       "blocked_by": [],
-      "notes": "Local L2/L6 demand-generator evidence passes with seeded Bernoulli arrivals, explicit burst/profile metadata, stable ordering, and replay digest; remote Actions validation is required before closure. No unexplained random numbers."
+      "notes": "Local L2/L6 demand-generator evidence passes with seeded Bernoulli arrivals, explicit burst/profile metadata, stable ordering, and replay digest; remote Actions run 32581545061 passed all five jobs. No unexplained random numbers."
     },
     {
       "id": "RM-152",
@@ -802,12 +802,12 @@
       "phase": "P15",
       "priority": "high",
       "depends_on": ["RM-150", "RM-131"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Preparation delay, queue load, expected/actual ready time, and late risk evolve over simulated time", "Dispatch can consume preparation state", "Fixed stochastic inputs replay deterministically"],
       "gates": ["L2-preparation-model", "L6-preparation-replay"],
       "evidence": ["evidence/gates/RM-153/merchant-preparation.md"],
       "blocked_by": [],
-      "notes": "Model is simulation state, not durable merchant truth."
+      "notes": "Dynamic merchant preparation is now the active task; model is simulation state, not durable merchant truth."
     },
     {
       "id": "RM-154",

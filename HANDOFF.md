@@ -464,4 +464,5 @@ profile metadata propagation, and a canonical replay digest. Local compute and
 full gates pass with Java 60 tests, Python 92 tests at 96.34% coverage, Web 38
 unit tests/build, and 5 schemas/15 fixtures. Evidence is recorded at
 `evidence/gates/RM-151/demand-arrivals.md`; checkpoint is awaiting remote
-Actions validation.
+Actions run `32581545061` passed all five jobs; RM-151 is fully validated.
+RM-153 dynamic merchant preparation model is now the active task.
