@@ -420,5 +420,7 @@ tests, Python 74 tests at 96.03% coverage, Web 38 unit tests/build, and 5
 schemas/15 fixtures. Evidence is recorded at
 `evidence/gates/RM-132/flow-assignment.md`; remote Actions run `32576849657`
 passed all five jobs. RM-132 is fully validated. RM-140 dynamic travel model
-contract now has local/full evidence and is awaiting remote Actions validation.
-Evidence is recorded at `evidence/gates/RM-140/dynamic-travel.md`.
+contract passed local/full validation and remote Actions run `32577433788` (all
+five jobs green). Evidence is recorded at
+`evidence/gates/RM-140/dynamic-travel.md`. RM-141 network and zone travel
+provider is now the active task.

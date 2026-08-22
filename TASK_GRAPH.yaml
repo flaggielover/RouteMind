@@ -711,12 +711,12 @@
       "phase": "P14",
       "priority": "high",
       "depends_on": ["RM-040", "RM-050"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Travel estimates accept simulated time, traffic context, and incident updates", "Point and matrix results preserve provider/fallback metadata", "Fixed inputs remain reproducible"],
       "gates": ["L1-travel-contract", "L2-dynamic-travel"],
       "evidence": ["evidence/gates/RM-140/dynamic-travel.md"],
       "blocked_by": [],
-      "notes": "Local L1/L2 dynamic travel evidence passes with deterministic context and fallback metadata; remote Actions validation is required before closure. No real traffic claim without a live provider."
+      "notes": "Local L1/L2 dynamic travel evidence passes with deterministic context and fallback metadata; remote Actions run 32577433788 passed all five jobs. No real traffic claim without a live provider."
     },
     {
       "id": "RM-141",

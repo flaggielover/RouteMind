@@ -27,4 +27,4 @@ Date: 2026-08-22
 ## Gate decision
 
 Local L1 travel-contract and L2 dynamic-travel evidence is complete. Remote
-Actions validation is required before RM-140 is finally marked passed.
+Actions run `32577433788` passed all five jobs; RM-140 is fully validated.
