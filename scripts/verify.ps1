@@ -42,6 +42,11 @@ try {
         throw "Recovery contract self-tests failed"
     }
 
+    python scripts/release_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Release contract self-tests failed"
+    }
+
     if (Test-Path -LiteralPath "compose.yaml") {
         if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
             throw "Docker is required to validate compose.yaml"
