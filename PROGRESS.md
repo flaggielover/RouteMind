@@ -10,11 +10,11 @@ Current Task: RM-143 - Add traffic and incident travel updates
 
 Last Completed: RM-142 - Add data-root matrix and artifact adapter
 
-Current Gate: RM-142 local/full/CI gates passed in run 32578382074; RM-143 is now in progress
+Current Gate: RM-143 local/full gates passed; checkpoint is awaiting remote CI validation
 
 CI: PASS - RM-142 run 32578382074; all five jobs passed. RM-141 run 32577972174 also passed all five jobs.
 
-Regression: PASS - Java 60, Python 85 / 95.22%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 89 / 96.40%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 

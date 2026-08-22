@@ -30,3 +30,9 @@ and replay data. `DataArtifactManifest` is content-addressed and records
 producer, revision, configuration, and seed. `DataRootArtifactAdapter` performs
 symlink-aware containment and checksum verification before exposing a path;
 unsafe or missing inputs fail closed and no generated payload is committed.
+
+RM-143 adds versioned `TravelUpdate` records to the dynamic context. Updates
+activate at simulated time and can perturb global traffic, named zones, route
+edges, and incidents. Canonical ordering and a replay digest make fixed
+scenarios reproducible; all traffic remains explicitly simulated until a live
+provider is separately verified.

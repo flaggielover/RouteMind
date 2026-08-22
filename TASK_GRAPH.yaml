@@ -755,7 +755,7 @@
       "gates": ["L2-traffic-model", "L6-travel-robustness"],
       "evidence": ["evidence/gates/RM-143/traffic-updates.md"],
       "blocked_by": [],
-      "notes": "Traffic and incident updates are now the active task; provider live traffic remains deferred_external unless verified."
+      "notes": "Local L2/L6 traffic update evidence passes with versioned deterministic perturbations and replay digest; remote Actions validation is required before closure. Provider live traffic remains deferred_external unless verified."
     },
     {
       "id": "RM-150",

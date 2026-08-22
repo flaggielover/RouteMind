@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 from collections.abc import Callable, Sequence
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 from dataclasses import dataclass, field, replace
@@ -12,6 +14,55 @@ from routemind_compute.domain.dispatch import GeoPoint
 
 
 @dataclass(frozen=True, slots=True)
+class TravelUpdate:
+    """Versioned, simulated traffic and incident perturbation."""
+
+    update_id: str
+    revision: int
+    effective_from_seconds: float
+    traffic_multiplier: float = 1.0
+    zone_multipliers: tuple[tuple[str, float], ...] = ()
+    edge_delays_seconds: tuple[tuple[str, float], ...] = ()
+    incident_delay_seconds: float = 0.0
+    source: str = "simulated"
+
+    def __post_init__(self) -> None:
+        if not self.update_id.strip():
+            raise ValueError("travel update id must not be blank")
+        if (
+            isinstance(self.revision, bool)
+            or not isinstance(self.revision, int)
+            or self.revision < 0
+        ):
+            raise ValueError("travel update revision must be a non-negative integer")
+        if not isfinite(self.effective_from_seconds) or self.effective_from_seconds < 0:
+            raise ValueError("travel update effective time must be finite and non-negative")
+        if not isfinite(self.traffic_multiplier) or self.traffic_multiplier <= 0:
+            raise ValueError("travel update multiplier must be finite and positive")
+        if not isfinite(self.incident_delay_seconds) or self.incident_delay_seconds < 0:
+            raise ValueError("travel update incident delay must be finite and non-negative")
+        if not self.source.strip():
+            raise ValueError("travel update source must not be blank")
+        _validate_multiplier_entries(self.zone_multipliers, "zone")
+        _validate_delay_entries(self.edge_delays_seconds, "edge")
+        object.__setattr__(self, "zone_multipliers", tuple(sorted(self.zone_multipliers)))
+        object.__setattr__(self, "edge_delays_seconds", tuple(sorted(self.edge_delays_seconds)))
+
+    @property
+    def metadata(self) -> dict[str, object]:
+        return {
+            "update_id": self.update_id,
+            "revision": self.revision,
+            "effective_from_seconds": self.effective_from_seconds,
+            "traffic_multiplier": self.traffic_multiplier,
+            "zone_multipliers": self.zone_multipliers,
+            "edge_delays_seconds": self.edge_delays_seconds,
+            "incident_delay_seconds": self.incident_delay_seconds,
+            "source": self.source,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class DynamicTravelContext:
     """Deterministic inputs that can change a travel estimate without I/O."""
 
@@ -20,6 +71,7 @@ class DynamicTravelContext:
     incident_delay_seconds: float = 0.0
     traffic_context: str = "baseline"
     incident_ids: tuple[str, ...] = ()
+    updates: tuple[TravelUpdate, ...] = ()
 
     def __post_init__(self) -> None:
         if not isfinite(self.simulated_time_seconds) or self.simulated_time_seconds < 0:
@@ -32,7 +84,24 @@ class DynamicTravelContext:
             raise ValueError("traffic context must not be blank")
         if any(not incident_id.strip() for incident_id in self.incident_ids):
             raise ValueError("incident ids must not be blank")
+        update_ids = tuple(update.update_id for update in self.updates)
+        if len(update_ids) != len(set(update_ids)):
+            raise ValueError("travel update ids must be unique")
         object.__setattr__(self, "incident_ids", tuple(sorted(set(self.incident_ids))))
+        object.__setattr__(
+            self,
+            "updates",
+            tuple(
+                sorted(
+                    self.updates,
+                    key=lambda update: (
+                        update.effective_from_seconds,
+                        update.revision,
+                        update.update_id,
+                    ),
+                )
+            ),
+        )
 
     @property
     def metadata(self) -> dict[str, object]:
@@ -42,7 +111,19 @@ class DynamicTravelContext:
             "traffic_context": self.traffic_context,
             "incident_delay_seconds": self.incident_delay_seconds,
             "incident_ids": self.incident_ids,
+            "updates": tuple(tuple(update.metadata.items()) for update in self.updates),
         }
+
+    @property
+    def replay_digest(self) -> str:
+        encoded = json.dumps(self.metadata, sort_keys=True, separators=(",", ":")).encode()
+        return hashlib.sha256(encoded).hexdigest()
+
+    def with_update(self, update: TravelUpdate) -> DynamicTravelContext:
+        """Return a context with one versioned simulated update applied."""
+        if any(existing.update_id == update.update_id for existing in self.updates):
+            raise ValueError("travel update id must be unique")
+        return replace(self, updates=(*self.updates, update))
 
     def with_incident(self, incident_id: str, delay_seconds: float) -> DynamicTravelContext:
         """Return a reproducible context with one incident update applied."""
@@ -298,7 +379,7 @@ class NetworkTravelProvider:
         effective_context = context or DynamicTravelContext()
         base_seconds, geometry, edge_ids, zones = self._route(origin, destination)
         return TravelTime(
-            _apply_context(base_seconds, effective_context),
+            _apply_context(base_seconds, effective_context, zones=zones, edge_ids=edge_ids),
             self.name,
             context=effective_context,
             route_geometry=geometry,
@@ -323,8 +404,51 @@ class NetworkTravelProvider:
         return TravelTimeMatrix(values, self.name, effective_context)
 
 
-def _apply_context(base_seconds: float, context: DynamicTravelContext) -> float:
-    return base_seconds * context.traffic_multiplier + context.incident_delay_seconds
+def _validate_multiplier_entries(entries: tuple[tuple[str, float], ...], label: str) -> None:
+    keys = [key for key, _ in entries]
+    if any(not key.strip() for key in keys):
+        raise ValueError(f"travel update {label} keys must not be blank")
+    if len(keys) != len(set(keys)):
+        raise ValueError(f"travel update {label} keys must be unique")
+    if any(not isfinite(value) or value <= 0 for _, value in entries):
+        raise ValueError(f"travel update {label} multipliers must be finite and positive")
+
+
+def _validate_delay_entries(entries: tuple[tuple[str, float], ...], label: str) -> None:
+    keys = [key for key, _ in entries]
+    if any(not key.strip() for key in keys):
+        raise ValueError(f"travel update {label} keys must not be blank")
+    if len(keys) != len(set(keys)):
+        raise ValueError(f"travel update {label} keys must be unique")
+    if any(not isfinite(value) or value < 0 for _, value in entries):
+        raise ValueError(f"travel update {label} delays must be finite and non-negative")
+
+
+def _apply_context(
+    base_seconds: float,
+    context: DynamicTravelContext,
+    *,
+    zones: tuple[str, ...] = (),
+    edge_ids: tuple[str, ...] = (),
+) -> float:
+    multiplier = context.traffic_multiplier
+    delay = context.incident_delay_seconds
+    active_zones = set(zones)
+    active_edges = set(edge_ids)
+    for update in context.updates:
+        if update.effective_from_seconds > context.simulated_time_seconds:
+            continue
+        multiplier *= update.traffic_multiplier
+        for zone, zone_multiplier in update.zone_multipliers:
+            if zone in active_zones:
+                multiplier *= zone_multiplier
+        delay += update.incident_delay_seconds
+        delay += sum(
+            edge_delay
+            for edge_id, edge_delay in update.edge_delays_seconds
+            if edge_id in active_edges
+        )
+    return base_seconds * multiplier + delay
 
 
 def _invoke_with_context(
