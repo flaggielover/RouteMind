@@ -37,6 +37,20 @@ class OrderTests {
 	}
 
 	@Test
+	void recordsMerchantPreparationAndReadyStatesBeforeDispatch() {
+		Order order = Order.create(OrderId.newId(), created)
+				.transitionTo(OrderStatus.CONFIRMED, "merchant", created.plusSeconds(1), 0)
+				.transitionTo(OrderStatus.PREPARING, "merchant", created.plusSeconds(2), 1)
+				.transitionTo(OrderStatus.READY_FOR_PICKUP, "merchant", created.plusSeconds(3), 2)
+				.transitionTo(OrderStatus.ASSIGNED, "dispatch", created.plusSeconds(4), 3);
+
+		assertThat(order.status()).isEqualTo(OrderStatus.ASSIGNED);
+		assertThat(order.transitions()).extracting(OrderTransition::to)
+				.containsExactly(OrderStatus.CONFIRMED, OrderStatus.PREPARING,
+						OrderStatus.READY_FOR_PICKUP, OrderStatus.ASSIGNED);
+	}
+
+	@Test
 	void cancellationIsOnlyAllowedBeforePickupAndTimeMustAdvance() {
 		Order cancelled = Order.create(OrderId.newId(), created)
 				.transitionTo(OrderStatus.CANCELLED, "customer", created.plusSeconds(1), 0);

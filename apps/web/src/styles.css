@@ -1386,6 +1386,20 @@ button {
 .next-stop {
   margin-bottom: 16px;
 }
+.readiness-details {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  display: grid;
+  font-size: 10px;
+  gap: 6px;
+  margin: 0 0 14px;
+  padding-top: 11px;
+}
+.readiness-details strong {
+  color: var(--ink);
+  font-size: 11px;
+  margin-left: 4px;
+}
 .shift-summary {
   margin-bottom: 16px;
 }

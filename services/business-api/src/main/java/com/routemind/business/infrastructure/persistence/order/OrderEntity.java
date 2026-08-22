@@ -62,12 +62,21 @@ class OrderEntity {
 			throw new IllegalArgumentException("order identity cannot change");
 		}
 		id = order.id().value();
-		status = order.status();
-		createdAt = order.createdAt();
-		updatedAt = order.updatedAt();
-		transitions.clear();
-		order.transitions().stream().map(transition -> OrderTransitionEntity.from(this, transition))
-				.forEach(transitions::add);
+	status = order.status();
+	createdAt = order.createdAt();
+	updatedAt = order.updatedAt();
+	for (int index = 0; index < order.transitions().size(); index++) {
+		OrderTransition transition = order.transitions().get(index);
+		if (index < transitions.size()) {
+			transitions.get(index).apply(transition);
+		}
+		else {
+			transitions.add(OrderTransitionEntity.from(this, transition));
+		}
+	}
+	while (transitions.size() > order.transitions().size()) {
+		transitions.remove(transitions.size() - 1);
+	}
 	}
 
 	long persistedVersion() {

@@ -22,6 +22,7 @@ import { liveDataSource, replayDataSource } from "./data/liveSnapshot";
 import {
   createCustomerOrder,
   createIdempotencyKey,
+  transitionMerchantOrder,
   type CustomerOrderCommandResult,
 } from "./data/orderCommands";
 import {
@@ -896,6 +897,41 @@ function CustomerView({
 }
 
 function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
+  const [command, setCommand] = useState<CustomerCommandState>(null);
+  const order =
+    snapshot.orders.find((candidate) =>
+      ["CREATED", "CONFIRMED", "PREPARING"].includes(candidate.status),
+    ) ?? snapshot.orders[0];
+  const nextCommand = order
+    ? order.status === "CREATED"
+      ? { target: "CONFIRMED" as const, label: "Accept order" }
+      : order.status === "CONFIRMED"
+        ? { target: "PREPARING" as const, label: "Start preparation" }
+        : order.status === "PREPARING"
+          ? { target: "READY_FOR_PICKUP" as const, label: "Mark ready" }
+          : null
+    : null;
+  const commandAvailable = snapshot.source === "live" && snapshot.availability !== "loading";
+  const ordersInPrep = snapshot.orders.filter(
+    (candidate) => candidate.status === "PREPARING",
+  ).length;
+  const handoffsNext = snapshot.orders.filter(
+    (candidate) => candidate.status === "READY_FOR_PICKUP",
+  ).length;
+  const prepMinutes = snapshot.merchants[0]?.prepMinutes ?? 0;
+  const readyEvent = order?.events.find((event) => event.status === "READY_FOR_PICKUP");
+  const submitTransition = async () => {
+    if (!order || !nextCommand || !commandAvailable || command?.kind === "pending") return;
+    const idempotencyKey = `merchant-${nextCommand.target.toLowerCase()}-${order.id}-${order.version ?? 0}`;
+    setCommand({ kind: "pending", idempotencyKey });
+    const result = await transitionMerchantOrder({
+      orderId: order.id,
+      target: nextCommand.target,
+      expectedVersion: order.version ?? 0,
+      idempotencyKey,
+    });
+    setCommand(result);
+  };
   return (
     <RolePage
       eyebrow="Merchant / kitchen queue"
@@ -914,15 +950,15 @@ function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
           </div>
           <div className="merchant-stats">
             <div>
-              <strong>6</strong>
+              <strong>{ordersInPrep}</strong>
               <span>orders in prep</span>
             </div>
             <div>
-              <strong>11m</strong>
+              <strong>{prepMinutes > 0 ? `${prepMinutes}m` : "Unavailable"}</strong>
               <span>avg prep time</span>
             </div>
             <div>
-              <strong>2</strong>
+              <strong>{handoffsNext}</strong>
               <span>handoffs next</span>
             </div>
           </div>
@@ -951,13 +987,69 @@ function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
               <Clock3 size={19} />
             </div>
             <div>
-              <strong>Preparing now</strong>
-              <p>Cedar &amp; Salt · expected ready 13:01</p>
+              <strong>{order ? orderStatusLabel[order.status] : "No order available"}</strong>
+              <p>
+                {order
+                  ? `${order.merchantName} · ${order.shortId} · version ${order.version ?? "unknown"}`
+                  : "Select a live order to operate"}
+              </p>
             </div>
           </div>
-          <button className="button button-primary" type="button">
-            <CheckCircle2 size={15} /> Mark ready
-          </button>
+          <div className="readiness-details" aria-label="Readiness timing">
+            <span>
+              Expected ready <strong>{order?.eta ?? "Unavailable"}</strong>
+            </span>
+            <span>
+              Actual ready <strong>{readyEvent?.at ?? "Not recorded"}</strong>
+            </span>
+          </div>
+          {nextCommand && (
+            <button
+              className="button button-primary"
+              type="button"
+              disabled={!commandAvailable || command?.kind === "pending"}
+              onClick={() => void submitTransition()}
+            >
+              <CheckCircle2
+                size={15}
+                className={command?.kind === "pending" ? "spin" : undefined}
+              />
+              {command?.kind === "pending" ? "Submitting..." : nextCommand.label}
+            </button>
+          )}
+          {!commandAvailable && (
+            <p className="command-note" role="status">
+              {snapshot.source === "live"
+                ? "Waiting for the live Java snapshot."
+                : "Writing is disabled for demo and replay sources."}
+            </p>
+          )}
+          {command?.kind === "success" && (
+            <div className="command-result" role="status">
+              <strong>
+                {command.replayed ? "Idempotent replay acknowledged" : "Merchant command accepted"}
+              </strong>
+              <span>
+                {command.orderId} · {command.status} · version {command.version}
+              </span>
+              <small>
+                Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+              </small>
+            </div>
+          )}
+          {command?.kind === "error" && (
+            <div className="command-result command-error" role="alert">
+              <strong>Command not accepted: {command.code}</strong>
+              <span>
+                {command.retryable
+                  ? "The same idempotency key can be retried."
+                  : "Resolve the validation or conflict before retrying."}
+              </span>
+              <small>
+                Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+              </small>
+            </div>
+          )}
         </section>
       </section>
     </RolePage>

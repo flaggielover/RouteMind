@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { createCustomerOrder, createIdempotencyKey } from "./orderCommands";
+import {
+  createCustomerOrder,
+  createIdempotencyKey,
+  transitionMerchantOrder,
+} from "./orderCommands";
 
 function response(body: unknown, status: number, traceId = "trace-command-1"): Response {
   return new Response(JSON.stringify(body), {
@@ -61,5 +65,26 @@ describe("customer order command boundary", () => {
 
   it("creates a stable scoped key for a command attempt", () => {
     expect(createIdempotencyKey(() => "uuid-1")).toBe("customer-create-uuid-1");
+  });
+
+  it("sends merchant lifecycle transitions with the expected version", async () => {
+    let request: RequestInit | undefined;
+    const result = await transitionMerchantOrder({
+      orderId: "order-1",
+      target: "READY_FOR_PICKUP",
+      expectedVersion: 2,
+      fetchImpl: async (_url, init) => {
+        request = init;
+        return response(
+          { orderId: "order-1", status: "READY_FOR_PICKUP", version: 3, replayed: false },
+          200,
+        );
+      },
+    });
+
+    expect(result.kind).toBe("success");
+    expect(request?.method).toBe("POST");
+    expect(new Headers(request?.headers).get("X-Actor")).toBe("merchant");
+    expect(request?.body).toBe(JSON.stringify({ target: "READY_FOR_PICKUP", expectedVersion: 2 }));
   });
 });

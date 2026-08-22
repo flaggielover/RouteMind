@@ -49,6 +49,10 @@ class OrderTransitionEntity {
 
 	private OrderTransitionEntity(OrderEntity order, OrderTransition transition) {
 		this.order = order;
+		apply(transition);
+	}
+
+	void apply(OrderTransition transition) {
 		sequenceNumber = transition.sequenceNumber();
 		from = transition.from();
 		to = transition.to();

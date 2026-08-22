@@ -77,6 +77,8 @@ function orderStatus(status: string): OrderStatus {
   const map: Record<string, OrderStatus> = {
     CREATED: "CREATED",
     CONFIRMED: "CONFIRMED",
+    PREPARING: "PREPARING",
+    READY_FOR_PICKUP: "READY_FOR_PICKUP",
     ASSIGNED: "ASSIGNED",
     PICKED_UP: "PICKED_UP",
     DELIVERED: "DELIVERED",

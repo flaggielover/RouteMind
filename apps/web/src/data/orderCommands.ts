@@ -117,3 +117,69 @@ export async function createCustomerOrder(
     clearTimeout(timeout);
   }
 }
+
+export async function transitionMerchantOrder(options: {
+  orderId: string;
+  target: "CONFIRMED" | "PREPARING" | "READY_FOR_PICKUP";
+  expectedVersion: number;
+  fetchImpl?: typeof fetch;
+  idempotencyKey?: string;
+}): Promise<CustomerOrderCommandResult> {
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const idempotencyKey =
+    options.idempotencyKey ??
+    `merchant-${options.target.toLowerCase()}-${options.orderId}-${options.expectedVersion}`;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetchImpl(
+      `${businessApi}/api/v1/orders/${options.orderId}/transitions`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Idempotency-Key": idempotencyKey,
+          "X-Actor": "merchant",
+        },
+        body: JSON.stringify({ target: options.target, expectedVersion: options.expectedVersion }),
+        signal: controller.signal,
+      },
+    );
+    const body = (await response.json().catch(() => ({}))) as OrderCommandResponse;
+    const responseTraceId = traceId(response, body);
+    if (response.ok && isSuccess(body)) {
+      return {
+        kind: "success",
+        orderId: body.orderId,
+        status: body.status,
+        version: body.version,
+        replayed: body.replayed,
+        traceId: responseTraceId,
+        idempotencyKey,
+      };
+    }
+    return {
+      kind: "error",
+      code: typeof body.code === "string" ? body.code : `HTTP ${response.status}`,
+      status: response.status,
+      traceId: responseTraceId,
+      retryable: response.status >= 500 || response.status === 408,
+      idempotencyKey,
+    };
+  } catch (error) {
+    return {
+      kind: "error",
+      code:
+        error instanceof DOMException && error.name === "AbortError"
+          ? "command_timeout"
+          : "service_unavailable",
+      status: 0,
+      traceId: null,
+      retryable: true,
+      idempotencyKey,
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
+}

@@ -115,6 +115,21 @@ describe("role-aware application", () => {
     ).toBeInTheDocument();
   });
 
+  it("shows the merchant lifecycle action while keeping demo commands disabled", async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    await user.click(screen.getByRole("link", { name: /Merchant/ }));
+
+    expect(
+      await screen.findByRole("heading", { name: "Prep with the handoff in view." }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Mark ready" })).toBeDisabled();
+    expect(
+      screen.getByText("Writing is disabled for demo and replay sources."),
+    ).toBeInTheDocument();
+  });
+
   it("keeps live failure explicit while switching through demo and replay modes", async () => {
     const user = userEvent.setup();
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));

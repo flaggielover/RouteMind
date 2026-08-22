@@ -160,11 +160,54 @@ class BusinessApiApplicationTests {
 	}
 
 	@Test
+	void merchantPreparationCommandsAreValidatedAndAudited() throws Exception {
+		String create = mockMvc.perform(post("/api/v1/orders")
+				.header("Idempotency-Key", "merchant-flow-create")
+				.header("X-Actor", "customer"))
+				.andExpect(status().isCreated())
+				.andReturn().getResponse().getContentAsString();
+		String orderId = com.fasterxml.jackson.databind.json.JsonMapper.builder().build()
+				.readTree(create).get("orderId").asText();
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/transitions", orderId)
+					.header("Idempotency-Key", "merchant-confirm")
+					.header("X-Actor", "merchant")
+					.contentType("application/json")
+					.content("{\"target\":\"CONFIRMED\",\"expectedVersion\":0}"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value("CONFIRMED"));
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/transitions", orderId)
+					.header("Idempotency-Key", "merchant-preparing")
+					.header("X-Actor", "merchant")
+					.contentType("application/json")
+					.content("{\"target\":\"PREPARING\",\"expectedVersion\":1}"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value("PREPARING"));
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/transitions", orderId)
+					.header("Idempotency-Key", "merchant-ready")
+					.header("X-Actor", "merchant")
+					.contentType("application/json")
+					.content("{\"target\":\"READY_FOR_PICKUP\",\"expectedVersion\":2}"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value("READY_FOR_PICKUP"));
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/transitions", orderId)
+					.header("Idempotency-Key", "merchant-invalid")
+					.header("X-Actor", "merchant")
+					.contentType("application/json")
+					.content("{\"target\":\"ASSIGNED\",\"expectedVersion\":3}"))
+				.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.code").value("actor_not_authorized"));
+	}
+
+	@Test
 	void flywayOwnsTheApplicationSchema() {
 		Integer migrationCount = jdbcTemplate.queryForObject(
-				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7') and success = true",
+				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7', '8') and success = true",
 				Integer.class);
 
-		assertThat(migrationCount).isEqualTo(7);
+		assertThat(migrationCount).isEqualTo(8);
 	}
 }

@@ -17,7 +17,10 @@ final class OrderCommandAuthorization {
 		boolean allowed = switch (target) {
 			case CONFIRMED -> ("customer".equals(actor) || "merchant".equals(actor))
 					&& current == OrderStatus.CREATED;
-			case ASSIGNED -> "dispatch".equals(actor) && current == OrderStatus.CONFIRMED;
+			case PREPARING -> "merchant".equals(actor) && current == OrderStatus.CONFIRMED;
+			case READY_FOR_PICKUP -> "merchant".equals(actor) && current == OrderStatus.PREPARING;
+			case ASSIGNED -> "dispatch".equals(actor)
+					&& (current == OrderStatus.CONFIRMED || current == OrderStatus.READY_FOR_PICKUP);
 			case PICKED_UP -> "courier".equals(actor) && current == OrderStatus.ASSIGNED;
 			case DELIVERED -> "courier".equals(actor) && current == OrderStatus.PICKED_UP;
 		case CANCELLED -> ("customer".equals(actor) || "merchant".equals(actor)

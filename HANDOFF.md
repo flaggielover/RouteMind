@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P12 Role Workflows
 
-Current Task: RM-121 - Implement merchant preparation workflow
+Current Task: RM-122 - Implement courier shift and delivery workflow
 
-Task Status: passed (RM-120 customer order creation and tracking workflow); RM-121 is next
+Task Status: passed (RM-121 merchant preparation workflow); RM-122 is in progress
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -358,4 +358,13 @@ orders to an empty live projection and forward lifecycle events retain versions.
 Local full gate passed with Java 57 tests, Python 59 tests at 96.13% coverage,
 Web 29 unit tests and build, 16 Playwright tests, and 5 schemas/15 fixtures.
 Checkpoint `fbecdd0` and Actions run `32569640180` passed all five jobs. RM-120 is
-now passed; RM-121 merchant preparation is in progress.
+now passed; RM-121 merchant preparation is locally passed and awaiting its Actions
+checkpoint. RM-121 full gate evidence is recorded at
+`evidence/gates/RM-121/merchant-workflow.md`.
+RM-121 adds Java-owned merchant preparation states, validated actor permissions,
+durable Flyway status expansion, transition persistence repair, and a merchant UI
+that drives accept, start preparation, and mark ready commands with idempotency,
+expected versions, traces, and explicit degradation. Local full gate passed with
+Java 59 tests, Python 59 tests at 96.13% coverage, Web 31 unit tests/build, 16
+Playwright tests, and 5 schemas/15 fixtures. RM-122 courier shift and delivery
+workflow is now the active task.
