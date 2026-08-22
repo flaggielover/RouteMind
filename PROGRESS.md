@@ -4,11 +4,11 @@ Current Phase: P9 Research and Experimentation
 
 Overall: 25 / 26 tasks passed
 
-Current Task: RM-086 - Define authentication and authorization boundary contract
+Current Task: RM-086 - implementation checkpoint pushed locally; GitHub Actions pending
 
 Last Completed: RM-084 - Define release provenance and deployment preflight contract
 
-CI: PASS - GitHub Actions run 32558073285 (control, Java, Python/contracts, Web, Resilience)
+CI: PENDING - implementation checkpoint `45850cd`; observe the real Actions run before marking RM-086 passed
 
 Regression: PASS - Java 34, Python 50 / 95.47%, Web, locked install, and 4 schemas / 12 contract fixtures
 
@@ -16,7 +16,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-086 - implement framework-independent Java auth policy contract
+Next Candidates: RM-086 - complete after CI, then select the next unblocked task
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -36,4 +36,4 @@ RM-085 design is recorded in `docs/design/p8-staged-release-decision-contract.md
 implementation evidence is recorded in `evidence/gates/RM-085/`.
 RM-085 CI evidence is recorded in the same gate file; all five Actions jobs passed.
 RM-086 design is recorded in `docs/design/p8-authn-authz-boundary.md`; executable
-implementation and evidence remain pending.
+implementation evidence is recorded in `evidence/gates/RM-086/`.

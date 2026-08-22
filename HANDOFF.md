@@ -8,7 +8,7 @@ Current Phase: P9 Research and Experimentation
 
 Current Task: RM-086 - Define authentication and authorization boundary contract
 
-Task Status: in_progress (design checkpoint)
+Task Status: implemented locally; CI pending
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -239,12 +239,14 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Design RM-086's authentication and authorization
-boundary, preserving Java ownership of durable business authorization decisions
-and Python/web adapters as non-authoritative clients; then commit, push, and
-observe the design checkpoint before implementing the Java policy.
+RM-086 implementation checkpoint `45850cd` adds the framework-independent Java
+policy, five unit tests, and local full-gate evidence. The task remains
+`implemented` until its real Actions run is observed.
 
-Next Candidate Task: RM-086 - implement framework-independent Java auth policy contract
+Next Recommended Action: Push `45850cd`, observe its real GitHub Actions run,
+diagnose any failure to green, then record CI evidence and continue.
+
+Next Candidate Task: RM-086 - complete after CI, then select the next unblocked task
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
