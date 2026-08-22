@@ -146,6 +146,8 @@ explicitly not claimed and remains deferred_external. Evidence is in
 `evidence/gates/RM-083/2026-08-22-recovery-contract.md`.
 The RM-083 checkpoint commit `4b47d4e` passed all five GitHub Actions jobs in
 run `32556590018`.
+The RM-083 CI evidence commit `ac4723c` passed all five GitHub Actions jobs in
+run `32556661332`.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
