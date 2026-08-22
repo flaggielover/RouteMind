@@ -1,7 +1,7 @@
 # RM-113 Operations Filters and Detail Drawers
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint pending
+- Revision: `549fb87`; Actions run `32568470723`
 - Boundary: Web operations projection interaction over verified snapshot data
 
 ## Interaction behavior

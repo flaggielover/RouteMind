@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P11 Operations Command Center
 
-Current Task: RM-113 - Add operations filters and detail drawers
+Current Task: RM-114 - Add operations exceptions, imbalance, and alerts
 
-Task Status: implemented (RM-113 operations filters and detail drawers; awaiting CI)
+Task Status: in_progress (RM-114 operations exceptions, imbalance, and alerts)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -342,4 +342,5 @@ five jobs. RM-112 is now passed; continue with RM-113.
 RM-113 adds functional zone/lifecycle/exception/freshness filters and order/courier
 detail panels. Local full gate passed with 23 Web unit tests, 16 Playwright tests,
 Java 57 tests, Python 59 tests at 96.13% coverage, and 5 schemas/15 fixtures.
-Checkpoint is awaiting Actions validation.
+Checkpoint is awaiting Actions validation. Checkpoint `549fb87` and Actions run
+`32568470723` passed all five jobs. RM-113 is now passed; continue with RM-114.
