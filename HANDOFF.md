@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: P9 Research and Experimentation
 
-Current Task: NONE - current task graph baseline complete
+Current Task: RM-081 - Implement strategy Shadow Mode and regression gate
 
-Task Status: passed
+Task Status: in_progress
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -178,12 +178,12 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Commit and push the RM-091 checkpoint, observe the real
-GitHub Actions run, and autonomously fix any CI failure. The current task graph
-will then be complete; extend it from the highest-priority remaining roadmap
-capability before further implementation.
+Next Recommended Action: Implement RM-081 so the active strategy remains the
+sole authority while a candidate is evaluated against identical immutable
+inputs. Record bounded candidate failures, reproducible provenance, and an
+explicit minimum-sample/assignment/failure/disagreement regression decision.
 
-Next Candidate Task: NONE IN CURRENT TASK GRAPH
+Next Candidate Task: RM-081 - Implement strategy Shadow Mode and regression gate
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

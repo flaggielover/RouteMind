@@ -238,6 +238,19 @@
       "notes": "Incremental observability begins earlier; this task closes system gates."
     },
     {
+      "id": "RM-081",
+      "title": "Implement strategy Shadow Mode and regression gate",
+      "phase": "P8",
+      "priority": "high",
+      "depends_on": ["RM-030", "RM-050", "RM-080", "RM-090"],
+      "status": "in_progress",
+      "acceptance": ["Active strategy decisions retain sole operational authority while candidate evaluation is isolated", "Candidate outcomes and failures are versioned, bounded, and reproducibly linked to the same inputs", "Explicit sample, assignment-loss, failure, and disagreement thresholds produce explainable promote or hold decisions"],
+      "gates": ["L2-strategy-control", "L5-shadow-isolation", "L6-regression"],
+      "evidence": [],
+      "blocked_by": [],
+      "notes": "This task does not claim staged traffic release or automatic rollback."
+    },
+    {
       "id": "RM-090",
       "title": "Implement RouteBench and research lineage core",
       "phase": "P9",

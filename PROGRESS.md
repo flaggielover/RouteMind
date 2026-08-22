@@ -2,9 +2,9 @@
 
 Current Phase: P9 Research and Experimentation
 
-Overall: 20 / 20 tasks passed
+Overall: 20 / 21 tasks passed
 
-Current Task: NONE - current task graph baseline complete
+Current Task: RM-081 - Implement strategy Shadow Mode and regression gate
 
 Last Completed: RM-091 - Implement RADS research baseline
 
@@ -16,7 +16,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: NONE IN CURRENT TASK GRAPH
+Next Candidates: RM-081
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
