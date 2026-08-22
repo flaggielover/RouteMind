@@ -204,9 +204,13 @@ function OperationsView({
   const filteredCouriers = snapshot.couriers.filter(
     (courier) => zoneFilter === "all" || courier.zone === zoneFilter,
   );
+  const exceptionOrders = snapshot.orders.filter(
+    (order) => order.priority === "priority" && order.status !== "DELIVERED",
+  );
   const availableCouriers = snapshot.couriers.filter(
     (courier) => courier.status === "available",
   ).length;
+  const supplyGap = snapshot.orders.length - availableCouriers;
   const zones = new Set(snapshot.couriers.map((courier) => courier.zone).filter(Boolean)).size;
   const openExceptions = countOpenExceptions(snapshot);
   const hasDispatchLatency = snapshot.availability === "ready" && snapshot.dispatch.latencyMs > 0;
@@ -349,6 +353,64 @@ function OperationsView({
           <span>Review the selected order before assigning another route.</span>
         </div>
       )}
+      <section className="operations-alerts" aria-label="Operations alerts and imbalance">
+        <section className="panel alert-panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Exception queue</p>
+              <h2>
+                {exceptionOrders.length} recorded alert{exceptionOrders.length === 1 ? "" : "s"}
+              </h2>
+            </div>
+            <AlertTriangle size={17} className="heading-icon" />
+          </div>
+          {exceptionOrders.length ? (
+            <div className="alert-list">
+              {exceptionOrders.map((order) => (
+                <button
+                  key={order.id}
+                  className="alert-item"
+                  type="button"
+                  onClick={() => setSelectedOrderId(order.id)}
+                >
+                  <span>
+                    <strong>{order.shortId}</strong>
+                    <small>{order.destination}</small>
+                  </span>
+                  <span className="alert-link">
+                    Inspect <ArrowUpRight size={13} />
+                  </span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p className="empty-state">No recorded exceptions in this snapshot.</p>
+          )}
+        </section>
+        <section className="panel alert-panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Supply / demand</p>
+              <h2>{supplyGap > 0 ? `${supplyGap} order gap` : "Covered"}</h2>
+            </div>
+            <Gauge size={17} className="heading-icon" />
+          </div>
+          <dl className="detail-list">
+            <div>
+              <dt>Orders in snapshot</dt>
+              <dd>{snapshot.orders.length}</dd>
+            </div>
+            <div>
+              <dt>Available couriers</dt>
+              <dd>{availableCouriers}</dd>
+            </div>
+            <div>
+              <dt>Overtime risk</dt>
+              <dd className="muted-label">Unavailable from source</dd>
+            </div>
+          </dl>
+        </section>
+      </section>
       <section className="primary-grid">
         <OperationsMap
           orders={filteredOrders}

@@ -8,7 +8,7 @@ Current Phase: Round 2 P11 Operations Command Center
 
 Current Task: RM-114 - Add operations exceptions, imbalance, and alerts
 
-Task Status: in_progress (RM-114 operations exceptions, imbalance, and alerts)
+Task Status: implemented (RM-114 operations exceptions, imbalance, and alerts; awaiting CI)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -344,3 +344,8 @@ detail panels. Local full gate passed with 23 Web unit tests, 16 Playwright test
 Java 57 tests, Python 59 tests at 96.13% coverage, and 5 schemas/15 fixtures.
 Checkpoint is awaiting Actions validation. Checkpoint `549fb87` and Actions run
 `32568470723` passed all five jobs. RM-113 is now passed; continue with RM-114.
+RM-114 adds a recorded exception queue with order-linked inspection, snapshot-derived
+supply/demand imbalance, and an explicit unavailable overtime-risk state. Local full
+gate passed with 24 Web unit tests, 16 Playwright tests, Java 57 tests, Python 59
+tests at 96.13% coverage, and 5 schemas/15 fixtures. Checkpoint is awaiting Actions
+validation.

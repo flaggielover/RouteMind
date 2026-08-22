@@ -296,6 +296,49 @@ button {
 .entity-drawer .detail-list {
   margin-top: 8px;
 }
+.operations-alerts {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.alert-panel {
+  min-width: 0;
+}
+.alert-list {
+  display: grid;
+  gap: 6px;
+}
+.alert-item {
+  align-items: center;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  justify-content: space-between;
+  padding: 9px 10px;
+  text-align: left;
+}
+.alert-item:hover,
+.alert-item:focus-visible {
+  border-color: var(--amber);
+  outline: none;
+}
+.alert-item span:first-child {
+  display: grid;
+  gap: 3px;
+}
+.alert-item small,
+.alert-link {
+  color: var(--muted);
+  font-size: 10px;
+}
+.alert-link {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+}
 .projection-state strong {
   color: var(--ink);
   font-size: 12px;
@@ -1438,6 +1481,7 @@ button {
   .primary-grid,
   .secondary-grid,
   .entity-drawers,
+  .operations-alerts,
   .content-grid-two {
     grid-template-columns: minmax(0, 1fr);
   }

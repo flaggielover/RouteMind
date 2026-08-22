@@ -85,6 +85,17 @@ describe("role-aware application", () => {
     expect(within(queue).queryByRole("button", { name: /RM-2041/ })).not.toBeInTheDocument();
   });
 
+  it("links recorded exceptions to the affected order", async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    const alerts = screen.getByRole("region", { name: "Operations alerts and imbalance" });
+    await user.click(within(alerts).getByRole("button", { name: /RM-2042/ }));
+    expect(screen.getByRole("heading", { name: "RM-2042 lifecycle" })).toBeInTheDocument();
+    expect(within(alerts).getByText("1 order gap")).toBeInTheDocument();
+    expect(within(alerts).getByText("Unavailable from source")).toBeInTheDocument();
+  });
+
   it("keeps live failure explicit while switching through demo and replay modes", async () => {
     const user = userEvent.setup();
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));

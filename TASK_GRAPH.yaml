@@ -542,7 +542,7 @@
       "phase": "P11",
       "priority": "medium",
       "depends_on": ["RM-110", "RM-108"],
-      "status": "in_progress",
+      "status": "implemented",
       "acceptance": ["Exception queue, supply/demand imbalance, overtime risk, and alerts use recorded data", "Alerts link to affected entity and trace", "Unavailable metrics are labeled rather than fabricated"],
       "gates": ["L2-operations-alerts", "L4-operations-alert-ui"],
       "evidence": ["evidence/gates/RM-114/operations-alerts.md"],

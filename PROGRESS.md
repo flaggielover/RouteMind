@@ -10,17 +10,17 @@ Current Task: RM-114 - Add operations exceptions, imbalance, and alerts
 
 Last Completed: RM-110 - Build operations command-center data projection
 
-Current Gate: RM-113 local/full/browser/CI gates passed; RM-114 implementation in progress
+Current Gate: RM-114 local/full/browser/CI gates passed locally; awaiting Actions validation
 
-CI: PASS - RM-113 run 32568470723; all five jobs passed. RM-112 run 32568087013 also passed.
+CI: PASS - RM-113 run 32568470723; all five jobs passed. RM-114 local implementation is awaiting CI.
 
-Regression: PASS - Java 57, Python 59 / 96.13%, Web 23 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 57, Python 59 / 96.13%, Web 24 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-114 - operations exceptions, imbalance, and alerts
+Next Candidates: RM-114 - operations exceptions, imbalance, and alerts; push and observe CI
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -116,3 +116,7 @@ freshness filters alter the map/queue projection; order and courier details reta
 route, trace/state, source, and freshness metadata. Checkpoint awaits Actions.
 RM-113 checkpoint `549fb87` and Actions run `32568470723` passed all five jobs.
 The task is now passed and RM-114 is the active implementation.
+RM-114 local alert evidence is recorded in `evidence/gates/RM-114/operations-alerts.md`.
+Recorded exception queue, order-linked alerts, snapshot-derived supply/demand gap,
+and explicit unavailable overtime risk pass local full and browser gates; checkpoint
+is awaiting Actions validation.
