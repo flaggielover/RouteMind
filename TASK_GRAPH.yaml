@@ -243,10 +243,10 @@
       "phase": "P8",
       "priority": "high",
       "depends_on": ["RM-030", "RM-050", "RM-080", "RM-090"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Active strategy decisions retain sole operational authority while candidate evaluation is isolated", "Candidate outcomes and failures are versioned, bounded, and reproducibly linked to the same inputs", "Explicit sample, assignment-loss, failure, and disagreement thresholds produce explainable promote or hold decisions"],
       "gates": ["L2-strategy-control", "L5-shadow-isolation", "L6-regression"],
-      "evidence": [],
+      "evidence": ["evidence/gates/RM-081/2026-08-22-shadow-regression.md"],
       "blocked_by": [],
       "notes": "This task does not claim staged traffic release or automatic rollback."
     },

@@ -15,6 +15,9 @@ state or transactional lifecycle decisions.
 - `application/rads.py`: deterministic research-only risk-aware state encoding,
   objective decomposition, explanations, registered-baseline comparison,
   ablation, and robustness manifests.
+- `application/shadow.py`: isolated candidate evaluation that preserves active
+  strategy authority, records bounded failures and reproducible comparisons,
+  and emits explicit promote/hold regression decisions.
 - `api`: inbound HTTP adapter; may depend on application and domain.
 - `infrastructure`: external compute adapters; never an authoritative data store.
 

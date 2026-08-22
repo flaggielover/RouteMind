@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: P9 Research and Experimentation
 
-Current Task: RM-081 - Implement strategy Shadow Mode and regression gate
+Current Task: NONE - current task graph baseline complete
 
-Task Status: in_progress
+Task Status: passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -112,6 +112,16 @@ tests, and Web/control regression. Evidence is in
 The RM-091 checkpoint commit `50e666d` passed all five GitHub Actions jobs in
 run `32554498417`.
 
+RM-081 implements isolated strategy Shadow Mode and a deterministic regression
+gate. The active strategy is evaluated first and remains authoritative; candidate
+exceptions become bounded failures and never mutate business state. Immutable
+observations record both outcomes, metrics, and digests while excluding wall
+clock latency from reproducibility hashes. Explicit sample, candidate failure,
+assignment-rate drop, and disagreement thresholds produce `promote` or `hold`
+with stable reason codes. Local full gate passed with 56 Python tests at 96.05%
+coverage, Java 34 tests, and Web/control regression. Evidence is in
+`evidence/gates/RM-081/2026-08-22-shadow-regression.md`.
+
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
 cross-`down/up` persistence for all three services, and the unified infrastructure
@@ -178,12 +188,12 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Implement RM-081 so the active strategy remains the
-sole authority while a candidate is evaluated against identical immutable
-inputs. Record bounded candidate failures, reproducible provenance, and an
-explicit minimum-sample/assignment/failure/disagreement regression decision.
+Next Recommended Action: Commit and push the RM-081 checkpoint, observe the real
+GitHub Actions run, and autonomously fix any CI failure. The current task graph
+will then be complete; extend it from the highest-priority remaining roadmap
+capability before further implementation.
 
-Next Candidate Task: RM-081 - Implement strategy Shadow Mode and regression gate
+Next Candidate Task: NONE IN CURRENT TASK GRAPH
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
