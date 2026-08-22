@@ -1,14 +1,18 @@
 # RouteMind Progress
 
-Current Phase: P9 Research and Experimentation
+Current Phase: Round 2 P10 Live Product Foundation
 
-Overall: 28 / 28 tasks passed
+Round 2 Progress: 0 / 48 tasks passed
 
-Current Task: none - all graph tasks passed
+Repository Total: 28 / 76 tasks passed
+
+Current Task: RM-100 - Define live, demo, and replay data boundary
 
 Last Completed: RM-088 - Define deployment and edge-security adapter boundary
 
-CI: PASS - GitHub Actions run 32559680696 (control, Java, Python/contracts, Web, Resilience)
+Current Gate: Round 2 gap audit and planning checkpoint
+
+CI: PASS - Round 1 baseline GitHub Actions run 32559798989; Round 2 planning CI pending
 
 Regression: PASS - Java 49, Python 56 / 96.05%, Web, locked install, and 4 schemas / 12 contract fixtures
 
@@ -16,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: none in current TASK_GRAPH.yaml; all 28 tasks passed
+Next Candidates: RM-100 (in_progress; all dependencies passed)
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -45,3 +49,8 @@ RM-088 design is recorded in `docs/design/p8-deployment-edge-security-adapter.md
 the provider-neutral Java adapter and five executable tests are recorded in
 `evidence/gates/RM-088/2026-08-22-deployment-edge-security.md`; all five Actions
 jobs passed in run `32559680696`.
+
+Round 2 gap audit is recorded in `docs/reviews/ROUND_2_GAP_AUDIT.md` and maps
+actual source/evidence gaps to RM-100 through RM-190. The first implementation
+design is recorded in
+`docs/superpowers/specs/2026-08-22-round2-live-product-foundation-design.md`.

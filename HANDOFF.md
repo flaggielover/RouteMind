@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: P9 Research and Experimentation
+Current Phase: Round 2 P10 Live Product Foundation
 
-Current Task: RM-088 - Define deployment and edge-security adapter boundary
+Current Task: RM-100 - Define live, demo, and replay data boundary
 
-Task Status: passed (local and CI gates passed)
+Task Status: in_progress (Round 2 planning checkpoint; implementation next)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -243,9 +243,9 @@ RM-086 implementation checkpoint `45850cd` adds the framework-independent Java
 policy, five unit tests, and local full-gate evidence. The task remains
 `passed` after Actions run `32558622055` passed all five jobs.
 
-Next Recommended Action: Run the recovery/resume protocol and inspect the
-authoritative task graph. RM-088 is complete; the current graph has no
-remaining unblocked task.
+Next Recommended Action: Commit and push the Round 2 gap audit and expanded
+task graph, observe planning CI, then implement RM-100's explicit LIVE/DEMO/
+REPLAY adapter and minimal Java/Python read contracts.
 The RM-088 design now binds release/staged/auth/rate digests, requires
 fail-closed immutable edge references for apply/rollback, and keeps local
 preflight/plan read-only. Design is in
@@ -266,7 +266,13 @@ tests; local full gate passed. Evidence is in
 `evidence/gates/RM-087/2026-08-22-rate-limit-input.md`. The task is now
 `passed` after Actions run `32559165335` passed all five jobs.
 
-Next Candidate Task: none in the current task graph; all 28 tasks are passed.
+Round 2 gap audit: `docs/reviews/ROUND_2_GAP_AUDIT.md`.
+Round 2 foundation design:
+`docs/superpowers/specs/2026-08-22-round2-live-product-foundation-design.md`.
+The graph now contains 48 Round 2 tasks (RM-100 through RM-190); Round 1 tasks
+remain passed and RM-100 is the only active eligible task.
+
+Next Candidate Task: RM-100 - implement the live/demo/replay data boundary.
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

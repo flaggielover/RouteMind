@@ -57,3 +57,27 @@ and rollback.
 Implement RADS, RouteBench, lineage, formal baselines, ablations, uncertainty,
 counterfactual explanations, switching policies, robustness studies, and
 reproducible large-scale experiment packages.
+
+## Round 2 Productization and Living Digital Twin
+
+Round 1 closure is not product completion. Round 2 extends the graph from
+RM-100 through RM-190 in dependency-ordered slices:
+
+- P10 live/demo/replay data modes, Java read/command APIs, Python dispatch API,
+  SSE updates, reconnect semantics, and activity projection;
+- P11 operations command center, real geospatial map adapter/fallback, filters,
+  entity drawers, exceptions, imbalance, and alerts;
+- P12 real customer, merchant, courier, degraded, and mobile workflows;
+- P13 constrained dispatch, risk/preparation/capacity scoring, flow, VRP/VRPTW,
+  insertion, replanning, and durable dispatch integration;
+- P14 dynamic network travel, data-root matrices, traffic, and incidents;
+- P15 continuous Digital Twin, demand, courier motion, merchant preparation,
+  traffic perturbations, control API, UI, replay, and What-if;
+- P16 functional Strategy Laboratory, experiment provenance, comparisons, and
+  Shadow Mode productization;
+- P17-P19 real local E2E, failure E2E, measured performance, UX closure, and
+  adversarial evidence audit.
+
+Large maps, matrices, replay archives, and experiment outputs remain under
+`ROUTEMIND_DATA_ROOT`; production map providers, identity, WAF, and full-scale
+compute remain explicit external gates unless exercised with matching evidence.
