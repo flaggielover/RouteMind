@@ -62,6 +62,43 @@ describe("role-aware application", () => {
     expect(screen.getByText("weighted-greedy", { selector: "strong" })).toBeInTheDocument();
   });
 
+  it("opens the mobile workspace drawer and closes it on escape or navigation", async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    const toggle = screen.getByRole("button", { name: "Open workspace navigation" });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await user.click(toggle);
+    expect(screen.getByRole("navigation", { name: "RouteMind navigation" })).toBeInTheDocument();
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+
+    await user.keyboard("{Escape}");
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    await user.click(toggle);
+    await user.click(screen.getByRole("link", { name: /Courier/ }));
+    expect(
+      await screen.findByRole("heading", { name: "A focused shift, one next action." }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Open workspace navigation" })).toHaveAttribute(
+      "aria-expanded",
+      "false",
+    );
+  });
+
+  it("keeps customer, merchant, and courier actions explicit on the role surfaces", async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    await user.click(screen.getByRole("link", { name: /Customer/ }));
+    expect(screen.getByRole("button", { name: "Create order" })).toBeVisible();
+    await user.click(screen.getByRole("link", { name: /Merchant/ }));
+    expect(screen.getByRole("button", { name: "Mark ready" })).toBeVisible();
+    await user.click(screen.getByRole("link", { name: /Courier/ }));
+    expect(screen.getByRole("button", { name: "Complete delivery" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Go online" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Send location" })).toBeVisible();
+  });
+
   it("allows the operator to focus a different order on the shared map and queue", async () => {
     const user = userEvent.setup();
     renderApp();

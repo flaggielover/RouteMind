@@ -60,6 +60,12 @@ button {
   align-items: center;
   padding: 0 10px 28px;
 }
+.sidebar-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
 .brand-mark {
   width: 34px;
   height: 34px;
@@ -147,6 +153,9 @@ button {
   right: 4px;
   bottom: 5px;
   color: #b4c9ce;
+}
+.mobile-nav-toggle {
+  display: none;
 }
 
 .main-column {
@@ -1475,32 +1484,65 @@ button {
     align-items: center;
     display: block;
     padding: 8px 12px 9px;
+    position: relative;
+    z-index: 20;
+  }
+  .sidebar-header {
+    align-items: center;
+    min-height: 40px;
   }
   .brand-lockup {
-    display: none;
+    display: flex;
+    padding: 0;
+  }
+  .brand-lockup > div:last-child {
+    display: block;
+  }
+  .mobile-nav-toggle {
+    align-items: center;
+    background: #21495a;
+    border: 1px solid #3f7180;
+    border-radius: 6px;
+    color: #eaf3f5;
+    display: inline-flex;
+    gap: 7px;
+    min-height: 36px;
+    padding: 0 10px;
+  }
+  .mobile-nav-toggle:focus-visible {
+    outline: 2px solid #7bd9df;
+    outline-offset: 2px;
   }
   .sidebar-footer {
     display: none;
   }
   .role-nav {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .role-nav::-webkit-scrollbar {
+    background: #183646;
+    border: 1px solid #3f7180;
+    border-radius: 6px;
+    box-shadow: 0 12px 24px rgba(7, 26, 35, 0.22);
     display: none;
+    gap: 4px;
+    left: 12px;
+    padding: 8px;
+    position: absolute;
+    right: 12px;
+    top: calc(100% - 1px);
+  }
+  .role-nav.mobile-nav-open {
+    display: grid;
   }
   .role-link {
-    flex: 1 0 105px;
-    grid-template-columns: 18px minmax(0, auto);
-    justify-content: center;
-    min-height: 36px;
-    padding: 0 10px;
+    grid-template-columns: 18px minmax(0, 1fr) 16px;
+    min-height: 44px;
+    padding: 0 12px;
   }
   .role-link span {
     display: block;
     font-size: 11px;
+  }
+  .role-link .nav-chevron {
+    display: block;
   }
   .topbar {
     min-height: 0;
@@ -1569,6 +1611,23 @@ button {
     height: 42px;
     width: 42px;
   }
+  .panel {
+    padding: 16px;
+  }
+  .button {
+    min-height: 40px;
+  }
+  .customer-command > .button,
+  .content-grid-two > .panel > .button {
+    width: 100%;
+  }
+  .courier-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .courier-actions .button:last-child {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 420px) {
@@ -1596,6 +1655,12 @@ button {
   }
   .metric-value {
     font-size: 19px;
+  }
+  .courier-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .courier-actions .button:last-child {
+    grid-column: auto;
   }
   .map-legend {
     bottom: 9px;

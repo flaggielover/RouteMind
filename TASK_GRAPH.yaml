@@ -599,7 +599,7 @@
       "gates": ["L2-role-errors", "L5-role-degradation"],
       "evidence": ["evidence/gates/RM-123/role-degraded-states.md"],
       "blocked_by": [],
-      "notes": "The UI distinguishes live, degraded, demo, and unavailable. Local L2/L5, full, and browser evidence is recorded; remote CI validation is required for the checkpoint."
+      "notes": "The UI distinguishes live, degraded, demo, and unavailable. Local L2/L5, full, and browser evidence is recorded; remote Actions run 32574390001 passed all five jobs."
     },
     {
       "id": "RM-124",
@@ -607,12 +607,12 @@
       "phase": "P12",
       "priority": "medium",
       "depends_on": ["RM-123"],
-      "status": "pending",
+      "status": "passed",
       "acceptance": ["Customer, merchant, and courier core actions work at mobile viewport sizes", "Navigation, drawers, forms, and focus order are role-appropriate", "Playwright mobile coverage proves no overflow or inaccessible action"],
       "gates": ["L4-mobile-workflows", "accessibility-review"],
       "evidence": ["evidence/gates/RM-124/mobile-workflows.md"],
       "blocked_by": [],
-      "notes": "Mobile is not a shrunken desktop dashboard."
+      "notes": "Mobile is not a shrunken desktop dashboard. Mobile navigation, focus dismissal, role actions, overflow, and accessibility are covered by local browser evidence; remote CI validation is required for the checkpoint."
     },
     {
       "id": "RM-130",

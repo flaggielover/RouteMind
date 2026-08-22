@@ -10,7 +10,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { DataAvailability, DataSourceMode, Role, ServiceHealth } from "../domain/model";
 import type { RealtimeConnectionState } from "../data/realtime";
 import { StatusPill } from "./StatusPill";
@@ -45,25 +45,54 @@ export function AppShell({
   children,
 }: AppShellProps) {
   const unavailable = health.filter((item) => item.status === "unavailable").length;
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  useEffect(() => {
+    if (!mobileNavOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileNavOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [mobileNavOpen]);
+
   return (
     <div className="app-shell">
       <aside className="sidebar" aria-label="RouteMind sidebar">
-        <div className="brand-lockup">
-          <div className="brand-mark" aria-hidden="true">
-            <Activity size={19} />
+        <div className="sidebar-header">
+          <div className="brand-lockup">
+            <div className="brand-mark" aria-hidden="true">
+              <Activity size={19} />
+            </div>
+            <div>
+              <strong>RouteMind</strong>
+              <span>delivery control</span>
+            </div>
           </div>
-          <div>
-            <strong>RouteMind</strong>
-            <span>delivery control</span>
-          </div>
+          <button
+            className="mobile-nav-toggle"
+            type="button"
+            aria-expanded={mobileNavOpen}
+            aria-controls="role-navigation"
+            aria-label={mobileNavOpen ? "Close workspace navigation" : "Open workspace navigation"}
+            onClick={() => setMobileNavOpen((open) => !open)}
+          >
+            <Menu size={17} aria-hidden="true" />
+            <span>{mobileNavOpen ? "Close" : "Menu"}</span>
+          </button>
         </div>
         <div className="sidebar-section-label">Workspace</div>
-        <nav className="role-nav" aria-label="RouteMind navigation">
+        <nav
+          className={`role-nav ${mobileNavOpen ? "mobile-nav-open" : ""}`}
+          id="role-navigation"
+          aria-label="RouteMind navigation"
+        >
           {navigation.map(({ role, label, icon: Icon }) => (
             <NavLink
               className={({ isActive }) => `role-link ${isActive ? "active" : ""}`}
               to={`/${role}`}
               key={role}
+              onClick={() => setMobileNavOpen(false)}
             >
               <Icon size={17} aria-hidden="true" />
               <span>{label}</span>

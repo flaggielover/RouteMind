@@ -376,11 +376,19 @@ Local full gate passed with Java 60 tests, Python 59 tests at 96.13% coverage, W
 34 unit tests/build, 16 Playwright tests, and 5 schemas/15 fixtures. Evidence is
 recorded at `evidence/gates/RM-122/courier-workflow.md`; remote Actions run
 `32573723273` passed all five jobs. RM-123 role command error/degradation handling
-is now the active task.
+passed local and remote validation in Actions run `32574390001` (all five jobs
+green).
 RM-123 role command adapters classify failures as conflict, validation, timeout, or
 unavailable while preserving the original idempotency key and trace context; live
 degraded snapshots disable writes with an explicit reason. Local full gate passed
 with Java 60 tests, Python 59 tests at 96.13% coverage, Web 36 unit tests/build, 16
 Playwright tests, and 5 schemas/15 fixtures. Evidence is recorded at
-`evidence/gates/RM-123/role-degraded-states.md`; checkpoint is awaiting remote
-Actions validation. RM-124 mobile role workflow closure is now the active task.
+`evidence/gates/RM-123/role-degraded-states.md`; remote Actions run `32574390001`
+passed all five jobs.
+RM-124 adds a keyboard-dismissible mobile navigation drawer, 44px role links,
+responsive courier/customer/merchant action layouts, and mobile browser/axe
+coverage. Local full gate passed with Java 60 tests, Python 59 tests at 96.13%
+coverage, Web 38 unit tests/build, 17 Playwright passes plus one desktop-only skip,
+and 5 schemas/15 fixtures. Evidence is recorded at
+`evidence/gates/RM-124/mobile-workflows.md`; checkpoint is awaiting remote Actions
+validation. RM-130 constraint-aware dispatch model is now the next active task.

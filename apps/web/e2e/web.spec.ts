@@ -14,6 +14,14 @@ test.describe("role-aware web smoke", () => {
     await page.getByRole("combobox", { name: "Data source mode" }).selectOption("demo");
   }
 
+  async function openMobileNavigation(page: Page) {
+    const toggle = page.getByRole("button", { name: "Open workspace navigation" });
+    if (await toggle.isVisible()) {
+      await toggle.click();
+      await expect(page.getByRole("navigation", { name: "RouteMind navigation" })).toBeVisible();
+    }
+  }
+
   test("shows the full lifecycle on the default operations route", async ({ page }) => {
     await page.goto("/operations");
     await selectDemo(page);
@@ -28,6 +36,7 @@ test.describe("role-aware web smoke", () => {
     test(`renders the ${path} role surface`, async ({ page }) => {
       await page.goto(`/${path}`);
       await selectDemo(page);
+      await openMobileNavigation(page);
       await expect(page.getByRole("heading", { name: heading })).toBeVisible();
       await expect(page.getByRole("navigation", { name: "RouteMind navigation" })).toBeVisible();
     });
@@ -40,8 +49,26 @@ test.describe("role-aware web smoke", () => {
       () => document.documentElement.scrollWidth - window.innerWidth,
     );
     expect(overflow).toBeLessThanOrEqual(1);
+    await openMobileNavigation(page);
     await expect(page.getByRole("link", { name: /Operations/ })).toBeVisible();
     await page.screenshot({ path: "test-results/operations-mobile.png", fullPage: true });
+  });
+
+  test("keeps role actions reachable through the mobile navigation drawer", async ({ page }) => {
+    if (test.info().project.name !== "mobile") test.skip();
+    await page.goto("/customer");
+    await selectDemo(page);
+    await openMobileNavigation(page);
+    await page.getByRole("link", { name: /Merchant/ }).click();
+    await expect(page.getByRole("button", { name: "Mark ready" })).toBeVisible();
+    await openMobileNavigation(page);
+    await page.getByRole("link", { name: /Courier/ }).click();
+    await expect(page.getByRole("button", { name: "Complete delivery" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Go online" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Send location" })).toBeVisible();
+    await openMobileNavigation(page);
+    await page.getByRole("link", { name: /Customer/ }).click();
+    await expect(page.getByRole("button", { name: "Create order" })).toBeVisible();
   });
 
   test("passes the accessibility smoke gate for every role route", async ({ page }) => {
