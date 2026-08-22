@@ -807,7 +807,7 @@
       "gates": ["L2-preparation-model", "L6-preparation-replay"],
       "evidence": ["evidence/gates/RM-153/merchant-preparation.md"],
       "blocked_by": [],
-      "notes": "Dynamic merchant preparation is now the active task; model is simulation state, not durable merchant truth."
+      "notes": "Local L2/L6 preparation-model evidence passes with seeded capacity scheduling, evolving queue/ready/risk state, and dispatch readiness propagation; remote Actions validation is required before closure. Model is simulation state, not durable merchant truth."
     },
     {
       "id": "RM-154",

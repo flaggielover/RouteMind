@@ -10,11 +10,11 @@ Current Task: RM-153 - Implement dynamic merchant preparation model
 
 Last Completed: RM-151 - Implement continuous demand arrival generator
 
-Current Gate: RM-151 local/full/CI gates passed in run 32581545061; RM-153 is now in progress
+Current Gate: RM-153 compute gate passed; full repository gate and remote Actions validation are pending
 
-CI: PASS - RM-151 run 32581545061; all five jobs passed. RM-150 run 32579369219 also passed all five jobs.
+CI: PASS - RM-151 run 32581545061; all five jobs passed. RM-150 run 32579369219 also passed all five jobs. RM-153 remote validation is pending.
 
-Regression: PASS - Java 60, Python 92 / 96.34%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 96 / 96.16%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 

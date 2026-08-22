@@ -463,6 +463,12 @@ Bernoulli decisions per active tick, deterministic burst expansion and ordering,
 profile metadata propagation, and a canonical replay digest. Local compute and
 full gates pass with Java 60 tests, Python 92 tests at 96.34% coverage, Web 38
 unit tests/build, and 5 schemas/15 fixtures. Evidence is recorded at
-`evidence/gates/RM-151/demand-arrivals.md`; checkpoint is awaiting remote
-Actions run `32581545061` passed all five jobs; RM-151 is fully validated.
-RM-153 dynamic merchant preparation model is now the active task.
+`evidence/gates/RM-151/demand-arrivals.md`; remote Actions run `32581545061`
+passed all five jobs; RM-151 is fully validated. RM-153 dynamic merchant
+preparation model is now the active task.
+RM-153 is locally complete: `MerchantPreparationModel` schedules expected and
+actual preparation on deterministic capacity slots, exposes queue load,
+readiness and evolving late risk, and applies actual-ready state to dispatch.
+Compute check passes 96 tests at 96.16% coverage; evidence is recorded at
+`evidence/gates/RM-153/merchant-preparation.md`. Full repository and remote
+Actions validation remain pending.

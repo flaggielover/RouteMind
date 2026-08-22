@@ -21,3 +21,11 @@ per-tick Bernoulli decisions, burst expansion is deterministic, and profile
 metadata travels with each immutable `DemandEvent`. The canonical seed,
 profiles, arrivals, and SHA-256 digest make generated demand replayable without
 introducing durable business state into the compute runtime.
+
+RM-153 adds `MerchantPreparationModel` as a simulation-only preparation
+boundary. Merchant profiles define baseline time, capacity slots, profile
+multipliers, and bounded seeded variability; each run records expected and
+actual schedule outcomes in its replay digest. State snapshots expose queue
+load, ready times, and late-preparation risk, while `apply_to` lets dispatch
+consume the current simulated readiness without transferring durable lifecycle
+ownership from Java.
