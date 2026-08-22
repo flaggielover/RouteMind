@@ -880,12 +880,12 @@
       "phase": "P16",
       "priority": "critical",
       "depends_on": ["RM-103", "RM-130"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["API lists registered strategy names, versions, capabilities, and status", "Execution accepts a bounded scenario and returns decision/metric provenance", "Failures and runtime are explicit"],
       "gates": ["L2-strategy-api", "L3-strategy-execution"],
       "evidence": ["evidence/gates/RM-160/strategy-api.md"],
       "blocked_by": [],
-      "notes": "No hard-coded scores in product views."
+      "notes": "Compute-owned catalog and bounded execution endpoint preserve strategy version, explicit runtime metrics, and canonical input/output provenance; local full/browser gates pass and remote Actions run 32600128160 passed all five jobs."
     },
     {
       "id": "RM-161",
@@ -893,7 +893,7 @@
       "phase": "P16",
       "priority": "high",
       "depends_on": ["RM-160", "RM-090"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Strategies publish versioned parameter schemas with validation", "Experiment runs record scenario, seed, configuration, runtime, and outputs", "Registered baselines, advanced strategies, and RADS are selectable where available"],
       "gates": ["L2-strategy-parameters", "L6-experiment-provenance"],
       "evidence": ["evidence/gates/RM-161/strategy-experiments.md"],

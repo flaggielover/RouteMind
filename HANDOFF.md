@@ -487,6 +487,13 @@ critical task is RM-160, which exposes the compute-owned strategy registry and
 bounded execution API while preserving versioned provenance and explicit
 failure metadata.
 
+RM-160 is fully validated. The compute catalog and bounded execution API are
+covered by 104 Python tests at 95.78%, full local gates, browser smoke (17
+passed plus one desktop-only skip), and GitHub Actions run `32600128160` with
+all five jobs green. The task graph now activates RM-161, which depends on
+RM-160 and RM-090 and adds versioned strategy parameter schemas and experiment
+provenance.
+
 
 ## Current Resume Capsule
 - Resume at RM-160; do not redo completed RM-123 through RM-154 gates.

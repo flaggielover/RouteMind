@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P15 Digital Twin
 
-Round 2 Progress: 30 / 48 tasks passed
+Round 2 Progress: 31 / 48 tasks passed
 
-Repository Total: 58 / 76 tasks passed
+Repository Total: 59 / 76 tasks passed
 
-Current Task: RM-160 - Expose strategy registry and execution API
+Current Task: RM-161 - Add strategy parameter schemas and experiments
 
-Last Completed: RM-154 - Implement traffic, supply, and failure perturbations
+Last Completed: RM-160 - Expose strategy registry and execution API
 
-Current Gate: RM-160 local/full/browser gates passed; checkpoint is awaiting remote Actions validation
+Current Gate: RM-160 local/full/browser gates and remote Actions run 32600128160 passed; RM-161 is the next unblocked high-priority task
 
-CI: PASS - RM-154 run 32582936237; RM-160 remote validation is pending after local closure.
+CI: PASS - RM-160 run 32600128160; RM-154 run 32582936237 also passed all five jobs.
 
 Regression: PASS - Java 60, Python 104 / 95.78%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-160 remote validation; RM-155 remains blocked by RM-152 (which depends on RM-133)
+Next Candidates: RM-161 - add strategy parameter schemas and experiments; RM-163 is also unblocked; RM-155 remains blocked by RM-152 (which depends on RM-133)
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -130,4 +130,11 @@ The task is now passed and RM-120 is the active implementation.
 - Added compute-owned strategy catalog and bounded strategy execution API with explicit provenance.
 - Preserved live dispatch snapshot behavior and Java durable-state ownership.
 - Focused tests: 12 passed. Full compute suite: 104 passed at 95.78% coverage. Ruff passed.
-- Full available gate and browser smoke now pass locally; remote Actions validation is pending.
+- Full available gate and browser smoke pass locally; remote Actions run 32600128160 passed all five jobs.
+
+### RM-160 completion - 2026-08-23
+- Strategy catalog and bounded execution API are fully validated.
+- Provenance records canonical input/output SHA-256 digests, strategy identity,
+  metrics, trace context, and explicit failure metadata without durable writes.
+- RM-161 is now active; it will add versioned parameter schemas and experiment
+  provenance on top of the registry boundary.

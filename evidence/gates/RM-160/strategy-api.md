@@ -17,5 +17,5 @@
   smoke passed for desktop and mobile routes.
 
 ## Remaining gate
-Local L2/L3 strategy API evidence is complete. RM-160 remains `in_progress`
-until the pushed checkpoint receives a green remote Actions run.
+Local L2/L3 strategy API evidence is complete. GitHub Actions run
+`32600128160` passed all five required jobs, so RM-160 is fully validated.
