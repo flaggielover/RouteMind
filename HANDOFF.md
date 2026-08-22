@@ -450,3 +450,10 @@ Evidence is recorded at `evidence/gates/RM-143/traffic-updates.md`; remote
 Actions run `32579007370` passed all five jobs and the task is fully validated.
 RM-150 continuous Digital Twin state kernel is now the active critical-path
 task.
+RM-150 is locally complete: `TwinClock` separates forward-only simulated time
+from wall-clock observation, and the seeded scenario kernel records simulated
+end tick without polluting replay digest. Local full gate passed with Java 60
+tests, Python 90 tests at 96.37% coverage, Web 38 unit tests/build, and 5
+schemas/15 fixtures. Evidence is recorded at
+`evidence/gates/RM-150/continuous-twin.md`; checkpoint is awaiting remote
+Actions validation.

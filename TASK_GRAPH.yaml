@@ -768,7 +768,7 @@
       "gates": ["L2-twin-kernel", "L6-simulation-reproducibility"],
       "evidence": ["evidence/gates/RM-150/continuous-twin.md"],
       "blocked_by": [],
-      "notes": "Continuous twin kernel is now the active critical-path task; kernel remains framework-free and compute-owned."
+      "notes": "Local L2/L6 continuous twin evidence passes with explicit simulation clock separation and deterministic replay; remote Actions validation is required before closure. Kernel remains framework-free and compute-owned."
     },
     {
       "id": "RM-151",

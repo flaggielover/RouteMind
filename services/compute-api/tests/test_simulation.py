@@ -9,6 +9,7 @@ from routemind_compute.application.simulation import (
     DemandEvent,
     ScenarioKernel,
     ScenarioManifest,
+    TwinClock,
 )
 from routemind_compute.application.travel import DeterministicLocalTravelProvider
 from routemind_compute.domain.dispatch import GeoPoint
@@ -45,6 +46,20 @@ def test_repeated_runs_are_deterministic_and_replayable() -> None:
     assert len(first.decisions) == 2
     assert {transition.to_state for transition in first.transitions} == {"ASSIGNED"}
     assert len(first.replay_digest) == 64
+    assert first.simulated_end_tick == 0
+    assert first.wall_clock_elapsed_seconds >= 0
+    assert first.wall_clock_elapsed_seconds != first.simulated_end_tick
+
+
+def test_twin_clock_separates_simulated_time_from_wall_clock() -> None:
+    clock = TwinClock(ticks_per_hour=60)
+    assert clock.simulated_time_seconds == 0
+    advanced = clock.advance_to(30)
+    assert advanced.simulated_time_seconds == 1800
+    with pytest.raises(ValueError, match="backwards"):
+        advanced.advance_to(29)
+    with pytest.raises(ValueError, match="ticks_per_hour"):
+        TwinClock(ticks_per_hour=0)
 
 
 def test_seed_and_scenario_inputs_are_part_of_replay() -> None:

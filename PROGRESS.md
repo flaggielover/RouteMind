@@ -10,11 +10,11 @@ Current Task: RM-150 - Implement continuous Digital Twin state kernel
 
 Last Completed: RM-143 - Add traffic and incident travel updates
 
-Current Gate: RM-143 local/full/CI gates passed in run 32579007370; RM-150 is now in progress
+Current Gate: RM-150 local/full gates passed; checkpoint is awaiting remote CI validation
 
 CI: PASS - RM-143 run 32579007370; all five jobs passed. RM-142 run 32578382074 also passed all five jobs.
 
-Regression: PASS - Java 60, Python 89 / 96.40%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 90 / 96.37%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 

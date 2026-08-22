@@ -3,8 +3,9 @@ from __future__ import annotations
 import hashlib
 import json
 import random
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from math import ceil, isfinite
+from time import perf_counter
 
 from routemind_compute.application.registry import StrategyRegistry
 from routemind_compute.application.travel import TravelTimeProvider
@@ -73,6 +74,29 @@ class StateTransition:
 
 
 @dataclass(frozen=True, slots=True)
+class TwinClock:
+    """Simulation time is advanced explicitly and never derived from wall time."""
+
+    tick: int = 0
+    ticks_per_hour: int = 60
+
+    def __post_init__(self) -> None:
+        if self.tick < 0:
+            raise ValueError("clock tick must be non-negative")
+        if self.ticks_per_hour <= 0:
+            raise ValueError("clock ticks_per_hour must be positive")
+
+    @property
+    def simulated_time_seconds(self) -> float:
+        return self.tick * 3600 / self.ticks_per_hour
+
+    def advance_to(self, tick: int) -> TwinClock:
+        if tick < self.tick:
+            raise ValueError("clock cannot move backwards")
+        return TwinClock(tick, self.ticks_per_hour)
+
+
+@dataclass(frozen=True, slots=True)
 class ScenarioDecision:
     request_id: str
     tick: int
@@ -88,6 +112,8 @@ class ScenarioRun:
     decisions: tuple[ScenarioDecision, ...]
     transitions: tuple[StateTransition, ...]
     replay_digest: str
+    simulated_end_tick: int = 0
+    wall_clock_elapsed_seconds: float = field(default=0.0, compare=False)
 
 
 class ScenarioKernel:
@@ -106,11 +132,14 @@ class ScenarioKernel:
         self.ticks_per_hour = ticks_per_hour
 
     def run(self, manifest: ScenarioManifest) -> ScenarioRun:
+        wall_started = perf_counter()
+        clock = TwinClock(0, self.ticks_per_hour)
         available = {courier.courier_id: courier for courier in manifest.couriers}
         rng = random.Random(manifest.seed)
         decisions: list[ScenarioDecision] = []
         transitions: list[StateTransition] = []
         for event in sorted(manifest.demands, key=lambda item: (item.tick, item.request_id)):
+            clock = clock.advance_to(event.tick)
             candidates = tuple(
                 CourierCandidate(courier_id, state.location)
                 for courier_id, state in sorted(available.items())
@@ -149,6 +178,7 @@ class ScenarioKernel:
         payload = {
             "scenario_id": manifest.scenario_id,
             "seed": manifest.seed,
+            "simulated_end_tick": clock.tick,
             "decisions": [
                 {
                     "request_id": decision.request_id,
@@ -173,5 +203,11 @@ class ScenarioKernel:
         canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
         digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
         return ScenarioRun(
-            manifest.scenario_id, manifest.seed, tuple(decisions), tuple(transitions), digest
+            manifest.scenario_id,
+            manifest.seed,
+            tuple(decisions),
+            tuple(transitions),
+            digest,
+            clock.tick,
+            perf_counter() - wall_started,
         )
