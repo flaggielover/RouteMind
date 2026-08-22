@@ -29,6 +29,14 @@ The self-tests cover canonical plan digests, threshold boundaries, rollback
 precedence over incomplete observations, unknown stages, missing health checks,
 and no-write behavior.
 
+## GitHub Actions
+
+- Run: `32558073285`
+- Commit: `f081984dd8474aa5813a0f8f5f267268005cd5cc`
+- Result: all five jobs passed: control plane and Compose, Java business
+  runtime, Python compute and contracts, Web application, and bounded
+  degradation/resilience.
+
 ## Boundary
 
 This is a local policy evaluator only. Service-mesh traffic shifting, live

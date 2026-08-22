@@ -295,12 +295,25 @@
       "phase": "P8",
       "priority": "high",
       "depends_on": ["RM-080", "RM-081", "RM-083", "RM-084"],
-      "status": "implemented",
+      "status": "passed",
       "acceptance": ["Ordered traffic cohorts and safety thresholds are immutable and content-addressed", "Promotion, hold, and rollback decisions are deterministic with rollback precedence", "Local evaluation is read-only and does not claim traffic shifting or production rollback"],
       "gates": ["L2-release-policy", "L5-staged-isolation", "security-review"],
       "evidence": ["evidence/gates/RM-085/2026-08-22-staged-release.md"],
       "blocked_by": [],
       "notes": "Service-mesh traffic control, live monitoring, and production rollback remain external gates."
+    },
+    {
+      "id": "RM-086",
+      "title": "Define authentication and authorization boundary contract",
+      "phase": "P8",
+      "priority": "high",
+      "depends_on": ["RM-005", "RM-010", "RM-011", "RM-082"],
+      "status": "in_progress",
+      "acceptance": ["Authenticated principal context has explicit validity, issuer, role, scope, and audit invariants", "Java owns deny-by-default command authorization and distinguishes forbidden, stale, and repeated outcomes", "Web, Python, and agent clients cannot mint credentials or bypass the Java policy boundary"],
+      "gates": ["L2-auth-policy", "L3-command-authorization", "security-review"],
+      "evidence": [],
+      "blocked_by": [],
+      "notes": "OIDC/JWKS verification, rotation, revocation, rate limiting, and production secret management remain external gates."
     },
     {
       "id": "RM-090",
