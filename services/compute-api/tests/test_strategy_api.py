@@ -63,3 +63,60 @@ def test_execution_rejects_unknown_and_unbounded_inputs() -> None:
     unbounded = payload()
     unbounded["configuration"] = [[f"key-{index}", "value"] for index in range(33)]
     assert client.post("/api/v1/strategies/execute", json=unbounded).status_code == 422
+
+
+def test_parameter_schema_exposes_versioned_supported_weights() -> None:
+    response = client.get("/api/v1/strategies/risk-aware/parameters")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["strategy"] == "risk-aware"
+    assert body["version"] == "1.0.0"
+    assert {item["key"] for item in body["parameters"]} == {
+        "distance",
+        "readiness",
+        "overtime",
+        "service_risk",
+        "balance",
+    }
+    assert client.get("/api/v1/strategies/missing/parameters").status_code == 404
+
+
+def test_routebench_experiment_records_manifest_and_output_provenance() -> None:
+    response = client.post(
+        "/api/v1/experiments/routebench",
+        json={
+            "manifest_id": "manifest-api-1",
+            "code_version": "git:test",
+            "scenario_id": "scenario-api-1",
+            "seed": 7,
+            "load_profile": "reduced",
+            "city_state": "fixture",
+            "dataset_provenance": "fixture:api",
+            "strategies": ["nearest", "weighted-greedy"],
+            "configuration": [["batch_size", "2"]],
+            "parameter_configuration": [["distance_weight", "2.0"]],
+            "demands": [
+                {
+                    "request_id": "request-api-1",
+                    "pickup": {"latitude": 31.2304, "longitude": 121.4737},
+                    "tick": 0,
+                }
+            ],
+            "couriers": [
+                {
+                    "courier_id": "courier-api-1",
+                    "location": {"latitude": 31.231, "longitude": 121.474},
+                }
+            ],
+        },
+    )
+    assert response.status_code == 200
+    body = response.json()
+    assert body["source"] == "experiment"
+    assert len(body["manifest_digest"]) == 64
+    assert len(body["output_digest"]) == 64
+    assert [metric["strategy"] for metric in body["metrics"]] == [
+        "nearest",
+        "weighted-greedy",
+    ]
+    assert body["parameter_configuration"] == [["distance_weight", "2.0"]]

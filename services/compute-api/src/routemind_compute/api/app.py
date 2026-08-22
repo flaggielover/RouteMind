@@ -9,7 +9,10 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from routemind_compute.api.observability import RequestObservabilityMiddleware, metrics_response
 from routemind_compute.application.execution import execution_provenance
+from routemind_compute.application.parameters import Metadata
 from routemind_compute.application.registry import StrategyRegistry, default_registry
+from routemind_compute.application.routebench import BenchmarkManifest, RouteBenchRunner
+from routemind_compute.application.simulation import CourierState, DemandEvent, ScenarioManifest
 from routemind_compute.application.travel import (
     DeterministicLocalTravelProvider,
     FallbackTravelTimeProvider,
@@ -160,6 +163,88 @@ class StrategyExecutionResponse(BaseModel):
     trace_id: str
 
 
+class ParameterDefinitionResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    key: str
+    type: Literal["float"]
+    default: str
+    minimum: float | None
+    maximum: float | None
+
+
+class StrategyParameterSchemaResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    strategy: str
+    version: str
+    parameters: tuple[ParameterDefinitionResponse, ...]
+
+
+class ExperimentDemandRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    request_id: str = Field(min_length=1, max_length=128)
+    pickup: GeoPointRequest
+    tick: int = Field(ge=0, le=100_000)
+    zone: str = Field(default="", max_length=64)
+    merchant_id: str = Field(default="", max_length=128)
+    order_profile: str = Field(default="standard", min_length=1, max_length=64)
+
+
+class ExperimentCourierRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    courier_id: str = Field(min_length=1, max_length=128)
+    location: GeoPointRequest
+    available_tick: int = Field(default=0, ge=0, le=100_000)
+
+
+class RouteBenchExperimentRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    manifest_id: str = Field(min_length=1, max_length=128)
+    code_version: str = Field(min_length=1, max_length=128)
+    scenario_id: str = Field(min_length=1, max_length=128)
+    seed: int = Field(ge=0, le=2_147_483_647)
+    load_profile: str = Field(min_length=1, max_length=128)
+    city_state: str = Field(min_length=1, max_length=128)
+    dataset_provenance: str = Field(min_length=1, max_length=256)
+    strategies: tuple[str, ...] = Field(min_length=1, max_length=6)
+    configuration: tuple[tuple[str, str], ...] = Field(default=(), max_length=16)
+    parameter_configuration: tuple[tuple[str, str], ...] = Field(default=(), max_length=16)
+    demands: tuple[ExperimentDemandRequest, ...] = Field(min_length=1, max_length=64)
+    couriers: tuple[ExperimentCourierRequest, ...] = Field(min_length=1, max_length=64)
+    delay_ticks: tuple[int, ...] = Field(default=(0,), min_length=1, max_length=16)
+    traffic_multiplier: float = Field(default=1.0, gt=0, le=10)
+
+
+class ExperimentMetricResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    strategy: str
+    strategy_version: str
+    request_count: int
+    assigned_count: int
+    assignment_rate: float
+    runtime_millis: float
+    replay_digest: str
+
+
+class ExperimentResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["experiment"]
+    manifest_digest: str
+    output_digest: str
+    metrics: tuple[ExperimentMetricResponse, ...]
+    scenario_id: str
+    seed: int
+    configuration: tuple[tuple[str, str], ...]
+    parameter_configuration: tuple[tuple[str, str], ...]
+    trace_id: str
+
+
 @app.get("/healthz", response_model=HealthResponse)
 def health() -> HealthResponse:
     return HealthResponse(status="UP")
@@ -190,6 +275,31 @@ def strategy_catalog() -> tuple[StrategyDescriptorResponse, ...]:
             status="available",
         )
         for descriptor in REGISTRY.descriptors()
+    )
+
+
+@app.get(
+    "/api/v1/strategies/{strategy_name}/parameters",
+    response_model=StrategyParameterSchemaResponse,
+)
+def strategy_parameters(strategy_name: str) -> StrategyParameterSchemaResponse:
+    try:
+        schema = REGISTRY.parameter_schema(strategy_name)
+    except KeyError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
+    return StrategyParameterSchemaResponse(
+        strategy=schema.strategy,
+        version=schema.version,
+        parameters=tuple(
+            ParameterDefinitionResponse(
+                key=item.key,
+                type=item.value_type,
+                default=item.default,
+                minimum=item.minimum,
+                maximum=item.maximum,
+            )
+            for item in schema.parameters
+        ),
     )
 
 
@@ -274,6 +384,79 @@ def execute_strategy(
             input_digest=provenance.input_digest,
             output_digest=provenance.output_digest,
         ),
+        trace_id=trace_id,
+    )
+
+
+@app.post("/api/v1/experiments/routebench", response_model=ExperimentResponse)
+def run_routebench_experiment(
+    payload: RouteBenchExperimentRequest, request: Request
+) -> ExperimentResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        configuration: Metadata = tuple(sorted(payload.configuration))
+        manifest = BenchmarkManifest(
+            payload.manifest_id,
+            payload.code_version,
+            payload.scenario_id,
+            payload.seed,
+            payload.load_profile,
+            payload.city_state,
+            payload.dataset_provenance,
+            payload.strategies,
+            configuration=configuration,
+            parameter_configuration=tuple(sorted(payload.parameter_configuration)),
+        )
+        scenario = ScenarioManifest(
+            payload.scenario_id,
+            payload.seed,
+            tuple(
+                DemandEvent(
+                    demand.request_id,
+                    GeoPoint(demand.pickup.latitude, demand.pickup.longitude),
+                    demand.tick,
+                    demand.zone,
+                    demand.merchant_id,
+                    demand.order_profile,
+                )
+                for demand in payload.demands
+            ),
+            tuple(
+                CourierState(
+                    courier.courier_id,
+                    GeoPoint(courier.location.latitude, courier.location.longitude),
+                    courier.available_tick,
+                )
+                for courier in payload.couriers
+            ),
+            payload.delay_ticks,
+            payload.traffic_multiplier,
+        )
+        run = RouteBenchRunner(REGISTRY, TRAVEL_PROVIDER).run(manifest, scenario)
+    except KeyError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return ExperimentResponse(
+        source="experiment",
+        manifest_digest=run.manifest.digest,
+        output_digest=run.output_digest,
+        metrics=tuple(
+            ExperimentMetricResponse(
+                strategy=result.strategy,
+                strategy_version=result.strategy_version,
+                request_count=result.request_count,
+                assigned_count=result.assigned_count,
+                assignment_rate=result.assignment_rate,
+                runtime_millis=result.runtime_millis,
+                replay_digest=result.replay_digest,
+            )
+            for result in run.results
+        ),
+        scenario_id=payload.scenario_id,
+        seed=payload.seed,
+        configuration=configuration,
+        parameter_configuration=tuple(sorted(payload.parameter_configuration)),
         trace_id=trace_id,
     )
 

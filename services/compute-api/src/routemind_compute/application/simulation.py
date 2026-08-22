@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from math import ceil, isfinite
 from time import perf_counter
 
+from routemind_compute.application.parameters import Metadata
 from routemind_compute.application.registry import StrategyRegistry
 from routemind_compute.application.travel import TravelTimeProvider
 from routemind_compute.domain.dispatch import CourierCandidate, DispatchProblem, GeoPoint
@@ -128,6 +129,7 @@ class ScenarioKernel:
         travel_provider: TravelTimeProvider,
         strategy: str = "nearest",
         ticks_per_hour: int = 60,
+        strategy_configuration: Metadata = (),
     ) -> None:
         if ticks_per_hour <= 0:
             raise ValueError("ticks_per_hour must be positive")
@@ -135,6 +137,7 @@ class ScenarioKernel:
         self.travel_provider = travel_provider
         self.strategy = strategy
         self.ticks_per_hour = ticks_per_hour
+        self.strategy_configuration = tuple(sorted(strategy_configuration))
 
     def run(self, manifest: ScenarioManifest) -> ScenarioRun:
         wall_started = perf_counter()
@@ -150,8 +153,15 @@ class ScenarioKernel:
                 for courier_id, state in sorted(available.items())
                 if state.available_tick <= event.tick
             )
+            parameter_configuration = (
+                self.strategy_configuration
+                if self.registry.parameter_schema(self.strategy).parameters
+                else ()
+            )
             dispatch = self.registry.solve(
-                self.strategy, DispatchProblem(event.request_id, event.pickup, candidates)
+                self.strategy,
+                DispatchProblem(event.request_id, event.pickup, candidates),
+                parameter_configuration,
             )
             decisions.append(
                 ScenarioDecision(

@@ -1,6 +1,7 @@
 from dataclasses import dataclass, replace
 from time import perf_counter
 
+from routemind_compute.application.parameters import Metadata, StrategyParameterSchema, schema_for
 from routemind_compute.domain.dispatch import DispatchDecision, DispatchProblem, DispatchStrategy
 
 
@@ -57,14 +58,25 @@ class StrategyRegistry:
             descriptors.append(StrategyDescriptor(name, version, capabilities))
         return tuple(descriptors)
 
+    def parameter_schemas(self) -> tuple[StrategyParameterSchema, ...]:
+        return tuple(
+            schema_for(descriptor.name, descriptor.version) for descriptor in self.descriptors()
+        )
+
+    def parameter_schema(self, name: str) -> StrategyParameterSchema:
+        strategy = self.get(name)
+        return schema_for(name, str(getattr(strategy, "version", "1.0.0")))
+
     def get(self, name: str) -> DispatchStrategy:
         try:
             return self._strategies[name]
         except KeyError as error:
             raise KeyError(f"unknown dispatch strategy: {name}") from error
 
-    def solve(self, name: str, problem: DispatchProblem) -> DispatchDecision:
-        strategy = self.get(name)
+    def solve(
+        self, name: str, problem: DispatchProblem, configuration: Metadata = ()
+    ) -> DispatchDecision:
+        strategy = self._configured(name, configuration)
         started = perf_counter()
         decision = strategy.solve(problem)
         elapsed_millis = (perf_counter() - started) * 1000
@@ -92,6 +104,33 @@ class StrategyRegistry:
             latency_millis=elapsed_millis,
             metadata=metadata,
         )
+
+    def _configured(self, name: str, configuration: Metadata) -> DispatchStrategy:
+        base = self.get(name)
+        if not configuration:
+            return base
+        normalized = self.parameter_schema(name).validate(configuration)
+        values = dict(normalized)
+        if name == "weighted-greedy":
+            from routemind_compute.application.baselines import WeightedGreedyStrategy
+
+            return WeightedGreedyStrategy(float(values["distance_weight"]))
+        if name == "risk-aware":
+            from routemind_compute.application.risk_aware import (
+                RiskAwareScoringStrategy,
+                RiskAwareWeights,
+            )
+
+            return RiskAwareScoringStrategy(
+                RiskAwareWeights(
+                    float(values["distance"]),
+                    float(values["readiness"]),
+                    float(values["overtime"]),
+                    float(values["service_risk"]),
+                    float(values["balance"]),
+                )
+            )
+        raise ValueError(f"strategy does not expose configurable parameters: {name}")
 
 
 def default_registry() -> StrategyRegistry:

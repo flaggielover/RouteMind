@@ -10,17 +10,17 @@ Current Task: RM-161 - Add strategy parameter schemas and experiments
 
 Last Completed: RM-160 - Expose strategy registry and execution API
 
-Current Gate: RM-160 local/full/browser gates and remote Actions run 32600128160 passed; RM-161 is the next unblocked high-priority task
+Current Gate: RM-161 local/full gates passed; checkpoint is awaiting remote Actions validation
 
-CI: PASS - RM-160 run 32600128160; RM-154 run 32582936237 also passed all five jobs.
+CI: PASS - RM-160 run 32600128160; RM-161 remote validation is pending.
 
-Regression: PASS - Java 60, Python 104 / 95.78%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 109 / 95.39%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-161 - add strategy parameter schemas and experiments; RM-163 is also unblocked; RM-155 remains blocked by RM-152 (which depends on RM-133)
+Next Candidates: RM-161 remote validation; RM-163 is also unblocked after RM-160; RM-155 remains blocked by RM-152 (which depends on RM-133)
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -138,3 +138,9 @@ The task is now passed and RM-120 is the active implementation.
   metrics, trace context, and explicit failure metadata without durable writes.
 - RM-161 is now active; it will add versioned parameter schemas and experiment
   provenance on top of the registry boundary.
+
+### RM-161 checkpoint - 2026-08-23
+- Added versioned parameter schemas and bounded configured strategy execution.
+- Added a RouteBench experiment API that records scenario/seed/configuration,
+  manifest/output/replay digests, runtime observations, and assignment metrics.
+- Local compute and full repository gates pass; remote Actions validation is pending.

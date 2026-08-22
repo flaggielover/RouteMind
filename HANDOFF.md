@@ -494,10 +494,19 @@ all five jobs green. The task graph now activates RM-161, which depends on
 RM-160 and RM-090 and adds versioned strategy parameter schemas and experiment
 provenance.
 
+RM-161 is locally complete and awaiting remote validation. It adds bounded
+versioned parameter schemas for weighted-greedy and risk-aware, preserves
+generic RouteBench manifest metadata separately from strategy parameters, and
+adds `POST /api/v1/experiments/routebench` backed by the existing seeded
+RouteBench/ScenarioKernel. Compute check passes 109 tests at 95.39%; full
+available gates pass Java 60, Web 38 unit/build, and 5 schemas/15 fixtures.
+The next action is to push and observe the RM-161 Actions run; RM-163 is the
+next alternative unblocked task after RM-161.
+
 
 ## Current Resume Capsule
-- Resume at RM-160; do not redo completed RM-123 through RM-154 gates.
-- Local compute evidence: 104 tests passed, 95.78% coverage, Ruff clean.
-- Full gate passed Java 60, Python 104 at 95.78%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke passed 17 with one desktop-only skip.
-- Next action: commit and push the local evidence refresh, then obtain remote Actions validation before marking RM-160 passed.
+- Resume at RM-161; do not redo completed RM-123 through RM-160 gates.
+- Local compute evidence: 109 tests passed, 95.39% coverage, Ruff clean.
+- Full gate passed Java 60, Python 109 at 95.39%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
+- Next action: commit and push the RM-161 evidence refresh, then obtain remote Actions validation before marking RM-161 passed.
 - External data remains governed by ROUTEMIND_DATA_ROOT; no external data path was hardcoded.

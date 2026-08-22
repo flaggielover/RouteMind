@@ -46,6 +46,7 @@ class BenchmarkManifest:
     dataset_provenance: str
     strategies: tuple[str, ...]
     configuration: Metadata = ()
+    parameter_configuration: Metadata = ()
     runtime: Metadata = ()
     failures: tuple[str, ...] = ()
     hardware: Metadata = ()
@@ -71,7 +72,7 @@ class BenchmarkManifest:
             raise ValueError("failure labels must not be blank")
         object.__setattr__(self, "strategies", tuple(sorted(self.strategies)))
         object.__setattr__(self, "failures", tuple(sorted(set(self.failures))))
-        for field_name in ("configuration", "runtime", "hardware"):
+        for field_name in ("configuration", "parameter_configuration", "runtime", "hardware"):
             object.__setattr__(self, field_name, _normalize_metadata(getattr(self, field_name)))
 
     def canonical_payload(self) -> dict[str, object]:
@@ -85,6 +86,7 @@ class BenchmarkManifest:
             "dataset_provenance": self.dataset_provenance,
             "strategies": self.strategies,
             "configuration": self.configuration,
+            "parameter_configuration": self.parameter_configuration,
             "runtime": self.runtime,
             "failures": self.failures,
             "hardware": self.hardware,
@@ -208,6 +210,7 @@ class RouteBenchRunner:
                 self.travel_provider,
                 strategy=strategy,
                 ticks_per_hour=self.ticks_per_hour,
+                strategy_configuration=manifest.parameter_configuration,
             ).run(scenario)
             runtime_millis = (perf_counter() - started) * 1000
             assigned_count = sum(item.courier_id is not None for item in scenario_run.decisions)
