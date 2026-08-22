@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P10 Live Product Foundation
 
-Round 2 Progress: 6 / 48 tasks passed
+Round 2 Progress: 7 / 48 tasks passed
 
-Repository Total: 34 / 76 tasks passed
+Repository Total: 35 / 76 tasks passed
 
-Current Task: RM-106 - Implement Java business event SSE feed
+Current Task: RM-107 - Implement web realtime reconnect and stale-state handling
 
-Last Completed: RM-088 - Define deployment and edge-security adapter boundary
+Last Completed: RM-106 - Implement Java business event SSE feed
 
-Current Gate: RM-106 local implementation and full gate passed; awaiting push/CI validation
+Current Gate: RM-106 local/full/CI gates passed; RM-107 implementation in progress
 
-CI: PASS - RM-104 run 32564042862; RM-105 run 32564387503; all five jobs passed. RM-106 CI pending.
+CI: PASS - RM-106 run 32565242420; all five jobs passed. Earlier RM-104/105 runs 32564042862/32564387503 also passed.
 
 Regression: PASS - Java 57, Python 59 / 96.13%, Web 9 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-106 - push checkpoint and observe GitHub Actions, then RM-107
+Next Candidates: RM-107 - bounded browser reconnect, deduplication, and stale-state handling
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -79,3 +79,5 @@ RM-106 local Java SSE evidence is recorded in `evidence/gates/RM-106/java-sse.md
 The bounded Outbox-backed stream, exclusive reconnect cursor, stale conflict,
 and subscriber-loss handling pass the local full gate; the implementation
 checkpoint is awaiting Actions validation.
+RM-106 checkpoint `21beadc` and Actions run `32565242420` passed all five jobs.
+The task is now passed and RM-107 is the active implementation.

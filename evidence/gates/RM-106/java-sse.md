@@ -1,7 +1,7 @@
 # RM-106 Java Business Event SSE Feed
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint pending
+- Revision: `21beadc`
 - Boundary: bounded read-only Java SSE projection over durable Outbox event records
 
 ## Transport and cursor behavior
@@ -27,6 +27,8 @@ and complete the emitter, bounding slow or disconnected subscribers.
 2. `./scripts/full-gate.ps1` -> PASS; Java 57 tests, Python 59 tests at 96.13%
    coverage, 5 schemas/15 fixtures, Web 9 unit tests and production build.
 3. `git diff --check` -> PASS before checkpoint commit.
+4. GitHub Actions run `32565242420` -> PASS; all five jobs passed, including
+   the clean Java runtime gate.
 
 ## Evidence limits
 
