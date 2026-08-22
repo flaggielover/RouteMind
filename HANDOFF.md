@@ -8,7 +8,7 @@ Current Phase: P9 Research and Experimentation
 
 Current Task: RM-085 - Define staged release and rollback decision contract
 
-Task Status: in_progress (design checkpoint)
+Task Status: implemented locally; CI pending
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -168,6 +168,10 @@ read-only and leaves traffic shifting, live monitoring, and production restore
 external. Design is in
 `docs/design/p8-staged-release-decision-contract.md`; the task graph now marks
 RM-085 `in_progress`.
+The implementation checkpoint `4367caf` adds deterministic evaluation and five
+self-tests; local full gate passed. Evidence is in
+`evidence/gates/RM-085/2026-08-22-staged-release.md`. The task remains
+`implemented` until its real GitHub Actions run is observed.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -235,8 +239,9 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Implement RM-085's deterministic staged release
-evaluation and self-tests, run the full gate, commit, push, and observe CI.
+Next Recommended Action: Push `4367caf`, observe its real GitHub Actions run,
+diagnose any failure to green, then record CI evidence and continue to the next
+unblocked task.
 
 Next Candidate Task: RM-085 - implement deterministic staged release evaluation
 

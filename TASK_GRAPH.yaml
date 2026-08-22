@@ -295,10 +295,10 @@
       "phase": "P8",
       "priority": "high",
       "depends_on": ["RM-080", "RM-081", "RM-083", "RM-084"],
-      "status": "in_progress",
+      "status": "implemented",
       "acceptance": ["Ordered traffic cohorts and safety thresholds are immutable and content-addressed", "Promotion, hold, and rollback decisions are deterministic with rollback precedence", "Local evaluation is read-only and does not claim traffic shifting or production rollback"],
       "gates": ["L2-release-policy", "L5-staged-isolation", "security-review"],
-      "evidence": [],
+      "evidence": ["evidence/gates/RM-085/2026-08-22-staged-release.md"],
       "blocked_by": [],
       "notes": "Service-mesh traffic control, live monitoring, and production rollback remain external gates."
     },
