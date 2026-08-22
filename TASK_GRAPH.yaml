@@ -672,12 +672,12 @@
       "phase": "P13",
       "priority": "high",
       "depends_on": ["RM-131", "RM-133"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["New demand can be inserted into an active route without violating constraints", "Insertion cost and rejected reasons are deterministic", "Existing assignments remain immutable unless an explicit replan is requested"],
       "gates": ["L2-dynamic-insertion", "L6-insertion-benchmark"],
       "evidence": ["evidence/gates/RM-134/dynamic-insertion.md"],
       "blocked_by": [],
-      "notes": "Local L2/L6 evidence passes with deterministic all-position insertion, immutable route snapshots, stable rejection reasons, and bounded stop limits. Remote Actions validation is pending; no business-state mutation in the optimizer."
+      "notes": "Local L2/L6 evidence passes with deterministic all-position insertion, immutable route snapshots, stable rejection reasons, and bounded stop limits. Remote Actions run 32602785200 passed all five jobs; no business-state mutation in the optimizer."
     },
     {
       "id": "RM-135",
@@ -685,12 +685,12 @@
       "phase": "P13",
       "priority": "high",
       "depends_on": ["RM-134", "RM-105"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Replanning triggers on arrivals, lateness, incidents, courier loss, and material state changes", "Debounce, cooldown, and authority boundaries prevent thrashing", "Replan decisions include reason, trace, and before/after metrics"],
       "gates": ["L2-replanning", "L5-replanning-resilience", "L6-replanning-benchmark"],
       "evidence": ["evidence/gates/RM-135/dynamic-replanning.md"],
       "blocked_by": [],
-      "notes": "Java validates resulting commands before durable application."
+      "notes": "Java validates resulting commands before durable application. RM-135 is the next active P13 critical-path task after RM-134 passed."
     },
     {
       "id": "RM-136",

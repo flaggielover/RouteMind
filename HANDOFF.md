@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-134 - Implement dynamic insertion
+Current Task: RM-135 - Implement dynamic replanning policy
 
-Task Status: RM-134 implementation and local/full gates complete; remote Actions validation pending
+Task Status: RM-135 is in progress; RM-134 is the last fully validated task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -523,19 +523,23 @@ two-stop reproducible reference baseline. Compute check passes 119 tests at
 fixtures. The task graph now activates RM-134 dynamic insertion; RM-152 is also
 unblocked while RM-162 remains blocked by RM-156.
 
-RM-134 implementation is locally complete. `VrptwRoutePlanner.insert` evaluates
+RM-134 is fully validated after remote Actions run `32602785200` passed all five
+jobs. `VrptwRoutePlanner.insert` evaluates
 all positions against the active route snapshot, returns an immutable proposed
 route with incremental travel cost, and emits stable identity, capacity,
 time-window, availability, and bounded-limit rejection codes. Compute check
 passes 122 tests at 95.56%; full available gates pass Java 60, Web 38
 unit/build, and 5 schemas/15 fixtures. Evidence is recorded at
-`evidence/gates/RM-134/dynamic-insertion.md`; remote Actions validation is
-pending before the graph marks RM-134 passed.
+`evidence/gates/RM-134/dynamic-insertion.md`. The task graph now activates
+RM-135 dynamic replanning; RM-152 is also unblocked while RM-162 remains
+blocked by RM-156.
 
 
 ## Current Resume Capsule
-- Resume by observing RM-134's remote Actions run; do not redo completed RM-123 through RM-163 gates or RM-133's green Actions run.
+- Resume at RM-135; do not redo completed RM-123 through RM-163 gates or RM-133/RM-134 green Actions runs.
 - Local compute evidence: 122 tests passed, 95.56% coverage, Ruff/format/mypy/contracts clean.
 - Full gate passed Java 60, Python 122 at 95.56%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
-- After RM-134 remote validation passes, activate RM-135 dynamic replanning or RM-152 according to the refreshed task graph.
+- Next action: inspect twin/perturbation and dispatch boundaries, then implement
+  debounced dynamic replanning with explicit trigger, reason, and before/after
+  metrics.
 - External data remains governed by ROUTEMIND_DATA_ROOT; no external data path was hardcoded.
