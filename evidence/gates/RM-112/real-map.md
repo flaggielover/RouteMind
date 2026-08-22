@@ -1,7 +1,7 @@
 # RM-112 Real Map Layer With Local Fallback
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint pending
+- Revision: `e199a9a`; Actions run `32568087013`
 - Boundary: Web map surface selecting configured tiles or explicit local fallback
 
 ## Map behavior

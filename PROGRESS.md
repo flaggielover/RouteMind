@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P11 Operations Command Center
 
-Round 2 Progress: 11 / 48 tasks passed
+Round 2 Progress: 12 / 48 tasks passed
 
-Repository Total: 39 / 76 tasks passed
+Repository Total: 40 / 76 tasks passed
 
-Current Task: RM-112 - Implement real map layer with local fallback
+Current Task: RM-113 - Add operations filters and detail drawers
 
 Last Completed: RM-110 - Build operations command-center data projection
 
-Current Gate: RM-112 local/full/browser/CI gates passed locally; awaiting Actions validation
+Current Gate: RM-112 local/full/browser/CI gates passed; RM-113 implementation in progress
 
-CI: PASS - RM-111 run 32567620315; all five jobs passed. RM-112 local implementation is awaiting CI.
+CI: PASS - RM-112 run 32568087013; all five jobs passed. RM-111 run 32567620315 also passed.
 
 Regression: PASS - Java 57, Python 59 / 96.13%, Web 22 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-112 - real map layer with local fallback; push and observe CI
+Next Candidates: RM-113 - operations filters and detail drawers
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -108,3 +108,5 @@ RM-112 local map evidence is recorded in `evidence/gates/RM-112/real-map.md`.
 Configured tile templates render a provider layer with attribution; absent
 configuration remains explicitly labeled Offline fallback. Local full and browser
 gates pass; checkpoint is awaiting Actions validation.
+RM-112 checkpoint `e199a9a` and Actions run `32568087013` passed all five jobs.
+The task is now passed and RM-113 is the active implementation.
