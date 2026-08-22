@@ -72,6 +72,8 @@ for travel-provider and Redis projection degradation. A fixed 100-request local
 bounded-burst smoke is included. Local full gate passed with Java 34 tests and
 Python 36 tests at 98.07% coverage. Evidence is in
 `evidence/gates/RM-080/2026-08-22-observability-resilience.md`.
+The RM-080 checkpoint commit `c1913f3` passed all five GitHub Actions jobs in
+run `32552399489`, including the focused resilience job.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,

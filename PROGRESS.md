@@ -8,7 +8,7 @@ Current Task: RM-090 - Implement RouteBench and research lineage core
 
 Last Completed: RM-050 - Implement seeded Digital Twin scenario kernel
 
-CI: PENDING - RM-080 checkpoint pushed after local validation; observe the real resilience workflow run
+CI: PASS - GitHub Actions run 32552399489 (control, Java, Python/contracts, Web, Resilience)
 
 Regression: PASS - Java 34, Python 36 / 98.07%, Web, locked install, and 4 schemas / 12 contract fixtures
 
