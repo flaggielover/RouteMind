@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P10 Live Product Foundation
 
-Current Task: RM-108 - Integrate live activity and event stream into web shell
+Current Task: RM-110 - Build operations command-center data projection
 
-Task Status: implemented (RM-108 activity stream; local gates passed, CI pending)
+Task Status: in_progress (RM-110 operations command-center projection)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -272,7 +272,7 @@ Round 2 foundation design:
 The graph now contains 48 Round 2 tasks (RM-100 through RM-190); Round 1 tasks
 remain passed, RM-106 is CI-validated, and RM-107 is the current active task.
 
-Next Candidate Task: push RM-108, observe CI, then implement RM-110 operations command-center data projection.
+Next Candidate Task: implement RM-110 operations command-center data projection.
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
@@ -317,5 +317,5 @@ Actions run `32565242420` passed all five jobs. RM-107 evidence is in
 RM-108 adds the verified live activity projection with cursor, trace, freshness,
 and explicit Demo/Replay labels. Local full gate passed with 15 Web unit tests,
 16 Playwright tests, Java 57 tests, Python 59 tests at 96.13% coverage, and
-5 schemas/15 fixtures. Evidence is in `evidence/gates/RM-108/activity-stream.md`;
-push and observe Actions before marking the task passed.
+5 schemas/15 fixtures. Checkpoint `4181f3c` and Actions run `32566340978` passed
+all five jobs. Continue with RM-110.
