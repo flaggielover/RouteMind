@@ -47,6 +47,11 @@ try {
         throw "Release contract self-tests failed"
     }
 
+    python scripts/staged_release_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Staged release self-tests failed"
+    }
+
     if (Test-Path -LiteralPath "compose.yaml") {
         if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
             throw "Docker is required to validate compose.yaml"
