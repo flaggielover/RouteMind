@@ -390,5 +390,5 @@ responsive courier/customer/merchant action layouts, and mobile browser/axe
 coverage. Local full gate passed with Java 60 tests, Python 59 tests at 96.13%
 coverage, Web 38 unit tests/build, 17 Playwright passes plus one desktop-only skip,
 and 5 schemas/15 fixtures. Evidence is recorded at
-`evidence/gates/RM-124/mobile-workflows.md`; checkpoint is awaiting remote Actions
-validation. RM-130 constraint-aware dispatch model is now the next active task.
+`evidence/gates/RM-124/mobile-workflows.md`; remote Actions run `32575052384`
+passed all five jobs. RM-130 constraint-aware dispatch model is now the active task.

@@ -29,4 +29,5 @@ Date: 2026-08-22
 ## Gate decision
 
 Local L4 mobile workflow and accessibility evidence is complete. Remote Actions
-validation is required before the task is finally closed.
+run `32575052384` passed all five jobs, including the Web static/unit and browser
+smoke gates. RM-124 is fully validated.

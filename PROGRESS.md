@@ -10,9 +10,9 @@ Current Task: RM-130 - Define constraint-aware dispatch model
 
 Last Completed: RM-124 - Close mobile role workflow experience
 
-Current Gate: RM-124 local/full/browser gates passed; checkpoint is awaiting remote CI validation
+Current Gate: RM-124 local/full/browser/CI gates passed in run 32575052384; RM-130 constraint model implementation is in progress
 
-CI: PASS - RM-123 run 32574390001; all five jobs passed. RM-122 run 32573723273 also passed all five jobs.
+CI: PASS - RM-124 run 32575052384; all five jobs passed. RM-123 run 32574390001 also passed all five jobs.
 
 Regression: PASS - Java 60, Python 59 / 96.13%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
