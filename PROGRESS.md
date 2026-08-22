@@ -10,17 +10,17 @@ Current Task: RM-111 - Define provider-neutral geospatial map adapter
 
 Last Completed: RM-110 - Build operations command-center data projection
 
-Current Gate: RM-110 local/full/browser/CI gates passed; RM-111 implementation in progress
+Current Gate: RM-111 local/full/browser/CI gates passed locally; awaiting Actions validation
 
-CI: PASS - RM-110 run 32567110886; all five jobs passed. RM-108 run 32566340978 also passed.
+CI: PASS - RM-110 run 32567110886; all five jobs passed. RM-111 local implementation is awaiting CI.
 
-Regression: PASS - Java 57, Python 59 / 96.13%, Web 17 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 57, Python 59 / 96.13%, Web 21 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-111 - provider-neutral geospatial map adapter contract
+Next Candidates: RM-111 - provider-neutral geospatial map adapter contract; push and observe CI
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -98,3 +98,7 @@ states pass the local full and browser gates; the implementation checkpoint is
 awaiting Actions validation.
 RM-110 checkpoint `4b4ab79` and Actions run `32567110886` passed all five jobs.
 The task is now passed and RM-111 is the active implementation.
+RM-111 local geospatial adapter evidence is recorded in
+`evidence/gates/RM-111/geospatial-adapter.md`. WGS84 validation, schematic
+coordinate mapping, provider capabilities, and marker/route/zone/selection
+projection pass the local full and browser gates; checkpoint is awaiting Actions.

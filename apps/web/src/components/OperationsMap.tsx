@@ -1,5 +1,6 @@
 import { Navigation, Store, Truck, UserRound } from "lucide-react";
 import type { Courier, DataAvailability, DataSourceMode, Order } from "../domain/model";
+import { localSchematicMapCapabilities } from "../domain/geospatial";
 
 interface OperationsMapProps {
   orders: readonly Order[];
@@ -25,7 +26,7 @@ export function OperationsMap({
     <section className="panel map-panel" aria-labelledby="map-title">
       <div className="panel-heading">
         <div>
-          <p className="eyebrow">Live planning surface</p>
+          <p className="eyebrow">{localSchematicMapCapabilities.providerLabel}</p>
           <h2 id="map-title">City dispatch map</h2>
         </div>
         <span className="panel-meta">
@@ -34,7 +35,7 @@ export function OperationsMap({
       </div>
       <div
         className="map-canvas"
-        aria-label="Schematic city dispatch map with live order and courier markers"
+        aria-label="Local schematic fallback dispatch map with live order and courier markers"
       >
         <div className="map-grid" aria-hidden="true" />
         <div className="map-road road-one" aria-hidden="true" />

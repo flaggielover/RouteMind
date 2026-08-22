@@ -498,12 +498,12 @@
       "notes": "Avoid generic dashboard cards; optimize for operational scanning."
     },
     {
-        "id": "RM-111",
+      "id": "RM-111",
       "title": "Define provider-neutral geospatial map adapter",
       "phase": "P11",
       "priority": "high",
       "depends_on": ["RM-110"],
-        "status": "in_progress",
+        "status": "implemented",
       "acceptance": ["Map contract represents geographic coordinates, markers, routes, zones, and selection", "Provider capabilities and tile/routing availability are explicit", "No paid credential is required for local tests"],
       "gates": ["L1-map-contract", "L2-geo-adapter"],
       "evidence": ["evidence/gates/RM-111/geospatial-adapter.md"],
