@@ -8,7 +8,7 @@ Current Task: NONE - current task graph baseline complete
 
 Last Completed: RM-091 - Implement RADS research baseline
 
-CI: PENDING - RM-083 local gates passed; push and observe GitHub Actions
+CI: PASS - GitHub Actions run 32556590018 (control, Java, Python/contracts, Web, Resilience)
 
 Regression: PASS - Java 34, Python 50 / 95.47%, Web, locked install, and 4 schemas / 12 contract fixtures
 

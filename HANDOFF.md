@@ -144,6 +144,8 @@ passed with Java 34 tests, Python 56 tests at 96.05% coverage, Web regression,
 security checks, and four recovery-contract self-tests. Live service restore is
 explicitly not claimed and remains deferred_external. Evidence is in
 `evidence/gates/RM-083/2026-08-22-recovery-contract.md`.
+The RM-083 checkpoint commit `4b47d4e` passed all five GitHub Actions jobs in
+run `32556590018`.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
