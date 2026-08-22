@@ -408,6 +408,6 @@ The same constrained fixtures remain available to nearest, weighted-greedy,
 Hungarian, and risk-aware strategies; rationale and weight metadata are recorded
 in each decision. Local full gate passed with Java 60 tests, Python 69 tests at
 96.57% coverage, Web 38 unit tests/build, and 5 schemas/15 fixtures. Evidence is
-recorded at `evidence/gates/RM-131/risk-aware-scoring.md`; checkpoint is awaiting
-remote Actions validation. RM-132 minimum-cost flow and partitioned assignment is
-now the active task.
+recorded at `evidence/gates/RM-131/risk-aware-scoring.md`; remote Actions run
+`32576213676` passed all five jobs. RM-132 minimum-cost flow and partitioned
+assignment is now the active task.

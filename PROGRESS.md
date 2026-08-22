@@ -10,9 +10,9 @@ Current Task: RM-132 - Implement minimum-cost flow and partitioned assignment
 
 Last Completed: RM-131 - Add capacity, preparation, and risk-aware scoring
 
-Current Gate: RM-131 local/full gates passed; checkpoint is awaiting remote CI validation
+Current Gate: RM-131 local/full/CI gates passed in run 32576213676; RM-132 flow assignment implementation is in progress
 
-CI: PASS - RM-130 checkpoint run 32575824899; all five jobs passed. RM-124 run 32575052384 also passed all five jobs.
+CI: PASS - RM-131 run 32576213676; all five jobs passed. RM-130 run 32575824899 also passed all five jobs.
 
 Regression: PASS - Java 60, Python 69 / 96.57%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 

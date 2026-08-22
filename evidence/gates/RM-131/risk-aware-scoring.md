@@ -27,5 +27,6 @@ Date: 2026-08-22
 
 ## Gate decision
 
-Local L2 risk-scoring and L6 baseline-comparison evidence is complete. Remote
-Actions validation is required before the task is finally closed.
+Local L2 risk-scoring and L6 baseline-comparison evidence is complete. Actions run
+`32576213676` passed all five jobs, including Python compute/contracts and the
+bounded degradation gate. RM-131 is fully validated.

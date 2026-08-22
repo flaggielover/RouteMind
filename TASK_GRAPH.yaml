@@ -638,7 +638,7 @@
       "gates": ["L2-risk-scoring", "L6-baseline-comparison"],
       "evidence": ["evidence/gates/RM-131/risk-aware-scoring.md"],
       "blocked_by": [],
-      "notes": "RADS integration remains a separately measured strategy. Versioned risk-aware scoring is registered and covered by deterministic baseline comparisons; remote CI validation is required for the checkpoint."
+      "notes": "RADS integration remains a separately measured strategy. Versioned risk-aware scoring is registered and covered by deterministic baseline comparisons; Actions run 32576213676 passed all five jobs."
     },
     {
       "id": "RM-132",
