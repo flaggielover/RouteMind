@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createGeographicCoordinate,
+  configuredTileMapAdapter,
   localFallbackBounds,
   localSchematicMapAdapter,
   localSchematicMapCapabilities,
@@ -77,5 +78,14 @@ describe("provider-neutral geospatial contract", () => {
       localSchematicMapAdapter.select(projection, { kind: "zone", id: "zone-1" }).selection,
     ).toEqual({ kind: "zone", id: "zone-1" });
     expect(input.markers[0]?.coordinate).toEqual({ latitude: 31.23, longitude: 121.47 });
+  });
+
+  it("uses a configured tile provider only when its template is explicit", () => {
+    expect(configuredTileMapAdapter(undefined).capabilities.mode).toBe("local-fallback");
+    const adapter = configuredTileMapAdapter("https://tiles.example/{z}/{x}/{y}.png");
+    expect(adapter.capabilities.mode).toBe("provider");
+    expect(adapter.capabilities.tiles).toBe("available");
+    expect(adapter.capabilities.attributionRequired).toBe(true);
+    expect(() => configuredTileMapAdapter("https://tiles.example/{z}/{y}.png")).toThrow();
   });
 });

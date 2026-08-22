@@ -643,6 +643,27 @@ button {
   position: relative;
   isolation: isolate;
 }
+.map-tile-layer {
+  background-position: center;
+  background-size: cover;
+  inset: 0;
+  opacity: 0.32;
+  position: absolute;
+  z-index: 0;
+}
+.map-grid,
+.map-road,
+.map-marker,
+.route-node,
+.map-scale,
+.map-state,
+.map-legend {
+  z-index: 1;
+}
+.map-capability {
+  color: var(--muted);
+  font-size: 10px;
+}
 .map-state {
   align-items: center;
   background: rgb(255 255 255 / 88%);

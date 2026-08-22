@@ -8,7 +8,7 @@ Current Phase: Round 2 P11 Operations Command Center
 
 Current Task: RM-112 - Implement real map layer with local fallback
 
-Task Status: in_progress (RM-112 real map layer with local fallback)
+Task Status: implemented (RM-112 real map layer with local fallback; awaiting CI)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -332,3 +332,9 @@ explicit without paid credentials. Local full gate passed with 21 Web unit
 tests, 16 Playwright tests, Java 57 tests, Python 59 tests at 96.13% coverage,
 and 5 schemas/15 fixtures. Checkpoint `d73be4f` and Actions run `32567620315`
 passed all five jobs. RM-111 is now passed; continue with RM-112.
+RM-112 connects the provider-neutral adapter to the operations map. Explicit tile
+templates render a provider layer and attribution; no template keeps the local
+schematic fallback visibly labeled and routing remains not configured. Local full
+gate passed with 22 Web unit tests, 16 Playwright tests, Java 57 tests, Python 59
+tests at 96.13% coverage, and 5 schemas/15 fixtures. Checkpoint is awaiting
+Actions validation.

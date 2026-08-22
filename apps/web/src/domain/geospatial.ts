@@ -47,6 +47,8 @@ export interface MapCapabilities {
   tiles: MapCapabilityStatus;
   routing: MapCapabilityStatus;
   attributionRequired: boolean;
+  tileUrlTemplate?: string;
+  attribution?: string;
   detail: string;
 }
 
@@ -94,6 +96,52 @@ export const localSchematicMapCapabilities: MapCapabilities = Object.freeze({
   attributionRequired: false,
   detail: "No external tiles or paid routing credentials are required",
 });
+
+export interface TileMapProviderConfig {
+  providerId: string;
+  providerLabel: string;
+  tileUrlTemplate: string;
+  attribution: string;
+}
+
+export function createConfiguredTileMapAdapter(
+  config: TileMapProviderConfig,
+): GeospatialMapAdapter {
+  if (!config.tileUrlTemplate.includes("{z}") || !config.tileUrlTemplate.includes("{x}")) {
+    throw new Error("Tile URL template must include {z} and {x} placeholders");
+  }
+  const capabilities: MapCapabilities = Object.freeze({
+    providerId: config.providerId,
+    providerLabel: config.providerLabel,
+    mode: "provider",
+    tiles: "available",
+    routing: "not_configured",
+    attributionRequired: true,
+    tileUrlTemplate: config.tileUrlTemplate,
+    attribution: config.attribution,
+    detail: "Configured tile provider; routing remains an explicit separate capability",
+  });
+  return {
+    capabilities,
+    project(input) {
+      const fallback = localSchematicMapAdapter.project(input);
+      return { ...fallback, mode: "provider", capabilities };
+    },
+    select(projection, selection) {
+      return { ...projection, selection };
+    },
+  };
+}
+
+export function configuredTileMapAdapter(template: string | undefined): GeospatialMapAdapter {
+  if (!template?.trim()) return localSchematicMapAdapter;
+  return createConfiguredTileMapAdapter({
+    providerId: "configured-tile-provider",
+    providerLabel: "Configured tile provider",
+    tileUrlTemplate: template,
+    attribution: "Configured provider",
+  });
+}
 
 export function createGeographicCoordinate(input: GeographicCoordinate): GeographicCoordinate {
   if (

@@ -1,6 +1,6 @@
 import { Navigation, Store, Truck, UserRound } from "lucide-react";
 import type { Courier, DataAvailability, DataSourceMode, Order } from "../domain/model";
-import { localSchematicMapCapabilities } from "../domain/geospatial";
+import { configuredTileMapAdapter } from "../domain/geospatial";
 
 interface OperationsMapProps {
   orders: readonly Order[];
@@ -22,11 +22,13 @@ export function OperationsMap({
   generatedAt,
 }: OperationsMapProps) {
   const selected = orders.find((order) => order.id === selectedOrderId) ?? orders[0];
+  const mapAdapter = configuredTileMapAdapter(import.meta.env.VITE_MAP_TILE_URL_TEMPLATE);
+  const mapCapabilities = mapAdapter.capabilities;
   return (
     <section className="panel map-panel" aria-labelledby="map-title">
       <div className="panel-heading">
         <div>
-          <p className="eyebrow">{localSchematicMapCapabilities.providerLabel}</p>
+          <p className="eyebrow">{mapCapabilities.providerLabel}</p>
           <h2 id="map-title">City dispatch map</h2>
         </div>
         <span className="panel-meta">
@@ -35,8 +37,20 @@ export function OperationsMap({
       </div>
       <div
         className="map-canvas"
-        aria-label="Local schematic fallback dispatch map with live order and courier markers"
+        aria-label={`${mapCapabilities.providerLabel} dispatch map with live order and courier markers`}
       >
+        {mapCapabilities.mode === "provider" && mapCapabilities.tileUrlTemplate && (
+          <div
+            className="map-tile-layer"
+            aria-label={`${mapCapabilities.providerLabel} tile layer`}
+            style={{
+              backgroundImage: `url(${mapCapabilities.tileUrlTemplate
+                .replace("{z}", "12")
+                .replace("{x}", "3375")
+                .replace("{y}", "1660")})`,
+            }}
+          />
+        )}
         <div className="map-grid" aria-hidden="true" />
         <div className="map-road road-one" aria-hidden="true" />
         <div className="map-road road-two" aria-hidden="true" />
@@ -119,6 +133,9 @@ export function OperationsMap({
           <Navigation size={14} aria-hidden="true" /> {selected?.shortId ?? "No order selected"}
         </span>
         <span>{selected?.destination ?? "Awaiting destination"}</span>
+        <span className="map-capability">
+          {mapCapabilities.mode === "provider" ? mapCapabilities.attribution : "Offline fallback"}
+        </span>
       </div>
     </section>
   );

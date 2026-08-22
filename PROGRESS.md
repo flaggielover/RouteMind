@@ -10,17 +10,17 @@ Current Task: RM-112 - Implement real map layer with local fallback
 
 Last Completed: RM-110 - Build operations command-center data projection
 
-Current Gate: RM-111 local/full/browser/CI gates passed; RM-112 implementation in progress
+Current Gate: RM-112 local/full/browser/CI gates passed locally; awaiting Actions validation
 
-CI: PASS - RM-111 run 32567620315; all five jobs passed. RM-110 run 32567110886 also passed.
+CI: PASS - RM-111 run 32567620315; all five jobs passed. RM-112 local implementation is awaiting CI.
 
-Regression: PASS - Java 57, Python 59 / 96.13%, Web 21 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 57, Python 59 / 96.13%, Web 22 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-112 - real map layer with local fallback
+Next Candidates: RM-112 - real map layer with local fallback; push and observe CI
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -104,3 +104,7 @@ coordinate mapping, provider capabilities, and marker/route/zone/selection
 projection pass the local full and browser gates; checkpoint is awaiting Actions.
 RM-111 checkpoint `d73be4f` and Actions run `32567620315` passed all five jobs.
 The task is now passed and RM-112 is the active implementation.
+RM-112 local map evidence is recorded in `evidence/gates/RM-112/real-map.md`.
+Configured tile templates render a provider layer with attribution; absent
+configuration remains explicitly labeled Offline fallback. Local full and browser
+gates pass; checkpoint is awaiting Actions validation.
