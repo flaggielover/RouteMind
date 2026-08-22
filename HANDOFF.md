@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: P9 Research and Experimentation
 
-Current Task: RM-091 - Implement RADS research baseline
+Current Task: NONE - current task graph baseline complete
 
-Task Status: in_progress
+Task Status: passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -99,6 +99,17 @@ Java 34 tests, and Web/control regression. Evidence is in
 The RM-070 checkpoint commit `3b1c5b2` passed all five GitHub Actions jobs in
 run `32553873639`.
 
+RM-091 implements the deterministic RADS research baseline. Immutable risk
+signals and encoded states feed a decomposed distance/risk objective with stable
+tie-breaking and explicit explanations. `RadsExperimentRunner` compares RADS
+with registered baselines and records full, distance-only, and risk-only
+ablations across explicit risk multipliers with stable manifest and output
+digests. The reduced experiment shows the registered distance baselines choosing
+the near/high-risk courier while full/risk-only RADS chooses the farther/low-risk
+courier. Local full gate passed with 50 Python tests at 95.47% coverage, Java 34
+tests, and Web/control regression. Evidence is in
+`evidence/gates/RM-091/2026-08-22-rads-baseline.md`.
+
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
 cross-`down/up` persistence for all three services, and the unified infrastructure
@@ -165,11 +176,12 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Implement RM-091 as a reproducible RADS research
-baseline with RouteBench comparison and ablation/robustness evidence, then run
-the full local gate, record evidence, commit, push, and observe GitHub Actions.
+Next Recommended Action: Commit and push the RM-091 checkpoint, observe the real
+GitHub Actions run, and autonomously fix any CI failure. The current task graph
+will then be complete; extend it from the highest-priority remaining roadmap
+capability before further implementation.
 
-Next Candidate Task: RM-091 - Implement RADS research baseline
+Next Candidate Task: NONE IN CURRENT TASK GRAPH
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

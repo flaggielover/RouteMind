@@ -12,6 +12,9 @@ state or transactional lifecycle decisions.
 - `application/agents.py`: bounded read/research tools with role and argument
   policy, call budgets, immutable audit records, and deterministic fallback;
   agent execution never owns dispatch correctness.
+- `application/rads.py`: deterministic research-only risk-aware state encoding,
+  objective decomposition, explanations, registered-baseline comparison,
+  ablation, and robustness manifests.
 - `api`: inbound HTTP adapter; may depend on application and domain.
 - `infrastructure`: external compute adapters; never an authoritative data store.
 

@@ -256,10 +256,10 @@
       "phase": "P9",
       "priority": "medium",
       "depends_on": ["RM-090"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["State encoder, risk representation, selector, objective, and explanations are measurable", "RADS is compared with registered baselines", "Ablation and robustness manifests are reproducible"],
       "gates": ["L2-rads", "L6-routebench", "L6-robustness"],
-      "evidence": [],
+      "evidence": ["evidence/gates/RM-091/2026-08-22-rads-baseline.md"],
       "blocked_by": [],
       "notes": "Research claims remain scoped to recorded experiments."
     }
