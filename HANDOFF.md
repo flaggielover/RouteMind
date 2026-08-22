@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Round 2 P10 Live Product Foundation
+Current Phase: Round 2 P11 Operations Command Center
 
-Current Task: RM-110 - Build operations command-center data projection
+Current Task: RM-111 - Define provider-neutral geospatial map adapter
 
-Task Status: in_progress (RM-110 operations command-center projection)
+Task Status: in_progress (RM-111 provider-neutral geospatial map adapter)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -323,5 +323,5 @@ RM-110 adds explicit operations projection loading/degraded/unavailable states,
 source and freshness metadata, projection health, exception visibility, and
 route-geometry fallback handling. Local full gate passed with 17 Web unit tests,
 16 Playwright tests, Java 57 tests, Python 59 tests at 96.13% coverage, and
-5 schemas/15 fixtures. The implementation checkpoint is awaiting Actions
-validation; continue with CI observation before marking RM-110 passed.
+5 schemas/15 fixtures. Checkpoint `4b4ab79` and Actions run `32567110886` passed
+all five jobs. RM-110 is now passed; continue with RM-111.

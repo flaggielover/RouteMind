@@ -1,7 +1,7 @@
 # RM-110 Operations Command Center Projection
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint pending
+- Revision: `4b4ab79`; Actions run `32567110886`
 - Boundary: Web operations projection over Java durable reads and Python dispatch metadata
 
 ## Projection behavior
