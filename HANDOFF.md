@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-160 - Expose strategy registry and execution API
+Current Task: RM-163 - Productize Shadow Mode comparison and promotion gate
 
-Task Status: RM-160 is in progress; RM-154 is the last fully validated task
+Task Status: RM-163 is in progress; RM-161 is the last fully validated task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -494,19 +494,19 @@ all five jobs green. The task graph now activates RM-161, which depends on
 RM-160 and RM-090 and adds versioned strategy parameter schemas and experiment
 provenance.
 
-RM-161 is locally complete and awaiting remote validation. It adds bounded
+RM-161 is fully validated after remote Actions run `32600780985` passed all
+five jobs. It adds bounded
 versioned parameter schemas for weighted-greedy and risk-aware, preserves
 generic RouteBench manifest metadata separately from strategy parameters, and
 adds `POST /api/v1/experiments/routebench` backed by the existing seeded
 RouteBench/ScenarioKernel. Compute check passes 109 tests at 95.39%; full
 available gates pass Java 60, Web 38 unit/build, and 5 schemas/15 fixtures.
-The next action is to push and observe the RM-161 Actions run; RM-163 is the
-next alternative unblocked task after RM-161.
+The task graph now activates RM-163; RM-162 remains blocked by RM-156.
 
 
 ## Current Resume Capsule
-- Resume at RM-161; do not redo completed RM-123 through RM-160 gates.
+- Resume at RM-163; do not redo completed RM-123 through RM-161 gates.
 - Local compute evidence: 109 tests passed, 95.39% coverage, Ruff clean.
 - Full gate passed Java 60, Python 109 at 95.39%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
-- Next action: commit and push the RM-161 evidence refresh, then obtain remote Actions validation before marking RM-161 passed.
+- Next action: read the existing Shadow Mode evaluator and implement RM-163's product-facing comparison/promotion contract.
 - External data remains governed by ROUTEMIND_DATA_ROOT; no external data path was hardcoded.

@@ -27,4 +27,5 @@
 ## Gate decision
 
 Local L2 strategy-parameter and L6 experiment-provenance evidence is complete.
-Remote Actions validation is required before RM-161 is marked passed.
+GitHub Actions run `32600780985` passed all five required jobs, so RM-161 is
+fully validated.

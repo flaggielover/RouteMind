@@ -893,12 +893,12 @@
       "phase": "P16",
       "priority": "high",
       "depends_on": ["RM-160", "RM-090"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Strategies publish versioned parameter schemas with validation", "Experiment runs record scenario, seed, configuration, runtime, and outputs", "Registered baselines, advanced strategies, and RADS are selectable where available"],
       "gates": ["L2-strategy-parameters", "L6-experiment-provenance"],
       "evidence": ["evidence/gates/RM-161/strategy-experiments.md"],
       "blocked_by": [],
-      "notes": "The lab cannot fabricate metrics."
+      "notes": "Versioned bounded parameter schemas and configured weighted-greedy/risk-aware execution reuse RouteBench provenance; local full gates pass and remote Actions run 32600780985 passed all five jobs."
     },
     {
       "id": "RM-162",
@@ -919,7 +919,7 @@
       "phase": "P16",
       "priority": "high",
       "depends_on": ["RM-160", "RM-081", "RM-107"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Active/candidate strategy, window, disagreement, quality delta, and failure rate are inspectable", "Promotion/hold/rollback uses the existing deterministic gate", "Candidate decisions never gain authority without an explicit validated boundary"],
       "gates": ["L2-shadow-ui-contract", "L4-shadow-lab", "L5-shadow-isolation"],
       "evidence": ["evidence/gates/RM-163/shadow-productization.md"],
