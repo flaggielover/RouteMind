@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: P9 Research and Experimentation
 
-Current Task: RM-084 - Define release provenance and deployment preflight contract
+Current Task: RM-085 - Define staged release and rollback decision contract
 
-Task Status: passed
+Task Status: in_progress (design checkpoint)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -160,6 +160,15 @@ fixtures. Evidence is in
 The implementation checkpoint is `ada92bc`; the CI evidence checkpoint is
 `5459b50`, and GitHub Actions run `32557262937` passed all five jobs.
 
+RM-085 design defines immutable ordered cohorts, integer basis-point thresholds,
+and deterministic `promote`/`hold`/`rollback` precedence. Rollback wins on
+unhealthy required checks, breached safety limits, or unavailable rollback
+readiness; promotion cannot skip the next declared stage. The contract is
+read-only and leaves traffic shifting, live monitoring, and production restore
+external. Design is in
+`docs/design/p8-staged-release-decision-contract.md`; the task graph now marks
+RM-085 `in_progress`.
+
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
 cross-`down/up` persistence for all three services, and the unified infrastructure
@@ -226,11 +235,10 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Design RM-085's staged release and rollback decision
-contract, keeping deployment execution and production health as external gates;
-then update the task graph and run the design checkpoint through CI.
+Next Recommended Action: Implement RM-085's deterministic staged release
+evaluation and self-tests, run the full gate, commit, push, and observe CI.
 
-Next Candidate Task: RM-085 - define staged release and rollback decision contract
+Next Candidate Task: RM-085 - implement deterministic staged release evaluation
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

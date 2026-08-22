@@ -2,9 +2,9 @@
 
 Current Phase: P9 Research and Experimentation
 
-Overall: 24 / 24 tasks passed
+Overall: 24 / 25 tasks passed
 
-Current Task: RM-085 - design staged release and rollback decision contract
+Current Task: RM-085 - Define staged release and rollback decision contract
 
 Last Completed: RM-084 - Define release provenance and deployment preflight contract
 
@@ -16,7 +16,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-085 - define staged release and rollback decision contract
+Next Candidates: RM-085 - implement deterministic staged release evaluation
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -32,3 +32,5 @@ RM-091 local RADS baseline, ablation, robustness, and registered-baseline
 comparison evidence is recorded under `evidence/gates/RM-091/`.
 RM-084 release provenance and read-only preflight evidence is recorded under
 `evidence/gates/RM-084/`.
+RM-085 design is recorded in `docs/design/p8-staged-release-decision-contract.md`;
+implementation and executable evidence remain pending.
