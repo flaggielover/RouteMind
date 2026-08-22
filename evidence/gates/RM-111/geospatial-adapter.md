@@ -1,7 +1,7 @@
 # RM-111 Provider-Neutral Geospatial Map Adapter
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint pending
+- Revision: `d73be4f`; Actions run `32567620315`
 - Boundary: Web geospatial contract and deterministic local fallback
 
 ## Adapter behavior

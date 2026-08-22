@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P11 Operations Command Center
 
-Current Task: RM-111 - Define provider-neutral geospatial map adapter
+Current Task: RM-112 - Implement real map layer with local fallback
 
-Task Status: implemented (RM-111 provider-neutral geospatial map adapter; awaiting CI)
+Task Status: in_progress (RM-112 real map layer with local fallback)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -330,5 +330,5 @@ local schematic fallback. It validates WGS84 coordinates and bounds, carries
 markers/routes/zones/selection and freshness, and makes tile/routing capability
 explicit without paid credentials. Local full gate passed with 21 Web unit
 tests, 16 Playwright tests, Java 57 tests, Python 59 tests at 96.13% coverage,
-and 5 schemas/15 fixtures. Checkpoint is awaiting Actions validation; RM-112
-remains blocked until this task passes CI.
+and 5 schemas/15 fixtures. Checkpoint `d73be4f` and Actions run `32567620315`
+passed all five jobs. RM-111 is now passed; continue with RM-112.
