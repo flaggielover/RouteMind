@@ -165,10 +165,9 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Commit and push the RM-070 checkpoint, observe the
-real GitHub Actions run, and autonomously fix any CI failure. Then implement
-RM-091 as a reproducible RADS research baseline with RouteBench comparison and
-ablation/robustness evidence.
+Next Recommended Action: Implement RM-091 as a reproducible RADS research
+baseline with RouteBench comparison and ablation/robustness evidence, then run
+the full local gate, record evidence, commit, push, and observe GitHub Actions.
 
 Next Candidate Task: RM-091 - Implement RADS research baseline
 
