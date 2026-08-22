@@ -29,3 +29,10 @@ actual schedule outcomes in its replay digest. State snapshots expose queue
 load, ready times, and late-preparation risk, while `apply_to` lets dispatch
 consume the current simulated readiness without transferring durable lifecycle
 ownership from Java.
+
+RM-154 adds a single perturbation boundary for traffic, courier supply,
+merchant delay, and dependency-failure scenarios. Each event has an explicit
+scope, simulated-time window, source, and bounded effect; traffic events reuse
+the versioned travel context, while failure metrics distinguish simulated
+injection from live dependency failure. Active events and their metric effects
+are part of the replayable scenario snapshot, not hidden mutable state.

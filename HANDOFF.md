@@ -474,3 +474,10 @@ Compute check passes 96 tests at 96.16% coverage; evidence is recorded at
 remote Actions run `32582291443` passed all five jobs. RM-153 is fully
 validated. RM-154 traffic, supply, and failure perturbation modeling is now
 the active task.
+RM-154 is locally complete: `PerturbationScenario` emits bounded, windowed
+traffic, supply, merchant-delay, and dependency-failure events, feeds traffic
+into `DynamicTravelContext`, and separates simulated from live failure metrics.
+Full local gate passes Java 60, Python 100 at 95.96%, Web 38 unit tests/build,
+and 5 schemas/15 fixtures. Evidence is recorded at
+`evidence/gates/RM-154/twin-perturbations.md`; checkpoint is awaiting remote
+Actions validation.

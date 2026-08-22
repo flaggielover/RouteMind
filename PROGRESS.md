@@ -10,11 +10,11 @@ Current Task: RM-154 - Implement traffic, supply, and failure perturbations
 
 Last Completed: RM-153 - Implement dynamic merchant preparation model
 
-Current Gate: RM-153 local/full/CI gates passed in run 32582291443; RM-154 is now in progress
+Current Gate: RM-154 local/full gates passed; checkpoint is awaiting remote Actions validation
 
-CI: PASS - RM-153 run 32582291443; all five jobs passed. RM-151 run 32581545061 also passed all five jobs.
+CI: PASS - RM-153 run 32582291443; all five jobs passed. RM-151 run 32581545061 also passed all five jobs. RM-154 remote validation is pending.
 
-Regression: PASS - Java 60, Python 96 / 96.16%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 100 / 95.96%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 

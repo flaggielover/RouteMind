@@ -820,7 +820,7 @@
       "gates": ["L2-twin-perturbation", "L5-simulation-failure", "L6-robustness"],
       "evidence": ["evidence/gates/RM-154/twin-perturbations.md"],
       "blocked_by": [],
-      "notes": "Traffic, supply, and failure perturbation modeling is now the active task; failure injection must remain bounded and reproducible."
+      "notes": "Local L2/L5/L6 perturbation evidence passes with explicit bounded traffic, supply, merchant-delay, and dependency-failure events; simulated/live failure sources remain distinct. Remote Actions validation is required before closure."
     },
     {
       "id": "RM-155",
