@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections.abc import Callable, Sequence
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
 from dataclasses import dataclass, field, replace
+from heapq import heappop, heappush
 from math import isfinite
 from typing import Protocol
 
@@ -62,18 +63,30 @@ class TravelTime:
     provider: str
     fallback_used: bool = False
     context: DynamicTravelContext = field(default_factory=DynamicTravelContext)
+    route_geometry: tuple[GeoPoint, ...] = ()
+    edge_ids: tuple[str, ...] = ()
+    zones: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         if not isfinite(self.seconds) or self.seconds < 0:
             raise ValueError("travel time seconds must be finite and non-negative")
         if not self.provider.strip():
             raise ValueError("travel provider must not be blank")
+        if any(not edge_id.strip() for edge_id in self.edge_ids):
+            raise ValueError("travel edge ids must not be blank")
+        if any(not zone.strip() for zone in self.zones):
+            raise ValueError("travel zones must not be blank")
 
     @property
     def metadata(self) -> dict[str, object]:
         return {
             "provider": self.provider,
             "fallback_used": self.fallback_used,
+            "route_geometry": tuple(
+                (point.latitude, point.longitude) for point in self.route_geometry
+            ),
+            "edge_ids": self.edge_ids,
+            "zones": self.zones,
             **self.context.metadata,
         }
 
@@ -134,10 +147,7 @@ class DeterministicLocalTravelProvider:
             origin.latitude, origin.longitude, destination.latitude, destination.longitude
         )
         base_seconds = distance / self.speed_kilometres_per_hour * 3600
-        seconds = (
-            base_seconds * effective_context.traffic_multiplier
-            + effective_context.incident_delay_seconds
-        )
+        seconds = _apply_context(base_seconds, effective_context)
         return TravelTime(seconds, self.name, context=effective_context)
 
     def matrix(
@@ -152,6 +162,169 @@ class DeterministicLocalTravelProvider:
         )
         effective_context = context or DynamicTravelContext()
         return TravelTimeMatrix(values, self.name, effective_context)
+
+
+@dataclass(frozen=True, slots=True)
+class TravelNetworkNode:
+    node_id: str
+    location: GeoPoint
+    zone: str
+
+    def __post_init__(self) -> None:
+        if not self.node_id.strip():
+            raise ValueError("network node id must not be blank")
+        if not self.zone.strip():
+            raise ValueError("network node zone must not be blank")
+
+
+@dataclass(frozen=True, slots=True)
+class TravelNetworkEdge:
+    edge_id: str
+    origin_node_id: str
+    destination_node_id: str
+    travel_seconds: float
+    zone: str
+
+    def __post_init__(self) -> None:
+        if not self.edge_id.strip():
+            raise ValueError("network edge id must not be blank")
+        if not self.origin_node_id.strip() or not self.destination_node_id.strip():
+            raise ValueError("network edge node ids must not be blank")
+        if not isfinite(self.travel_seconds) or self.travel_seconds <= 0:
+            raise ValueError("network edge travel seconds must be finite and positive")
+        if not self.zone.strip():
+            raise ValueError("network edge zone must not be blank")
+
+
+@dataclass(frozen=True, slots=True)
+class TravelNetworkFixture:
+    nodes: tuple[TravelNetworkNode, ...]
+    edges: tuple[TravelNetworkEdge, ...]
+
+    def __post_init__(self) -> None:
+        node_ids = tuple(node.node_id for node in self.nodes)
+        if len(set(node_ids)) != len(node_ids):
+            raise ValueError("network node ids must be unique")
+        locations = tuple(node.location for node in self.nodes)
+        if len(set(locations)) != len(locations):
+            raise ValueError("network node locations must be unique")
+        edge_ids = tuple(edge.edge_id for edge in self.edges)
+        if len(set(edge_ids)) != len(edge_ids):
+            raise ValueError("network edge ids must be unique")
+        known_nodes = set(node_ids)
+        if any(
+            edge.origin_node_id not in known_nodes or edge.destination_node_id not in known_nodes
+            for edge in self.edges
+        ):
+            raise ValueError("network edge references an unknown node")
+
+
+class NetworkRouteUnavailableError(LookupError):
+    """Raised when a fixture cannot route between two requested locations."""
+
+
+class NetworkTravelProvider:
+    """Deterministic shortest-path provider over a bounded in-memory fixture."""
+
+    def __init__(self, fixture: TravelNetworkFixture, name: str = "network-fixture") -> None:
+        if not name.strip():
+            raise ValueError("network provider name must not be blank")
+        self.fixture = fixture
+        self.name = name
+        self._nodes_by_location = {node.location: node for node in fixture.nodes}
+        self._nodes_by_id = {node.node_id: node for node in fixture.nodes}
+        self._outgoing: dict[str, tuple[TravelNetworkEdge, ...]] = {
+            node.node_id: tuple(
+                sorted(
+                    (edge for edge in fixture.edges if edge.origin_node_id == node.node_id),
+                    key=lambda edge: edge.edge_id,
+                )
+            )
+            for node in fixture.nodes
+        }
+
+    @property
+    def metadata(self) -> dict[str, object]:
+        return {
+            "provider": self.name,
+            "node_count": len(self.fixture.nodes),
+            "edge_count": len(self.fixture.edges),
+        }
+
+    def _route(
+        self, origin: GeoPoint, destination: GeoPoint
+    ) -> tuple[float, tuple[GeoPoint, ...], tuple[str, ...], tuple[str, ...]]:
+        origin_node = self._nodes_by_location.get(origin)
+        destination_node = self._nodes_by_location.get(destination)
+        if origin_node is None or destination_node is None:
+            raise NetworkRouteUnavailableError("network fixture does not contain both locations")
+        if origin_node.node_id == destination_node.node_id:
+            return 0.0, (origin,), (), (origin_node.zone,)
+
+        queue: list[tuple[float, tuple[str, ...], str, tuple[str, ...], tuple[str, ...]]] = []
+        heappush(queue, (0.0, (), origin_node.node_id, (origin_node.node_id,), ()))
+        best: dict[str, tuple[float, tuple[str, ...]]] = {}
+        while queue:
+            total_seconds, path_edges, node_id, path_nodes, path_zones = heappop(queue)
+            score = (total_seconds, path_edges)
+            previous = best.get(node_id)
+            if previous is not None and previous <= score:
+                continue
+            best[node_id] = score
+            if node_id == destination_node.node_id:
+                geometry = tuple(self._nodes_by_id[item].location for item in path_nodes)
+                return total_seconds, geometry, path_edges, path_zones
+            for edge in self._outgoing[node_id]:
+                heappush(
+                    queue,
+                    (
+                        total_seconds + edge.travel_seconds,
+                        (*path_edges, edge.edge_id),
+                        edge.destination_node_id,
+                        (*path_nodes, edge.destination_node_id),
+                        (*path_zones, edge.zone),
+                    ),
+                )
+        raise NetworkRouteUnavailableError(
+            f"network fixture has no route from {origin_node.node_id} to {destination_node.node_id}"
+        )
+
+    def estimate(
+        self,
+        origin: GeoPoint,
+        destination: GeoPoint,
+        context: DynamicTravelContext | None = None,
+    ) -> TravelTime:
+        effective_context = context or DynamicTravelContext()
+        base_seconds, geometry, edge_ids, zones = self._route(origin, destination)
+        return TravelTime(
+            _apply_context(base_seconds, effective_context),
+            self.name,
+            context=effective_context,
+            route_geometry=geometry,
+            edge_ids=edge_ids,
+            zones=zones,
+        )
+
+    def matrix(
+        self,
+        origins: Sequence[GeoPoint],
+        destinations: Sequence[GeoPoint],
+        context: DynamicTravelContext | None = None,
+    ) -> TravelTimeMatrix:
+        effective_context = context or DynamicTravelContext()
+        values = tuple(
+            tuple(
+                self.estimate(origin, destination, effective_context)
+                for destination in destinations
+            )
+            for origin in origins
+        )
+        return TravelTimeMatrix(values, self.name, effective_context)
+
+
+def _apply_context(base_seconds: float, context: DynamicTravelContext) -> float:
+    return base_seconds * context.traffic_multiplier + context.incident_delay_seconds
 
 
 def _invoke_with_context(
@@ -217,6 +390,9 @@ class FallbackTravelTimeProvider:
                 result.provider,
                 fallback_used=True,
                 context=result.context,
+                route_geometry=result.route_geometry,
+                edge_ids=result.edge_ids,
+                zones=result.zones,
             )
 
     def matrix(
@@ -246,6 +422,9 @@ class FallbackTravelTimeProvider:
                         item.provider,
                         fallback_used=True,
                         context=item.context,
+                        route_geometry=item.route_geometry,
+                        edge_ids=item.edge_ids,
+                        zones=item.zones,
                     )
                     for item in row
                 )

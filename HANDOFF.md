@@ -424,3 +424,10 @@ contract passed local/full validation and remote Actions run `32577433788` (all
 five jobs green). Evidence is recorded at
 `evidence/gates/RM-140/dynamic-travel.md`. RM-141 network and zone travel
 provider is now the active task.
+RM-141 network and zone travel provider is locally complete. The bounded
+network fixture provides deterministic shortest paths, route geometry, edge and
+zone metadata, matrix reuse, and explicit unavailable-route fallback. Local
+full gate passed with Java 60 tests, Python 80 tests at 95.32% coverage, Web 38
+unit tests/build, and 5 schemas/15 fixtures. Evidence is recorded at
+`evidence/gates/RM-141/network-travel.md`; checkpoint is awaiting remote Actions
+validation.

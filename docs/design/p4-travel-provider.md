@@ -17,3 +17,10 @@ replays are reproducible. Point and matrix results preserve provider identity,
 fallback state, dimensions, and the full context metadata. Existing providers
 that implement the original two-argument methods remain callable during
 migration; the fallback wrapper adapts them without claiming live traffic.
+
+RM-141 adds a bounded `TravelNetworkFixture` and replaceable
+`NetworkTravelProvider`. Directed edges carry stable IDs, route seconds, and
+zones; deterministic shortest-path search returns route geometry and edge/zone
+metadata for both point and matrix calls. Missing nodes or routes fail with a
+typed unavailable error so the existing fallback wrapper can mark substitution.
+Large road graphs remain external data under `ROUTEMIND_DATA_ROOT`.

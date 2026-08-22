@@ -10,11 +10,11 @@ Current Task: RM-141 - Implement network and zone travel provider
 
 Last Completed: RM-140 - Define dynamic travel model contract
 
-Current Gate: RM-140 local/full/CI gates passed in run 32577433788; RM-141 is now in progress
+Current Gate: RM-141 local/full gates passed; checkpoint is awaiting remote CI validation
 
-CI: PASS - RM-140 run 32577433788; all five jobs passed. RM-132 run 32577050589 also passed all five jobs.
+CI: PASS - RM-140 checkpoint run 32577604609; all five jobs passed. RM-140 implementation run 32577433788 also passed all five jobs.
 
-Regression: PASS - Java 60, Python 76 / 95.80%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 80 / 95.32%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
