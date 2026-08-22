@@ -2,9 +2,9 @@
 
 Current Phase: P9 Research and Experimentation
 
-Overall: 23 / 23 tasks passed
+Overall: 23 / 24 tasks passed
 
-Current Task: NONE - current task graph baseline complete
+Current Task: RM-084 - Define release provenance and deployment preflight contract
 
 Last Completed: RM-091 - Implement RADS research baseline
 
@@ -16,7 +16,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: NONE IN CURRENT TASK GRAPH
+Next Candidates: RM-084
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

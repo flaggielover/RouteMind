@@ -277,6 +277,19 @@
       "notes": "Live service restore requires Docker/service credentials and is deferred_external when unavailable."
     },
     {
+      "id": "RM-084",
+      "title": "Define release provenance and deployment preflight contract",
+      "phase": "P8",
+      "priority": "high",
+      "depends_on": ["RM-005", "RM-080", "RM-082", "RM-083"],
+      "status": "in_progress",
+      "acceptance": ["Release manifests bind source, artifacts, contracts, migrations, health checks, and rollback digest", "Mutable or incomplete release inputs produce deterministic preflight blockers", "Local preflight is read-only and its production/deployment limitations are explicit"],
+      "gates": ["L1-release-preflight", "security-review", "L5-rollback-linkage"],
+      "evidence": [],
+      "blocked_by": [],
+      "notes": "Registry signatures, image scans, deployment, and production health remain external gates."
+    },
+    {
       "id": "RM-090",
       "title": "Implement RouteBench and research lineage core",
       "phase": "P9",
