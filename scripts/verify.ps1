@@ -27,6 +27,16 @@ try {
         throw "Task graph validation failed"
     }
 
+    python scripts/security_gate.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Security and supply-chain hygiene gate failed"
+    }
+
+    python scripts/security_gate_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Security gate self-tests failed"
+    }
+
     if (Test-Path -LiteralPath "compose.yaml") {
         if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
             throw "Docker is required to validate compose.yaml"

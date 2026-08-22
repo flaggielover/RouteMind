@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: P9 Research and Experimentation
 
-Current Task: RM-082 - Establish repository security and supply-chain hygiene gate
+Current Task: NONE - current task graph baseline complete
 
-Task Status: in_progress
+Task Status: passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -124,6 +124,15 @@ coverage, Java 34 tests, and Web/control regression. Evidence is in
 The RM-081 checkpoint commit `8b92bf0` passed all five GitHub Actions jobs in
 run `32555440040`.
 
+RM-082 adds a local static security and supply-chain hygiene gate. It scans only
+Git-tracked files for private keys, high-confidence provider tokens,
+non-placeholder secret assignments, and sensitive artifacts; checks Python/npm
+lock metadata, workflow least-privilege permissions, and Compose image/loopback
+hygiene; and runs three standard-library self-tests from `verify.ps1`. Local
+full gate passed with Java 34 tests, Python 56 tests at 96.05% coverage, Web
+regression, and security checks. Evidence is in
+`evidence/gates/RM-082/2026-08-22-security-supply-chain.md`.
+
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
 cross-`down/up` persistence for all three services, and the unified infrastructure
@@ -190,11 +199,12 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Complete RM-082's repository security and supply-chain
-hygiene gate, record local evidence, commit and push, observe GitHub Actions, and
-then extend the task graph from the next highest-priority production capability.
+Next Recommended Action: Commit and push the RM-082 checkpoint, observe the real
+GitHub Actions run, and autonomously fix any CI failure. The current task graph
+will then be complete; extend it from the next highest-priority production
+capability before further implementation.
 
-Next Candidate Task: RM-082 - Establish repository security and supply-chain hygiene gate
+Next Candidate Task: NONE IN CURRENT TASK GRAPH
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

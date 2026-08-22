@@ -256,10 +256,10 @@
       "phase": "P8",
       "priority": "high",
       "depends_on": ["RM-005", "RM-080"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Tracked secret and sensitive-file isolation is executable", "Dependency lockfile, workflow permission, and Compose image/loopback hygiene are checked", "Gate limits and non-claims are documented without pretending to be production security validation"],
       "gates": ["L1-security", "security-review", "L5-secret-isolation"],
-      "evidence": [],
+      "evidence": ["evidence/gates/RM-082/2026-08-22-security-supply-chain.md"],
       "blocked_by": [],
       "notes": "Static local gate; vulnerability freshness and production identity remain separate capabilities."
     },
