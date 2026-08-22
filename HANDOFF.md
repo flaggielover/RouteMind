@@ -8,7 +8,7 @@ Current Phase: P9 Research and Experimentation
 
 Current Task: RM-084 - Define release provenance and deployment preflight contract
 
-Task Status: in_progress
+Task Status: passed locally; CI pending
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -149,6 +149,16 @@ run `32556590018`.
 The RM-083 CI evidence commit `ac4723c` passed all five GitHub Actions jobs in
 run `32556661332`.
 
+RM-084 defines immutable release artifact provenance and a canonical release
+manifest covering source revision, contracts, migrations, health checks, and a
+content-addressed rollback package. Its read-only preflight reports stable
+blocker codes for mutable or incomplete inputs and unsafe/missing repository
+files. Local full gate passed with Java 34 tests, Python 56 tests at 96.05%
+coverage, Web checks/build, security/recovery/release self-tests, and schema
+fixtures. Evidence is in
+`evidence/gates/RM-084/2026-08-22-release-preflight.md`.
+The implementation checkpoint is `ada92bc`; its GitHub Actions run is pending.
+
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
 cross-`down/up` persistence for all three services, and the unified infrastructure
@@ -215,11 +225,11 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Implement RM-084's immutable release provenance and
-read-only deployment preflight contract, record deterministic blockers and
-rollback linkage, then run the full gate, commit, push, and observe GitHub Actions.
+Next Recommended Action: Push `ada92bc`, observe its real GitHub Actions run,
+diagnose any failure to green, then record the CI evidence checkpoint before
+starting RM-085.
 
-Next Candidate Task: RM-084 - Define release provenance and deployment preflight contract
+Next Candidate Task: RM-085 - define staged release and rollback decision contract
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
