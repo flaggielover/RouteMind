@@ -568,7 +568,7 @@
       "phase": "P12",
       "priority": "high",
       "depends_on": ["RM-102", "RM-104", "RM-107"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Merchant can accept, start preparation, and mark ready through validated commands", "Preparation queue and expected/actual readiness are visible", "Invalid or stale transitions are explained and audited"],
       "gates": ["L3-merchant-api", "L4-merchant-golden-path"],
       "evidence": ["evidence/gates/RM-121/merchant-workflow.md"],

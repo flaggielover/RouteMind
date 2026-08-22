@@ -357,4 +357,5 @@ explicit demo/replay write protection. Realtime `order.created` events now add
 orders to an empty live projection and forward lifecycle events retain versions.
 Local full gate passed with Java 57 tests, Python 59 tests at 96.13% coverage,
 Web 29 unit tests and build, 16 Playwright tests, and 5 schemas/15 fixtures.
-Checkpoint is awaiting Actions validation. Next task is RM-121 merchant preparation.
+Checkpoint `fbecdd0` and Actions run `32569640180` passed all five jobs. RM-120 is
+now passed; RM-121 merchant preparation is in progress.

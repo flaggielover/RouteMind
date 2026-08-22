@@ -10,9 +10,9 @@ Current Task: RM-121 - Implement merchant preparation workflow
 
 Last Completed: RM-120 - Implement customer order creation and tracking workflow
 
-Current Gate: RM-120 local/full/browser/CI gates passed; RM-121 is the highest-priority unblocked task
+Current Gate: RM-120 local/full/browser/CI gates passed in run 32569640180; RM-121 is now in progress
 
-CI: PASS - RM-114 run 32568845070; RM-120 local gates passed and its Actions checkpoint is queued after push.
+CI: PASS - RM-120 run 32569640180; all five jobs passed. RM-114 run 32568845070 also passed.
 
 Regression: PASS - Java 57, Python 59 / 96.13%, Web 29 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
