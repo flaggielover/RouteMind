@@ -794,7 +794,7 @@
       "gates": ["L2-courier-motion", "L6-motion-replay"],
       "evidence": ["evidence/gates/RM-152/courier-motion.md"],
       "blocked_by": [],
-      "notes": "Redis remains a rebuildable projection. RM-152 is the next active high-priority task after RM-135 passed."
+      "notes": "Redis remains a rebuildable projection. Local compute/full gates pass 135 Python tests at 95.46% with deterministic movement, service events, replay digest, and Redis GEO projection; remote Actions validation is pending."
     },
     {
       "id": "RM-153",

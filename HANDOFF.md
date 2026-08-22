@@ -8,7 +8,7 @@ Current Phase: Round 2 P16 Strategy Laboratory
 
 Current Task: RM-152 - Implement courier motion and service progress
 
-Task Status: RM-152 is in progress; RM-135 is the last fully validated task
+Task Status: RM-152 implementation and local/full gates are complete; remote Actions validation is pending
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -543,11 +543,22 @@ passes 131 tests at 95.66%; full available gates pass Java 60, Web 38
 unit/build, and 5 schemas/15 fixtures. The task graph now activates RM-152
 courier motion; RM-162 remains blocked by RM-156.
 
+
+RM-152 local implementation is complete. `CourierMotionEngine` advances an
+immutable route with the existing travel-provider abstraction, interpolates
+locations in simulated time, emits stable route/arrival/pickup/delivery/
+completion events, and returns idle/en-route/servicing/available state. The
+snapshot includes a canonical replay digest and a Redis GEO-compatible
+`(longitude, latitude, member)` projection; Redis remains rebuildable hot state.
+Compute check passes 135 tests at 95.46%; full available gates pass Java 60,
+Web 38 unit/build, and 5 schemas/15 fixtures. Evidence is recorded at
+`evidence/gates/RM-152/courier-motion.md`; remote Actions validation is pending.
+
 ## Current Resume Capsule
-- Resume at RM-152; do not redo completed RM-123 through RM-163 gates or RM-133/RM-134/RM-135 green Actions runs.
-- Local compute evidence: 131 tests passed, 95.66% coverage, Ruff/format/mypy/contracts clean.
-- Full gate passed Java 60, Python 131 at 95.66%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
-- Next action: inspect `ScenarioKernel` and travel-provider boundaries, then
-  implement deterministic courier movement, service progress, event emission,
-  and replay-safe location projection without durable-state mutation.
+- Resume by committing and pushing RM-152, then observe the real Actions run
+  until all five jobs pass; do not mark the task passed on local evidence alone.
+- Local compute evidence: 135 tests passed, 95.46% coverage, Ruff/format/mypy/contracts clean.
+- Full gate passed Java 60, Python 135 at 95.46%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke remains 17 passed with one desktop-only skip.
+- After RM-152 Actions is green, close the task and activate critical RM-155
+  Digital Twin control/replay API; RM-162 remains blocked by RM-156.
 - External data remains governed by ROUTEMIND_DATA_ROOT; no external data path was hardcoded.

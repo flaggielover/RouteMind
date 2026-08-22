@@ -10,17 +10,17 @@ Current Task: RM-152 - Implement courier motion and service progress
 
 Last Completed: RM-135 - Implement dynamic replanning policy
 
-Current Gate: RM-135 local/full gates and remote Actions run 32603303249 passed; RM-152 is now the next active high-priority task
+Current Gate: RM-152 local/full gates passed; remote Actions validation is pending
 
-CI: PASS - RM-135 run 32603303249; RM-134 run 32602785200 also passed all five jobs.
+CI: PENDING - RM-152 implementation checkpoint is ready to push; RM-135 run 32603303249 and RM-134 run 32602785200 passed all five jobs.
 
-Regression: PASS - Java 60, Python 131 / 95.66%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 135 / 95.46%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-152 - implement courier motion and service progress; RM-162 remains blocked by RM-156
+Next Candidates: RM-152 remote validation; after green, RM-155 Digital Twin control API; RM-162 remains blocked by RM-156
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -207,3 +207,14 @@ The task is now passed and RM-120 is the active implementation.
   state, trace, and before/after metrics.
 - RM-135 is now passed (36/48 Round 2, 64/76 repository); RM-152 courier motion
   is activated as the next high-priority task.
+
+### RM-152 checkpoint - 2026-08-23
+- Added immutable, provider-neutral courier routes and stops with bounded
+  validation; simulated-time movement interpolates location and reports idle,
+  en-route, servicing, and available states.
+- Deterministic route, arrival, pickup, delivery, and completion events carry
+  stable IDs; incremental advancement is replay-safe and exposes a canonical
+  SHA-256 replay digest plus a Redis GEO-compatible location projection.
+- Local compute/full gates pass with Python 135 tests at 95.46% coverage, Java
+  60 tests, Web 38 unit/build, and 5 schemas/15 fixtures. Remote Actions
+  validation is the remaining Evidence Gate before marking RM-152 passed.
