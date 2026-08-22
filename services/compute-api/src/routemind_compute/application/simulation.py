@@ -17,12 +17,17 @@ class DemandEvent:
     request_id: str
     pickup: GeoPoint
     tick: int
+    zone: str = ""
+    merchant_id: str = ""
+    order_profile: str = "standard"
 
     def __post_init__(self) -> None:
         if not self.request_id.strip():
             raise ValueError("request_id must not be blank")
         if self.tick < 0:
             raise ValueError("tick must be non-negative")
+        if not self.order_profile.strip():
+            raise ValueError("order profile must not be blank")
 
 
 @dataclass(frozen=True, slots=True)

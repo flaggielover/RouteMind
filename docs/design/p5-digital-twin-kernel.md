@@ -14,3 +14,10 @@ RM-150 makes the clock boundary explicit with `TwinClock`: simulated ticks and
 seconds advance deterministically, while wall-clock elapsed time is observation
 only and excluded from replay identity. The kernel records the simulated end
 tick and remains framework-free and compute-owned.
+
+RM-151 adds `DemandArrivalProfile` and `DemandArrivalGenerator` as the seeded
+arrival boundary for continuous scenarios. Rates are converted to explicit
+per-tick Bernoulli decisions, burst expansion is deterministic, and profile
+metadata travels with each immutable `DemandEvent`. The canonical seed,
+profiles, arrivals, and SHA-256 digest make generated demand replayable without
+introducing durable business state into the compute runtime.

@@ -781,7 +781,7 @@
       "gates": ["L2-demand-generator", "L6-demand-replay"],
       "evidence": ["evidence/gates/RM-151/demand-arrivals.md"],
       "blocked_by": [],
-      "notes": "Continuous demand arrival generation is now the active task; no unexplained random numbers."
+      "notes": "Local L2/L6 demand-generator evidence passes with seeded Bernoulli arrivals, explicit burst/profile metadata, stable ordering, and replay digest; remote Actions validation is required before closure. No unexplained random numbers."
     },
     {
       "id": "RM-152",
