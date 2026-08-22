@@ -4,11 +4,11 @@ Current Phase: P9 Research and Experimentation
 
 Overall: 24 / 24 tasks passed
 
-Current Task: RM-084 - release checkpoint pushed locally; GitHub Actions pending
+Current Task: RM-085 - design staged release and rollback decision contract
 
 Last Completed: RM-084 - Define release provenance and deployment preflight contract
 
-CI: PENDING - implementation checkpoint `ada92bc`; observe the real Actions run before the next task
+CI: PASS - GitHub Actions run 32557262937 (control, Java, Python/contracts, Web, Resilience)
 
 Regression: PASS - Java 34, Python 50 / 95.47%, Web, locked install, and 4 schemas / 12 contract fixtures
 
@@ -16,7 +16,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-085 - define staged release and rollback decision contract after RM-084 CI
+Next Candidates: RM-085 - define staged release and rollback decision contract
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

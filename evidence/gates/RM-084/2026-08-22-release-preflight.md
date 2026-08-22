@@ -29,6 +29,14 @@ codes.
 The release self-tests also verify that preflight does not create or mutate
 files and that missing or traversal-prone required paths remain blocked.
 
+## GitHub Actions
+
+- Run: `32557262937`
+- Commit: `5459b50fcde1c625e7afc026f42b5c2dd3bf1237`
+- Result: all five jobs passed: control plane and Compose, Java business
+  runtime, Python compute and contracts, Web application, and bounded
+  degradation/resilience.
+
 ## Boundary
 
 This is a local, read-only release contract. Registry signature verification,

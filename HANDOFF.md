@@ -8,7 +8,7 @@ Current Phase: P9 Research and Experimentation
 
 Current Task: RM-084 - Define release provenance and deployment preflight contract
 
-Task Status: passed locally; CI pending
+Task Status: passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -157,7 +157,8 @@ files. Local full gate passed with Java 34 tests, Python 56 tests at 96.05%
 coverage, Web checks/build, security/recovery/release self-tests, and schema
 fixtures. Evidence is in
 `evidence/gates/RM-084/2026-08-22-release-preflight.md`.
-The implementation checkpoint is `ada92bc`; its GitHub Actions run is pending.
+The implementation checkpoint is `ada92bc`; the CI evidence checkpoint is
+`5459b50`, and GitHub Actions run `32557262937` passed all five jobs.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -225,9 +226,9 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Push `ada92bc`, observe its real GitHub Actions run,
-diagnose any failure to green, then record the CI evidence checkpoint before
-starting RM-085.
+Next Recommended Action: Design RM-085's staged release and rollback decision
+contract, keeping deployment execution and production health as external gates;
+then update the task graph and run the design checkpoint through CI.
 
 Next Candidate Task: RM-085 - define staged release and rollback decision contract
 
