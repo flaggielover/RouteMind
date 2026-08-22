@@ -132,6 +132,8 @@ hygiene; and runs three standard-library self-tests from `verify.ps1`. Local
 full gate passed with Java 34 tests, Python 56 tests at 96.05% coverage, Web
 regression, and security checks. Evidence is in
 `evidence/gates/RM-082/2026-08-22-security-supply-chain.md`.
+The RM-082 checkpoint commit `5498fee` passed all five GitHub Actions jobs in
+run `32556047734`.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
