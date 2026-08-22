@@ -96,6 +96,8 @@ exhaustion, while the existing dispatch registry remains independent of agent
 availability. Local full gate passed with 45 Python tests at 96.47% coverage,
 Java 34 tests, and Web/control regression. Evidence is in
 `evidence/gates/RM-070/2026-08-22-agent-runtime.md`.
+The RM-070 checkpoint commit `3b1c5b2` passed all five GitHub Actions jobs in
+run `32553873639`.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
