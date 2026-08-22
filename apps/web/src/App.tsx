@@ -30,6 +30,7 @@ import { AppShell } from "./components/AppShell";
 import { LifecycleTimeline } from "./components/LifecycleTimeline";
 import { MetricCell } from "./components/MetricCell";
 import { OperationsMap } from "./components/OperationsMap";
+import { ActivityStream } from "./components/ActivityStream";
 import { StatusPill } from "./components/StatusPill";
 import type { Order, OperationsSnapshot } from "./domain/model";
 import "./styles.css";
@@ -56,6 +57,7 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
       : "Connecting to live event stream",
     appliedEvents: 0,
     staleReason: null,
+    recentEvents: [],
   });
 
   useEffect(() => {
@@ -78,6 +80,7 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
         detail: "Realtime disabled for non-live data source",
         appliedEvents: 0,
         staleReason: null,
+        recentEvents: [],
       });
       return;
     }
@@ -88,6 +91,7 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
         detail: "Browser EventSource is unavailable",
         appliedEvents: 0,
         staleReason: "Browser EventSource is unavailable",
+        recentEvents: [],
       });
       return;
     }
@@ -135,7 +139,7 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
         onSourceChange={changeSource}
         onRefreshHealth={() => void refreshHealth()}
       >
-        <AppRoutes snapshot={snapshot} />
+        <AppRoutes snapshot={snapshot} realtime={realtime} />
       </AppShell>
       {isRefreshing && (
         <span className="sr-only" role="status">
@@ -146,10 +150,19 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
   );
 }
 
-export function AppRoutes({ snapshot }: { snapshot: OperationsSnapshot }) {
+export function AppRoutes({
+  snapshot,
+  realtime,
+}: {
+  snapshot: OperationsSnapshot;
+  realtime: RealtimeConnectionState;
+}) {
   return (
     <Routes>
-      <RouterRoute path="/operations" element={<OperationsView snapshot={snapshot} />} />
+      <RouterRoute
+        path="/operations"
+        element={<OperationsView snapshot={snapshot} realtime={realtime} />}
+      />
       <RouterRoute path="/strategy" element={<StrategyView snapshot={snapshot} />} />
       <RouterRoute path="/customer" element={<CustomerView snapshot={snapshot} />} />
       <RouterRoute path="/merchant" element={<MerchantView snapshot={snapshot} />} />
@@ -159,7 +172,13 @@ export function AppRoutes({ snapshot }: { snapshot: OperationsSnapshot }) {
   );
 }
 
-function OperationsView({ snapshot }: { snapshot: OperationsSnapshot }) {
+function OperationsView({
+  snapshot,
+  realtime,
+}: {
+  snapshot: OperationsSnapshot;
+  realtime: RealtimeConnectionState;
+}) {
   const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0]?.id ?? "");
   const selectedOrder = snapshot.orders.length ? findOrder(snapshot, selectedOrderId) : undefined;
   const availableCouriers = snapshot.couriers.filter(
@@ -281,6 +300,7 @@ function OperationsView({ snapshot }: { snapshot: OperationsSnapshot }) {
               <dd>dispatch-4d19</dd>
             </div>
           </dl>
+          <ActivityStream snapshot={snapshot} realtime={realtime} />
           <button className="text-button" type="button">
             Open decision details <ArrowUpRight size={14} />
           </button>

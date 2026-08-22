@@ -42,6 +42,7 @@ export interface RealtimeConnectionState {
   detail: string;
   appliedEvents: number;
   staleReason: string | null;
+  recentEvents: readonly RealtimeItem[];
 }
 
 export interface RealtimeCursorState {
@@ -212,6 +213,7 @@ export function createRealtimeStream(options: RealtimeStreamOptions): RealtimeSt
   let retryAttempt = 0;
   let stopped = false;
   let appliedEvents = 0;
+  let recentEvents: RealtimeItem[] = [];
 
   const publish = (
     status: RealtimeStatus,
@@ -224,6 +226,7 @@ export function createRealtimeStream(options: RealtimeStreamOptions): RealtimeSt
       detail,
       appliedEvents,
       staleReason,
+      recentEvents,
     });
   };
 
@@ -254,6 +257,7 @@ export function createRealtimeStream(options: RealtimeStreamOptions): RealtimeSt
         return;
       }
       appliedEvents += 1;
+      recentEvents = [item, ...recentEvents].slice(0, 20);
       options.onEvent(item);
       publish("connected", item.replay ? "Replayed event received" : "Live event received");
     } catch (error) {

@@ -10,17 +10,17 @@ Current Task: RM-108 - Integrate live activity and event stream into web shell
 
 Last Completed: RM-107 - Implement web realtime reconnect and stale-state handling
 
-Current Gate: RM-107 local/full/browser/CI gates passed; RM-108 implementation in progress
+Current Gate: RM-108 local/full/browser gates passed; awaiting push/CI validation
 
-CI: PASS - RM-107 run 32565914443; all five jobs passed. RM-106 run 32565242420 also passed.
+CI: PASS - RM-107 run 32565914443; all five jobs passed. RM-108 CI pending.
 
-Regression: PASS - Java 57, Python 59 / 96.13%, Web 13 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 57, Python 59 / 96.13%, Web 15 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-108 - live activity projection with source/cursor/trace context
+Next Candidates: RM-108 - push checkpoint and observe GitHub Actions, then RM-110
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -87,3 +87,6 @@ and visible stale/degraded labels pass the local full and browser gates; the
 implementation checkpoint is awaiting Actions validation.
 RM-107 checkpoint `48ef6fa` and Actions run `32565914443` passed all five jobs.
 The task is now passed and RM-108 is the active implementation.
+RM-108 local activity-stream evidence is recorded in `evidence/gates/RM-108/activity-stream.md`.
+The live cursor/trace projection and explicit Demo/Replay labels pass the local
+full and browser gates; the implementation checkpoint is awaiting Actions validation.

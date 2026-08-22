@@ -253,6 +253,87 @@ button {
   color: var(--red);
   font-size: 10px;
 }
+.activity-stream {
+  border-top: 1px solid var(--line);
+  margin-top: 18px;
+  padding-top: 16px;
+}
+.activity-stream-heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.activity-stream-heading h3 {
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+.activity-freshness {
+  color: var(--muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+.freshness-live-stale,
+.freshness-live-degraded {
+  color: var(--red);
+  font-weight: 700;
+}
+.activity-list {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+.activity-item {
+  align-items: center;
+  display: grid;
+  gap: 9px;
+  grid-template-columns: 7px minmax(0, 1fr) auto auto;
+  min-width: 0;
+}
+.activity-marker {
+  background: var(--green);
+  border-radius: 50%;
+  height: 7px;
+  width: 7px;
+}
+.activity-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.activity-copy strong,
+.activity-copy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.activity-copy strong {
+  color: var(--ink);
+  font-size: 11px;
+}
+.activity-copy small,
+.activity-item time {
+  color: var(--muted);
+  font-size: 10px;
+}
+.activity-source {
+  font-size: 9px;
+  font-weight: 750;
+  text-transform: uppercase;
+}
+.activity-source.source-live {
+  color: var(--green);
+}
+.activity-source.source-demo,
+.activity-source.source-replay {
+  color: var(--amber);
+}
+.activity-empty {
+  font-size: 11px;
+  padding: 14px 0 2px;
+}
 .icon-button {
   width: 32px;
   height: 32px;

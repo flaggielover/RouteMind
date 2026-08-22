@@ -477,7 +477,7 @@
       "phase": "P10",
       "priority": "medium",
       "depends_on": ["RM-107"],
-      "status": "in_progress",
+      "status": "implemented",
       "acceptance": ["Activity stream renders verified live events with trace context", "Event inspection identifies source mode and freshness", "Demo and replay activity are visibly labeled"],
       "gates": ["L2-activity-stream", "L4-event-ui"],
       "evidence": ["evidence/gates/RM-108/activity-stream.md"],
