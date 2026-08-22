@@ -4,9 +4,9 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: P7 Agent Runtime and Orchestration
+Current Phase: P9 Research and Experimentation
 
-Current Task: RM-070 - Implement bounded Agent Runtime and Orchestrator
+Current Task: RM-091 - Implement RADS research baseline
 
 Task Status: in_progress
 
@@ -87,6 +87,16 @@ Evidence is in `evidence/gates/RM-090/2026-08-22-routebench-lineage.md`.
 The RM-090 checkpoint commit `a32802d` passed all five GitHub Actions jobs in
 run `32553160352`.
 
+RM-070 defines and implements a bounded Python Agent Runtime and Orchestrator.
+Read/research tool permissions, role grants, argument keys, metadata, and
+per-session call counts are bounded and validated. Immutable audit records
+capture accepted, rejected, and failed calls. Orchestration emits deterministic
+fallbacks for missing plans, denied tools, handler failures, and call-budget
+exhaustion, while the existing dispatch registry remains independent of agent
+availability. Local full gate passed with 45 Python tests at 96.47% coverage,
+Java 34 tests, and Web/control regression. Evidence is in
+`evidence/gates/RM-070/2026-08-22-agent-runtime.md`.
+
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
 cross-`down/up` persistence for all three services, and the unified infrastructure
@@ -153,12 +163,12 @@ Important Context: Keep Java business correctness separate from Python compute a
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Push the RM-090 checkpoint, observe the real GitHub
-Actions run, and autonomously fix any CI failure. Then implement RM-070 with
-auditable, permission-bounded read-oriented tools and deterministic fallbacks.
-Keep agent availability outside hard real-time dispatch correctness.
+Next Recommended Action: Commit and push the RM-070 checkpoint, observe the
+real GitHub Actions run, and autonomously fix any CI failure. Then implement
+RM-091 as a reproducible RADS research baseline with RouteBench comparison and
+ablation/robustness evidence.
 
-Next Candidate Task: RM-070 - Implement bounded Agent Runtime and Orchestrator
+Next Candidate Task: RM-091 - Implement RADS research baseline
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

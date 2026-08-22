@@ -217,10 +217,10 @@
       "phase": "P7",
       "priority": "medium",
       "depends_on": ["RM-050"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Agent tools are auditable and permission bounded", "Hard real-time dispatch does not depend on LLM availability", "Analysis and experiment orchestration have deterministic fallbacks"],
       "gates": ["L2-agents", "L5-agent-outage", "security-review"],
-      "evidence": [],
+      "evidence": ["evidence/gates/RM-070/2026-08-22-agent-runtime.md"],
       "blocked_by": [],
       "notes": "Start with read-oriented operations and research tools."
     },

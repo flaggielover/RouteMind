@@ -9,6 +9,9 @@ state or transactional lifecycle decisions.
 - `domain`: immutable compute inputs, outputs, and strategy protocols; standard
   library only.
 - `application`: compute orchestration; may depend on domain only.
+- `application/agents.py`: bounded read/research tools with role and argument
+  policy, call budgets, immutable audit records, and deterministic fallback;
+  agent execution never owns dispatch correctness.
 - `api`: inbound HTTP adapter; may depend on application and domain.
 - `infrastructure`: external compute adapters; never an authoritative data store.
 
