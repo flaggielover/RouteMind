@@ -84,6 +84,8 @@ stores typed hypothesis, observation, result, and conclusion nodes with parent
 links, canonical payloads, and manifest/hypothesis queries. Local full gate
 passed with 40 Python tests at 97.75% coverage and Java/Web/control regression.
 Evidence is in `evidence/gates/RM-090/2026-08-22-routebench-lineage.md`.
+The RM-090 checkpoint commit `a32802d` passed all five GitHub Actions jobs in
+run `32553160352`.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
