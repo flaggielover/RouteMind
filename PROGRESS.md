@@ -4,11 +4,11 @@ Current Phase: P9 Research and Experimentation
 
 Overall: 26 / 27 tasks passed
 
-Current Task: RM-087 - design request rate-limit and input protection contract
+Current Task: RM-087 - implementation checkpoint pushed locally; GitHub Actions pending
 
 Last Completed: RM-084 - Define release provenance and deployment preflight contract
 
-CI: PASS - GitHub Actions run 32558622055 (control, Java, Python/contracts, Web, Resilience)
+CI: PENDING - implementation checkpoint `24831c0`; observe the real Actions run before marking RM-087 passed
 
 Regression: PASS - Java 34, Python 50 / 95.47%, Web, locked install, and 4 schemas / 12 contract fixtures
 
@@ -39,4 +39,4 @@ RM-086 design is recorded in `docs/design/p8-authn-authz-boundary.md`; executabl
 implementation evidence is recorded in `evidence/gates/RM-086/`.
 RM-086 CI evidence is recorded in the same gate file; all five Actions jobs passed.
 RM-087 design is recorded in `docs/design/p8-rate-limit-input-protection.md`;
-implementation and executable evidence remain pending.
+implementation evidence is recorded in `evidence/gates/RM-087/`.

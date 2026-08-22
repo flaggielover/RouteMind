@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: P9 Research and Experimentation
 
-Current Task: RM-087 - design request rate-limit and input protection contract
+Current Task: RM-087 - implementation checkpoint pushed locally; GitHub Actions pending
 
-Task Status: RM-086 passed; RM-087 design in progress
+Task Status: implemented locally; CI pending
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -243,16 +243,20 @@ RM-086 implementation checkpoint `45850cd` adds the framework-independent Java
 policy, five unit tests, and local full-gate evidence. The task remains
 `passed` after Actions run `32558622055` passed all five jobs.
 
-Next Recommended Action: Design RM-087's deterministic request rate-limit and
-input protection contract, preserving Java durable command boundaries and
-bounded Python/web adapters.
+Next Recommended Action: Push `24831c0`, observe its real GitHub Actions run,
+diagnose any failure to green, then record CI evidence and continue.
 
 The RM-087 design now defines immutable limits, normalized descriptors, reject
 versus throttle precedence, deterministic retry-after, and the explicit
 non-claim that distributed counters and WAF remain external. Design is in
 `docs/design/p8-rate-limit-input-protection.md`.
 
-Next Candidate Task: RM-087 - implement deterministic request admission evaluator
+The implementation checkpoint `24831c0` adds the Java evaluator and five unit
+tests; local full gate passed. Evidence is in
+`evidence/gates/RM-087/2026-08-22-rate-limit-input.md`. The task remains
+`implemented` until its real Actions run is observed.
+
+Next Candidate Task: RM-087 - complete after CI, then select the next unblocked task
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

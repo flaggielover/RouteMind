@@ -321,10 +321,10 @@
       "phase": "P8",
       "priority": "high",
       "depends_on": ["RM-005", "RM-010", "RM-011", "RM-080", "RM-082", "RM-086"],
-      "status": "in_progress",
+      "status": "implemented",
       "acceptance": ["Immutable policy limits and normalized request descriptors produce stable digests", "Malformed or oversized input is rejected and usage above the burst budget is throttled with deterministic retry-after", "The evaluator is read-only and does not replace Java authorization, idempotency, Outbox, or durable state"],
       "gates": ["L1-input-protection", "L2-rate-policy", "security-review"],
-      "evidence": [],
+      "evidence": ["evidence/gates/RM-087/2026-08-22-rate-limit-input.md"],
       "blocked_by": [],
       "notes": "Distributed counter atomicity, WAF/bot mitigation, production quotas, and load validation remain external gates."
     },
