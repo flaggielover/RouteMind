@@ -24,3 +24,9 @@ zones; deterministic shortest-path search returns route geometry and edge/zone
 metadata for both point and matrix calls. Missing nodes or routes fail with a
 typed unavailable error so the existing fallback wrapper can mark substitution.
 Large road graphs remain external data under `ROUTEMIND_DATA_ROOT`.
+
+RM-142 defines the external artifact boundary used by matrices, road graphs,
+and replay data. `DataArtifactManifest` is content-addressed and records
+producer, revision, configuration, and seed. `DataRootArtifactAdapter` performs
+symlink-aware containment and checksum verification before exposing a path;
+unsafe or missing inputs fail closed and no generated payload is committed.

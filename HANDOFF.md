@@ -433,3 +433,10 @@ unit tests/build, and 5 schemas/15 fixtures. Evidence is recorded at
 validation.
 RM-141 remote Actions run `32577972174` passed all five jobs; the task is fully
 validated. RM-142 data-root matrix and artifact adapter is now the active task.
+RM-142 is locally complete: manifests carry canonical artifact metadata and
+digests, the adapter resolves only inside `ROUTEMIND_DATA_ROOT`, and checksum or
+path failures are explicit. Local full gate passed with Java 60 tests, Python
+85 tests at 95.22% coverage, Web 38 unit tests/build, and 5 schemas/15
+fixtures. Evidence is recorded at
+`evidence/gates/RM-142/data-root-adapter.md`; checkpoint is awaiting remote
+Actions validation.

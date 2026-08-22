@@ -737,12 +737,12 @@
       "phase": "P14",
       "priority": "medium",
       "depends_on": ["RM-083", "RM-140"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Large matrices, road graphs, and replay artifacts resolve through ROUTEMIND_DATA_ROOT", "Manifests carry relative path, checksum, producer, revision, configuration, and seed", "Unsafe absolute or repository-escaping paths fail closed"],
       "gates": ["L1-data-root", "L2-artifact-manifest", "security-review"],
       "evidence": ["evidence/gates/RM-142/data-root-adapter.md"],
       "blocked_by": [],
-      "notes": "Do not commit generated large artifacts."
+      "notes": "Local L1/L2/security data-root evidence passes with canonical manifests, containment checks, and checksum verification; remote Actions validation is required before closure. Do not commit generated large artifacts."
     },
     {
       "id": "RM-143",
