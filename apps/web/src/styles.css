@@ -211,6 +211,25 @@ button {
 .source-replay {
   background: var(--amber);
 }
+.realtime-state {
+  border-left: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+  padding-left: 12px;
+  white-space: nowrap;
+}
+.realtime-connected {
+  color: var(--green);
+}
+.realtime-reconnecting,
+.realtime-connecting {
+  color: var(--amber);
+}
+.realtime-stale,
+.realtime-degraded {
+  color: var(--red);
+  font-weight: 700;
+}
 .source-selector select {
   min-height: 30px;
   border: 1px solid var(--line);

@@ -10,17 +10,17 @@ Current Task: RM-107 - Implement web realtime reconnect and stale-state handling
 
 Last Completed: RM-106 - Implement Java business event SSE feed
 
-Current Gate: RM-106 local/full/CI gates passed; RM-107 implementation in progress
+Current Gate: RM-107 local implementation and full/browser gates passed; awaiting push/CI validation
 
-CI: PASS - RM-106 run 32565242420; all five jobs passed. Earlier RM-104/105 runs 32564042862/32564387503 also passed.
+CI: PASS - RM-106 run 32565242420; all five jobs passed. RM-107 CI pending.
 
-Regression: PASS - Java 57, Python 59 / 96.13%, Web 9 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 57, Python 59 / 96.13%, Web 13 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-107 - bounded browser reconnect, deduplication, and stale-state handling
+Next Candidates: RM-107 - push checkpoint and observe GitHub Actions, then RM-108
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -81,3 +81,7 @@ and subscriber-loss handling pass the local full gate; the implementation
 checkpoint is awaiting Actions validation.
 RM-106 checkpoint `21beadc` and Actions run `32565242420` passed all five jobs.
 The task is now passed and RM-107 is the active implementation.
+RM-107 local browser realtime evidence is recorded in `evidence/gates/RM-107/web-realtime.md`.
+The bounded cursor consumer, deduplication, reconnect backoff, lifecycle monotonicity,
+and visible stale/degraded labels pass the local full and browser gates; the
+implementation checkpoint is awaiting Actions validation.

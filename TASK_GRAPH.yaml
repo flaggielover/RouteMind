@@ -464,7 +464,7 @@
       "phase": "P10",
       "priority": "high",
       "depends_on": ["RM-104", "RM-106"],
-      "status": "in_progress",
+      "status": "implemented",
       "acceptance": ["Browser reconnects with bounded backoff and last-event cursor", "Duplicate or out-of-order events do not regress visible state", "Stale and degraded labels are visible to the user"],
       "gates": ["L2-web-realtime", "L4-realtime-browser", "L5-reconnect"],
       "evidence": ["evidence/gates/RM-107/web-realtime.md"],

@@ -38,6 +38,7 @@ export interface Order {
   eta: string;
   age: string;
   priority: "standard" | "priority";
+  version?: number;
   destination: string;
   route: readonly GeoPoint[];
   events: readonly OrderEvent[];

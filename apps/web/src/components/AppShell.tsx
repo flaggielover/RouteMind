@@ -12,6 +12,7 @@ import {
 import { NavLink } from "react-router-dom";
 import type { ReactNode } from "react";
 import type { DataAvailability, DataSourceMode, Role, ServiceHealth } from "../domain/model";
+import type { RealtimeConnectionState } from "../data/realtime";
 import { StatusPill } from "./StatusPill";
 
 const navigation: Array<{ role: Role; label: string; icon: typeof LayoutDashboard }> = [
@@ -27,6 +28,7 @@ interface AppShellProps {
   source: DataSourceMode;
   availability: DataAvailability;
   sourceDetail: string;
+  realtime: RealtimeConnectionState;
   onSourceChange: (source: DataSourceMode) => void;
   onRefreshHealth: () => void;
   children: ReactNode;
@@ -37,6 +39,7 @@ export function AppShell({
   source,
   availability,
   sourceDetail,
+  realtime,
   onSourceChange,
   onRefreshHealth,
   children,
@@ -100,6 +103,23 @@ export function AppShell({
                     : `Live ${availability}`}
               </span>
             </div>
+            {source === "live" && (
+              <span
+                className={`realtime-state realtime-${realtime.status}`}
+                role="status"
+                title={realtime.staleReason ?? realtime.detail}
+              >
+                {realtime.status === "connected"
+                  ? "Stream connected"
+                  : realtime.status === "reconnecting"
+                    ? "Stream reconnecting"
+                    : realtime.status === "stale"
+                      ? "Stream stale"
+                      : realtime.status === "degraded"
+                        ? "Stream degraded"
+                        : "Stream connecting"}
+              </span>
+            )}
             <label className="source-selector">
               <span className="sr-only">Data source mode</span>
               <select

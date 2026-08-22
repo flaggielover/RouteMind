@@ -107,6 +107,7 @@ function toOrder(order: LiveOrder, parties: readonly LiveParty[]): Order {
     eta: order.updatedAt,
     age: "live",
     priority: "standard",
+    version: order.version,
     destination: "Durable order state",
     route: [],
     events: orderEvents(order),

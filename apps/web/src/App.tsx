@@ -19,6 +19,11 @@ import { BrowserRouter, Navigate, Route as RouterRoute, Routes } from "react-rou
 import { demoDataSource } from "./data/demoSnapshot";
 import { probeServices } from "./data/health";
 import { liveDataSource, replayDataSource } from "./data/liveSnapshot";
+import {
+  applyRealtimeItem,
+  createRealtimeStream,
+  type RealtimeConnectionState,
+} from "./data/realtime";
 import type { DataSourceMode, OperationsDataSource, ServiceHealth } from "./domain/model";
 import { countOpenExceptions, findOrder, orderStatusLabel, statusTone } from "./domain/selectors";
 import { AppShell } from "./components/AppShell";
@@ -43,6 +48,15 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
   const [snapshot, setSnapshot] = useState(initialSnapshot);
   const [health, setHealth] = useState<ServiceHealth[]>([...snapshot.health]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [realtime, setRealtime] = useState<RealtimeConnectionState>({
+    status: suppliedDataSource ? "disabled" : "connecting",
+    cursor: "0",
+    detail: suppliedDataSource
+      ? "Realtime disabled for supplied data source"
+      : "Connecting to live event stream",
+    appliedEvents: 0,
+    staleReason: null,
+  });
 
   useEffect(() => {
     setSnapshot(initialSnapshot);
@@ -55,6 +69,37 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
       mounted = false;
     };
   }, [activeDataSource, initialSnapshot]);
+
+  useEffect(() => {
+    if (activeDataSource !== liveDataSource) {
+      setRealtime({
+        status: "disabled",
+        cursor: "0",
+        detail: "Realtime disabled for non-live data source",
+        appliedEvents: 0,
+        staleReason: null,
+      });
+      return;
+    }
+    if (typeof EventSource === "undefined") {
+      setRealtime({
+        status: "degraded",
+        cursor: "0",
+        detail: "Browser EventSource is unavailable",
+        appliedEvents: 0,
+        staleReason: "Browser EventSource is unavailable",
+      });
+      return;
+    }
+    const endpoint = `${import.meta.env.VITE_BUSINESS_API_URL ?? "http://localhost:18080"}/api/v1/events/stream`;
+    const stream = createRealtimeStream({
+      endpoint,
+      onEvent: (item) => setSnapshot((current) => applyRealtimeItem(current, item)),
+      onStateChange: setRealtime,
+    });
+    stream.start();
+    return () => stream.stop();
+  }, [activeDataSource]);
 
   const refreshHealth = useCallback(async () => {
     setIsRefreshing(true);
@@ -86,6 +131,7 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
         source={snapshot.source}
         availability={snapshot.availability}
         sourceDetail={snapshot.sourceDetail}
+        realtime={realtime}
         onSourceChange={changeSource}
         onRefreshHealth={() => void refreshHealth()}
       >
