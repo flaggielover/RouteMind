@@ -45,11 +45,19 @@ class BusinessApiApplicationTests {
 	void operationsSnapshotIsLiveAndEmptyWhenDurableStateIsEmpty() throws Exception {
 		mockMvc.perform(get("/api/v1/operations/snapshot"))
 				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.schemaVersion").value("v1"))
 				.andExpect(jsonPath("$.source").value("live"))
 				.andExpect(jsonPath("$.orders").isArray())
 				.andExpect(jsonPath("$.orders").isEmpty())
 				.andExpect(jsonPath("$.parties").isArray())
-				.andExpect(jsonPath("$.courierLocations").isArray());
+				.andExpect(jsonPath("$.merchants").isArray())
+				.andExpect(jsonPath("$.merchants").isEmpty())
+				.andExpect(jsonPath("$.courierLocations").isArray())
+				.andExpect(jsonPath("$.couriers").isArray())
+				.andExpect(jsonPath("$.couriers").isEmpty())
+				.andExpect(jsonPath("$.health.status").value("UP"))
+				.andExpect(jsonPath("$.health.durableState").value("available"))
+				.andExpect(jsonPath("$.health.courierProjection").value("available"));
 	}
 
 	@Test

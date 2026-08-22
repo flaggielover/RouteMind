@@ -26,17 +26,28 @@ public final class OperationsSnapshotController {
 		return OperationsSnapshotResponse.from(service.read());
 	}
 
-	public record OperationsSnapshotResponse(String source, Instant generatedAt, List<OrderResponse> orders,
-			List<PartyResponse> parties, List<CourierLocationResponse> courierLocations) {
+	public record OperationsSnapshotResponse(String schemaVersion, String source, Instant generatedAt,
+			List<OrderResponse> orders, List<PartyResponse> parties, List<MerchantResponse> merchants,
+			List<CourierLocationResponse> courierLocations, List<CourierResponse> couriers, HealthResponse health) {
 
 		static OperationsSnapshotResponse from(OperationsSnapshot snapshot) {
-			return new OperationsSnapshotResponse("live", snapshot.generatedAt(),
+			var parties = snapshot.parties().stream()
+				.map(party -> new PartyResponse(party.id(), party.type(), party.displayName(), party.status()))
+				.toList();
+			var merchants = parties.stream()
+				.filter(party -> "MERCHANT".equals(party.type()))
+				.map(party -> new MerchantResponse(party.id(), party.displayName(), party.status()))
+				.toList();
+			var locations = snapshot.courierLocations().stream()
+				.map(location -> new CourierLocationResponse(location.courierId(), location.latitude(), location.longitude(),
+						location.observedAt()))
+				.toList();
+			return new OperationsSnapshotResponse("v1", "live", snapshot.generatedAt(),
 				snapshot.orders().stream().map(order -> new OrderResponse(order.id(), order.status(), order.version(),
-						order.createdAt(), order.updatedAt())).toList(),
-				snapshot.parties().stream().map(party -> new PartyResponse(party.id(), party.type(), party.displayName(),
-						party.status())).toList(),
-				snapshot.courierLocations().stream().map(location -> new CourierLocationResponse(location.courierId(),
-						location.latitude(), location.longitude(), location.observedAt())).toList());
+						order.createdAt(), order.updatedAt())).toList(), parties, merchants, locations,
+				locations.stream().map(location -> new CourierResponse(location.courierId(), location.latitude(),
+						location.longitude(), location.observedAt())).toList(),
+				new HealthResponse("UP", "available", "available"));
 		}
 	}
 
@@ -46,6 +57,15 @@ public final class OperationsSnapshotController {
 	public record PartyResponse(UUID id, String type, String displayName, String status) {
 	}
 
+	public record MerchantResponse(UUID id, String displayName, String status) {
+	}
+
 	public record CourierLocationResponse(UUID courierId, double latitude, double longitude, Instant observedAt) {
+	}
+
+	public record CourierResponse(UUID courierId, double latitude, double longitude, Instant observedAt) {
+	}
+
+	public record HealthResponse(String status, String durableState, String courierProjection) {
 	}
 }
