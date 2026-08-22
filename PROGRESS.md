@@ -10,17 +10,17 @@ Current Task: RM-160 - Expose strategy registry and execution API
 
 Last Completed: RM-154 - Implement traffic, supply, and failure perturbations
 
-Current Gate: RM-160 compute/API implementation is locally validated; full gate is blocked at web test startup by Windows spawn EPERM
+Current Gate: RM-160 local/full/browser gates passed; checkpoint is awaiting remote Actions validation
 
-CI: PASS - RM-154 run 32582936237; RM-160 remote validation is not yet available.
+CI: PASS - RM-154 run 32582936237; RM-160 remote validation is pending after local closure.
 
-Regression: RM-160 local compute: 104 tests passed, 95.78% coverage, Ruff clean. Full gate stopped at Web Vitest startup with Windows spawn EPERM after Java, contracts, Python, and Web format/lint/type checks passed.
+Regression: PASS - Java 60, Python 104 / 95.78%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
-Blocked: Web full-gate unit startup requires a Windows process-spawn permission fix; rerun before marking RM-160 passed.
+Blocked: NONE
 
-Human Action Required: NO - environment blocker is recorded and bounded.
+Human Action Required: NO
 
-Next Candidates: RM-160 remains in progress pending web/full-gate and remote Actions validation; RM-155 remains blocked by RM-152 (which depends on RM-133)
+Next Candidates: RM-160 remote validation; RM-155 remains blocked by RM-152 (which depends on RM-133)
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -126,8 +126,8 @@ The task is now passed and RM-120 is the active implementation.
 
 ## Progress Capsule
 
-### RM-160 checkpoint - 2026-08-22
+### RM-160 checkpoint - 2026-08-23
 - Added compute-owned strategy catalog and bounded strategy execution API with explicit provenance.
 - Preserved live dispatch snapshot behavior and Java durable-state ownership.
 - Focused tests: 12 passed. Full compute suite: 104 passed at 95.78% coverage. Ruff passed.
-- Full-gate blocker: Web Vitest startup fails with Windows spawn EPERM in the current sandbox; RM-160 remains in progress.
+- Full available gate and browser smoke now pass locally; remote Actions validation is pending.

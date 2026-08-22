@@ -11,7 +11,11 @@
 - Focused API, registry, and boundary tests: 12 passed.
 - Full compute suite: 104 passed, 95.78% coverage.
 - Ruff check: passed.
-- Java, repository integrity, contracts, Python, and Web format/lint/type checks: passed during the full-gate attempt.
+- Full available gate: Java 60 tests, Python 104 tests at 95.78%, Web 38 unit
+  tests/build, and 5 schemas/15 fixtures passed.
+- Browser smoke: 17 passed and 1 desktop-only test skipped; accessibility
+  smoke passed for desktop and mobile routes.
 
 ## Remaining gate
-Web Vitest could not start because the current Windows sandbox returns `spawn EPERM`. RM-160 remains `in_progress`; no remote Actions pass is claimed.
+Local L2/L3 strategy API evidence is complete. RM-160 remains `in_progress`
+until the pushed checkpoint receives a green remote Actions run.

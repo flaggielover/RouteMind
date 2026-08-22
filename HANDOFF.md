@@ -491,6 +491,6 @@ failure metadata.
 ## Current Resume Capsule
 - Resume at RM-160; do not redo completed RM-123 through RM-154 gates.
 - Local compute evidence: 104 tests passed, 95.78% coverage, Ruff clean.
-- Full gate passed repository integrity, Java, contracts, Python, and Web format/lint/type checks, then stopped at Web Vitest startup with Windows spawn EPERM.
-- Next action: rerun the full gate where Web worker spawning is permitted, then obtain remote Actions validation before marking RM-160 passed.
+- Full gate passed Java 60, Python 104 at 95.78%, Web 38 unit/build, and 5 schemas/15 fixtures. Browser smoke passed 17 with one desktop-only skip.
+- Next action: commit and push the local evidence refresh, then obtain remote Actions validation before marking RM-160 passed.
 - External data remains governed by ROUTEMIND_DATA_ROOT; no external data path was hardcoded.
