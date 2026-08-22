@@ -1,7 +1,7 @@
 # RM-108 Live Activity and Event Stream Shell Integration
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint pending
+- Revision: `4181f3c`
 - Boundary: role-aware Web activity projection over verified realtime events
 
 ## Activity behavior

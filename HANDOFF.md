@@ -319,3 +319,9 @@ and explicit Demo/Replay labels. Local full gate passed with 15 Web unit tests,
 16 Playwright tests, Java 57 tests, Python 59 tests at 96.13% coverage, and
 5 schemas/15 fixtures. Checkpoint `4181f3c` and Actions run `32566340978` passed
 all five jobs. Continue with RM-110.
+RM-110 adds explicit operations projection loading/degraded/unavailable states,
+source and freshness metadata, projection health, exception visibility, and
+route-geometry fallback handling. Local full gate passed with 17 Web unit tests,
+16 Playwright tests, Java 57 tests, Python 59 tests at 96.13% coverage, and
+5 schemas/15 fixtures. The implementation checkpoint is awaiting Actions
+validation; continue with CI observation before marking RM-110 passed.

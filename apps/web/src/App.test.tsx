@@ -86,6 +86,6 @@ describe("role-aware application", () => {
     expect(
       await screen.findByText("Replay", { selector: ".source-status span" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Select a verified replay artifact")).toBeInTheDocument();
+    expect(screen.getAllByText("Select a verified replay artifact").length).toBeGreaterThan(0);
   });
 });

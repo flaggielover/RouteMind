@@ -14,7 +14,7 @@ Current Gate: RM-108 local/full/browser/CI gates passed; RM-110 implementation i
 
 CI: PASS - RM-108 run 32566340978; all five jobs passed. RM-107 run 32565914443 also passed.
 
-Regression: PASS - Java 57, Python 59 / 96.13%, Web 15 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 57, Python 59 / 96.13%, Web 17 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
@@ -91,3 +91,8 @@ RM-108 local activity-stream evidence is recorded in `evidence/gates/RM-108/acti
 The live cursor/trace projection and explicit Demo/Replay labels pass the local
 full and browser gates; checkpoint `4181f3c` and Actions run `32566340978` passed
 all five jobs. The task is now passed and RM-110 is the active implementation.
+RM-110 local operations projection evidence is recorded in
+`evidence/gates/RM-110/operations-command-center.md`. Loading, degraded,
+unavailable, empty, exception, source, freshness, health, and route-geometry
+states pass the local full and browser gates; the implementation checkpoint is
+awaiting Actions validation.

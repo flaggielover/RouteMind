@@ -1,11 +1,14 @@
 import { Navigation, Store, Truck, UserRound } from "lucide-react";
-import type { Courier, Order } from "../domain/model";
+import type { Courier, DataAvailability, DataSourceMode, Order } from "../domain/model";
 
 interface OperationsMapProps {
   orders: readonly Order[];
   couriers: readonly Courier[];
   selectedOrderId: string;
   onSelectOrder: (orderId: string) => void;
+  availability: DataAvailability;
+  source: DataSourceMode;
+  generatedAt: string;
 }
 
 export function OperationsMap({
@@ -13,6 +16,9 @@ export function OperationsMap({
   couriers,
   selectedOrderId,
   onSelectOrder,
+  availability,
+  source,
+  generatedAt,
 }: OperationsMapProps) {
   const selected = orders.find((order) => order.id === selectedOrderId) ?? orders[0];
   return (
@@ -22,7 +28,9 @@ export function OperationsMap({
           <p className="eyebrow">Live planning surface</p>
           <h2 id="map-title">City dispatch map</h2>
         </div>
-        <span className="panel-meta">12:48 local</span>
+        <span className="panel-meta">
+          {sourceLabel(source)} · {formatFreshness(generatedAt)}
+        </span>
       </div>
       <div
         className="map-canvas"
@@ -40,18 +48,22 @@ export function OperationsMap({
             aria-hidden="true"
           />
         ))}
-        {orders.map((order) => (
-          <button
-            className={`map-marker order-marker ${order.id === selectedOrderId ? "selected" : ""}`}
-            key={order.id}
-            style={{ left: `${order.route[0].x}%`, top: `${order.route[0].y}%` }}
-            onClick={() => onSelectOrder(order.id)}
-            aria-label={`Select order ${order.shortId}`}
-            title={`Order ${order.shortId}`}
-          >
-            <Store size={15} aria-hidden="true" />
-          </button>
-        ))}
+        {orders.map((order) => {
+          const origin = order.route[0];
+          if (!origin) return null;
+          return (
+            <button
+              className={`map-marker order-marker ${order.id === selectedOrderId ? "selected" : ""}`}
+              key={order.id}
+              style={{ left: `${origin.x}%`, top: `${origin.y}%` }}
+              onClick={() => onSelectOrder(order.id)}
+              aria-label={`Select order ${order.shortId}`}
+              title={`Order ${order.shortId}`}
+            >
+              <Store size={15} aria-hidden="true" />
+            </button>
+          );
+        })}
         {couriers.map((courier) => (
           <span
             className={`map-marker courier-marker courier-${courier.status}`}
@@ -73,6 +85,22 @@ export function OperationsMap({
           <span />
           <small>1 km</small>
         </div>
+        {availability !== "ready" && (
+          <div className="map-state" role="status">
+            {availability === "loading"
+              ? "Loading operational map projections"
+              : availability === "degraded"
+                ? "Map projection degraded"
+                : "Map projection unavailable"}
+          </div>
+        )}
+        {availability === "ready" &&
+          orders.length > 0 &&
+          orders.every((order) => !order.route[0]) && (
+            <div className="map-state" role="status">
+              Route geometry is unavailable from this source
+            </div>
+          )}
         <div className="map-legend" aria-label="Map legend">
           <span>
             <i className="legend-dot legend-order" /> orders
@@ -93,4 +121,16 @@ export function OperationsMap({
       </div>
     </section>
   );
+}
+
+function sourceLabel(source: DataSourceMode): string {
+  return source === "live" ? "Live" : source === "demo" ? "Demo" : "Replay";
+}
+
+function formatFreshness(value: string): string {
+  if (!value) return "freshness pending";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? value
+    : `updated ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
 }

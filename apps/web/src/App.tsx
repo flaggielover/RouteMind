@@ -139,7 +139,7 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
         onSourceChange={changeSource}
         onRefreshHealth={() => void refreshHealth()}
       >
-        <AppRoutes snapshot={snapshot} realtime={realtime} />
+        <AppRoutes snapshot={snapshot} realtime={realtime} health={health} />
       </AppShell>
       {isRefreshing && (
         <span className="sr-only" role="status">
@@ -153,15 +153,17 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
 export function AppRoutes({
   snapshot,
   realtime,
+  health,
 }: {
   snapshot: OperationsSnapshot;
   realtime: RealtimeConnectionState;
+  health: readonly ServiceHealth[];
 }) {
   return (
     <Routes>
       <RouterRoute
         path="/operations"
-        element={<OperationsView snapshot={snapshot} realtime={realtime} />}
+        element={<OperationsView snapshot={snapshot} realtime={realtime} health={health} />}
       />
       <RouterRoute path="/strategy" element={<StrategyView snapshot={snapshot} />} />
       <RouterRoute path="/customer" element={<CustomerView snapshot={snapshot} />} />
@@ -175,15 +177,20 @@ export function AppRoutes({
 function OperationsView({
   snapshot,
   realtime,
+  health,
 }: {
   snapshot: OperationsSnapshot;
   realtime: RealtimeConnectionState;
+  health: readonly ServiceHealth[];
 }) {
   const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0]?.id ?? "");
   const selectedOrder = snapshot.orders.length ? findOrder(snapshot, selectedOrderId) : undefined;
   const availableCouriers = snapshot.couriers.filter(
     (courier) => courier.status === "available",
   ).length;
+  const zones = new Set(snapshot.couriers.map((courier) => courier.zone).filter(Boolean)).size;
+  const openExceptions = countOpenExceptions(snapshot);
+  const hasDispatchLatency = snapshot.availability === "ready" && snapshot.dispatch.latencyMs > 0;
   return (
     <div className="page-stack">
       <section className="page-intro">
@@ -196,53 +203,95 @@ function OperationsView({
         </div>
         <div className="intro-actions">
           <span className="last-updated">
-            <CircleDot size={13} /> Snapshot 12:48 local
+            <CircleDot size={13} /> Snapshot {formatFreshness(snapshot.generatedAt)}
           </span>
           <button className="button button-primary" type="button">
             <ListFilter size={15} /> Filter board
           </button>
         </div>
       </section>
+      {snapshot.availability !== "ready" && (
+        <section className={`projection-state projection-${snapshot.availability}`} role="status">
+          <strong>
+            {snapshot.availability === "loading"
+              ? "Loading operational projections"
+              : snapshot.availability === "degraded"
+                ? "Operational projections degraded"
+                : "Operational projections unavailable"}
+          </strong>
+          <span>{snapshot.sourceDetail}</span>
+        </section>
+      )}
+      <section className="operations-health" aria-label="Operations projection health">
+        <div>
+          <p className="eyebrow">Projection health</p>
+          <strong>{health.length ? "Service checks" : "Checking service health"}</strong>
+        </div>
+        <div className="operations-health-items">
+          {(health.length
+            ? health
+            : [{ service: "business-api", label: "Business API", status: "checking" as const }]
+          ).map((item) => (
+            <StatusPill key={item.service} status={item.status} label={item.label} />
+          ))}
+          <span className="health-freshness">
+            {snapshot.generatedAt
+              ? `Snapshot ${formatFreshness(snapshot.generatedAt)}`
+              : "Snapshot freshness pending"}
+          </span>
+        </div>
+      </section>
       <section className="metric-grid" aria-label="Operational metrics">
         <MetricCell
           label="Active orders"
           value={`${snapshot.orders.length}`}
-          detail="2 need attention"
+          detail={openExceptions ? `${openExceptions} need attention` : "No recorded exceptions"}
           icon={PackageCheck}
           tone="accent"
         />
         <MetricCell
           label="Available couriers"
           value={`${availableCouriers}`}
-          detail="Across 3 zones"
+          detail={zones ? `Across ${zones} zone${zones === 1 ? "" : "s"}` : "Zone data pending"}
           icon={Bike}
           tone="success"
         />
         <MetricCell
           label="Assignment latency"
-          value={`${snapshot.dispatch.latencyMs} ms`}
-          detail="Last decision"
+          value={hasDispatchLatency ? `${snapshot.dispatch.latencyMs} ms` : "-"}
+          detail={hasDispatchLatency ? "Last decision" : "Decision latency unavailable"}
           icon={Gauge}
         />
         <MetricCell
           label="Exceptions"
-          value={`${countOpenExceptions(snapshot)}`}
+          value={`${openExceptions}`}
           detail="Priority queue"
           icon={AlertTriangle}
           tone="warning"
         />
       </section>
+      {openExceptions > 0 && (
+        <div className="exception-banner" role="alert">
+          <AlertTriangle size={16} aria-hidden="true" />
+          <strong>{openExceptions} priority exception needs attention</strong>
+          <span>Review the selected order before assigning another route.</span>
+        </div>
+      )}
       <section className="primary-grid">
         <OperationsMap
           orders={snapshot.orders}
           couriers={snapshot.couriers}
           selectedOrderId={selectedOrderId}
           onSelectOrder={setSelectedOrderId}
+          availability={snapshot.availability}
+          source={snapshot.source}
+          generatedAt={snapshot.generatedAt}
         />
         <OrderQueue
           orders={snapshot.orders}
           selectedOrderId={selectedOrderId}
           onSelectOrder={setSelectedOrderId}
+          availability={snapshot.availability}
         />
       </section>
       <section className="secondary-grid">
@@ -251,6 +300,10 @@ function OperationsView({
             <div>
               <p className="eyebrow">Selected order</p>
               <h2 id="lifecycle-title">{selectedOrder?.shortId ?? "No order"} lifecycle</h2>
+              <span className="entity-freshness">
+                {snapshot.source} source ·{" "}
+                {snapshot.generatedAt ? formatFreshness(snapshot.generatedAt) : "freshness pending"}
+              </span>
             </div>
             {selectedOrder ? (
               <StatusPill
@@ -314,10 +367,12 @@ function OrderQueue({
   orders,
   selectedOrderId,
   onSelectOrder,
+  availability,
 }: {
   orders: readonly Order[];
   selectedOrderId: string;
   onSelectOrder: (id: string) => void;
+  availability: OperationsSnapshot["availability"];
 }) {
   return (
     <section className="panel queue-panel" aria-labelledby="queue-title">
@@ -329,31 +384,41 @@ function OrderQueue({
         <span className="count-badge">{orders.length}</span>
       </div>
       <div className="queue-list">
-        {orders.map((order) => (
-          <button
-            className={`queue-item ${order.id === selectedOrderId ? "selected" : ""}`}
-            key={order.id}
-            onClick={() => onSelectOrder(order.id)}
-            type="button"
-          >
-            <span
-              className={`queue-status status-tone-${statusTone(order.status)}`}
-              aria-hidden="true"
-            />
-            <span className="queue-copy">
-              <strong>
-                {order.shortId} <span>{order.customerName}</span>
-              </strong>
-              <small>
-                {order.merchantName} · {order.destination}
-              </small>
-            </span>
-            <span className="queue-side">
-              <strong>{order.eta}</strong>
-              <small>{orderStatusLabel[order.status]}</small>
-            </span>
-          </button>
-        ))}
+        {orders.length === 0 ? (
+          <p className="empty-state queue-empty">
+            {availability === "loading"
+              ? "Loading live orders"
+              : availability === "unavailable"
+                ? "Orders are unavailable from this source"
+                : "No orders are present in the selected source"}
+          </p>
+        ) : (
+          orders.map((order) => (
+            <button
+              className={`queue-item ${order.id === selectedOrderId ? "selected" : ""}`}
+              key={order.id}
+              onClick={() => onSelectOrder(order.id)}
+              type="button"
+            >
+              <span
+                className={`queue-status status-tone-${statusTone(order.status)}`}
+                aria-hidden="true"
+              />
+              <span className="queue-copy">
+                <strong>
+                  {order.shortId} <span>{order.customerName}</span>
+                </strong>
+                <small>
+                  {order.merchantName} · {order.destination}
+                </small>
+              </span>
+              <span className="queue-side">
+                <strong>{order.eta}</strong>
+                <small>{orderStatusLabel[order.status]}</small>
+              </span>
+            </button>
+          ))
+        )}
       </div>
       <button className="text-button" type="button">
         View all orders <ArrowUpRight size={14} />
@@ -680,4 +745,12 @@ function NavigationIcon() {
       <ArrowUpRight size={16} />
     </span>
   );
+}
+
+function formatFreshness(value: string): string {
+  if (!value) return "freshness pending";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? value
+    : `updated ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
 }

@@ -3,7 +3,7 @@ export const roles = ["operations", "strategy", "customer", "merchant", "courier
 export type Role = (typeof roles)[number];
 
 export type DataSourceMode = "live" | "demo" | "replay";
-export type DataAvailability = "ready" | "degraded" | "unavailable";
+export type DataAvailability = "loading" | "ready" | "degraded" | "unavailable";
 
 export type OrderStatus =
   | "CREATED"

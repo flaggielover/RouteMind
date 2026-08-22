@@ -244,6 +244,77 @@ button {
   margin: 0;
   padding: 24px 0;
 }
+.projection-state {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--amber);
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 12px 14px;
+}
+.projection-state strong {
+  color: var(--ink);
+  font-size: 12px;
+}
+.projection-state span {
+  color: var(--muted);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.projection-unavailable {
+  border-left-color: var(--red);
+}
+.operations-health {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  padding: 12px 14px;
+}
+.operations-health strong {
+  color: var(--ink);
+  display: block;
+  font-size: 12px;
+  margin-top: 3px;
+}
+.operations-health-items {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.health-freshness,
+.entity-freshness {
+  color: var(--muted);
+  font-size: 10px;
+}
+.entity-freshness {
+  display: block;
+  margin-top: 5px;
+}
+.exception-banner {
+  align-items: center;
+  background: #fff6e4;
+  border: 1px solid #ecd7ab;
+  color: #81530e;
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+}
+.exception-banner strong {
+  font-size: 11px;
+}
+.exception-banner span {
+  color: #76521b;
+  font-size: 10px;
+}
 .health-summary {
   gap: 8px;
   padding-left: 12px;
@@ -571,6 +642,19 @@ button {
   overflow: hidden;
   position: relative;
   isolation: isolate;
+}
+.map-state {
+  align-items: center;
+  background: rgb(255 255 255 / 88%);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  display: flex;
+  font-size: 11px;
+  inset: auto 16px 16px;
+  justify-content: center;
+  padding: 9px;
+  position: absolute;
+  text-align: center;
 }
 .map-grid {
   position: absolute;
@@ -1247,6 +1331,21 @@ button {
   .topbar-actions {
     gap: 8px;
     width: 100%;
+  }
+  .projection-state,
+  .operations-health {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .projection-state span {
+    white-space: normal;
+  }
+  .operations-health-items {
+    justify-content: flex-start;
+  }
+  .exception-banner {
+    align-items: flex-start;
+    flex-wrap: wrap;
   }
   .health-summary {
     border-left: 0;

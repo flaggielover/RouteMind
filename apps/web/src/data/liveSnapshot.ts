@@ -203,7 +203,10 @@ export async function loadLiveSnapshot(
 }
 
 export const liveDataSource: OperationsDataSource = {
-  getSnapshot: () => emptySnapshot("live", "Connecting to live services"),
+  getSnapshot: () => ({
+    ...emptySnapshot("live", "Loading Java durable snapshot and Python dispatch"),
+    availability: "loading",
+  }),
   loadSnapshot: () => loadLiveSnapshot(),
 };
 
