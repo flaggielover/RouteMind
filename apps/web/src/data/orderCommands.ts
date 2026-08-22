@@ -10,6 +10,7 @@ export interface CustomerOrderCommandSuccess {
 
 export interface CustomerOrderCommandFailure {
   kind: "error";
+  failureState: "conflict" | "validation" | "timeout" | "unavailable";
   code: string;
   status: number;
   traceId: string | null;
@@ -22,6 +23,36 @@ export type CustomerOrderCommandResult = CustomerOrderCommandSuccess | CustomerO
 export type CourierCommandSuccess = CustomerOrderCommandSuccess & { courierId: string };
 export type CourierCommandFailure = CustomerOrderCommandFailure;
 export type CourierCommandResult = CourierCommandSuccess | CourierCommandFailure;
+
+function failureState(status: number, code: string): CustomerOrderCommandFailure["failureState"] {
+  if (status === 408 || code === "command_timeout") return "timeout";
+  if (
+    status === 409 ||
+    code.includes("conflict") ||
+    code.includes("stale") ||
+    code.includes("reused")
+  )
+    return "conflict";
+  if (status >= 500 || status === 0 || code === "service_unavailable") return "unavailable";
+  return "validation";
+}
+
+function commandFailure(
+  status: number,
+  code: string,
+  traceId: string | null,
+  idempotencyKey: string,
+): CustomerOrderCommandFailure {
+  return {
+    kind: "error",
+    failureState: failureState(status, code),
+    code,
+    status,
+    traceId,
+    retryable: status >= 500 || status === 408 || status === 0,
+    idempotencyKey,
+  };
+}
 
 interface OrderCommandResponse {
   orderId?: string;
@@ -112,26 +143,14 @@ async function runCourierCommand(
         idempotencyKey: options.idempotencyKey,
       };
     }
-    return {
-      kind: "error",
-      code: typeof body.code === "string" ? body.code : `HTTP ${response.status}`,
-      status: response.status,
-      traceId: responseTraceId,
-      retryable: response.status >= 500 || response.status === 408,
-      idempotencyKey: options.idempotencyKey,
-    };
+    const code = typeof body.code === "string" ? body.code : `HTTP ${response.status}`;
+    return commandFailure(response.status, code, responseTraceId, options.idempotencyKey);
   } catch (error) {
-    return {
-      kind: "error",
-      code:
-        error instanceof DOMException && error.name === "AbortError"
-          ? "command_timeout"
-          : "service_unavailable",
-      status: 0,
-      traceId: null,
-      retryable: true,
-      idempotencyKey: options.idempotencyKey,
-    };
+    const code =
+      error instanceof DOMException && error.name === "AbortError"
+        ? "command_timeout"
+        : "service_unavailable";
+    return commandFailure(0, code, null, options.idempotencyKey);
   } finally {
     clearTimeout(timeout);
   }
@@ -174,27 +193,14 @@ export async function createCustomerOrder(
         idempotencyKey,
       };
     }
-    const retryable = response.status >= 500 || response.status === 408;
-    return {
-      kind: "error",
-      code: typeof body.code === "string" ? body.code : `HTTP ${response.status}`,
-      status: response.status,
-      traceId: responseTraceId,
-      retryable,
-      idempotencyKey,
-    };
+    const code = typeof body.code === "string" ? body.code : `HTTP ${response.status}`;
+    return commandFailure(response.status, code, responseTraceId, idempotencyKey);
   } catch (error) {
-    return {
-      kind: "error",
-      code:
-        error instanceof DOMException && error.name === "AbortError"
-          ? "command_timeout"
-          : "service_unavailable",
-      status: 0,
-      traceId: null,
-      retryable: true,
-      idempotencyKey,
-    };
+    const code =
+      error instanceof DOMException && error.name === "AbortError"
+        ? "command_timeout"
+        : "service_unavailable";
+    return commandFailure(0, code, null, idempotencyKey);
   } finally {
     clearTimeout(timeout);
   }
@@ -241,26 +247,14 @@ export async function transitionMerchantOrder(options: {
         idempotencyKey,
       };
     }
-    return {
-      kind: "error",
-      code: typeof body.code === "string" ? body.code : `HTTP ${response.status}`,
-      status: response.status,
-      traceId: responseTraceId,
-      retryable: response.status >= 500 || response.status === 408,
-      idempotencyKey,
-    };
+    const code = typeof body.code === "string" ? body.code : `HTTP ${response.status}`;
+    return commandFailure(response.status, code, responseTraceId, idempotencyKey);
   } catch (error) {
-    return {
-      kind: "error",
-      code:
-        error instanceof DOMException && error.name === "AbortError"
-          ? "command_timeout"
-          : "service_unavailable",
-      status: 0,
-      traceId: null,
-      retryable: true,
-      idempotencyKey,
-    };
+    const code =
+      error instanceof DOMException && error.name === "AbortError"
+        ? "command_timeout"
+        : "service_unavailable";
+    return commandFailure(0, code, null, idempotencyKey);
   } finally {
     clearTimeout(timeout);
   }
@@ -320,26 +314,14 @@ async function transitionOrderAsCourier(
         idempotencyKey,
       };
     }
-    return {
-      kind: "error",
-      code: typeof body.code === "string" ? body.code : `HTTP ${response.status}`,
-      status: response.status,
-      traceId: responseTraceId,
-      retryable: response.status >= 500 || response.status === 408,
-      idempotencyKey,
-    };
+    const code = typeof body.code === "string" ? body.code : `HTTP ${response.status}`;
+    return commandFailure(response.status, code, responseTraceId, idempotencyKey);
   } catch (error) {
-    return {
-      kind: "error",
-      code:
-        error instanceof DOMException && error.name === "AbortError"
-          ? "command_timeout"
-          : "service_unavailable",
-      status: 0,
-      traceId: null,
-      retryable: true,
-      idempotencyKey,
-    };
+    const code =
+      error instanceof DOMException && error.name === "AbortError"
+        ? "command_timeout"
+        : "service_unavailable";
+    return commandFailure(0, code, null, idempotencyKey);
   } finally {
     clearTimeout(timeout);
   }

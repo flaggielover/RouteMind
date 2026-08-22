@@ -162,4 +162,25 @@ describe("role-aware application", () => {
     ).toBeInTheDocument();
     expect(screen.getAllByText("Select a verified replay artifact").length).toBeGreaterThan(0);
   });
+
+  it("disables role writes and explains degraded live state", async () => {
+    const user = userEvent.setup();
+    const degradedSource = {
+      getSnapshot: () => ({
+        ...demoDataSource.getSnapshot(),
+        source: "live" as const,
+        availability: "degraded" as const,
+        sourceDetail: "Live data is degraded; courier location is stale",
+      }),
+    };
+    render(
+      <App dataSource={degradedSource} healthProbe={vi.fn().mockResolvedValue(healthyServices)} />,
+    );
+    await user.click(screen.getByRole("link", { name: /Customer/ }));
+
+    expect(screen.getByRole("button", { name: "Create order" })).toBeDisabled();
+    expect(
+      screen.getByText("Live data is degraded; commands are temporarily unavailable."),
+    ).toBeInTheDocument();
+  });
 });

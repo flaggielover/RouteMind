@@ -759,7 +759,7 @@ function CustomerView({
   const order = snapshot.orders[0];
   const [command, setCommand] = useState<CustomerCommandState>(null);
   const [idempotencyKey, setIdempotencyKey] = useState(createIdempotencyKey);
-  const commandAvailable = snapshot.source === "live" && snapshot.availability !== "loading";
+  const commandAvailable = snapshot.source === "live" && snapshot.availability === "ready";
   const trackingStatus =
     realtime.status === "connected"
       ? "healthy"
@@ -866,7 +866,9 @@ function CustomerView({
             {!commandAvailable && (
               <p className="command-note" role="status">
                 {snapshot.source === "live"
-                  ? "Waiting for the live Java snapshot."
+                  ? snapshot.availability === "degraded"
+                    ? "Live data is degraded; commands are temporarily unavailable."
+                    : "Waiting for the live Java snapshot."
                   : "Writing is disabled for demo and replay sources."}
               </p>
             )}
@@ -887,9 +889,11 @@ function CustomerView({
               <div className="command-result command-error" role="alert">
                 <strong>Command not accepted: {command.code}</strong>
                 <span>
-                  {command.retryable
+                  {command.failureState === "unavailable" || command.failureState === "timeout"
                     ? "The same idempotency key can be retried."
-                    : "Resolve the validation or conflict before retrying."}
+                    : command.failureState === "conflict"
+                      ? "Refresh the order before retrying this stale command."
+                      : "Resolve the validation before retrying."}
                 </span>
                 <small>
                   Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
@@ -918,7 +922,7 @@ function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
           ? { target: "READY_FOR_PICKUP" as const, label: "Mark ready" }
           : null
     : null;
-  const commandAvailable = snapshot.source === "live" && snapshot.availability !== "loading";
+  const commandAvailable = snapshot.source === "live" && snapshot.availability === "ready";
   const ordersInPrep = snapshot.orders.filter(
     (candidate) => candidate.status === "PREPARING",
   ).length;
@@ -1027,7 +1031,9 @@ function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
           {!commandAvailable && (
             <p className="command-note" role="status">
               {snapshot.source === "live"
-                ? "Waiting for the live Java snapshot."
+                ? snapshot.availability === "degraded"
+                  ? "Live data is degraded; commands are temporarily unavailable."
+                  : "Waiting for the live Java snapshot."
                 : "Writing is disabled for demo and replay sources."}
             </p>
           )}
@@ -1048,9 +1054,11 @@ function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
             <div className="command-result command-error" role="alert">
               <strong>Command not accepted: {command.code}</strong>
               <span>
-                {command.retryable
+                {command.failureState === "unavailable" || command.failureState === "timeout"
                   ? "The same idempotency key can be retried."
-                  : "Resolve the validation or conflict before retrying."}
+                  : command.failureState === "conflict"
+                    ? "Refresh the order before retrying this stale command."
+                    : "Resolve the validation before retrying."}
               </span>
               <small>
                 Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
@@ -1097,6 +1105,7 @@ function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
     if (expectedVersion === undefined) {
       setCommand({
         kind: "error",
+        failureState: "validation",
         code: "version_unavailable",
         status: 0,
         traceId: null,
@@ -1232,7 +1241,9 @@ function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
           {!commandAvailable && (
             <p className="command-note" role="status">
               {snapshot.source === "live"
-                ? "Waiting for the live Java snapshot."
+                ? snapshot.availability === "degraded"
+                  ? "Live data is degraded; commands are temporarily unavailable."
+                  : "Waiting for the live Java snapshot."
                 : "Writing is disabled for demo and replay sources."}
             </p>
           )}

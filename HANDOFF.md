@@ -367,12 +367,20 @@ that drives accept, start preparation, and mark ready commands with idempotency,
 expected versions, traces, and explicit degradation. Local full gate passed with
 Java 59 tests, Python 59 tests at 96.13% coverage, Web 31 unit tests/build, 16
 Playwright tests, and 5 schemas/15 fixtures. RM-122 courier shift and delivery
-workflow is now passed locally and awaiting remote Actions validation.
+workflow passed local and remote validation in Actions run `32573723273` (all five
+jobs green).
 RM-122 adds durable courier shift state, courier location commands with idempotent
 outbox events, optional `ACCEPTED` and `ARRIVED` order audit states, courier order
 commands through delivery completion, and explicit live/degraded projection state.
 Local full gate passed with Java 60 tests, Python 59 tests at 96.13% coverage, Web
 34 unit tests/build, 16 Playwright tests, and 5 schemas/15 fixtures. Evidence is
-recorded at `evidence/gates/RM-122/courier-workflow.md`; checkpoint is awaiting
-remote Actions validation. RM-123 role command error/degradation handling is now
-the active task.
+recorded at `evidence/gates/RM-122/courier-workflow.md`; remote Actions run
+`32573723273` passed all five jobs. RM-123 role command error/degradation handling
+is now the active task.
+RM-123 role command adapters classify failures as conflict, validation, timeout, or
+unavailable while preserving the original idempotency key and trace context; live
+degraded snapshots disable writes with an explicit reason. Local full gate passed
+with Java 60 tests, Python 59 tests at 96.13% coverage, Web 36 unit tests/build, 16
+Playwright tests, and 5 schemas/15 fixtures. Evidence is recorded at
+`evidence/gates/RM-123/role-degraded-states.md`; checkpoint is awaiting remote
+Actions validation. RM-124 mobile role workflow closure is now the active task.

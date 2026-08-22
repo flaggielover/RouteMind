@@ -58,6 +58,7 @@ describe("customer order command boundary", () => {
 
     expect(result).toEqual({
       kind: "error",
+      failureState: "conflict",
       code: "idempotency_key_reused",
       status: 409,
       traceId: "trace-conflict",
@@ -131,5 +132,38 @@ describe("customer order command boundary", () => {
     expect(requests[2].body).toBe(
       JSON.stringify({ latitude: 31.2, longitude: 121.5, observedAt: "2026-08-22T12:00:00Z" }),
     );
+  });
+
+  it("classifies timeout and unavailable failures without losing the retry key", async () => {
+    const timeout = await createCustomerOrder({
+      idempotencyKey: "customer-timeout-fixed",
+      fetchImpl: async () => {
+        const error = new DOMException("timed out", "AbortError");
+        throw error;
+      },
+    });
+    const unavailable = await transitionMerchantOrder({
+      orderId: "order-1",
+      target: "PREPARING",
+      expectedVersion: 1,
+      idempotencyKey: "merchant-unavailable-fixed",
+      fetchImpl: async () => {
+        return response({ code: "service_unavailable" }, 503, "trace-unavailable");
+      },
+    });
+
+    expect(timeout).toMatchObject({
+      kind: "error",
+      failureState: "timeout",
+      retryable: true,
+      idempotencyKey: "customer-timeout-fixed",
+    });
+    expect(unavailable).toMatchObject({
+      kind: "error",
+      failureState: "unavailable",
+      retryable: true,
+      idempotencyKey: "merchant-unavailable-fixed",
+      traceId: "trace-unavailable",
+    });
   });
 });

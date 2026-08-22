@@ -594,12 +594,12 @@
       "phase": "P12",
       "priority": "high",
       "depends_on": ["RM-120", "RM-121", "RM-122"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Every role command has pending, success, conflict, validation, timeout, and unavailable states", "Retry behavior preserves idempotency keys and trace context", "No command silently succeeds when the service is unavailable"],
       "gates": ["L2-role-errors", "L5-role-degradation"],
       "evidence": ["evidence/gates/RM-123/role-degraded-states.md"],
       "blocked_by": [],
-      "notes": "The UI must distinguish live, degraded, demo, and unavailable."
+      "notes": "The UI distinguishes live, degraded, demo, and unavailable. Local L2/L5, full, and browser evidence is recorded; remote CI validation is required for the checkpoint."
     },
     {
       "id": "RM-124",
