@@ -716,7 +716,7 @@
       "gates": ["L1-travel-contract", "L2-dynamic-travel"],
       "evidence": ["evidence/gates/RM-140/dynamic-travel.md"],
       "blocked_by": [],
-      "notes": "No real traffic claim without a live provider. Dynamic time and traffic context are now the active contract focus."
+      "notes": "Local L1/L2 dynamic travel evidence passes with deterministic context and fallback metadata; remote Actions validation is required before closure. No real traffic claim without a live provider."
     },
     {
       "id": "RM-141",

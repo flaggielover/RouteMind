@@ -10,11 +10,11 @@ Current Task: RM-140 - Define dynamic travel model contract
 
 Last Completed: RM-132 - Implement minimum-cost flow and partitioned assignment
 
-Current Gate: RM-132 local/full/CI gates passed in run 32576849657; RM-140 dynamic travel model contract is in progress
+Current Gate: RM-140 local/full gates passed; checkpoint is awaiting remote CI validation
 
-CI: PASS - RM-132 run 32576849657; all five jobs passed. RM-131 run 32576213676 also passed all five jobs.
+CI: PASS - RM-132 run 32577050589; all five jobs passed. RM-131 run 32576213676 also passed all five jobs.
 
-Regression: PASS - Java 60, Python 74 / 96.03%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 76 / 95.80%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
