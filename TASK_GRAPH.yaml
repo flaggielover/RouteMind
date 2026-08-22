@@ -251,6 +251,19 @@
       "notes": "This task does not claim staged traffic release or automatic rollback."
     },
     {
+      "id": "RM-082",
+      "title": "Establish repository security and supply-chain hygiene gate",
+      "phase": "P8",
+      "priority": "high",
+      "depends_on": ["RM-005", "RM-080"],
+      "status": "in_progress",
+      "acceptance": ["Tracked secret and sensitive-file isolation is executable", "Dependency lockfile, workflow permission, and Compose image/loopback hygiene are checked", "Gate limits and non-claims are documented without pretending to be production security validation"],
+      "gates": ["L1-security", "security-review", "L5-secret-isolation"],
+      "evidence": [],
+      "blocked_by": [],
+      "notes": "Static local gate; vulnerability freshness and production identity remain separate capabilities."
+    },
+    {
       "id": "RM-090",
       "title": "Implement RouteBench and research lineage core",
       "phase": "P9",
