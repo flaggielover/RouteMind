@@ -96,6 +96,25 @@ describe("role-aware application", () => {
     expect(within(alerts).getByText("Unavailable from source")).toBeInTheDocument();
   });
 
+  it("shows customer lifecycle freshness and keeps demo writes disabled", async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    await user.click(screen.getByRole("link", { name: /Customer/ }));
+
+    expect(
+      await screen.findByRole("heading", { name: "Your delivery, clearly explained." }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("Version unknown · Deterministic fixture for offline demonstration"),
+    ).toBeInTheDocument();
+    const createOrder = screen.getByRole("button", { name: "Create order" });
+    expect(createOrder).toBeDisabled();
+    expect(
+      screen.getByText("Writing is disabled for demo and replay sources."),
+    ).toBeInTheDocument();
+  });
+
   it("keeps live failure explicit while switching through demo and replay modes", async () => {
     const user = userEvent.setup();
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));

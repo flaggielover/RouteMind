@@ -109,6 +109,29 @@ describe("browser realtime cursor and reconnect boundary", () => {
     expect(regression.orders.find((order) => order.id === "order-2042")?.status).toBe("DELIVERED");
   });
 
+  it("adds a newly created order when the live snapshot was empty", () => {
+    const snapshot = {
+      ...demoDataSource.getSnapshot(),
+      orders: [],
+    };
+    const created = applyRealtimeItem(snapshot, {
+      ...item("1", "event-created"),
+      event: {
+        ...item("1").event,
+        eventType: "order.created",
+        aggregateId: "order-new",
+        payload: { orderId: "order-new", status: "CREATED" },
+      },
+    });
+
+    expect(created.orders).toHaveLength(1);
+    expect(created.orders[0]).toMatchObject({
+      id: "order-new",
+      status: "CREATED",
+      version: 1,
+    });
+  });
+
   it("reconnects with the last cursor using bounded backoff", () => {
     const sources: FakeEventSource[] = [];
     const urls: string[] = [];

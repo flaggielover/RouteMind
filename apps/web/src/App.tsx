@@ -20,6 +20,11 @@ import { demoDataSource } from "./data/demoSnapshot";
 import { probeServices } from "./data/health";
 import { liveDataSource, replayDataSource } from "./data/liveSnapshot";
 import {
+  createCustomerOrder,
+  createIdempotencyKey,
+  type CustomerOrderCommandResult,
+} from "./data/orderCommands";
+import {
   applyRealtimeItem,
   createRealtimeStream,
   type RealtimeConnectionState,
@@ -166,7 +171,10 @@ export function AppRoutes({
         element={<OperationsView snapshot={snapshot} realtime={realtime} health={health} />}
       />
       <RouterRoute path="/strategy" element={<StrategyView snapshot={snapshot} />} />
-      <RouterRoute path="/customer" element={<CustomerView snapshot={snapshot} />} />
+      <RouterRoute
+        path="/customer"
+        element={<CustomerView snapshot={snapshot} realtime={realtime} />}
+      />
       <RouterRoute path="/merchant" element={<MerchantView snapshot={snapshot} />} />
       <RouterRoute path="/courier" element={<CourierView snapshot={snapshot} />} />
       <RouterRoute path="*" element={<Navigate to="/operations" replace />} />
@@ -730,8 +738,41 @@ function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
   );
 }
 
-function CustomerView({ snapshot }: { snapshot: OperationsSnapshot }) {
+type CustomerCommandState =
+  { kind: "pending"; idempotencyKey: string } | CustomerOrderCommandResult | null;
+
+function CustomerView({
+  snapshot,
+  realtime,
+}: {
+  snapshot: OperationsSnapshot;
+  realtime: RealtimeConnectionState;
+}) {
   const order = snapshot.orders[0];
+  const [command, setCommand] = useState<CustomerCommandState>(null);
+  const [idempotencyKey, setIdempotencyKey] = useState(createIdempotencyKey);
+  const commandAvailable = snapshot.source === "live" && snapshot.availability !== "loading";
+  const trackingStatus =
+    realtime.status === "connected"
+      ? "healthy"
+      : realtime.status === "disabled"
+        ? "checking"
+        : "unavailable";
+  const trackingLabel =
+    realtime.status === "connected"
+      ? "Live tracking"
+      : realtime.status === "disabled"
+        ? "Tracking paused"
+        : "Tracking degraded";
+
+  const submitOrder = async () => {
+    if (!commandAvailable || command?.kind === "pending") return;
+    setCommand({ kind: "pending", idempotencyKey });
+    const result = await createCustomerOrder({ idempotencyKey });
+    setCommand(result);
+    if (result.kind === "success") setIdempotencyKey(createIdempotencyKey());
+  };
+
   return (
     <RolePage
       eyebrow="Customer / order tracking"
@@ -750,7 +791,16 @@ function CustomerView({ snapshot }: { snapshot: OperationsSnapshot }) {
                   <p className="eyebrow">Order {order.shortId}</p>
                   <h2>{order.merchantName}</h2>
                 </div>
-                <StatusPill status="healthy" label="Delivered" />
+                <StatusPill
+                  status={
+                    order.status === "DELIVERED"
+                      ? "healthy"
+                      : order.status === "OUT_FOR_DELIVERY"
+                        ? "busy"
+                        : "checking"
+                  }
+                  label={orderStatusLabel[order.status]}
+                />
               </div>
               <div className="customer-destination">
                 <MapPinIcon />
@@ -760,6 +810,12 @@ function CustomerView({ snapshot }: { snapshot: OperationsSnapshot }) {
                 </div>
               </div>
               <LifecycleTimeline order={order} />
+              <div className="customer-tracking-meta">
+                <StatusPill status={trackingStatus} label={trackingLabel} />
+                <span>
+                  Version {order.version ?? "unknown"} · {snapshot.sourceDetail}
+                </span>
+              </div>
             </>
           )}
         </section>
@@ -778,9 +834,61 @@ function CustomerView({ snapshot }: { snapshot: OperationsSnapshot }) {
               <p>Thanks for using RouteMind.</p>
             </div>
           </div>
-          <button className="button button-secondary" type="button">
-            <RefreshCw size={15} /> Get help
-          </button>
+          <div className="customer-command" aria-label="Create customer order">
+            <div className="panel-heading">
+              <div>
+                <p className="eyebrow">Java command</p>
+                <h2>Start a new order</h2>
+              </div>
+              <RefreshCw size={18} className="heading-icon" />
+            </div>
+            <p className="panel-copy">
+              Creates durable order state through the customer command boundary. The same
+              idempotency key is kept for a retry.
+            </p>
+            <button
+              className="button button-primary"
+              type="button"
+              disabled={!commandAvailable || command?.kind === "pending"}
+              onClick={() => void submitOrder()}
+            >
+              <RefreshCw size={15} className={command?.kind === "pending" ? "spin" : undefined} />
+              {command?.kind === "pending" ? "Submitting..." : "Create order"}
+            </button>
+            {!commandAvailable && (
+              <p className="command-note" role="status">
+                {snapshot.source === "live"
+                  ? "Waiting for the live Java snapshot."
+                  : "Writing is disabled for demo and replay sources."}
+              </p>
+            )}
+            {command?.kind === "success" && (
+              <div className="command-result" role="status">
+                <strong>
+                  {command.replayed ? "Idempotent replay acknowledged" : "Order created"}
+                </strong>
+                <span>
+                  {command.orderId} · {command.status} · version {command.version}
+                </span>
+                <small>
+                  Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+                </small>
+              </div>
+            )}
+            {command?.kind === "error" && (
+              <div className="command-result command-error" role="alert">
+                <strong>Command not accepted: {command.code}</strong>
+                <span>
+                  {command.retryable
+                    ? "The same idempotency key can be retried."
+                    : "Resolve the validation or conflict before retrying."}
+                </span>
+                <small>
+                  Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+                </small>
+              </div>
+            )}
+          </div>
         </section>
       </section>
     </RolePage>

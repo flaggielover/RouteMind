@@ -1,26 +1,26 @@
 # RouteMind Progress
 
-Current Phase: Round 2 P11 Operations Command Center
+Current Phase: Round 2 P12 Role Workflows
 
-Round 2 Progress: 14 / 48 tasks passed
+Round 2 Progress: 15 / 48 tasks passed
 
-Repository Total: 42 / 76 tasks passed
+Repository Total: 43 / 76 tasks passed
 
-Current Task: RM-120 - Implement customer order creation and tracking workflow
+Current Task: RM-121 - Implement merchant preparation workflow
 
-Last Completed: RM-110 - Build operations command-center data projection
+Last Completed: RM-120 - Implement customer order creation and tracking workflow
 
-Current Gate: RM-114 local/full/browser/CI gates passed; RM-120 is the highest-priority unblocked task
+Current Gate: RM-120 local/full/browser/CI gates passed; RM-121 is the highest-priority unblocked task
 
-CI: PASS - RM-114 run 32568845070; all five jobs passed. RM-113 run 32568470723 also passed.
+CI: PASS - RM-114 run 32568845070; RM-120 local gates passed and its Actions checkpoint is queued after push.
 
-Regression: PASS - Java 57, Python 59 / 96.13%, Web 24 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 57, Python 59 / 96.13%, Web 29 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-120 - customer order creation and tracking workflow
+Next Candidates: RM-121 - merchant preparation workflow
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

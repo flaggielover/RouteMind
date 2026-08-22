@@ -1254,6 +1254,57 @@ button {
   color: var(--ink);
   font-size: 12px;
 }
+.customer-tracking-meta {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 10px;
+  gap: 9px;
+  margin-top: 16px;
+  padding-top: 12px;
+}
+.customer-command {
+  border-top: 1px solid var(--line);
+  margin-top: 18px;
+  padding-top: 18px;
+}
+.customer-command .panel-heading {
+  margin-bottom: 8px;
+}
+.customer-command .panel-copy {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+}
+.customer-command .button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.command-note,
+.command-result {
+  background: var(--surface-muted);
+  border-left: 3px solid var(--cyan);
+  color: var(--muted);
+  display: grid;
+  font-size: 10px;
+  gap: 4px;
+  line-height: 1.4;
+  margin: 12px 0 0;
+  padding: 9px 10px;
+}
+.command-result strong {
+  color: var(--ink);
+  font-size: 11px;
+}
+.command-result small {
+  overflow-wrap: anywhere;
+}
+.command-error {
+  border-left-color: var(--red);
+}
 .inline-icon {
   align-items: center;
   background: #e0f1f2;

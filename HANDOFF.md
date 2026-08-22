@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Round 2 P11 Operations Command Center
+Current Phase: Round 2 P12 Role Workflows
 
-Current Task: RM-120 - Implement customer order creation and tracking workflow
+Current Task: RM-121 - Implement merchant preparation workflow
 
-Task Status: in_progress (RM-120 customer order creation and tracking workflow)
+Task Status: passed (RM-120 customer order creation and tracking workflow); RM-121 is next
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -351,3 +351,10 @@ tests at 96.13% coverage, and 5 schemas/15 fixtures. Checkpoint is awaiting Acti
 validation.
 Checkpoint `550f2a2` and Actions run `32568845070` passed all five jobs. RM-114 is
 now passed; continue with RM-120.
+RM-120 connects the customer role to the Java-owned durable order command path,
+including idempotency, validation/conflict/timeout states, trace metadata, and
+explicit demo/replay write protection. Realtime `order.created` events now add
+orders to an empty live projection and forward lifecycle events retain versions.
+Local full gate passed with Java 57 tests, Python 59 tests at 96.13% coverage,
+Web 29 unit tests and build, 16 Playwright tests, and 5 schemas/15 fixtures.
+Checkpoint is awaiting Actions validation. Next task is RM-121 merchant preparation.

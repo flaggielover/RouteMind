@@ -82,6 +82,7 @@ class BusinessApiApplicationTests {
 				.header("Idempotency-Key", "create-1")
 				.header("X-Actor", "customer"))
 				.andExpect(status().isCreated())
+				.andExpect(header().exists("X-Trace-Id"))
 				.andExpect(jsonPath("$.status").value("CREATED"))
 				.andExpect(jsonPath("$.replayed").value(false))
 				.andReturn().getResponse().getContentAsString();

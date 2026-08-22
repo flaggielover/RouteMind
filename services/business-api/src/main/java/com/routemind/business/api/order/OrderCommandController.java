@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @RestController
 @RequestMapping("/api/v1/orders")
+@CrossOrigin(origins = { "http://localhost:4173", "http://127.0.0.1:4173" })
 public final class OrderCommandController {
 
 	private static final Pattern TRACE_ID = Pattern.compile("[0-9a-f]{32}");

@@ -171,6 +171,33 @@ export function applyRealtimeItem(
       ],
     };
   });
+  if (
+    item.event.eventType === "order.created" &&
+    orderId &&
+    !orders.some((order) => order.id === orderId)
+  ) {
+    orders.push({
+      id: orderId,
+      shortId: orderId.slice(0, 8).toUpperCase(),
+      customerName: "Customer",
+      merchantName: "Pending merchant",
+      status,
+      eta: "Pending",
+      age: "live",
+      priority: "standard",
+      destination: "Durable order state",
+      route: [],
+      version: item.event.aggregateVersion,
+      events: [
+        {
+          status,
+          label: status.replaceAll("_", " "),
+          at: item.event.occurredAt,
+          completed: true,
+        },
+      ],
+    });
+  }
   return {
     ...snapshot,
     orders,

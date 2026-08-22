@@ -555,7 +555,7 @@
       "phase": "P12",
       "priority": "critical",
       "depends_on": ["RM-102", "RM-104", "RM-107"],
-      "status": "pending",
+      "status": "passed",
       "acceptance": ["Customer can create an order through a real Java command path", "Validation, idempotency, lifecycle, and trace are visible", "Tracking updates from live events and handles degraded service"],
       "gates": ["L3-customer-api", "L4-customer-golden-path"],
       "evidence": ["evidence/gates/RM-120/customer-workflow.md"],
