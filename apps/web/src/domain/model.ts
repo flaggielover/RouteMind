@@ -11,6 +11,8 @@ export type OrderStatus =
   | "PREPARING"
   | "READY_FOR_PICKUP"
   | "ASSIGNED"
+  | "ACCEPTED"
+  | "ARRIVED"
   | "PICKED_UP"
   | "OUT_FOR_DELIVERY"
   | "DELIVERED";

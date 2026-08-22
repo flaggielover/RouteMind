@@ -132,6 +132,39 @@ describe("browser realtime cursor and reconnect boundary", () => {
     });
   });
 
+  it("projects courier location and shift events with explicit degradation", () => {
+    const snapshot = demoDataSource.getSnapshot();
+    const location = applyRealtimeItem(snapshot, {
+      ...item("1", "courier-location"),
+      event: {
+        ...item("1").event,
+        eventType: "courier.location.updated",
+        aggregateId: "courier-17",
+        payload: {
+          courierId: "courier-17",
+          latitude: 31.2,
+          longitude: 121.5,
+          projectionStatus: "DEGRADED",
+        },
+      },
+    });
+    expect(location.couriers.find((courier) => courier.id === "courier-17")).toMatchObject({
+      status: "offline",
+      position: { x: 121.5, y: 31.2 },
+    });
+    expect(location.availability).toBe("degraded");
+    const shift = applyRealtimeItem(location, {
+      ...item("2", "courier-shift"),
+      event: {
+        ...item("2").event,
+        eventType: "courier.shift.changed",
+        aggregateId: "courier-17",
+        payload: { courierId: "courier-17", status: "ONLINE" },
+      },
+    });
+    expect(shift.couriers.find((courier) => courier.id === "courier-17")?.status).toBe("available");
+  });
+
   it("reconnects with the last cursor using bounded backoff", () => {
     const sources: FakeEventSource[] = [];
     const urls: string[] = [];

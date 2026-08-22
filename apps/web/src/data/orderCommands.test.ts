@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   createCustomerOrder,
   createIdempotencyKey,
+  recordCourierLocation,
+  transitionCourierOrder,
+  transitionCourierShift,
   transitionMerchantOrder,
 } from "./orderCommands";
 
@@ -86,5 +89,47 @@ describe("customer order command boundary", () => {
     expect(request?.method).toBe("POST");
     expect(new Headers(request?.headers).get("X-Actor")).toBe("merchant");
     expect(request?.body).toBe(JSON.stringify({ target: "READY_FOR_PICKUP", expectedVersion: 2 }));
+  });
+
+  it("sends courier lifecycle and shift commands with stable actor boundaries", async () => {
+    const requests: RequestInit[] = [];
+    const fetchImpl = async (url: string | URL | Request, init?: RequestInit) => {
+      requests.push(init ?? {});
+      return String(url).includes("/orders/")
+        ? response({ orderId: "order-1", status: "ACCEPTED", version: 3, replayed: false }, 200)
+        : response({ courierId: "courier-1", status: "ONLINE", version: 1, replayed: false }, 200);
+    };
+    const order = await transitionCourierOrder({
+      orderId: "order-1",
+      target: "ACCEPTED",
+      expectedVersion: 2,
+      fetchImpl,
+      idempotencyKey: "courier-accept-fixed",
+    });
+    const shift = await transitionCourierShift({
+      courierId: "courier-1",
+      target: "ONLINE",
+      expectedVersion: 0,
+      fetchImpl,
+      idempotencyKey: "courier-online-fixed",
+    });
+    const location = await recordCourierLocation({
+      courierId: "courier-1",
+      latitude: 31.2,
+      longitude: 121.5,
+      observedAt: "2026-08-22T12:00:00Z",
+      fetchImpl,
+      idempotencyKey: "courier-location-fixed",
+    });
+
+    expect(order.kind).toBe("success");
+    expect(shift.kind).toBe("success");
+    expect(location.kind).toBe("success");
+    expect(new Headers(requests[0].headers).get("X-Actor")).toBe("courier");
+    expect(requests[0].body).toBe(JSON.stringify({ target: "ACCEPTED", expectedVersion: 2 }));
+    expect(requests[1].body).toBe(JSON.stringify({ target: "ONLINE", expectedVersion: 0 }));
+    expect(requests[2].body).toBe(
+      JSON.stringify({ latitude: 31.2, longitude: 121.5, observedAt: "2026-08-22T12:00:00Z" }),
+    );
   });
 });

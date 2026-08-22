@@ -6,6 +6,8 @@ export const orderStatusLabel: Record<OrderStatus, string> = {
   PREPARING: "Preparing",
   READY_FOR_PICKUP: "Ready for pickup",
   ASSIGNED: "Assigned",
+  ACCEPTED: "Assignment accepted",
+  ARRIVED: "Arrived at merchant",
   PICKED_UP: "Picked up",
   OUT_FOR_DELIVERY: "Out for delivery",
   DELIVERED: "Delivered",
@@ -27,7 +29,13 @@ export function countOpenExceptions(snapshot: OperationsSnapshot): number {
 
 export function statusTone(status: OrderStatus): "neutral" | "info" | "warning" | "success" {
   if (status === "DELIVERED") return "success";
-  if (status === "OUT_FOR_DELIVERY" || status === "PICKED_UP") return "info";
+  if (
+    status === "OUT_FOR_DELIVERY" ||
+    status === "PICKED_UP" ||
+    status === "ACCEPTED" ||
+    status === "ARRIVED"
+  )
+    return "info";
   if (status === "PREPARING" || status === "READY_FOR_PICKUP") return "warning";
   return "neutral";
 }

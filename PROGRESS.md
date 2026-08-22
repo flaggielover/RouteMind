@@ -2,25 +2,25 @@
 
 Current Phase: Round 2 P12 Role Workflows
 
-Round 2 Progress: 16 / 48 tasks passed
+Round 2 Progress: 17 / 48 tasks passed
 
-Repository Total: 44 / 76 tasks passed
+Repository Total: 45 / 76 tasks passed
 
-Current Task: RM-122 - Implement courier shift and delivery workflow
+Current Task: RM-123 - Implement role command errors and degraded states
 
-Last Completed: RM-121 - Implement merchant preparation workflow
+Last Completed: RM-122 - Implement courier shift and delivery workflow
 
-Current Gate: RM-121 local/full/browser/CI gates passed in run 32572069719; RM-122 is in progress
+Current Gate: RM-122 local/full/browser gates passed; checkpoint is awaiting remote CI validation
 
-CI: PASS - RM-121 run 32572069719; all five jobs passed. RM-120 run 32569640180 also passed.
+CI: PASS - RM-121 run 32572069719; all five jobs passed. RM-122 remote run is pending after push.
 
-Regression: PASS - Java 59, Python 59 / 96.13%, Web 31 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 59 / 96.13%, Web 34 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-122 - courier shift and delivery workflow
+Next Candidates: RM-123 - implement role command errors and degraded states
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

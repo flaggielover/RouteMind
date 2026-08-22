@@ -1361,6 +1361,13 @@ button {
   color: var(--muted);
   font-size: 10px;
 }
+
+.courier-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
 .merchant-row {
   align-items: center;
   border-bottom: 1px solid var(--line);

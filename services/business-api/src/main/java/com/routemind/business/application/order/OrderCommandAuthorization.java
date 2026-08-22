@@ -21,7 +21,12 @@ final class OrderCommandAuthorization {
 			case READY_FOR_PICKUP -> "merchant".equals(actor) && current == OrderStatus.PREPARING;
 			case ASSIGNED -> "dispatch".equals(actor)
 					&& (current == OrderStatus.CONFIRMED || current == OrderStatus.READY_FOR_PICKUP);
-			case PICKED_UP -> "courier".equals(actor) && current == OrderStatus.ASSIGNED;
+			case ACCEPTED -> "courier".equals(actor) && current == OrderStatus.ASSIGNED;
+			case ARRIVED -> "courier".equals(actor)
+					&& (current == OrderStatus.ASSIGNED || current == OrderStatus.ACCEPTED);
+			case PICKED_UP -> "courier".equals(actor)
+					&& (current == OrderStatus.ASSIGNED || current == OrderStatus.ACCEPTED
+							|| current == OrderStatus.ARRIVED);
 			case DELIVERED -> "courier".equals(actor) && current == OrderStatus.PICKED_UP;
 		case CANCELLED -> ("customer".equals(actor) || "merchant".equals(actor)
 					|| "dispatch".equals(actor)) && current != OrderStatus.DELIVERED;

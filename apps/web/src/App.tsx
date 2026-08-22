@@ -22,7 +22,11 @@ import { liveDataSource, replayDataSource } from "./data/liveSnapshot";
 import {
   createCustomerOrder,
   createIdempotencyKey,
+  recordCourierLocation,
+  transitionCourierOrder,
+  transitionCourierShift,
   transitionMerchantOrder,
+  type CourierCommandResult,
   type CustomerOrderCommandResult,
 } from "./data/orderCommands";
 import {
@@ -742,6 +746,9 @@ function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
 type CustomerCommandState =
   { kind: "pending"; idempotencyKey: string } | CustomerOrderCommandResult | null;
 
+type CourierCommandState =
+  { kind: "pending"; idempotencyKey: string } | CourierCommandResult | null;
+
 function CustomerView({
   snapshot,
   realtime,
@@ -1058,7 +1065,88 @@ function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
 
 function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
   const courier = snapshot.couriers[0];
-  const order = snapshot.orders[1];
+  const [command, setCommand] = useState<CustomerCommandState>(null);
+  const [shiftCommand, setShiftCommand] = useState<CourierCommandState>(null);
+  const [locationCommand, setLocationCommand] = useState<CourierCommandState>(null);
+  const [localShift, setLocalShift] = useState<"ONLINE" | "OFFLINE" | null>(null);
+  const [shiftVersion, setShiftVersion] = useState(0);
+  const order =
+    snapshot.orders.find((candidate) =>
+      ["ASSIGNED", "ACCEPTED", "ARRIVED", "PICKED_UP", "OUT_FOR_DELIVERY"].includes(
+        candidate.status,
+      ),
+    ) ?? snapshot.orders.find((candidate) => candidate.status !== "DELIVERED");
+  const nextCommand = order
+    ? order.status === "ASSIGNED"
+      ? { target: "ACCEPTED" as const, label: "Accept task" }
+      : order.status === "ACCEPTED"
+        ? { target: "ARRIVED" as const, label: "Arrive merchant" }
+        : order.status === "ARRIVED"
+          ? { target: "PICKED_UP" as const, label: "Confirm pickup" }
+          : order.status === "PICKED_UP" || order.status === "OUT_FOR_DELIVERY"
+            ? { target: "DELIVERED" as const, label: "Complete delivery" }
+            : null
+    : null;
+  const commandAvailable =
+    snapshot.source === "live" && snapshot.availability === "ready" && Boolean(courier);
+  const online = localShift ?? (courier?.status === "offline" ? "OFFLINE" : "ONLINE");
+  const submitOrderTransition = async () => {
+    if (!courier || !order || !nextCommand || !commandAvailable || command?.kind === "pending")
+      return;
+    const expectedVersion = order.version;
+    if (expectedVersion === undefined) {
+      setCommand({
+        kind: "error",
+        code: "version_unavailable",
+        status: 0,
+        traceId: null,
+        retryable: false,
+        idempotencyKey: `courier-${nextCommand.target.toLowerCase()}-${order.id}-unknown`,
+      });
+      return;
+    }
+    const idempotencyKey = `courier-${nextCommand.target.toLowerCase()}-${order.id}-${expectedVersion}`;
+    setCommand({ kind: "pending", idempotencyKey });
+    setCommand(
+      await transitionCourierOrder({
+        orderId: order.id,
+        target: nextCommand.target,
+        expectedVersion,
+        idempotencyKey,
+      }),
+    );
+  };
+  const submitShift = async (target: "ONLINE" | "OFFLINE") => {
+    if (!courier || !commandAvailable || shiftCommand?.kind === "pending") return;
+    const idempotencyKey = `courier-shift-${target.toLowerCase()}-${courier.id}-${shiftVersion}`;
+    setShiftCommand({ kind: "pending", idempotencyKey });
+    const result = await transitionCourierShift({
+      courierId: courier.id,
+      target,
+      expectedVersion: shiftVersion,
+      idempotencyKey,
+    });
+    setShiftCommand(result);
+    if (result.kind === "success") {
+      setLocalShift(target);
+      setShiftVersion(result.version);
+    }
+  };
+  const submitLocation = async () => {
+    if (!courier || !commandAvailable || locationCommand?.kind === "pending") return;
+    const observedAt = new Date().toISOString();
+    const idempotencyKey = `courier-location-${courier.id}-${observedAt}`;
+    setLocationCommand({ kind: "pending", idempotencyKey });
+    setLocationCommand(
+      await recordCourierLocation({
+        courierId: courier.id,
+        latitude: courier.position.y,
+        longitude: courier.position.x,
+        observedAt,
+        idempotencyKey,
+      }),
+    );
+  };
   return (
     <RolePage
       eyebrow="Courier / active route"
@@ -1077,30 +1165,93 @@ function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
                   <p className="eyebrow">Shift status</p>
                   <h2>{courier.name}</h2>
                 </div>
-                <StatusPill status={courier.status} label="On route" />
+                <StatusPill
+                  status={online === "ONLINE" ? "available" : "offline"}
+                  label={online === "ONLINE" ? "Online" : "Offline"}
+                />
               </div>
               <div className="shift-summary">
-                <div className="avatar courier-avatar">AS</div>
+                <div className="avatar courier-avatar">
+                  {courier.name.slice(0, 2).toUpperCase()}
+                </div>
                 <div>
                   <strong>{courier.zone}</strong>
-                  <p>2 deliveries completed · 1 active</p>
+                  <p>
+                    {order
+                      ? `${order.shortId} · ${orderStatusLabel[order.status]}`
+                      : "No assigned task"}
+                  </p>
                 </div>
               </div>
               <div className="courier-metrics">
                 <div>
                   <span>Shift</span>
-                  <strong>4h 12m</strong>
+                  <strong>{snapshot.source === "live" ? "Live" : "Fixture"}</strong>
                 </div>
                 <div>
                   <span>Distance</span>
-                  <strong>18.4 km</strong>
+                  <strong>{snapshot.source === "live" ? "Projection" : "Fixture"}</strong>
                 </div>
                 <div>
-                  <span>Rating</span>
-                  <strong>4.98</strong>
+                  <span>Location</span>
+                  <strong>{snapshot.availability === "ready" ? "Fresh" : "Degraded"}</strong>
                 </div>
               </div>
+              <div className="courier-actions">
+                <button
+                  className="button button-secondary"
+                  type="button"
+                  disabled={
+                    !commandAvailable || shiftCommand?.kind === "pending" || online === "ONLINE"
+                  }
+                  onClick={() => void submitShift("ONLINE")}
+                >
+                  <Bike size={15} /> Go online
+                </button>
+                <button
+                  className="button button-secondary"
+                  type="button"
+                  disabled={
+                    !commandAvailable || shiftCommand?.kind === "pending" || online === "OFFLINE"
+                  }
+                  onClick={() => void submitShift("OFFLINE")}
+                >
+                  <CircleDot size={15} /> Go offline
+                </button>
+                <button
+                  className="button button-secondary"
+                  type="button"
+                  disabled={!commandAvailable || locationCommand?.kind === "pending"}
+                  onClick={() => void submitLocation()}
+                >
+                  <NavigationIcon /> Send location
+                </button>
+              </div>
             </>
+          )}
+          {!commandAvailable && (
+            <p className="command-note" role="status">
+              {snapshot.source === "live"
+                ? "Waiting for the live Java snapshot."
+                : "Writing is disabled for demo and replay sources."}
+            </p>
+          )}
+          {shiftCommand?.kind === "error" && (
+            <div className="command-result command-error" role="alert">
+              <strong>Shift command not accepted: {shiftCommand.code}</strong>
+              <small>
+                Trace {shiftCommand.traceId ?? "not returned"} · key {shiftCommand.idempotencyKey}
+              </small>
+            </div>
+          )}
+          {locationCommand?.kind === "success" && (
+            <div className="command-result" role="status">
+              <strong>Location recorded: {locationCommand.status}</strong>
+              <small>
+                Trace {locationCommand.traceId ?? "not returned"} · key{" "}
+                {locationCommand.idempotencyKey}
+              </small>
+            </div>
           )}
         </section>
         <section className="panel">
@@ -1126,9 +1277,41 @@ function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
               </div>
             </div>
           )}
-          <button className="button button-primary" type="button">
-            <ArrowUpRight size={15} /> Open route
-          </button>
+          {nextCommand && (
+            <button
+              className="button button-primary"
+              type="button"
+              disabled={!commandAvailable || command?.kind === "pending"}
+              onClick={() => void submitOrderTransition()}
+            >
+              <CheckCircle2
+                size={15}
+                className={command?.kind === "pending" ? "spin" : undefined}
+              />
+              {command?.kind === "pending" ? "Submitting..." : nextCommand.label}
+            </button>
+          )}
+          {command?.kind === "success" && (
+            <div className="command-result" role="status">
+              <strong>
+                {command.replayed ? "Idempotent replay acknowledged" : "Courier command accepted"}
+              </strong>
+              <span>
+                {command.orderId} · {command.status} · version {command.version}
+              </span>
+              <small>
+                Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+              </small>
+            </div>
+          )}
+          {command?.kind === "error" && (
+            <div className="command-result command-error" role="alert">
+              <strong>Command not accepted: {command.code}</strong>
+              <small>
+                Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+              </small>
+            </div>
+          )}
         </section>
       </section>
     </RolePage>

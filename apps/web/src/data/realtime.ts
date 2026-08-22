@@ -5,6 +5,7 @@ export const realtimeEventTypes = [
   "order.status.changed",
   "dispatch.decision.recorded",
   "courier.location.updated",
+  "courier.shift.changed",
   "exception.raised",
   "simulation.tick",
 ] as const;
@@ -140,12 +141,46 @@ export function applyRealtimeItem(
   snapshot: OperationsSnapshot,
   item: RealtimeItem,
 ): OperationsSnapshot {
-  if (
-    item.stale ||
-    (item.event.eventType !== "order.created" && item.event.eventType !== "order.status.changed")
-  ) {
+  if (item.stale) {
     return snapshot;
   }
+  if (item.event.eventType === "courier.location.updated") {
+    const courierId = stringValue(item.event.payload.courierId);
+    const latitude = numberValue(item.event.payload.latitude);
+    const longitude = numberValue(item.event.payload.longitude);
+    if (!courierId || latitude === null || longitude === null) return snapshot;
+    const degraded = stringValue(item.event.payload.projectionStatus) === "DEGRADED";
+    return {
+      ...snapshot,
+      couriers: snapshot.couriers.map((courier) =>
+        courier.id === courierId
+          ? {
+              ...courier,
+              position: { x: longitude, y: latitude },
+              status: degraded ? "offline" : "available",
+            }
+          : courier,
+      ),
+      generatedAt: item.event.occurredAt,
+      availability: degraded ? "degraded" : snapshot.availability,
+    };
+  }
+  if (item.event.eventType === "courier.shift.changed") {
+    const courierId = stringValue(item.event.payload.courierId);
+    const status = stringValue(item.event.payload.status);
+    if (!courierId || (status !== "ONLINE" && status !== "OFFLINE")) return snapshot;
+    return {
+      ...snapshot,
+      couriers: snapshot.couriers.map((courier) =>
+        courier.id === courierId
+          ? { ...courier, status: status === "ONLINE" ? "available" : "offline" }
+          : courier,
+      ),
+      generatedAt: item.event.occurredAt,
+    };
+  }
+  if (item.event.eventType !== "order.created" && item.event.eventType !== "order.status.changed")
+    return snapshot;
   const orderId = stringValue(item.event.payload.orderId);
   const status = orderStatus(item.event.payload.status);
   if (!orderId || !status) return snapshot;
@@ -338,6 +373,15 @@ function stringValue(value: unknown): string | null {
   return typeof value === "string" && value.length > 0 ? value : null;
 }
 
+function numberValue(value: unknown): number | null {
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (typeof value === "string" && value.trim() !== "") {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
 function orderStatus(value: unknown): OrderStatus | null {
   const statuses: readonly OrderStatus[] = [
     "CREATED",
@@ -345,6 +389,8 @@ function orderStatus(value: unknown): OrderStatus | null {
     "PREPARING",
     "READY_FOR_PICKUP",
     "ASSIGNED",
+    "ACCEPTED",
+    "ARRIVED",
     "PICKED_UP",
     "OUT_FOR_DELIVERY",
     "DELIVERED",
@@ -361,6 +407,8 @@ function statusRank(status: OrderStatus): number {
     "PREPARING",
     "READY_FOR_PICKUP",
     "ASSIGNED",
+    "ACCEPTED",
+    "ARRIVED",
     "PICKED_UP",
     "OUT_FOR_DELIVERY",
     "DELIVERED",

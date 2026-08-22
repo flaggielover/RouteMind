@@ -581,12 +581,12 @@
       "phase": "P12",
       "priority": "high",
       "depends_on": ["RM-102", "RM-104", "RM-107"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Courier can go online, accept assignment, arrive, pickup, and complete delivery", "Location/status updates are traceable and idempotent", "Offline or stale courier state is shown as degraded"],
       "gates": ["L3-courier-api", "L4-courier-golden-path"],
       "evidence": ["evidence/gates/RM-122/courier-workflow.md"],
       "blocked_by": [],
-      "notes": "Hard real-time correctness remains in deterministic services, not LLM agents."
+      "notes": "Hard real-time correctness remains in deterministic services, not LLM agents. Local L3/L4 evidence is recorded; remote CI validation is required for the checkpoint."
     },
     {
       "id": "RM-123",
@@ -594,7 +594,7 @@
       "phase": "P12",
       "priority": "high",
       "depends_on": ["RM-120", "RM-121", "RM-122"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Every role command has pending, success, conflict, validation, timeout, and unavailable states", "Retry behavior preserves idempotency keys and trace context", "No command silently succeeds when the service is unavailable"],
       "gates": ["L2-role-errors", "L5-role-degradation"],
       "evidence": ["evidence/gates/RM-123/role-degraded-states.md"],

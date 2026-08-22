@@ -80,6 +80,8 @@ function orderStatus(status: string): OrderStatus {
     PREPARING: "PREPARING",
     READY_FOR_PICKUP: "READY_FOR_PICKUP",
     ASSIGNED: "ASSIGNED",
+    ACCEPTED: "ACCEPTED",
+    ARRIVED: "ARRIVED",
     PICKED_UP: "PICKED_UP",
     DELIVERED: "DELIVERED",
   };
@@ -116,13 +118,16 @@ function toOrder(order: LiveOrder, parties: readonly LiveParty[]): Order {
   };
 }
 
-function toCourier(location: LiveCourierLocation): Courier {
+function toCourier(location: LiveCourierLocation, reference: Date): Courier {
+  const observedAt = new Date(location.observedAt);
+  const stale =
+    !Number.isNaN(observedAt.getTime()) && reference.getTime() - observedAt.getTime() > 120_000;
   return {
     id: location.courierId,
     name: location.courierId,
-    status: "available",
+    status: stale ? "offline" : "available",
     zone: "live",
-    eta: "unknown",
+    eta: stale ? "stale" : "unknown",
     position: { x: location.longitude, y: location.latitude },
   };
 }
@@ -172,14 +177,25 @@ export async function loadLiveSnapshot(
       },
       fetchImpl,
     );
+    const reference = new Date(operations.generatedAt);
+    const staleCourier = operations.courierLocations.some((location) => {
+      const observedAt = new Date(location.observedAt);
+      return (
+        !Number.isNaN(reference.getTime()) &&
+        !Number.isNaN(observedAt.getTime()) &&
+        reference.getTime() - observedAt.getTime() > 120_000
+      );
+    });
     const orders = operations.orders.map((order) => toOrder(order, operations.parties));
     return {
       source: "live",
-      availability: "ready",
-      sourceDetail: "Java durable snapshot + Python dispatch decision",
+      availability: staleCourier ? "degraded" : "ready",
+      sourceDetail: staleCourier
+        ? "Java durable snapshot + Python dispatch decision; courier location stale"
+        : "Java durable snapshot + Python dispatch decision",
       generatedAt: operations.generatedAt,
       orders,
-      couriers: operations.courierLocations.map(toCourier),
+      couriers: operations.courierLocations.map((location) => toCourier(location, reference)),
       merchants: operations.parties
         .filter((party) => party.type === "MERCHANT")
         .map((party) => ({

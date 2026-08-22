@@ -44,6 +44,15 @@ class BusinessApiApplicationTests {
 
 	@Test
 	void operationsSnapshotIsLiveAndEmptyWhenDurableStateIsEmpty() throws Exception {
+		jdbcTemplate.update("delete from routemind.courier_command_idempotency");
+		jdbcTemplate.update("delete from routemind.courier_shifts");
+		jdbcTemplate.update("delete from routemind.order_command_idempotency");
+		jdbcTemplate.update("delete from routemind.order_transitions");
+		jdbcTemplate.update("delete from routemind.orders");
+		jdbcTemplate.update("delete from routemind.outbox_messages");
+		jdbcTemplate.update("delete from routemind.inbox_messages");
+		jdbcTemplate.update("delete from routemind.courier_locations");
+		jdbcTemplate.update("delete from routemind.parties");
 		mockMvc.perform(get("/api/v1/operations/snapshot"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.schemaVersion").value("v1"))
@@ -203,11 +212,69 @@ class BusinessApiApplicationTests {
 	}
 
 	@Test
+	void courierShiftLocationAndDeliveryCommandsAreDurableAndIdempotent() throws Exception {
+		String courierId = java.util.UUID.randomUUID().toString();
+		mockMvc.perform(post("/api/v1/couriers/{courierId}/shift", courierId)
+				.header("Idempotency-Key", "courier-online")
+				.header("X-Actor", "courier")
+				.contentType("application/json")
+				.content("{\"target\":\"ONLINE\",\"expectedVersion\":0}"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value("ONLINE"))
+				.andExpect(jsonPath("$.version").value(1));
+
+		mockMvc.perform(post("/api/v1/couriers/{courierId}/shift", courierId)
+				.header("Idempotency-Key", "courier-online")
+				.header("X-Actor", "courier")
+				.contentType("application/json")
+				.content("{\"target\":\"ONLINE\",\"expectedVersion\":0}"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.replayed").value(true));
+
+		mockMvc.perform(post("/api/v1/couriers/{courierId}/location", courierId)
+				.header("Idempotency-Key", "courier-location-1")
+				.header("X-Actor", "courier")
+				.contentType("application/json")
+				.content("{\"latitude\":31.2,\"longitude\":121.5,\"observedAt\":\"2026-08-22T12:00:00Z\"}"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value("DEGRADED"));
+
+		String create = mockMvc.perform(post("/api/v1/orders")
+				.header("Idempotency-Key", "courier-flow-create")
+				.header("X-Actor", "customer"))
+				.andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+		String orderId = com.fasterxml.jackson.databind.json.JsonMapper.builder().build()
+				.readTree(create).get("orderId").asText();
+		transition(mockMvc, orderId, "courier-flow-confirm", "customer", "CONFIRMED", 0)
+				.andExpect(status().isOk());
+		transition(mockMvc, orderId, "courier-flow-assign", "dispatch", "ASSIGNED", 1)
+				.andExpect(status().isOk());
+		transition(mockMvc, orderId, "courier-flow-accept", "courier", "ACCEPTED", 2)
+				.andExpect(jsonPath("$.status").value("ACCEPTED"));
+		transition(mockMvc, orderId, "courier-flow-arrive", "courier", "ARRIVED", 3)
+				.andExpect(jsonPath("$.status").value("ARRIVED"));
+		transition(mockMvc, orderId, "courier-flow-pickup", "courier", "PICKED_UP", 4)
+				.andExpect(jsonPath("$.status").value("PICKED_UP"));
+		transition(mockMvc, orderId, "courier-flow-deliver", "courier", "DELIVERED", 5)
+				.andExpect(jsonPath("$.status").value("DELIVERED"));
+	}
+
+	private static org.springframework.test.web.servlet.ResultActions transition(
+			org.springframework.test.web.servlet.MockMvc mockMvc, String orderId, String key, String actor,
+			String target, long expectedVersion) throws Exception {
+		return mockMvc.perform(post("/api/v1/orders/{orderId}/transitions", orderId)
+				.header("Idempotency-Key", key)
+				.header("X-Actor", actor)
+				.contentType("application/json")
+				.content("{\"target\":\"" + target + "\",\"expectedVersion\":" + expectedVersion + "}"));
+	}
+
+	@Test
 	void flywayOwnsTheApplicationSchema() {
 		Integer migrationCount = jdbcTemplate.queryForObject(
-				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7', '8') and success = true",
+				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7', '8', '9') and success = true",
 				Integer.class);
 
-		assertThat(migrationCount).isEqualTo(8);
+		assertThat(migrationCount).isEqualTo(9);
 	}
 }

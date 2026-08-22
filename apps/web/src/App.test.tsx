@@ -130,6 +130,23 @@ describe("role-aware application", () => {
     ).toBeInTheDocument();
   });
 
+  it("shows the courier golden path while keeping demo commands disabled", async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    await user.click(screen.getByRole("link", { name: /Courier/ }));
+
+    expect(
+      await screen.findByRole("heading", { name: "A focused shift, one next action." }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Complete delivery" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Go online" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Send location" })).toBeDisabled();
+    expect(
+      screen.getByText("Writing is disabled for demo and replay sources."),
+    ).toBeInTheDocument();
+  });
+
   it("keeps live failure explicit while switching through demo and replay modes", async () => {
     const user = userEvent.setup();
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));

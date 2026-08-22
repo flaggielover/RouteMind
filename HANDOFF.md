@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P12 Role Workflows
 
-Current Task: RM-122 - Implement courier shift and delivery workflow
+Current Task: RM-123 - Implement role command errors and degraded states
 
-Task Status: passed (RM-121 merchant preparation workflow); RM-122 is in progress
+Task Status: passed (RM-122 courier shift and delivery workflow); RM-123 is in progress
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -367,4 +367,12 @@ that drives accept, start preparation, and mark ready commands with idempotency,
 expected versions, traces, and explicit degradation. Local full gate passed with
 Java 59 tests, Python 59 tests at 96.13% coverage, Web 31 unit tests/build, 16
 Playwright tests, and 5 schemas/15 fixtures. RM-122 courier shift and delivery
-workflow is now the active task.
+workflow is now passed locally and awaiting remote Actions validation.
+RM-122 adds durable courier shift state, courier location commands with idempotent
+outbox events, optional `ACCEPTED` and `ARRIVED` order audit states, courier order
+commands through delivery completion, and explicit live/degraded projection state.
+Local full gate passed with Java 60 tests, Python 59 tests at 96.13% coverage, Web
+34 unit tests/build, 16 Playwright tests, and 5 schemas/15 fixtures. Evidence is
+recorded at `evidence/gates/RM-122/courier-workflow.md`; checkpoint is awaiting
+remote Actions validation. RM-123 role command error/degradation handling is now
+the active task.

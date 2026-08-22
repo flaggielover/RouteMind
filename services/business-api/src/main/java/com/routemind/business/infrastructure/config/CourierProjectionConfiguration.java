@@ -5,6 +5,7 @@ import com.routemind.business.application.courier.CourierLocationService;
 import com.routemind.business.application.courier.CourierLocationStore;
 import com.routemind.business.infrastructure.projection.redis.RedisCourierGeoProjection;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -19,7 +20,12 @@ public class CourierProjectionConfiguration {
 	}
 
 	@Bean
-	@ConditionalOnProperty(name = "routemind.redis.projection.enabled", havingValue = "true")
+	@ConditionalOnMissingBean(CourierGeoProjection.class)
+	CourierGeoProjection unavailableCourierGeoProjection() {
+		return new UnavailableCourierGeoProjection();
+	}
+
+	@Bean
 	CourierLocationService courierLocationService(CourierLocationStore store, CourierGeoProjection projection) {
 		return new CourierLocationService(store, projection);
 	}
