@@ -51,7 +51,11 @@ def test_registry_records_version_latency_and_decision_metadata() -> None:
 
     assert registry.names() == ("nearest",)
     assert result.latency_millis >= 0
-    assert dict(result.metadata) == {"candidate_count": "1", "assigned": "true"}
+    assert dict(result.metadata) == {
+        "candidate_count": "1",
+        "eligible_candidate_count": "1",
+        "assigned": "true",
+    }
 
 
 def test_registry_rejects_duplicate_and_unknown_strategies() -> None:

@@ -620,12 +620,12 @@
       "phase": "P13",
       "priority": "critical",
       "depends_on": ["RM-031", "RM-040", "RM-103"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Dispatch problem represents capacity, time windows, preparation readiness, service risk, and courier state", "Constraints have deterministic validation and explicit infeasibility reasons", "Existing registry strategies remain compatible"],
       "gates": ["L2-dispatch-model", "L6-dispatch-correctness"],
       "evidence": ["evidence/gates/RM-130/constraint-dispatch-model.md"],
       "blocked_by": [],
-      "notes": "The model is compute-owned and does not mutate business aggregates. Deterministic capacity, readiness, time-window, risk, and infeasibility contracts are now the active implementation focus."
+      "notes": "The model is compute-owned and does not mutate business aggregates. Deterministic capacity, readiness, time-window, risk, and infeasibility contracts are recorded; remote CI validation is required for the checkpoint."
     },
     {
       "id": "RM-131",
@@ -633,12 +633,12 @@
       "phase": "P13",
       "priority": "high",
       "depends_on": ["RM-130"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Scoring accounts for capacity, merchant readiness, overtime risk, and service balance", "Weights and rationale are versioned and recorded", "Baseline comparisons use identical input fixtures"],
       "gates": ["L2-risk-scoring", "L6-baseline-comparison"],
       "evidence": ["evidence/gates/RM-131/risk-aware-scoring.md"],
       "blocked_by": [],
-      "notes": "RADS integration remains a separately measured strategy."
+      "notes": "RADS integration remains a separately measured strategy. Versioned risk-aware scoring is now the active implementation focus."
     },
     {
       "id": "RM-132",

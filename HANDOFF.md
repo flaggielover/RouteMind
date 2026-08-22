@@ -391,4 +391,14 @@ coverage. Local full gate passed with Java 60 tests, Python 59 tests at 96.13%
 coverage, Web 38 unit tests/build, 17 Playwright passes plus one desktop-only skip,
 and 5 schemas/15 fixtures. Evidence is recorded at
 `evidence/gates/RM-124/mobile-workflows.md`; remote Actions run `32575052384`
-passed all five jobs. RM-130 constraint-aware dispatch model is now the active task.
+passed all five jobs. RM-130 constraint-aware dispatch model is now locally complete.
+RM-130 adds optional capacity, current load, courier state, availability bounds,
+service risk, estimated travel, pickup readiness, service duration, delivery time
+windows, and a maximum risk threshold to the compute-owned DispatchProblem. All
+registered baseline strategies use the shared eligibility boundary and return
+stable infeasibility reasons; the API exposes eligible counts and reason metadata.
+Local full gate passed with Java 60 tests, Python 65 tests at 96.47% coverage, Web
+38 unit tests/build, and 5 schemas/15 fixtures. Evidence is recorded at
+`evidence/gates/RM-130/constraint-dispatch-model.md`; checkpoint is awaiting remote
+Actions validation. RM-131 capacity, preparation, and risk-aware scoring is now the
+active task.

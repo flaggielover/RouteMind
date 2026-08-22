@@ -23,13 +23,18 @@ class NearestStrategy:
     version = "1.0.0"
 
     def solve(self, problem: DispatchProblem) -> DispatchDecision:
-        if not problem.candidates:
+        eligible = problem.eligible_candidates()
+        if not eligible:
             return DispatchDecision(
                 request_id=problem.request_id,
                 strategy=self.name,
                 courier_id=None,
                 score=None,
-                rationale=("no eligible courier",),
+                rationale=(
+                    ("no eligible courier",)
+                    if not problem.candidates
+                    else ("no eligible courier", *problem.infeasibility_reasons())
+                ),
                 strategy_version=self.version,
             )
 
@@ -43,7 +48,7 @@ class NearestStrategy:
                 ),
                 candidate.courier_id,
             )
-            for candidate in problem.candidates
+            for candidate in eligible
         )
         distance, courier_id = ranked[0]
         return DispatchDecision(

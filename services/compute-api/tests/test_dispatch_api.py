@@ -95,3 +95,59 @@ def test_dispatch_snapshot_exposes_explicit_strategy_failure_fallback_metadata(
         "fallback_available": "true",
         "failure_type": "RuntimeError",
     }
+
+
+def test_dispatch_snapshot_applies_constraints_and_exposes_infeasibility_metadata() -> None:
+    response = client.post(
+        "/api/v1/dispatch/snapshot",
+        json={
+            "request_id": "ops-constraints-1",
+            "strategy": "nearest",
+            "pickup": {"latitude": 31.2304, "longitude": 121.4737},
+            "demand_units": 2,
+            "service_seconds": 10,
+            "delivery_window": {"start_seconds": 0, "end_seconds": 60},
+            "candidates": [
+                {
+                    "courier_id": "offline",
+                    "location": {"latitude": 31.2304, "longitude": 121.4737},
+                    "state": "offline",
+                },
+                {
+                    "courier_id": "eligible",
+                    "location": {"latitude": 31.24, "longitude": 121.48},
+                    "capacity_units": 4,
+                    "estimated_travel_seconds": 20,
+                },
+            ],
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["selected_courier"] == "eligible"
+    metadata = dict(body["metadata"])
+    assert metadata["eligible_candidate_count"] == "1"
+
+    blocked = client.post(
+        "/api/v1/dispatch/snapshot",
+        json={
+            "request_id": "ops-constraints-2",
+            "strategy": "nearest",
+            "pickup": {"latitude": 0, "longitude": 0},
+            "demand_units": 3,
+            "candidates": [
+                {
+                    "courier_id": "small",
+                    "location": {"latitude": 0, "longitude": 0},
+                    "capacity_units": 2,
+                }
+            ],
+        },
+    )
+
+    assert blocked.status_code == 200
+    blocked_body = blocked.json()
+    assert blocked_body["selected_courier"] is None
+    assert "small:capacity_insufficient=2.000" in blocked_body["rationale"]
+    assert dict(blocked_body["metadata"])["eligible_candidate_count"] == "0"

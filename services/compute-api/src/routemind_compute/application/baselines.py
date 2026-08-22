@@ -20,7 +20,7 @@ def _ranked_candidates(problem: DispatchProblem, weight: float) -> list[tuple[fl
             ),
             candidate.courier_id,
         )
-        for candidate in problem.candidates
+        for candidate in problem.eligible_candidates()
     )
 
 
@@ -39,7 +39,11 @@ class WeightedGreedyStrategy:
                 self.name,
                 None,
                 None,
-                ("no eligible courier",),
+                (
+                    ("no eligible courier",)
+                    if not problem.candidates
+                    else ("no eligible courier", *problem.infeasibility_reasons())
+                ),
                 self.version,
             )
         score, courier_id = ranked[0]
@@ -133,7 +137,11 @@ class HungarianStrategy:
                 self.name,
                 None,
                 None,
-                ("no eligible courier",),
+                (
+                    ("no eligible courier",)
+                    if not problem.candidates
+                    else ("no eligible courier", *problem.infeasibility_reasons())
+                ),
                 self.version,
             )
         score, courier_id = ranked[0]

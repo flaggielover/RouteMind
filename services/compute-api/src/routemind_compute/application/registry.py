@@ -46,8 +46,14 @@ class StrategyRegistry:
         metadata = (
             *decision.metadata,
             ("candidate_count", str(len(problem.candidates))),
+            ("eligible_candidate_count", str(len(problem.eligible_candidates()))),
             ("assigned", str(decision.courier_id is not None).lower()),
         )
+        if decision.courier_id is None:
+            metadata = (
+                *metadata,
+                ("infeasibility_reasons", "|".join(problem.infeasibility_reasons())),
+            )
         return replace(
             decision,
             strategy_version=version,

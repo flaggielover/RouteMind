@@ -1,26 +1,26 @@
 # RouteMind Progress
 
-Current Phase: Round 2 P12 Role Workflows
+Current Phase: Round 2 P13 Advanced Dispatch
 
-Round 2 Progress: 19 / 48 tasks passed
+Round 2 Progress: 20 / 48 tasks passed
 
-Repository Total: 47 / 76 tasks passed
+Repository Total: 48 / 76 tasks passed
 
-Current Task: RM-130 - Define constraint-aware dispatch model
+Current Task: RM-131 - Add capacity, preparation, and risk-aware scoring
 
-Last Completed: RM-124 - Close mobile role workflow experience
+Last Completed: RM-130 - Define constraint-aware dispatch model
 
-Current Gate: RM-124 local/full/browser/CI gates passed in run 32575052384; RM-130 constraint model implementation is in progress
+Current Gate: RM-130 local/full gates passed; checkpoint is awaiting remote CI validation
 
 CI: PASS - RM-124 run 32575052384; all five jobs passed. RM-123 run 32574390001 also passed all five jobs.
 
-Regression: PASS - Java 60, Python 59 / 96.13%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 65 / 96.47%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-130 - define constraint-aware dispatch model
+Next Candidates: RM-131 - add capacity, preparation, and risk-aware scoring
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

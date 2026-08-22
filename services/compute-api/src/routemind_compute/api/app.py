@@ -13,7 +13,12 @@ from routemind_compute.application.travel import (
     DeterministicLocalTravelProvider,
     FallbackTravelTimeProvider,
 )
-from routemind_compute.domain.dispatch import CourierCandidate, DispatchProblem, GeoPoint
+from routemind_compute.domain.dispatch import (
+    CourierCandidate,
+    DispatchProblem,
+    GeoPoint,
+    TimeWindow,
+)
 
 
 class HealthResponse(BaseModel):
@@ -57,6 +62,20 @@ class CourierCandidateRequest(BaseModel):
 
     courier_id: str = Field(min_length=1, max_length=128)
     location: GeoPointRequest
+    capacity_units: float = Field(default=1.0, ge=0)
+    current_load_units: float = Field(default=0.0, ge=0)
+    available_from_seconds: float = Field(default=0.0, ge=0)
+    available_until_seconds: float | None = Field(default=None, ge=0)
+    state: Literal["available", "on_route", "offline", "paused"] = "available"
+    service_risk: float = Field(default=0.0, ge=0, le=1)
+    estimated_travel_seconds: float = Field(default=0.0, ge=0)
+
+
+class TimeWindowRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    start_seconds: float = Field(ge=0)
+    end_seconds: float = Field(ge=0)
 
 
 class DispatchSnapshotRequest(BaseModel):
@@ -66,6 +85,11 @@ class DispatchSnapshotRequest(BaseModel):
     strategy: str = Field(default="nearest", min_length=1, max_length=64)
     pickup: GeoPointRequest
     candidates: list[CourierCandidateRequest] = Field(default_factory=list, max_length=64)
+    demand_units: float = Field(default=1.0, gt=0)
+    pickup_ready_at_seconds: float = Field(default=0.0, ge=0)
+    service_seconds: float = Field(default=0.0, ge=0)
+    delivery_window: TimeWindowRequest | None = None
+    max_service_risk: float = Field(default=1.0, ge=0, le=1)
 
 
 class DispatchSnapshotResponse(BaseModel):
@@ -117,9 +141,28 @@ def dispatch_snapshot(
                 CourierCandidate(
                     candidate.courier_id,
                     GeoPoint(candidate.location.latitude, candidate.location.longitude),
+                    capacity_units=candidate.capacity_units,
+                    current_load_units=candidate.current_load_units,
+                    available_from_seconds=candidate.available_from_seconds,
+                    available_until_seconds=candidate.available_until_seconds,
+                    state=candidate.state,
+                    service_risk=candidate.service_risk,
+                    estimated_travel_seconds=candidate.estimated_travel_seconds,
                 )
                 for candidate in payload.candidates
             ),
+            demand_units=payload.demand_units,
+            pickup_ready_at_seconds=payload.pickup_ready_at_seconds,
+            service_seconds=payload.service_seconds,
+            delivery_window=(
+                TimeWindow(
+                    payload.delivery_window.start_seconds,
+                    payload.delivery_window.end_seconds,
+                )
+                if payload.delivery_window is not None
+                else None
+            ),
+            max_service_risk=payload.max_service_risk,
         )
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error

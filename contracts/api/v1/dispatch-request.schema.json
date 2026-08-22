@@ -11,6 +11,15 @@
         "longitude": {"type": "number", "minimum": -180, "maximum": 180}
       },
       "additionalProperties": false
+    },
+    "timeWindow": {
+      "type": "object",
+      "required": ["startSeconds", "endSeconds"],
+      "properties": {
+        "startSeconds": {"type": "number", "minimum": 0},
+        "endSeconds": {"type": "number", "minimum": 0}
+      },
+      "additionalProperties": false
     }
   },
   "type": "object",
@@ -25,11 +34,23 @@
         "required": ["courierId", "location"],
         "properties": {
           "courierId": {"type": "string", "format": "uuid"},
-          "location": {"$ref": "#/$defs/geoPoint"}
+          "location": {"$ref": "#/$defs/geoPoint"},
+          "capacityUnits": {"type": "number", "minimum": 0},
+          "currentLoadUnits": {"type": "number", "minimum": 0},
+          "availableFromSeconds": {"type": "number", "minimum": 0},
+          "availableUntilSeconds": {"type": ["number", "null"], "minimum": 0},
+          "state": {"enum": ["available", "on_route", "offline", "paused"]},
+          "serviceRisk": {"type": "number", "minimum": 0, "maximum": 1},
+          "estimatedTravelSeconds": {"type": "number", "minimum": 0}
         },
         "additionalProperties": false
       }
-    }
+    },
+    "demandUnits": {"type": "number", "exclusiveMinimum": 0},
+    "pickupReadyAtSeconds": {"type": "number", "minimum": 0},
+    "serviceSeconds": {"type": "number", "minimum": 0},
+    "deliveryWindow": {"$ref": "#/$defs/timeWindow"},
+    "maxServiceRisk": {"type": "number", "minimum": 0, "maximum": 1}
   },
   "additionalProperties": false
 }
