@@ -10,17 +10,17 @@ Current Task: RM-163 - Productize Shadow Mode comparison and promotion gate
 
 Last Completed: RM-161 - Add strategy parameter schemas and experiments
 
-Current Gate: RM-161 local/full gates and remote Actions run 32600780985 passed; RM-163 is the next unblocked high-priority task
+Current Gate: RM-163 local/full gates passed; checkpoint is awaiting remote Actions validation
 
-CI: PASS - RM-161 run 32600780985; RM-160 run 32600128160 also passed all five jobs.
+CI: PASS - RM-161 run 32600780985; RM-163 remote validation is pending.
 
-Regression: PASS - Java 60, Python 109 / 95.39%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 111 / 95.41%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-163 - productize Shadow Mode comparison and promotion gate; RM-162 remains blocked by RM-156; RM-155 remains blocked by RM-152 (which depends on RM-133)
+Next Candidates: RM-163 remote validation; RM-162 remains blocked by RM-156; RM-155 remains blocked by RM-152 (which depends on RM-133)
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -151,3 +151,8 @@ The task is now passed and RM-120 is the active implementation.
   seed, runtime observations, assignment metrics, replay digests, and output
   provenance; remote Actions run `32600780985` passed all five jobs.
 - RM-163 is now active; RM-162 remains blocked by RM-156.
+
+### RM-163 checkpoint - 2026-08-23
+- Added the read-only Shadow evaluation API over the existing evaluator and
+  regression gate, with explicit candidate isolation and stable reason codes.
+- Local compute and full repository gates pass; remote Actions validation is pending.

@@ -12,6 +12,12 @@ from routemind_compute.application.execution import execution_provenance
 from routemind_compute.application.parameters import Metadata
 from routemind_compute.application.registry import StrategyRegistry, default_registry
 from routemind_compute.application.routebench import BenchmarkManifest, RouteBenchRunner
+from routemind_compute.application.shadow import (
+    RegressionGate,
+    RegressionPolicy,
+    ShadowManifest,
+    ShadowModeEvaluator,
+)
 from routemind_compute.application.simulation import CourierState, DemandEvent, ScenarioManifest
 from routemind_compute.application.travel import (
     DeterministicLocalTravelProvider,
@@ -245,6 +251,66 @@ class ExperimentResponse(BaseModel):
     trace_id: str
 
 
+class RegressionPolicyRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    minimum_samples: int = Field(default=1, ge=1, le=100_000)
+    maximum_failure_rate: float = Field(default=0.0, ge=0, le=1)
+    maximum_assignment_rate_drop: float = Field(default=0.0, ge=0, le=1)
+    maximum_disagreement_rate: float = Field(default=1.0, ge=0, le=1)
+
+
+class ShadowEvaluateRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    manifest_id: str = Field(min_length=1, max_length=128)
+    code_version: str = Field(min_length=1, max_length=128)
+    scenario_id: str = Field(min_length=1, max_length=128)
+    seed: int = Field(ge=0, le=2_147_483_647)
+    active_strategy: str = Field(min_length=1, max_length=64)
+    candidate_strategy: str = Field(min_length=1, max_length=64)
+    policy: RegressionPolicyRequest = RegressionPolicyRequest()
+    configuration: tuple[tuple[str, str], ...] = Field(default=(), max_length=32)
+    problems: tuple[DispatchSnapshotRequest, ...] = Field(min_length=1, max_length=64)
+
+
+class ShadowMetricsResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    sample_count: int
+    active_assignment_rate: float
+    candidate_assignment_rate: float
+    candidate_failure_rate: float
+    disagreement_rate: float
+    assignment_rate_drop: float
+
+
+class ShadowObservationResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    request_id: str
+    active_courier_id: str | None
+    candidate_courier_id: str | None
+    candidate_error: str | None
+    disagrees: bool
+
+
+class ShadowEvaluateResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["shadow"]
+    action: Literal["promote", "hold"]
+    reasons: tuple[str, ...]
+    active_strategy: str
+    candidate_strategy: str
+    metrics: ShadowMetricsResponse
+    observations: tuple[ShadowObservationResponse, ...]
+    manifest_digest: str
+    run_digest: str
+    trace_id: str
+    candidate_authority: Literal["none"]
+
+
 @app.get("/healthz", response_model=HealthResponse)
 def health() -> HealthResponse:
     return HealthResponse(status="UP")
@@ -458,6 +524,74 @@ def run_routebench_experiment(
         configuration=configuration,
         parameter_configuration=tuple(sorted(payload.parameter_configuration)),
         trace_id=trace_id,
+    )
+
+
+@app.post("/api/v1/shadow/evaluate", response_model=ShadowEvaluateResponse)
+def evaluate_shadow(payload: ShadowEvaluateRequest, request: Request) -> ShadowEvaluateResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        policy = RegressionPolicy(
+            payload.policy.minimum_samples,
+            payload.policy.maximum_failure_rate,
+            payload.policy.maximum_assignment_rate_drop,
+            payload.policy.maximum_disagreement_rate,
+        )
+        manifest = ShadowManifest(
+            payload.manifest_id,
+            payload.code_version,
+            payload.scenario_id,
+            payload.seed,
+            payload.active_strategy,
+            payload.candidate_strategy,
+            policy,
+            tuple(sorted(payload.configuration)),
+        )
+        problems = tuple(_dispatch_problem(problem) for problem in payload.problems)
+        run = ShadowModeEvaluator(REGISTRY).run(manifest, problems)
+        assessment = RegressionGate().assess(run)
+    except KeyError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    except (TimeoutError, RuntimeError, TypeError) as error:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "shadow_evaluation_unavailable",
+                "message": "active or candidate strategy execution failed",
+                "trace_id": trace_id,
+                "metadata": {"failure_type": type(error).__name__},
+            },
+        ) from error
+    return ShadowEvaluateResponse(
+        source="shadow",
+        action=assessment.action,
+        reasons=assessment.reasons,
+        active_strategy=manifest.active_strategy,
+        candidate_strategy=manifest.candidate_strategy,
+        metrics=ShadowMetricsResponse(
+            sample_count=run.metrics.sample_count,
+            active_assignment_rate=run.metrics.active_assignment_rate,
+            candidate_assignment_rate=run.metrics.candidate_assignment_rate,
+            candidate_failure_rate=run.metrics.candidate_failure_rate,
+            disagreement_rate=run.metrics.disagreement_rate,
+            assignment_rate_drop=run.metrics.assignment_rate_drop,
+        ),
+        observations=tuple(
+            ShadowObservationResponse(
+                request_id=item.request_id,
+                active_courier_id=item.authoritative.courier_id,
+                candidate_courier_id=item.candidate.courier_id if item.candidate else None,
+                candidate_error=item.candidate_error,
+                disagrees=item.disagrees,
+            )
+            for item in run.observations
+        ),
+        manifest_digest=assessment.manifest_digest,
+        run_digest=assessment.run_digest,
+        trace_id=trace_id,
+        candidate_authority="none",
     )
 
 

@@ -503,6 +503,14 @@ RouteBench/ScenarioKernel. Compute check passes 109 tests at 95.39%; full
 available gates pass Java 60, Web 38 unit/build, and 5 schemas/15 fixtures.
 The task graph now activates RM-163; RM-162 remains blocked by RM-156.
 
+RM-163 is locally complete and awaiting remote validation. The new shadow
+evaluation endpoint exposes active/candidate comparisons, ordered observations,
+assignment/disagreement/failure metrics, promote/hold reasons, manifest/run
+digests, and `candidate_authority: none`, while preserving active-strategy
+authority and bounded candidate failures. Compute check passes 111 tests at
+95.41%; full available gates pass Java 60, Web 38 unit/build, and 5
+schemas/15 fixtures.
+
 
 ## Current Resume Capsule
 - Resume at RM-163; do not redo completed RM-123 through RM-161 gates.
