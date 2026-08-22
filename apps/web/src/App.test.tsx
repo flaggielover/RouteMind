@@ -73,6 +73,18 @@ describe("role-aware application", () => {
     expect(screen.getByRole("list", { name: "Lifecycle for RM-2042" })).toBeInTheDocument();
   });
 
+  it("applies lifecycle and exception filters to the operational queue", async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    await user.click(screen.getByRole("button", { name: /Filter board/ }));
+    await user.selectOptions(screen.getByLabelText("Lifecycle"), "OUT_FOR_DELIVERY");
+    expect(screen.getByText("Showing 1 of 3")).toBeInTheDocument();
+    const queue = screen.getByRole("region", { name: "Orders in motion" });
+    expect(within(queue).getByRole("button", { name: /RM-2042/ })).toBeInTheDocument();
+    expect(within(queue).queryByRole("button", { name: /RM-2041/ })).not.toBeInTheDocument();
+  });
+
   it("keeps live failure explicit while switching through demo and replay modes", async () => {
     const user = userEvent.setup();
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));

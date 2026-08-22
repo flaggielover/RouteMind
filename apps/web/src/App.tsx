@@ -184,7 +184,26 @@ function OperationsView({
   health: readonly ServiceHealth[];
 }) {
   const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0]?.id ?? "");
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [zoneFilter, setZoneFilter] = useState("all");
+  const [lifecycleFilter, setLifecycleFilter] = useState("all");
+  const [exceptionsOnly, setExceptionsOnly] = useState(false);
+  const [freshOnly, setFreshOnly] = useState(false);
   const selectedOrder = snapshot.orders.length ? findOrder(snapshot, selectedOrderId) : undefined;
+  const filteredOrders = snapshot.orders.filter((order) => {
+    const courier = snapshot.couriers.find(
+      (candidate) => candidate.id === snapshot.dispatch.selectedCourier,
+    );
+    const zoneMatches = zoneFilter === "all" || courier?.zone === zoneFilter;
+    const lifecycleMatches = lifecycleFilter === "all" || order.status === lifecycleFilter;
+    const exceptionMatches =
+      !exceptionsOnly || (order.priority === "priority" && order.status !== "DELIVERED");
+    const freshnessMatches = !freshOnly || Boolean(snapshot.generatedAt);
+    return zoneMatches && lifecycleMatches && exceptionMatches && freshnessMatches;
+  });
+  const filteredCouriers = snapshot.couriers.filter(
+    (courier) => zoneFilter === "all" || courier.zone === zoneFilter,
+  );
   const availableCouriers = snapshot.couriers.filter(
     (courier) => courier.status === "available",
   ).length;
@@ -205,11 +224,64 @@ function OperationsView({
           <span className="last-updated">
             <CircleDot size={13} /> Snapshot {formatFreshness(snapshot.generatedAt)}
           </span>
-          <button className="button button-primary" type="button">
+          <button
+            className="button button-primary"
+            type="button"
+            aria-expanded={filtersOpen}
+            onClick={() => setFiltersOpen((open) => !open)}
+          >
             <ListFilter size={15} /> Filter board
           </button>
         </div>
       </section>
+      {filtersOpen && (
+        <section className="operations-filters" aria-label="Operations filters">
+          <label>
+            Zone
+            <select value={zoneFilter} onChange={(event) => setZoneFilter(event.target.value)}>
+              <option value="all">All zones</option>
+              {[...new Set(snapshot.couriers.map((courier) => courier.zone))].map((zone) => (
+                <option key={zone} value={zone}>
+                  {zone}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Lifecycle
+            <select
+              value={lifecycleFilter}
+              onChange={(event) => setLifecycleFilter(event.target.value)}
+            >
+              <option value="all">All lifecycle states</option>
+              {Object.entries(orderStatusLabel).map(([status, label]) => (
+                <option key={status} value={status}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="filter-check">
+            <input
+              type="checkbox"
+              checked={exceptionsOnly}
+              onChange={(event) => setExceptionsOnly(event.target.checked)}
+            />
+            Exceptions only
+          </label>
+          <label className="filter-check">
+            <input
+              type="checkbox"
+              checked={freshOnly}
+              onChange={(event) => setFreshOnly(event.target.checked)}
+            />
+            Has freshness
+          </label>
+          <span className="filter-result">
+            Showing {filteredOrders.length} of {snapshot.orders.length}
+          </span>
+        </section>
+      )}
       {snapshot.availability !== "ready" && (
         <section className={`projection-state projection-${snapshot.availability}`} role="status">
           <strong>
@@ -279,8 +351,8 @@ function OperationsView({
       )}
       <section className="primary-grid">
         <OperationsMap
-          orders={snapshot.orders}
-          couriers={snapshot.couriers}
+          orders={filteredOrders}
+          couriers={filteredCouriers}
           selectedOrderId={selectedOrderId}
           onSelectOrder={setSelectedOrderId}
           availability={snapshot.availability}
@@ -288,7 +360,7 @@ function OperationsView({
           generatedAt={snapshot.generatedAt}
         />
         <OrderQueue
-          orders={snapshot.orders}
+          orders={filteredOrders}
           selectedOrderId={selectedOrderId}
           onSelectOrder={setSelectedOrderId}
           availability={snapshot.availability}
@@ -357,6 +429,75 @@ function OperationsView({
           <button className="text-button" type="button">
             Open decision details <ArrowUpRight size={14} />
           </button>
+        </section>
+      </section>
+      <section className="entity-drawers" aria-label="Selected entity details">
+        <section className="panel entity-drawer">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Order detail</p>
+              <h2>{selectedOrder?.shortId ?? "No order selected"}</h2>
+            </div>
+            <PackageCheck size={17} className="heading-icon" />
+          </div>
+          {selectedOrder ? (
+            <dl className="detail-list">
+              <div>
+                <dt>Route points</dt>
+                <dd>{selectedOrder.route.length || "Unavailable"}</dd>
+              </div>
+              <div>
+                <dt>Order version</dt>
+                <dd>{selectedOrder.version ?? "Not supplied"}</dd>
+              </div>
+              <div>
+                <dt>Source</dt>
+                <dd>
+                  {snapshot.source} · {formatFreshness(snapshot.generatedAt)}
+                </dd>
+              </div>
+            </dl>
+          ) : (
+            <p className="empty-state">Select an order to inspect its state.</p>
+          )}
+        </section>
+        <section className="panel entity-drawer">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Courier detail</p>
+              <h2>{snapshot.dispatch.selectedCourier}</h2>
+            </div>
+            <Bike size={17} className="heading-icon" />
+          </div>
+          {snapshot.couriers.find((courier) => courier.id === snapshot.dispatch.selectedCourier) ? (
+            <dl className="detail-list">
+              {(() => {
+                const courier = snapshot.couriers.find(
+                  (item) => item.id === snapshot.dispatch.selectedCourier,
+                )!;
+                return (
+                  <>
+                    <div>
+                      <dt>Zone</dt>
+                      <dd>{courier.zone}</dd>
+                    </div>
+                    <div>
+                      <dt>Status</dt>
+                      <dd>{courier.status.replace("_", " ")}</dd>
+                    </div>
+                    <div>
+                      <dt>Position</dt>
+                      <dd>
+                        {courier.position.x}, {courier.position.y}
+                      </dd>
+                    </div>
+                  </>
+                );
+              })()}
+            </dl>
+          ) : (
+            <p className="empty-state">Courier detail unavailable from this source.</p>
+          )}
         </section>
       </section>
     </div>

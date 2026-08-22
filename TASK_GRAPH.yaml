@@ -529,7 +529,7 @@
       "phase": "P11",
       "priority": "high",
       "depends_on": ["RM-110"],
-      "status": "in_progress",
+      "status": "implemented",
       "acceptance": ["Zone, lifecycle, exception, and freshness filters alter the projection", "Order and courier drawers show route, trace, and state details", "Keyboard and mobile interaction remain usable"],
       "gates": ["L2-operations-interaction", "L4-operations-drawers"],
       "evidence": ["evidence/gates/RM-113/operations-filters.md"],

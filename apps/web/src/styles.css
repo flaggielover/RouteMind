@@ -254,6 +254,48 @@ button {
   justify-content: space-between;
   padding: 12px 14px;
 }
+.operations-filters {
+  align-items: end;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 14px;
+}
+.operations-filters label {
+  color: var(--muted);
+  display: grid;
+  font-size: 10px;
+  gap: 5px;
+}
+.operations-filters select {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  min-height: 30px;
+  padding: 0 8px;
+}
+.operations-filters .filter-check {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  min-height: 30px;
+}
+.filter-result {
+  color: var(--muted);
+  font-size: 10px;
+  margin-left: auto;
+  padding-bottom: 8px;
+}
+.entity-drawers {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.entity-drawer .detail-list {
+  margin-top: 8px;
+}
 .projection-state strong {
   color: var(--ink);
   font-size: 12px;
@@ -1395,6 +1437,7 @@ button {
   }
   .primary-grid,
   .secondary-grid,
+  .entity-drawers,
   .content-grid-two {
     grid-template-columns: minmax(0, 1fr);
   }
