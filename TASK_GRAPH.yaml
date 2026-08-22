@@ -789,12 +789,12 @@
       "phase": "P15",
       "priority": "high",
       "depends_on": ["RM-150", "RM-133"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Couriers move along routes with simulated progress and availability", "Pickup, delivery, and arrival transitions are emitted as events", "Location projection can feed Redis GEO in platform scenarios"],
       "gates": ["L2-courier-motion", "L6-motion-replay"],
       "evidence": ["evidence/gates/RM-152/courier-motion.md"],
       "blocked_by": [],
-      "notes": "Redis remains a rebuildable projection. Local compute/full gates pass 135 Python tests at 95.46% with deterministic movement, service events, replay digest, and Redis GEO projection; remote Actions validation is pending."
+      "notes": "Redis remains a rebuildable projection. Local compute/full gates pass 135 Python tests at 95.46% with deterministic movement, service events, replay digest, and Redis GEO projection; remote Actions run 32603896737 passed all five jobs."
     },
     {
       "id": "RM-153",
@@ -828,12 +828,12 @@
       "phase": "P15",
       "priority": "critical",
       "depends_on": ["RM-151", "RM-152", "RM-153", "RM-154"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["API supports start, pause, resume, step, reset, speed, scenario, seed, and strategy", "State and event responses carry simulated time and replay provenance", "Control commands are bounded and idempotent"],
       "gates": ["L3-twin-api", "L4-twin-control", "L5-twin-control-failure"],
       "evidence": ["evidence/gates/RM-155/twin-control-api.md"],
       "blocked_by": [],
-      "notes": "No new service unless scaling/failure isolation is demonstrated."
+      "notes": "Activated after RM-151/RM-152/RM-153/RM-154 passed. No new service unless scaling/failure isolation is demonstrated."
     },
     {
       "id": "RM-156",

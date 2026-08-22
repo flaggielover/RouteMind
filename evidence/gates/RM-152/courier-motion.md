@@ -36,6 +36,6 @@ Date: 2026-08-23
 
 ## Gate decision
 
-Local L2 courier-motion and L6 replay evidence is complete. Remote GitHub
-Actions validation is required before `TASK_GRAPH.yaml` changes RM-152 to
-`passed`.
+Local L2 courier-motion and L6 replay evidence is complete. GitHub Actions run
+`32603896737` passed all five jobs, including the browser smoke gate. RM-152 is
+fully validated.

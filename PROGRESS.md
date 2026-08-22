@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Round 2 Progress: 36 / 48 tasks passed
+Round 2 Progress: 37 / 48 tasks passed
 
-Repository Total: 64 / 76 tasks passed
+Repository Total: 65 / 76 tasks passed
 
-Current Task: RM-152 - Implement courier motion and service progress
+Current Task: RM-155 - Expose Digital Twin control and replay API
 
-Last Completed: RM-135 - Implement dynamic replanning policy
+Last Completed: RM-152 - Implement courier motion and service progress
 
-Current Gate: RM-152 local/full gates passed; remote Actions validation is pending
+Current Gate: RM-152 local/full gates and remote Actions run 32603896737 passed; RM-155 is now active
 
-CI: PENDING - RM-152 implementation checkpoint is ready to push; RM-135 run 32603303249 and RM-134 run 32602785200 passed all five jobs.
+CI: PASS - RM-152 run 32603896737 passed all five jobs; RM-135 run 32603303249 and RM-134 run 32602785200 also passed.
 
 Regression: PASS - Java 60, Python 135 / 95.46%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-152 remote validation; after green, RM-155 Digital Twin control API; RM-162 remains blocked by RM-156
+Next Candidates: RM-155 - expose Digital Twin control and replay API; RM-162 remains blocked by RM-156
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -218,3 +218,11 @@ The task is now passed and RM-120 is the active implementation.
 - Local compute/full gates pass with Python 135 tests at 95.46% coverage, Java
   60 tests, Web 38 unit/build, and 5 schemas/15 fixtures. Remote Actions
   validation is the remaining Evidence Gate before marking RM-152 passed.
+
+### RM-152 completion - 2026-08-23
+- Courier motion and service progress passed local/full gates and GitHub Actions
+  run `32603896737` (all five jobs green, including browser smoke), with stable
+  route/arrival/pickup/delivery/completion events, replay digest, and Redis GEO
+  projection.
+- RM-152 is now passed (37/48 Round 2, 65/76 repository); critical RM-155
+  Digital Twin control/replay API is activated.
