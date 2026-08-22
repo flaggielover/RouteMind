@@ -129,7 +129,9 @@ export function AppShell({
                   ? "Demo snapshot"
                   : source === "replay"
                     ? "Replay"
-                    : `Live ${availability}`}
+                    : source === "simulation"
+                      ? "Simulation"
+                      : `Live ${availability}`}
               </span>
             </div>
             {source === "live" && (
@@ -159,6 +161,7 @@ export function AppShell({
                 <option value="live">Live</option>
                 <option value="demo">Demo</option>
                 <option value="replay">Replay</option>
+                <option value="simulation">Simulation</option>
               </select>
             </label>
             <div className="health-summary" role="status" aria-label="Service health summary">

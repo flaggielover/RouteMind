@@ -10,17 +10,17 @@ Current Task: RM-156 - Build Digital Twin control surface
 
 Last Completed: RM-155 - Expose Digital Twin control and replay API
 
-Current Gate: RM-155 local/full gates and remote Actions run 32604701074 passed; RM-156 is now active
+Current Gate: RM-156 local/full and browser gates passed; implementation remote Actions validation is pending
 
-CI: PASS - RM-155 run 32604701074 and design run 32604205211 passed all five jobs; RM-152 run 32603896737 also passed.
+CI: PENDING - RM-156 implementation checkpoint is ready to push; RM-155 run 32604701074 and RM-152 run 32603896737 passed all five jobs.
 
-Regression: PASS - Java 60, Python 139 / 95.71%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 139 / 95.71%, Web 42 unit + build, E2E 19 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-156 - build Digital Twin control surface; RM-157 replay playback is also unblocked; RM-162 remains blocked by RM-156
+Next Candidates: RM-156 remote validation; after green, RM-157 verified replay playback; RM-162 remains blocked by RM-156
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -246,3 +246,16 @@ The task is now passed and RM-120 is the active implementation.
   replay provenance.
 - RM-155 is now passed (38/48 Round 2, 66/76 repository); RM-156 Digital Twin
   control surface is activated next.
+
+### RM-156 checkpoint - 2026-08-23
+- Added a distinct simulation data source and responsive Digital Twin control
+  surface on the existing Operations page. Operators can select scenario,
+  seed, speed, strategy, step seconds, and playback controls without changing
+  live/demo/replay semantics.
+- Simulation mode reuses the operational map, routes, lifecycle, metrics,
+  exceptions, and health regions while adding simulated time, traffic/supply/
+  demand metrics, replay digest, and deterministic event stream visibility.
+- Local full gate passes Java 60, Python 139 at 95.71%, Web 42 unit/build, and
+  5 schemas/15 fixtures; browser smoke passes 19 with one existing desktop-only
+  skip. Remote Actions validation is the remaining Evidence Gate before
+  marking RM-156 passed.

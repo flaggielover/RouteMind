@@ -220,6 +220,9 @@ button {
 .source-replay {
   background: var(--amber);
 }
+.source-simulation {
+  background: var(--cyan);
+}
 .realtime-state {
   border-left: 1px solid var(--line);
   color: var(--muted);
@@ -668,6 +671,135 @@ button {
   justify-content: space-between;
   gap: 14px;
   margin-bottom: 16px;
+}
+.panel-subtitle {
+  color: var(--muted);
+  font-size: 11px;
+  margin: 8px 0 0;
+}
+.simulation-panel {
+  border-left: 3px solid var(--cyan);
+}
+.simulation-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.simulation-metrics > div {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 9px;
+}
+.simulation-metrics span,
+.simulation-settings label,
+.simulation-step-field span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.simulation-metrics strong {
+  color: var(--ink);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.simulation-toolbar,
+.simulation-settings {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.simulation-toolbar {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+.simulation-step-field,
+.simulation-settings label {
+  display: grid;
+  gap: 5px;
+}
+.simulation-step-field input,
+.simulation-settings input,
+.simulation-settings select {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--ink);
+  min-height: 32px;
+  min-width: 110px;
+  padding: 0 8px;
+}
+.simulation-settings {
+  padding: 14px 0;
+}
+.simulation-settings label {
+  grid-template-columns: minmax(80px, 1fr) auto;
+}
+.simulation-settings label > input,
+.simulation-settings label > select {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+.simulation-settings label > button {
+  grid-column: 2;
+  grid-row: 2;
+}
+.simulation-settings .speed-setting {
+  min-width: 190px;
+}
+.speed-setting input[type="range"] {
+  accent-color: var(--cyan);
+  min-width: 155px;
+}
+.button-quiet {
+  min-height: 30px;
+  padding: 0 8px;
+}
+.simulation-events {
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.compact-heading {
+  margin-bottom: 8px;
+}
+.compact-heading h3 {
+  color: var(--ink);
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+.simulation-events ol {
+  display: grid;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.simulation-events li {
+  align-items: center;
+  background: var(--surface-muted);
+  border-left: 2px solid var(--cyan);
+  display: flex;
+  gap: 9px;
+  justify-content: space-between;
+  padding: 7px 9px;
+}
+.simulation-events li span {
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+}
+.simulation-events li small {
+  color: var(--muted);
+  font-size: 10px;
 }
 .panel-heading h2 {
   color: var(--ink);
@@ -1584,6 +1716,26 @@ button {
   }
   .metric-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .simulation-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .simulation-toolbar,
+  .simulation-settings {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .simulation-toolbar .button,
+  .simulation-toolbar .icon-button,
+  .simulation-settings label,
+  .simulation-settings label > input,
+  .simulation-settings label > select {
+    width: 100%;
+  }
+  .simulation-events li {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 3px;
   }
   .metric-cell {
     min-height: 99px;

@@ -846,7 +846,7 @@
       "gates": ["L4-twin-browser", "L5-twin-ui-degradation"],
       "evidence": ["evidence/gates/RM-156/twin-ui.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-155 passed. The UI must make simulation behavior understandable without logs."
+      "notes": "Activated after RM-155 passed. Local Web check passes 42 unit tests/build and browser smoke passes 19 tests with one existing desktop-only skip; simulation controls, metrics, events, map reuse, responsive states, and accessibility are covered. Remote Actions validation is pending. The UI must make simulation behavior understandable without logs."
     },
     {
       "id": "RM-157",

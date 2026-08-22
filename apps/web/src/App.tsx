@@ -19,6 +19,7 @@ import { BrowserRouter, Navigate, Route as RouterRoute, Routes } from "react-rou
 import { demoDataSource } from "./data/demoSnapshot";
 import { probeServices } from "./data/health";
 import { liveDataSource, replayDataSource } from "./data/liveSnapshot";
+import { simulationDataSource } from "./data/simulation";
 import {
   createCustomerOrder,
   createIdempotencyKey,
@@ -34,13 +35,19 @@ import {
   createRealtimeStream,
   type RealtimeConnectionState,
 } from "./data/realtime";
-import type { DataSourceMode, OperationsDataSource, ServiceHealth } from "./domain/model";
+import type {
+  DataSourceMode,
+  OperationsDataSource,
+  ServiceHealth,
+  SimulationCommand,
+} from "./domain/model";
 import { countOpenExceptions, findOrder, orderStatusLabel, statusTone } from "./domain/selectors";
 import { AppShell } from "./components/AppShell";
 import { LifecycleTimeline } from "./components/LifecycleTimeline";
 import { MetricCell } from "./components/MetricCell";
 import { OperationsMap } from "./components/OperationsMap";
 import { ActivityStream } from "./components/ActivityStream";
+import { SimulationControlPanel } from "./components/SimulationControlPanel";
 import { StatusPill } from "./components/StatusPill";
 import type { Order, OperationsSnapshot } from "./domain/model";
 import "./styles.css";
@@ -128,10 +135,24 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
     (mode: DataSourceMode) => {
       if (suppliedDataSource) return;
       setActiveDataSource(
-        mode === "live" ? liveDataSource : mode === "demo" ? demoDataSource : replayDataSource,
+        mode === "live"
+          ? liveDataSource
+          : mode === "demo"
+            ? demoDataSource
+            : mode === "replay"
+              ? replayDataSource
+              : simulationDataSource,
       );
     },
     [suppliedDataSource],
+  );
+
+  const controlSimulation = useCallback(
+    async (command: SimulationCommand) => {
+      if (!activeDataSource.controlSimulation) return;
+      setSnapshot(await activeDataSource.controlSimulation(command));
+    },
+    [activeDataSource],
   );
 
   useEffect(() => {
@@ -149,7 +170,12 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
         onSourceChange={changeSource}
         onRefreshHealth={() => void refreshHealth()}
       >
-        <AppRoutes snapshot={snapshot} realtime={realtime} health={health} />
+        <AppRoutes
+          snapshot={snapshot}
+          realtime={realtime}
+          health={health}
+          onSimulationControl={controlSimulation}
+        />
       </AppShell>
       {isRefreshing && (
         <span className="sr-only" role="status">
@@ -164,16 +190,25 @@ export function AppRoutes({
   snapshot,
   realtime,
   health,
+  onSimulationControl,
 }: {
   snapshot: OperationsSnapshot;
   realtime: RealtimeConnectionState;
   health: readonly ServiceHealth[];
+  onSimulationControl?: (command: SimulationCommand) => Promise<void>;
 }) {
   return (
     <Routes>
       <RouterRoute
         path="/operations"
-        element={<OperationsView snapshot={snapshot} realtime={realtime} health={health} />}
+        element={
+          <OperationsView
+            snapshot={snapshot}
+            realtime={realtime}
+            health={health}
+            onSimulationControl={onSimulationControl}
+          />
+        }
       />
       <RouterRoute path="/strategy" element={<StrategyView snapshot={snapshot} />} />
       <RouterRoute
@@ -191,10 +226,12 @@ function OperationsView({
   snapshot,
   realtime,
   health,
+  onSimulationControl,
 }: {
   snapshot: OperationsSnapshot;
   realtime: RealtimeConnectionState;
   health: readonly ServiceHealth[];
+  onSimulationControl?: (command: SimulationCommand) => Promise<void>;
 }) {
   const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0]?.id ?? "");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -310,6 +347,15 @@ function OperationsView({
           </strong>
           <span>{snapshot.sourceDetail}</span>
         </section>
+      )}
+      {snapshot.source === "simulation" && snapshot.simulation && onSimulationControl && (
+        <SimulationControlPanel
+          snapshot={snapshot.simulation}
+          demandCount={snapshot.orders.length}
+          supplyCount={snapshot.couriers.length}
+          trafficLabel="seeded 1.0x"
+          onControl={onSimulationControl}
+        />
       )}
       <section className="operations-health" aria-label="Operations projection health">
         <div>

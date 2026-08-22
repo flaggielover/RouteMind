@@ -2,7 +2,7 @@ export const roles = ["operations", "strategy", "customer", "merchant", "courier
 
 export type Role = (typeof roles)[number];
 
-export type DataSourceMode = "live" | "demo" | "replay";
+export type DataSourceMode = "live" | "demo" | "replay" | "simulation";
 export type DataAvailability = "loading" | "ready" | "degraded" | "unavailable";
 
 export type OrderStatus =
@@ -80,6 +80,32 @@ export interface ServiceHealth {
   detail: string;
 }
 
+export type SimulationStatus = "paused" | "running" | "completed";
+
+export interface SimulationEvent {
+  eventId: string;
+  eventType: string;
+  simulatedTimeSeconds: number;
+  commandId: string;
+  details: readonly [string, string][];
+}
+
+export interface SimulationSnapshot {
+  scenarioId: string;
+  seed: number;
+  strategy: string;
+  strategyVersion: string;
+  status: SimulationStatus;
+  speed: number;
+  simulatedTimeSeconds: number;
+  tick: number;
+  generation: number;
+  eventCount: number;
+  lastCommandId: string | null;
+  replayDigest: string;
+  events: readonly SimulationEvent[];
+}
+
 export interface OperationsSnapshot {
   source: DataSourceMode;
   availability: DataAvailability;
@@ -90,9 +116,24 @@ export interface OperationsSnapshot {
   merchants: readonly Merchant[];
   dispatch: DispatchDecision;
   health: readonly ServiceHealth[];
+  simulation?: SimulationSnapshot;
 }
 
 export interface OperationsDataSource {
   getSnapshot(): OperationsSnapshot;
   loadSnapshot?: () => Promise<OperationsSnapshot>;
+  controlSimulation?: (command: SimulationCommand) => Promise<OperationsSnapshot>;
+}
+
+export type SimulationAction =
+  "start" | "pause" | "resume" | "step" | "reset" | "speed" | "scenario" | "seed" | "strategy";
+
+export interface SimulationCommand {
+  commandId: string;
+  action: SimulationAction;
+  seconds?: number;
+  speed?: number;
+  scenarioId?: string;
+  seed?: number;
+  strategy?: string;
 }
