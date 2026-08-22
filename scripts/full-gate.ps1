@@ -29,6 +29,10 @@ try {
         & (Join-Path $PSScriptRoot "compute-api.ps1") -Action check
     }
 
+    if (Test-Path -LiteralPath "apps/web/package.json") {
+        & (Join-Path $PSScriptRoot "web.ps1") -Action check
+    }
+
     Write-Host "PASS: RouteMind full available gate"
 }
 finally {

@@ -50,3 +50,29 @@ jobs:
       - name: Run frozen Python and contract gate
         shell: pwsh
         run: ./scripts/compute-api.ps1 check
+
+  web:
+    name: Role-aware web application
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: apps/web/package-lock.json
+      - name: Install web dependencies
+        run: npm ci --prefix apps/web
+      - name: Install Chromium for browser smoke
+        shell: pwsh
+        run: |
+          Push-Location apps/web
+          npm exec -- playwright install --with-deps chromium
+          if ($LASTEXITCODE -ne 0) { throw "Playwright browser installation failed" }
+          Pop-Location
+      - name: Run web static and unit gate
+        shell: pwsh
+        run: ./scripts/web.ps1 check
+      - name: Run web browser smoke gate
+        shell: pwsh
+        run: ./scripts/web.ps1 e2e

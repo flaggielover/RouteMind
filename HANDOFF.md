@@ -4,9 +4,9 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: P1 Core Domain
+Current Phase: P6 Product Surfaces
 
-Current Task: RM-060 - Bootstrap role-aware web application
+Current Task: RM-080 - Establish production observability and resilience gates
 
 Task Status: in_progress
 
@@ -54,6 +54,14 @@ explicit provider and fallback metadata.
 RM-050 implements an immutable seeded scenario manifest, deterministic event
 kernel, dispatch/travel integration, replayable state transitions, and a
 canonical SHA-256 replay digest.
+
+RM-060 implements the shared React/TypeScript role-aware web surface under
+`apps/web`, with Operations, Strategy, Customer, Merchant, and Courier routes,
+typed deterministic demo data, independent Java/Python health probes, accessible
+responsive controls, a schematic dispatch map, lifecycle timeline, and Playwright
+desktop/mobile/axe smoke gates. The surface explicitly labels demo state and does
+not own durable business state. Evidence is in
+`evidence/gates/RM-060/2026-08-22-role-aware-web.md`.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -115,16 +123,18 @@ The first Python dependency sync took several minutes because uv's cache and the
 workspace are on filesystems that do not support hardlinks. The script now fixes
 copy mode; subsequent frozen syncs are incremental.
 
-Known Blockers: NONE
+Known Blockers: NONE. RM-060 GitHub Actions validation is pending for the pushed
+checkpoint; local full-gate and browser evidence pass.
 
 Important Context: Keep Java business correctness separate from Python compute and
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Bootstrap RM-060 role-aware web application surfaces
-without duplicating the Java/Python runtime boundaries.
+Next Recommended Action: Start RM-080 observability and resilience gates after
+observing the RM-060 GitHub Actions run. Keep web demo state separate from live
+business state and do not add public order APIs as part of the observability task.
 
-Next Candidate Task: RM-060 - Bootstrap role-aware web application
+Next Candidate Task: RM-080 - Establish production observability and resilience gates
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

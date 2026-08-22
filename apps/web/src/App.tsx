@@ -1,0 +1,565 @@
+import {
+  AlertTriangle,
+  ArrowUpRight,
+  Bike,
+  CheckCircle2,
+  CircleDot,
+  Clock3,
+  Gauge,
+  ListFilter,
+  PackageCheck,
+  RefreshCw,
+  Route,
+  ShieldCheck,
+  Store,
+  UserRound,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { BrowserRouter, Navigate, Route as RouterRoute, Routes } from "react-router-dom";
+import { demoDataSource } from "./data/demoSnapshot";
+import { probeServices } from "./data/health";
+import type { OperationsDataSource, ServiceHealth } from "./domain/model";
+import { countOpenExceptions, findOrder, orderStatusLabel, statusTone } from "./domain/selectors";
+import { AppShell } from "./components/AppShell";
+import { LifecycleTimeline } from "./components/LifecycleTimeline";
+import { MetricCell } from "./components/MetricCell";
+import { OperationsMap } from "./components/OperationsMap";
+import { StatusPill } from "./components/StatusPill";
+import type { Order, OperationsSnapshot } from "./domain/model";
+import "./styles.css";
+
+interface AppProps {
+  dataSource?: OperationsDataSource;
+  healthProbe?: () => Promise<ServiceHealth[]>;
+}
+
+export default function App({
+  dataSource = demoDataSource,
+  healthProbe = probeServices,
+}: AppProps) {
+  const snapshot = useMemo(() => dataSource.getSnapshot(), [dataSource]);
+  const [health, setHealth] = useState<ServiceHealth[]>([...snapshot.health]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const refreshHealth = useCallback(async () => {
+    setIsRefreshing(true);
+    try {
+      setHealth(await healthProbe());
+    } finally {
+      setIsRefreshing(false);
+    }
+  }, [healthProbe]);
+
+  useEffect(() => {
+    void refreshHealth();
+  }, [refreshHealth]);
+
+  return (
+    <BrowserRouter>
+      <AppShell
+        health={health}
+        source={snapshot.source}
+        onRefreshHealth={() => void refreshHealth()}
+      >
+        <AppRoutes snapshot={snapshot} />
+      </AppShell>
+      {isRefreshing && (
+        <span className="sr-only" role="status">
+          Refreshing service health
+        </span>
+      )}
+    </BrowserRouter>
+  );
+}
+
+export function AppRoutes({ snapshot }: { snapshot: OperationsSnapshot }) {
+  return (
+    <Routes>
+      <RouterRoute path="/operations" element={<OperationsView snapshot={snapshot} />} />
+      <RouterRoute path="/strategy" element={<StrategyView snapshot={snapshot} />} />
+      <RouterRoute path="/customer" element={<CustomerView snapshot={snapshot} />} />
+      <RouterRoute path="/merchant" element={<MerchantView snapshot={snapshot} />} />
+      <RouterRoute path="/courier" element={<CourierView snapshot={snapshot} />} />
+      <RouterRoute path="*" element={<Navigate to="/operations" replace />} />
+    </Routes>
+  );
+}
+
+function OperationsView({ snapshot }: { snapshot: OperationsSnapshot }) {
+  const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0].id);
+  const selectedOrder = findOrder(snapshot, selectedOrderId);
+  const availableCouriers = snapshot.couriers.filter(
+    (courier) => courier.status === "available",
+  ).length;
+  return (
+    <div className="page-stack">
+      <section className="page-intro">
+        <div>
+          <p className="eyebrow">Operations / live board</p>
+          <h2>Keep the city moving.</h2>
+          <p className="lede">
+            A single view of demand, supply, and the decisions connecting them.
+          </p>
+        </div>
+        <div className="intro-actions">
+          <span className="last-updated">
+            <CircleDot size={13} /> Snapshot 12:48 local
+          </span>
+          <button className="button button-primary" type="button">
+            <ListFilter size={15} /> Filter board
+          </button>
+        </div>
+      </section>
+      <section className="metric-grid" aria-label="Operational metrics">
+        <MetricCell
+          label="Active orders"
+          value={`${snapshot.orders.length}`}
+          detail="2 need attention"
+          icon={PackageCheck}
+          tone="accent"
+        />
+        <MetricCell
+          label="Available couriers"
+          value={`${availableCouriers}`}
+          detail="Across 3 zones"
+          icon={Bike}
+          tone="success"
+        />
+        <MetricCell
+          label="Assignment latency"
+          value={`${snapshot.dispatch.latencyMs} ms`}
+          detail="Last decision"
+          icon={Gauge}
+        />
+        <MetricCell
+          label="Exceptions"
+          value={`${countOpenExceptions(snapshot)}`}
+          detail="Priority queue"
+          icon={AlertTriangle}
+          tone="warning"
+        />
+      </section>
+      <section className="primary-grid">
+        <OperationsMap
+          orders={snapshot.orders}
+          couriers={snapshot.couriers}
+          selectedOrderId={selectedOrderId}
+          onSelectOrder={setSelectedOrderId}
+        />
+        <OrderQueue
+          orders={snapshot.orders}
+          selectedOrderId={selectedOrderId}
+          onSelectOrder={setSelectedOrderId}
+        />
+      </section>
+      <section className="secondary-grid">
+        <section className="panel lifecycle-panel" aria-labelledby="lifecycle-title">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Selected order</p>
+              <h2 id="lifecycle-title">{selectedOrder.shortId} lifecycle</h2>
+            </div>
+            <StatusPill
+              status={statusTone(selectedOrder.status) === "success" ? "healthy" : "checking"}
+              label={orderStatusLabel[selectedOrder.status]}
+            />
+          </div>
+          <LifecycleTimeline order={selectedOrder} />
+        </section>
+        <section className="panel activity-panel" aria-labelledby="activity-title">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Decision trace</p>
+              <h2 id="activity-title">Dispatch activity</h2>
+            </div>
+            <Route size={17} className="heading-icon" />
+          </div>
+          <div className="decision-callout">
+            <div className="decision-icon">
+              <Route size={17} />
+            </div>
+            <div>
+              <strong>
+                {snapshot.dispatch.strategy} <span>v{snapshot.dispatch.version}</span>
+              </strong>
+              <p>{snapshot.dispatch.rationale}</p>
+            </div>
+          </div>
+          <dl className="detail-list">
+            <div>
+              <dt>Selected courier</dt>
+              <dd>{snapshot.dispatch.selectedCourier}</dd>
+            </div>
+            <div>
+              <dt>Decision latency</dt>
+              <dd>{snapshot.dispatch.latencyMs} ms</dd>
+            </div>
+            <div>
+              <dt>Trace</dt>
+              <dd>dispatch-4d19</dd>
+            </div>
+          </dl>
+          <button className="text-button" type="button">
+            Open decision details <ArrowUpRight size={14} />
+          </button>
+        </section>
+      </section>
+    </div>
+  );
+}
+
+function OrderQueue({
+  orders,
+  selectedOrderId,
+  onSelectOrder,
+}: {
+  orders: readonly Order[];
+  selectedOrderId: string;
+  onSelectOrder: (id: string) => void;
+}) {
+  return (
+    <section className="panel queue-panel" aria-labelledby="queue-title">
+      <div className="panel-heading">
+        <div>
+          <p className="eyebrow">Demand queue</p>
+          <h2 id="queue-title">Orders in motion</h2>
+        </div>
+        <span className="count-badge">{orders.length}</span>
+      </div>
+      <div className="queue-list">
+        {orders.map((order) => (
+          <button
+            className={`queue-item ${order.id === selectedOrderId ? "selected" : ""}`}
+            key={order.id}
+            onClick={() => onSelectOrder(order.id)}
+            type="button"
+          >
+            <span
+              className={`queue-status status-tone-${statusTone(order.status)}`}
+              aria-hidden="true"
+            />
+            <span className="queue-copy">
+              <strong>
+                {order.shortId} <span>{order.customerName}</span>
+              </strong>
+              <small>
+                {order.merchantName} · {order.destination}
+              </small>
+            </span>
+            <span className="queue-side">
+              <strong>{order.eta}</strong>
+              <small>{orderStatusLabel[order.status]}</small>
+            </span>
+          </button>
+        ))}
+      </div>
+      <button className="text-button" type="button">
+        View all orders <ArrowUpRight size={14} />
+      </button>
+    </section>
+  );
+}
+
+function RolePage({
+  eyebrow,
+  title,
+  lede,
+  children,
+  icon: Icon,
+}: {
+  eyebrow: string;
+  title: string;
+  lede: string;
+  children: React.ReactNode;
+  icon: typeof Route;
+}) {
+  return (
+    <div className="page-stack">
+      <section className="page-intro role-intro">
+        <div>
+          <p className="eyebrow">{eyebrow}</p>
+          <h2>{title}</h2>
+          <p className="lede">{lede}</p>
+        </div>
+        <div className="role-intro-icon" aria-hidden="true">
+          <Icon size={25} />
+        </div>
+      </section>
+      {children}
+    </div>
+  );
+}
+
+function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
+  return (
+    <RolePage
+      eyebrow="Strategy lab / control"
+      title="Decisions you can inspect."
+      lede="Compare registered strategies against the same operational snapshot."
+      icon={Gauge}
+    >
+      <section className="content-grid-two">
+        <section className="panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Active policy</p>
+              <h2>{snapshot.dispatch.strategy}</h2>
+            </div>
+            <StatusPill status="healthy" label="Registered" />
+          </div>
+          <div className="strategy-score">
+            <span>Assignment quality</span>
+            <strong>92.4</strong>
+            <small>+4.8 vs nearest baseline</small>
+          </div>
+          <dl className="detail-list">
+            <div>
+              <dt>Version</dt>
+              <dd>{snapshot.dispatch.version}</dd>
+            </div>
+            <div>
+              <dt>Last decision</dt>
+              <dd>{snapshot.dispatch.latencyMs} ms</dd>
+            </div>
+            <div>
+              <dt>Shadow mode</dt>
+              <dd>Ready</dd>
+            </div>
+          </dl>
+        </section>
+        <section className="panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Baseline comparison</p>
+              <h2>Registered strategies</h2>
+            </div>
+            <ShieldCheck size={17} className="heading-icon" />
+          </div>
+          <div className="strategy-row active">
+            <span>
+              <strong>weighted-greedy</strong>
+              <small>v1.0.0 · active</small>
+            </span>
+            <b>92.4</b>
+            <StatusPill status="healthy" label="Live" />
+          </div>
+          <div className="strategy-row">
+            <span>
+              <strong>nearest</strong>
+              <small>v1.0.0 · baseline</small>
+            </span>
+            <b>87.6</b>
+            <span className="muted-label">Reference</span>
+          </div>
+          <button className="text-button" type="button">
+            Open strategy registry <ArrowUpRight size={14} />
+          </button>
+        </section>
+      </section>
+    </RolePage>
+  );
+}
+
+function CustomerView({ snapshot }: { snapshot: OperationsSnapshot }) {
+  const order = snapshot.orders[0];
+  return (
+    <RolePage
+      eyebrow="Customer / order tracking"
+      title="Your delivery, clearly explained."
+      lede="The same lifecycle state, translated into a calm customer view."
+      icon={UserRound}
+    >
+      <section className="content-grid-two">
+        <section className="panel customer-order">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Order {order.shortId}</p>
+              <h2>{order.merchantName}</h2>
+            </div>
+            <StatusPill status="healthy" label="Delivered" />
+          </div>
+          <div className="customer-destination">
+            <MapPinIcon />
+            <div>
+              <span>Delivered to</span>
+              <strong>{order.destination}</strong>
+            </div>
+          </div>
+          <LifecycleTimeline order={order} />
+        </section>
+        <section className="panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Courier</p>
+              <h2>Ari Singh</h2>
+            </div>
+            <Bike size={18} className="heading-icon" />
+          </div>
+          <div className="courier-card">
+            <div className="avatar">AS</div>
+            <div>
+              <strong>Delivery complete</strong>
+              <p>Thanks for using RouteMind.</p>
+            </div>
+          </div>
+          <button className="button button-secondary" type="button">
+            <RefreshCw size={15} /> Get help
+          </button>
+        </section>
+      </section>
+    </RolePage>
+  );
+}
+
+function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
+  return (
+    <RolePage
+      eyebrow="Merchant / kitchen queue"
+      title="Prep with the handoff in view."
+      lede="See preparation load and courier handoffs without leaving the order context."
+      icon={Store}
+    >
+      <section className="content-grid-two">
+        <section className="panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Kitchen queue</p>
+              <h2>Today at a glance</h2>
+            </div>
+            <StatusPill status="busy" label="Busy" />
+          </div>
+          <div className="merchant-stats">
+            <div>
+              <strong>6</strong>
+              <span>orders in prep</span>
+            </div>
+            <div>
+              <strong>11m</strong>
+              <span>avg prep time</span>
+            </div>
+            <div>
+              <strong>2</strong>
+              <span>handoffs next</span>
+            </div>
+          </div>
+          {snapshot.merchants.map((merchant) => (
+            <div className="merchant-row" key={merchant.id}>
+              <span>
+                <strong>{merchant.name}</strong>
+                <small>
+                  {merchant.queue} orders queued · {merchant.prepMinutes}m prep
+                </small>
+              </span>
+              <StatusPill status={merchant.status} />
+            </div>
+          ))}
+        </section>
+        <section className="panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Next handoff</p>
+              <h2>RM-2043</h2>
+            </div>
+            <PackageCheck size={18} className="heading-icon" />
+          </div>
+          <div className="handoff-state">
+            <div className="handoff-icon">
+              <Clock3 size={19} />
+            </div>
+            <div>
+              <strong>Preparing now</strong>
+              <p>Cedar &amp; Salt · expected ready 13:01</p>
+            </div>
+          </div>
+          <button className="button button-primary" type="button">
+            <CheckCircle2 size={15} /> Mark ready
+          </button>
+        </section>
+      </section>
+    </RolePage>
+  );
+}
+
+function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
+  const courier = snapshot.couriers[0];
+  const order = snapshot.orders[1];
+  return (
+    <RolePage
+      eyebrow="Courier / active route"
+      title="A focused shift, one next action."
+      lede="A courier view keeps the next handoff and route state legible at a glance."
+      icon={Bike}
+    >
+      <section className="content-grid-two">
+        <section className="panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Shift status</p>
+              <h2>{courier.name}</h2>
+            </div>
+            <StatusPill status={courier.status} label="On route" />
+          </div>
+          <div className="shift-summary">
+            <div className="avatar courier-avatar">AS</div>
+            <div>
+              <strong>{courier.zone}</strong>
+              <p>2 deliveries completed · 1 active</p>
+            </div>
+          </div>
+          <div className="courier-metrics">
+            <div>
+              <span>Shift</span>
+              <strong>4h 12m</strong>
+            </div>
+            <div>
+              <span>Distance</span>
+              <strong>18.4 km</strong>
+            </div>
+            <div>
+              <span>Rating</span>
+              <strong>4.98</strong>
+            </div>
+          </div>
+        </section>
+        <section className="panel">
+          <div className="panel-heading">
+            <div>
+              <p className="eyebrow">Next stop</p>
+              <h2>{order.shortId}</h2>
+            </div>
+            <Route size={18} className="heading-icon" />
+          </div>
+          <div className="next-stop">
+            <div className="stop-icon">
+              <NavigationIcon />
+            </div>
+            <div>
+              <strong>{order.destination}</strong>
+              <p>
+                {order.customerName} · ETA {order.eta}
+              </p>
+            </div>
+          </div>
+          <button className="button button-primary" type="button">
+            <ArrowUpRight size={15} /> Open route
+          </button>
+        </section>
+      </section>
+    </RolePage>
+  );
+}
+
+function MapPinIcon() {
+  return (
+    <span className="inline-icon">
+      <UserRound size={16} />
+    </span>
+  );
+}
+function NavigationIcon() {
+  return (
+    <span className="inline-icon">
+      <ArrowUpRight size={16} />
+    </span>
+  );
+}

@@ -1,0 +1,71 @@
+import { render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import App from "./App";
+import { demoDataSource } from "./data/demoSnapshot";
+import type { ServiceHealth } from "./domain/model";
+
+const healthyServices: ServiceHealth[] = [
+  {
+    service: "business-api",
+    label: "Business API",
+    status: "healthy",
+    endpoint: "",
+    checkedAt: "",
+    detail: "Healthy response",
+  },
+  {
+    service: "compute-api",
+    label: "Compute API",
+    status: "healthy",
+    endpoint: "",
+    checkedAt: "",
+    detail: "Healthy response",
+  },
+];
+
+function renderApp() {
+  return render(
+    <App dataSource={demoDataSource} healthProbe={vi.fn().mockResolvedValue(healthyServices)} />,
+  );
+}
+
+describe("role-aware application", () => {
+  beforeEach(() => {
+    window.history.replaceState({}, "", "/operations");
+  });
+
+  it("shows the operations lifecycle and an explicit demo source", async () => {
+    renderApp();
+
+    expect(await screen.findByText("Demo snapshot")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Keep the city moving." })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "RM-2041 lifecycle" })).toBeInTheDocument();
+    expect(screen.getByText("Delivered", { selector: ".status-pill span" })).toBeInTheDocument();
+    expect(screen.getByRole("list", { name: "Lifecycle for RM-2041" })).toBeInTheDocument();
+  });
+
+  it("switches role routes without duplicating the application shell", async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    await user.click(screen.getByRole("link", { name: /Strategy lab/ }));
+
+    expect(
+      await screen.findByRole("heading", { name: "Decisions you can inspect." }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "RouteMind navigation" })).toBeInTheDocument();
+    expect(screen.getByText("weighted-greedy", { selector: "strong" })).toBeInTheDocument();
+  });
+
+  it("allows the operator to focus a different order on the shared map and queue", async () => {
+    const user = userEvent.setup();
+    renderApp();
+
+    const queue = screen.getByRole("region", { name: "Orders in motion" });
+    await user.click(within(queue).getByRole("button", { name: /RM-2042/ }));
+
+    expect(screen.getByRole("heading", { name: "RM-2042 lifecycle" })).toBeInTheDocument();
+    expect(screen.getByRole("list", { name: "Lifecycle for RM-2042" })).toBeInTheDocument();
+  });
+});

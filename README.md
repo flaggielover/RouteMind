@@ -4,7 +4,7 @@ RouteMind is an evidence-driven urban delivery platform and research system. It
 combines a consistency-focused Java business backend with Python dispatch,
 simulation, optimization, benchmarking, and intelligence modules.
 
-The repository is currently in **P0 Foundation**. The authoritative project
+The repository is currently in **P6 Product Surfaces**. The authoritative project
 state lives in the root control files, especially `TASK_GRAPH.yaml`,
 `PROGRESS.md`, and `HANDOFF.md`.
 
@@ -47,6 +47,20 @@ Validate or run the stateless Python compute service:
 ./scripts/compute-api.ps1 check
 ./scripts/compute-api.ps1 run
 ```
+
+Run the role-aware product surface:
+
+```powershell
+./scripts/web.ps1 check
+./scripts/web.ps1 e2e
+Push-Location apps/web
+npm run dev
+Pop-Location
+```
+
+The web surface defaults to an explicitly labeled deterministic demo snapshot.
+Java and Python health probes are independent and show unavailable states when
+those services are not running; the demo snapshot is not presented as live data.
 
 This exposes PostgreSQL on `127.0.0.1:15432`, RabbitMQ AMQP on
 `127.0.0.1:15673`, RabbitMQ Management on `http://127.0.0.1:15674`, and Redis on
