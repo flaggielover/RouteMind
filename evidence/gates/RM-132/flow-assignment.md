@@ -25,4 +25,4 @@ Date: 2026-08-22
 ## Gate decision
 
 Local L2 flow-assignment and L6 dispatch-benchmark evidence is complete. Remote
-Actions validation is required before the task is finally closed.
+Actions run `32576849657` passed all five jobs; RM-132 is fully validated.

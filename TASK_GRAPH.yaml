@@ -651,7 +651,7 @@
       "gates": ["L2-flow-assignment", "L6-dispatch-benchmark"],
       "evidence": ["evidence/gates/RM-132/flow-assignment.md"],
       "blocked_by": [],
-      "notes": "No fabricated performance claims. Deterministic flow and partitioned assignment are recorded; remote CI validation is required for the checkpoint."
+      "notes": "No fabricated performance claims. Deterministic flow and partitioned assignment are recorded; remote Actions run 32576849657 passed all five jobs."
     },
     {
       "id": "RM-133",

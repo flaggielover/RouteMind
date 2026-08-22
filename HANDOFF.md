@@ -418,5 +418,6 @@ without crossing courier partitions; single-order calls remain registry-compatib
 and record assignment mode/count metadata. Local full gate passed with Java 60
 tests, Python 74 tests at 96.03% coverage, Web 38 unit tests/build, and 5
 schemas/15 fixtures. Evidence is recorded at
-`evidence/gates/RM-132/flow-assignment.md`; checkpoint is awaiting remote Actions
-validation. RM-140 dynamic travel model contract is now the active task.
+`evidence/gates/RM-132/flow-assignment.md`; remote Actions run `32576849657`
+passed all five jobs. RM-132 is fully validated and RM-140 dynamic travel model
+contract is now the active task.
