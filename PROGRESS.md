@@ -10,17 +10,17 @@ Current Task: RM-106 - Implement Java business event SSE feed
 
 Last Completed: RM-088 - Define deployment and edge-security adapter boundary
 
-Current Gate: RM-104 and RM-105 local gates plus CI passed; RM-106 implementation pending
+Current Gate: RM-106 local implementation and full gate passed; awaiting push/CI validation
 
-CI: PASS - RM-104 run 32564042862; RM-105 run 32564387503; all five jobs passed
+CI: PASS - RM-104 run 32564042862; RM-105 run 32564387503; all five jobs passed. RM-106 CI pending.
 
-Regression: PASS - Java 53, Python 59 / 96.13%, Web 8 unit + build, E2E 16, and 4 schemas / 12 contract fixtures
+Regression: PASS - Java 57, Python 59 / 96.13%, Web 9 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-106 - bounded Java SSE feed backed by business events
+Next Candidates: RM-106 - push checkpoint and observe GitHub Actions, then RM-107
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -75,3 +75,7 @@ RM-105 realtime contract evidence is recorded in
 `evidence/gates/RM-105/realtime-contract.md`; the implementation checkpoint is
 ready for Actions validation. Checkpoint `3c218e5` and Actions run
 `32564387503` passed all five jobs. RM-106 is now the active implementation.
+RM-106 local Java SSE evidence is recorded in `evidence/gates/RM-106/java-sse.md`.
+The bounded Outbox-backed stream, exclusive reconnect cursor, stale conflict,
+and subscriber-loss handling pass the local full gate; the implementation
+checkpoint is awaiting Actions validation.

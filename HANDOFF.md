@@ -8,7 +8,7 @@ Current Phase: Round 2 P10 Live Product Foundation
 
 Current Task: RM-106 - Implement Java business event SSE feed
 
-Task Status: pending (RM-104 and RM-105 passed local and GitHub Actions validation)
+Task Status: implemented (RM-106 bounded Java SSE feed; local gates passed, CI pending)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -272,7 +272,7 @@ Round 2 foundation design:
 The graph now contains 48 Round 2 tasks (RM-100 through RM-190); Round 1 tasks
 remain passed and RM-106 is the current active task.
 
-Next Candidate Task: RM-106 - implement bounded Java business event SSE feed and record evidence.
+Next Candidate Task: push RM-106, observe CI, then implement RM-107 web realtime reconnect and stale-state handling.
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
@@ -306,3 +306,9 @@ exclusive `Last-Event-ID` reconnect, replay provenance, stale-state semantics,
 and supported event types. Local contract evidence is in
 `evidence/gates/RM-105/realtime-contract.md`; checkpoint `3c218e5` and Actions
 run `32564387503` passed all five jobs. Continue with RM-106.
+RM-106 adds a bounded read-only Java SSE projection over durable Outbox events,
+exclusive decimal reconnect cursors, explicit stale conflicts, and bounded
+subscriber-loss logging. Local full gate passed with 57 Java tests, 59 Python
+tests at 96.13% coverage, 5 schemas/15 fixtures, and 9 Web unit tests plus build.
+Evidence is in `evidence/gates/RM-106/java-sse.md`; push and observe Actions before
+marking the task passed.

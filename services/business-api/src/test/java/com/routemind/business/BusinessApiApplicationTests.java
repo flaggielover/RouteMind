@@ -128,6 +128,12 @@ class BusinessApiApplicationTests {
 	}
 
 	@Test
+	void eventStreamRejectsNonCanonicalCursor() throws Exception {
+		mockMvc.perform(get("/api/v1/events/stream").param("after", "004"))
+				.andExpect(status().isBadRequest());
+	}
+
+	@Test
 	void orderCommandsRejectUnauthorizedActorAndStaleVersion() throws Exception {
 		mockMvc.perform(post("/api/v1/orders")
 				.header("Idempotency-Key", "unauthorized-create")

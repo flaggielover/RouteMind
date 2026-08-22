@@ -14,4 +14,6 @@ interface SpringDataOutboxRepository extends JpaRepository<OutboxEntity, UUID> {
 	@Lock(LockModeType.PESSIMISTIC_WRITE)
 	List<OutboxEntity> findByStatusInAndNextAttemptAtLessThanEqualOrderByCreatedAtAsc(
 			List<OutboxStatus> statuses, Instant now, Pageable pageable);
+
+	List<OutboxEntity> findByOrderByCreatedAtDescEventIdDesc(Pageable pageable);
 }

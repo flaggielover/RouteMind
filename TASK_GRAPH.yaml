@@ -451,7 +451,7 @@
       "phase": "P10",
       "priority": "high",
       "depends_on": ["RM-101", "RM-105"],
-      "status": "pending",
+      "status": "implemented",
       "acceptance": ["Java exposes a bounded read-only SSE stream backed by business events", "Reconnect cursors and event identity prevent duplicate UI application", "Subscriber loss and slow consumers are bounded and observable"],
       "gates": ["L3-java-sse", "L5-sse-degradation"],
       "evidence": ["evidence/gates/RM-106/java-sse.md"],
