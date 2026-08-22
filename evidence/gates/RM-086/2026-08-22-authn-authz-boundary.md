@@ -34,3 +34,11 @@ This is a framework-independent Java policy boundary. OIDC/JWKS signature
 verification, key rotation/revocation, rate limiting, WAF, and production secret
 management remain external gates. Web, Python, and agent runtimes do not mint
 credentials or bypass this policy.
+
+## GitHub Actions
+
+- Run: `32558622055`
+- Commit: `7327aef3e74c5ccc000e3e12200530cb14b80aaa`
+- Result: all five jobs passed: control plane and Compose, Java business
+  runtime, Python compute and contracts, Web application, and bounded
+  degradation/resilience.

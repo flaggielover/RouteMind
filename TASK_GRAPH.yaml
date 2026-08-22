@@ -308,12 +308,25 @@
       "phase": "P8",
       "priority": "high",
       "depends_on": ["RM-005", "RM-010", "RM-011", "RM-082"],
-      "status": "implemented",
+      "status": "passed",
       "acceptance": ["Authenticated principal context has explicit validity, issuer, role, scope, and audit invariants", "Java owns deny-by-default command authorization and distinguishes forbidden, stale, and repeated outcomes", "Web, Python, and agent clients cannot mint credentials or bypass the Java policy boundary"],
       "gates": ["L2-auth-policy", "L3-command-authorization", "security-review"],
       "evidence": ["evidence/gates/RM-086/2026-08-22-authn-authz-boundary.md"],
       "blocked_by": [],
       "notes": "OIDC/JWKS verification, rotation, revocation, rate limiting, and production secret management remain external gates."
+    },
+    {
+      "id": "RM-087",
+      "title": "Define request rate-limit and input protection contract",
+      "phase": "P8",
+      "priority": "high",
+      "depends_on": ["RM-005", "RM-010", "RM-011", "RM-080", "RM-082", "RM-086"],
+      "status": "in_progress",
+      "acceptance": ["Immutable policy limits and normalized request descriptors produce stable digests", "Malformed or oversized input is rejected and usage above the burst budget is throttled with deterministic retry-after", "The evaluator is read-only and does not replace Java authorization, idempotency, Outbox, or durable state"],
+      "gates": ["L1-input-protection", "L2-rate-policy", "security-review"],
+      "evidence": [],
+      "blocked_by": [],
+      "notes": "Distributed counter atomicity, WAF/bot mitigation, production quotas, and load validation remain external gates."
     },
     {
       "id": "RM-090",

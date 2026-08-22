@@ -2,13 +2,13 @@
 
 Current Phase: P9 Research and Experimentation
 
-Overall: 25 / 26 tasks passed
+Overall: 26 / 27 tasks passed
 
-Current Task: RM-086 - implementation checkpoint pushed locally; GitHub Actions pending
+Current Task: RM-087 - design request rate-limit and input protection contract
 
 Last Completed: RM-084 - Define release provenance and deployment preflight contract
 
-CI: PENDING - implementation checkpoint `45850cd`; observe the real Actions run before marking RM-086 passed
+CI: PASS - GitHub Actions run 32558622055 (control, Java, Python/contracts, Web, Resilience)
 
 Regression: PASS - Java 34, Python 50 / 95.47%, Web, locked install, and 4 schemas / 12 contract fixtures
 
@@ -16,7 +16,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-086 - complete after CI, then select the next unblocked task
+Next Candidates: RM-087 - implement deterministic request admission evaluator
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -37,3 +37,6 @@ implementation evidence is recorded in `evidence/gates/RM-085/`.
 RM-085 CI evidence is recorded in the same gate file; all five Actions jobs passed.
 RM-086 design is recorded in `docs/design/p8-authn-authz-boundary.md`; executable
 implementation evidence is recorded in `evidence/gates/RM-086/`.
+RM-086 CI evidence is recorded in the same gate file; all five Actions jobs passed.
+RM-087 design is recorded in `docs/design/p8-rate-limit-input-protection.md`;
+implementation and executable evidence remain pending.
