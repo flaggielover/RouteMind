@@ -1,7 +1,7 @@
 # RM-102 Idempotent Java Order Command API
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint recorded by the accompanying commit
+- Revision: `ad988bc`
 - Boundary: Java durable order state, transactional Outbox, and durable command idempotency
 
 ## Contract
@@ -27,6 +27,10 @@ remain the edge/security adapter boundary recorded in ADR 0002.
 2. `./scripts/full-gate.ps1` -> PASS; control, security, Compose, Java, Python,
    contract, Web static/unit/build, and resilience gates passed.
 3. `python scripts/validate_control_plane.py` -> PASS.
+
+4. GitHub Actions run `32563322826` -> PASS; all five jobs passed: Java
+   business runtime, Python compute and contracts, role-aware web application,
+   bounded degradation and resilience, and control plane and Compose.
 
 ## Durable behavior
 

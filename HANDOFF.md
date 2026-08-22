@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P10 Live Product Foundation
 
-Current Task: RM-102 - Expose idempotent Java order command API
+Current Task: RM-103 - Expose bounded Python dispatch snapshot API
 
-Task Status: implemented (local full gate passed; GitHub Actions validation pending)
+Task Status: pending (RM-102 passed local and GitHub Actions validation)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -270,9 +270,9 @@ Round 2 gap audit: `docs/reviews/ROUND_2_GAP_AUDIT.md`.
 Round 2 foundation design:
 `docs/superpowers/specs/2026-08-22-round2-live-product-foundation-design.md`.
 The graph now contains 48 Round 2 tasks (RM-100 through RM-190); Round 1 tasks
-remain passed and RM-102 is the current active task.
+remain passed and RM-103 is the current active task.
 
-Next Candidate Task: RM-102 - push and observe implementation CI, then continue RM-103.
+Next Candidate Task: RM-103 - harden bounded Python dispatch snapshot API and record evidence.
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
@@ -289,8 +289,8 @@ in Actions run `32561918020`; evidence is in
 `3237144` added the Java v1 operations read response with explicit
 merchant/courier projections and bounded health summary. Local gates and all
 five Actions jobs in run `32562416957` passed; evidence is in
-`evidence/gates/RM-101/operations-read-api.md`. RM-102 is implemented locally
-with durable command idempotency, role-aware lifecycle validation, expected-version
-conflicts, and transactional Outbox commands. Evidence is in
-`evidence/gates/RM-102/order-command-api.md`. Push, observe CI, then continue
-with RM-103.
+`evidence/gates/RM-101/operations-read-api.md`. RM-102 is implemented and
+CI-validated with durable command idempotency, role-aware lifecycle validation,
+expected-version conflicts, and transactional Outbox commands. Checkpoint
+`ad988bc` and Actions run `32563322826` passed all five jobs; evidence is in
+`evidence/gates/RM-102/order-command-api.md`. Continue with RM-103.
