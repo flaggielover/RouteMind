@@ -1,7 +1,7 @@
 # RM-088 Deployment and Edge-Security Adapter Evidence
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: `1326a62` design checkpoint; implementation revision recorded after commit
+- Revision: `42f7279` implementation checkpoint
 - Worktree: clean after the implementation checkpoint
 
 ## Contract
@@ -40,4 +40,6 @@ production rollback remain external gates.
 ## GitHub Actions
 
 - Design checkpoint run: `32559357972` (all five jobs passed).
-- Implementation run: pending; append the run ID and job result after push.
+- Implementation run: `32559680696` (all five jobs passed: control plane and
+  Compose, Java business runtime, Python compute and contracts, Role-aware web
+  application, and bounded degradation and resilience).

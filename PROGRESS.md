@@ -2,13 +2,13 @@
 
 Current Phase: P9 Research and Experimentation
 
-Overall: 27 / 28 tasks passed
+Overall: 28 / 28 tasks passed
 
-Current Task: RM-088 - Define deployment and edge-security adapter boundary (implementation complete; CI validation pending)
+Current Task: none - all graph tasks passed
 
-Last Completed: RM-084 - Define release provenance and deployment preflight contract
+Last Completed: RM-088 - Define deployment and edge-security adapter boundary
 
-CI: PASS - design checkpoint GitHub Actions run 32559357972; implementation run pending
+CI: PASS - GitHub Actions run 32559680696 (control, Java, Python/contracts, Web, Resilience)
 
 Regression: PASS - Java 49, Python 56 / 96.05%, Web, locked install, and 4 schemas / 12 contract fixtures
 
@@ -16,7 +16,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-088 - implement provider-neutral fail-closed adapter contract
+Next Candidates: none in current TASK_GRAPH.yaml; all 28 tasks passed
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -43,5 +43,5 @@ implementation evidence is recorded in `evidence/gates/RM-087/`.
 RM-087 CI evidence is recorded in the same gate file; all five Actions jobs passed.
 RM-088 design is recorded in `docs/design/p8-deployment-edge-security-adapter.md`;
 the provider-neutral Java adapter and five executable tests are recorded in
-`evidence/gates/RM-088/2026-08-22-deployment-edge-security.md`; CI validation is
-pending after the implementation push.
+`evidence/gates/RM-088/2026-08-22-deployment-edge-security.md`; all five Actions
+jobs passed in run `32559680696`.
