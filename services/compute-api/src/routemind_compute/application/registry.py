@@ -1,9 +1,25 @@
-from __future__ import annotations
-
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from time import perf_counter
 
 from routemind_compute.domain.dispatch import DispatchDecision, DispatchProblem, DispatchStrategy
+
+
+@dataclass(frozen=True, slots=True)
+class StrategyDescriptor:
+    name: str
+    version: str
+    capabilities: tuple[str, ...]
+    status: str = "available"
+
+    def __post_init__(self) -> None:
+        if not self.name.strip():
+            raise ValueError("strategy name must not be blank")
+        if not self.version.strip():
+            raise ValueError("strategy version must not be blank")
+        if not self.capabilities or any(not capability.strip() for capability in self.capabilities):
+            raise ValueError("strategy capabilities must not be blank")
+        if self.status != "available":
+            raise ValueError("registered strategy status must be available")
 
 
 class StrategyRegistry:
@@ -24,6 +40,22 @@ class StrategyRegistry:
 
     def names(self) -> tuple[str, ...]:
         return tuple(sorted(self._strategies))
+
+    def descriptors(self) -> tuple[StrategyDescriptor, ...]:
+        descriptors = []
+        for name in self.names():
+            strategy = self._strategies[name]
+            version = str(getattr(strategy, "version", "")).strip()
+            capabilities = tuple(
+                sorted(
+                    {
+                        str(capability).strip()
+                        for capability in getattr(strategy, "capabilities", ("dispatch",))
+                    }
+                )
+            )
+            descriptors.append(StrategyDescriptor(name, version, capabilities))
+        return tuple(descriptors)
 
     def get(self, name: str) -> DispatchStrategy:
         try:

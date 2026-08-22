@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Round 2 P12 Role Workflows
+Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-123 - Implement role command errors and degraded states
+Current Task: RM-160 - Expose strategy registry and execution API
 
-Task Status: passed (RM-122 courier shift and delivery workflow); RM-123 is in progress
+Task Status: RM-160 is in progress; RM-154 is the last fully validated task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -486,3 +486,11 @@ RM-155 remains blocked because RM-152 depends on RM-133. The next unblocked
 critical task is RM-160, which exposes the compute-owned strategy registry and
 bounded execution API while preserving versioned provenance and explicit
 failure metadata.
+
+
+## Current Resume Capsule
+- Resume at RM-160; do not redo completed RM-123 through RM-154 gates.
+- Local compute evidence: 104 tests passed, 95.78% coverage, Ruff clean.
+- Full gate passed repository integrity, Java, contracts, Python, and Web format/lint/type checks, then stopped at Web Vitest startup with Windows spawn EPERM.
+- Next action: rerun the full gate where Web worker spawning is permitted, then obtain remote Actions validation before marking RM-160 passed.
+- External data remains governed by ROUTEMIND_DATA_ROOT; no external data path was hardcoded.

@@ -880,7 +880,7 @@
       "phase": "P16",
       "priority": "critical",
       "depends_on": ["RM-103", "RM-130"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["API lists registered strategy names, versions, capabilities, and status", "Execution accepts a bounded scenario and returns decision/metric provenance", "Failures and runtime are explicit"],
       "gates": ["L2-strategy-api", "L3-strategy-execution"],
       "evidence": ["evidence/gates/RM-160/strategy-api.md"],
