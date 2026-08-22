@@ -25,4 +25,4 @@ Date: 2026-08-22
 ## Gate decision
 
 Local L2 traffic-model and L6 travel-robustness evidence is complete. Remote
-Actions validation is required before RM-143 is finally marked passed.
+Actions run `32579007370` passed all five jobs; RM-143 is fully validated.

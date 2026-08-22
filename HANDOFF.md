@@ -446,5 +446,7 @@ RM-143 is locally complete: versioned simulated updates apply by effective time,
 zone, edge, and incident, while context replay digests and provider metadata
 remain deterministic. Local full gate passed with Java 60 tests, Python 89 tests
 at 96.40% coverage, Web 38 unit tests/build, and 5 schemas/15 fixtures.
-Evidence is recorded at `evidence/gates/RM-143/traffic-updates.md`; checkpoint
-is awaiting remote Actions validation.
+Evidence is recorded at `evidence/gates/RM-143/traffic-updates.md`; remote
+Actions run `32579007370` passed all five jobs and the task is fully validated.
+RM-150 continuous Digital Twin state kernel is now the active critical-path
+task.

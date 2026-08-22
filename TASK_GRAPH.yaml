@@ -750,12 +750,12 @@
       "phase": "P14",
       "priority": "medium",
       "depends_on": ["RM-141", "RM-142"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Time-of-day, zone, edge, and incident perturbations alter travel estimates deterministically", "Updates are versioned and replayable", "Unavailable external traffic remains explicitly simulated"],
       "gates": ["L2-traffic-model", "L6-travel-robustness"],
       "evidence": ["evidence/gates/RM-143/traffic-updates.md"],
       "blocked_by": [],
-      "notes": "Local L2/L6 traffic update evidence passes with versioned deterministic perturbations and replay digest; remote Actions validation is required before closure. Provider live traffic remains deferred_external unless verified."
+      "notes": "Local L2/L6 traffic update evidence passes with versioned deterministic perturbations and replay digest; remote Actions run 32579007370 passed all five jobs. Provider live traffic remains deferred_external unless verified."
     },
     {
       "id": "RM-150",
@@ -763,12 +763,12 @@
       "phase": "P15",
       "priority": "critical",
       "depends_on": ["RM-050", "RM-130", "RM-140"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Twin advances simulated time with arrivals, state transitions, travel, capacity, and decisions", "Wall-clock and simulated time are distinct", "Fixed scenario, seed, code, and configuration produce reproducible state/replay digests"],
       "gates": ["L2-twin-kernel", "L6-simulation-reproducibility"],
       "evidence": ["evidence/gates/RM-150/continuous-twin.md"],
       "blocked_by": [],
-      "notes": "Kernel remains framework-free and compute-owned."
+      "notes": "Continuous twin kernel is now the active critical-path task; kernel remains framework-free and compute-owned."
     },
     {
       "id": "RM-151",
