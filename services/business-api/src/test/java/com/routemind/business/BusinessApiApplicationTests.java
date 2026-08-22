@@ -2,6 +2,7 @@ package com.routemind.business;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,11 +77,87 @@ class BusinessApiApplicationTests {
 	}
 
 	@Test
+	void orderCommandsAreIdempotentAndRejectKeyReuse() throws Exception {
+		String create = mockMvc.perform(post("/api/v1/orders")
+				.header("Idempotency-Key", "create-1")
+				.header("X-Actor", "customer"))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.status").value("CREATED"))
+				.andExpect(jsonPath("$.replayed").value(false))
+				.andReturn().getResponse().getContentAsString();
+		String orderId = com.fasterxml.jackson.databind.json.JsonMapper.builder().build()
+				.readTree(create).get("orderId").asText();
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/transitions", orderId)
+					.header("Idempotency-Key", "transition-1")
+					.header("X-Actor", "customer")
+					.contentType("application/json")
+					.content("{\"target\":\"CONFIRMED\",\"expectedVersion\":0}"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value("CONFIRMED"))
+				.andExpect(jsonPath("$.replayed").value(false));
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/transitions", orderId)
+					.header("Idempotency-Key", "transition-1")
+					.header("X-Actor", "customer")
+					.contentType("application/json")
+					.content("{\"target\":\"CONFIRMED\",\"expectedVersion\":0}"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.replayed").value(true));
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/transitions", orderId)
+					.header("Idempotency-Key", "transition-1")
+					.header("X-Actor", "customer")
+					.contentType("application/json")
+					.content("{\"target\":\"CANCELLED\",\"expectedVersion\":1}"))
+				.andExpect(status().isConflict())
+				.andExpect(jsonPath("$.code").value("idempotency_key_reused"));
+
+		mockMvc.perform(post("/api/v1/orders")
+					.header("Idempotency-Key", "create-1")
+					.header("X-Actor", "customer"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.replayed").value(true));
+	}
+
+	@Test
+	void commandWithoutIdempotencyKeyIsRejected() throws Exception {
+		mockMvc.perform(post("/api/v1/orders").header("X-Actor", "customer"))
+				.andExpect(status().isBadRequest())
+				.andExpect(jsonPath("$.code").value("idempotency_key_required"));
+	}
+
+	@Test
+	void orderCommandsRejectUnauthorizedActorAndStaleVersion() throws Exception {
+		mockMvc.perform(post("/api/v1/orders")
+				.header("Idempotency-Key", "unauthorized-create")
+				.header("X-Actor", "dispatch"))
+				.andExpect(status().isForbidden())
+				.andExpect(jsonPath("$.code").value("actor_not_authorized"));
+
+		String create = mockMvc.perform(post("/api/v1/orders")
+				.header("Idempotency-Key", "stale-create")
+				.header("X-Actor", "customer"))
+				.andExpect(status().isCreated())
+				.andReturn().getResponse().getContentAsString();
+		String orderId = com.fasterxml.jackson.databind.json.JsonMapper.builder().build()
+				.readTree(create).get("orderId").asText();
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/transitions", orderId)
+					.header("Idempotency-Key", "stale-transition")
+					.header("X-Actor", "customer")
+					.contentType("application/json")
+					.content("{\"target\":\"CONFIRMED\",\"expectedVersion\":99}"))
+				.andExpect(status().isConflict())
+				.andExpect(jsonPath("$.code").value("stale_version"));
+	}
+
+	@Test
 	void flywayOwnsTheApplicationSchema() {
 		Integer migrationCount = jdbcTemplate.queryForObject(
-				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6') and success = true",
+				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7') and success = true",
 				Integer.class);
 
-		assertThat(migrationCount).isEqualTo(6);
+		assertThat(migrationCount).isEqualTo(7);
 	}
 }

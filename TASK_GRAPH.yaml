@@ -399,7 +399,7 @@
       "phase": "P10",
       "priority": "high",
       "depends_on": ["RM-101"],
-      "status": "pending",
+      "status": "implemented",
       "acceptance": ["Create and lifecycle commands validate authorization, idempotency, and expected version", "Commands persist order and Outbox changes transactionally", "Conflict and invalid-transition responses are stable and auditable"],
       "gates": ["L2-java-command-api", "L3-order-command", "L5-command-retry"],
       "evidence": ["evidence/gates/RM-102/order-command-api.md"],

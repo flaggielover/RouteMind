@@ -6,13 +6,13 @@ Round 2 Progress: 2 / 48 tasks passed
 
 Repository Total: 30 / 76 tasks passed
 
-Current Task: RM-101 - Expose Java authoritative operations read API
+Current Task: RM-102 - Expose idempotent Java order command API
 
 Last Completed: RM-088 - Define deployment and edge-security adapter boundary
 
-Current Gate: RM-101 implementation and CI passed; RM-102 is next
+Current Gate: RM-102 local full gate passed; implementation CI pending
 
-CI: PASS - RM-101 implementation run 32562416957 (all five jobs)
+CI: PASS - RM-101 run 32562416957; RM-102 implementation run pending
 
 Regression: PASS - Java 50, Python 58 / 96.15%, Web 8 unit + build, E2E 16, and 4 schemas / 12 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-102 (all dependencies passed), then RM-103
+Next Candidates: RM-102 (implemented; push and observe CI), then RM-103
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -62,3 +62,6 @@ RM-101 local read API evidence is recorded in
 `evidence/gates/RM-101/operations-read-api.md`; the implementation is ready for
 Actions validation. The implementation checkpoint `3237144` and Actions run
 `32562416957` passed all five jobs.
+RM-102 local command API evidence is recorded in
+`evidence/gates/RM-102/order-command-api.md`; the implementation is ready for
+Actions validation.
