@@ -10,17 +10,17 @@ Current Task: RM-134 - Implement dynamic insertion
 
 Last Completed: RM-133 - Implement VRP and VRPTW strategy baseline
 
-Current Gate: RM-133 local/full gates and remote Actions run 32602269612 passed; RM-134 is now the next active critical-path task
+Current Gate: RM-134 local/full gates passed (Python 122 / 95.56%); remote Actions validation is pending before closing the task
 
-CI: PASS - RM-133 run 32602269612; RM-163 run 32601454810 also passed all five jobs.
+CI: PASS - RM-133 run 32602269612; RM-134 remote validation is pending.
 
-Regression: PASS - Java 60, Python 119 / 95.57%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 122 / 95.56%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-134 - implement dynamic insertion; RM-152 is also unblocked; RM-162 remains blocked by RM-156
+Next Candidates: RM-134 remote validation; after it passes, RM-135 and RM-152 are unblocked; RM-162 remains blocked by RM-156
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -179,3 +179,10 @@ The task is now passed and RM-120 is the active implementation.
   `32602269612` (all five jobs green).
 - RM-133 is now passed (34/48 Round 2, 62/76 repository); RM-134 dynamic
   insertion is activated as the next critical-path task.
+
+### RM-134 checkpoint - 2026-08-23
+- Added deterministic all-position dynamic insertion on top of the VRP/VRPTW
+  snapshot contract. Existing routes and problems remain immutable; accepted
+  results return a new route and incremental travel cost.
+- Local compute/full gates pass with Python 122 tests at 95.56%; remote Actions
+  validation is the remaining Evidence Gate before marking RM-134 passed.

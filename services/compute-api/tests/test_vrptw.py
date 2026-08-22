@@ -9,7 +9,9 @@ from routemind_compute.application.nearest import great_circle_distance_kilometr
 from routemind_compute.application.registry import default_registry
 from routemind_compute.application.vrptw import (
     MAX_VRP_STOPS,
+    VrpInsertionDecision,
     VrpProblem,
+    VrpRoute,
     VrpStop,
     VrptwRoutePlanner,
     VrptwStrategy,
@@ -214,4 +216,94 @@ def test_vrptw_rejects_invalid_provider_results_and_ineligible_dispatch() -> Non
     assert result.rationale == (
         "no feasible VRPTW route",
         "offline:courier_state=offline",
+    )
+
+
+def test_dynamic_insertion_returns_new_deterministic_route_and_preserves_snapshot() -> None:
+    point = GeoPoint(0, 0)
+    problem = VrpProblem(
+        "insert",
+        point,
+        (VrpStop("a", GeoPoint(0, 0.01)), VrpStop("b", GeoPoint(0, 0.03))),
+        (VrpVehicle("vehicle", point, 3),),
+        return_to_depot=False,
+    )
+    planner = VrptwRoutePlanner()
+    active = planner.plan(problem).routes[0]
+    new_stop = VrpStop("c", GeoPoint(0, 0.02))
+
+    first = planner.insert(problem, active, new_stop)
+    second = planner.insert(problem, active, new_stop)
+
+    assert isinstance(first, VrpInsertionDecision)
+    assert first == second
+    assert first.accepted is True
+    assert first.route is not None
+    assert first.route.stop_ids == ("a", "c", "b")
+    assert first.insertion_position == 1
+    assert first.incremental_travel_seconds == pytest.approx(0)
+    assert active.stop_ids == ("a", "b")
+
+
+def test_dynamic_insertion_rejects_constraints_with_stable_reasons() -> None:
+    point = GeoPoint(0, 0)
+    capacity_problem = VrpProblem(
+        "insert-capacity",
+        point,
+        (VrpStop("existing", point),),
+        (VrpVehicle("vehicle", point, 1),),
+        return_to_depot=False,
+    )
+    planner = VrptwRoutePlanner()
+    capacity_route = planner.plan(capacity_problem).routes[0]
+    assert planner.insert(capacity_problem, capacity_route, VrpStop("new", point)).reason == (
+        "capacity_insufficient"
+    )
+
+    window_problem = VrpProblem(
+        "insert-window",
+        point,
+        (VrpStop("existing", point),),
+        (VrpVehicle("vehicle", point, 2),),
+        return_to_depot=False,
+    )
+    window_route = planner.plan(window_problem).routes[0]
+    late_stop = VrpStop("late", GeoPoint(0, 0.1), time_window=TimeWindow(0, 1))
+    assert planner.insert(window_problem, window_route, late_stop).reason == "time_window_missed"
+
+
+def test_dynamic_insertion_rejects_snapshot_identity_and_capacity_limits() -> None:
+    point = GeoPoint(0, 0)
+    problem = VrpProblem(
+        "identity",
+        point,
+        (VrpStop("existing", point),),
+        (VrpVehicle("vehicle", point, 1),),
+        return_to_depot=False,
+    )
+    planner = VrptwRoutePlanner()
+    route = planner.plan(problem).routes[0]
+    assert planner.insert(problem, route, VrpStop("existing", point)).reason == "stop_id_conflict"
+    missing_vehicle = VrpRoute("missing", ("existing",), (0,), (0,), (0,), 1, 0, 0)
+    assert (
+        planner.insert(problem, missing_vehicle, VrpStop("new", point)).reason
+        == "vehicle_not_found"
+    )
+    missing_stop = VrpRoute("vehicle", ("unknown",), (0,), (0,), (0,), 1, 0, 0)
+    assert (
+        planner.insert(problem, missing_stop, VrpStop("new", point)).reason
+        == "route_stop_not_found"
+    )
+
+    full_problem = VrpProblem(
+        "full",
+        point,
+        tuple(VrpStop(f"stop-{index}", point) for index in range(MAX_VRP_STOPS)),
+        (VrpVehicle("vehicle", point, MAX_VRP_STOPS + 1),),
+        return_to_depot=False,
+    )
+    full_route = VrpRoute("vehicle", ("stop-0",), (0,), (0,), (0,), 1, 0, 0)
+    assert (
+        planner.insert(full_problem, full_route, VrpStop("new", point)).reason
+        == "stop_limit_exceeded"
     )

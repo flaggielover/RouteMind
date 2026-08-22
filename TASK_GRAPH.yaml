@@ -677,7 +677,7 @@
       "gates": ["L2-dynamic-insertion", "L6-insertion-benchmark"],
       "evidence": ["evidence/gates/RM-134/dynamic-insertion.md"],
       "blocked_by": [],
-      "notes": "No business-state mutation in the optimizer. RM-134 is the next active critical-path task after RM-133 passed."
+      "notes": "Local L2/L6 evidence passes with deterministic all-position insertion, immutable route snapshots, stable rejection reasons, and bounded stop limits. Remote Actions validation is pending; no business-state mutation in the optimizer."
     },
     {
       "id": "RM-135",

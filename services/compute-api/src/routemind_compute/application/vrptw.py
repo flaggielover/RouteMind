@@ -105,6 +105,15 @@ class VrpRoutePlan:
 
 
 @dataclass(frozen=True, slots=True)
+class VrpInsertionDecision:
+    accepted: bool
+    route: VrpRoute | None
+    insertion_position: int | None
+    incremental_travel_seconds: float | None
+    reason: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class _RouteEvaluation:
     feasible: bool
     route: VrpRoute | None
@@ -195,6 +204,60 @@ class VrptwRoutePlanner:
             total_travel_seconds=sum(route.travel_seconds for route in route_records),
             strategy=self.name,
             strategy_version=self.version,
+        )
+
+    def insert(
+        self,
+        problem: VrpProblem,
+        active_route: VrpRoute,
+        stop: VrpStop,
+    ) -> VrpInsertionDecision:
+        """Return a new route with one stop inserted, without mutating the snapshot."""
+        if len(problem.stops) >= MAX_VRP_STOPS:
+            return VrpInsertionDecision(False, None, None, None, "stop_limit_exceeded")
+        if stop.stop_id in {item.stop_id for item in problem.stops}:
+            return VrpInsertionDecision(False, None, None, None, "stop_id_conflict")
+        vehicle = next(
+            (item for item in problem.vehicles if item.vehicle_id == active_route.vehicle_id),
+            None,
+        )
+        if vehicle is None:
+            return VrpInsertionDecision(False, None, None, None, "vehicle_not_found")
+        stop_by_id = {item.stop_id: item for item in problem.stops}
+        if any(stop_id not in stop_by_id for stop_id in active_route.stop_ids):
+            return VrpInsertionDecision(False, None, None, None, "route_stop_not_found")
+        current = self._evaluate(vehicle, active_route.stop_ids, stop_by_id, problem)
+        if not current.feasible or current.route is None:
+            return VrpInsertionDecision(False, None, None, None, "active_route_infeasible")
+        stop_by_id[stop.stop_id] = stop
+        options: list[tuple[tuple[float, tuple[str, ...], int], int, _RouteEvaluation]] = []
+        reasons: set[str] = set()
+        for position in range(len(active_route.stop_ids) + 1):
+            candidate_ids = (
+                *active_route.stop_ids[:position],
+                stop.stop_id,
+                *active_route.stop_ids[position:],
+            )
+            evaluation = self._evaluate(vehicle, candidate_ids, stop_by_id, problem)
+            if evaluation.feasible and evaluation.route is not None:
+                key = (
+                    evaluation.route.travel_seconds - current.route.travel_seconds,
+                    candidate_ids,
+                    position,
+                )
+                options.append((key, position, evaluation))
+            elif evaluation.reason is not None:
+                reasons.add(evaluation.reason)
+        if not options:
+            reason = sorted(reasons)[0] if reasons else "no feasible insertion"
+            return VrpInsertionDecision(False, None, None, None, reason)
+        _, position, evaluation = min(options, key=lambda item: item[0])
+        assert evaluation.route is not None
+        return VrpInsertionDecision(
+            True,
+            evaluation.route,
+            position,
+            evaluation.route.travel_seconds - current.route.travel_seconds,
         )
 
     def _evaluate(
