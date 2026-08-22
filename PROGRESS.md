@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Round 2 Progress: 39 / 48 tasks passed
+Round 2 Progress: 40 / 48 tasks passed
 
-Repository Total: 67 / 76 tasks passed
+Repository Total: 68 / 76 tasks passed
 
-Current Task: RM-157 - Implement verified replay playback
+Current Task: RM-158 - Implement What-if scenario comparison
 
-Last Completed: RM-156 - Build Digital Twin control surface
+Last Completed: RM-157 - Implement verified replay playback
 
-Current Gate: RM-157 local/full/browser gates passed; implementation checkpoint is pending remote Actions validation
+Current Gate: RM-157 local/full/browser gates and remote Actions run 32606493460 passed; RM-158 is now active
 
-CI: PASS - RM-156 run 32605590683, RM-155 run 32604701074, and RM-152 run 32603896737 passed all five jobs; RM-157 remote validation is pending.
+CI: PASS - RM-157 run 32606493460, RM-156 run 32605590683, RM-155 run 32604701074, and RM-152 run 32603896737 passed all five jobs.
 
 Regression: PASS - Java 60, Python 139 / 95.71%, Web 43 unit + build, E2E 21 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-157 - complete remote Evidence Gate; RM-158 is next after RM-157 passes; RM-162 remains blocked by RM-161
+Next Candidates: RM-158 - implement What-if scenario comparison; RM-162 remains blocked by RM-161
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -279,3 +279,11 @@ The task is now passed and RM-120 is the active implementation.
   browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures.
   Remote Actions validation is the remaining Evidence Gate before marking
   RM-157 passed.
+
+### RM-157 completion - 2026-08-23
+- Verified replay playback passed local/full/browser gates and GitHub Actions
+  run `32606493460` (all five jobs green, including browser smoke), with
+  canonical digest verification, provenance, cursor playback, and event detail
+  inspection.
+- RM-157 is now passed (40/48 Round 2, 68/76 repository); RM-158 What-if
+  scenario comparison is activated next.

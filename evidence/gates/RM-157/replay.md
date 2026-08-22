@@ -30,5 +30,6 @@ Date: 2026-08-23
 
 ## Gate decision
 
-Local L2 replay verification and L4 replay browser evidence are complete. The
-remote Actions Evidence Gate is pending for the implementation checkpoint.
+Local L2 replay verification and L4 replay browser evidence are complete.
+GitHub Actions run `32606493460` passed all five jobs, including the Web static,
+unit, and browser smoke gates. RM-157 is fully validated.

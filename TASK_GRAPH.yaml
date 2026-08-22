@@ -854,12 +854,12 @@
       "phase": "P15",
       "priority": "high",
       "depends_on": ["RM-155"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Valid replay artifacts reconstruct meaningful state transitions", "Digest/provenance is verified before playback", "Play, pause, seek, step, speed, and event inspection work"],
       "gates": ["L2-replay-verification", "L4-replay-browser"],
       "evidence": ["evidence/gates/RM-157/replay.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-156 and RM-155 passed. Local full gate passes Java 60, Python 139 at 95.71%, Web 43 unit/build, 21 browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures. Replay digest verification, playback controls, cursor-derived event visibility, provenance, and event inspection are covered. Replay is not presented as live state. Remote Actions validation is pending."
+      "notes": "Passed after RM-156 and RM-155. Local full gate passes Java 60, Python 139 at 95.71%, Web 43 unit/build, 21 browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures. Replay digest verification, playback controls, cursor-derived event visibility, provenance, and event inspection are covered. Replay is not presented as live state. GitHub Actions run 32606493460 passed all five jobs."
     },
     {
       "id": "RM-158",
@@ -867,12 +867,12 @@
       "phase": "P15",
       "priority": "high",
       "depends_on": ["RM-155", "RM-157"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Users can define demand, supply, preparation, traffic, strategy, and risk variants", "Comparisons use recorded runs and provenance", "Results are labeled scenario comparisons, not causal production claims"],
       "gates": ["L6-what-if", "L4-what-if-browser"],
       "evidence": ["evidence/gates/RM-158/what-if.md"],
       "blocked_by": [],
-      "notes": "Large runs may use ROUTEMIND_DATA_ROOT artifacts."
+      "notes": "Activated after RM-157 passed. Large runs may use ROUTEMIND_DATA_ROOT artifacts."
     },
     {
       "id": "RM-160",
