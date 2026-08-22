@@ -10,9 +10,9 @@ Current Task: RM-122 - Implement courier shift and delivery workflow
 
 Last Completed: RM-121 - Implement merchant preparation workflow
 
-Current Gate: RM-121 local/full/browser/CI gates passed locally; RM-122 is the highest-priority unblocked task
+Current Gate: RM-121 local/full/browser/CI gates passed in run 32572069719; RM-122 is in progress
 
-CI: PASS - RM-120 run 32569640180; all five jobs passed. RM-121 checkpoint is queued after push.
+CI: PASS - RM-121 run 32572069719; all five jobs passed. RM-120 run 32569640180 also passed.
 
 Regression: PASS - Java 59, Python 59 / 96.13%, Web 31 unit + build, E2E 16, and 5 schemas / 15 contract fixtures
 

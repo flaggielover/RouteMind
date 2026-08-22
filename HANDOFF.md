@@ -358,8 +358,8 @@ orders to an empty live projection and forward lifecycle events retain versions.
 Local full gate passed with Java 57 tests, Python 59 tests at 96.13% coverage,
 Web 29 unit tests and build, 16 Playwright tests, and 5 schemas/15 fixtures.
 Checkpoint `fbecdd0` and Actions run `32569640180` passed all five jobs. RM-120 is
-now passed; RM-121 merchant preparation is locally passed and awaiting its Actions
-checkpoint. RM-121 full gate evidence is recorded at
+now passed; RM-121 checkpoint `b4e1694` and Actions run `32572069719` also passed
+all five jobs. RM-121 full gate evidence is recorded at
 `evidence/gates/RM-121/merchant-workflow.md`.
 RM-121 adds Java-owned merchant preparation states, validated actor permissions,
 durable Flyway status expansion, transition persistence repair, and a merchant UI
