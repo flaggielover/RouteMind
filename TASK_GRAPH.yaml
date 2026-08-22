@@ -737,12 +737,12 @@
       "phase": "P14",
       "priority": "medium",
       "depends_on": ["RM-083", "RM-140"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Large matrices, road graphs, and replay artifacts resolve through ROUTEMIND_DATA_ROOT", "Manifests carry relative path, checksum, producer, revision, configuration, and seed", "Unsafe absolute or repository-escaping paths fail closed"],
       "gates": ["L1-data-root", "L2-artifact-manifest", "security-review"],
       "evidence": ["evidence/gates/RM-142/data-root-adapter.md"],
       "blocked_by": [],
-      "notes": "Local L1/L2/security data-root evidence passes with canonical manifests, containment checks, and checksum verification; remote Actions validation is required before closure. Do not commit generated large artifacts."
+      "notes": "Local L1/L2/security data-root evidence passes with canonical manifests, containment checks, and checksum verification; remote Actions run 32578382074 passed all five jobs. Do not commit generated large artifacts."
     },
     {
       "id": "RM-143",
@@ -750,12 +750,12 @@
       "phase": "P14",
       "priority": "medium",
       "depends_on": ["RM-141", "RM-142"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Time-of-day, zone, edge, and incident perturbations alter travel estimates deterministically", "Updates are versioned and replayable", "Unavailable external traffic remains explicitly simulated"],
       "gates": ["L2-traffic-model", "L6-travel-robustness"],
       "evidence": ["evidence/gates/RM-143/traffic-updates.md"],
       "blocked_by": [],
-      "notes": "Provider live traffic remains deferred_external unless verified."
+      "notes": "Traffic and incident updates are now the active task; provider live traffic remains deferred_external unless verified."
     },
     {
       "id": "RM-150",

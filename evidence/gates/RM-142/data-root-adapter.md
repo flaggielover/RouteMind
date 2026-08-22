@@ -27,4 +27,5 @@ Date: 2026-08-22
 ## Gate decision
 
 Local L1 data-root, L2 artifact-manifest, and security evidence is complete.
-Remote Actions validation is required before RM-142 is finally marked passed.
+Remote Actions run `32578382074` passed all five jobs; RM-142 is fully
+validated.
