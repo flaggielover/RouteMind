@@ -36,6 +36,6 @@ Date: 2026-08-23
 
 ## Gate decision
 
-Local L4 Twin browser and L5 UI degradation evidence is complete. Remote
-GitHub Actions validation is required before `TASK_GRAPH.yaml` changes RM-156
-to `passed`.
+Local L4 Twin browser and L5 UI degradation evidence is complete. GitHub Actions
+run `32605590683` passed all five jobs, including the browser smoke gate. RM-156
+is fully validated.

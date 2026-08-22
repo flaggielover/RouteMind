@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-156 - Build Digital Twin control surface
+Current Task: RM-157 - Implement verified replay playback
 
-Task Status: RM-156 implementation and local/browser gates are complete; remote Actions validation is pending
+Task Status: RM-157 is in progress; RM-156 is the last fully validated task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -577,12 +577,19 @@ simulated time, seeded traffic/supply/demand metrics, replay digest, and recent
 events are explicit. Web check passes 42 unit tests/build; browser smoke passes
 19 tests with one existing desktop-only skip, including the new desktop/mobile
 simulation control flow. Evidence is recorded at
-`evidence/gates/RM-156/twin-ui.md`; remote Actions validation is pending.
+`evidence/gates/RM-156/twin-ui.md`. GitHub Actions run `32605590683` passed all
+five jobs, including browser smoke; RM-156 is fully validated and RM-157 is now
+active.
 
 ## Current Resume Capsule
-- Resume by committing and pushing RM-156, then observe its real Actions run
-  until all five jobs pass; do not mark the task passed on local evidence alone.
-- Local evidence: Java 60, Python 139 at 95.71%, Web 42 unit/build, browser
+- Resume at RM-157 verified replay playback; do not redo completed RM-123
+  through RM-163 gates or RM-133/RM-134/RM-135/RM-152/RM-155/RM-156 green
+  Actions runs.
+- RM-156 evidence: Java 60, Python 139 at 95.71%, Web 42 unit/build, browser
   smoke 19 passed plus one desktop-only skip, and 5 schemas/15 fixtures.
-- After RM-156 is green, close it and activate RM-157 verified replay playback;
-  RM-162 then becomes unblocked by the UI dependency.
+- RM-156 implementation Actions run `32605590683` passed all five jobs. Round 2
+  is 39/48 and repository total is 67/76.
+- Next action: inspect the existing simulation state/event provenance and build
+  verified replay loading, digest validation, playback controls, seek/step,
+  event inspection, and explicit replay-vs-live labeling. RM-162 remains
+  blocked by RM-161.

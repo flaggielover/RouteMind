@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Round 2 Progress: 38 / 48 tasks passed
+Round 2 Progress: 39 / 48 tasks passed
 
-Repository Total: 66 / 76 tasks passed
+Repository Total: 67 / 76 tasks passed
 
-Current Task: RM-156 - Build Digital Twin control surface
+Current Task: RM-157 - Implement verified replay playback
 
-Last Completed: RM-155 - Expose Digital Twin control and replay API
+Last Completed: RM-156 - Build Digital Twin control surface
 
-Current Gate: RM-156 local/full and browser gates passed; implementation remote Actions validation is pending
+Current Gate: RM-156 local/full/browser gates and remote Actions run 32605590683 passed; RM-157 is now active
 
-CI: PENDING - RM-156 implementation checkpoint is ready to push; RM-155 run 32604701074 and RM-152 run 32603896737 passed all five jobs.
+CI: PASS - RM-156 run 32605590683 and RM-155 run 32604701074 passed all five jobs; RM-152 run 32603896737 also passed.
 
 Regression: PASS - Java 60, Python 139 / 95.71%, Web 42 unit + build, E2E 19 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-156 remote validation; after green, RM-157 verified replay playback; RM-162 remains blocked by RM-156
+Next Candidates: RM-157 - implement verified replay playback; RM-162 remains blocked by RM-161
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -259,3 +259,11 @@ The task is now passed and RM-120 is the active implementation.
   5 schemas/15 fixtures; browser smoke passes 19 with one existing desktop-only
   skip. Remote Actions validation is the remaining Evidence Gate before
   marking RM-156 passed.
+
+### RM-156 completion - 2026-08-23
+- Digital Twin simulation source and control surface passed local/full/browser
+  gates and GitHub Actions run `32605590683` (all five jobs green, including
+  browser smoke), with distinct simulation mode, responsive controls, map/
+  route reuse, metrics, exceptions, events, and replay digest visibility.
+- RM-156 is now passed (39/48 Round 2, 67/76 repository); RM-157 verified
+  replay playback is activated next.

@@ -841,12 +841,12 @@
       "phase": "P15",
       "priority": "high",
       "depends_on": ["RM-155", "RM-112"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["UI exposes scenario, seed, speed, strategy, demand, supply, traffic, and controls", "Live simulated map, routes, events, metrics, and exceptions update visibly", "Simulation mode is distinct from live and demo modes"],
       "gates": ["L4-twin-browser", "L5-twin-ui-degradation"],
       "evidence": ["evidence/gates/RM-156/twin-ui.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-155 passed. Local Web check passes 42 unit tests/build and browser smoke passes 19 tests with one existing desktop-only skip; simulation controls, metrics, events, map reuse, responsive states, and accessibility are covered. Remote Actions validation is pending. The UI must make simulation behavior understandable without logs."
+      "notes": "Activated after RM-155 passed. Local Web check passes 42 unit tests/build and browser smoke passes 19 tests with one existing desktop-only skip; simulation controls, metrics, events, map reuse, responsive states, and accessibility are covered. Remote Actions run 32605590683 passed all five jobs. The UI makes simulation behavior understandable without logs."
     },
     {
       "id": "RM-157",
@@ -854,12 +854,12 @@
       "phase": "P15",
       "priority": "high",
       "depends_on": ["RM-155"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Valid replay artifacts reconstruct meaningful state transitions", "Digest/provenance is verified before playback", "Play, pause, seek, step, speed, and event inspection work"],
       "gates": ["L2-replay-verification", "L4-replay-browser"],
       "evidence": ["evidence/gates/RM-157/replay.md"],
       "blocked_by": [],
-      "notes": "Replay is not presented as live state."
+      "notes": "Activated after RM-156 and RM-155 passed. Replay is not presented as live state."
     },
     {
       "id": "RM-158",
