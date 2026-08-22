@@ -9,6 +9,10 @@ from pydantic import BaseModel, ConfigDict, Field
 
 from routemind_compute.api.observability import RequestObservabilityMiddleware, metrics_response
 from routemind_compute.application.registry import StrategyRegistry, default_registry
+from routemind_compute.application.travel import (
+    DeterministicLocalTravelProvider,
+    FallbackTravelTimeProvider,
+)
 from routemind_compute.domain.dispatch import CourierCandidate, DispatchProblem, GeoPoint
 
 
@@ -36,6 +40,9 @@ app.add_middleware(
 )
 app.add_middleware(RequestObservabilityMiddleware)
 REGISTRY: StrategyRegistry = default_registry()
+TRAVEL_PROVIDER = FallbackTravelTimeProvider(
+    DeterministicLocalTravelProvider(), DeterministicLocalTravelProvider()
+)
 
 
 class GeoPointRequest(BaseModel):
@@ -101,6 +108,7 @@ def system_info() -> SystemInfoResponse:
 def dispatch_snapshot(
     payload: DispatchSnapshotRequest, request: Request
 ) -> DispatchSnapshotResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
     try:
         problem = DispatchProblem(
             payload.request_id,
@@ -113,9 +121,60 @@ def dispatch_snapshot(
                 for candidate in payload.candidates
             ),
         )
-        decision = REGISTRY.solve(payload.strategy, problem)
-    except (KeyError, ValueError) as error:
+    except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
+    try:
+        decision = REGISTRY.solve(payload.strategy, problem)
+    except KeyError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    except (TimeoutError, RuntimeError, TypeError, ValueError) as error:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "strategy_unavailable",
+                "message": "dispatch strategy failed",
+                "trace_id": trace_id,
+                "metadata": {
+                    "fallback_strategy": "nearest",
+                    "fallback_available": "true",
+                    "failure_type": type(error).__name__,
+                },
+            },
+        ) from error
+    try:
+        selected_travel = next(
+            (
+                TRAVEL_PROVIDER.estimate(candidate.location, problem.pickup)
+                for candidate in problem.candidates
+                if candidate.courier_id == decision.courier_id
+            ),
+            None,
+        )
+    except (TimeoutError, RuntimeError, TypeError, ValueError) as error:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "travel_provider_unavailable",
+                "message": "travel metadata unavailable",
+                "trace_id": trace_id,
+                "metadata": {
+                    "fallback_provider": "deterministic-local",
+                    "fallback_available": "true",
+                    "failure_type": type(error).__name__,
+                },
+            },
+        ) from error
+    metadata = (
+        *decision.metadata,
+        ("travel_provider", selected_travel.provider if selected_travel else "not_required"),
+        ("travel_candidate_count", str(len(problem.candidates))),
+        (
+            "travel_fallback_used",
+            str(selected_travel.fallback_used if selected_travel else False).lower(),
+        ),
+    )
+    if selected_travel is not None:
+        metadata = (*metadata, ("selected_travel_seconds", f"{selected_travel.seconds:.3f}"))
     return DispatchSnapshotResponse(
         source="live",
         generated_at=datetime.now(UTC),
@@ -126,6 +185,6 @@ def dispatch_snapshot(
         score=decision.score,
         rationale=decision.rationale,
         latency_millis=decision.latency_millis,
-        metadata=decision.metadata,
-        trace_id=getattr(request.state, "trace_id", "unavailable"),
+        metadata=metadata,
+        trace_id=trace_id,
     )

@@ -10,17 +10,17 @@ Current Task: RM-103 - Expose bounded Python dispatch snapshot API
 
 Last Completed: RM-088 - Define deployment and edge-security adapter boundary
 
-Current Gate: RM-102 implementation, local full gate, and CI passed; RM-103 implementation pending
+Current Gate: RM-103 local full gate passed; implementation CI pending
 
 CI: PASS - RM-102 run 32563322826; all five jobs passed
 
-Regression: PASS - Java 53, Python 58 / 96.15%, Web 8 unit + build, E2E 16, and 4 schemas / 12 contract fixtures
+Regression: PASS - Java 53, Python 59 / 96.13%, Web 8 unit + build, E2E 16, and 4 schemas / 12 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-103 - bounded Python dispatch snapshot API
+Next Candidates: RM-103 (implemented; push and observe CI), then RM-104
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -59,9 +59,12 @@ RM-100 local implementation evidence is recorded in
 the implementation checkpoint `8b70f9e` and Actions run `32561918020` passed all
 five jobs.
 RM-101 local read API evidence is recorded in
-`evidence/gates/RM-101/operations-read-api.md`; the implementation is ready for
-Actions validation. The implementation checkpoint `3237144` and Actions run
+`evidence/gates/RM-101/operations-read-api.md`; the implementation checkpoint
+`3237144` and Actions run
 `32562416957` passed all five jobs.
 RM-102 local command API evidence is recorded in
 `evidence/gates/RM-102/order-command-api.md`; checkpoint `ad988bc` and Actions
 run `32563322826` passed all five jobs. RM-103 is now the active implementation.
+RM-103 local dispatch API evidence is recorded in
+`evidence/gates/RM-103/dispatch-api.md`; the implementation checkpoint is ready
+for Actions validation.

@@ -412,7 +412,7 @@
       "phase": "P10",
       "priority": "high",
       "depends_on": ["RM-100"],
-      "status": "pending",
+      "status": "implemented",
       "acceptance": ["Dispatch requests validate bounded candidates and return versioned strategy decisions", "Registry and travel metadata are included without durable business writes", "Timeout and strategy failure responses preserve explicit fallback metadata"],
       "gates": ["L2-python-dispatch-api", "L3-compute-contract"],
       "evidence": ["evidence/gates/RM-103/dispatch-api.md"],

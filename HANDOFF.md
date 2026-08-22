@@ -8,7 +8,7 @@ Current Phase: Round 2 P10 Live Product Foundation
 
 Current Task: RM-103 - Expose bounded Python dispatch snapshot API
 
-Task Status: pending (RM-102 passed local and GitHub Actions validation)
+Task Status: implemented (local full gate passed; GitHub Actions validation pending)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -272,7 +272,7 @@ Round 2 foundation design:
 The graph now contains 48 Round 2 tasks (RM-100 through RM-190); Round 1 tasks
 remain passed and RM-103 is the current active task.
 
-Next Candidate Task: RM-103 - harden bounded Python dispatch snapshot API and record evidence.
+Next Candidate Task: RM-103 - push and observe implementation CI, then continue RM-104.
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
@@ -294,3 +294,7 @@ CI-validated with durable command idempotency, role-aware lifecycle validation,
 expected-version conflicts, and transactional Outbox commands. Checkpoint
 `ad988bc` and Actions run `32563322826` passed all five jobs; evidence is in
 `evidence/gates/RM-102/order-command-api.md`. Continue with RM-103.
+RM-103 adds bounded candidate validation, versioned strategy decisions, travel
+provider metadata, and explicit 503 strategy/travel failure responses. Local
+full gate passed; evidence is in `evidence/gates/RM-103/dispatch-api.md`.
+Push and observe CI, then continue with RM-104.
