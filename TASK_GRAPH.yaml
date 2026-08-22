@@ -243,7 +243,7 @@
       "phase": "P9",
       "priority": "high",
       "depends_on": ["RM-050"],
-      "status": "ready",
+      "status": "in_progress",
       "acceptance": ["Benchmark manifests record code, scenario, seed, configuration, runtime, and outputs", "Baseline metrics compare strategies reproducibly", "Hypothesis-to-conclusion lineage is queryable"],
       "gates": ["L6-routebench", "L6-lineage"],
       "evidence": [],
