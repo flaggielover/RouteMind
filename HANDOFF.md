@@ -8,7 +8,7 @@ Current Phase: P9 Research and Experimentation
 
 Current Task: RM-088 - Define deployment and edge-security adapter boundary
 
-Task Status: in_progress (design checkpoint)
+Task Status: implemented (local gates passed; CI validation pending)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -243,13 +243,17 @@ RM-086 implementation checkpoint `45850cd` adds the framework-independent Java
 policy, five unit tests, and local full-gate evidence. The task remains
 `passed` after Actions run `32558622055` passed all five jobs.
 
-Next Recommended Action: Design RM-088's deployment and edge-security adapter
-boundary, keeping orchestration, WAF, distributed counters, and production
-identity as explicit external capabilities.
+Next Recommended Action: Push the RM-088 implementation, observe the real
+Actions run, append CI evidence, then mark RM-088 passed and select the next
+unblocked high-priority task.
 The RM-088 design now binds release/staged/auth/rate digests, requires
 fail-closed immutable edge references for apply/rollback, and keeps local
 preflight/plan read-only. Design is in
-`docs/design/p8-deployment-edge-security-adapter.md`.
+`docs/design/p8-deployment-edge-security-adapter.md`. The implementation adds
+the pure Java `DeploymentEdgeAdapter`, immutable request/capability/decision
+records, stable operation digests, and five focused tests. Local Java (49 tests)
+and repository gates pass; implementation evidence is in
+`evidence/gates/RM-088/2026-08-22-deployment-edge-security.md`.
 
 The RM-087 design now defines immutable limits, normalized descriptors, reject
 versus throttle precedence, deterministic retry-after, and the explicit
@@ -261,7 +265,7 @@ tests; local full gate passed. Evidence is in
 `evidence/gates/RM-087/2026-08-22-rate-limit-input.md`. The task is now
 `passed` after Actions run `32559165335` passed all five jobs.
 
-Next Candidate Task: RM-088 - implement provider-neutral fail-closed adapter contract
+Next Candidate Task: RM-088 - validate and pass the provider-neutral fail-closed adapter contract
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

@@ -4,13 +4,13 @@ Current Phase: P9 Research and Experimentation
 
 Overall: 27 / 28 tasks passed
 
-Current Task: RM-088 - Define deployment and edge-security adapter boundary
+Current Task: RM-088 - Define deployment and edge-security adapter boundary (implementation complete; CI validation pending)
 
 Last Completed: RM-084 - Define release provenance and deployment preflight contract
 
-CI: PASS - GitHub Actions run 32559165335 (control, Java, Python/contracts, Web, Resilience)
+CI: PASS - design checkpoint GitHub Actions run 32559357972; implementation run pending
 
-Regression: PASS - Java 34, Python 50 / 95.47%, Web, locked install, and 4 schemas / 12 contract fixtures
+Regression: PASS - Java 49, Python 56 / 96.05%, Web, locked install, and 4 schemas / 12 contract fixtures
 
 Blocked: NONE
 
@@ -42,4 +42,6 @@ RM-087 design is recorded in `docs/design/p8-rate-limit-input-protection.md`;
 implementation evidence is recorded in `evidence/gates/RM-087/`.
 RM-087 CI evidence is recorded in the same gate file; all five Actions jobs passed.
 RM-088 design is recorded in `docs/design/p8-deployment-edge-security-adapter.md`;
-implementation and executable evidence remain pending.
+the provider-neutral Java adapter and five executable tests are recorded in
+`evidence/gates/RM-088/2026-08-22-deployment-edge-security.md`; CI validation is
+pending after the implementation push.

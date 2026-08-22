@@ -334,10 +334,10 @@
       "phase": "P8",
       "priority": "high",
       "depends_on": ["RM-082", "RM-084", "RM-085", "RM-086", "RM-087"],
-      "status": "in_progress",
+      "status": "implemented",
       "acceptance": ["Provider-neutral adapter requests bind release, staged decision, auth, and rate/input digests without secret values", "Missing or mutable identity, TLS, WAF, limiter, or secret references fail closed for apply and rollback", "Local preflight/plan are read-only and deployment health and provider enforcement remain external"],
       "gates": ["L1-deployment-adapter", "security-review", "L5-edge-fail-closed"],
-      "evidence": [],
+      "evidence": ["evidence/gates/RM-088/2026-08-22-deployment-edge-security.md"],
       "blocked_by": [],
       "notes": "Provider APIs, TLS/WAF/limiter enforcement, identity rotation, deployment health, and production rollback remain external gates."
     },
