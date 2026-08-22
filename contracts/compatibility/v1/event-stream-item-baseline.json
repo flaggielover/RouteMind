@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "v1",
+  "cursor": "7",
+  "event": {
+    "specVersion": "1.0",
+    "eventId": "66666666-6666-4666-8666-666666666666",
+    "eventType": "courier.location.updated",
+    "occurredAt": "2026-08-22T09:59:00Z",
+    "producer": "business-api",
+    "aggregateId": "77777777-7777-4777-8777-777777777777",
+    "aggregateVersion": 1,
+    "correlationId": "88888888-8888-4888-8888-888888888888",
+    "causationId": null,
+    "traceId": "fedcba9876543210fedcba9876543210",
+    "payload": {"courierId": "courier-1", "latitude": 31.2, "longitude": 121.4}
+  },
+  "replay": true,
+  "stale": false,
+  "staleReason": null
+}

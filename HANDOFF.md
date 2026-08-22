@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P10 Live Product Foundation
 
-Current Task: RM-104 - Connect web live data source with explicit modes
+Current Task: RM-105 - Define realtime event stream and cursor contract
 
-Task Status: implemented (local web/static/browser gates passed; GitHub Actions validation pending)
+Task Status: implemented (local contract gate passed; GitHub Actions validation pending)
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -272,7 +272,7 @@ Round 2 foundation design:
 The graph now contains 48 Round 2 tasks (RM-100 through RM-190); Round 1 tasks
 remain passed and RM-104 is the current active task.
 
-Next Candidate Task: RM-104 - push and observe implementation CI, then continue RM-105.
+Next Candidate Task: RM-105 - push and observe implementation CI, then continue RM-106.
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,
@@ -301,3 +301,8 @@ Checkpoint `7506a5d` and Actions run `32563779670` passed all five jobs.
 Continue with RM-104. The web source boundary has local evidence in
 `evidence/gates/RM-104/web-live-data-source.md`; push and observe CI, then
 continue with RM-105.
+RM-105 defines the v1 event-stream item schema, monotonic decimal cursor,
+exclusive `Last-Event-ID` reconnect, replay provenance, stale-state semantics,
+and supported event types. Local contract evidence is in
+`evidence/gates/RM-105/realtime-contract.md`; push and observe CI, then continue
+with RM-106.

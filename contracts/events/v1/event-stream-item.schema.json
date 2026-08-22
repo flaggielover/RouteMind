@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.routemind.local/events/v1/event-stream-item.schema.json",
+  "title": "RouteMind Event Stream Item v1",
+  "type": "object",
+  "required": ["schemaVersion", "cursor", "event", "replay", "stale", "staleReason"],
+  "properties": {
+    "schemaVersion": {"const": "v1"},
+    "cursor": {"type": "string", "pattern": "^(0|[1-9][0-9]*)$", "maxLength": 20},
+    "event": {"allOf": [{"$ref": "event-envelope.schema.json"}, {"properties": {"eventType": {"type": "string", "enum": ["order.created", "order.status.changed", "dispatch.decision.recorded", "courier.location.updated", "exception.raised", "simulation.tick"]}}}]},
+    "replay": {"type": "boolean"},
+    "stale": {"type": "boolean"},
+    "staleReason": {"type": ["string", "null"], "minLength": 1}
+  },
+  "allOf": [
+    {"if": {"properties": {"stale": {"const": true}}}, "then": {"properties": {"staleReason": {"type": "string", "minLength": 1}}}},
+    {"if": {"properties": {"stale": {"const": false}}}, "then": {"properties": {"staleReason": {"type": "null"}}}}
+  ],
+  "additionalProperties": false
+}

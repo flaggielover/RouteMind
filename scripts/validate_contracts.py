@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from jsonschema import Draft202012Validator, FormatChecker
+from referencing import Registry, Resource
 
 ROOT = Path(__file__).parents[1]
 CONTRACTS = ROOT / "contracts"
@@ -17,12 +18,19 @@ def load_json(path: Path) -> Any:
 
 def main() -> None:
     manifest = load_json(CONTRACTS / "manifest.json")
+    schema_store = {
+        load_json(CONTRACTS / case["schema"])["$id"]: Resource.from_contents(
+            load_json(CONTRACTS / case["schema"])
+        )
+        for case in manifest["cases"]
+    }
+    registry = Registry().with_resources(schema_store.items())
     checked = 0
     for case in manifest["cases"]:
         schema_path = CONTRACTS / case["schema"]
         schema = load_json(schema_path)
         Draft202012Validator.check_schema(schema)
-        validator = Draft202012Validator(schema, format_checker=FormatChecker())
+        validator = Draft202012Validator(schema, registry=registry, format_checker=FormatChecker())
 
         for relative_path in case["valid"]:
             validator.validate(load_json(CONTRACTS / relative_path))

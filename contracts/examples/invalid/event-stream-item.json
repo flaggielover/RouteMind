@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "v1",
+  "cursor": "0042",
+  "event": {
+    "specVersion": "1.0",
+    "eventId": "33333333-3333-4333-8333-333333333333",
+    "eventType": "payment.refunded",
+    "occurredAt": "2026-08-22T10:00:00Z",
+    "producer": "business-api",
+    "aggregateId": "11111111-1111-4111-8111-111111111111",
+    "aggregateVersion": 2,
+    "correlationId": "44444444-4444-4444-8444-444444444444",
+    "causationId": null,
+    "traceId": "0123456789abcdef0123456789abcdef",
+    "payload": {}
+  },
+  "replay": false,
+  "stale": true,
+  "staleReason": "cursor gap detected"
+}

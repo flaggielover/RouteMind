@@ -6,11 +6,11 @@ Round 2 Progress: 4 / 48 tasks passed
 
 Repository Total: 32 / 76 tasks passed
 
-Current Task: RM-104 - Connect web live data source with explicit modes
+Current Task: RM-105 - Define realtime event stream and cursor contract
 
 Last Completed: RM-088 - Define deployment and edge-security adapter boundary
 
-Current Gate: RM-104 local web/static/browser gates passed; implementation CI pending
+Current Gate: RM-105 local contract gate passed; implementation CI pending
 
 CI: PASS - RM-103 run 32563779670; all five jobs passed
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-104 (implemented; push and observe CI), then RM-105
+Next Candidates: RM-104 (implemented; CI evidence pending), RM-105 (implemented; CI pending), then RM-106
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -71,3 +71,6 @@ RM-103 dispatch API evidence is recorded in
 RM-104 web source-mode evidence is recorded in
 `evidence/gates/RM-104/web-live-data-source.md`; local static and browser gates
 passed and the implementation checkpoint is ready for Actions validation.
+RM-105 realtime contract evidence is recorded in
+`evidence/gates/RM-105/realtime-contract.md`; the implementation checkpoint is
+ready for Actions validation.

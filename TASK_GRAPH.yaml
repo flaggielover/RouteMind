@@ -438,7 +438,7 @@
       "phase": "P10",
       "priority": "high",
       "depends_on": ["RM-100"],
-      "status": "pending",
+      "status": "implemented",
       "acceptance": ["Event stream preserves event, correlation, causation, and trace identifiers", "Cursor, ordering, reconnect, and stale-state semantics are explicit", "Event types cover order, dispatch, courier, exception, and simulation updates"],
       "gates": ["L1-realtime-contract", "L2-event-cursor"],
       "evidence": ["evidence/gates/RM-105/realtime-contract.md"],

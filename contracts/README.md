@@ -22,6 +22,15 @@ causation IDs identify the direct predecessor and are null only at a workflow
 root; W3C-compatible trace IDs join telemetry. Payload models are not internal
 database or domain entities.
 
+The v1 event-stream item uses a decimal cursor as the SSE `id` and
+`Last-Event-ID` resume token. Producers assign cursors strictly monotonically;
+reconnect replay is exclusive (`cursor > Last-Event-ID`) and keeps the original
+event identity. `replay` identifies a reconnect replay, while `stale: true` is
+only valid with a non-empty `staleReason` when a cursor gap or retention boundary
+prevents a complete stream. Consumers must stop applying updates and refresh
+their snapshot when an item is stale. Supported event types cover order,
+dispatch, courier, exception, and simulation updates.
+
 Run `./scripts/compute-api.ps1 check` from the repository root. It checks every
 schema, asserts positive and compatibility fixtures are accepted, and asserts
 negative examples are rejected.
