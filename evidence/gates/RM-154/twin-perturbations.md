@@ -31,4 +31,6 @@ Date: 2026-08-22
 ## Gate decision
 
 Local L2 twin-perturbation, L5 simulation-failure, and L6 robustness evidence
-is complete. The checkpoint is awaiting remote Actions validation.
+is complete. GitHub Actions run `32582936237` passed all five required jobs
+(Java, Python, control plane/resilience, and Web browser smoke), so RM-154 is
+fully validated.

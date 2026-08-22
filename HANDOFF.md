@@ -479,5 +479,10 @@ traffic, supply, merchant-delay, and dependency-failure events, feeds traffic
 into `DynamicTravelContext`, and separates simulated from live failure metrics.
 Full local gate passes Java 60, Python 100 at 95.96%, Web 38 unit tests/build,
 and 5 schemas/15 fixtures. Evidence is recorded at
-`evidence/gates/RM-154/twin-perturbations.md`; checkpoint is awaiting remote
-Actions validation.
+`evidence/gates/RM-154/twin-perturbations.md`; remote Actions run
+`32582936237` passed all five jobs. RM-154 is fully validated.
+
+RM-155 remains blocked because RM-152 depends on RM-133. The next unblocked
+critical task is RM-160, which exposes the compute-owned strategy registry and
+bounded execution API while preserving versioned provenance and explicit
+failure metadata.

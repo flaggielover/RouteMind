@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P15 Digital Twin
 
-Round 2 Progress: 29 / 48 tasks passed
+Round 2 Progress: 30 / 48 tasks passed
 
-Repository Total: 57 / 76 tasks passed
+Repository Total: 58 / 76 tasks passed
 
-Current Task: RM-154 - Implement traffic, supply, and failure perturbations
+Current Task: RM-160 - Expose strategy registry and execution API
 
-Last Completed: RM-153 - Implement dynamic merchant preparation model
+Last Completed: RM-154 - Implement traffic, supply, and failure perturbations
 
-Current Gate: RM-154 local/full gates passed; checkpoint is awaiting remote Actions validation
+Current Gate: RM-154 local/full gates and remote Actions run 32582936237 passed; RM-160 is the next unblocked critical task
 
-CI: PASS - RM-153 run 32582291443; all five jobs passed. RM-151 run 32581545061 also passed all five jobs. RM-154 remote validation is pending.
+CI: PASS - RM-154 run 32582936237; all five jobs passed. RM-153 run 32582291443 also passed all five jobs.
 
 Regression: PASS - Java 60, Python 100 / 95.96%, Web 38 unit + build, E2E 17 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-154 - implement traffic, supply, and failure perturbations
+Next Candidates: RM-160 - expose strategy registry and execution API; RM-155 remains blocked by RM-152 (which depends on RM-133)
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
