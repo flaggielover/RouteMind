@@ -109,6 +109,8 @@ the near/high-risk courier while full/risk-only RADS chooses the farther/low-ris
 courier. Local full gate passed with 50 Python tests at 95.47% coverage, Java 34
 tests, and Web/control regression. Evidence is in
 `evidence/gates/RM-091/2026-08-22-rads-baseline.md`.
+The RM-091 checkpoint commit `50e666d` passed all five GitHub Actions jobs in
+run `32554498417`.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
