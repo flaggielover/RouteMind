@@ -34,3 +34,11 @@ The evaluator does not store or mutate counters, authorize business commands,
 write PostgreSQL, or replace Outbox/idempotency semantics. Atomic distributed
 counters, WAF/bot mitigation, production quotas, credential reputation, and
 load validation remain external gates.
+
+## GitHub Actions
+
+- Run: `32559165335`
+- Commit: `df616fe55e1e51a1ec5481412b6ba3aaa8e6a232`
+- Result: all five jobs passed: control plane and Compose, Java business
+  runtime, Python compute and contracts, Web application, and bounded
+  degradation/resilience.

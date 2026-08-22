@@ -321,12 +321,25 @@
       "phase": "P8",
       "priority": "high",
       "depends_on": ["RM-005", "RM-010", "RM-011", "RM-080", "RM-082", "RM-086"],
-      "status": "implemented",
+      "status": "passed",
       "acceptance": ["Immutable policy limits and normalized request descriptors produce stable digests", "Malformed or oversized input is rejected and usage above the burst budget is throttled with deterministic retry-after", "The evaluator is read-only and does not replace Java authorization, idempotency, Outbox, or durable state"],
       "gates": ["L1-input-protection", "L2-rate-policy", "security-review"],
       "evidence": ["evidence/gates/RM-087/2026-08-22-rate-limit-input.md"],
       "blocked_by": [],
       "notes": "Distributed counter atomicity, WAF/bot mitigation, production quotas, and load validation remain external gates."
+    },
+    {
+      "id": "RM-088",
+      "title": "Define deployment and edge-security adapter boundary",
+      "phase": "P8",
+      "priority": "high",
+      "depends_on": ["RM-082", "RM-084", "RM-085", "RM-086", "RM-087"],
+      "status": "in_progress",
+      "acceptance": ["Provider-neutral adapter requests bind release, staged decision, auth, and rate/input digests without secret values", "Missing or mutable identity, TLS, WAF, limiter, or secret references fail closed for apply and rollback", "Local preflight/plan are read-only and deployment health and provider enforcement remain external"],
+      "gates": ["L1-deployment-adapter", "security-review", "L5-edge-fail-closed"],
+      "evidence": [],
+      "blocked_by": [],
+      "notes": "Provider APIs, TLS/WAF/limiter enforcement, identity rotation, deployment health, and production rollback remain external gates."
     },
     {
       "id": "RM-090",

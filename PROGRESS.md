@@ -2,13 +2,13 @@
 
 Current Phase: P9 Research and Experimentation
 
-Overall: 26 / 27 tasks passed
+Overall: 27 / 28 tasks passed
 
-Current Task: RM-087 - implementation checkpoint pushed locally; GitHub Actions pending
+Current Task: RM-088 - Define deployment and edge-security adapter boundary
 
 Last Completed: RM-084 - Define release provenance and deployment preflight contract
 
-CI: PENDING - implementation checkpoint `24831c0`; observe the real Actions run before marking RM-087 passed
+CI: PASS - GitHub Actions run 32559165335 (control, Java, Python/contracts, Web, Resilience)
 
 Regression: PASS - Java 34, Python 50 / 95.47%, Web, locked install, and 4 schemas / 12 contract fixtures
 
@@ -16,7 +16,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-087 - implement deterministic request admission evaluator
+Next Candidates: RM-088 - implement provider-neutral fail-closed adapter contract
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -40,3 +40,6 @@ implementation evidence is recorded in `evidence/gates/RM-086/`.
 RM-086 CI evidence is recorded in the same gate file; all five Actions jobs passed.
 RM-087 design is recorded in `docs/design/p8-rate-limit-input-protection.md`;
 implementation evidence is recorded in `evidence/gates/RM-087/`.
+RM-087 CI evidence is recorded in the same gate file; all five Actions jobs passed.
+RM-088 design is recorded in `docs/design/p8-deployment-edge-security-adapter.md`;
+implementation and executable evidence remain pending.
