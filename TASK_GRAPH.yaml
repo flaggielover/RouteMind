@@ -659,12 +659,12 @@
       "phase": "P13",
       "priority": "high",
       "depends_on": ["RM-130", "RM-140"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Routes respect vehicle capacity, service times, and time windows", "Infeasible routes have stable explanations", "Small reproducible instances compare against a verified baseline"],
       "gates": ["L2-vrptw", "L6-route-correctness"],
       "evidence": ["evidence/gates/RM-133/vrptw.md"],
       "blocked_by": [],
-      "notes": "Local L2/L6 evidence passes with deterministic bounded insertion, capacity/service/time-window checks, stable infeasibility reasons, and a two-stop reference baseline. Remote Actions validation is pending; large-scale optimization may remain a measured external-compute extension."
+      "notes": "Local L2/L6 evidence passes with deterministic bounded insertion, capacity/service/time-window checks, stable infeasibility reasons, and a two-stop reference baseline. Remote Actions run 32602269612 passed all five jobs; large-scale optimization may remain a measured external-compute extension."
     },
     {
       "id": "RM-134",
@@ -672,12 +672,12 @@
       "phase": "P13",
       "priority": "high",
       "depends_on": ["RM-131", "RM-133"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["New demand can be inserted into an active route without violating constraints", "Insertion cost and rejected reasons are deterministic", "Existing assignments remain immutable unless an explicit replan is requested"],
       "gates": ["L2-dynamic-insertion", "L6-insertion-benchmark"],
       "evidence": ["evidence/gates/RM-134/dynamic-insertion.md"],
       "blocked_by": [],
-      "notes": "No business-state mutation in the optimizer."
+      "notes": "No business-state mutation in the optimizer. RM-134 is the next active critical-path task after RM-133 passed."
     },
     {
       "id": "RM-135",
