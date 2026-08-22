@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from typing import Literal
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from pydantic import BaseModel, ConfigDict
+
+from routemind_compute.api.observability import RequestObservabilityMiddleware, metrics_response
 
 
 class HealthResponse(BaseModel):
@@ -22,11 +24,17 @@ class SystemInfoResponse(BaseModel):
 
 
 app = FastAPI(title="RouteMind Compute API", version="0.1.0")
+app.add_middleware(RequestObservabilityMiddleware)
 
 
 @app.get("/healthz", response_model=HealthResponse)
 def health() -> HealthResponse:
     return HealthResponse(status="UP")
+
+
+@app.get("/metrics", include_in_schema=False)
+def metrics() -> Response:
+    return metrics_response()
 
 
 @app.get("/api/v1/system", response_model=SystemInfoResponse)

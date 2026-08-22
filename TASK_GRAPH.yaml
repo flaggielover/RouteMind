@@ -230,10 +230,10 @@
       "phase": "P8",
       "priority": "high",
       "depends_on": ["RM-021", "RM-030"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Logs, metrics, traces, health, and SLI definitions correlate requests and events", "Failure injection validates bounded degradation", "Runbooks identify intervention and rollback paths"],
       "gates": ["L5-resilience", "L6-load"],
-      "evidence": [],
+      "evidence": ["evidence/gates/RM-080/2026-08-22-observability-resilience.md"],
       "blocked_by": [],
       "notes": "Incremental observability begins earlier; this task closes system gates."
     },

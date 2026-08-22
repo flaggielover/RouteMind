@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("test", "package", "run")]
+    [ValidateSet("test", "package", "run", "resilience")]
     [string] $Action = "test"
 )
 
@@ -55,6 +55,7 @@ try {
         "test" { & $wrapper "clean" "test" }
         "package" { & $wrapper "clean" "package" }
         "run" { & $wrapper "spring-boot:run" }
+        "resilience" { & $wrapper "test" "-Dtest=BusinessApiApplicationTests" }
     }
     if ($LASTEXITCODE -ne 0) {
         throw "Business API $Action failed with exit code $LASTEXITCODE"

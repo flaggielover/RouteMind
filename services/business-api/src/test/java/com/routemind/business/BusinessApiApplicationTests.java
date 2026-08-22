@@ -2,6 +2,7 @@ package com.routemind.business;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,6 +39,21 @@ class BusinessApiApplicationTests {
 				.andExpect(jsonPath("$.service").value("business-api"))
 				.andExpect(jsonPath("$.runtime").value("java"))
 				.andExpect(jsonPath("$.architectureVersion").value("v1"));
+	}
+
+	@Test
+	void requestContextIsReturnedAndPrometheusIsExposed() throws Exception {
+		mockMvc.perform(get("/api/v1/system")
+				.header("X-Request-Id", "ops-42")
+				.header("X-Trace-Id", "0123456789abcdef0123456789abcdef"))
+				.andExpect(status().isOk())
+				.andExpect(header().string("X-Request-Id", "ops-42"))
+				.andExpect(header().string("X-Trace-Id", "0123456789abcdef0123456789abcdef"));
+
+		mockMvc.perform(get("/metrics"))
+				.andExpect(status().isOk())
+				.andExpect(result -> assertThat(result.getResponse().getContentAsString())
+						.contains("routemind_http_requests_total"));
 	}
 
 	@Test

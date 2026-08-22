@@ -45,6 +45,13 @@ management:
     web:
       exposure:
         include: health,info
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  pattern:
+    level: "%5p [trace_id=%X{trace_id:-none} request_id=%X{request_id:-none}]"
 
 routemind:
   rabbit:

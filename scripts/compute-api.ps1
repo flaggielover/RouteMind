@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("sync", "test", "check", "run", "lock")]
+    [ValidateSet("sync", "test", "check", "run", "lock", "resilience")]
     [string] $Action = "check"
 )
 
@@ -92,6 +92,10 @@ try {
         "run" {
             Invoke-Uv @("sync", "--frozen", "--python", $pythonPath)
             Invoke-Uv @("run", "--frozen", "routemind-compute-api")
+        }
+        "resilience" {
+            Invoke-Uv @("sync", "--frozen", "--python", $pythonPath)
+            Invoke-Uv @("run", "--frozen", "pytest", "tests/test_resilience.py", "--no-cov")
         }
     }
 }

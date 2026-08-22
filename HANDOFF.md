@@ -4,9 +4,9 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: P6 Product Surfaces
+Current Phase: P8 Reliability and Operations
 
-Current Task: RM-080 - Establish production observability and resilience gates
+Current Task: RM-090 - Implement RouteBench and research lineage core
 
 Task Status: in_progress
 
@@ -62,6 +62,16 @@ responsive controls, a schematic dispatch map, lifecycle timeline, and Playwrigh
 desktop/mobile/axe smoke gates. The surface explicitly labels demo state and does
 not own durable business state. Evidence is in
 `evidence/gates/RM-060/2026-08-22-role-aware-web.md`.
+The RM-060 checkpoint commit `9eaada1` passed all four GitHub Actions jobs in run
+`32548856880`.
+
+RM-080 adds bounded request/trace context, structured completion logs, request
+count/latency metrics, health/SLI documentation, a Java Micrometer registry-backed
+`/metrics` endpoint, Python Prometheus metrics, and deterministic failure injection
+for travel-provider and Redis projection degradation. A fixed 100-request local
+bounded-burst smoke is included. Local full gate passed with Java 34 tests and
+Python 36 tests at 98.07% coverage. Evidence is in
+`evidence/gates/RM-080/2026-08-22-observability-resilience.md`.
 
 Tests Run: Stage 0 gates passed. RM-001 passed Compose validation, real health,
 PostgreSQL SQL, RabbitMQ diagnostics, Redis authenticated ping, loopback binding,
@@ -123,18 +133,18 @@ The first Python dependency sync took several minutes because uv's cache and the
 workspace are on filesystems that do not support hardlinks. The script now fixes
 copy mode; subsequent frozen syncs are incremental.
 
-Known Blockers: NONE. RM-060 GitHub Actions validation is pending for the pushed
-checkpoint; local full-gate and browser evidence pass.
+Known Blockers: NONE
 
 Important Context: Keep Java business correctness separate from Python compute and
 research. Do not store large datasets or runtime databases in Git. The configured
 data boundary is `F:\Projects\RouteMind-Data` on this workstation.
 
-Next Recommended Action: Start RM-080 observability and resilience gates after
-observing the RM-060 GitHub Actions run. Keep web demo state separate from live
-business state and do not add public order APIs as part of the observability task.
+Next Recommended Action: Push the RM-080 checkpoint, observe the real GitHub
+Actions resilience job, and autonomously fix any CI failure. Then implement
+RM-090 RouteBench and research lineage core. Keep web demo state separate from
+live business state.
 
-Next Candidate Task: RM-080 - Establish production observability and resilience gates
+Next Candidate Task: RM-090 - Implement RouteBench and research lineage core
 
 Relevant Files: `TASK_GRAPH.yaml`, `MASTER_ARCHITECTURE.md`, `compose.yaml`,
 `scripts/full-gate.ps1`, `scripts/business-api.ps1`,

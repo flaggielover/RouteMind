@@ -76,3 +76,19 @@ jobs:
       - name: Run web browser smoke gate
         shell: pwsh
         run: ./scripts/web.ps1 e2e
+
+  resilience:
+    name: Bounded degradation and resilience
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
+      - name: Run focused failure injection gate
+        shell: pwsh
+        run: ./scripts/resilience.ps1
