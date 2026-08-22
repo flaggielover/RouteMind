@@ -1,7 +1,7 @@
 # RM-107 Web Realtime Reconnect and Stale-State Handling
 
 - Date: 2026-08-22 (Asia/Shanghai)
-- Revision: implementation checkpoint pending
+- Revision: `48ef6fa`
 - Boundary: browser-side SSE cursor consumer and visible connection status
 
 ## Client behavior
@@ -30,6 +30,8 @@ regress a visible status.
 3. `./scripts/full-gate.ps1` -> PASS; Java 57 tests, Python 59 tests at 96.13%
    coverage, 5 schemas/15 fixtures, and the Web static/unit/build gate.
 4. `git diff --check` -> PASS before checkpoint commit.
+5. GitHub Actions run `32565914443` -> PASS; all five jobs passed, including
+   the Web browser smoke gate.
 
 ## Evidence limits
 
