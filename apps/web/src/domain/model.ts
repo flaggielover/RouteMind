@@ -2,6 +2,9 @@ export const roles = ["operations", "strategy", "customer", "merchant", "courier
 
 export type Role = (typeof roles)[number];
 
+export type DataSourceMode = "live" | "demo" | "replay";
+export type DataAvailability = "ready" | "degraded" | "unavailable";
+
 export type OrderStatus =
   | "CREATED"
   | "CONFIRMED"
@@ -75,7 +78,9 @@ export interface ServiceHealth {
 }
 
 export interface OperationsSnapshot {
-  source: "demo" | "api";
+  source: DataSourceMode;
+  availability: DataAvailability;
+  sourceDetail: string;
   generatedAt: string;
   orders: readonly Order[];
   couriers: readonly Courier[];
@@ -86,4 +91,5 @@ export interface OperationsSnapshot {
 
 export interface OperationsDataSource {
   getSnapshot(): OperationsSnapshot;
+  loadSnapshot?: () => Promise<OperationsSnapshot>;
 }

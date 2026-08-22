@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import type { ReactNode } from "react";
-import type { Role, ServiceHealth } from "../domain/model";
+import type { DataAvailability, DataSourceMode, Role, ServiceHealth } from "../domain/model";
 import { StatusPill } from "./StatusPill";
 
 const navigation: Array<{ role: Role; label: string; icon: typeof LayoutDashboard }> = [
@@ -24,12 +24,23 @@ const navigation: Array<{ role: Role; label: string; icon: typeof LayoutDashboar
 
 interface AppShellProps {
   health: readonly ServiceHealth[];
-  source: "demo" | "api";
+  source: DataSourceMode;
+  availability: DataAvailability;
+  sourceDetail: string;
+  onSourceChange: (source: DataSourceMode) => void;
   onRefreshHealth: () => void;
   children: ReactNode;
 }
 
-export function AppShell({ health, source, onRefreshHealth, children }: AppShellProps) {
+export function AppShell({
+  health,
+  source,
+  availability,
+  sourceDetail,
+  onSourceChange,
+  onRefreshHealth,
+  children,
+}: AppShellProps) {
   const unavailable = health.filter((item) => item.status === "unavailable").length;
   return (
     <div className="app-shell">
@@ -79,11 +90,29 @@ export function AppShell({ health, source, onRefreshHealth, children }: AppShell
             <h1>Delivery control center</h1>
           </div>
           <div className="topbar-actions">
-            <div className="source-status" title="This state source is intentionally explicit">
+            <div className="source-status" title={sourceDetail}>
               <span className={`source-dot source-${source}`} />
-              <span>{source === "demo" ? "Demo snapshot" : "Connected data"}</span>
+              <span>
+                {source === "demo"
+                  ? "Demo snapshot"
+                  : source === "replay"
+                    ? "Replay"
+                    : `Live ${availability}`}
+              </span>
             </div>
-            <div className="health-summary" aria-label="Service health summary">
+            <label className="source-selector">
+              <span className="sr-only">Data source mode</span>
+              <select
+                aria-label="Data source mode"
+                value={source}
+                onChange={(event) => onSourceChange(event.target.value as DataSourceMode)}
+              >
+                <option value="live">Live</option>
+                <option value="demo">Demo</option>
+                <option value="replay">Replay</option>
+              </select>
+            </label>
+            <div className="health-summary" role="status" aria-label="Service health summary">
               {health.map((item) => (
                 <StatusPill key={item.service} status={item.status} label={item.label} />
               ))}

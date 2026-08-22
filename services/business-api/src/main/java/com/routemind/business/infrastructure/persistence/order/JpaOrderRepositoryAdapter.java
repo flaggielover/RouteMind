@@ -3,6 +3,7 @@ package com.routemind.business.infrastructure.persistence.order;
 import com.routemind.business.application.order.OrderRepository;
 import com.routemind.business.domain.order.Order;
 import com.routemind.business.domain.order.OrderId;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,5 +33,11 @@ public class JpaOrderRepositoryAdapter implements OrderRepository {
 	@Transactional(readOnly = true)
 	public Optional<Order> findById(OrderId id) {
 		return repository.findById(id.value()).map(OrderEntity::toDomain);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Order> findAll() {
+		return repository.findAll().stream().map(OrderEntity::toDomain).toList();
 	}
 }

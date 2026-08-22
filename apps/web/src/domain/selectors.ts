@@ -12,7 +12,11 @@ export const orderStatusLabel: Record<OrderStatus, string> = {
 };
 
 export function findOrder(snapshot: OperationsSnapshot, orderId: string): Order {
-  return snapshot.orders.find((order) => order.id === orderId) ?? snapshot.orders[0];
+  const order = snapshot.orders.find((candidate) => candidate.id === orderId) ?? snapshot.orders[0];
+  if (!order) {
+    throw new Error("selected order is unavailable");
+  }
+  return order;
 }
 
 export function countOpenExceptions(snapshot: OperationsSnapshot): number {

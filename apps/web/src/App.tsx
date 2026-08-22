@@ -18,7 +18,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { BrowserRouter, Navigate, Route as RouterRoute, Routes } from "react-router-dom";
 import { demoDataSource } from "./data/demoSnapshot";
 import { probeServices } from "./data/health";
-import type { OperationsDataSource, ServiceHealth } from "./domain/model";
+import { liveDataSource, replayDataSource } from "./data/liveSnapshot";
+import type { DataSourceMode, OperationsDataSource, ServiceHealth } from "./domain/model";
 import { countOpenExceptions, findOrder, orderStatusLabel, statusTone } from "./domain/selectors";
 import { AppShell } from "./components/AppShell";
 import { LifecycleTimeline } from "./components/LifecycleTimeline";
@@ -33,13 +34,27 @@ interface AppProps {
   healthProbe?: () => Promise<ServiceHealth[]>;
 }
 
-export default function App({
-  dataSource = demoDataSource,
-  healthProbe = probeServices,
-}: AppProps) {
-  const snapshot = useMemo(() => dataSource.getSnapshot(), [dataSource]);
+export default function App({ dataSource, healthProbe = probeServices }: AppProps) {
+  const suppliedDataSource = dataSource;
+  const [activeDataSource, setActiveDataSource] = useState<OperationsDataSource>(
+    suppliedDataSource ?? liveDataSource,
+  );
+  const initialSnapshot = useMemo(() => activeDataSource.getSnapshot(), [activeDataSource]);
+  const [snapshot, setSnapshot] = useState(initialSnapshot);
   const [health, setHealth] = useState<ServiceHealth[]>([...snapshot.health]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    setSnapshot(initialSnapshot);
+    if (!activeDataSource.loadSnapshot) return;
+    let mounted = true;
+    void activeDataSource.loadSnapshot().then((loaded) => {
+      if (mounted) setSnapshot(loaded);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, [activeDataSource, initialSnapshot]);
 
   const refreshHealth = useCallback(async () => {
     setIsRefreshing(true);
@@ -50,6 +65,16 @@ export default function App({
     }
   }, [healthProbe]);
 
+  const changeSource = useCallback(
+    (mode: DataSourceMode) => {
+      if (suppliedDataSource) return;
+      setActiveDataSource(
+        mode === "live" ? liveDataSource : mode === "demo" ? demoDataSource : replayDataSource,
+      );
+    },
+    [suppliedDataSource],
+  );
+
   useEffect(() => {
     void refreshHealth();
   }, [refreshHealth]);
@@ -59,6 +84,9 @@ export default function App({
       <AppShell
         health={health}
         source={snapshot.source}
+        availability={snapshot.availability}
+        sourceDetail={snapshot.sourceDetail}
+        onSourceChange={changeSource}
         onRefreshHealth={() => void refreshHealth()}
       >
         <AppRoutes snapshot={snapshot} />
@@ -86,8 +114,8 @@ export function AppRoutes({ snapshot }: { snapshot: OperationsSnapshot }) {
 }
 
 function OperationsView({ snapshot }: { snapshot: OperationsSnapshot }) {
-  const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0].id);
-  const selectedOrder = findOrder(snapshot, selectedOrderId);
+  const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0]?.id ?? "");
+  const selectedOrder = snapshot.orders.length ? findOrder(snapshot, selectedOrderId) : undefined;
   const availableCouriers = snapshot.couriers.filter(
     (courier) => courier.status === "available",
   ).length;
@@ -157,14 +185,22 @@ function OperationsView({ snapshot }: { snapshot: OperationsSnapshot }) {
           <div className="panel-heading">
             <div>
               <p className="eyebrow">Selected order</p>
-              <h2 id="lifecycle-title">{selectedOrder.shortId} lifecycle</h2>
+              <h2 id="lifecycle-title">{selectedOrder?.shortId ?? "No order"} lifecycle</h2>
             </div>
-            <StatusPill
-              status={statusTone(selectedOrder.status) === "success" ? "healthy" : "checking"}
-              label={orderStatusLabel[selectedOrder.status]}
-            />
+            {selectedOrder ? (
+              <StatusPill
+                status={statusTone(selectedOrder.status) === "success" ? "healthy" : "checking"}
+                label={orderStatusLabel[selectedOrder.status]}
+              />
+            ) : (
+              <StatusPill status="checking" label="No live orders" />
+            )}
           </div>
-          <LifecycleTimeline order={selectedOrder} />
+          {selectedOrder ? (
+            <LifecycleTimeline order={selectedOrder} />
+          ) : (
+            <p className="empty-state">No orders are present in the selected source.</p>
+          )}
         </section>
         <section className="panel activity-panel" aria-labelledby="activity-title">
           <div className="panel-heading">
@@ -371,21 +407,27 @@ function CustomerView({ snapshot }: { snapshot: OperationsSnapshot }) {
     >
       <section className="content-grid-two">
         <section className="panel customer-order">
-          <div className="panel-heading">
-            <div>
-              <p className="eyebrow">Order {order.shortId}</p>
-              <h2>{order.merchantName}</h2>
-            </div>
-            <StatusPill status="healthy" label="Delivered" />
-          </div>
-          <div className="customer-destination">
-            <MapPinIcon />
-            <div>
-              <span>Delivered to</span>
-              <strong>{order.destination}</strong>
-            </div>
-          </div>
-          <LifecycleTimeline order={order} />
+          {!order ? (
+            <p className="empty-state">No order is available in the selected source.</p>
+          ) : (
+            <>
+              <div className="panel-heading">
+                <div>
+                  <p className="eyebrow">Order {order.shortId}</p>
+                  <h2>{order.merchantName}</h2>
+                </div>
+                <StatusPill status="healthy" label="Delivered" />
+              </div>
+              <div className="customer-destination">
+                <MapPinIcon />
+                <div>
+                  <span>Delivered to</span>
+                  <strong>{order.destination}</strong>
+                </div>
+              </div>
+              <LifecycleTimeline order={order} />
+            </>
+          )}
         </section>
         <section className="panel">
           <div className="panel-heading">
@@ -492,54 +534,64 @@ function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
     >
       <section className="content-grid-two">
         <section className="panel">
-          <div className="panel-heading">
-            <div>
-              <p className="eyebrow">Shift status</p>
-              <h2>{courier.name}</h2>
-            </div>
-            <StatusPill status={courier.status} label="On route" />
-          </div>
-          <div className="shift-summary">
-            <div className="avatar courier-avatar">AS</div>
-            <div>
-              <strong>{courier.zone}</strong>
-              <p>2 deliveries completed · 1 active</p>
-            </div>
-          </div>
-          <div className="courier-metrics">
-            <div>
-              <span>Shift</span>
-              <strong>4h 12m</strong>
-            </div>
-            <div>
-              <span>Distance</span>
-              <strong>18.4 km</strong>
-            </div>
-            <div>
-              <span>Rating</span>
-              <strong>4.98</strong>
-            </div>
-          </div>
+          {!courier ? (
+            <p className="empty-state">No courier is available in the selected source.</p>
+          ) : (
+            <>
+              <div className="panel-heading">
+                <div>
+                  <p className="eyebrow">Shift status</p>
+                  <h2>{courier.name}</h2>
+                </div>
+                <StatusPill status={courier.status} label="On route" />
+              </div>
+              <div className="shift-summary">
+                <div className="avatar courier-avatar">AS</div>
+                <div>
+                  <strong>{courier.zone}</strong>
+                  <p>2 deliveries completed · 1 active</p>
+                </div>
+              </div>
+              <div className="courier-metrics">
+                <div>
+                  <span>Shift</span>
+                  <strong>4h 12m</strong>
+                </div>
+                <div>
+                  <span>Distance</span>
+                  <strong>18.4 km</strong>
+                </div>
+                <div>
+                  <span>Rating</span>
+                  <strong>4.98</strong>
+                </div>
+              </div>
+            </>
+          )}
         </section>
         <section className="panel">
           <div className="panel-heading">
             <div>
               <p className="eyebrow">Next stop</p>
-              <h2>{order.shortId}</h2>
+              <h2>{order?.shortId ?? "No active route"}</h2>
             </div>
             <Route size={18} className="heading-icon" />
           </div>
-          <div className="next-stop">
-            <div className="stop-icon">
-              <NavigationIcon />
+          {!order ? (
+            <p className="empty-state">No active route is available in the selected source.</p>
+          ) : (
+            <div className="next-stop">
+              <div className="stop-icon">
+                <NavigationIcon />
+              </div>
+              <div>
+                <strong>{order.destination}</strong>
+                <p>
+                  {order.customerName} · ETA {order.eta}
+                </p>
+              </div>
             </div>
-            <div>
-              <strong>{order.destination}</strong>
-              <p>
-                {order.customerName} · ETA {order.eta}
-              </p>
-            </div>
-          </div>
+          )}
           <button className="button button-primary" type="button">
             <ArrowUpRight size={15} /> Open route
           </button>

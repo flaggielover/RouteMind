@@ -205,6 +205,26 @@ button {
 .source-api {
   background: var(--green);
 }
+.source-live {
+  background: var(--green);
+}
+.source-replay {
+  background: var(--amber);
+}
+.source-selector select {
+  min-height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--ink);
+  background: var(--surface);
+  padding: 0 7px;
+  font-size: 12px;
+}
+.empty-state {
+  color: var(--muted);
+  margin: 0;
+  padding: 24px 0;
+}
 .health-summary {
   gap: 8px;
   padding-left: 12px;

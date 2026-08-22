@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const roles = [
   ["operations", "Keep the city moving."],
@@ -10,8 +10,13 @@ const roles = [
 ] as const;
 
 test.describe("role-aware web smoke", () => {
+  async function selectDemo(page: Page) {
+    await page.getByRole("combobox", { name: "Data source mode" }).selectOption("demo");
+  }
+
   test("shows the full lifecycle on the default operations route", async ({ page }) => {
     await page.goto("/operations");
+    await selectDemo(page);
     await expect(page.getByRole("heading", { name: "Keep the city moving." })).toBeVisible();
     await expect(page.getByRole("list", { name: "Lifecycle for RM-2041" })).toBeVisible();
     await expect(page.getByText("Order received")).toBeVisible();
@@ -22,6 +27,7 @@ test.describe("role-aware web smoke", () => {
   for (const [path, heading] of roles) {
     test(`renders the ${path} role surface`, async ({ page }) => {
       await page.goto(`/${path}`);
+      await selectDemo(page);
       await expect(page.getByRole("heading", { name: heading })).toBeVisible();
       await expect(page.getByRole("navigation", { name: "RouteMind navigation" })).toBeVisible();
     });
@@ -29,6 +35,7 @@ test.describe("role-aware web smoke", () => {
 
   test("keeps the mobile layout inside the viewport", async ({ page }) => {
     await page.goto("/operations");
+    await selectDemo(page);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - window.innerWidth,
     );
@@ -40,6 +47,7 @@ test.describe("role-aware web smoke", () => {
   test("passes the accessibility smoke gate for every role route", async ({ page }) => {
     for (const [path] of roles) {
       await page.goto(`/${path}`);
+      await selectDemo(page);
       const results = await new AxeBuilder({ page }).analyze();
       expect(results.violations, `${path} accessibility violations`).toEqual([]);
     }

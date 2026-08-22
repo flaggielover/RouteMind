@@ -3,6 +3,7 @@ package com.routemind.business.infrastructure.persistence.party;
 import com.routemind.business.application.party.PartyRepository;
 import com.routemind.business.domain.party.Party;
 import com.routemind.business.domain.party.PartyId;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,5 +33,11 @@ public class JpaPartyRepositoryAdapter implements PartyRepository {
 	@Transactional(readOnly = true)
 	public Optional<Party> findById(PartyId id) {
 		return repository.findById(id.value()).map(PartyEntity::toDomain);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Party> findAll() {
+		return repository.findAll().stream().map(PartyEntity::toDomain).toList();
 	}
 }

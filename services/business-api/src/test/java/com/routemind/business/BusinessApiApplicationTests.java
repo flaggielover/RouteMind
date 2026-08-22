@@ -42,6 +42,17 @@ class BusinessApiApplicationTests {
 	}
 
 	@Test
+	void operationsSnapshotIsLiveAndEmptyWhenDurableStateIsEmpty() throws Exception {
+		mockMvc.perform(get("/api/v1/operations/snapshot"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.source").value("live"))
+				.andExpect(jsonPath("$.orders").isArray())
+				.andExpect(jsonPath("$.orders").isEmpty())
+				.andExpect(jsonPath("$.parties").isArray())
+				.andExpect(jsonPath("$.courierLocations").isArray());
+	}
+
+	@Test
 	void requestContextIsReturnedAndPrometheusIsExposed() throws Exception {
 		mockMvc.perform(get("/api/v1/system")
 				.header("X-Request-Id", "ops-42")
