@@ -470,5 +470,7 @@ RM-153 is locally complete: `MerchantPreparationModel` schedules expected and
 actual preparation on deterministic capacity slots, exposes queue load,
 readiness and evolving late risk, and applies actual-ready state to dispatch.
 Compute check passes 96 tests at 96.16% coverage; evidence is recorded at
-`evidence/gates/RM-153/merchant-preparation.md`. Full repository and remote
-Actions validation remain pending.
+`evidence/gates/RM-153/merchant-preparation.md`; full repository gate and
+remote Actions run `32582291443` passed all five jobs. RM-153 is fully
+validated. RM-154 traffic, supply, and failure perturbation modeling is now
+the active task.

@@ -31,5 +31,6 @@ Date: 2026-08-22
 
 ## Gate decision
 
-Local L2 preparation-model and L6 preparation-replay evidence is complete. The
-checkpoint is awaiting full repository and remote Actions validation.
+Local L2 preparation-model and L6 preparation-replay evidence is complete.
+Remote Actions run `32582291443` passed all five jobs; RM-153 is fully
+validated.

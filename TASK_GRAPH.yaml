@@ -802,12 +802,12 @@
       "phase": "P15",
       "priority": "high",
       "depends_on": ["RM-150", "RM-131"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Preparation delay, queue load, expected/actual ready time, and late risk evolve over simulated time", "Dispatch can consume preparation state", "Fixed stochastic inputs replay deterministically"],
       "gates": ["L2-preparation-model", "L6-preparation-replay"],
       "evidence": ["evidence/gates/RM-153/merchant-preparation.md"],
       "blocked_by": [],
-      "notes": "Local L2/L6 preparation-model evidence passes with seeded capacity scheduling, evolving queue/ready/risk state, and dispatch readiness propagation; remote Actions validation is required before closure. Model is simulation state, not durable merchant truth."
+      "notes": "Local L2/L6 preparation-model evidence passes with seeded capacity scheduling, evolving queue/ready/risk state, and dispatch readiness propagation; remote Actions run 32582291443 passed all five jobs. Model is simulation state, not durable merchant truth."
     },
     {
       "id": "RM-154",
@@ -815,12 +815,12 @@
       "phase": "P15",
       "priority": "high",
       "depends_on": ["RM-150", "RM-143"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Traffic, courier supply, merchant delay, and dependency failures can be scenario inputs", "Perturbations produce explicit events and metric effects", "Simulation distinguishes simulated failure from live service failure"],
       "gates": ["L2-twin-perturbation", "L5-simulation-failure", "L6-robustness"],
       "evidence": ["evidence/gates/RM-154/twin-perturbations.md"],
       "blocked_by": [],
-      "notes": "Failure injection must remain bounded and reproducible."
+      "notes": "Traffic, supply, and failure perturbation modeling is now the active task; failure injection must remain bounded and reproducible."
     },
     {
       "id": "RM-155",
