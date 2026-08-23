@@ -984,12 +984,12 @@
       "phase": "P19",
       "priority": "critical",
       "depends_on": ["RM-112", "RM-157", "RM-158", "RM-163", "RM-171", "RM-180", "RM-181"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Round 2 closure checklist maps each claim to executable evidence", "Fake buttons, fabricated metrics, silent fallbacks, interface-only capabilities, and untested failures are removed or labeled", "A reproducible final demo runbook and proposed Round 3 gaps are persisted"],
       "gates": ["L1-round2-closure", "L4-final-demo", "L5-adversarial-review", "L6-evidence-audit"],
       "evidence": ["evidence/gates/RM-190/round2-closure.md"],
       "blocked_by": [],
-      "notes": "Adversarial closure audit in progress; Round 2 closure does not claim production deployment or full research completion."
+      "notes": "Adversarial source audit, deterministic final-demo runbook, and Round 3 gap review passed in bd58002; local verify/full/browser gates pass and Actions run 32616020918 passed all five jobs. Round 2 closure does not claim production deployment or full research completion."
     }
   ]
 }

@@ -1,26 +1,26 @@
 # RouteMind Progress
 
-Current Phase: Round 2 P16 Strategy Laboratory
+Current Phase: Round 2 P19 Closure Audit Complete
 
-Round 2 Progress: 47 / 48 tasks passed
+Round 2 Progress: 48 / 48 tasks passed
 
-Repository Total: 75 / 76 tasks passed
+Repository Total: 76 / 76 tasks passed
 
-Current Task: RM-190 - Perform Round 2 adversarial closure audit
+Current Task: Round 2 closure complete; proposed Round 3 gaps are recorded
 
-Last Completed: RM-181 - Close browser UX, accessibility, and mobile quality gates
+Last Completed: RM-190 - Perform Round 2 adversarial closure audit
 
-Current Gate: RM-181 browser UX, axe, mobile focus, state, form, map, full, verify, and Actions run 32614952772 (all five jobs) passed; RM-190 is active
+Current Gate: RM-190 source audit, verify/full/browser reruns, and Actions run 32616020918 (all five jobs) passed
 
-CI: PASS through RM-181 run 32614952772 and RM-180 run 32613773339 with all five jobs; RM-171 run 32613079169, RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
+CI: PASS through RM-190 run 32616020918 with all five jobs; RM-181 run 32615330788 and implementation run 32614952772, RM-180 run 32613773339, RM-171 run 32613079169, RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
 
-Regression: PASS - Java 61, Python 142 / 95.88%, Web 49 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 61, Python 142 / 95.88%, Web 49 unit + build, E2E 34 passed + 2 existing mobile-project skips, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-190 - perform Round 2 adversarial closure audit; no other higher-priority unblocked task is present.
+Next Candidates: Round 3 work from `docs/reviews/ROUND_3_GAPS.md`; no remaining Round 2 task is unblocked because all 76 repository tasks are passed.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -423,3 +423,23 @@ The task is now passed and RM-120 is the active implementation.
   passed all five jobs, including Web browser smoke and bounded degradation.
   RM-181 is now passed (47/48 Round 2, 75/76 repository), and RM-190 is
   activated as the final critical closure audit.
+
+### RM-190 completion - 2026-08-23
+- The adversarial closure removed fabricated strategy quality numbers and fixed
+  live-source role surfaces that previously displayed fixed courier, order, or
+  queue state. Strategy comparison values now require a recorded comparison
+  run; unavailable and unmeasured states are explicit.
+- Added `scripts/round2-adversarial-audit.py`, which checks every passed-task
+  evidence path, Web button action/disabled coverage, known fabricated literals,
+  debug markers, and the live unavailable boundary. The audit passed with 75
+  prior evidence files present and non-empty.
+- Added the reproducible final demo at
+  `docs/runbooks/round2-final-demo.md` and proposed Round 3 gaps at
+  `docs/reviews/ROUND_3_GAPS.md`. Local verify/full/browser reruns passed
+  Java 61, Python 142 at 95.88%, Web 49 unit/build, and Playwright 34/36
+  (two existing mobile-project skips).
+- RM-190 implementation checkpoint `bd58002` and GitHub Actions run
+  `32616020918` passed all five jobs. Evidence is recorded at
+  `evidence/gates/RM-190/round2-closure.md`. Round 2 is now 48/48 and the
+  repository total is 76/76; this does not claim production deployment or
+  full research completion.

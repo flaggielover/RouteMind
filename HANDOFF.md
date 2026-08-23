@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Round 2 P16 Strategy Laboratory
+Current Phase: Round 2 P19 Closure Audit Complete
 
-Current Task: RM-190 - Perform Round 2 adversarial closure audit
+Current Task: Round 2 closure complete; proposed Round 3 gaps are recorded
 
-Task Status: RM-181 is fully validated locally and remotely; RM-190 is the final highest-priority unblocked closure task
+Task Status: RM-190 is fully validated locally and remotely; all 76 repository tasks are passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,9 +629,10 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-190 Round 2 adversarial closure audit. Do not redo
-  RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162/RM-170/RM-171/
-  RM-180/RM-181; their local evidence and green Actions runs are recorded.
+- Round 2 is complete at 48/48 tasks and the repository total is 76/76. Do not
+  redo RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162/
+  RM-170/RM-171/RM-180/RM-181/RM-190; their local evidence and green Actions
+  runs are recorded.
 - RM-180 is fully validated locally and remotely. Implementation checkpoint is
   `56c17be`; evidence checkpoint is `7c7773e`; evidence is in
   `evidence/gates/RM-180/round2-performance.md`.
@@ -653,5 +654,11 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   at 95.88%, Web 49 unit/build, five schemas/15 fixtures, and control checks.
   GitHub Actions run `32613773339` passed all five jobs, including Web browser
   smoke and bounded degradation. RM-180 is passed (46/48 Round 2, 74/76
-  repository); RM-181 is passed (47/48 Round 2, 75/76 repository), and RM-190
-  is now active as the final critical closure audit.
+  repository); RM-181 is passed (47/48 Round 2, 75/76 repository).
+- RM-190 is fully validated in checkpoint `bd58002`; its evidence is in
+  `evidence/gates/RM-190/round2-closure.md`. The source audit removed known
+  fabricated live metrics/role copy, added explicit unavailable states, and
+  passed the deterministic audit script. The final demo sequence is in
+  `docs/runbooks/round2-final-demo.md`; proposed Round 3 gaps are in
+  `docs/reviews/ROUND_3_GAPS.md`. Actions run `32616020918` passed all five
+  jobs. There is no remaining unblocked Round 2 task.
