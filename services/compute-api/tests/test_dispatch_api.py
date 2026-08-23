@@ -28,7 +28,11 @@ def test_dispatch_snapshot_is_live_and_uses_registry() -> None:
     assert response.status_code == 200
     body = response.json()
     assert body["source"] == "live"
+    assert body["contract_version"] == "v1"
     assert body["selected_courier"] == "courier-1"
+    assert len(body["input_digest"]) == 64
+    assert len(body["output_digest"]) == 64
+    assert body["fallback_used"] is False
     assert body["trace_id"] == "0123456789abcdef0123456789abcdef"
     assert any(item[0] == "candidate_count" for item in body["metadata"])
     metadata = dict(body["metadata"])

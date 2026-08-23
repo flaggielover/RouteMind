@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-136 - Integrate advanced dispatch decisions and audit
+Current Task: RM-136 - Integrate advanced dispatch decisions and audit (awaiting remote Actions)
 
-Task Status: RM-136 is in progress; RM-162 is the last fully validated task
+Task Status: RM-136 local/full/browser gates pass; remote Actions validation is pending; RM-162 is the last fully remote-validated task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,13 +629,19 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-136 advanced dispatch integration and audit; do not redo
+- Resume at RM-136 remote Actions validation; do not redo
   completed RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162
   green Actions runs.
+- RM-136 implementation checkpoint is locally complete: Python `v1` live
+  dispatch responses expose input/output digests and fallback metadata; Java
+  V10 writes durable dispatch audits and a detailed Outbox event in the same
+  transaction as the authoritative order assignment. Golden-path, duplicate,
+  key-reuse, stale-version, full, and browser gates pass.
+- RM-136 evidence is recorded at `evidence/gates/RM-136/dispatch-integration.md`;
+  push the checkpoint and observe all five Actions jobs before marking the task
+  passed.
 - RM-162 evidence: Java 60, Python 142 at 95.88%, Web 49 unit/build, browser
   smoke 23 passed plus one existing desktop-only skip, and 5 schemas/15
   fixtures. GitHub Actions run `32608343277` passed all five jobs.
-- Round 2 is 42/48 and repository total is 70/76. Next action is to connect
-  advanced Python decisions to the Java durable assignment boundary with audit,
-  duplicate/stale handling, and retry evidence. RM-170 remains blocked by
-  RM-136.
+- Round 2 is 42/48 and repository total is 70/76. RM-170 remains blocked by
+  RM-136 until the remote Evidence Gate is green.

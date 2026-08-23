@@ -703,7 +703,7 @@
       "gates": ["L3-dispatch-integration", "L4-dispatch-golden-path", "L5-dispatch-retry"],
       "evidence": ["evidence/gates/RM-136/dispatch-integration.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-162 passed; RM-135, RM-103, and RM-106 are passed. No shortcut around Outbox/Inbox or Java authority."
+      "notes": "Local implementation and full/browser gates pass: Python v1 decision envelope carries input/output digests and fallback metadata; Java V10 durable audit and Outbox-backed assignment command pass golden-path, duplicate, stale, and key-reuse tests. Awaiting remote Actions validation; no shortcut around Outbox/Inbox or Java authority."
     },
     {
       "id": "RM-140",

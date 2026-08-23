@@ -6,21 +6,21 @@ Round 2 Progress: 42 / 48 tasks passed
 
 Repository Total: 70 / 76 tasks passed
 
-Current Task: RM-136 - Integrate advanced dispatch decisions and audit
+Current Task: RM-136 - Integrate advanced dispatch decisions and audit (awaiting remote Actions)
 
 Last Completed: RM-162 - Build strategy comparison visualizations
 
-Current Gate: RM-162 local/full/browser gates and remote Actions run 32608343277 passed; RM-136 is now active
+Current Gate: RM-136 local/full/browser gates passed; implementation checkpoint is ready for remote Actions validation
 
 CI: PASS - RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 passed all five jobs.
 
-Regression: PASS - Java 60, Python 142 / 95.88%, Web 49 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 61, Python 142 / 95.88%, Web 49 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-136 - integrate advanced dispatch decisions and audit; RM-170 remains blocked by RM-136
+Next Candidates: RM-136 remote Actions validation; RM-170 remains blocked by RM-136
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -330,3 +330,16 @@ The task is now passed and RM-120 is the active implementation.
   inventory, and inspectable recorded-run provenance.
 - RM-162 is now passed (42/48 Round 2, 70/76 repository); RM-136 advanced
   dispatch integration and audit is activated next because RM-170 depends on it.
+
+### RM-136 checkpoint - 2026-08-23
+- Added a versioned Python live dispatch envelope with `contract_version=v1`,
+  deterministic input/output SHA-256 digests, and explicit travel fallback
+  metadata.
+- Added Java V10 durable dispatch assignment audits and the transactional
+  `/api/v1/orders/{orderId}/dispatch-assignment` command. It applies the
+  decision through the existing order command and Outbox, records strategy,
+  digests, trace, and fallback, and safely handles duplicate, key-reuse, and
+  stale-version decisions.
+- Local full gate passes Java 61, Python 142 at 95.88%, Web 49 unit/build,
+  browser smoke 23 passed plus one existing desktop-only skip, and 5
+  schemas/15 fixtures. Remote Actions validation is pending.

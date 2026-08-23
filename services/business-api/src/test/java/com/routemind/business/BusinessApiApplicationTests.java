@@ -212,6 +212,64 @@ class BusinessApiApplicationTests {
 	}
 
 	@Test
+	void advancedDispatchAssignmentIsVersionedAuditedAndIdempotent() throws Exception {
+		String create = mockMvc.perform(post("/api/v1/orders")
+				.header("Idempotency-Key", "rm136-create")
+				.header("X-Actor", "customer"))
+				.andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+		String orderId = com.fasterxml.jackson.databind.json.JsonMapper.builder().build()
+				.readTree(create).get("orderId").asText();
+		transition(mockMvc, orderId, "rm136-confirm", "customer", "CONFIRMED", 0)
+				.andExpect(status().isOk());
+		String courierId = java.util.UUID.randomUUID().toString();
+		String body = "{\"requestId\":\"compute-request-1\",\"contractVersion\":\"v1\","
+				+ "\"courierId\":\"" + courierId + "\",\"strategy\":\"risk-aware\","
+				+ "\"strategyVersion\":\"1.0.0\",\"inputDigest\":\""
+				+ "0000000000000000000000000000000000000000000000000000000000000000"
+				+ "\",\"outputDigest\":\""
+				+ "1111111111111111111111111111111111111111111111111111111111111111"
+				+ "\",\"fallbackUsed\":true,\"fallbackReason\":\"travel-provider-timeout\","
+				+ "\"expectedOrderVersion\":1}";
+		mockMvc.perform(post("/api/v1/orders/{orderId}/dispatch-assignment", orderId)
+				.header("Idempotency-Key", "rm136-assignment")
+				.header("X-Trace-Id", "0123456789abcdef0123456789abcdef")
+				.contentType("application/json").content(body))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value("ASSIGNED"))
+				.andExpect(jsonPath("$.version").value(2))
+				.andExpect(jsonPath("$.replayed").value(false))
+				.andExpect(jsonPath("$.contractVersion").value("v1"))
+				.andExpect(jsonPath("$.fallbackUsed").value(true));
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/dispatch-assignment", orderId)
+				.header("Idempotency-Key", "rm136-assignment")
+				.contentType("application/json").content(body))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.replayed").value(true));
+
+		String changed = body.replace("risk-aware", "nearest");
+		mockMvc.perform(post("/api/v1/orders/{orderId}/dispatch-assignment", orderId)
+				.header("Idempotency-Key", "rm136-assignment")
+				.contentType("application/json").content(changed))
+				.andExpect(status().isConflict())
+				.andExpect(jsonPath("$.code").value("idempotency_key_reused"));
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/dispatch-assignment", orderId)
+				.header("Idempotency-Key", "rm136-stale")
+				.contentType("application/json").content(body))
+				.andExpect(status().isConflict())
+				.andExpect(jsonPath("$.code").value("stale_version"));
+		assertThat(jdbcTemplate.queryForObject(
+				"select count(*) from routemind.dispatch_assignment_audits", Integer.class)).isOne();
+		assertThat(jdbcTemplate.queryForObject(
+				"select count(*) from routemind.outbox_messages where event_type = 'dispatch.assignment.applied'",
+				Integer.class)).isOne();
+		assertThat(jdbcTemplate.queryForObject(
+				"select payload_json from routemind.outbox_messages where event_type = 'dispatch.assignment.applied'",
+				String.class)).contains("risk-aware", "travel-provider-timeout", "inputDigest");
+	}
+
+	@Test
 	void courierShiftLocationAndDeliveryCommandsAreDurableAndIdempotent() throws Exception {
 		String courierId = java.util.UUID.randomUUID().toString();
 		mockMvc.perform(post("/api/v1/couriers/{courierId}/shift", courierId)
@@ -272,9 +330,9 @@ class BusinessApiApplicationTests {
 	@Test
 	void flywayOwnsTheApplicationSchema() {
 		Integer migrationCount = jdbcTemplate.queryForObject(
-				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7', '8', '9') and success = true",
+				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10') and success = true",
 				Integer.class);
 
-		assertThat(migrationCount).isEqualTo(9);
+		assertThat(migrationCount).isEqualTo(10);
 	}
 }

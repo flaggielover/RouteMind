@@ -118,15 +118,19 @@ class DispatchSnapshotResponse(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     source: Literal["live"]
+    contract_version: Literal["v1"]
     generated_at: datetime
     request_id: str
     strategy: str
     strategy_version: str
+    input_digest: str
+    output_digest: str
     selected_courier: str | None
     score: float | None
     rationale: tuple[str, ...]
     latency_millis: float
     metadata: tuple[tuple[str, str], ...]
+    fallback_used: bool
     trace_id: str
 
 
@@ -919,18 +923,25 @@ def dispatch_snapshot(
             str(selected_travel.fallback_used if selected_travel else False).lower(),
         ),
     )
+    canonical_input = payload.model_dump(mode="json")
+    provenance = execution_provenance(canonical_input, decision)
+    fallback_used = bool(selected_travel and selected_travel.fallback_used)
     if selected_travel is not None:
         metadata = (*metadata, ("selected_travel_seconds", f"{selected_travel.seconds:.3f}"))
     return DispatchSnapshotResponse(
         source="live",
+        contract_version="v1",
         generated_at=datetime.now(UTC),
         request_id=decision.request_id,
         strategy=decision.strategy,
         strategy_version=decision.strategy_version,
+        input_digest=provenance.input_digest,
+        output_digest=provenance.output_digest,
         selected_courier=decision.courier_id,
         score=decision.score,
         rationale=decision.rationale,
         latency_millis=decision.latency_millis,
         metadata=metadata,
+        fallback_used=fallback_used,
         trace_id=trace_id,
     )
