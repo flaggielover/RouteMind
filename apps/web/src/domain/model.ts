@@ -131,6 +131,44 @@ export interface ReplaySnapshot {
   verificationError: string | null;
 }
 
+export interface WhatIfVariantInput {
+  variantId: string;
+  label: string;
+  demandMultiplier: number;
+  supplyDelta: number;
+  preparationDelayTicks: number;
+  trafficMultiplier: number;
+  strategy: string;
+  riskMultiplier: number;
+}
+
+export interface WhatIfMetric {
+  variantId: string;
+  label: string;
+  strategy: string;
+  strategyVersion: string;
+  requestCount: number;
+  assignedCount: number;
+  assignmentRate: number;
+  simulatedEndTick: number;
+  simulatedDurationSeconds: number;
+  riskIndex: number;
+  replayDigest: string;
+  manifestDigest: string;
+  outputDigest: string;
+  observedRuntimeMillis: number;
+}
+
+export interface WhatIfComparison {
+  source: "what-if";
+  claimLabel: "scenario comparison; not a causal production claim";
+  recordedRunId: string;
+  comparisonDigest: string;
+  scenarioId: string;
+  seed: number;
+  results: readonly WhatIfMetric[];
+}
+
 export interface OperationsSnapshot {
   source: DataSourceMode;
   availability: DataAvailability;

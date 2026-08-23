@@ -31,6 +31,7 @@ from routemind_compute.application.twin_control import (
     TwinControlService,
     TwinControlState,
 )
+from routemind_compute.application.what_if import WhatIfRunner, WhatIfVariant
 from routemind_compute.domain.dispatch import (
     CourierCandidate,
     DispatchProblem,
@@ -67,6 +68,7 @@ TRAVEL_PROVIDER = FallbackTravelTimeProvider(
     DeterministicLocalTravelProvider(), DeterministicLocalTravelProvider()
 )
 TWIN_CONTROL = TwinControlService(REGISTRY, TRAVEL_PROVIDER)
+WHAT_IF_RUNNER = WhatIfRunner(REGISTRY, TRAVEL_PROVIDER)
 
 
 class GeoPointRequest(BaseModel):
@@ -257,6 +259,59 @@ class ExperimentResponse(BaseModel):
     seed: int
     configuration: tuple[tuple[str, str], ...]
     parameter_configuration: tuple[tuple[str, str], ...]
+    trace_id: str
+
+
+class WhatIfVariantRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    variant_id: str = Field(min_length=1, max_length=64)
+    label: str = Field(min_length=1, max_length=128)
+    demand_multiplier: float = Field(default=1.0, ge=0.5, le=2.0)
+    supply_delta: int = Field(default=0, ge=-32, le=32)
+    preparation_delay_ticks: int = Field(default=0, ge=0, le=60)
+    traffic_multiplier: float = Field(default=1.0, ge=0.5, le=3.0)
+    strategy: str = Field(default="nearest", min_length=1, max_length=64)
+    risk_multiplier: float = Field(default=1.0, ge=0.1, le=5.0)
+
+
+class WhatIfExperimentRequest(RouteBenchExperimentRequest):
+    model_config = ConfigDict(frozen=True)
+
+    recorded_run_id: str = Field(min_length=1, max_length=128)
+    baseline_strategy: str = Field(default="nearest", min_length=1, max_length=64)
+    variants: tuple[WhatIfVariantRequest, ...] = Field(min_length=1, max_length=4)
+
+
+class WhatIfMetricResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    variant_id: str
+    label: str
+    strategy: str
+    strategy_version: str
+    request_count: int
+    assigned_count: int
+    assignment_rate: float
+    simulated_end_tick: int
+    simulated_duration_seconds: float
+    risk_index: float
+    replay_digest: str
+    manifest_digest: str
+    output_digest: str
+    observed_runtime_millis: float
+
+
+class WhatIfExperimentResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["what-if"]
+    claim_label: Literal["scenario comparison; not a causal production claim"]
+    recorded_run_id: str
+    comparison_digest: str
+    scenario_id: str
+    seed: int
+    results: tuple[WhatIfMetricResponse, ...]
     trace_id: str
 
 
@@ -649,6 +704,90 @@ def run_routebench_experiment(
         seed=payload.seed,
         configuration=configuration,
         parameter_configuration=tuple(sorted(payload.parameter_configuration)),
+        trace_id=trace_id,
+    )
+
+
+@app.post("/api/v1/experiments/what-if", response_model=WhatIfExperimentResponse)
+def run_what_if_experiment(
+    payload: WhatIfExperimentRequest, request: Request
+) -> WhatIfExperimentResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        manifest = ScenarioManifest(
+            payload.scenario_id,
+            payload.seed,
+            tuple(
+                DemandEvent(
+                    demand.request_id,
+                    GeoPoint(demand.pickup.latitude, demand.pickup.longitude),
+                    demand.tick,
+                    demand.zone,
+                    demand.merchant_id,
+                    demand.order_profile,
+                )
+                for demand in payload.demands
+            ),
+            tuple(
+                CourierState(
+                    courier.courier_id,
+                    GeoPoint(courier.location.latitude, courier.location.longitude),
+                    courier.available_tick,
+                )
+                for courier in payload.couriers
+            ),
+            payload.delay_ticks,
+            payload.traffic_multiplier,
+        )
+        variants = tuple(
+            WhatIfVariant(
+                variant.variant_id,
+                variant.label,
+                variant.demand_multiplier,
+                variant.supply_delta,
+                variant.preparation_delay_ticks,
+                variant.traffic_multiplier,
+                variant.strategy,
+                variant.risk_multiplier,
+            )
+            for variant in payload.variants
+        )
+        comparison = WHAT_IF_RUNNER.run(
+            payload.recorded_run_id,
+            payload.baseline_strategy,
+            manifest,
+            variants,
+        )
+    except KeyError as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return WhatIfExperimentResponse(
+        source="what-if",
+        claim_label="scenario comparison; not a causal production claim",
+        recorded_run_id=comparison.recorded_run_id,
+        comparison_digest=comparison.comparison_digest,
+        scenario_id=comparison.scenario_id,
+        seed=comparison.seed,
+        results=tuple(
+            WhatIfMetricResponse(
+                variant_id=result.variant_id,
+                label=result.label,
+                strategy=result.strategy,
+                strategy_version=result.strategy_version,
+                request_count=result.request_count,
+                assigned_count=result.assigned_count,
+                assignment_rate=result.assignment_rate,
+                simulated_end_tick=result.simulated_end_tick,
+                simulated_duration_seconds=result.simulated_duration_seconds,
+                risk_index=result.risk_index,
+                replay_digest=result.replay_digest,
+                manifest_digest=result.manifest_digest,
+                output_digest=result.output_digest,
+                observed_runtime_millis=result.observed_runtime_millis,
+            )
+            for result in comparison.results
+        ),
         trace_id=trace_id,
     )
 

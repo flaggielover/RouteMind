@@ -872,7 +872,7 @@
       "gates": ["L6-what-if", "L4-what-if-browser"],
       "evidence": ["evidence/gates/RM-158/what-if.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-157 passed. Large runs may use ROUTEMIND_DATA_ROOT artifacts."
+      "notes": "Activated after RM-157 passed. Local full gate passes Java 60, Python 142 at 95.88%, Web 47 unit/build, 23 browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures. The compute-owned WhatIfRunner derives bounded demand, supply, preparation, traffic, strategy, and risk variants with manifest/replay/output provenance; the Strategy surface labels results as scenario comparisons, not causal production claims. Large runs may use ROUTEMIND_DATA_ROOT artifacts. Remote Actions validation is pending."
     },
     {
       "id": "RM-160",

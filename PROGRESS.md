@@ -10,17 +10,17 @@ Current Task: RM-158 - Implement What-if scenario comparison
 
 Last Completed: RM-157 - Implement verified replay playback
 
-Current Gate: RM-157 local/full/browser gates and remote Actions run 32606493460 passed; RM-158 is now active
+Current Gate: RM-158 local/full/browser gates passed; implementation checkpoint is pending remote Actions validation
 
-CI: PASS - RM-157 run 32606493460, RM-156 run 32605590683, RM-155 run 32604701074, and RM-152 run 32603896737 passed all five jobs.
+CI: PASS - RM-157 run 32606493460, RM-156 run 32605590683, RM-155 run 32604701074, and RM-152 run 32603896737 passed all five jobs; RM-158 remote validation is pending.
 
-Regression: PASS - Java 60, Python 139 / 95.71%, Web 43 unit + build, E2E 21 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 142 / 95.88%, Web 47 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-158 - implement What-if scenario comparison; RM-162 remains blocked by RM-161
+Next Candidates: RM-158 - complete remote Evidence Gate; RM-162 is the next high-priority unblocked task after RM-158
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -287,3 +287,17 @@ The task is now passed and RM-120 is the active implementation.
   inspection.
 - RM-157 is now passed (40/48 Round 2, 68/76 repository); RM-158 What-if
   scenario comparison is activated next.
+
+### RM-158 checkpoint - 2026-08-23
+- Added the compute-owned `WhatIfRunner` and `/api/v1/experiments/what-if`.
+  Each bounded variant derives immutable demand, supply, preparation, traffic,
+  strategy, and risk inputs from one recorded manifest and returns reproducible
+  replay, manifest, output, and comparison digests with explicit scenario-risk
+  metrics.
+- Added the Strategy What-if panel with variant controls, run/clear/error
+  states, baseline/variant metric inspection, recorded-run provenance, and an
+  explicit non-causal scenario-comparison label.
+- Local full gate passes Java 60, Python 142 at 95.88%, Web 47 unit/build, 23
+  browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures.
+  Remote Actions validation is the remaining Evidence Gate before marking
+  RM-158 passed.

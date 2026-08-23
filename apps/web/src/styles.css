@@ -910,6 +910,126 @@ button {
   color: var(--ink);
   font-size: 10px;
 }
+.what-if-panel {
+  border-left: 3px solid var(--green);
+}
+.what-if-controls {
+  align-items: end;
+  display: grid;
+  gap: 9px;
+  grid-template-columns: minmax(150px, 1.4fr) repeat(6, minmax(90px, 1fr));
+}
+.what-if-controls label {
+  color: var(--muted);
+  display: grid;
+  font-size: 10px;
+  font-weight: 700;
+  gap: 5px;
+  text-transform: uppercase;
+}
+.what-if-controls input,
+.what-if-controls select {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  color: var(--ink);
+  min-height: 32px;
+  min-width: 0;
+  padding: 0 8px;
+}
+.what-if-actions {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 14px;
+  padding-bottom: 14px;
+}
+.what-if-status {
+  color: var(--muted);
+  font-size: 11px;
+}
+.what-if-provenance {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  display: grid;
+  gap: 5px;
+  margin-top: 14px;
+  padding: 9px;
+}
+.what-if-provenance span {
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+}
+.what-if-provenance code,
+.what-if-provenance small,
+.what-if-result-provenance {
+  color: var(--muted);
+  font-size: 10px;
+}
+.what-if-result-list {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 9px;
+}
+.what-if-result {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  min-width: 0;
+  padding: 11px;
+}
+.what-if-result-heading {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+.what-if-result-heading h3 {
+  color: var(--ink);
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+.what-if-result-heading .status-pill {
+  max-width: 48%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.what-if-metrics {
+  display: grid;
+  gap: 7px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 12px 0 10px;
+}
+.what-if-metrics div {
+  min-width: 0;
+}
+.what-if-metrics dt {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.what-if-metrics dd {
+  color: var(--ink);
+  font-size: 12px;
+  margin: 3px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 .panel-heading h2 {
   color: var(--ink);
   font-size: 15px;
@@ -1830,9 +1950,13 @@ button {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .simulation-toolbar,
-  .simulation-settings {
+  .simulation-settings,
+  .what-if-controls {
     align-items: stretch;
     flex-direction: column;
+  }
+  .what-if-controls {
+    display: flex;
   }
   .simulation-toolbar .button,
   .simulation-toolbar .icon-button,
@@ -1857,6 +1981,16 @@ button {
   .replay-toolbar label input,
   .replay-seek input[type="range"] {
     width: 100%;
+  }
+  .what-if-controls label,
+  .what-if-controls input,
+  .what-if-controls select,
+  .what-if-actions .button,
+  .what-if-actions .icon-button {
+    width: 100%;
+  }
+  .what-if-result-list {
+    grid-template-columns: minmax(0, 1fr);
   }
   .metric-cell {
     min-height: 99px;

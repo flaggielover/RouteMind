@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-158 - Implement What-if scenario comparison
+Current Task: RM-158 - Implement What-if scenario comparison (remote Evidence Gate pending)
 
-Task Status: RM-158 is in progress; RM-157 is the last fully validated task
+Task Status: RM-158 local/full/browser gates passed; implementation checkpoint is ready for commit, push, and Actions observation
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -595,13 +595,24 @@ jobs, including the Web static, unit, and browser smoke gates. The task graph
 now records RM-157 passed (40/48 Round 2, 68/76 repository) and activates
 RM-158 What-if scenario comparison.
 
+RM-158 local implementation is complete. The compute-owned What-if runner and
+`POST /api/v1/experiments/what-if` derive bounded demand, supply, preparation,
+traffic, strategy, and risk variants from a recorded manifest and return
+reproducible replay/manifest/output/comparison digests. The Strategy surface
+exposes controls, baseline/variant metrics, loading/error/clear states, and
+explicitly labels results as scenario comparisons rather than causal production
+claims. Compute check passes 142 Python tests at 95.88%; Web check passes 47
+unit tests/build; browser smoke passes 23 desktop/mobile tests with one
+existing desktop-only skip; full available gates pass Java 60 and 5 schemas/15
+fixtures. Evidence is recorded at `evidence/gates/RM-158/what-if.md`; remote
+Actions validation is pending.
+
 ## Current Resume Capsule
-- Resume at RM-158 What-if scenario comparison; do not redo completed
-  RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157 green Actions runs.
-- RM-157 evidence: Java 60, Python 139 at 95.71%, Web 43 unit/build, browser
-  smoke 21 passed plus one existing desktop-only skip, and 5 schemas/15
-  fixtures. GitHub Actions run `32606493460` passed all five jobs.
-- Round 2 is 40/48 and repository total is 68/76. Next action is to inspect
-  existing Twin/replay and strategy provenance, then implement bounded demand,
-  supply, preparation, traffic, strategy, and risk variants with explicit
-  comparison labeling. RM-162 remains blocked by RM-161.
+- Resume at RM-158 commit, push, and observe the real GitHub Actions run; do not
+  redo completed RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157 green runs.
+- RM-158 local evidence: Java 60, Python 142 at 95.88%, Web 47 unit/build,
+  browser smoke 23 passed plus one existing desktop-only skip, and 5 schemas/
+  15 fixtures. The Strategy What-if flow is already covered on desktop/mobile.
+- Round 2 is 40/48 and repository total is 68/76 until RM-158's remote gate
+  passes. After that, close RM-158 and activate RM-162 strategy comparison
+  visualizations; RM-160 and RM-161 are already passed.

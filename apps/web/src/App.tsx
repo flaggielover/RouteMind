@@ -21,6 +21,7 @@ import { probeServices } from "./data/health";
 import { liveDataSource } from "./data/liveSnapshot";
 import { replayDataSource } from "./data/replay";
 import { simulationDataSource } from "./data/simulation";
+import { whatIfDataSource } from "./data/whatIf";
 import {
   createCustomerOrder,
   createIdempotencyKey,
@@ -51,6 +52,7 @@ import { OperationsMap } from "./components/OperationsMap";
 import { ActivityStream } from "./components/ActivityStream";
 import { SimulationControlPanel } from "./components/SimulationControlPanel";
 import { ReplayPlaybackPanel } from "./components/ReplayPlaybackPanel";
+import { WhatIfComparisonPanel } from "./components/WhatIfComparisonPanel";
 import { StatusPill } from "./components/StatusPill";
 import type { Order, OperationsSnapshot } from "./domain/model";
 import "./styles.css";
@@ -805,6 +807,7 @@ function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
           </button>
         </section>
       </section>
+      <WhatIfComparisonPanel onRun={(variant) => whatIfDataSource.run(variant)} />
     </RolePage>
   );
 }

@@ -106,6 +106,64 @@ test.describe("role-aware web smoke", () => {
     await page.screenshot({ path: "test-results/replay-playback.png", fullPage: true });
   });
 
+  test("runs a what-if comparison with recorded provenance", async ({ page }) => {
+    await page.route("**/api/v1/experiments/what-if", async (route) => {
+      expect(route.request().method()).toBe("POST");
+      await route.fulfill({
+        json: {
+          source: "what-if",
+          claim_label: "scenario comparison; not a causal production claim",
+          recorded_run_id: "replay-control-default-v1",
+          comparison_digest: "comparison-digest-123",
+          scenario_id: "control-default",
+          seed: 7,
+          results: [
+            {
+              variant_id: "baseline",
+              label: "Recorded baseline",
+              strategy: "nearest",
+              strategy_version: "1.0.0",
+              request_count: 2,
+              assigned_count: 2,
+              assignment_rate: 1,
+              simulated_end_tick: 1,
+              simulated_duration_seconds: 60,
+              risk_index: 0,
+              replay_digest: "baseline-replay-digest",
+              manifest_digest: "baseline-manifest-digest",
+              output_digest: "baseline-output-digest",
+              observed_runtime_millis: 1,
+            },
+            {
+              variant_id: "traffic-stress",
+              label: "Traffic stress",
+              strategy: "weighted-greedy",
+              strategy_version: "1.0.0",
+              request_count: 3,
+              assigned_count: 2,
+              assignment_rate: 0.6667,
+              simulated_end_tick: 3,
+              simulated_duration_seconds: 180,
+              risk_index: 12.5,
+              replay_digest: "variant-replay-digest",
+              manifest_digest: "variant-manifest-digest",
+              output_digest: "variant-output-digest",
+              observed_runtime_millis: 1,
+            },
+          ],
+        },
+      });
+    });
+    await page.goto("/strategy");
+    await expect(page.getByRole("heading", { name: "Compare a scenario variant." })).toBeVisible();
+    await page.getByRole("button", { name: "Run comparison" }).click();
+    await expect(page.getByText("Comparison ready")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Traffic stress" })).toBeVisible();
+    await expect(page.getByText("Recorded run: replay-control-default-v1")).toBeVisible();
+    await expect(page.getByText(/not a causal production claim/).last()).toBeVisible();
+    await page.screenshot({ path: "test-results/what-if-comparison.png", fullPage: true });
+  });
+
   for (const [path, heading] of roles) {
     test(`renders the ${path} role surface`, async ({ page }) => {
       await page.goto(`/${path}`);
