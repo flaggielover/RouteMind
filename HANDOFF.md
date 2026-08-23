@@ -8,7 +8,7 @@ Current Phase: Round 2 P16 Strategy Laboratory
 
 Current Task: RM-171 - Implement failure and degradation E2E journeys
 
-Task Status: RM-170 is fully validated locally; commit 13b08a9 is awaiting remote Actions observation; RM-171 is the next highest-priority unblocked task
+Task Status: RM-170 is fully validated locally and remotely; RM-171 is the next highest-priority unblocked task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -646,5 +646,6 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   `38385309-478b-44ce-997e-eb54744cafe1` completed the Java/Python/PostgreSQL/
   RabbitMQ/Redis delivery path and observed `PUBLISHED` assignment Outbox state.
   Commit `13b08a9` fixes stable Rabbit event serialization and process-tree
-  cleanup; its remote Actions run still needs observation. RM-171 and RM-180
-  are now unblocked; RM-171 is next by priority.
+  cleanup. GitHub Actions run `32612407286` for commit `a6f8163` passed all five
+  jobs, including Web browser smoke and bounded degradation. RM-171 and RM-180
+  are now unblocked; RM-171 is next by priority and is marked `in_progress`.

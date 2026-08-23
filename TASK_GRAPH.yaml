@@ -945,12 +945,12 @@
       "phase": "P17",
       "priority": "high",
       "depends_on": ["RM-170", "RM-080", "RM-083"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Selected Redis loss, compute outage, RabbitMQ restart, duplicate event, courier offline, and dispatch timeout journeys are exercised", "Durable truth and idempotency survive selected failures", "Product surfaces show bounded degraded state instead of stale success"],
       "gates": ["L5-failure-e2e", "L4-degraded-product"],
       "evidence": ["evidence/gates/RM-171/failure-e2e.md"],
       "blocked_by": [],
-      "notes": "Claims remain limited to exercised failure modes."
+      "notes": "Activated after RM-170 passed local golden delivery and Actions run 32612407286. Claims remain limited to exercised failure modes."
     },
     {
       "id": "RM-180",
