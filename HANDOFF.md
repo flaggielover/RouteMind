@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Architectural Hardening P20
 
-Current Task: RM-202 - Modularize Compute API composition and routers
+Current Task: RM-203 - Introduce unified clock domains and event-time semantics
 
-Task Status: RM-201 is fully validated locally and in Actions run 32624822845; RM-202 is now `in_progress`; Round 2 remains fully passed
+Task Status: RM-202 is fully validated locally and in Actions run 32625456062; RM-203 is the active next hardening task; Round 2 remains fully passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,13 +629,13 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-202 Compute API composition and router modularization. RM-200
-  architectural hardening audit and RM-201 frontend modularization are passed;
-  RM-203 is independently eligible after RM-202 is staged. The RM-201 evidence
-  is `evidence/gates/RM-201/frontend-modularization.md` and Actions run
-  `32624822845` passed all five jobs.
-- Round 2 is complete at 48/48 tasks and the hardening program is 2/10; the
-  repository total is 78/86. Do not
+- Resume at RM-203 unified clock domains and event-time semantics. RM-200,
+  RM-201, and RM-202 are passed; RM-206 is independently eligible, while
+  RM-204/RM-205 depend on RM-203. RM-202 evidence is
+  `evidence/gates/RM-202/compute-api-modularization.md` and Actions run
+  `32625456062` passed all five jobs.
+- Round 2 is complete at 48/48 tasks and the hardening program is 3/10; the
+  repository total is 79/86. Do not
   redo RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162/
   RM-170/RM-171/RM-180/RM-181/RM-190; their local evidence and green Actions
   runs are recorded.
@@ -668,8 +668,8 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   `docs/runbooks/round2-final-demo.md`; proposed Round 3 gaps are in
   `docs/reviews/ROUND_3_GAPS.md`. Actions run `32616020918` passed all five
   jobs. There is no remaining unblocked Round 2 task.
-- The hardening graph is present in `TASK_GRAPH.yaml`: RM-200 and RM-201 are
-  passed, RM-202 is the active task, and RM-203 through RM-209 remain pending
-  with explicit dependencies. The local full-gate attempt for RM-201 stopped at
-  a silent Docker Compose CLI hang; targeted Web gates and the complete remote
-  Actions run are the accepted evidence.
+- The hardening graph is present in `TASK_GRAPH.yaml`: RM-200 through RM-202
+  are passed, RM-203 is the active task, and RM-204 through RM-209 remain
+  pending with explicit dependencies. The local full-gate attempt for RM-201
+  stopped at a silent Docker Compose CLI hang; targeted Web gates and the
+  complete remote Actions run are the accepted evidence.

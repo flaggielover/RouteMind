@@ -1023,12 +1023,12 @@
       "phase": "P20",
       "priority": "high",
       "depends_on": ["RM-200"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["FastAPI app composition is separated from route schemas and feature handlers", "Existing dispatch, twin, strategy, replay, RouteBench, RADS, shadow, and What-if endpoints preserve contracts", "Python format, lint, type, unit, coverage, and API tests remain green"],
       "gates": ["L1-python", "L2-python", "L3-contracts"],
       "evidence": ["evidence/gates/RM-202/compute-api-modularization.md"],
       "blocked_by": [],
-      "notes": "No FastAPI rewrite and no new network service."
+      "notes": "Passed in checkpoint 145af62: app.py is a 30-line composition root, schemas live in api/schemas.py, handlers live behind one APIRouter in api/routes.py, and stateful collaborators are injected by api/runtime.py. Ruff, format, mypy, contracts, and 142 tests at 95.92% coverage pass locally; GitHub Actions run 32625456062 passed all five jobs. No FastAPI rewrite and no new network service."
     },
     {
       "id": "RM-203",
