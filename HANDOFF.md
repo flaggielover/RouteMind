@@ -668,8 +668,9 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   `docs/runbooks/round2-final-demo.md`; proposed Round 3 gaps are in
   `docs/reviews/ROUND_3_GAPS.md`. Actions run `32616020918` passed all five
   jobs. There is no remaining unblocked Round 2 task.
-- The hardening graph is present in `TASK_GRAPH.yaml`: RM-200 through RM-208
-  are passed, RM-209 is the active closure task, and all dependencies are
-  explicit. The current Docker-backed rerun stopped at a silent Docker Compose
-  CLI hang; targeted local gates, reused real-service evidence, and the complete
-  remote Actions run are recorded in the RM-208 gate.
+- The hardening graph is present in `TASK_GRAPH.yaml`: RM-200 through RM-209
+  are passed, all dependencies are explicit, and the Enhancement Pass handoff
+  is recorded. The current Docker-backed rerun stopped at a silent Docker
+  Compose CLI hang; targeted local gates, reused real-service evidence, and the
+  complete remote Actions runs are recorded in the RM-208/RM-209 closure
+  evidence.
