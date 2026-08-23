@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Round 2 P19 Closure Audit Complete
+Current Phase: Architectural Hardening P20
 
-Current Task: Round 2 closure complete; proposed Round 3 gaps are recorded
+Current Task: RM-201 - Modularize frontend route and feature orchestration
 
-Task Status: RM-190 is fully validated locally and remotely; all 76 repository tasks are passed
+Task Status: RM-200 is fully validated locally; RM-201 and RM-202 are the next eligible hardening tasks; Round 2 remains fully passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,6 +629,10 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
+- Resume at RM-200 architectural hardening audit closure, then RM-201/RM-202
+  in parallel order as dependency permits. The audit artifact is
+  `docs/hardening/ROUND_2_CODEBASE_AUDIT.md`; it is read-only and does not
+  remove Round 2 capabilities.
 - Round 2 is complete at 48/48 tasks and the repository total is 76/76. Do not
   redo RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162/
   RM-170/RM-171/RM-180/RM-181/RM-190; their local evidence and green Actions
@@ -662,3 +666,7 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   `docs/runbooks/round2-final-demo.md`; proposed Round 3 gaps are in
   `docs/reviews/ROUND_3_GAPS.md`. Actions run `32616020918` passed all five
   jobs. There is no remaining unblocked Round 2 task.
+- The hardening graph is now present in `TASK_GRAPH.yaml`: RM-200 is
+  `in_progress`, RM-201 through RM-209 are pending with explicit dependencies.
+  The next eligible implementation work begins only after RM-200 evidence is
+  committed and remotely validated.

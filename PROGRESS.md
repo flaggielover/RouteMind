@@ -1,16 +1,18 @@
 # RouteMind Progress
 
-Current Phase: Round 2 P19 Closure Audit Complete
+Current Phase: Architectural Hardening P20
 
 Round 2 Progress: 48 / 48 tasks passed
 
-Repository Total: 76 / 76 tasks passed
+Hardening Progress: 1 / 10 tasks passed (RM-200)
 
-Current Task: Round 2 closure complete; proposed Round 3 gaps are recorded
+Repository Total: 77 / 86 tasks passed
+
+Current Task: RM-201 - Modularize frontend route and feature orchestration
 
 Last Completed: RM-190 - Perform Round 2 adversarial closure audit
 
-Current Gate: RM-190 source audit, verify/full/browser reruns, and Actions run 32616020918 (all five jobs) passed
+Current Gate: RM-200 audit and control-plane evidence passed; RM-201 is next eligible
 
 CI: PASS through RM-190 run 32616020918 with all five jobs; RM-181 run 32615330788 and implementation run 32614952772, RM-180 run 32613773339, RM-171 run 32613079169, RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
 
@@ -20,7 +22,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Round 3 work from `docs/reviews/ROUND_3_GAPS.md`; no remaining Round 2 task is unblocked because all 76 repository tasks are passed.
+Next Candidates: RM-201 and RM-202; both depend on the passed RM-200 audit and can proceed independently.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -443,3 +445,22 @@ The task is now passed and RM-120 is the active implementation.
   `evidence/gates/RM-190/round2-closure.md`. Round 2 is now 48/48 and the
   repository total is 76/76; this does not claim production deployment or
   full research completion.
+
+### Hardening transition / RM-200 audit - 2026-08-23
+- Round 2 closure was re-verified from repository state at `6b742b7`, with
+  `origin/main` synchronized and 76/76 existing tasks passed. The new
+  dependency-ordered RM-200 through RM-209 hardening program is recorded in
+  `TASK_GRAPH.yaml`; RM-200 is active and no accepted capability is removed.
+- The read-only audit is recorded at
+  `docs/hardening/ROUND_2_CODEBASE_AUDIT.md`. It measures the 1,550-line Web
+  `App.tsx`, 947-line Compute API composition module, missing courier lease,
+  assignment-scoped rather than decision-scoped provenance, absent independent
+  solver verification, and implicit clock/determinism domains.
+- RM-201 through RM-209 are dependency-ordered for frontend/API boundaries,
+  clock semantics, leases, decision ledger, solver verification, determinism,
+  integration regression, and closure. Human action required: NONE.
+- RM-200 is now passed in `TASK_GRAPH.yaml` with audit artifact
+  `docs/hardening/ROUND_2_CODEBASE_AUDIT.md` and executable evidence
+  `evidence/gates/RM-200/architectural-audit.md`. The control-plane, security,
+  contract self-tests, and Compose config gate passed; RM-201 and RM-202 are
+  the next eligible hardening tasks.
