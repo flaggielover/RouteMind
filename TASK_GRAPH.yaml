@@ -1192,12 +1192,12 @@
       "phase": "P25",
       "priority": "critical",
       "depends_on": ["RM-211", "RM-214"],
-      "status": "validating",
+      "status": "passed",
       "acceptance": ["Detect-only invariant checks expose status, last check, violations, and evidence", "Lease, assignment, projection, terminal-order, and decision-reference invariants are covered", "Repair is never silently applied without an explicit safe policy"],
       "gates": ["L5-reconciliation", "L6-evidence-audit", "L4-degraded-product"],
       "evidence": ["evidence/gates/RM-215/reconciliation.md"],
       "blocked_by": [],
-      "notes": "Implementation is validating after 77 Java tests passed. Scheduled/manual detect-only checks cover leases, assignments, terminal orders, decision references, Redis projection membership, and append-only evidence; repository-wide and CI gates remain before passed."
+      "notes": "Passed in checkpoint d26a121 after final Java 77, full available, verify, and focused resilience gates. Scheduled/manual detect-only checks cover leases, assignments, terminal orders, decision references, Redis projection membership, and append-only evidence. GitHub Actions run 32647766636 passed all five jobs; no repair authority is introduced. RM-216 is active."
     },
     {
       "id": "RM-216",
@@ -1205,12 +1205,12 @@
       "phase": "P25",
       "priority": "critical",
       "depends_on": ["RM-210"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Merchant, courier, pickup, delivery, cancellation, timeout, rejection, reassignment, and compensation states are explicit", "Commands remain idempotent and transitions auditable", "Payment processing is not introduced"],
       "gates": ["L2-java", "L3-postgres", "L5-failure", "L4-contracts"],
       "evidence": ["evidence/gates/RM-216/fulfillment-saga.md"],
       "blocked_by": [],
-      "notes": "Java remains authoritative for lifecycle and compensation state."
+      "notes": "Active after RM-215 passed. Java remains authoritative for lifecycle and compensation state; payment processing remains out of scope."
     },
     {
       "id": "RM-217",

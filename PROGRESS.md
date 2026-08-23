@@ -6,25 +6,25 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 5 / 27 tasks passed (RM-210 through RM-214; RM-215 active; RM-216 through RM-236 pending)
+Enhancement Progress: 6 / 27 tasks passed (RM-210 through RM-215; RM-216 active; RM-217 through RM-236 pending)
 
-Repository Total: 91 / 113 tasks passed
+Repository Total: 92 / 113 tasks passed
 
-Current Task: RM-215 - Add continuous reconciliation and invariant drift detection
+Current Task: RM-216 - Expand fulfillment saga and bounded exception paths
 
-Last Completed: RM-214 - Add useful end-to-end OpenTelemetry tracing boundaries
+Last Completed: RM-215 - Add continuous reconciliation and invariant drift detection
 
-Current Gate: RM-215 is validating after final Java 77/77 passed with real drift injection, bounded evidence, V13 append-only storage, report readback, and explicit no-repair verification. Full available and focused resilience gates are green locally; GitHub Actions remains before it can pass.
+Current Gate: RM-215 passed in checkpoint d26a121 after final Java 77/77, full available, verify, and focused resilience gates plus GitHub Actions run 32647766636 across all five jobs. RM-216 fulfillment saga expansion is active.
 
-CI: PASS through RM-214 implementation run 32645791900 with all five jobs; RM-213 closure run 32644103060, RM-213 implementation run 32643932098, hardening handoff run 32641575021, and recorded prior closure runs also passed. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-215 implementation run 32647766636 with all five jobs; RM-214 closure run 32645942196, RM-214 implementation run 32645791900, and recorded prior closure runs also passed. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: LOCAL PASS - final Java 77/77, Python 185 / 95.24%, Web 51 unit + build, and 5 schemas / 15 contract fixtures passed; focused resilience passed Java 15 and Python 2. Browser E2E remains unchanged at the last accepted 34 passed + 2 existing mobile-project skips and will run in CI.
+Regression: PASS - final Java 77/77, Python 185 / 95.24%, Web 51 unit + build, 5 schemas / 15 contract fixtures, focused resilience Java 15/Python 2, and remote Web browser smoke passed.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Complete RM-215 full/CI validation, then activate RM-216 fulfillment saga expansion.
+Next Candidates: RM-216 (active) fulfillment saga expansion; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -512,5 +512,7 @@ The task is now passed and RM-120 is the active implementation.
   including real API drift injection, database evidence readback, and proof that
   the committed lease was not changed. ADR 0013,
   `docs/runbooks/reconciliation.md`, and
-  `evidence/gates/RM-215/reconciliation.md` record the boundary. Remote CI gates
-  are pending, so RM-215 remains `validating`.
+  `evidence/gates/RM-215/reconciliation.md` record the boundary.
+- Checkpoint `d26a121` and GitHub Actions run `32647766636` passed all five
+  jobs, including Web browser smoke and bounded degradation. RM-215 is passed,
+  Enhancement is 6/27, repository total is 92/113, and RM-216 is active.

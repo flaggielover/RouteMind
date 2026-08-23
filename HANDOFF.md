@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P25
 
-Current Task: RM-215 - Add continuous reconciliation and invariant drift detection
+Current Task: RM-216 - Expand fulfillment saga and bounded exception paths
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-214 are passed. RM-215 detect-only reconciliation is validating after final Java 77/77, full available, verify, and focused resilience gates passed with V13 append-only evidence, real drift injection, bounded evidence, report readback, and no-repair proof. GitHub Actions remains; RM-216 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-215 are passed. RM-215 checkpoint d26a121 and Actions run 32647766636 passed all five jobs after final Java 77/77, full available, verify, and focused resilience gates. RM-216 fulfillment saga expansion is active; RM-217 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,12 +629,12 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-215 full repository validation, commit, push, and GitHub Actions.
-  Implementation evidence is `evidence/gates/RM-215/reconciliation.md`; local
-  Java 77/77 is green and no repair policy exists.
-- RM-214 checkpoint `9697a75` and GitHub Actions run `32645791900` passed all
-  five jobs; closure run `32645942196` also passed all five jobs.
-- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 5/27.
-  Repository total is 91/113. RM-216 is independently eligible but RM-215 is
-  next only after RM-215 reaches passed with remote CI evidence.
+- Resume at RM-216 fulfillment saga and bounded exception paths. Preserve Java
+  lifecycle authority, idempotent/audited commands, and the explicit no-payment
+  boundary.
+- RM-215 evidence is `evidence/gates/RM-215/reconciliation.md`; checkpoint
+  `d26a121` and GitHub Actions run `32647766636` passed all five jobs.
+- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 6/27.
+  Repository total is 92/113. RM-233 is independently eligible, while RM-216 is
+  the active critical path for RM-217 through RM-220.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.

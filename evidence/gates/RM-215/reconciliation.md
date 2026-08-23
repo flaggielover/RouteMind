@@ -2,8 +2,8 @@
 
 Date: 2026-08-23
 Validation worktree base: `aea09db`
-Implementation checkpoint: pending
-GitHub Actions: pending
+Implementation checkpoint: `d26a121`
+GitHub Actions: `32647766636` - PASS across all five jobs
 
 ## Scope
 
@@ -58,3 +58,9 @@ does not change existing bounded Redis or travel-provider degradation behavior.
   is modified by reconciliation.
 - No production alerting, retention, repair policy, or autonomous remediation is
   claimed.
+
+## Remote evidence
+
+GitHub Actions run `32647766636` passed control-plane/Compose, clean Java,
+frozen Python/contracts, bounded degradation, and Web static/unit/browser jobs
+for implementation checkpoint `d26a121`.
