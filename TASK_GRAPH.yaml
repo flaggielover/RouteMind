@@ -1010,12 +1010,12 @@
       "phase": "P20",
       "priority": "high",
       "depends_on": ["RM-200"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["App.tsx route orchestration is materially reduced and feature boundaries are explicit", "Live/demo/replay/simulation semantics and mobile/accessibility behavior are preserved", "Web static, unit, build, and Playwright gates remain green"],
       "gates": ["L1-web", "L2-web", "L4-web", "accessibility-review"],
       "evidence": ["evidence/gates/RM-201/frontend-modularization.md"],
       "blocked_by": [],
-      "notes": "React/Vite/TypeScript remain unchanged; this is a boundary refactor, not a framework rewrite."
+      "notes": "Passed in checkpoint f057d36 with local Web format, lint, typecheck, unit (14 files/49 tests), build, and Playwright (34 passed/2 existing mobile-project skips) evidence; GitHub Actions run 32624822845 passed all five jobs. The local full-gate attempt stopped at a silent Docker Compose CLI hang and is not claimed as a local pass. React/Vite/TypeScript remain unchanged; this is a boundary refactor, not a framework rewrite."
     },
     {
       "id": "RM-202",
