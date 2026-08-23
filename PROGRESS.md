@@ -6,17 +6,17 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 21 / 27 tasks passed (RM-210 through RM-227, RM-230, RM-233 through RM-234; RM-229 and RM-231 through RM-232 pending; RM-228 in progress; RM-235 through RM-236 pending)
+Enhancement Progress: 22 / 27 tasks passed (RM-210 through RM-228, RM-230, RM-233 through RM-234; RM-231 through RM-232 pending; RM-229 in progress; RM-235 through RM-236 pending)
 
-Repository Total: 107 / 113 tasks passed
+Repository Total: 108 / 113 tasks passed
 
-Current Task: RM-228 - Build Digital Twin visualization center
+Current Task: RM-229 - Add What-if delta visualization
 
-Last Completed: RM-234 - Add event upcasting and historical replay compatibility
+Last Completed: RM-228 - Build Digital Twin visualization center
 
-Current Gate: RM-234 passed local validation; remote evidence is pending for its checkpoint. RM-228 is active; Twin visualization must preserve bounded simulation/replay semantics and distinguish benchmark mode without owning simulation state.
+Current Gate: RM-228 passed local validation; remote evidence is pending for its checkpoint. RM-229 is active; What-if deltas must remain bounded counterfactual computations linked to source decision evidence and must not claim causal production effects.
 
-CI: PASS through RM-230 checkpoint 39c5dcb in run 32660524649 with all five jobs. RM-234 local gates pass; remote evidence is pending. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-230 checkpoint 39c5dcb in run 32660524649 with all five jobs. RM-234 and RM-228 local gates pass; remote evidence is pending for the latest checkpoints. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
@@ -24,7 +24,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement RM-228 Digital Twin visualization center; RM-229 remains blocked until RM-228 passes.
+Next Candidates: Implement RM-229 What-if delta visualization; RM-231 remains independently dependency-eligible after RM-228.
 
 ### RM-230 closure and RM-234 activation - 2026-08-24
 
@@ -37,6 +37,12 @@ Next Candidates: Implement RM-228 Digital Twin visualization center; RM-229 rema
 - RM-234 local implementation is complete: 233 compute tests pass at 95.27% coverage, with strict Ruff, mypy, contract, determinism, archive, mart, and semantic-metrics gates green.
 - The replay compatibility adapter is read-only, version-chain explicit, and preserves event identity, clock, trace, reference-data, and digest semantics.
 - RM-228 is now active pending remote CI evidence for the RM-234 checkpoint.
+
+### RM-228 closure and RM-229 activation - 2026-08-24
+
+- RM-228 local implementation is complete: Web static/unit/build passes with 31 test files and 85 tests; Playwright passes 34 tests with 2 existing desktop-only skips across desktop/mobile simulation and replay flows.
+- Twin visualization keeps simulation, replay, and benchmark evidence distinct, bounds the event timeline, and preserves source clock/digest provenance.
+- Enhancement is now 22/27 and repository total is 108/113. RM-229 is active.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

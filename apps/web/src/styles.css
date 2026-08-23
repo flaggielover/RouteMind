@@ -805,6 +805,145 @@ button {
   color: var(--muted);
   font-size: 10px;
 }
+.twin-visualization-panel {
+  display: grid;
+  gap: 18px;
+}
+.twin-mode-strip,
+.twin-visualization-meta,
+.twin-visualization-grid {
+  display: grid;
+  gap: 12px;
+}
+.twin-mode-strip {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.twin-mode {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 12px;
+}
+.twin-mode strong {
+  color: var(--ink);
+  text-transform: capitalize;
+}
+.twin-mode span {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.twin-mode small {
+  color: var(--muted);
+  line-height: 1.45;
+}
+.twin-mode.active {
+  background: var(--surface-accent);
+  border-color: var(--cyan);
+}
+.twin-mode.available {
+  border-color: var(--green);
+}
+.twin-mode.unavailable {
+  opacity: 0.8;
+}
+.twin-visualization-meta {
+  align-items: center;
+  color: var(--muted);
+  font-size: 11px;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+.twin-visualization-meta span {
+  align-items: center;
+  display: inline-flex;
+  gap: 6px;
+  min-width: 0;
+}
+.twin-visualization-meta code {
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.twin-visualization-grid {
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+.twin-state-chart,
+.twin-timeline {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  min-width: 0;
+  padding: 14px;
+}
+.twin-state-chart {
+  align-content: start;
+  display: grid;
+  gap: 14px;
+}
+.twin-state-bar {
+  display: grid;
+  gap: 7px;
+}
+.twin-state-bar > div:first-child {
+  color: var(--muted);
+  display: flex;
+  font-size: 11px;
+  gap: 12px;
+  justify-content: space-between;
+}
+.twin-state-bar strong {
+  color: var(--ink);
+}
+.twin-state-track {
+  background: var(--surface-muted);
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+}
+.twin-state-track span {
+  background: var(--cyan);
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+}
+.twin-event-count {
+  color: var(--muted);
+}
+.twin-timeline {
+  display: grid;
+  gap: 12px;
+}
+.twin-timeline ol {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  max-height: 238px;
+  overflow: auto;
+  padding: 0;
+}
+.twin-timeline li {
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: 3px;
+  padding-bottom: 8px;
+}
+.twin-timeline li:last-child {
+  border-bottom: 0;
+}
+.twin-timeline li span {
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+}
+.twin-timeline li small {
+  color: var(--muted);
+  font-size: 10px;
+}
 .replay-panel {
   border-left: 3px solid var(--amber);
 }
@@ -3227,6 +3366,14 @@ button {
   }
   .simulation-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .twin-mode-strip,
+  .twin-visualization-meta,
+  .twin-visualization-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .twin-visualization-meta {
+    align-items: start;
   }
   .simulation-toolbar,
   .simulation-settings,

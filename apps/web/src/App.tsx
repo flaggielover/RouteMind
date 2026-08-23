@@ -38,6 +38,7 @@ import { FlowVisualizationPanel } from "./components/FlowVisualizationPanel";
 import { GeoAnalyticalLayersPanel } from "./components/GeoAnalyticalLayersPanel";
 import { DecisionXrayPanel } from "./components/DecisionXrayPanel";
 import { ReliabilityCenterPanel } from "./components/ReliabilityCenterPanel";
+import { TwinVisualizationPanel } from "./components/TwinVisualizationPanel";
 import { ActivityStream } from "./components/ActivityStream";
 import { SimulationControlPanel } from "./components/SimulationControlPanel";
 import { ReplayPlaybackPanel } from "./components/ReplayPlaybackPanel";
@@ -376,6 +377,9 @@ function OperationsView({
       )}
       {snapshot.source === "replay" && snapshot.replay && onReplayControl && (
         <ReplayPlaybackPanel snapshot={snapshot.replay} onControl={onReplayControl} />
+      )}
+      {(snapshot.source === "simulation" || snapshot.source === "replay") && (
+        <TwinVisualizationPanel snapshot={snapshot} />
       )}
       <section className="operations-health" aria-label="Operations projection health">
         <div>

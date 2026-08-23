@@ -1361,12 +1361,12 @@
       "phase": "P27",
       "priority": "medium",
       "depends_on": ["RM-210", "RM-211"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Twin event timeline and state charts expose seed, clock, scenario, and replay digest", "Simulation, replay, and benchmark modes are distinct", "Large event streams are bounded and empty/stale/error states are tested"],
       "gates": ["L2-compute", "L4-web", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-228/twin-visualization.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-234 passed. Visualization consumes existing Twin contracts; it does not own simulation state."
+      "notes": "Passed in checkpoint pending after Web 31 test files/85 tests, full Playwright 34 passes with 2 existing desktop-only skips, and accessibility smoke on desktop/mobile. The visualization consumes existing Twin contracts, bounds the timeline, and explicitly separates simulation, replay, and unavailable benchmark evidence. RM-229 is now active."
     },
     {
       "id": "RM-229",
@@ -1374,7 +1374,7 @@
       "phase": "P27",
       "priority": "medium",
       "depends_on": ["RM-226", "RM-228"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Bounded perturbations show decision changed/unchanged, objective delta, and risk delta", "Inputs and outputs are reproducible and linked to source decision evidence", "Results are labeled counterfactual computation rather than causal inference"],
       "gates": ["L2-compute", "L4-web", "L6-correctness"],
       "evidence": ["evidence/gates/RM-229/what-if-delta.md"],
@@ -1387,7 +1387,7 @@
       "phase": "P28",
       "priority": "high",
       "depends_on": ["RM-214", "RM-215"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Reliability timeline, invariant matrix, degradation state, trace links, and recovery evidence are inspectable", "Unavailable telemetry is explicit and never shown as healthy", "Operator actions remain bounded and authorized"],
       "gates": ["L4-web", "L5-resilience", "L6-evidence-audit"],
       "evidence": ["evidence/gates/RM-230/reliability-center.md"],
