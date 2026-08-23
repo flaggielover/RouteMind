@@ -49,6 +49,72 @@ class GeoPointRequest(BaseModel):
     longitude: float = Field(ge=-180, le=180)
 
 
+class LocationObservationRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    courier_id: str = Field(min_length=1, max_length=128)
+    location: GeoPointRequest
+    sequence: int = Field(gt=0)
+    observed_at: datetime
+    ingested_at: datetime
+    online: bool = True
+
+
+class LocationIntegrityRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    observations: tuple[LocationObservationRequest, ...] = Field(min_length=1, max_length=1000)
+    reference_time: datetime | None = None
+    max_speed_kilometres_per_hour: float = Field(default=130.0, gt=0, le=300)
+    stale_after_seconds: float = Field(default=120.0, gt=0, le=86_400)
+    max_ingestion_lag_seconds: float = Field(default=30.0, ge=0, le=86_400)
+    hotspot_cell_size_degrees: float = Field(default=0.01, gt=0, le=1)
+    minimum_hotspot_couriers: int = Field(default=3, ge=2, le=100)
+
+
+class IntegritySignalResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    code: str
+    detail: str
+    severity: Literal["info", "warning", "critical"]
+
+
+class LocationIntegrityResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    courier_id: str
+    status: Literal["HEALTHY", "DEGRADED", "SUSPECT", "STALE"]
+    sequence: int
+    distance_kilometres: float
+    speed_kilometres_per_hour: float | None
+    staleness_seconds: float
+    ingestion_lag_seconds: float
+    sequence_gap: int
+    signals: tuple[IntegritySignalResponse, ...]
+    digest: str
+
+
+class HotspotCellResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    cell_id: str
+    latitude: float
+    longitude: float
+    observation_count: int
+    unique_courier_count: int
+
+
+class LocationIntegrityBatchResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["compute"]
+    claim_label: Literal["operational signal; not a disciplinary action"]
+    assessments: tuple[LocationIntegrityResponse, ...]
+    hotspots: tuple[HotspotCellResponse, ...]
+    trace_id: str
+
+
 class CourierCandidateRequest(BaseModel):
     model_config = ConfigDict(frozen=True)
 

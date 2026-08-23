@@ -14,11 +14,11 @@ Current Task: RM-218 - Add location history integrity and hotspot substrate
 
 Last Completed: RM-217 - Add live courier location streaming and bounded history
 
-Current Gate: RM-218 is in progress; RM-217 passed local and remote gates. Baseline is Java 80/80, Python 185/185 at 95.24%, 6 schemas/18 fixtures, Web 52 unit + build, full available, verify, and GitHub Actions run 32650330974.
+Current Gate: RM-218 is validating after Compute 191/191 at 95.42% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, determinism, archive, marts, semantic-metrics, and verify gates. RM-217 passed local and remote gates in GitHub Actions run 32650330974; RM-218 remote CI remains.
 
 CI: PASS through RM-217 checkpoint 7234ff6 in run 32650330974 with all five jobs; RM-216 run 32649193769 and RM-215 run 32647766636 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely - Java 80/80, Python 185 / 95.24%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32650330974.
+Regression: PASS locally - Java 80/80, Python 191 / 95.42%, Web 52 unit + build, 6 schemas / 18 contract fixtures, full available, verify, and RM-218 compute quality gates. Remote RM-218 browser/CI evidence remains pending.
 
 Blocked: NONE
 
@@ -539,3 +539,11 @@ The task is now passed and RM-120 is the active implementation.
 - Enhancement is now 8/27 and repository total is 94/113. RM-218 is active to
   add explicit location integrity states, anomaly signals, and privacy-bounded
   hotspot aggregation without autonomous disciplinary action.
+
+### RM-218 integrity implementation - 2026-08-24
+- Added deterministic Python location integrity analysis with explicit status
+  precedence and machine-readable signals for sequence, time, speed, stale,
+  offline, and ingestion-lag conditions.
+- Added a bounded `/api/v1/locations/integrity` read endpoint and k-anonymous
+  grid hotspot substrate. Local Compute gate passes 191 tests at 95.42%; remote
+  CI remains pending for the implementation checkpoint.

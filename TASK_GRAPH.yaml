@@ -1236,7 +1236,7 @@
       "gates": ["L2-compute", "L6-data-quality", "L4-operations"],
       "evidence": ["evidence/gates/RM-218/location-integrity.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-217 passed. Integrity is an operational signal, not an autonomous disciplinary decision."
+      "notes": "Implementation is validating after Compute 191 tests at 95.42% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, determinism, archive, marts, semantic-metrics, and verify gates. Explicit HEALTHY/DEGRADED/SUSPECT/STALE signals cover sequence gaps, duplicate reports, event-time regression, impossible speed, stale/offline state, and ingestion lag. Hotspots require at least three distinct couriers and omit IDs/raw trajectories. Remote CI remains before passed; integrity is an operational signal, not an autonomous disciplinary decision."
     },
     {
       "id": "RM-219",

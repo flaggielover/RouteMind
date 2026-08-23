@@ -14,6 +14,11 @@ from routemind_compute.api.schemas import (
     ExperimentMetricResponse,
     ExperimentResponse,
     HealthResponse,
+    HotspotCellResponse,
+    IntegritySignalResponse,
+    LocationIntegrityBatchResponse,
+    LocationIntegrityRequest,
+    LocationIntegrityResponse,
     ParameterDefinitionResponse,
     RouteBenchExperimentRequest,
     SemanticMetricDefinitionResponse,
@@ -37,6 +42,11 @@ from routemind_compute.api.schemas import (
     WhatIfMetricResponse,
 )
 from routemind_compute.application.execution import execution_provenance
+from routemind_compute.application.location_integrity import (
+    LocationObservation,
+    assess_location,
+    build_hotspots,
+)
 from routemind_compute.application.parameters import Metadata
 from routemind_compute.application.registry import StrategyRegistry
 from routemind_compute.application.routebench import BenchmarkManifest, RouteBenchRunner
@@ -106,6 +116,86 @@ def semantic_metric_catalog(
     return tuple(
         SemanticMetricDefinitionResponse(**definition.contract())
         for definition in metric_catalog(consumer)
+    )
+
+
+@router.post(
+    "/api/v1/locations/integrity",
+    response_model=LocationIntegrityBatchResponse,
+)
+def location_integrity(
+    payload: LocationIntegrityRequest, request: Request
+) -> LocationIntegrityBatchResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        observations = tuple(
+            LocationObservation(
+                courier_id=item.courier_id,
+                location=GeoPoint(item.location.latitude, item.location.longitude),
+                sequence=item.sequence,
+                observed_at=item.observed_at,
+                ingested_at=item.ingested_at,
+                online=item.online,
+            )
+            for item in payload.observations
+        )
+        previous: dict[str, LocationObservation] = {}
+        assessments = []
+        for observation in observations:
+            result = assess_location(
+                observation,
+                previous.get(observation.courier_id),
+                reference_time=payload.reference_time,
+                max_speed_kilometres_per_hour=payload.max_speed_kilometres_per_hour,
+                stale_after_seconds=payload.stale_after_seconds,
+                max_ingestion_lag_seconds=payload.max_ingestion_lag_seconds,
+            )
+            assessments.append(
+                LocationIntegrityResponse(
+                    courier_id=result.courier_id,
+                    status=result.status,
+                    sequence=result.sequence,
+                    distance_kilometres=result.distance_kilometres,
+                    speed_kilometres_per_hour=result.speed_kilometres_per_hour,
+                    staleness_seconds=result.staleness_seconds,
+                    ingestion_lag_seconds=result.ingestion_lag_seconds,
+                    sequence_gap=result.sequence_gap,
+                    signals=tuple(
+                        IntegritySignalResponse(
+                            code=signal.code,
+                            detail=signal.detail,
+                            severity=signal.severity,
+                        )
+                        for signal in result.signals
+                    ),
+                    digest=result.digest,
+                )
+            )
+            prior = previous.get(observation.courier_id)
+            if prior is None or observation.sequence > prior.sequence:
+                previous[observation.courier_id] = observation
+        hotspots = build_hotspots(
+            observations,
+            cell_size_degrees=payload.hotspot_cell_size_degrees,
+            minimum_unique_couriers=payload.minimum_hotspot_couriers,
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return LocationIntegrityBatchResponse(
+        source="compute",
+        claim_label="operational signal; not a disciplinary action",
+        assessments=tuple(assessments),
+        hotspots=tuple(
+            HotspotCellResponse(
+                cell_id=cell.cell_id,
+                latitude=cell.latitude,
+                longitude=cell.longitude,
+                observation_count=cell.observation_count,
+                unique_courier_count=cell.unique_courier_count,
+            )
+            for cell in hotspots
+        ),
+        trace_id=trace_id,
     )
 
 

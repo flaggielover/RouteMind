@@ -48,3 +48,58 @@ def test_system_info_declares_non_ownership_of_durable_state() -> None:
         "architecture_version": "v1",
         "durable_state_owner": False,
     }
+
+
+def test_location_integrity_exposes_signals_and_privacy_bounded_hotspots() -> None:
+    observations = [
+        {
+            "courier_id": f"courier-{index}",
+            "location": {"latitude": 31.2, "longitude": 121.4},
+            "sequence": 1,
+            "observed_at": "2026-08-24T00:00:00Z",
+            "ingested_at": "2026-08-24T00:00:00Z",
+        }
+        for index in range(3)
+    ]
+    observations.append(
+        {
+            "courier_id": "courier-0",
+            "location": {"latitude": 32.2, "longitude": 121.4},
+            "sequence": 2,
+            "observed_at": "2026-08-24T00:00:01Z",
+            "ingested_at": "2026-08-24T00:00:01Z",
+        }
+    )
+    response = client.post(
+        "/api/v1/locations/integrity",
+        json={"observations": observations, "reference_time": "2026-08-24T00:00:01Z"},
+        headers={"X-Trace-Id": "location-integrity-trace"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["claim_label"] == "operational signal; not a disciplinary action"
+    assert body["trace_id"] == "location-integrity-trace"
+    assert body["assessments"][-1]["status"] == "SUSPECT"
+    assert body["assessments"][-1]["signals"][0]["code"] == "impossible_speed"
+    assert body["hotspots"][0]["unique_courier_count"] == 3
+    assert all("courier_ids" not in cell for cell in body["hotspots"])
+
+
+def test_location_integrity_rejects_timezone_less_observations() -> None:
+    response = client.post(
+        "/api/v1/locations/integrity",
+        json={
+            "observations": [
+                {
+                    "courier_id": "courier-1",
+                    "location": {"latitude": 31.2, "longitude": 121.4},
+                    "sequence": 1,
+                    "observed_at": "2026-08-24T00:00:00",
+                    "ingested_at": "2026-08-24T00:00:00Z",
+                }
+            ]
+        },
+    )
+
+    assert response.status_code == 422
