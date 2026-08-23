@@ -37,5 +37,6 @@ Date: 2026-08-23
 
 ## Gate decision
 
-Local L6 What-if and L4 What-if browser evidence is complete. The implementation
-checkpoint is ready for commit, push, and remote Actions Evidence Gate.
+Local L6 What-if and L4 What-if browser evidence is complete. GitHub Actions run
+`32607641909` passed all five jobs, including the Python compute and Web browser
+smoke gates. RM-158 is fully validated.

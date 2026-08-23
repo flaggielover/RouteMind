@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Round 2 Progress: 40 / 48 tasks passed
+Round 2 Progress: 41 / 48 tasks passed
 
-Repository Total: 68 / 76 tasks passed
+Repository Total: 69 / 76 tasks passed
 
-Current Task: RM-158 - Implement What-if scenario comparison
+Current Task: RM-162 - Build strategy comparison visualizations
 
-Last Completed: RM-157 - Implement verified replay playback
+Last Completed: RM-158 - Implement What-if scenario comparison
 
-Current Gate: RM-158 local/full/browser gates passed; implementation checkpoint is pending remote Actions validation
+Current Gate: RM-158 local/full/browser gates and remote Actions run 32607641909 passed; RM-162 is now active
 
-CI: PASS - RM-157 run 32606493460, RM-156 run 32605590683, RM-155 run 32604701074, and RM-152 run 32603896737 passed all five jobs; RM-158 remote validation is pending.
+CI: PASS - RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, RM-155 run 32604701074, and RM-152 run 32603896737 passed all five jobs.
 
 Regression: PASS - Java 60, Python 142 / 95.88%, Web 47 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-158 - complete remote Evidence Gate; RM-162 is the next high-priority unblocked task after RM-158
+Next Candidates: RM-162 - build strategy comparison visualizations; RM-170 remains the next critical E2E task after the strategy lab path
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -301,3 +301,11 @@ The task is now passed and RM-120 is the active implementation.
   browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures.
   Remote Actions validation is the remaining Evidence Gate before marking
   RM-158 passed.
+
+### RM-158 completion - 2026-08-23
+- What-if scenario comparison passed local/full/browser gates and GitHub Actions
+  run `32607641909` (all five jobs green, including Python compute and Web
+  browser smoke), with bounded compute-owned variants and reproducible
+  manifest/replay/output/comparison provenance.
+- RM-158 is now passed (41/48 Round 2, 69/76 repository); RM-162 strategy
+  comparison visualizations are activated next.

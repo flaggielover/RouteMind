@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-158 - Implement What-if scenario comparison (remote Evidence Gate pending)
+Current Task: RM-162 - Build strategy comparison visualizations
 
-Task Status: RM-158 local/full/browser gates passed; implementation checkpoint is ready for commit, push, and Actions observation
+Task Status: RM-162 is in progress; RM-158 is the last fully validated task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -604,15 +604,21 @@ explicitly labels results as scenario comparisons rather than causal production
 claims. Compute check passes 142 Python tests at 95.88%; Web check passes 47
 unit tests/build; browser smoke passes 23 desktop/mobile tests with one
 existing desktop-only skip; full available gates pass Java 60 and 5 schemas/15
-fixtures. Evidence is recorded at `evidence/gates/RM-158/what-if.md`; remote
-Actions validation is pending.
+fixtures. Evidence is recorded at `evidence/gates/RM-158/what-if.md`; the
+implementation checkpoint is `90f85ea`.
+
+RM-158 is fully validated after GitHub Actions run `32607641909` passed all five
+jobs, including the Python compute and Web browser smoke gates. The task graph
+now records RM-158 passed (41/48 Round 2, 69/76 repository) and activates
+RM-162 strategy comparison visualizations; RM-160 and RM-161 are already passed.
 
 ## Current Resume Capsule
-- Resume at RM-158 commit, push, and observe the real GitHub Actions run; do not
-  redo completed RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157 green runs.
-- RM-158 local evidence: Java 60, Python 142 at 95.88%, Web 47 unit/build,
-  browser smoke 23 passed plus one existing desktop-only skip, and 5 schemas/
-  15 fixtures. The Strategy What-if flow is already covered on desktop/mobile.
-- Round 2 is 40/48 and repository total is 68/76 until RM-158's remote gate
-  passes. After that, close RM-158 and activate RM-162 strategy comparison
-  visualizations; RM-160 and RM-161 are already passed.
+- Resume at RM-162 strategy comparison visualizations; do not redo completed
+  RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158 green Actions runs.
+- RM-158 evidence: Java 60, Python 142 at 95.88%, Web 47 unit/build, browser
+  smoke 23 passed plus one existing desktop-only skip, and 5 schemas/15
+  fixtures. GitHub Actions run `32607641909` passed all five jobs.
+- Round 2 is 41/48 and repository total is 69/76. Next action is to build
+  evidence-first strategy comparison visualizations over the existing
+  What-if/RouteBench provenance, including explicit unavailable metrics and
+  manifest/lineage inspection. RM-170 remains the next critical local E2E task.
