@@ -89,6 +89,7 @@ try {
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/validate_contracts.py")
             Invoke-Uv @("run", "--frozen", "pytest")
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/determinism_gate.py")
+            Invoke-Uv @("run", "--frozen", "python", "../../scripts/analytics_archive_gate.py")
         }
         "run" {
             Invoke-Uv @("sync", "--frozen", "--python", $pythonPath)

@@ -1140,12 +1140,12 @@
       "phase": "P24",
       "priority": "critical",
       "depends_on": ["RM-210"],
-      "status": "pending",
+      "status": "validating",
       "acceptance": ["Versioned analytical records can be appended under ROUTEMIND_DATA_ROOT", "Manifests carry schema, event/ingestion time, clock, trace, and source revision", "Duplicate and malformed records are rejected without changing Java authority"],
       "gates": ["L2-analytics", "L6-lineage", "L5-recovery"],
       "evidence": ["evidence/gates/RM-211/analytical-archive.md"],
       "blocked_by": [],
-      "notes": "Large data stays outside Git; only manifests, schemas, and checksums are committed."
+      "notes": "Implementation is complete at the local checkpoint and is awaiting the remote Evidence Gate. Large data stays outside Git; only manifests, schemas, and checksums are committed."
     },
     {
       "id": "RM-212",
