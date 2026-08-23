@@ -1643,6 +1643,215 @@ button {
   margin: 0;
 }
 
+.flow-panel {
+  display: grid;
+  gap: 13px;
+}
+.flow-summary {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.flow-summary span {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  padding: 9px 10px;
+}
+.flow-summary strong {
+  color: var(--navy);
+  font-size: 16px;
+}
+.flow-summary small {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.25;
+}
+.flow-visual-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(220px, 0.9fr) minmax(280px, 1.1fr);
+}
+.flow-canvas-wrap {
+  background: #f5f8f8;
+  border: 1px solid var(--line);
+  min-height: 224px;
+  overflow: hidden;
+  padding: 10px;
+  position: relative;
+}
+.flow-canvas {
+  display: block;
+  height: 100%;
+  min-height: 200px;
+  width: 100%;
+}
+.flow-map-background {
+  fill: #edf4f4;
+}
+.flow-map-gridline {
+  stroke: #d8e5e5;
+  stroke-width: 0.4;
+}
+.flow-arc {
+  color: var(--cyan);
+  opacity: 0.58;
+}
+.flow-arc path {
+  fill: none;
+  marker-end: url("#flow-arrow");
+  stroke: currentColor;
+}
+.flow-arc circle {
+  fill: var(--surface);
+  stroke: currentColor;
+  stroke-width: 1.2;
+}
+.flow-arc.selected {
+  color: var(--amber);
+  opacity: 1;
+}
+.flow-map-labels {
+  bottom: 10px;
+  color: var(--muted);
+  display: flex;
+  font-size: 9px;
+  justify-content: space-between;
+  left: 12px;
+  pointer-events: none;
+  position: absolute;
+  right: 12px;
+  text-transform: uppercase;
+}
+.flow-list {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.flow-item {
+  align-items: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 22px minmax(0, 1fr) auto;
+  min-height: 52px;
+  padding: 8px;
+  text-align: left;
+  width: 100%;
+}
+.flow-item:hover,
+.flow-item:focus-visible {
+  background: #f4f8f8;
+  border-color: #d9e7e8;
+  outline: 2px solid var(--cyan);
+  outline-offset: 1px;
+}
+.flow-item.selected {
+  background: #eaf6f6;
+  border-color: #c9e5e7;
+}
+.flow-item-icon {
+  align-items: center;
+  background: #e5f4f4;
+  border-radius: 50%;
+  color: var(--cyan);
+  display: inline-flex;
+  height: 22px;
+  justify-content: center;
+  width: 22px;
+}
+.flow-item-copy,
+.flow-item-side {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.flow-item-copy strong,
+.flow-item-side strong {
+  color: var(--navy);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.flow-item-copy small,
+.flow-item-side small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.flow-item-side {
+  justify-items: end;
+  text-align: right;
+}
+.flow-item-side strong {
+  color: var(--green);
+}
+.flow-evidence {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+}
+.flow-evidence h3 {
+  color: var(--navy);
+  font-size: 14px;
+  margin: 2px 0 0;
+}
+.flow-evidence-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+}
+.flow-evidence-grid div {
+  background: var(--surface-muted);
+  padding: 8px;
+}
+.flow-evidence-grid dt {
+  color: var(--muted);
+  font-size: 10px;
+}
+.flow-evidence-grid dd {
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 750;
+  margin: 4px 0 0;
+}
+.flow-evidence-note,
+.flow-footnote {
+  align-items: flex-start;
+  color: var(--muted);
+  display: flex;
+  font-size: 10px;
+  gap: 5px;
+  line-height: 1.4;
+  margin: 0;
+}
+.flow-footnote svg {
+  color: var(--cyan);
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+.flow-empty-state {
+  align-items: center;
+  background: #f7f9fa;
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  display: flex;
+  font-size: 11px;
+  gap: 8px;
+  min-height: 74px;
+  padding: 12px;
+}
+.flow-empty-state svg {
+  color: var(--cyan);
+  flex: 0 0 auto;
+}
+
 .queue-list {
   display: grid;
   gap: 5px;
@@ -2305,6 +2514,15 @@ button {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .geo-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .flow-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .flow-visual-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .flow-evidence-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .simulation-metrics {

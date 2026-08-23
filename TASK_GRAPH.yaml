@@ -1309,12 +1309,12 @@
       "phase": "P27",
       "priority": "medium",
       "depends_on": ["RM-211", "RM-223"],
-      "status": "in_progress",
       "acceptance": ["Aggregated city/zone/cluster flows are derived from analytical records", "Volume, recency/confidence, and direction have defined units", "Interaction reveals the underlying metric/evidence and empty state is honest"],
       "gates": ["L4-web", "L6-geospatial", "L6-evidence-audit"],
       "evidence": ["evidence/gates/RM-224/arc-flow.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-223 passed. Decorative arcs without analytical lineage are not accepted; derive direction, volume, recency, and confidence from existing flow records."
+      "status": "validating",
+      "notes": "Implementation complete with order-route-derived area-pair aggregation, bounded SVG arcs, explicit volume/direction/recency/confidence units, selectable evidence, and honest empty/unavailable states. Local Web and regression baselines pass; awaiting checkpoint commit and remote Actions validation."
     },
     {
       "id": "RM-225",

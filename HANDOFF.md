@@ -8,7 +8,7 @@ Current Phase: Enhancement Pass P25
 
 Current Task: RM-224 - Add data-backed arc and flow visualization
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-223 are passed. RM-223 checkpoint c3f5587 and Actions run 32655392123 passed all five jobs. RM-224 data-backed arc and flow visualization is now active; RM-225 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-223 are passed. RM-223 checkpoint c3f5587 and Actions run 32655392123 passed all five jobs. RM-224 implementation is locally validated on Web 66 unit/build plus 34 browser passes, Java 80/80, Python 208/95.29%, and control-plane checks; its checkpoint is awaiting commit and remote Actions validation. RM-225 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -635,7 +635,7 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
 - RM-215 evidence is `evidence/gates/RM-215/reconciliation.md`; checkpoint
   `d26a121` and GitHub Actions run `32647766636` passed all five jobs.
 - Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 14/27 with
-  RM-224 active.
+  RM-224 validating.
   Repository total is 100/113. RM-233 is independently eligible, while RM-224 is
   the active geo-operations sequence.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
@@ -656,4 +656,6 @@ descriptive and reconcile observed duration without causal claims. RM-222 is
 fully validated in Actions run `32654207318`. RM-223 is fully validated in
 Actions run `32655392123`; evidence is recorded in
 `evidence/gates/RM-223/city-zone-drilldown.md`. Continue autonomously with
-RM-224.
+RM-224. Its local evidence is recorded in
+`evidence/gates/RM-224/arc-flow.md`; preserve order-route lineage and explicit
+empty/stale/unavailable states.
