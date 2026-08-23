@@ -8,7 +8,7 @@ Current Phase: Architectural Hardening P20
 
 Current Task: RM-204 - Implement authoritative assignment lease protocol
 
-Task Status: RM-203 is fully validated locally and in Actions run 32626153743; RM-204 is the active next hardening task; Round 2 remains fully passed
+Task Status: RM-203 is fully validated locally and in Actions run 32626153743; RM-204 is now `in_progress`; Round 2 remains fully passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

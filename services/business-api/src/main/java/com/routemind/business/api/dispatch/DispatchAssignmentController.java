@@ -2,6 +2,7 @@ package com.routemind.business.api.dispatch;
 
 import com.routemind.business.application.dispatch.DispatchAssignmentCommandService;
 import com.routemind.business.application.dispatch.DispatchAssignmentConflictException;
+import com.routemind.business.application.dispatch.DispatchAssignmentLeaseConflictException;
 import com.routemind.business.application.dispatch.DispatchAssignmentResult;
 import com.routemind.business.application.order.OrderCommandAuthorizationException;
 import com.routemind.business.application.order.OrderCommandConflictException;
@@ -53,6 +54,11 @@ public final class DispatchAssignmentController {
         return error(HttpStatus.CONFLICT, exception.getMessage());
     }
 
+    @ExceptionHandler(DispatchAssignmentLeaseConflictException.class)
+    ResponseEntity<ErrorResponse> leaseConflict(DispatchAssignmentLeaseConflictException exception) {
+        return error(HttpStatus.CONFLICT, exception.getMessage());
+    }
+
     @ExceptionHandler(OrderCommandConflictException.class)
     ResponseEntity<ErrorResponse> stale(OrderCommandConflictException exception) {
         return error(HttpStatus.CONFLICT, exception.getMessage());
@@ -93,12 +99,14 @@ public final class DispatchAssignmentController {
 
     public record DispatchAssignmentResponse(UUID orderId, UUID courierId, String status, long version,
             boolean replayed, String requestId, String contractVersion, String strategy, String strategyVersion,
-            String inputDigest, String outputDigest, boolean fallbackUsed, String fallbackReason, String traceId) {
+            String inputDigest, String outputDigest, boolean fallbackUsed, String fallbackReason, UUID leaseId,
+            Long leaseGeneration, String traceId) {
         static DispatchAssignmentResponse from(DispatchAssignmentResult result, String traceId) {
             var audit = result.audit();
             return new DispatchAssignmentResponse(result.orderId(), result.courierId(), result.status(), result.version(),
                     result.replayed(), audit.requestId(), audit.contractVersion(), audit.strategy(), audit.strategyVersion(),
-                    audit.inputDigest(), audit.outputDigest(), audit.fallbackUsed(), audit.fallbackReason(), traceId);
+                    audit.inputDigest(), audit.outputDigest(), audit.fallbackUsed(), audit.fallbackReason(), audit.leaseId(),
+                    audit.leaseGeneration(), traceId);
         }
     }
 

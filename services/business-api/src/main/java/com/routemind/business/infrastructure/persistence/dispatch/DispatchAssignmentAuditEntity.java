@@ -55,6 +55,12 @@ class DispatchAssignmentAuditEntity {
     @Column(name = "applied_order_version", nullable = false)
     private long appliedOrderVersion;
 
+    @Column(name = "lease_id")
+    private UUID leaseId;
+
+    @Column(name = "lease_generation")
+    private Long leaseGeneration;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
@@ -82,12 +88,14 @@ class DispatchAssignmentAuditEntity {
         fallbackUsed = audit.fallbackUsed();
         fallbackReason = audit.fallbackReason();
         appliedOrderVersion = audit.appliedOrderVersion();
+        leaseId = audit.leaseId();
+        leaseGeneration = audit.leaseGeneration();
         createdAt = audit.createdAt();
     }
 
     DispatchAssignmentAudit toDomain() {
         return new DispatchAssignmentAudit(idempotencyKey, requestHash, requestId, orderId, courierId,
                 contractVersion, strategy, strategyVersion, inputDigest, outputDigest, traceId, fallbackUsed,
-                fallbackReason, appliedOrderVersion, createdAt);
+                fallbackReason, appliedOrderVersion, leaseId, leaseGeneration, createdAt);
     }
 }

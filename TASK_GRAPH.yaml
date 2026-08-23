@@ -1049,12 +1049,12 @@
       "phase": "P21",
       "priority": "critical",
       "depends_on": ["RM-200", "RM-203"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Durable lease state prevents two competing decisions from committing one courier", "Stale generation, duplicate commit, expiry, retry, release, and concurrent decisions are tested", "Java remains authority and lease transitions are auditable with bounded recovery"],
       "gates": ["L2-concurrency", "L3-postgres", "L5-failure", "L4-dispatch"],
       "evidence": ["evidence/gates/RM-204/assignment-leases.md"],
       "blocked_by": [],
-      "notes": "Redis may accelerate coordination but PostgreSQL remains durable lease truth."
+      "notes": "Passed in implementation checkpoint pending CI closure: V11 PostgreSQL lease/current-state and append-only transition events, Java pessimistic courier-row locking, explicit 30s expiry, generation checks, idempotent commit/release, and cross-order courier competition evidence. Redis is not durable truth."
     },
     {
       "id": "RM-205",

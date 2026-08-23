@@ -5,6 +5,7 @@ import com.routemind.business.application.order.OrderCommandService;
 import com.routemind.business.application.outbox.OutboxRepository;
 import com.routemind.business.domain.dispatch.DispatchAssignmentAudit;
 import com.routemind.business.domain.dispatch.DispatchAssignmentCommand;
+import com.routemind.business.domain.dispatch.DispatchAssignmentLease;
 import com.routemind.business.domain.event.EventEnvelope;
 import com.routemind.business.domain.order.OrderId;
 import com.routemind.business.domain.order.OrderStatus;
@@ -25,13 +26,15 @@ public class DispatchAssignmentCommandService {
 
     private final OrderCommandService orders;
     private final DispatchAssignmentAuditRepository audits;
+    private final DispatchAssignmentLeaseService leases;
     private final OutboxRepository outbox;
     private final Clock clock;
 
     public DispatchAssignmentCommandService(OrderCommandService orders, DispatchAssignmentAuditRepository audits,
-            OutboxRepository outbox, Clock clock) {
+            DispatchAssignmentLeaseService leases, OutboxRepository outbox, Clock clock) {
         this.orders = orders;
         this.audits = audits;
+        this.leases = leases;
         this.outbox = outbox;
         this.clock = clock;
     }
@@ -52,12 +55,24 @@ public class DispatchAssignmentCommandService {
                     existing.appliedOrderVersion(), true, existing);
         }
 
+        DispatchAssignmentLease lease = leases.reserve(orderId.value(), command.courierId(), command.requestId());
+        if (lease.state() == com.routemind.business.domain.dispatch.DispatchAssignmentLeaseState.COMMITTED) {
+            if (!lease.orderId().equals(orderId.value())) {
+                throw new DispatchAssignmentLeaseConflictException("courier_already_assigned");
+            }
+            // Let the authoritative order version check classify a delayed decision as stale.
+            orders.transitionCommand(orderId, OrderStatus.ASSIGNED, "dispatch",
+                    command.expectedOrderVersion(), correlationId, null, traceId, key);
+            throw new DispatchAssignmentLeaseConflictException("lease_already_committed");
+        }
         OrderCommandResult transition = orders.transitionCommand(orderId, OrderStatus.ASSIGNED, "dispatch",
                 command.expectedOrderVersion(), correlationId, null, traceId, key);
+        lease = leases.commit(lease);
         DispatchAssignmentAudit audit = new DispatchAssignmentAudit(key, requestHash, command.requestId(),
                 orderId.value(), command.courierId(), command.contractVersion(), command.strategy(),
                 command.strategyVersion(), command.inputDigest(), command.outputDigest(), traceId,
-                command.fallbackUsed(), command.fallbackReason(), transition.version(), clock.instant());
+                command.fallbackUsed(), command.fallbackReason(), transition.version(), lease.leaseId(),
+                lease.generation(), clock.instant());
         audits.save(audit);
         Map<String, Object> payload = new HashMap<>();
         payload.put("orderId", orderId.value().toString());
@@ -68,6 +83,8 @@ public class DispatchAssignmentCommandService {
         payload.put("strategyVersion", command.strategyVersion());
         payload.put("inputDigest", command.inputDigest());
         payload.put("outputDigest", command.outputDigest());
+        payload.put("leaseId", lease.leaseId().toString());
+        payload.put("leaseGeneration", lease.generation());
         payload.put("fallbackUsed", command.fallbackUsed());
         if (command.fallbackReason() != null && !command.fallbackReason().isBlank()) payload.put("fallbackReason", command.fallbackReason());
         outbox.save(OutboxMessage.pending(new EventEnvelope("1.0", UUID.randomUUID(),
