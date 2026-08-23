@@ -1852,6 +1852,203 @@ button {
   flex: 0 0 auto;
 }
 
+.geo-layers-panel {
+  display: grid;
+  gap: 13px;
+}
+.geo-layers-panel .panel-meta {
+  align-items: center;
+  display: inline-flex;
+  gap: 5px;
+}
+.geo-layers-toolbar {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: space-between;
+}
+.geo-layers-toolbar-label {
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 750;
+}
+.geo-layers-toolbar-note {
+  color: var(--muted);
+  font-size: 10px;
+}
+.geo-layer-toggles {
+  display: grid;
+  gap: 7px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.geo-layer-toggle {
+  align-items: center;
+  background: #f7fafb;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  cursor: pointer;
+  display: grid;
+  gap: 7px;
+  grid-template-columns: 16px minmax(0, 1fr);
+  min-height: 48px;
+  padding: 8px;
+}
+.geo-layer-toggle:hover,
+.geo-layer-toggle:focus-within {
+  border-color: var(--cyan);
+  outline: 2px solid #b5e5e7;
+  outline-offset: 1px;
+}
+.geo-layer-toggle.unavailable {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+.geo-layer-toggle input {
+  height: 1px;
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+}
+.geo-layer-toggle-mark {
+  align-items: center;
+  border: 1px solid #96aeb4;
+  border-radius: 3px;
+  color: #fff;
+  display: inline-flex;
+  height: 16px;
+  justify-content: center;
+  width: 16px;
+}
+.geo-layer-toggle input:checked + .geo-layer-toggle-mark {
+  background: var(--cyan);
+  border-color: var(--cyan);
+}
+.geo-layer-toggle input:focus-visible + .geo-layer-toggle-mark {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+.geo-layer-toggle-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.geo-layer-toggle-copy strong {
+  color: var(--navy);
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.geo-layer-toggle-copy small {
+  color: var(--muted);
+  font-size: 9px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.geo-layer-state {
+  align-items: center;
+  background: #fff6df;
+  border-left: 3px solid var(--amber);
+  color: #765313;
+  display: flex;
+  font-size: 11px;
+  gap: 7px;
+  padding: 8px 10px;
+}
+.geo-layer-state svg {
+  flex: 0 0 auto;
+}
+.geo-layer-stack {
+  display: grid;
+  gap: 10px;
+}
+.geo-layer-block {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 7px;
+  padding-top: 11px;
+}
+.geo-layer-block-heading {
+  align-items: start;
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+.geo-layer-block-heading h3 {
+  color: var(--navy);
+  font-size: 13px;
+  margin: 2px 0 0;
+}
+.geo-layer-scale {
+  color: var(--muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+.geo-layer-detail {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.4;
+  margin: 0;
+}
+.geo-layer-values {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.geo-layer-value {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+.geo-layer-value-heading {
+  align-items: center;
+  color: var(--muted);
+  display: flex;
+  font-size: 10px;
+  gap: 8px;
+  justify-content: space-between;
+}
+.geo-layer-value-heading span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.geo-layer-value-heading strong {
+  color: var(--ink);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.geo-layer-value-heading small {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 500;
+}
+.geo-layer-value progress {
+  accent-color: var(--cyan);
+  height: 7px;
+  width: 100%;
+}
+.geo-layer-evidence {
+  color: var(--muted);
+  font-size: 9px;
+}
+.geo-layers-footnote {
+  align-items: flex-start;
+  color: var(--muted);
+  display: flex;
+  font-size: 10px;
+  gap: 5px;
+  line-height: 1.4;
+  margin: 0;
+}
+.geo-layers-footnote svg {
+  color: var(--cyan);
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
 .queue-list {
   display: grid;
   gap: 5px;
@@ -2524,6 +2721,12 @@ button {
   }
   .flow-evidence-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .geo-layer-toggles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .geo-layer-values {
+    grid-template-columns: minmax(0, 1fr);
   }
   .simulation-metrics {
     grid-template-columns: repeat(2, minmax(0, 1fr));

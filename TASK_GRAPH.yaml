@@ -1313,8 +1313,8 @@
       "gates": ["L4-web", "L6-geospatial", "L6-evidence-audit"],
       "evidence": ["evidence/gates/RM-224/arc-flow.md"],
       "blocked_by": [],
-      "status": "validating",
-      "notes": "Implementation complete with order-route-derived area-pair aggregation, bounded SVG arcs, explicit volume/direction/recency/confidence units, selectable evidence, and honest empty/unavailable states. Local Web and regression baselines pass; awaiting checkpoint commit and remote Actions validation."
+      "status": "passed",
+      "notes": "Passed in checkpoint c2ee880 after Web 66 unit tests/build, 34 browser passes with 2 existing desktop-only skips, Java 80/80, and Python 208 at 95.29%. Order-route records aggregate into bounded SVG arcs with explicit volume/direction/recency/confidence units, selectable evidence, and honest empty/unavailable states. GitHub Actions run 32656271920 passed all five jobs. RM-225 is now active."
     },
     {
       "id": "RM-225",
@@ -1322,12 +1322,12 @@
       "phase": "P27",
       "priority": "high",
       "depends_on": ["RM-223", "RM-224"],
-      "status": "pending",
       "acceptance": ["Order, courier supply, gap, SLA risk, congestion, travel degradation, integrity, utilization, and flow layers are data-backed where enabled", "Scales, legends, units, and unavailable states are explicit", "Large datasets use aggregation, viewport filtering, or downsampling"],
       "gates": ["L4-web", "L6-geospatial", "L5-performance"],
       "evidence": ["evidence/gates/RM-225/geo-layers.md"],
       "blocked_by": [],
-      "notes": "Only justified layers are implemented; inventory items may remain deferred with evidence."
+      "status": "validating",
+      "notes": "Implementation complete with toggleable order, supply, gap, SLA risk, utilization, and flow layers. Congestion/travel are explicitly disabled without travel metrics; integrity requires courier metadata. Units, scales, evidence counts, bounded aggregates, and unavailable states are visible. Awaiting checkpoint commit and remote Actions validation."
     },
     {
       "id": "RM-226",

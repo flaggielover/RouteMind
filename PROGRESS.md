@@ -6,25 +6,25 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 14 / 27 tasks passed (RM-210 through RM-223; RM-224 in progress; RM-225 through RM-236 pending)
+Enhancement Progress: 15 / 27 tasks passed (RM-210 through RM-224; RM-225 in progress; RM-226 through RM-236 pending)
 
-Repository Total: 100 / 113 tasks passed
+Repository Total: 101 / 113 tasks passed
 
-Current Task: RM-224 - Add data-backed arc and flow visualization
+Current Task: RM-225 - Add toggleable geo analytical layers
 
-Last Completed: RM-223 - Add city and zone operational drilldown
+Last Completed: RM-224 - Add data-backed arc and flow visualization
 
-Current Gate: RM-224 local validation passed: Web 66 unit/build, 34 browser passes with 2 existing skips, Java 80/80, Python 208 at 95.29%, and control-plane validation. The checkpoint is ready for commit and remote Actions validation; flow arcs derive direction, volume, recency, and confidence from order-route records.
+Current Gate: RM-225 local validation passed: Web 70 unit/build, 34 browser passes with 2 existing skips, Java 80/80, Python 208 at 95.29%, and control-plane validation. The checkpoint is ready for commit and remote Actions validation; deferred travel/integrity layers are explicitly unavailable rather than inferred.
 
-CI: PASS through RM-223 checkpoint c3f5587 in run 32655392123 with all five jobs; RM-222 run 32654399976 (closure docs) and implementation run 32654207318, RM-221 run 32653393681, and RM-220 run 32652719384 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-224 checkpoint c2ee880 in run 32656271920 with all five jobs; RM-223 run 32655392123, RM-222 run 32654399976 (closure docs) and implementation run 32654207318, RM-221 run 32653393681, and RM-220 run 32652719384 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely through RM-223 - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32655392123. Local Docker engine remained unresponsive, while remote Compose validation passed.
+Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and push RM-224, observe all five Actions jobs, then activate RM-225; RM-233 remains independently dependency-eligible.
+Next Candidates: Commit and push RM-225, observe all five Actions jobs, then activate RM-226; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -646,6 +646,24 @@ The task is now passed and RM-120 is the active implementation.
 - Web check passes 66 unit tests/build; browser smoke passes 34 tests with 2
   existing desktop-only skips. Java 80/80 and Python 208 at 95.29% remain
   green. RM-224 is validating pending checkpoint commit and remote Actions.
+
+### RM-224 closure and RM-225 activation - 2026-08-24
+- Checkpoint `c2ee880` passed all five GitHub Actions jobs in run
+  `32656271920`, including Web static/unit/browser validation.
+- Enhancement is now 15/27 and repository total is 101/113. RM-225 is active
+  to add justified, toggleable geo analytical layers with explicit scales,
+  units, lineage, and unavailable semantics.
+
+### RM-225 geo analytical layers validation - 2026-08-24
+- Added toggleable order, courier supply, supply gap, SLA risk, utilization,
+  and flow layers over bounded city/zone and flow aggregates. Every active
+  layer exposes local units, scale, and source-record counts.
+- Congestion and travel degradation stay disabled without provider travel
+  metrics. Integrity stays disabled unless courier sequence/freshness/online
+  metadata exists; missing metrics are never shown as zero.
+- Web check passes 70 unit tests/build; browser smoke passes 34 tests with 2
+  existing desktop-only skips. Java 80/80 and Python 208 at 95.29% remain
+  green. RM-225 is validating pending checkpoint commit and remote Actions.
 
 ### RM-223 closure and RM-224 activation - 2026-08-24
 - Checkpoint `c3f5587` passed all five GitHub Actions jobs in run

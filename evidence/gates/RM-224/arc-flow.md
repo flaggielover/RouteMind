@@ -1,8 +1,8 @@
 # RM-224 Data-Backed Arc and Flow Evidence
 
 Date: 2026-08-24
-Implementation checkpoint: pending commit
-GitHub Actions: pending remote validation
+Implementation checkpoint: c2ee880
+GitHub Actions: PASS - run 32656271920 (all five jobs)
 
 ## Scope
 
@@ -42,5 +42,6 @@ communicates projection lineage and geometry quality, not dispatch correctness.
 
 ## Remote validation
 
-To be filled after the checkpoint is pushed and all five GitHub Actions jobs
-complete successfully.
+GitHub Actions run `32656271920` passed the Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `c2ee880`.
