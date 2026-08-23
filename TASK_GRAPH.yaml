@@ -1036,12 +1036,12 @@
       "phase": "P21",
       "priority": "critical",
       "depends_on": ["RM-200"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["WALL, SIMULATED, and REPLAY clock ownership is explicit in critical paths", "Event time and ingestion time semantics are documented and version-compatible", "Replay and simulation tests prove wall-clock independence while live snapshots retain wall time"],
       "gates": ["L1-clock", "L2-determinism", "L3-contracts", "L4-replay"],
       "evidence": ["evidence/gates/RM-203/clock-domains.md"],
       "blocked_by": [],
-      "notes": "Use injected clocks and explicit metadata; do not build a distributed time service."
+      "notes": "Passed in checkpoint b6202f0 with explicit WALL/SIMULATED/REPLAY metadata, Python Twin/scenario domain-bound digests, Java injected UTC Clock for courier fallback, and monotonic Web simulation/replay command IDs. Local Compute (144 tests, 95.94%), Java (61 tests), Web unit/build/Playwright (34 passed/2 existing skips) gates pass; GitHub Actions run 32626153743 passed all five jobs. Use injected clocks and explicit metadata; do not build a distributed time service."
     },
     {
       "id": "RM-204",

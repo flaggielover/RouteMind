@@ -4,15 +4,15 @@ Current Phase: Architectural Hardening P20
 
 Round 2 Progress: 48 / 48 tasks passed
 
-Hardening Progress: 3 / 10 tasks passed (RM-200, RM-201, RM-202)
+Hardening Progress: 4 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203)
 
-Repository Total: 79 / 86 tasks passed
+Repository Total: 80 / 86 tasks passed
 
-Current Task: RM-203 - Introduce unified clock domains and event-time semantics
+Current Task: RM-204 - Implement authoritative assignment lease protocol
 
 Last Completed: RM-190 - Perform Round 2 adversarial closure audit
 
-Current Gate: RM-202 Compute API modularization passed locally and in Actions run 32625456062; RM-203 clock-domain implementation is in progress
+Current Gate: RM-203 clock domains passed locally and in Actions run 32626153743; RM-204 is the active next task
 
 CI: PASS through RM-201 run 32624822845 with all five jobs; RM-190 run 32616020918, RM-181 run 32615330788 and implementation run 32614952772, RM-180 run 32613773339, RM-171 run 32613079169, RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
 
@@ -22,7 +22,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-203 (active) and RM-206; RM-204/RM-205 unlock after RM-203.
+Next Candidates: RM-204 (active), RM-205, and RM-206; RM-204/RM-205 unlocked after RM-203.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -486,3 +486,15 @@ The task is now passed and RM-120 is the active implementation.
 - Checkpoint `145af62` and Actions run `32625456062` passed all five jobs. Full
   evidence is in `evidence/gates/RM-202/compute-api-modularization.md`.
 - RM-202 is passed in `TASK_GRAPH.yaml`; RM-203 is now the active task.
+
+### RM-203 clock domains - 2026-08-23
+- Added explicit `WALL`, `SIMULATED`, and `REPLAY` ownership across Python
+  scenario/Twin responses and Web snapshots, while preserving live wall-time
+  freshness separately from event time.
+- Java courier location fallback now uses the injected UTC `Clock`; simulation,
+  replay, and local idempotency IDs no longer depend on wall-clock entropy.
+- Compute 144 tests at 95.94%, Java 61 tests, Web 49 unit/build, and Playwright
+  34 passed / 2 existing skips passed locally. Checkpoint `b6202f0` and Actions
+  run `32626153743` passed all five jobs. Evidence is in
+  `evidence/gates/RM-203/clock-domains.md` and ADR 0004.
+- RM-203 is passed in `TASK_GRAPH.yaml`; RM-204 is now the active task.
