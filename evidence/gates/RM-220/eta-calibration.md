@@ -1,8 +1,8 @@
 # RM-220 ETA Calibration and SLA Risk Evidence
 
 Date: 2026-08-24
-Implementation checkpoint: pending commit
-GitHub Actions: pending
+Implementation checkpoint: 7f7af74
+GitHub Actions: PASS - run 32652719384 (all five jobs)
 
 ## Scope
 
@@ -40,5 +40,6 @@ customer-facing accuracy claim.
 
 ## Remote validation
 
-The implementation checkpoint and GitHub Actions run will be recorded here
-after the commit is pushed and all required jobs pass.
+GitHub Actions run `32652719384` passed the Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `7f7af74`.

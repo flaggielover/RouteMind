@@ -6,25 +6,25 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 10 / 27 tasks passed (RM-210 through RM-219; RM-220 in progress; RM-221 through RM-236 pending)
+Enhancement Progress: 11 / 27 tasks passed (RM-210 through RM-220; RM-221 in progress; RM-222 through RM-236 pending)
 
-Repository Total: 96 / 113 tasks passed
+Repository Total: 97 / 113 tasks passed
 
-Current Task: RM-220 - Add ETA calibration and SLA risk contract
+Current Task: RM-221 - Add delay attribution accounting waterfall
 
 Last Completed: RM-219 - Build honest ETA intelligence foundation
 
-Current Gate: RM-220 is validating; local Compute 201/201 at 95.23%, full available, verify, and strict quality gates pass. RM-219 passed in GitHub Actions run 32651955908; RM-220 remote evidence remains pending.
+Current Gate: RM-220 passed local and remote validation in Actions run 32652719384. RM-221 is active; delay accounting must reconcile observed duration and remain explicitly descriptive rather than causal.
 
-CI: PASS through RM-219 checkpoint 8fab1a6 in run 32651955908 with all five jobs; RM-218 run 32651238530 and RM-217 run 32650330974 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-220 checkpoint 7f7af74 in run 32652719384 with all five jobs; RM-219 run 32651955908 and RM-218 run 32651238530 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely for the RM-219 baseline - Java 80/80, Python 196 / 95.30%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32651955908. RM-220 local regression is 201 / 95.23% and awaiting remote validation.
+Regression: PASS locally and remotely - Java 80/80, Python 201 / 95.23%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32652719384.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Complete RM-220 ETA calibration and SLA risk contract; RM-233 remains independently dependency-eligible.
+Next Candidates: Complete RM-221 delay attribution accounting waterfall; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -582,3 +582,10 @@ The task is now passed and RM-120 is the active implementation.
   contracts, determinism, archive, marts, and semantic-metrics gates pass.
   Customer confidence remains unavailable without outcome samples. RM-220 is
   validating pending commit and remote GitHub Actions evidence.
+
+### RM-220 closure and RM-221 activation - 2026-08-24
+- RM-220 checkpoint `7f7af74` passed all five GitHub Actions jobs in run
+  `32652719384`; calibration metrics, interval coverage, explicit unavailable
+  state, SLA thresholds, and confidence gating are fully validated.
+- Enhancement is now 11/27 and repository total is 97/113. RM-221 is active to
+  add descriptive delay-accounting reconciliation without causal inference.

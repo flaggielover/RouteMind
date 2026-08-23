@@ -1257,25 +1257,25 @@
       "phase": "P26",
       "priority": "high",
       "depends_on": ["RM-219"],
-      "status": "validating",
+      "status": "passed",
       "acceptance": ["Quantile/interval evaluation includes MAE, median, p90, and coverage where data exists", "ON_TRACK, AT_RISK, and LIKELY_LATE thresholds are defined and tested", "Customer confidence is gated when calibration evidence is absent"],
       "gates": ["L2-analytics", "L6-statistics", "L4-product"],
       "evidence": ["evidence/gates/RM-220/eta-calibration.md"],
       "blocked_by": [],
-      "notes": "Local implementation complete and validating: Compute 201 tests at 95.23% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, full available gate, and explicit unavailable confidence when no outcomes exist. Calibration is not claimed from training fixtures alone; GitHub Actions validation remains before pass."
+      "notes": "Passed in checkpoint 7f7af74 after Compute 201 tests at 95.23% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, full available gate, and explicit unavailable confidence when no outcomes exist. Calibration is not claimed from training fixtures alone. GitHub Actions run 32652719384 passed all five jobs. RM-221 is now active."
     },
-    {
-      "id": "RM-221",
+      {
+        "id": "RM-221",
       "title": "Add delay attribution accounting waterfall",
       "phase": "P26",
       "priority": "medium",
       "depends_on": ["RM-219", "RM-220"],
-      "status": "pending",
+        "status": "in_progress",
       "acceptance": ["Per-order and aggregate delay components reconcile to observed duration", "Output is labeled accounting decomposition rather than causal inference", "Missing components and clock-domain mismatches are explicit"],
       "gates": ["L2-analytics", "L6-data-quality", "L4-operations"],
       "evidence": ["evidence/gates/RM-221/delay-attribution.md"],
       "blocked_by": [],
-      "notes": "The waterfall is descriptive accounting only."
+        "notes": "Activated after RM-220 passed. The waterfall is descriptive accounting only; it must reconcile observed duration without causal inference."
     },
     {
       "id": "RM-222",
