@@ -1010,7 +1010,7 @@
       "phase": "P20",
       "priority": "high",
       "depends_on": ["RM-200"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["App.tsx route orchestration is materially reduced and feature boundaries are explicit", "Live/demo/replay/simulation semantics and mobile/accessibility behavior are preserved", "Web static, unit, build, and Playwright gates remain green"],
       "gates": ["L1-web", "L2-web", "L4-web", "accessibility-review"],
       "evidence": ["evidence/gates/RM-201/frontend-modularization.md"],
