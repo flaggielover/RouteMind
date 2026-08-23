@@ -8,7 +8,7 @@ Current Phase: Architectural Hardening P20
 
 Current Task: RM-202 - Modularize Compute API composition and routers
 
-Task Status: RM-201 is fully validated locally and in Actions run 32624822845; RM-202 is the active next hardening task; Round 2 remains fully passed
+Task Status: RM-201 is fully validated locally and in Actions run 32624822845; RM-202 is now `in_progress`; Round 2 remains fully passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

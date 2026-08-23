@@ -12,7 +12,7 @@ Current Task: RM-202 - Modularize Compute API composition and routers
 
 Last Completed: RM-190 - Perform Round 2 adversarial closure audit
 
-Current Gate: RM-201 frontend modularization passed locally and in Actions run 32624822845; RM-202 is next eligible
+Current Gate: RM-201 frontend modularization passed locally and in Actions run 32624822845; RM-202 implementation is in progress
 
 CI: PASS through RM-201 run 32624822845 with all five jobs; RM-190 run 32616020918, RM-181 run 32615330788 and implementation run 32614952772, RM-180 run 32613773339, RM-171 run 32613079169, RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
 
@@ -22,7 +22,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-202 and RM-203; RM-202 depends on RM-200 and is now active, while RM-203 is independently eligible.
+Next Candidates: RM-202 (active) and RM-203; RM-203 remains independently eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -474,4 +474,5 @@ The task is now passed and RM-120 is the active implementation.
   counted as a local pass.
 - Checkpoint `f057d36` and Actions run `32624822845` passed all five jobs. Full
   evidence is in `evidence/gates/RM-201/frontend-modularization.md`.
-- RM-201 is passed in `TASK_GRAPH.yaml`; RM-202 is the active next task.
+- RM-201 is passed in `TASK_GRAPH.yaml`; RM-202 is now `in_progress` and owns
+  the next implementation checkpoint.

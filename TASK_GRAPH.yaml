@@ -1023,7 +1023,7 @@
       "phase": "P20",
       "priority": "high",
       "depends_on": ["RM-200"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["FastAPI app composition is separated from route schemas and feature handlers", "Existing dispatch, twin, strategy, replay, RouteBench, RADS, shadow, and What-if endpoints preserve contracts", "Python format, lint, type, unit, coverage, and API tests remain green"],
       "gates": ["L1-python", "L2-python", "L3-contracts"],
       "evidence": ["evidence/gates/RM-202/compute-api-modularization.md"],
