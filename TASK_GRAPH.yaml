@@ -1348,12 +1348,12 @@
       "phase": "P27",
       "priority": "high",
       "depends_on": ["RM-213", "RM-226"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Strategy metadata, maturity, parameters, constraints, fallback, and verification status are visible", "Scenario comparisons cover latency, quality, risk, fairness, cost, fallback, and verification", "Pareto points are computed rather than asserted"],
       "gates": ["L2-compute", "L4-web", "L6-statistics"],
       "evidence": ["evidence/gates/RM-227/strategy-analytics.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-226 passed. Existing Strategy Comparison UI is extended only where data contracts support it."
+      "notes": "Passed in checkpoint c63d336 after Web 27 test files/78 tests, full Playwright 34 passes with 2 existing desktop-only skips, and all five GitHub Actions jobs in run 32659202824. Strategy registry metadata, scenario metrics, explicit unsupported inventory, and computed Pareto dominance are inspectable without production ranking claims. RM-233 is now active."
     },
     {
       "id": "RM-228",
@@ -1426,12 +1426,12 @@
       "phase": "P28",
       "priority": "high",
       "depends_on": ["RM-205", "RM-211"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Travel, zone, strategy, and analytical reference data have immutable version identities", "Decisions, archives, marts, and replay manifests link the identity", "Updates are additive/versioned and do not silently rewrite history"],
       "gates": ["L6-lineage", "L3-postgres", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-233/reference-data-versioning.md"],
       "blocked_by": [],
-      "notes": "Provider-neutral and local deterministic fixtures remain supported."
+      "notes": "Activated after RM-227 passed. Provider-neutral and local deterministic fixtures remain supported; preserve immutable identities across decisions, archives, marts, and replay manifests."
     },
     {
       "id": "RM-234",

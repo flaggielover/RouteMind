@@ -1,7 +1,9 @@
 # RM-227 Strategy Analytics Evidence
 
 Date: 2026-08-24
-Status: validating
+Status: passed
+Implementation checkpoint: c63d336
+GitHub Actions: PASS - run 32659202824 (all five jobs)
 
 ## Scope
 
@@ -28,7 +30,9 @@ Status: validating
 
 ## Remote evidence
 
-Pending checkpoint commit and GitHub Actions run.
+GitHub Actions run `32659202824` passed Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `c63d336`.
 
 ## Boundaries
 
