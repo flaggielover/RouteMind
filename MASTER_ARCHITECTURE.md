@@ -85,3 +85,26 @@ Modules are extracted into additional services only when independent deployment,
 scaling, security, ownership, or failure isolation justifies the operational cost.
 
 See `docs/adr/0001-modular-monorepo-dual-runtime.md` for the initial decision.
+
+## Hardening contracts
+
+Architectural Hardening P20-P23 records the following cross-cutting contracts:
+
+- `WALL`, `SIMULATED`, and `REPLAY` are explicit clock domains. Durable live
+  business records use WALL; simulation/replay digests use artifact time and do
+  not include wall-clock elapsed duration.
+- Java owns a durable assignment lease per courier, with generation/expiry and
+  append-only transition evidence. A lease is committed in the same authority
+  boundary as the order transition.
+- Durable dispatch decisions carry stable identifiers, reference-data identity,
+  clock domain, bounded canonical input/output snapshots, and content digests.
+- Python solver output is independently verified for dispatch constraints and
+  VRPTW route feasibility/objective before crossing the API or experiment
+  boundary. The verifier is an executable consistency gate, not a theorem
+  prover.
+- Determinism is classified per subsystem as critical, configured, or allowed
+  operational nondeterminism. Seed, configuration, environment, and repeated
+  output digests are recorded by the reproducibility auditor.
+
+The implementation decisions are recorded in ADR-0004 through ADR-0008 and the
+phase result in `docs/hardening/HARDENING_CLOSURE_REPORT.md`.

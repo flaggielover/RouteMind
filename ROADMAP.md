@@ -81,3 +81,20 @@ RM-100 through RM-190 in dependency-ordered slices:
 Large maps, matrices, replay archives, and experiment outputs remain under
 `ROUTEMIND_DATA_ROOT`; production map providers, identity, WAF, and full-scale
 compute remain explicit external gates unless exercised with matching evidence.
+
+## Architectural Hardening P20-P23
+
+The post-Round-2 hardening graph RM-200 through RM-209 makes the critical
+contracts explicit without adding unnecessary services:
+
+- P20 modularizes the frontend/Compute boundaries and records the audit;
+- P21 introduces unified clock domains, durable assignment leases, and the
+  content-addressed dispatch decision ledger;
+- P22 adds independent solver verification, honest strategy maturity labels, and
+  a seeded determinism/reproducibility auditor;
+- P23 runs the cross-surface regression gates and closes the hardening phase.
+
+The closure report is `docs/hardening/HARDENING_CLOSURE_REPORT.md`. The next
+Enhancement Pass follows the deferred production and research gaps in
+`docs/reviews/ROUND_3_GAPS.md`; hardening does not claim production deployment,
+external provider validation, or theorem-prover coverage.

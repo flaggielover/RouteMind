@@ -1101,12 +1101,12 @@
       "phase": "P23",
       "priority": "critical",
       "depends_on": ["RM-201", "RM-202", "RM-203", "RM-204", "RM-205", "RM-206", "RM-207"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Round 2 customer, merchant, courier, operations, realtime, replay, simulation, What-if, dispatch, VRPTW, RADS, and degradation behavior remains green", "Real PostgreSQL/RabbitMQ/Redis checks cover changed consistency and recovery paths", "Local full gate and browser/API regression evidence are recorded"],
       "gates": ["L3-integration", "L4-regression", "L5-resilience", "L6-system"],
       "evidence": ["evidence/gates/RM-208/hardening-regression.md"],
       "blocked_by": [],
-      "notes": "Active after RM-207 closure. No quality threshold is reduced; failures must be repaired or explicitly blocked."
+      "notes": "Passed in checkpoint 15f86f8 with local control, Java 68-test, Compute 160-test/95.84%, Web 49-test/build, Playwright 34-pass/2-existing-skip, and remote Actions run 32629363069 all green. Docker Desktop API hung during a fresh infrastructure rerun; prior real PostgreSQL/RabbitMQ/Redis evidence from RM-170/RM-171 is reused because RM-206/207 changed no infrastructure paths, and the environment rerun remains an explicit residual risk."
     },
     {
       "id": "RM-209",
@@ -1114,12 +1114,12 @@
       "phase": "P23",
       "priority": "critical",
       "depends_on": ["RM-208"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Hardening closure report names starting/ending commits, tasks, gates, CI runs, residual risks, and deferred work", "Architecture docs, Progress, Handoff, and task graph are synchronized", "Enhancement Pass dependency-ordered task graph is prepared without starting deep Round 3 research"],
       "gates": ["L1-closure", "L6-evidence-audit", "architecture-review"],
       "evidence": ["docs/hardening/HARDENING_CLOSURE_REPORT.md"],
       "blocked_by": [],
-      "notes": "Closure does not claim production verification or complete research validation."
+      "notes": "Active after RM-208 regression closure. Closure does not claim production verification or complete research validation."
     }
   ]
 }

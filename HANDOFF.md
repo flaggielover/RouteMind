@@ -8,7 +8,7 @@ Current Phase: Architectural Hardening P20
 
 Current Task: RM-206 - Build independent solver verification kernel and maturity labels
 
-Task Status: RM-207 is fully validated locally with 160 Python tests and 95.84% coverage and in Actions run 32629142871; RM-208 is now `in_progress`; Round 2 remains fully passed
+Task Status: RM-208 is fully validated with local Java 68, Python 160/95.84%, Web/Playwright gates and Actions run 32629363069; Docker Desktop API hung during a fresh infra rerun but prior RM-170/RM-171 real-service evidence is reused with the residual explicitly recorded. RM-209 is now `in_progress`; Round 2 remains fully passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -668,8 +668,8 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   `docs/runbooks/round2-final-demo.md`; proposed Round 3 gaps are in
   `docs/reviews/ROUND_3_GAPS.md`. Actions run `32616020918` passed all five
   jobs. There is no remaining unblocked Round 2 task.
-- The hardening graph is present in `TASK_GRAPH.yaml`: RM-200 through RM-203
-  are passed, RM-204 is the active task, and RM-205 through RM-209 remain
-  pending with explicit dependencies. The local full-gate attempt for RM-201
-  stopped at a silent Docker Compose CLI hang; targeted Web gates and the
-  complete remote Actions run are the accepted evidence.
+- The hardening graph is present in `TASK_GRAPH.yaml`: RM-200 through RM-208
+  are passed, RM-209 is the active closure task, and all dependencies are
+  explicit. The current Docker-backed rerun stopped at a silent Docker Compose
+  CLI hang; targeted local gates, reused real-service evidence, and the complete
+  remote Actions run are recorded in the RM-208 gate.
