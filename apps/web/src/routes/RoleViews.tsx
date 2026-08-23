@@ -31,6 +31,7 @@ import { LifecycleTimeline } from "../components/LifecycleTimeline";
 import { WhatIfComparisonPanel } from "../components/WhatIfComparisonPanel";
 import { StrategyComparisonPanel } from "../components/StrategyComparisonPanel";
 import { StrategyAnalyticsPanel } from "../components/StrategyAnalyticsPanel";
+import { ResearchCenterPanel } from "../components/ResearchCenterPanel";
 import { StatusPill } from "../components/StatusPill";
 
 function RolePage({
@@ -186,6 +187,7 @@ export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
         onComparisonChange={setComparison}
       />
       <StrategyAnalyticsPanel comparison={comparison} />
+      <ResearchCenterPanel snapshot={snapshot} comparison={comparison} />
     </RolePage>
   );
 }

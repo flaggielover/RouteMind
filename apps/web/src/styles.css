@@ -1179,6 +1179,106 @@ button {
   font-size: 10px;
   overflow-wrap: anywhere;
 }
+.research-center-panel {
+  border-left: 3px solid var(--amber);
+  display: grid;
+  gap: 14px;
+}
+.research-center-status {
+  align-items: center;
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  display: grid;
+  gap: 8px;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  padding: 10px;
+}
+.research-center-status.ready {
+  border-color: var(--green);
+}
+.research-center-status.fixture {
+  border-color: var(--amber);
+}
+.research-center-status.pending,
+.research-center-status.unavailable {
+  border-color: var(--line-strong);
+}
+.research-center-status span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.research-center-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.research-center-block {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  min-width: 0;
+  padding: 13px;
+}
+.research-observations,
+.research-artifacts,
+.research-lineage-list {
+  display: grid;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.research-observations li,
+.research-artifacts li {
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 4px;
+  padding: 9px;
+}
+.research-observations li > div,
+.research-artifacts li {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+.research-observations li strong,
+.research-artifacts li strong {
+  color: var(--ink);
+  font-size: 11px;
+}
+.research-observations li span,
+.research-artifacts li span,
+.research-observations li small,
+.research-lineage-list li,
+.research-artifacts li code {
+  color: var(--muted);
+  font-size: 10px;
+}
+.research-observations li p {
+  color: var(--ink);
+  font-size: 12px;
+  margin: 0;
+}
+.research-lineage-list {
+  counter-reset: lineage;
+}
+.research-lineage-list li {
+  border-left: 2px solid var(--amber);
+  counter-increment: lineage;
+  padding: 7px 9px;
+}
+.research-lineage-list li::before {
+  color: var(--amber);
+  content: counter(lineage) ".";
+  font-weight: 700;
+  margin-right: 7px;
+}
+.research-artifacts li code {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .strategy-comparison-panel {
   border-left: 3px solid var(--cyan);
 }
@@ -3498,6 +3598,9 @@ button {
     grid-template-columns: minmax(0, 1fr);
   }
   .what-if-delta-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .research-center-grid {
     grid-template-columns: minmax(0, 1fr);
   }
   .metric-cell {

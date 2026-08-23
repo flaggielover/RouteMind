@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P28
 
-Current Task: RM-231 - Build Research Center surface
+Current Task: RM-232 - Add agent analytical substrate and guardrails
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-230 and RM-233 through RM-234 are passed locally. RM-234 Actions run 32661326399 and RM-228 Actions run 32661874586 passed all five jobs; RM-229 remote evidence is pending. RM-231 Research Center is now active; RM-232, RM-235, and RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-231 and RM-233 through RM-234 are passed locally. RM-234 Actions run 32661326399 and RM-228 Actions run 32661874586 passed all five jobs; RM-229/RM-231 remote evidence is pending. RM-232 agent analytical substrate is now active; RM-235 and RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

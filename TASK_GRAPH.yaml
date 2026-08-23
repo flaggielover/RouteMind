@@ -1400,12 +1400,12 @@
       "phase": "P28",
       "priority": "medium",
       "depends_on": ["RM-212", "RM-213", "RM-228"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Experiments, manifests, strategy comparisons, lineage, and artifact references are inspectable", "Engineering results, empirical observations, and scientific claims remain distinct", "No large experiment campaign or novelty claim is introduced"],
       "gates": ["L2-compute", "L4-web", "L6-lineage"],
       "evidence": ["evidence/gates/RM-231/research-center.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-229 passed. Round 3 research remains a prepared graph, not automatic experimentation."
+      "notes": "Passed in checkpoint pending after Web 34 test files/92 tests, full Playwright 34 passes with 2 existing desktop-only skips, and Strategy/What-if accessibility smoke on desktop/mobile. The Research Center exposes manifest, engineering observations, lineage, artifact references, and explicit scientific-claim boundaries without launching experiments. RM-232 is now active."
     },
     {
       "id": "RM-232",
@@ -1413,12 +1413,12 @@
       "phase": "P28",
       "priority": "medium",
       "depends_on": ["RM-213", "RM-226", "RM-231"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Agents can query metrics, evidence, lineage, and X-Ray records through bounded read tools", "Tool calls are audited and state-changing operations remain mediated", "Agent output never owns dispatch correctness or invents unsupported metrics"],
       "gates": ["L2-compute", "L6-security", "L6-lineage"],
       "evidence": ["evidence/gates/RM-232/agent-analytics.md"],
       "blocked_by": [],
-      "notes": "Reuse the existing Agent Runtime permission and audit boundary."
+      "notes": "Activated after RM-231 passed. Reuse the existing Agent Runtime permission and audit boundary."
     },
     {
       "id": "RM-233",

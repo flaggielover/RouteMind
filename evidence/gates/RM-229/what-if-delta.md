@@ -25,9 +25,9 @@ Status: passed
 
 ## Remote evidence
 
-Checkpoint: pending
+Checkpoint: `5600487`
 
-GitHub Actions: pending checkpoint push.
+GitHub Actions: pending run completion.
 
 ## Boundaries
 
