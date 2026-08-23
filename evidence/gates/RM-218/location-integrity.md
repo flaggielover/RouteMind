@@ -1,8 +1,8 @@
 # RM-218 Location Integrity and Hotspot Evidence
 
 Date: 2026-08-24
-Implementation checkpoint: pending
-GitHub Actions: pending
+Implementation checkpoint: a61b559
+GitHub Actions: PASS - run 32651238530 (all five jobs)
 
 ## Scope
 
@@ -36,4 +36,8 @@ is changed by this read-oriented compute endpoint. Thresholds are configured
 inputs, not production calibration evidence. Sparse cells are intentionally
 omitted when the minimum distinct-courier threshold is not met.
 
-Remote Actions evidence remains pending until this checkpoint is pushed.
+## Remote validation
+
+GitHub Actions run `32651238530` passed the Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `a61b559`.

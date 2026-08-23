@@ -1231,12 +1231,12 @@
       "phase": "P25",
       "priority": "high",
       "depends_on": ["RM-217"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Impossible speed, teleport, sequence, gap, duplicate, and staleness signals are explicit", "Integrity states are HEALTHY, DEGRADED, SUSPECT, or STALE", "Anomaly signals do not silently ban couriers and aggregate hotspot data is privacy-bounded"],
       "gates": ["L2-compute", "L6-data-quality", "L4-operations"],
       "evidence": ["evidence/gates/RM-218/location-integrity.md"],
       "blocked_by": [],
-      "notes": "Implementation is validating after Compute 191 tests at 95.42% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, determinism, archive, marts, semantic-metrics, and verify gates. Explicit HEALTHY/DEGRADED/SUSPECT/STALE signals cover sequence gaps, duplicate reports, event-time regression, impossible speed, stale/offline state, and ingestion lag. Hotspots require at least three distinct couriers and omit IDs/raw trajectories. Remote CI remains before passed; integrity is an operational signal, not an autonomous disciplinary decision."
+      "notes": "Passed in checkpoint a61b559 after Compute 191 tests at 95.42% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, determinism, archive, marts, semantic-metrics, full available, and verify gates. Explicit HEALTHY/DEGRADED/SUSPECT/STALE signals cover sequence gaps, duplicate reports, event-time regression, impossible speed, stale/offline state, and ingestion lag. Hotspots require at least three distinct couriers and omit IDs/raw trajectories. GitHub Actions run 32651238530 passed all five jobs; integrity is an operational signal, not an autonomous disciplinary decision. RM-219 is now active."
     },
     {
       "id": "RM-219",
@@ -1244,12 +1244,12 @@
       "phase": "P26",
       "priority": "high",
       "depends_on": ["RM-216"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["ETA composes dispatch, travel, preparation, pickup, and delivery components", "Prediction timestamp, horizon, model/version, input digest, and actual outcome are recorded", "Baseline estimates are labeled and unavailable inputs are explicit"],
       "gates": ["L2-compute", "L6-lineage", "L4-product"],
       "evidence": ["evidence/gates/RM-219/eta-foundation.md"],
       "blocked_by": [],
-      "notes": "A deterministic baseline is acceptable; no unsupported AI or calibration claim."
+      "notes": "Activated after RM-218 passed. A deterministic baseline is acceptable; no unsupported AI or calibration claim."
     },
     {
       "id": "RM-220",

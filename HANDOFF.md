@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P25
 
-Current Task: RM-218 - Add location history integrity and hotspot substrate
+Current Task: RM-219 - Build honest ETA intelligence foundation
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-217 are passed. RM-217 checkpoint 7234ff6 and Actions run 32650330974 passed all five jobs. RM-218 location integrity is validating after Compute 191/191 at 95.42%, strict mypy/Ruff/format, 6 schemas/18 fixtures, determinism, archive, marts, semantic-metrics, and verify gates; remote CI remains. RM-219 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-218 are passed. RM-218 checkpoint a61b559 and Actions run 32651238530 passed all five jobs. RM-219 ETA foundation is now active on the Java 80/80, Python 191/95.42%, Web 52, full available, and verify baseline. RM-220 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,15 +629,15 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-218 remote CI observation and closure. Preserve Java lifecycle
+- Resume at RM-219 ETA foundation implementation. Preserve Java lifecycle
   authority, durable location sequence ordering, Redis-as-projection, and the
-  explicit non-disciplinary anomaly boundary.
+  explicit non-disciplinary anomaly boundary and honest ETA lineage boundary.
 - RM-215 evidence is `evidence/gates/RM-215/reconciliation.md`; checkpoint
   `d26a121` and GitHub Actions run `32647766636` passed all five jobs.
-- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 8/27 with
-  RM-218 active.
-  Repository total is 94/113. RM-233 is independently eligible, while RM-218 is
-  the active critical path for RM-219 through RM-220.
+- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 9/27 with
+  RM-219 active.
+  Repository total is 95/113. RM-233 is independently eligible, while RM-219 is
+  the active critical path for RM-220 through RM-221.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
 
 RM-216 closure, RM-217 implementation, and RM-218 notes: checkpoint `c98ea76` is
@@ -645,5 +645,5 @@ remote-green in Actions run `32649193769`, and RM-217 checkpoint `7234ff6` is
 remote-green in Actions run `32650330974`. V15 adds bounded courier location
 history; event sequence and ingestion metadata are propagated to operations
 snapshots and Web realtime handling. RM-218 adds read-oriented integrity states
-and privacy-bounded hotspots; its implementation checkpoint is pending remote
-CI. Continue autonomously after the CI result.
+and privacy-bounded hotspots; checkpoint `a61b559` is remote-green in Actions
+run `32651238530`. Continue autonomously with RM-219.

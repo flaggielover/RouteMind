@@ -6,25 +6,25 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 8 / 27 tasks passed (RM-210 through RM-217; RM-218 in progress; RM-219 through RM-236 pending)
+Enhancement Progress: 9 / 27 tasks passed (RM-210 through RM-218; RM-219 in progress; RM-220 through RM-236 pending)
 
-Repository Total: 94 / 113 tasks passed
+Repository Total: 95 / 113 tasks passed
 
-Current Task: RM-218 - Add location history integrity and hotspot substrate
+Current Task: RM-219 - Build honest ETA intelligence foundation
 
-Last Completed: RM-217 - Add live courier location streaming and bounded history
+Last Completed: RM-218 - Add location history integrity and hotspot substrate
 
-Current Gate: RM-218 is validating after Compute 191/191 at 95.42% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, determinism, archive, marts, semantic-metrics, and verify gates. RM-217 passed local and remote gates in GitHub Actions run 32650330974; RM-218 remote CI remains.
+Current Gate: RM-219 is in progress; RM-218 passed Compute 191/191 at 95.42% coverage, full available, verify, and GitHub Actions run 32651238530. ETA implementation and lineage evidence remain pending.
 
-CI: PASS through RM-217 checkpoint 7234ff6 in run 32650330974 with all five jobs; RM-216 run 32649193769 and RM-215 run 32647766636 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-218 checkpoint a61b559 in run 32651238530 with all five jobs; RM-217 run 32650330974 and RM-216 run 32649193769 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally - Java 80/80, Python 191 / 95.42%, Web 52 unit + build, 6 schemas / 18 contract fixtures, full available, verify, and RM-218 compute quality gates. Remote RM-218 browser/CI evidence remains pending.
+Regression: PASS locally and remotely - Java 80/80, Python 191 / 95.42%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32651238530.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Complete RM-218 location integrity and hotspot substrate; RM-233 remains independently dependency-eligible.
+Next Candidates: Complete RM-219 honest ETA intelligence foundation; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -536,7 +536,8 @@ The task is now passed and RM-120 is the active implementation.
 - RM-217 checkpoint `7234ff6` passed all five GitHub Actions jobs in run
   `32650330974`; sequence-aware client reports, bounded history, Redis GEO
   ordering, and stale/duplicate SSE handling are fully validated.
-- Enhancement is now 8/27 and repository total is 94/113. RM-218 is active to
+- Enhancement was 8/27 and repository total was 94/113 before RM-218 closure;
+  RM-218 was active to
   add explicit location integrity states, anomaly signals, and privacy-bounded
   hotspot aggregation without autonomous disciplinary action.
 
@@ -546,4 +547,12 @@ The task is now passed and RM-120 is the active implementation.
   offline, and ingestion-lag conditions.
 - Added a bounded `/api/v1/locations/integrity` read endpoint and k-anonymous
   grid hotspot substrate. Local Compute gate passes 191 tests at 95.42%; remote
-  CI remains pending for the implementation checkpoint.
+  CI was pending for the implementation checkpoint at this stage.
+
+### RM-218 closure and RM-219 activation - 2026-08-24
+- RM-218 checkpoint `a61b559` passed all five GitHub Actions jobs in run
+  `32651238530`; location integrity states, anomaly signals, bounded hotspots,
+  and non-disciplinary API labeling are fully validated.
+- Enhancement is now 9/27 and repository total is 95/113. RM-219 is active to
+  compose honest ETA components and persist prediction/outcome lineage without
+  claiming calibration or AI accuracy.
