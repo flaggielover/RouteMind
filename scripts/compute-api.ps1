@@ -9,6 +9,7 @@ $uvVersion = "0.12.5"
 $root = Split-Path -Parent $PSScriptRoot
 $serviceRoot = Join-Path $root "services/compute-api"
 $toolRoot = Join-Path $root ".tools/uv"
+$uvCacheRoot = Join-Path $root ".tools/uv-cache"
 $onWindows = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT
 $toolBin = if ($onWindows) { Join-Path $toolRoot "Scripts" } else { Join-Path $toolRoot "bin" }
 $toolPython = Join-Path $toolBin $(if ($onWindows) { "python.exe" } else { "python" })
@@ -69,6 +70,7 @@ if (-not (Test-Path -LiteralPath (Join-Path $serviceRoot "pyproject.toml"))) {
 $pythonPath = Get-RepositoryPython
 Initialize-Uv $pythonPath
 $env:UV_LINK_MODE = "copy"
+$env:UV_CACHE_DIR = $uvCacheRoot
 $runtimeVersion = & $pythonPath --version
 Write-Host "Using $runtimeVersion and uv $uvVersion"
 
@@ -90,6 +92,7 @@ try {
             Invoke-Uv @("run", "--frozen", "pytest")
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/determinism_gate.py")
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/analytics_archive_gate.py")
+            Invoke-Uv @("run", "--frozen", "python", "../../scripts/analytics_mart_gate.py")
         }
         "run" {
             Invoke-Uv @("sync", "--frozen", "--python", $pythonPath)

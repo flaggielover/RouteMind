@@ -8,7 +8,7 @@ Current Phase: Enhancement Pass P24
 
 Current Task: RM-212 - Build reproducible DuckDB analytical marts
 
-Task Status: Hardening is verified 10/10; RM-209, RM-210, and RM-211 are passed. RM-211 checkpoint ec23b15 and Actions run 32642414842 are green; archive evidence is in evidence/gates/RM-211/analytical-archive.md. RM-212 is active for reproducible analytical marts; RM-213 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209, RM-210, and RM-211 are passed. RM-211 checkpoint ec23b15 and Actions run 32642414842 are green. RM-212 DuckDB 1.5.5 mart implementation passes local Compute gates at 174 tests/95.47% and is preparing remote validation. RM-213 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

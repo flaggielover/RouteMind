@@ -1153,12 +1153,12 @@
       "phase": "P24",
       "priority": "high",
       "depends_on": ["RM-211"],
-      "status": "pending",
+      "status": "validating",
       "acceptance": ["Curated facts and only justified dimensions rebuild deterministically", "Incremental and full rebuild semantics are explicit", "Marts remain read-oriented and preserve source/reference-data lineage"],
       "gates": ["L2-analytics", "L6-reproducibility", "L6-data-quality"],
       "evidence": ["evidence/gates/RM-212/duckdb-marts.md"],
       "blocked_by": [],
-      "notes": "DuckDB is selected as a local analytical engine; no new network service is introduced."
+      "notes": "Implementation is complete locally and awaiting the remote Evidence Gate. DuckDB 1.5.5 is a pinned in-process analytical engine; no new network service or online extension is introduced."
     },
     {
       "id": "RM-213",
