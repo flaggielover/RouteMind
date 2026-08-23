@@ -8,7 +8,7 @@ Current Phase: Enhancement Pass P25
 
 Current Task: RM-219 - Build honest ETA intelligence foundation
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-218 are passed. RM-218 checkpoint a61b559 and Actions run 32651238530 passed all five jobs. RM-219 ETA foundation is now active on the Java 80/80, Python 191/95.42%, Web 52, full available, and verify baseline. RM-220 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-218 are passed. RM-218 checkpoint a61b559 and Actions run 32651238530 passed all five jobs. RM-219 ETA foundation is validating after Java 80/80, Python 196/95.30%, Web 52, full available, verify, and full local gates; remote CI remains. RM-220 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,7 +629,7 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-219 ETA foundation implementation. Preserve Java lifecycle
+- Resume at RM-219 remote CI observation and closure. Preserve Java lifecycle
   authority, durable location sequence ordering, Redis-as-projection, and the
   explicit non-disciplinary anomaly boundary and honest ETA lineage boundary.
 - RM-215 evidence is `evidence/gates/RM-215/reconciliation.md`; checkpoint
@@ -640,10 +640,12 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   the active critical path for RM-220 through RM-221.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
 
-RM-216 closure, RM-217 implementation, and RM-218 notes: checkpoint `c98ea76` is
+RM-216 closure, RM-217 implementation, RM-218 notes, and RM-219 status: checkpoint `c98ea76` is
 remote-green in Actions run `32649193769`, and RM-217 checkpoint `7234ff6` is
 remote-green in Actions run `32650330974`. V15 adds bounded courier location
 history; event sequence and ingestion metadata are propagated to operations
 snapshots and Web realtime handling. RM-218 adds read-oriented integrity states
 and privacy-bounded hotspots; checkpoint `a61b559` is remote-green in Actions
-run `32651238530`. Continue autonomously with RM-219.
+run `32651238530`. RM-219 implements a deterministic five-component ETA
+baseline with explicit unavailable inputs and outcome lineage; its checkpoint is
+pending remote CI. Continue autonomously after CI.

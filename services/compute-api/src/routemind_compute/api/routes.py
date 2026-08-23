@@ -11,6 +11,9 @@ from routemind_compute.api.runtime import ComputeRuntime
 from routemind_compute.api.schemas import (
     DispatchSnapshotRequest,
     DispatchSnapshotResponse,
+    EtaComponentResponse,
+    EtaPredictionRequest,
+    EtaPredictionResponse,
     ExperimentMetricResponse,
     ExperimentResponse,
     HealthResponse,
@@ -41,6 +44,7 @@ from routemind_compute.api.schemas import (
     WhatIfExperimentResponse,
     WhatIfMetricResponse,
 )
+from routemind_compute.application.eta import EtaBaseline
 from routemind_compute.application.execution import execution_provenance
 from routemind_compute.application.location_integrity import (
     LocationObservation,
@@ -195,6 +199,60 @@ def location_integrity(
             )
             for cell in hotspots
         ),
+        trace_id=trace_id,
+    )
+
+
+@router.post("/api/v1/eta/predict", response_model=EtaPredictionResponse)
+def eta_predict(payload: EtaPredictionRequest, request: Request) -> EtaPredictionResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        prediction = EtaBaseline(_runtime(request).travel_provider).predict(
+            order_id=payload.order_id,
+            courier_id=payload.courier_id,
+            prediction_time=payload.prediction_time,
+            horizon_seconds=payload.horizon_seconds,
+            courier_location=GeoPoint(
+                payload.courier_location.latitude, payload.courier_location.longitude
+            ),
+            pickup_location=GeoPoint(
+                payload.pickup_location.latitude, payload.pickup_location.longitude
+            ),
+            delivery_location=GeoPoint(
+                payload.delivery_location.latitude, payload.delivery_location.longitude
+            ),
+            courier_available_at=payload.courier_available_at,
+            pickup_ready_at=payload.pickup_ready_at,
+            preparation_seconds=payload.preparation_seconds,
+            pickup_seconds=payload.pickup_seconds,
+            delivery_seconds=payload.delivery_seconds,
+            actual_delivered_at=payload.actual_delivered_at,
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return EtaPredictionResponse(
+        source="compute",
+        claim_label="deterministic baseline; not calibrated production accuracy",
+        order_id=prediction.order_id,
+        courier_id=prediction.courier_id,
+        prediction_time=prediction.prediction_time,
+        horizon_seconds=prediction.horizon_seconds,
+        predicted_delivery_at=prediction.predicted_delivery_at,
+        model=prediction.model,
+        model_version=prediction.model_version,
+        input_digest=prediction.input_digest,
+        components=tuple(
+            EtaComponentResponse(
+                name=item.name,
+                seconds=item.seconds,
+                source=item.source,
+                available=item.available,
+            )
+            for item in prediction.components
+        ),
+        outcome_available=prediction.outcome_available,
+        actual_delivered_at=prediction.actual_delivered_at,
+        actual_duration_seconds=prediction.actual_duration_seconds,
         trace_id=trace_id,
     )
 

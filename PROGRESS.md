@@ -14,11 +14,11 @@ Current Task: RM-219 - Build honest ETA intelligence foundation
 
 Last Completed: RM-218 - Add location history integrity and hotspot substrate
 
-Current Gate: RM-219 is in progress; RM-218 passed Compute 191/191 at 95.42% coverage, full available, verify, and GitHub Actions run 32651238530. ETA implementation and lineage evidence remain pending.
+Current Gate: RM-219 is validating after Compute 196/196 at 95.30% coverage, full available, verify, and local full gate. RM-218 passed in GitHub Actions run 32651238530; RM-219 remote CI remains.
 
 CI: PASS through RM-218 checkpoint a61b559 in run 32651238530 with all five jobs; RM-217 run 32650330974 and RM-216 run 32649193769 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely - Java 80/80, Python 191 / 95.42%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32651238530.
+Regression: PASS locally - Java 80/80, Python 196 / 95.30%, Web 52 unit + build, 6 schemas / 18 contract fixtures, full available, verify, and full gate. Remote RM-219 browser/CI evidence remains pending.
 
 Blocked: NONE
 
@@ -556,3 +556,11 @@ The task is now passed and RM-120 is the active implementation.
 - Enhancement is now 9/27 and repository total is 95/113. RM-219 is active to
   compose honest ETA components and persist prediction/outcome lineage without
   claiming calibration or AI accuracy.
+
+### RM-219 ETA foundation implementation - 2026-08-24
+- Added the deterministic `/api/v1/eta/predict` baseline with five explicit
+  components, prediction horizon, model/version, input digest, and optional
+  actual delivery outcome. Missing preparation is represented as unavailable,
+  never silently imputed.
+- Local Compute/full gate passes 196 tests at 95.30%; ADR 0017 and evidence are
+  recorded. RM-219 is validating pending remote CI.

@@ -1249,7 +1249,7 @@
       "gates": ["L2-compute", "L6-lineage", "L4-product"],
       "evidence": ["evidence/gates/RM-219/eta-foundation.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-218 passed. A deterministic baseline is acceptable; no unsupported AI or calibration claim."
+      "notes": "Implementation is validating after Compute 196 tests at 95.30% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, determinism, archive, marts, semantic-metrics, and full local gate. The ETA baseline composes dispatch, travel, preparation, pickup, and delivery; prediction timestamp, horizon, model/version, input digest, and optional actual outcome are explicit. Missing preparation leaves predicted ETA unavailable. Remote CI remains before passed; no unsupported AI or calibration claim."
     },
     {
       "id": "RM-220",

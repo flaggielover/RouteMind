@@ -103,3 +103,65 @@ def test_location_integrity_rejects_timezone_less_observations() -> None:
     )
 
     assert response.status_code == 422
+
+
+def test_eta_predict_returns_components_lineage_and_actual_outcome() -> None:
+    response = client.post(
+        "/api/v1/eta/predict",
+        json={
+            "order_id": "order-eta-1",
+            "courier_id": "courier-1",
+            "prediction_time": "2026-08-24T01:00:00Z",
+            "courier_location": {"latitude": 31.2, "longitude": 121.4},
+            "pickup_location": {"latitude": 31.21, "longitude": 121.41},
+            "delivery_location": {"latitude": 31.22, "longitude": 121.42},
+            "courier_available_at": "2026-08-24T01:00:00Z",
+            "pickup_ready_at": "2026-08-24T01:01:00Z",
+            "preparation_seconds": 120,
+            "pickup_seconds": 30,
+            "delivery_seconds": 20,
+            "actual_delivered_at": "2026-08-24T01:15:00Z",
+        },
+        headers={"X-Trace-Id": "eta-trace"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["claim_label"] == "deterministic baseline; not calibrated production accuracy"
+    assert body["trace_id"] == "eta-trace"
+    assert [item["name"] for item in body["components"]] == [
+        "dispatch",
+        "travel",
+        "preparation",
+        "pickup",
+        "delivery",
+    ]
+    assert body["outcome_available"] is True
+    assert body["actual_duration_seconds"] == 900
+    assert len(body["input_digest"]) == 64
+
+
+def test_eta_predict_keeps_missing_preparation_explicit() -> None:
+    response = client.post(
+        "/api/v1/eta/predict",
+        json={
+            "order_id": "order-eta-2",
+            "courier_id": "courier-1",
+            "prediction_time": "2026-08-24T01:00:00Z",
+            "courier_location": {"latitude": 31.2, "longitude": 121.4},
+            "pickup_location": {"latitude": 31.21, "longitude": 121.41},
+            "delivery_location": {"latitude": 31.22, "longitude": 121.42},
+            "courier_available_at": "2026-08-24T01:00:00Z",
+            "pickup_ready_at": "2026-08-24T01:01:00Z",
+        },
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["predicted_delivery_at"] is None
+    assert body["components"][2] == {
+        "name": "preparation",
+        "seconds": None,
+        "source": "merchant preparation",
+        "available": False,
+    }

@@ -115,6 +115,53 @@ class LocationIntegrityBatchResponse(BaseModel):
     trace_id: str
 
 
+class EtaPredictionRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    order_id: str = Field(min_length=1, max_length=128)
+    courier_id: str = Field(min_length=1, max_length=128)
+    prediction_time: datetime
+    horizon_seconds: float = Field(default=3600.0, gt=0, le=86_400)
+    courier_location: GeoPointRequest
+    pickup_location: GeoPointRequest
+    delivery_location: GeoPointRequest
+    courier_available_at: datetime
+    pickup_ready_at: datetime
+    preparation_seconds: float | None = Field(default=None, ge=0)
+    pickup_seconds: float = Field(default=0.0, ge=0)
+    delivery_seconds: float = Field(default=0.0, ge=0)
+    actual_delivered_at: datetime | None = None
+
+
+class EtaComponentResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    name: str
+    seconds: float | None
+    source: str
+    available: bool
+
+
+class EtaPredictionResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["compute"]
+    claim_label: Literal["deterministic baseline; not calibrated production accuracy"]
+    order_id: str
+    courier_id: str
+    prediction_time: datetime
+    horizon_seconds: float
+    predicted_delivery_at: datetime | None
+    model: str
+    model_version: str
+    input_digest: str
+    components: tuple[EtaComponentResponse, ...]
+    outcome_available: bool
+    actual_delivered_at: datetime | None
+    actual_duration_seconds: float | None
+    trace_id: str
+
+
 class CourierCandidateRequest(BaseModel):
     model_config = ConfigDict(frozen=True)
 
