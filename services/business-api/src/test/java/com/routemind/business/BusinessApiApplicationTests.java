@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.routemind.business.application.reconciliation.ReconciliationReportRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,7 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -25,6 +27,9 @@ class BusinessApiApplicationTests {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+
+	@Autowired
+	private ReconciliationReportRepository reconciliationReports;
 
 	@Test
 	void actuatorHealthIsAvailable() throws Exception {
@@ -320,6 +325,53 @@ class BusinessApiApplicationTests {
 		assertThat(jdbcTemplate.queryForObject(
 				"select count(*) from routemind.dispatch_assignment_lease_events where courier_id = ?",
 				Integer.class, java.util.UUID.fromString(courierId))).isEqualTo(2);
+	}
+
+	@Test
+	@Transactional
+	void reconciliationDetectsPersistedInvariantDriftWithoutRepairingIt() throws Exception {
+		String orderId = createConfirmedOrder("rm215-drift");
+		String courierId = java.util.UUID.randomUUID().toString();
+		mockMvc.perform(post("/api/v1/orders/{orderId}/dispatch-assignment", orderId)
+				.header("Idempotency-Key", "rm215-assignment")
+				.contentType("application/json")
+				.content(dispatchBody(courierId, "rm215-decision", 1)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value("ASSIGNED"));
+		transition(mockMvc, orderId, "rm215-cancel", "customer", "CANCELLED", 2)
+				.andExpect(status().isOk());
+		jdbcTemplate.update("delete from routemind.dispatch_decision_ledger where decision_id = ?",
+				"rm215-decision");
+
+		String response = mockMvc.perform(post("/api/v1/reliability/reconciliation/checks"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value("DRIFT_DETECTED"))
+				.andExpect(jsonPath("$.repairMode").value("DETECT_ONLY"))
+				.andExpect(jsonPath("$.checks[?(@.name == 'terminal_order')].status",
+						org.hamcrest.Matchers.hasItem("FAIL")))
+				.andExpect(jsonPath("$.checks[*].violations[*].code",
+						org.hamcrest.Matchers.hasItems("TERMINAL_ORDER_ACTIVE_LEASE",
+								"ASSIGNMENT_DECISION_REFERENCE_MISMATCH")))
+				.andReturn().getResponse().getContentAsString();
+		String runId = com.fasterxml.jackson.databind.json.JsonMapper.builder().build()
+				.readTree(response).get("runId").asText();
+
+		mockMvc.perform(get("/api/v1/reliability/reconciliation"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.runId").value(runId))
+				.andExpect(jsonPath("$.status").value("DRIFT_DETECTED"));
+		assertThat(jdbcTemplate.queryForObject(
+				"select repair_mode from routemind.reconciliation_runs where run_id = ?", String.class,
+				java.util.UUID.fromString(runId))).isEqualTo("DETECT_ONLY");
+		assertThat(jdbcTemplate.queryForObject(
+				"select report_json from routemind.reconciliation_runs where run_id = ?", String.class,
+				java.util.UUID.fromString(runId)))
+				.contains("TERMINAL_ORDER_ACTIVE_LEASE", "ASSIGNMENT_DECISION_REFERENCE_MISMATCH");
+		assertThat(reconciliationReports.findLatest()).get()
+				.extracting(report -> report.runId().toString()).isEqualTo(runId);
+		assertThat(jdbcTemplate.queryForObject(
+				"select state from routemind.dispatch_assignment_leases where order_id = ?", String.class,
+				java.util.UUID.fromString(orderId))).isEqualTo("COMMITTED");
 	}
 
 	private String createConfirmedOrder(String key) throws Exception {

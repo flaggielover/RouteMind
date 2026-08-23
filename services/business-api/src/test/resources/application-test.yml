@@ -5,6 +5,9 @@ spring:
     password: ""
 
 routemind:
+  reconciliation:
+    scheduler:
+      enabled: false
   rabbit:
     publisher:
       enabled: false

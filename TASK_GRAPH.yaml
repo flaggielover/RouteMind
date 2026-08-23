@@ -1192,12 +1192,12 @@
       "phase": "P25",
       "priority": "critical",
       "depends_on": ["RM-211", "RM-214"],
-      "status": "in_progress",
+      "status": "validating",
       "acceptance": ["Detect-only invariant checks expose status, last check, violations, and evidence", "Lease, assignment, projection, terminal-order, and decision-reference invariants are covered", "Repair is never silently applied without an explicit safe policy"],
       "gates": ["L5-reconciliation", "L6-evidence-audit", "L4-degraded-product"],
       "evidence": ["evidence/gates/RM-215/reconciliation.md"],
       "blocked_by": [],
-      "notes": "Active after RM-214 passed. Initial mode is detect-only; Redis remains rebuildable hot state and repair is never implicit."
+      "notes": "Implementation is validating after 77 Java tests passed. Scheduled/manual detect-only checks cover leases, assignments, terminal orders, decision references, Redis projection membership, and append-only evidence; repository-wide and CI gates remain before passed."
     },
     {
       "id": "RM-216",

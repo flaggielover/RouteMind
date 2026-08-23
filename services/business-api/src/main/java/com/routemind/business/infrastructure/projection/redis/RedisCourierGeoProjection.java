@@ -1,9 +1,12 @@
 package com.routemind.business.infrastructure.projection.redis;
 
 import com.routemind.business.application.courier.CourierGeoProjection;
+import com.routemind.business.application.courier.CourierProjectionInspection;
 import com.routemind.business.domain.courier.CourierLocation;
 import com.routemind.business.domain.courier.NearbyCourier;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResult;
@@ -45,6 +48,20 @@ public class RedisCourierGeoProjection implements CourierGeoProjection {
 	public void rebuild(List<CourierLocation> locations) {
 		redis.delete(KEY);
 		locations.forEach(this::upsert);
+	}
+
+	@Override
+	public CourierProjectionInspection inspect() {
+		try {
+			Set<String> members = redis.opsForZSet().range(KEY, 0, -1);
+			Set<UUID> courierIds = members == null ? Set.of()
+					: members.stream().map(UUID::fromString).collect(java.util.stream.Collectors.toUnmodifiableSet());
+			return new CourierProjectionInspection(CourierProjectionInspection.Status.AVAILABLE, courierIds,
+					Map.of("projection_key", KEY, "member_count", Integer.toString(courierIds.size())));
+		}
+		catch (RuntimeException failure) {
+			return CourierProjectionInspection.unavailable("redis_projection_read_failed");
+		}
 	}
 
 	private NearbyCourier toNearby(GeoResult<RedisGeoCommands.GeoLocation<String>> result) {

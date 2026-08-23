@@ -14,17 +14,17 @@ Current Task: RM-215 - Add continuous reconciliation and invariant drift detecti
 
 Last Completed: RM-214 - Add useful end-to-end OpenTelemetry tracing boundaries
 
-Current Gate: RM-214 passed in checkpoint 9697a75 after local Java 71, Compute 185 at 95.24% coverage, focused resilience, and repository gates plus GitHub Actions run 32645791900 across all five jobs. RM-215 detect-only reconciliation is active. Docker Desktop API remains an explicit historical infrastructure residual.
+Current Gate: RM-215 is validating after final Java 77/77 passed with real drift injection, bounded evidence, V13 append-only storage, report readback, and explicit no-repair verification. Full available and focused resilience gates are green locally; GitHub Actions remains before it can pass.
 
 CI: PASS through RM-214 implementation run 32645791900 with all five jobs; RM-213 closure run 32644103060, RM-213 implementation run 32643932098, hardening handoff run 32641575021, and recorded prior closure runs also passed. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS - Java 71, Python 185 / 95.24%, Web 51 unit + build (unchanged), E2E 34 passed + 2 existing mobile-project skips (unchanged), and 5 schemas / 15 contract fixtures
+Regression: LOCAL PASS - final Java 77/77, Python 185 / 95.24%, Web 51 unit + build, and 5 schemas / 15 contract fixtures passed; focused resilience passed Java 15 and Python 2. Browser E2E remains unchanged at the last accepted 34 passed + 2 existing mobile-project skips and will run in CI.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-215 (active) reconciliation; RM-216 remains dependency-eligible.
+Next Candidates: Complete RM-215 full/CI validation, then activate RM-216 fulfillment saga expansion.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -500,3 +500,17 @@ The task is now passed and RM-120 is the active implementation.
   run `32626153743` passed all five jobs. Evidence is in
   `evidence/gates/RM-203/clock-domains.md` and ADR 0004.
 - RM-203 is passed in `TASK_GRAPH.yaml`; RM-204 is now the active task.
+
+### RM-215 reconciliation implementation - 2026-08-23
+- Added Java-owned scheduled and manual detect-only reconciliation for lease and
+  assignment agreement, terminal-order leases, decision-ledger references, and
+  durable courier location versus Redis GEO projection membership.
+- V13 stores bounded append-only reports and SHA-256 digests. Every check is
+  `PASS`, `FAIL`, or `UNAVAILABLE`; evidence persistence failure is explicit and
+  cannot produce a healthy result. No repair authority exists.
+- Java 77/77, full available, verify, and focused resilience gates passed,
+  including real API drift injection, database evidence readback, and proof that
+  the committed lease was not changed. ADR 0013,
+  `docs/runbooks/reconciliation.md`, and
+  `evidence/gates/RM-215/reconciliation.md` record the boundary. Remote CI gates
+  are pending, so RM-215 remains `validating`.
