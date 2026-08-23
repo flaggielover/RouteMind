@@ -1,6 +1,7 @@
 import { AlertTriangle, GitCompareArrows, LoaderCircle, Play, RotateCcw } from "lucide-react";
 import { useState } from "react";
 import type { WhatIfComparison, WhatIfVariantInput } from "../domain/model";
+import { projectWhatIfDeltas } from "../domain/whatIfDelta";
 
 interface WhatIfComparisonPanelProps {
   onRun: (variant: WhatIfVariantInput) => Promise<WhatIfComparison>;
@@ -23,6 +24,11 @@ function formatPercent(value: number): string {
 
 function formatDigest(value: string): string {
   return value.slice(0, 12);
+}
+
+function formatDelta(value: number, suffix = ""): string {
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${value.toFixed(2)}${suffix}`;
 }
 
 export function WhatIfComparisonPanel({ onRun }: WhatIfComparisonPanelProps) {
@@ -51,6 +57,7 @@ export function WhatIfComparisonPanel({ onRun }: WhatIfComparisonPanelProps) {
     setComparison(null);
     setError(null);
   };
+  const deltas = comparison ? projectWhatIfDeltas(comparison) : [];
 
   return (
     <section className="panel what-if-panel" aria-label="What-if scenario comparison">
@@ -229,6 +236,49 @@ export function WhatIfComparisonPanel({ onRun }: WhatIfComparisonPanelProps) {
               </article>
             ))}
           </div>
+          {deltas.length > 0 && (
+            <section className="what-if-delta-section" aria-label="What-if deltas">
+              <div className="decision-xray-block-heading">
+                <div>
+                  <p className="eyebrow">Bounded counterfactual delta</p>
+                  <h3>Variant impact against the recorded baseline.</h3>
+                </div>
+                <span>not causal</span>
+              </div>
+              <div className="what-if-delta-list">
+                {deltas.map((delta) => (
+                  <article className="what-if-delta" key={delta.variantId}>
+                    <div className="what-if-delta-heading">
+                      <strong>{delta.label}</strong>
+                      <span className={delta.changed ? "delta-changed" : "delta-unchanged"}>
+                        {delta.changed ? "changed" : "unchanged"}
+                      </span>
+                    </div>
+                    <dl>
+                      <div>
+                        <dt>Coverage objective delta</dt>
+                        <dd>{formatDelta(delta.objectiveDelta, " pts")}</dd>
+                      </div>
+                      <div>
+                        <dt>Duration delta</dt>
+                        <dd>{formatDelta(delta.durationDeltaSeconds, " s")}</dd>
+                      </div>
+                      <div>
+                        <dt>Risk delta</dt>
+                        <dd>{formatDelta(delta.riskDelta)}</dd>
+                      </div>
+                    </dl>
+                    <small>
+                      recorded run {delta.recordedRunId} · source{" "}
+                      {formatDigest(delta.baselineReplayDigest)} -&gt;{" "}
+                      {formatDigest(delta.variantReplayDigest)} · output{" "}
+                      {formatDigest(delta.variantOutputDigest)}
+                    </small>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
         </div>
       )}
     </section>

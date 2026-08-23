@@ -60,7 +60,10 @@ describe("What-if comparison panel", () => {
 
     expect(await screen.findByText("Comparison ready")).toBeInTheDocument();
     expect(screen.getAllByText("Recorded baseline").length).toBeGreaterThan(0);
-    expect(screen.getByText("Traffic stress")).toBeInTheDocument();
+    expect(screen.getAllByText("Traffic stress").length).toBeGreaterThan(0);
+    expect(screen.getByText("Bounded counterfactual delta")).toBeInTheDocument();
+    expect(screen.getByText("Coverage objective delta")).toBeInTheDocument();
+    expect(screen.getByText("changed")).toBeInTheDocument();
     expect(screen.getAllByText(/not a causal production claim/).length).toBeGreaterThan(0);
     expect(onRun).toHaveBeenCalledWith(
       expect.objectContaining({

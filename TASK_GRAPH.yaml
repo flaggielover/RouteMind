@@ -1366,7 +1366,7 @@
       "gates": ["L2-compute", "L4-web", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-228/twin-visualization.md"],
       "blocked_by": [],
-      "notes": "Passed in checkpoint pending after Web 31 test files/85 tests, full Playwright 34 passes with 2 existing desktop-only skips, and accessibility smoke on desktop/mobile. The visualization consumes existing Twin contracts, bounds the timeline, and explicitly separates simulation, replay, and unavailable benchmark evidence. RM-229 is now active."
+      "notes": "Passed in checkpoint afb6394 after Web 31 test files/85 tests, full Playwright 34 passes with 2 existing desktop-only skips, and accessibility smoke on desktop/mobile. GitHub Actions run 32661874586 passed all five jobs. The visualization consumes existing Twin contracts, bounds the timeline, and explicitly separates simulation, replay, and unavailable benchmark evidence. RM-229 is now active."
     },
     {
       "id": "RM-229",
@@ -1374,12 +1374,12 @@
       "phase": "P27",
       "priority": "medium",
       "depends_on": ["RM-226", "RM-228"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Bounded perturbations show decision changed/unchanged, objective delta, and risk delta", "Inputs and outputs are reproducible and linked to source decision evidence", "Results are labeled counterfactual computation rather than causal inference"],
       "gates": ["L2-compute", "L4-web", "L6-correctness"],
       "evidence": ["evidence/gates/RM-229/what-if-delta.md"],
       "blocked_by": [],
-      "notes": "Reuse the existing perturbation/What-if contracts."
+      "notes": "Passed in checkpoint pending after Web 32 test files/88 tests, full Playwright 34 passes with 2 existing desktop-only skips, and Strategy/What-if accessibility smoke on desktop/mobile. The delta projection compares each variant to the recorded baseline using coverage objective, duration, and risk; it preserves run and digest provenance and makes no causal claim. RM-231 is now active."
     },
     {
       "id": "RM-230",
@@ -1400,12 +1400,12 @@
       "phase": "P28",
       "priority": "medium",
       "depends_on": ["RM-212", "RM-213", "RM-228"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Experiments, manifests, strategy comparisons, lineage, and artifact references are inspectable", "Engineering results, empirical observations, and scientific claims remain distinct", "No large experiment campaign or novelty claim is introduced"],
       "gates": ["L2-compute", "L4-web", "L6-lineage"],
       "evidence": ["evidence/gates/RM-231/research-center.md"],
       "blocked_by": [],
-      "notes": "Round 3 research remains a prepared graph, not automatic experimentation."
+      "notes": "Activated after RM-229 passed. Round 3 research remains a prepared graph, not automatic experimentation."
     },
     {
       "id": "RM-232",
@@ -1444,7 +1444,7 @@
       "gates": ["L2-contracts", "L4-replay", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-234/event-upcasting.md"],
       "blocked_by": [],
-      "notes": "Passed in checkpoint pending after Compute 233 tests at 95.27% coverage, strict Ruff/mypy/contract/determinism/archive/mart/semantic gates. The read-only replay upcaster preserves event identity, clock, reference-data, trace, and replay digest semantics and fails explicitly on unsupported compatibility paths. RM-228 is now active."
+      "notes": "Passed in checkpoint 9fe015d after Compute 233 tests at 95.27% coverage, strict Ruff/mypy/contract/determinism/archive/mart/semantic gates, and all five GitHub Actions jobs in run 32661326399. The read-only replay upcaster preserves event identity, clock, reference-data, trace, and replay digest semantics and fails explicitly on unsupported compatibility paths. RM-228 is now active."
     },
     {
       "id": "RM-235",

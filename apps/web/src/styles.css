@@ -1113,6 +1113,72 @@ button {
   color: var(--muted);
   font-size: 10px;
 }
+.what-if-delta-section {
+  border-top: 1px solid var(--line);
+  margin-top: 14px;
+  padding-top: 14px;
+}
+.what-if-delta-list {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 9px;
+}
+.what-if-delta {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  padding: 10px;
+}
+.what-if-delta-heading {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+.what-if-delta-heading strong {
+  color: var(--ink);
+  font-size: 12px;
+}
+.what-if-delta-heading span {
+  border-radius: 999px;
+  font-size: 10px;
+  padding: 3px 7px;
+  text-transform: uppercase;
+}
+.delta-changed {
+  background: #fff0d8;
+  color: #8f5300;
+}
+.delta-unchanged {
+  background: #e5f5ed;
+  color: #176342;
+}
+.what-if-delta dl {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+}
+.what-if-delta dt {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.what-if-delta dd {
+  color: var(--ink);
+  font-size: 12px;
+  margin: 3px 0 0;
+}
+.what-if-delta small {
+  color: var(--muted);
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
 .strategy-comparison-panel {
   border-left: 3px solid var(--cyan);
 }
@@ -3429,6 +3495,9 @@ button {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .what-if-result-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .what-if-delta-list {
     grid-template-columns: minmax(0, 1fr);
   }
   .metric-cell {

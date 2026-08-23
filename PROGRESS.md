@@ -6,17 +6,17 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 22 / 27 tasks passed (RM-210 through RM-228, RM-230, RM-233 through RM-234; RM-231 through RM-232 pending; RM-229 in progress; RM-235 through RM-236 pending)
+Enhancement Progress: 23 / 27 tasks passed (RM-210 through RM-230, RM-233 through RM-234; RM-231 through RM-232 pending; RM-235 through RM-236 pending)
 
-Repository Total: 108 / 113 tasks passed
+Repository Total: 109 / 113 tasks passed
 
-Current Task: RM-229 - Add What-if delta visualization
+Current Task: RM-231 - Build Research Center surface
 
-Last Completed: RM-228 - Build Digital Twin visualization center
+Last Completed: RM-229 - Add What-if delta visualization
 
-Current Gate: RM-228 passed local validation; remote evidence is pending for its checkpoint. RM-229 is active; What-if deltas must remain bounded counterfactual computations linked to source decision evidence and must not claim causal production effects.
+Current Gate: RM-229 passed local validation; remote evidence is pending for its checkpoint. RM-231 is active; Research Center must expose experiment/manifests/lineage without launching deep research or conflating engineering observations with scientific claims.
 
-CI: PASS through RM-230 checkpoint 39c5dcb in run 32660524649 with all five jobs. RM-234 and RM-228 local gates pass; remote evidence is pending for the latest checkpoints. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-228 checkpoint afb6394 in run 32661874586; RM-234 checkpoint 9fe015d in run 32661326399; both passed all five jobs. RM-229 local gates pass; remote evidence is pending for the latest checkpoint. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
@@ -24,7 +24,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement RM-229 What-if delta visualization; RM-231 remains independently dependency-eligible after RM-228.
+Next Candidates: Implement RM-231 Research Center surface; RM-232 remains blocked until RM-231 passes.
 
 ### RM-230 closure and RM-234 activation - 2026-08-24
 
@@ -37,6 +37,12 @@ Next Candidates: Implement RM-229 What-if delta visualization; RM-231 remains in
 - RM-234 local implementation is complete: 233 compute tests pass at 95.27% coverage, with strict Ruff, mypy, contract, determinism, archive, mart, and semantic-metrics gates green.
 - The replay compatibility adapter is read-only, version-chain explicit, and preserves event identity, clock, trace, reference-data, and digest semantics.
 - RM-228 is now active pending remote CI evidence for the RM-234 checkpoint.
+
+### RM-229 closure and RM-231 activation - 2026-08-24
+
+- RM-229 local implementation is complete: Web static/unit/build passes with 32 test files and 88 tests; Playwright passes 34 tests with 2 existing desktop-only skips across Strategy/What-if desktop and mobile flows.
+- Deltas are derived from the recorded baseline and preserve run, replay, and output digest provenance. The objective is coverage only and remains explicitly non-causal.
+- Enhancement is now 23/27 and repository total is 109/113. RM-231 is active.
 
 ### RM-228 closure and RM-229 activation - 2026-08-24
 

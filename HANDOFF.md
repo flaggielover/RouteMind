@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P28
 
-Current Task: RM-229 - Add What-if delta visualization
+Current Task: RM-231 - Build Research Center surface
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-228, RM-230, and RM-233 through RM-234 are passed locally, with RM-234/RM-228 remote evidence pending. RM-229 What-if delta visualization is now active; RM-231, RM-232, RM-235, and RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-230 and RM-233 through RM-234 are passed locally. RM-234 Actions run 32661326399 and RM-228 Actions run 32661874586 passed all five jobs; RM-229 remote evidence is pending. RM-231 Research Center is now active; RM-232, RM-235, and RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

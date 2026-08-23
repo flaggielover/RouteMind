@@ -24,9 +24,9 @@ Status: passed
 
 ## Remote evidence
 
-Checkpoint: pending
+Checkpoint: `afb6394`
 
-GitHub Actions: pending closure checkpoint push.
+GitHub Actions: PASS - run `32661874586`, all five jobs.
 
 ## Boundaries
 
