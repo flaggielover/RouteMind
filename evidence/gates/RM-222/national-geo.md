@@ -1,8 +1,8 @@
 # RM-222 Multi-City Geo Operations Evidence
 
 Date: 2026-08-24
-Implementation checkpoint: pending commit
-GitHub Actions: pending
+Implementation checkpoint: 1a6f2fb
+GitHub Actions: PASS - run 32654207318 (all five jobs)
 
 ## Scope
 
@@ -39,5 +39,6 @@ must preserve the source label and coordinate lineage.
 
 ## Remote validation
 
-The implementation checkpoint and GitHub Actions run will be recorded here
-after the commit is pushed and all required jobs pass.
+GitHub Actions run `32654207318` passed the Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `1a6f2fb`.

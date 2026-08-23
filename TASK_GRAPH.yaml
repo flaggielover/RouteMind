@@ -1283,12 +1283,12 @@
       "phase": "P27",
       "priority": "high",
       "depends_on": ["RM-210", "RM-211"],
-          "status": "validating",
+        "status": "passed",
       "acceptance": ["National and multi-city views use clearly labeled DEMO, SIMULATION, REPLAY, or BENCHMARK data", "Aggregated volume, supply, risk, and strategy signals are coordinate-backed", "Viewport and zoom semantics avoid rendering raw points at national scale"],
       "gates": ["L4-web", "L6-geospatial", "accessibility-review"],
       "evidence": ["evidence/gates/RM-222/national-geo.md"],
       "blocked_by": [],
-          "notes": "Local implementation complete and validating: Web 57 unit tests/build, 34 browser passes with 2 existing desktop-only skips, explicit DEMO source, coordinate-backed city signals, city-centroid national/multi-city aggregation, city-detail operational-point semantics, and bounded zoom behavior. GitHub Actions validation remains before pass."
+        "notes": "Passed in checkpoint 1a6f2fb after Web 57 unit tests/build, 34 browser passes with 2 existing desktop-only skips, explicit DEMO source, coordinate-backed city signals, city-centroid national/multi-city aggregation, city-detail operational-point semantics, and bounded zoom behavior. GitHub Actions run 32654207318 passed all five jobs. RM-223 is now active."
     },
     {
       "id": "RM-223",
@@ -1296,12 +1296,12 @@
       "phase": "P27",
       "priority": "high",
       "depends_on": ["RM-222"],
-      "status": "pending",
+        "status": "in_progress",
       "acceptance": ["City/zone views show orders, merchants, couriers, service areas, density, supply, risk, and routes from real snapshot data", "Aggregation/clustering changes with zoom and handles empty/stale data", "Legend, units, and mode labels are visible"],
       "gates": ["L4-web", "L6-geospatial", "L4-mobile-closure"],
       "evidence": ["evidence/gates/RM-223/city-zone-drilldown.md"],
       "blocked_by": [],
-      "notes": "Use existing provider-neutral geospatial adapters where sufficient."
+        "notes": "Activated after RM-222 passed. Use existing provider-neutral geospatial adapters where sufficient; city/zone detail must preserve source and freshness labels."
     },
     {
       "id": "RM-224",

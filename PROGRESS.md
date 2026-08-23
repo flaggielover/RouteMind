@@ -6,25 +6,25 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 12 / 27 tasks passed (RM-210 through RM-221; RM-222 in progress; RM-223 through RM-236 pending)
+Enhancement Progress: 13 / 27 tasks passed (RM-210 through RM-222; RM-223 in progress; RM-224 through RM-236 pending)
 
-Repository Total: 98 / 113 tasks passed
+Repository Total: 99 / 113 tasks passed
 
-Current Task: RM-222 - Build multi-city geo operations foundation
+Current Task: RM-223 - Add city and zone operational drilldown
 
 Last Completed: RM-221 - Add delay attribution accounting waterfall
 
-Current Gate: RM-221 passed local and remote validation in Actions run 32653393681. RM-222 is validating; Web 57 unit/build and 34 browser passes (2 existing skips) are green. Multi-city geo uses explicit DEMO/SIMULATION/REPLAY/BENCHMARK labels and bounded viewport semantics.
+Current Gate: RM-222 passed local and remote validation in Actions run 32654207318. RM-223 is active; city/zone drilldown must show source-backed orders, merchants, couriers, service areas, density, supply, risk, and routes with empty/stale states.
 
-CI: PASS through RM-221 checkpoint 88cdafa in run 32653393681 with all five jobs; RM-220 run 32652719384 and RM-219 run 32651955908 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-222 checkpoint 1a6f2fb in run 32654207318 with all five jobs; RM-221 run 32653393681 and RM-220 run 32652719384 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely through RM-221 - Java 80/80, Python 208 / 95.29%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32653393681. RM-222 local regression is Web 57 unit/build and 34 browser passes with 2 existing skips.
+Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 57 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32654207318.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Complete RM-222 multi-city geo operations foundation; RM-233 remains independently dependency-eligible.
+Next Candidates: Complete RM-223 city and zone operational drilldown; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -614,3 +614,11 @@ The task is now passed and RM-120 is the active implementation.
 - Web check passes 57 unit tests/build; browser smoke passes 34 tests with 2
   existing desktop-only skips. RM-222 is validating pending commit and remote
   GitHub Actions evidence.
+
+### RM-222 closure and RM-223 activation - 2026-08-24
+- RM-222 checkpoint `1a6f2fb` passed all five GitHub Actions jobs in run
+  `32654207318`; explicit DEMO source labels, coordinate-backed city signals,
+  centroid national/multi-city aggregation, and bounded zoom behavior are fully
+  validated.
+- Enhancement is now 13/27 and repository total is 99/113. RM-223 is active to
+  add source-backed city and zone operational drilldown with stale/empty states.
