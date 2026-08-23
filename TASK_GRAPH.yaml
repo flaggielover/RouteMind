@@ -1088,7 +1088,7 @@
       "phase": "P22",
       "priority": "high",
       "depends_on": ["RM-203", "RM-206"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Subsystems are classified DETERMINISM_CRITICAL, DETERMINISTIC_IF_CONFIGURED, or NONDETERMINISTIC_ALLOWED", "Canonical scenarios run twice and compare stable digests with seed/configuration/environment recorded", "CI fails when a deterministic contract regresses without an explicit classification change"],
       "gates": ["L1-determinism", "L2-property-tests", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-207/determinism-audit.md"],
