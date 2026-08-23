@@ -32,6 +32,7 @@ import { AppShell } from "./components/AppShell";
 import { LifecycleTimeline } from "./components/LifecycleTimeline";
 import { MetricCell } from "./components/MetricCell";
 import { OperationsMap } from "./components/OperationsMap";
+import { MultiCityGeoPanel } from "./components/MultiCityGeoPanel";
 import { ActivityStream } from "./components/ActivityStream";
 import { SimulationControlPanel } from "./components/SimulationControlPanel";
 import { ReplayPlaybackPanel } from "./components/ReplayPlaybackPanel";
@@ -419,6 +420,7 @@ function OperationsView({
           tone="warning"
         />
       </section>
+      <MultiCityGeoPanel />
       {openExceptions > 0 && (
         <div className="exception-banner" role="alert">
           <AlertTriangle size={16} aria-hidden="true" />

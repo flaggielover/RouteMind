@@ -12,13 +12,13 @@ Repository Total: 98 / 113 tasks passed
 
 Current Task: RM-222 - Build multi-city geo operations foundation
 
-Last Completed: RM-219 - Build honest ETA intelligence foundation
+Last Completed: RM-221 - Add delay attribution accounting waterfall
 
-Current Gate: RM-221 passed local and remote validation in Actions run 32653393681. RM-222 is active; multi-city geo must use explicit DEMO/SIMULATION/REPLAY/BENCHMARK labels and bounded viewport semantics.
+Current Gate: RM-221 passed local and remote validation in Actions run 32653393681. RM-222 is validating; Web 57 unit/build and 34 browser passes (2 existing skips) are green. Multi-city geo uses explicit DEMO/SIMULATION/REPLAY/BENCHMARK labels and bounded viewport semantics.
 
 CI: PASS through RM-221 checkpoint 88cdafa in run 32653393681 with all five jobs; RM-220 run 32652719384 and RM-219 run 32651955908 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32653393681.
+Regression: PASS locally and remotely through RM-221 - Java 80/80, Python 208 / 95.29%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32653393681. RM-222 local regression is Web 57 unit/build and 34 browser passes with 2 existing skips.
 
 Blocked: NONE
 
@@ -605,3 +605,12 @@ The task is now passed and RM-120 is the active implementation.
 - Enhancement is now 12/27 and repository total is 98/113. RM-222 is active to
   build a bounded multi-city geo operations foundation with explicit data-source
   and zoom semantics.
+
+### RM-222 multi-city geo validation - 2026-08-24
+- Added the Web multi-city projection contract and Operations panel with
+  coordinate-backed city volume, supply, risk, and strategy signals. National
+  and multi-city scopes use city-centroid aggregation and hide raw points;
+  city detail explicitly enables operational-point semantics.
+- Web check passes 57 unit tests/build; browser smoke passes 34 tests with 2
+  existing desktop-only skips. RM-222 is validating pending commit and remote
+  GitHub Actions evidence.

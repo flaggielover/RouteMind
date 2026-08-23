@@ -8,7 +8,7 @@ Current Phase: Enhancement Pass P25
 
 Current Task: RM-222 - Build multi-city geo operations foundation
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-221 are passed. RM-221 checkpoint 88cdafa and Actions run 32653393681 passed all five jobs. RM-222 multi-city geo operations is now active on the Java 80/80, Python 208/95.29%, Web 52, full available, and verify baseline. RM-223 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-221 are passed. RM-221 checkpoint 88cdafa and Actions run 32653393681 passed all five jobs. RM-222 multi-city geo operations is validating on the Java 80/80, Python 208/95.29%, Web 57 unit/build plus 34 browser passes, full available, and verify baseline. RM-223 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,7 +629,7 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-222 multi-city geo operations implementation. Preserve Java lifecycle
+- Resume at RM-222 multi-city geo operations validation. Preserve Java lifecycle
   authority, durable location sequence ordering, Redis-as-projection, and the
   explicit non-disciplinary anomaly boundary and honest ETA lineage boundary.
 - RM-215 evidence is `evidence/gates/RM-215/reconciliation.md`; checkpoint

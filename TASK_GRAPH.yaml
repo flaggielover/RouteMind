@@ -1283,12 +1283,12 @@
       "phase": "P27",
       "priority": "high",
       "depends_on": ["RM-210", "RM-211"],
-        "status": "in_progress",
+          "status": "validating",
       "acceptance": ["National and multi-city views use clearly labeled DEMO, SIMULATION, REPLAY, or BENCHMARK data", "Aggregated volume, supply, risk, and strategy signals are coordinate-backed", "Viewport and zoom semantics avoid rendering raw points at national scale"],
       "gates": ["L4-web", "L6-geospatial", "accessibility-review"],
       "evidence": ["evidence/gates/RM-222/national-geo.md"],
       "blocked_by": [],
-        "notes": "Activated after RM-221 passed. The surface must not imply nationwide production operation; all data sources and viewport semantics remain explicit."
+          "notes": "Local implementation complete and validating: Web 57 unit tests/build, 34 browser passes with 2 existing desktop-only skips, explicit DEMO source, coordinate-backed city signals, city-centroid national/multi-city aggregation, city-detail operational-point semantics, and bounded zoom behavior. GitHub Actions validation remains before pass."
     },
     {
       "id": "RM-223",

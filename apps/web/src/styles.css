@@ -1452,6 +1452,109 @@ button {
   font-weight: 750;
   padding: 5px 8px;
 }
+
+.multi-city-panel {
+  display: grid;
+  gap: 14px;
+}
+.geo-scope-tabs {
+  display: inline-flex;
+  gap: 4px;
+  justify-self: start;
+  border-bottom: 1px solid var(--line);
+}
+.geo-scope-tab {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+}
+.geo-scope-tab:hover,
+.geo-scope-tab:focus-visible {
+  color: var(--navy);
+}
+.geo-scope-tab.active {
+  border-bottom-color: var(--cyan);
+  color: var(--navy);
+}
+.geo-summary {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.geo-summary > div {
+  align-items: center;
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  display: flex;
+  gap: 9px;
+  min-width: 0;
+  padding: 10px;
+}
+.geo-summary svg {
+  color: var(--cyan);
+  flex: 0 0 auto;
+}
+.geo-summary span,
+.geo-city-list li > span:first-child,
+.geo-city-metrics {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.geo-summary strong {
+  color: var(--navy);
+  font-size: 16px;
+}
+.geo-summary small,
+.geo-city-list small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.geo-scope-note {
+  background: #eef6f6;
+  border-left: 3px solid var(--cyan);
+  color: var(--muted);
+  font-size: 11px;
+  padding: 8px 10px;
+}
+.geo-city-list {
+  display: grid;
+  gap: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.geo-city-list li {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding: 9px 2px;
+}
+.geo-city-list li:last-child {
+  border-bottom: 0;
+}
+.geo-city-list strong {
+  color: var(--navy);
+  font-size: 12px;
+}
+.geo-city-metrics {
+  justify-items: end;
+  text-align: right;
+}
+.geo-city-metrics b {
+  color: var(--navy);
+  font-size: 11px;
+}
+
 .queue-list {
   display: grid;
   gap: 5px;
@@ -2111,6 +2214,9 @@ button {
     justify-content: flex-start;
   }
   .metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .geo-summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .simulation-metrics {
