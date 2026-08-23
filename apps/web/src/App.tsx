@@ -36,6 +36,7 @@ import { MultiCityGeoPanel } from "./components/MultiCityGeoPanel";
 import { CityZoneDrilldownPanel } from "./components/CityZoneDrilldownPanel";
 import { FlowVisualizationPanel } from "./components/FlowVisualizationPanel";
 import { GeoAnalyticalLayersPanel } from "./components/GeoAnalyticalLayersPanel";
+import { DecisionXrayPanel } from "./components/DecisionXrayPanel";
 import { ActivityStream } from "./components/ActivityStream";
 import { SimulationControlPanel } from "./components/SimulationControlPanel";
 import { ReplayPlaybackPanel } from "./components/ReplayPlaybackPanel";
@@ -427,6 +428,7 @@ function OperationsView({
       <CityZoneDrilldownPanel snapshot={snapshot} />
       <FlowVisualizationPanel snapshot={snapshot} />
       <GeoAnalyticalLayersPanel snapshot={snapshot} />
+      <DecisionXrayPanel snapshot={snapshot} />
       {openExceptions > 0 && (
         <div className="exception-banner" role="alert">
           <AlertTriangle size={16} aria-hidden="true" />

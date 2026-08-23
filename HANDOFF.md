@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P25
 
-Current Task: RM-225 - Add toggleable geo analytical layers
+Current Task: RM-226 - Build Decision X-Ray over the durable ledger
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-224 are passed. RM-224 checkpoint c2ee880 and Actions run 32656271920 passed all five jobs. RM-225 implementation is locally validated on Web 70 unit/build plus 34 browser passes, Java 80/80, Python 208/95.29%, and control-plane checks; its checkpoint is awaiting commit and remote Actions validation. RM-226 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-225 are passed. RM-225 checkpoint 71f1c18 and Actions run 32657006258 passed all five jobs. RM-226 Decision X-Ray is now active; RM-227 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,13 +629,13 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-225 toggleable geo analytical layers checkpoint commit and remote validation. Preserve Java lifecycle
+- Resume at RM-226 Decision X-Ray implementation. Preserve Java lifecycle
   authority, durable location sequence ordering, Redis-as-projection, and the
   explicit non-disciplinary anomaly boundary and honest ETA lineage boundary.
 - RM-215 evidence is `evidence/gates/RM-215/reconciliation.md`; checkpoint
   `d26a121` and GitHub Actions run `32647766636` passed all five jobs.
-- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 15/27 with
-  RM-225 validating.
+- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 16/27 with
+  RM-226 active.
   Repository total is 101/113. RM-233 is independently eligible, while RM-225 is
   the active geo-operations sequence.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
@@ -658,6 +658,6 @@ Actions run `32655392123`; evidence is recorded in
 `evidence/gates/RM-223/city-zone-drilldown.md`. Continue autonomously with
 RM-224. Its local evidence is recorded in
 `evidence/gates/RM-224/arc-flow.md`; preserve order-route lineage and explicit
-empty/stale/unavailable states. RM-225 local evidence is recorded in
-`evidence/gates/RM-225/geo-layers.md`; preserve explicit unavailable semantics
-and continue with its checkpoint commit and remote Actions validation.
+empty/stale/unavailable states. RM-225 is fully validated in Actions run
+`32657006258`; evidence is recorded in `evidence/gates/RM-225/geo-layers.md`.
+Continue autonomously with RM-226.

@@ -1326,8 +1326,8 @@
       "gates": ["L4-web", "L6-geospatial", "L5-performance"],
       "evidence": ["evidence/gates/RM-225/geo-layers.md"],
       "blocked_by": [],
-      "status": "validating",
-      "notes": "Implementation complete with toggleable order, supply, gap, SLA risk, utilization, and flow layers. Congestion/travel are explicitly disabled without travel metrics; integrity requires courier metadata. Units, scales, evidence counts, bounded aggregates, and unavailable states are visible. Awaiting checkpoint commit and remote Actions validation."
+      "status": "passed",
+      "notes": "Passed in checkpoint 71f1c18 after Web 70 unit tests/build, 34 browser passes with 2 existing desktop-only skips, Java 80/80, and Python 208 at 95.29%. Toggleable order, supply, gap, SLA risk, utilization, and flow layers expose units, scales, evidence counts, bounded aggregates, and unavailable semantics; congestion/travel are disabled without travel metrics and integrity requires courier metadata. GitHub Actions run 32657006258 passed all five jobs. RM-226 is now active."
     },
     {
       "id": "RM-226",
@@ -1335,12 +1335,12 @@
       "phase": "P27",
       "priority": "critical",
       "depends_on": ["RM-205", "RM-206", "RM-210"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Decision ID, provenance, candidates, rejection reasons, travel, objective, risk, selected action, alternatives, verification, and digests are inspectable", "Bounded replay uses captured snapshots and flags deterministic digest changes", "Natural-language summaries are grounded in structured evidence"],
       "gates": ["L3-java", "L4-web", "L6-lineage", "L6-correctness"],
       "evidence": ["evidence/gates/RM-226/decision-xray.md"],
       "blocked_by": [],
-      "notes": "The ledger remains durable authority; X-Ray is read-only."
+      "notes": "Activated after RM-225 passed. The ledger remains durable authority; X-Ray is read-only and must expose structured provenance rather than unsupported narrative."
     },
     {
       "id": "RM-227",

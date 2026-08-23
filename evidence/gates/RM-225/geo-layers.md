@@ -1,8 +1,8 @@
 # RM-225 Toggleable Geo Analytical Layers Evidence
 
 Date: 2026-08-24
-Implementation checkpoint: pending commit
-GitHub Actions: pending remote validation
+Implementation checkpoint: 71f1c18
+GitHub Actions: PASS - run 32657006258 (all five jobs)
 
 ## Scope
 
@@ -39,5 +39,6 @@ unavailable until their source contracts carry the required metrics.
 
 ## Remote validation
 
-To be filled after the checkpoint is pushed and all five GitHub Actions jobs
-complete successfully.
+GitHub Actions run `32657006258` passed the Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `71f1c18`.

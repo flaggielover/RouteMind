@@ -274,6 +274,14 @@ class BusinessApiApplicationTests {
 				.andExpect(status().isConflict())
 				.andExpect(jsonPath("$.code").value("idempotency_key_reused"));
 
+		mockMvc.perform(get("/api/v1/dispatch-decisions/{decisionId}", "compute-request-1"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.decisionId").value("compute-request-1"))
+				.andExpect(jsonPath("$.clockDomain").value("WALL"))
+				.andExpect(jsonPath("$.referenceDataId").value("dispatch-api:v1"))
+				.andExpect(jsonPath("$.inputSnapshotJson").value(org.hamcrest.Matchers.containsString("reference_data_id")))
+				.andExpect(jsonPath("$.outputSnapshotDigest").isString());
+
 		mockMvc.perform(post("/api/v1/orders/{orderId}/dispatch-assignment", orderId)
 				.header("Idempotency-Key", "rm136-stale")
 				.contentType("application/json").content(body))

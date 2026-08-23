@@ -83,6 +83,25 @@ export interface DispatchDecision {
   rationale: string;
 }
 
+export interface DispatchDecisionLedgerRecord {
+  decisionId: string;
+  requestId: string;
+  idempotencyKey?: string;
+  orderId?: string;
+  courierId?: string;
+  strategy: string;
+  strategyVersion: string;
+  referenceDataId: string;
+  clockDomain: ClockDomain;
+  inputDigest: string;
+  outputDigest: string;
+  inputSnapshotDigest: string;
+  outputSnapshotDigest: string;
+  inputSnapshotJson?: string;
+  outputSnapshotJson?: string;
+  createdAt: string;
+}
+
 export interface ServiceHealth {
   service: "business-api" | "compute-api";
   label: string;
@@ -193,6 +212,7 @@ export interface OperationsSnapshot {
   couriers: readonly Courier[];
   merchants: readonly Merchant[];
   dispatch: DispatchDecision;
+  decisionLedger?: DispatchDecisionLedgerRecord;
   health: readonly ServiceHealth[];
   simulation?: SimulationSnapshot;
   replay?: ReplaySnapshot;
