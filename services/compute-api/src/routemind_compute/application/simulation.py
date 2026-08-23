@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from math import ceil, isfinite
 from time import perf_counter
 
+from routemind_compute.application.clock import SIMULATED_CLOCK, ClockDomain, validate_clock_domain
 from routemind_compute.application.parameters import Metadata
 from routemind_compute.application.registry import StrategyRegistry
 from routemind_compute.application.travel import TravelTimeProvider
@@ -52,6 +53,7 @@ class ScenarioManifest:
     couriers: tuple[CourierState, ...]
     delay_ticks: tuple[int, ...] = (0,)
     traffic_multiplier: float = 1.0
+    clock_domain: ClockDomain = SIMULATED_CLOCK
 
     def __post_init__(self) -> None:
         if not self.scenario_id.strip():
@@ -68,6 +70,7 @@ class ScenarioManifest:
             raise ValueError("delay_ticks must contain non-negative values")
         if not isfinite(self.traffic_multiplier) or self.traffic_multiplier <= 0:
             raise ValueError("traffic_multiplier must be finite and positive")
+        validate_clock_domain(self.clock_domain, allowed=(SIMULATED_CLOCK, "REPLAY"))
 
 
 @dataclass(frozen=True, slots=True)
@@ -120,6 +123,7 @@ class ScenarioRun:
     replay_digest: str
     simulated_end_tick: int = 0
     wall_clock_elapsed_seconds: float = field(default=0.0, compare=False)
+    clock_domain: ClockDomain = SIMULATED_CLOCK
 
 
 class ScenarioKernel:
@@ -193,6 +197,7 @@ class ScenarioKernel:
         payload = {
             "scenario_id": manifest.scenario_id,
             "seed": manifest.seed,
+            "clock_domain": manifest.clock_domain,
             "simulated_end_tick": clock.tick,
             "decisions": [
                 {
@@ -225,4 +230,5 @@ class ScenarioKernel:
             digest,
             clock.tick,
             perf_counter() - wall_started,
+            manifest.clock_domain,
         )

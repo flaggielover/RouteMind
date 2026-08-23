@@ -11,7 +11,7 @@ let replayCommandSequence = 0;
 
 function replayCommandId(action: ReplayAction): string {
   replayCommandSequence += 1;
-  return `web-replay-${action}-${Date.now()}-${replayCommandSequence}`;
+  return `web-replay-${action}-${replayCommandSequence}`;
 }
 
 export function ReplayPlaybackPanel({ snapshot, onControl }: ReplayPlaybackPanelProps) {

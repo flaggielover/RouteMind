@@ -1036,7 +1036,7 @@
       "phase": "P21",
       "priority": "critical",
       "depends_on": ["RM-200"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["WALL, SIMULATED, and REPLAY clock ownership is explicit in critical paths", "Event time and ingestion time semantics are documented and version-compatible", "Replay and simulation tests prove wall-clock independence while live snapshots retain wall time"],
       "gates": ["L1-clock", "L2-determinism", "L3-contracts", "L4-replay"],
       "evidence": ["evidence/gates/RM-203/clock-domains.md"],

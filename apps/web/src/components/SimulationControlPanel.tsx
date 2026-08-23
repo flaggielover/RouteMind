@@ -14,7 +14,7 @@ let commandSequence = 0;
 
 function commandId(action: SimulationAction): string {
   commandSequence += 1;
-  return `web-${action}-${Date.now()}-${commandSequence}`;
+  return `web-${action}-${commandSequence}`;
 }
 
 export function SimulationControlPanel({

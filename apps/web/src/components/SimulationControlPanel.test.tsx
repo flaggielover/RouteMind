@@ -5,6 +5,7 @@ import { SimulationControlPanel } from "./SimulationControlPanel";
 import type { SimulationSnapshot } from "../domain/model";
 
 const snapshot: SimulationSnapshot = {
+  clockDomain: "SIMULATED",
   scenarioId: "control-default",
   seed: 7,
   strategy: "nearest",

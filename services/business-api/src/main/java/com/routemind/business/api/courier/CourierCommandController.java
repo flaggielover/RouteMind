@@ -6,6 +6,7 @@ import com.routemind.business.application.courier.CourierCommandResult;
 import com.routemind.business.application.courier.CourierLocationCommandService;
 import com.routemind.business.application.courier.CourierShiftCommandService;
 import com.routemind.business.domain.courier.CourierShiftStatus;
+import java.time.Clock;
 import java.time.Instant;
 import java.util.Locale;
 import java.util.UUID;
@@ -31,10 +32,13 @@ public final class CourierCommandController {
 	private static final Pattern TRACE_ID = Pattern.compile("[0-9a-f]{32}");
 	private final CourierShiftCommandService shifts;
 	private final CourierLocationCommandService locations;
+	private final Clock clock;
 
-	public CourierCommandController(CourierShiftCommandService shifts, CourierLocationCommandService locations) {
+	public CourierCommandController(CourierShiftCommandService shifts, CourierLocationCommandService locations,
+			Clock clock) {
 		this.shifts = shifts;
 		this.locations = locations;
+		this.clock = clock;
 	}
 
 	@PostMapping("/{courierId}/shift")
@@ -56,7 +60,7 @@ public final class CourierCommandController {
 			@RequestBody LocationRequest request) {
 		if (request == null) throw new IllegalArgumentException("location request is required");
 		Instant observedAt = request.observedAt() == null || request.observedAt().isBlank()
-				? Instant.now() : Instant.parse(request.observedAt());
+				? Instant.now(clock) : Instant.parse(request.observedAt());
 		CourierCommandResult result = locations.record(courierId, request.latitude(), request.longitude(), observedAt,
 				normalizeActor(actor), correlation(correlationId), traceId(), idempotencyKey);
 		return CourierCommandResponse.from(result, traceId());

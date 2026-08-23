@@ -74,12 +74,13 @@ interface CourierCommandResponse {
 
 const businessApi = import.meta.env.VITE_BUSINESS_API_URL ?? "http://localhost:18080";
 const timeoutMs = 2_000;
+let localIdempotencySequence = 0;
 
 export function createIdempotencyKey(
   randomUuid: () => string = () =>
     typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
       ? crypto.randomUUID()
-      : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      : `browser-${++localIdempotencySequence}`,
 ): string {
   return `customer-create-${randomUuid()}`;
 }

@@ -4,6 +4,7 @@ export type Role = (typeof roles)[number];
 
 export type DataSourceMode = "live" | "demo" | "replay" | "simulation";
 export type DataAvailability = "loading" | "ready" | "degraded" | "unavailable";
+export type ClockDomain = "WALL" | "SIMULATED" | "REPLAY";
 
 export type OrderStatus =
   | "CREATED"
@@ -91,6 +92,7 @@ export interface SimulationEvent {
 }
 
 export interface SimulationSnapshot {
+  clockDomain: "SIMULATED";
   scenarioId: string;
   seed: number;
   strategy: string;
@@ -116,6 +118,7 @@ export interface ReplayEvent {
 }
 
 export interface ReplaySnapshot {
+  clockDomain: "REPLAY";
   artifactId: string;
   scenarioId: string;
   seed: number;
@@ -171,6 +174,7 @@ export interface WhatIfComparison {
 
 export interface OperationsSnapshot {
   source: DataSourceMode;
+  clockDomain: ClockDomain;
   availability: DataAvailability;
   sourceDetail: string;
   generatedAt: string;

@@ -71,6 +71,7 @@ class DispatchSnapshotResponse(BaseModel):
 
     source: Literal["live"]
     contract_version: Literal["v1"]
+    clock_domain: Literal["WALL"]
     generated_at: datetime
     request_id: str
     strategy: str
@@ -347,6 +348,7 @@ class TwinStateResponse(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     source: Literal["simulation"]
+    clock_domain: Literal["SIMULATED"]
     scenario_id: str
     seed: int
     strategy: str
@@ -367,6 +369,7 @@ class TwinEventResponse(BaseModel):
 
     event_id: str
     event_type: str
+    clock_domain: Literal["SIMULATED"]
     simulated_time_seconds: float
     command_id: str
     details: tuple[tuple[str, str], ...]

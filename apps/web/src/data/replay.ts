@@ -71,6 +71,7 @@ export async function verifyReplayArtifact(artifact: ReplayArtifact): Promise<bo
 
 function emptyReplay(status: ReplaySnapshot["status"] = "verifying"): ReplaySnapshot {
   return {
+    clockDomain: "REPLAY",
     artifactId: replayArtifact.artifactId,
     scenarioId: replayArtifact.scenarioId,
     seed: replayArtifact.seed,
@@ -92,6 +93,7 @@ function operationSnapshot(replay: ReplaySnapshot, detail: string): OperationsSn
   return {
     ...base,
     source: "replay",
+    clockDomain: "REPLAY",
     availability:
       replay.status === "invalid"
         ? "unavailable"

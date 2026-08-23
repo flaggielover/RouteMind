@@ -57,6 +57,7 @@ const timeoutMs = 2_000;
 function emptySnapshot(mode: DataSourceMode, detail: string): OperationsSnapshot {
   return {
     source: mode,
+    clockDomain: "WALL",
     availability: "unavailable",
     sourceDetail: detail,
     generatedAt: "",
@@ -190,6 +191,7 @@ export async function loadLiveSnapshot(
     const orders = operations.orders.map((order) => toOrder(order, operations.parties));
     return {
       source: "live",
+      clockDomain: "WALL",
       availability: staleCourier ? "degraded" : "ready",
       sourceDetail: staleCourier
         ? "Java durable snapshot + Python dispatch decision; courier location stale"

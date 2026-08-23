@@ -12,7 +12,7 @@ Current Task: RM-203 - Introduce unified clock domains and event-time semantics
 
 Last Completed: RM-190 - Perform Round 2 adversarial closure audit
 
-Current Gate: RM-202 Compute API modularization passed locally and in Actions run 32625456062; RM-203 is the active next task
+Current Gate: RM-202 Compute API modularization passed locally and in Actions run 32625456062; RM-203 clock-domain implementation is in progress
 
 CI: PASS through RM-201 run 32624822845 with all five jobs; RM-190 run 32616020918, RM-181 run 32615330788 and implementation run 32614952772, RM-180 run 32613773339, RM-171 run 32613079169, RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
 

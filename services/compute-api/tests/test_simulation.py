@@ -49,6 +49,7 @@ def test_repeated_runs_are_deterministic_and_replayable() -> None:
     assert first.simulated_end_tick == 0
     assert first.wall_clock_elapsed_seconds >= 0
     assert first.wall_clock_elapsed_seconds != first.simulated_end_tick
+    assert first.clock_domain == "SIMULATED"
 
 
 def test_twin_clock_separates_simulated_time_from_wall_clock() -> None:

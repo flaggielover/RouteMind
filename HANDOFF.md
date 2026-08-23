@@ -8,7 +8,7 @@ Current Phase: Architectural Hardening P20
 
 Current Task: RM-203 - Introduce unified clock domains and event-time semantics
 
-Task Status: RM-202 is fully validated locally and in Actions run 32625456062; RM-203 is the active next hardening task; Round 2 remains fully passed
+Task Status: RM-202 is fully validated locally and in Actions run 32625456062; RM-203 is now `in_progress`; Round 2 remains fully passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

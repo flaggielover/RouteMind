@@ -8,6 +8,7 @@ import type {
 } from "../domain/model";
 
 interface TwinStateWire {
+  clock_domain: "SIMULATED";
   scenario_id: string;
   seed: number;
   strategy: string;
@@ -23,6 +24,7 @@ interface TwinStateWire {
 }
 
 interface TwinEventWire {
+  clock_domain: "SIMULATED";
   event_id: string;
   event_type: string;
   simulated_time_seconds: number;
@@ -40,6 +42,7 @@ const timeoutMs = 2_000;
 
 function emptySimulation(): SimulationSnapshot {
   return {
+    clockDomain: "SIMULATED",
     scenarioId: "control-default",
     seed: 7,
     strategy: "nearest",
@@ -61,6 +64,7 @@ function asSimulationState(
   events: readonly SimulationEvent[],
 ): SimulationSnapshot {
   return {
+    clockDomain: state.clock_domain,
     scenarioId: state.scenario_id,
     seed: state.seed,
     strategy: state.strategy,
@@ -92,6 +96,7 @@ function operationSnapshot(simulation: SimulationSnapshot, detail: string): Oper
   return {
     ...base,
     source: "simulation",
+    clockDomain: "SIMULATED",
     availability: "ready",
     sourceDetail: detail,
     generatedAt: new Date().toISOString(),

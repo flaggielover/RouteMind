@@ -37,6 +37,7 @@ const primaryOrder = {
 
 const demoSnapshot: OperationsSnapshot = {
   source: "demo",
+  clockDomain: "WALL",
   availability: "ready",
   sourceDetail: "Deterministic fixture for offline demonstration",
   generatedAt: "2026-08-22T09:48:00Z",

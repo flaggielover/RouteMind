@@ -96,6 +96,7 @@ def system_info() -> SystemInfoResponse:
 def _twin_state_response(state: TwinControlState, trace_id: str) -> TwinStateResponse:
     return TwinStateResponse(
         source="simulation",
+        clock_domain=state.clock_domain,
         scenario_id=state.scenario_id,
         seed=state.seed,
         strategy=state.strategy,
@@ -116,6 +117,7 @@ def _twin_event_response(event: TwinControlEvent) -> TwinEventResponse:
     return TwinEventResponse(
         event_id=event.event_id,
         event_type=event.event_type,
+        clock_domain=event.clock_domain,
         simulated_time_seconds=event.simulated_time_seconds,
         command_id=event.command_id,
         details=event.details,
@@ -575,6 +577,7 @@ def dispatch_snapshot(
     return DispatchSnapshotResponse(
         source="live",
         contract_version="v1",
+        clock_domain="WALL",
         generated_at=datetime.now(UTC),
         request_id=decision.request_id,
         strategy=decision.strategy,

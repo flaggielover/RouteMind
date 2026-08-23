@@ -8,6 +8,7 @@ from math import isfinite
 from threading import RLock
 from typing import Literal
 
+from routemind_compute.application.clock import SIMULATED_CLOCK
 from routemind_compute.application.registry import StrategyRegistry
 from routemind_compute.application.simulation import (
     CourierState,
@@ -109,6 +110,7 @@ class TwinControlEvent:
     simulated_time_seconds: float
     command_id: str
     details: tuple[tuple[str, str], ...] = ()
+    clock_domain: Literal["SIMULATED"] = SIMULATED_CLOCK
 
     def __post_init__(self) -> None:
         if not self.event_id.strip() or not self.event_type.strip():
@@ -133,6 +135,7 @@ class TwinControlState:
     event_count: int
     last_command_id: str | None
     replay_digest: str
+    clock_domain: Literal["SIMULATED"] = SIMULATED_CLOCK
 
 
 @dataclass(frozen=True, slots=True)
@@ -335,6 +338,7 @@ class TwinControlService:
                     "simulated_time_seconds": event.simulated_time_seconds,
                     "command_id": event.command_id,
                     "details": event.details,
+                    "clock_domain": event.clock_domain,
                 }
                 for event in self._events
             ],
@@ -355,6 +359,7 @@ class TwinControlService:
             len(self._events),
             self._last_command_id,
             digest,
+            SIMULATED_CLOCK,
         )
 
 
