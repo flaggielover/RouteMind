@@ -1127,12 +1127,12 @@
       "phase": "P24",
       "priority": "critical",
       "depends_on": ["RM-209"],
-      "status": "validating",
+      "status": "passed",
       "acceptance": ["Each Enhancement capability is classified against actual repository evidence", "Java/Python/Web/analytics ownership and data-root boundaries are explicit", "RM-211 through RM-236 form a dependency-ordered graph without claiming unimplemented capability"],
       "gates": ["L1-enhancement-audit", "architecture-review", "L6-evidence-audit"],
       "evidence": ["docs/enhancement/ENHANCEMENT_ARCHITECTURE_AUDIT.md"],
       "blocked_by": [],
-      "notes": "Audit implementation is complete at checkpoint 5fc2b5b and is awaiting the remote Evidence Gate. It is read-oriented and does not change product behavior."
+      "notes": "Passed in checkpoint 16ca664 with local control-plane/verify gates and GitHub Actions run 32641914580 green across all five jobs. The audit is read-oriented and does not change product behavior. RM-211 is now the highest-priority unblocked Enhancement task."
     },
     {
       "id": "RM-211",

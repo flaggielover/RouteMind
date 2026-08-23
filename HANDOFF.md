@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P24
 
-Current Task: RM-210 - Perform Enhancement architecture and dependency audit
+Current Task: RM-211 - Build append-only analytical event and decision archive
 
-Task Status: Hardening is verified 10/10; RM-209 is passed in the task graph and RM-210 is active. RM-210 audit evidence is in docs/enhancement/ENHANCEMENT_ARCHITECTURE_AUDIT.md and evidence/gates/RM-210/enhancement-architecture-audit.md. RM-211 through RM-236 are dependency-ordered; Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 and RM-210 are passed. RM-210 checkpoint 16ca664 and Actions run 32641914580 are green. RM-211 is active for the append-only analytical archive; RM-212 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
