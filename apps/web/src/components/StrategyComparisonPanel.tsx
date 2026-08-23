@@ -4,6 +4,7 @@ import type { WhatIfComparison, WhatIfMetric, WhatIfVariantInput } from "../doma
 
 interface StrategyComparisonPanelProps {
   onRun: (variants: readonly WhatIfVariantInput[]) => Promise<WhatIfComparison>;
+  onComparisonChange?: (comparison: WhatIfComparison | null) => void;
 }
 
 const unavailableMetrics = [
@@ -42,7 +43,10 @@ function formatMetric(value: number, key: "assignment" | "duration" | "runtime" 
   return value.toFixed(2);
 }
 
-export function StrategyComparisonPanel({ onRun }: StrategyComparisonPanelProps) {
+export function StrategyComparisonPanel({
+  onRun,
+  onComparisonChange,
+}: StrategyComparisonPanelProps) {
   const [candidate, setCandidate] = useState("weighted-greedy");
   const [comparison, setComparison] = useState<WhatIfComparison | null>(null);
   const [running, setRunning] = useState(false);
@@ -52,7 +56,9 @@ export function StrategyComparisonPanel({ onRun }: StrategyComparisonPanelProps)
     setRunning(true);
     setError(null);
     try {
-      setComparison(await onRun([variantFor(candidate)]));
+      const result = await onRun([variantFor(candidate)]);
+      setComparison(result);
+      onComparisonChange?.(result);
     } catch (cause) {
       setComparison(null);
       setError(cause instanceof Error ? cause.message : "Strategy comparison unavailable");
@@ -64,6 +70,7 @@ export function StrategyComparisonPanel({ onRun }: StrategyComparisonPanelProps)
   const clear = () => {
     setComparison(null);
     setError(null);
+    onComparisonChange?.(null);
   };
 
   const actualMetrics: readonly [string, "assignment" | "duration" | "runtime" | "risk"][] = [

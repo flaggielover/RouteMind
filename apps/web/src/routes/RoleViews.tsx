@@ -30,6 +30,7 @@ import { orderStatusLabel } from "../domain/selectors";
 import { LifecycleTimeline } from "../components/LifecycleTimeline";
 import { WhatIfComparisonPanel } from "../components/WhatIfComparisonPanel";
 import { StrategyComparisonPanel } from "../components/StrategyComparisonPanel";
+import { StrategyAnalyticsPanel } from "../components/StrategyAnalyticsPanel";
 import { StatusPill } from "../components/StatusPill";
 
 function RolePage({
@@ -64,6 +65,9 @@ function RolePage({
 
 export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
   const [registryOpen, setRegistryOpen] = useState(false);
+  const [comparison, setComparison] = useState<Awaited<
+    ReturnType<typeof whatIfDataSource.run>
+  > | null>(null);
   const strategyAvailable =
     snapshot.availability === "ready" && snapshot.dispatch.strategy !== "unavailable";
   const activeStrategy = snapshot.dispatch.strategy;
@@ -177,7 +181,11 @@ export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
         </section>
       </section>
       <WhatIfComparisonPanel onRun={(variant) => whatIfDataSource.run(variant)} />
-      <StrategyComparisonPanel onRun={(variants) => whatIfDataSource.runMany(variants)} />
+      <StrategyComparisonPanel
+        onRun={(variants) => whatIfDataSource.runMany(variants)}
+        onComparisonChange={setComparison}
+      />
+      <StrategyAnalyticsPanel comparison={comparison} />
     </RolePage>
   );
 }
