@@ -6,15 +6,15 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 1 / 27 tasks passed (RM-210; RM-211 active; RM-212 through RM-236 pending)
+Enhancement Progress: 2 / 27 tasks passed (RM-210, RM-211; RM-212 active; RM-213 through RM-236 pending)
 
-Repository Total: 87 / 113 tasks passed
+Repository Total: 88 / 113 tasks passed
 
-Current Task: RM-211 - Build append-only analytical event and decision archive
+Current Task: RM-212 - Build reproducible DuckDB analytical marts
 
 Last Completed: RM-209 - Close architectural hardening and prepare Enhancement Pass
 
-Current Gate: RM-211 archive implementation has passed local Compute gates (168 tests, 95.66% coverage, Ruff, mypy, contracts, determinism) and the dedicated archive gate (2 records, 1 partition, duplicate rejection); remote validation is in progress. RM-210 CI run 32641914580 remains green; hardening remains 10/10. Docker Desktop API remains an explicit historical infrastructure residual.
+Current Gate: RM-211 passed local Compute gates (168 tests, 95.66% coverage, Ruff, mypy, contracts, determinism), the dedicated archive gate, and GitHub Actions run 32642414842 (all five jobs). RM-212 is now active; hardening remains 10/10. Docker Desktop API remains an explicit historical infrastructure residual.
 
 CI: PASS through final handoff run 32641575021 with all five jobs; earlier handoff run 32630456710, closure runs 32629951315, 32630183684, and 32630339004, and RM-208 run 32629363069 also passed all five jobs; RM-207 run 32629142871, RM-206 run 32628787160, RM-205 closure run 32628007666, RM-205 implementation run 32627857784, RM-204 run 32627357369, RM-203 run 32626153743, RM-202 run 32625597945, RM-201 run 32624822845, RM-190 run 32616020918, RM-181 run 32615330788 and implementation run 32614952772, RM-180 run 32613773339, RM-171 run 32613079169, RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
@@ -24,7 +24,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-211 (active) analytical archive; RM-212 remains blocked until archive evidence passes.
+Next Candidates: RM-212 (active) reproducible DuckDB analytical marts; RM-213 remains blocked until mart evidence passes.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

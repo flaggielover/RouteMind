@@ -1140,12 +1140,12 @@
       "phase": "P24",
       "priority": "critical",
       "depends_on": ["RM-210"],
-      "status": "validating",
+      "status": "passed",
       "acceptance": ["Versioned analytical records can be appended under ROUTEMIND_DATA_ROOT", "Manifests carry schema, event/ingestion time, clock, trace, and source revision", "Duplicate and malformed records are rejected without changing Java authority"],
       "gates": ["L2-analytics", "L6-lineage", "L5-recovery"],
       "evidence": ["evidence/gates/RM-211/analytical-archive.md"],
       "blocked_by": [],
-      "notes": "Implementation is complete at the local checkpoint and is awaiting the remote Evidence Gate. Large data stays outside Git; only manifests, schemas, and checksums are committed."
+      "notes": "Passed in checkpoint ec23b15 with local Compute gates (168 tests, 95.66% coverage, archive gate) and GitHub Actions run 32642414842 green across all five jobs. Large data stays outside Git; only manifests, schemas, and checksums are committed. RM-212 is now active."
     },
     {
       "id": "RM-212",

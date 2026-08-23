@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P24
 
-Current Task: RM-211 - Build append-only analytical event and decision archive
+Current Task: RM-212 - Build reproducible DuckDB analytical marts
 
-Task Status: Hardening is verified 10/10; RM-209 and RM-210 are passed. RM-210 checkpoint 16ca664 and Actions run 32641914580 are green. RM-211 implementation is complete locally and validating remotely; Compute gates are green at 168 tests/95.66% plus the dedicated archive gate. RM-212 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209, RM-210, and RM-211 are passed. RM-211 checkpoint ec23b15 and Actions run 32642414842 are green; archive evidence is in evidence/gates/RM-211/analytical-archive.md. RM-212 is active for reproducible analytical marts; RM-213 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

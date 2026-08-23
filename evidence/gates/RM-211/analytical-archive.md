@@ -1,7 +1,7 @@
 # RM-211 Analytical Archive Evidence
 
 Date: 2026-08-23  
-Implementation checkpoint: pending commit after local validation  
+Implementation checkpoint: `ec23b15`
 Owner: Python compute/analytics boundary  
 Data root: `ROUTEMIND_DATA_ROOT` (tests use an isolated temporary directory)
 
@@ -30,6 +30,7 @@ Command: `./scripts/compute-api.ps1 -Action check`
 - Coverage: PASS (95.66%, threshold 95%)
 - Determinism gate: PASS; seeded replay digest stable
 - Analytical archive gate: PASS
+- GitHub Actions `32642414842`: PASS (all five jobs)
 
 Archive gate output:
 
