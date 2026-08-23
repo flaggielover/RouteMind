@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Round 2 Progress: 43 / 48 tasks passed
+Round 2 Progress: 44 / 48 tasks passed
 
-Repository Total: 71 / 76 tasks passed
+Repository Total: 72 / 76 tasks passed
 
-Current Task: RM-170 - Implement real local golden delivery E2E
+Current Task: RM-171 - Implement failure and degradation E2E journeys
 
-Last Completed: RM-136 - Integrate advanced dispatch decisions and audit
+Last Completed: RM-170 - Implement real local golden delivery E2E
 
-Current Gate: RM-136 local/full/browser gates and Actions run 32609222189 passed; RM-170 golden path implemented, execution pending Docker Desktop engine recovery
+Current Gate: RM-170 local golden delivery, Java 61-test gate, verify gate, and RabbitMQ/Redis probes passed; Actions validation for commit 13b08a9 is pending
 
-CI: PASS - RM-136 run 32609222189 and docs run 32609413087, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 passed all five jobs.
+CI: PASS through RM-136 run 32609222189 and docs run 32609413087; RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 passed all five jobs. Commit 13b08a9 Actions validation is pending.
 
 Regression: PASS - Java 61, Python 142 / 95.88%, Web 49 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-170 - execute real local golden delivery E2E after Docker engine recovery; RM-171 and RM-180 remain blocked by RM-170
+Next Candidates: RM-171 - implement failure and degradation E2E journeys; RM-180 performance/resilience gates are also unblocked; RM-181 UX closure remains eligible after its existing dependencies.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -348,3 +348,19 @@ The task is now passed and RM-120 is the active implementation.
 - RM-136 passed GitHub Actions run `32609222189` with all five jobs green.
 - The task graph now records RM-136 passed (43/48 Round 2, 71/76 repository)
   and activates RM-170 real local golden delivery E2E.
+
+### RM-170 completion - 2026-08-23
+- The real local golden path passed against the existing PostgreSQL 18.6,
+  RabbitMQ, and Redis Compose services. It launched Java and Python from the
+  repository scripts and exercised courier location projection, order
+  lifecycle, Python `v1` dispatch, Java durable assignment, all courier
+  movement transitions, dispatch audit, transactional Outbox, and authenticated
+  RabbitMQ/Redis probes. Run order was
+  `38385309-478b-44ce-997e-eb54744cafe1`.
+- The live run found and fixed Rabbit `EventEnvelope` conversion failure by
+  serializing a stable explicit event map and by terminating spawned process
+  trees during cleanup. Commit `13b08a9` contains the fix; Java 61 tests and
+  `scripts/verify.ps1` pass. Evidence is recorded at
+  `evidence/gates/RM-170/local-golden-e2e.md`.
+- RM-170 is now passed (44/48 Round 2, 72/76 repository), and RM-171 is the
+  next highest-priority unblocked task.

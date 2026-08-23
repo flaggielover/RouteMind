@@ -2,8 +2,8 @@
 
 - Date: 2026-08-23 (Asia/Shanghai)
 - Design: `docs/superpowers/specs/2026-08-23-rm-170-local-golden-delivery-design.md`
-- Implementation checkpoint: pending commit
-- Gate decision: IMPLEMENTED; execution pending Docker Desktop engine recovery
+- Implementation checkpoint: `13b08a9`
+- Gate decision: PASS
 
 ## Implemented path
 
@@ -29,7 +29,18 @@ second service or a direct database mutation.
 - `./scripts/business-api.ps1 -Action test` -> PASS, 61 Java tests.
 - `./scripts/verify.ps1` -> PASS, including PowerShell syntax for the new
   golden-delivery script.
-- `./scripts/golden-delivery.ps1` -> NOT YET EXECUTED: Docker Desktop returned
-  HTTP 500 from `dockerDesktopLinuxEngine` for `docker compose ps`; both the
-  `desktop-linux` and `default` Docker contexts were unavailable. No
-  cross-service success is claimed until the engine responds.
+- `./scripts/golden-delivery.ps1 -TimeoutSeconds 240` -> PASS on 2026-08-23
+  after Docker Desktop engine recovery. The run used order
+  `38385309-478b-44ce-997e-eb54744cafe1` and courier
+  `6df2cfb3-340d-41d9-98a8-f79a465db2a9`.
+- The real run passed PostgreSQL, RabbitMQ, and Redis health; Java and Python
+  health; courier `ONLINE` and projected GEO location; order create/confirm;
+  Python `contract_version=v1` dispatch; Java durable assignment; all four
+  courier movement transitions; delivered order; one dispatch audit; one
+  assignment Outbox row; `PUBLISHED` Outbox status; durable courier location;
+  authenticated RabbitMQ diagnostics; and authenticated Redis ping.
+- The first live attempt exposed a real publisher defect: the default Rabbit
+  converter rejected `EventEnvelope`. Commit `13b08a9` serializes an explicit
+  stable event map with normalized UUID/time scalars and terminates spawned
+  process trees during cleanup. The Java gate and the subsequent real run
+  passed with the repaired path.

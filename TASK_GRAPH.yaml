@@ -932,12 +932,12 @@
       "phase": "P17",
       "priority": "critical",
       "depends_on": ["RM-120", "RM-121", "RM-122", "RM-136", "RM-107"],
-      "status": "pending",
+      "status": "passed",
       "acceptance": ["Customer create, merchant preparation, Python dispatch, courier movement, pickup, delivery, and completion cross real local services", "PostgreSQL, RabbitMQ, Redis, Java, Python, and Web boundaries are exercised where required", "UI updates reflect durable events and assignment results"],
       "gates": ["L3-local-e2e", "L4-golden-delivery"],
       "evidence": ["evidence/gates/RM-170/local-golden-e2e.md"],
       "blocked_by": [],
-      "notes": "Implementation checkpoint adds scripts/golden-delivery.ps1 for real PostgreSQL/RabbitMQ/Redis plus Java/Python public-command flow and scheduled Outbox publication. Pure browser mocks do not satisfy this task. Execution evidence is pending Docker Desktop engine recovery."
+      "notes": "Real local golden delivery passes with PostgreSQL 18.6, RabbitMQ, Redis, Java, and Python: courier location projection, order lifecycle, v1 dispatch, durable assignment audit/Outbox, PUBLISHED assignment event, and authenticated broker/cache probes. Commit 13b08a9 fixes explicit Rabbit event serialization and process-tree cleanup; run order 38385309-478b-44ce-997e-eb54744cafe1 is recorded in evidence/gates/RM-170/local-golden-e2e.md. Pure browser mocks do not satisfy this task."
     },
     {
       "id": "RM-171",

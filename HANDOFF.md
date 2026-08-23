@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-170 - Implement real local golden delivery E2E
+Current Task: RM-171 - Implement failure and degradation E2E journeys
 
-Task Status: RM-170 implementation is complete; execution evidence is pending Docker Desktop engine recovery; RM-136 is fully validated
+Task Status: RM-170 is fully validated locally; commit 13b08a9 is awaiting remote Actions observation; RM-171 is the next highest-priority unblocked task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,7 +629,7 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-170 real local golden delivery E2E; do not redo
+- Resume at RM-171 failure and degradation E2E journeys; do not redo
   completed RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162
   green Actions runs.
 - RM-136 is fully validated after Actions run `32609222189`. Its Python `v1` live
@@ -642,8 +642,9 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
 - RM-162 evidence: Java 60, Python 142 at 95.88%, Web 49 unit/build, browser
   smoke 23 passed plus one existing desktop-only skip, and 5 schemas/15
   fixtures. GitHub Actions run `32608343277` passed all five jobs.
-- Round 2 is 43/48 and repository total is 71/76. RM-170 is now the highest
-  priority active task. Its implementation checkpoint adds
-  `scripts/golden-delivery.ps1` and scheduled Outbox publication, but Docker
-  Desktop currently returns HTTP 500 from both contexts. RM-171 and RM-180
-  remain blocked by RM-170.
+- RM-170 is passed locally (44/48 Round 2, 72/76 repository). The real run
+  `38385309-478b-44ce-997e-eb54744cafe1` completed the Java/Python/PostgreSQL/
+  RabbitMQ/Redis delivery path and observed `PUBLISHED` assignment Outbox state.
+  Commit `13b08a9` fixes stable Rabbit event serialization and process-tree
+  cleanup; its remote Actions run still needs observation. RM-171 and RM-180
+  are now unblocked; RM-171 is next by priority.
