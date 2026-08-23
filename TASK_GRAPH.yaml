@@ -698,12 +698,12 @@
       "phase": "P13",
       "priority": "critical",
       "depends_on": ["RM-135", "RM-103", "RM-106"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Advanced decisions flow through versioned compute contracts and durable assignment boundaries", "Dispatch audit links strategy, input, output, trace, and fallback", "Duplicate and stale decisions are rejected or deduplicated safely"],
       "gates": ["L3-dispatch-integration", "L4-dispatch-golden-path", "L5-dispatch-retry"],
       "evidence": ["evidence/gates/RM-136/dispatch-integration.md"],
       "blocked_by": [],
-      "notes": "No shortcut around Outbox/Inbox or Java authority."
+      "notes": "Activated after RM-162 passed; RM-135, RM-103, and RM-106 are passed. No shortcut around Outbox/Inbox or Java authority."
     },
     {
       "id": "RM-140",
@@ -906,12 +906,12 @@
       "phase": "P16",
       "priority": "high",
       "depends_on": ["RM-161", "RM-156"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Comparison visualizes actual latency, completion, overtime, distance, utilization, fairness, cost, and risk metrics", "Users can inspect manifest and lineage for every result", "Missing metrics are shown as unavailable"],
       "gates": ["L4-strategy-lab", "L6-strategy-visualization"],
       "evidence": ["evidence/gates/RM-162/strategy-comparison.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-158 passed; RM-160 and RM-161 are already passed. Local full gate passes Java 60, Python 142 at 95.88%, Web 49 unit/build, 23 browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures. Strategy comparison projects actual assignment, simulated duration, observed runtime, and scenario-risk metrics; completion, overtime, distance, utilization, fairness, and cost are explicitly unavailable until produced. Provenance digests remain inspectable. Charts are evidence projections, not decorative scores. Remote Actions validation is pending."
+      "notes": "Passed after RM-158; RM-160 and RM-161 are already passed. Local full gate passes Java 60, Python 142 at 95.88%, Web 49 unit/build, 23 browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures. Strategy comparison projects actual assignment, simulated duration, observed runtime, and scenario-risk metrics; completion, overtime, distance, utilization, fairness, and cost are explicitly unavailable until produced. Provenance digests remain inspectable. Charts are evidence projections, not decorative scores. GitHub Actions run 32608343277 passed all five jobs."
     },
     {
       "id": "RM-163",

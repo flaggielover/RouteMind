@@ -31,6 +31,6 @@ Date: 2026-08-23
 
 ## Gate decision
 
-Local L4 strategy lab and L6 strategy visualization evidence is complete. The
-implementation checkpoint is ready for commit, push, and remote Actions
-Evidence Gate.
+Local L4 strategy lab and L6 strategy visualization evidence is complete.
+GitHub Actions run `32608343277` passed all five jobs, including Python compute
+and Web browser smoke. RM-162 is fully validated.

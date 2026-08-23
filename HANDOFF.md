@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-162 - Build strategy comparison visualizations
+Current Task: RM-136 - Integrate advanced dispatch decisions and audit
 
-Task Status: RM-162 is in progress; RM-158 is the last fully validated task
+Task Status: RM-136 is in progress; RM-162 is the last fully validated task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -621,16 +621,21 @@ shown as unavailable from the recorded run. Web check passes 49 tests/build;
 browser smoke passes 23 desktop/mobile tests with one existing desktop-only
 skip; full available gates pass Java 60, Python 142 at 95.88%, and 5 schemas/15
 fixtures. Evidence is recorded at `evidence/gates/RM-162/strategy-comparison.md`;
-remote Actions validation is pending.
+the implementation checkpoint is `95901cd`.
+
+RM-162 is fully validated after GitHub Actions run `32608343277` passed all five
+jobs, including Python compute and Web browser smoke. The task graph now records
+RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
+dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-162 commit, push, and observe the real GitHub Actions run; do
-  not redo completed RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158
+- Resume at RM-136 advanced dispatch integration and audit; do not redo
+  completed RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162
   green Actions runs.
-- RM-158 evidence: Java 60, Python 142 at 95.88%, Web 47 unit/build, browser
+- RM-162 evidence: Java 60, Python 142 at 95.88%, Web 49 unit/build, browser
   smoke 23 passed plus one existing desktop-only skip, and 5 schemas/15
-  fixtures. GitHub Actions run `32607641909` passed all five jobs.
-- Round 2 is 41/48 and repository total is 69/76 until RM-162's remote gate
-  passes. Next action is to commit, push, and observe Actions; after closure,
-  continue with RM-170 local golden delivery E2E. RM-162 remains an evidence
-  projection, not a production score.
+  fixtures. GitHub Actions run `32608343277` passed all five jobs.
+- Round 2 is 42/48 and repository total is 70/76. Next action is to connect
+  advanced Python decisions to the Java durable assignment boundary with audit,
+  duplicate/stale handling, and retry evidence. RM-170 remains blocked by
+  RM-136.

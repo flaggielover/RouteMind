@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Round 2 Progress: 41 / 48 tasks passed
+Round 2 Progress: 42 / 48 tasks passed
 
-Repository Total: 69 / 76 tasks passed
+Repository Total: 70 / 76 tasks passed
 
-Current Task: RM-162 - Build strategy comparison visualizations
+Current Task: RM-136 - Integrate advanced dispatch decisions and audit
 
-Last Completed: RM-158 - Implement What-if scenario comparison
+Last Completed: RM-162 - Build strategy comparison visualizations
 
-Current Gate: RM-162 local/full/browser gates passed; implementation checkpoint is pending remote Actions validation
+Current Gate: RM-162 local/full/browser gates and remote Actions run 32608343277 passed; RM-136 is now active
 
-CI: PASS - RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, RM-155 run 32604701074, and RM-152 run 32603896737 passed all five jobs; RM-162 remote validation is pending.
+CI: PASS - RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 passed all five jobs.
 
 Regression: PASS - Java 60, Python 142 / 95.88%, Web 49 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-162 - complete remote Evidence Gate; RM-170 remains the next critical E2E task after the strategy lab path
+Next Candidates: RM-136 - integrate advanced dispatch decisions and audit; RM-170 remains blocked by RM-136
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -322,3 +322,11 @@ The task is now passed and RM-120 is the active implementation.
   browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures.
   Remote Actions validation is the remaining Evidence Gate before marking
   RM-162 passed.
+
+### RM-162 completion - 2026-08-23
+- Strategy comparison visualizations passed local/full/browser gates and
+  GitHub Actions run `32608343277` (all five jobs green, including Python
+  compute and Web browser smoke), with actual metric bars, explicit unavailable
+  inventory, and inspectable recorded-run provenance.
+- RM-162 is now passed (42/48 Round 2, 70/76 repository); RM-136 advanced
+  dispatch integration and audit is activated next because RM-170 depends on it.
