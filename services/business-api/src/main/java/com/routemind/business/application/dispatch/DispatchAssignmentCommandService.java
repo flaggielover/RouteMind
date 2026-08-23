@@ -27,14 +27,16 @@ public class DispatchAssignmentCommandService {
     private final OrderCommandService orders;
     private final DispatchAssignmentAuditRepository audits;
     private final DispatchAssignmentLeaseService leases;
+    private final DispatchDecisionLedgerService ledger;
     private final OutboxRepository outbox;
     private final Clock clock;
 
     public DispatchAssignmentCommandService(OrderCommandService orders, DispatchAssignmentAuditRepository audits,
-            DispatchAssignmentLeaseService leases, OutboxRepository outbox, Clock clock) {
+            DispatchAssignmentLeaseService leases, DispatchDecisionLedgerService ledger, OutboxRepository outbox, Clock clock) {
         this.orders = orders;
         this.audits = audits;
         this.leases = leases;
+        this.ledger = ledger;
         this.outbox = outbox;
         this.clock = clock;
     }
@@ -68,6 +70,7 @@ public class DispatchAssignmentCommandService {
         OrderCommandResult transition = orders.transitionCommand(orderId, OrderStatus.ASSIGNED, "dispatch",
                 command.expectedOrderVersion(), correlationId, null, traceId, key);
         lease = leases.commit(lease);
+        ledger.record(orderId.value(), command, key, lease, transition);
         DispatchAssignmentAudit audit = new DispatchAssignmentAudit(key, requestHash, command.requestId(),
                 orderId.value(), command.courierId(), command.contractVersion(), command.strategy(),
                 command.strategyVersion(), command.inputDigest(), command.outputDigest(), traceId,

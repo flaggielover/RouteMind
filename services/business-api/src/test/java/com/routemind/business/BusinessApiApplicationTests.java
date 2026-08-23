@@ -272,6 +272,15 @@ class BusinessApiApplicationTests {
 		assertThat(jdbcTemplate.queryForObject(
 				"select lease_generation from routemind.dispatch_assignment_audits where idempotency_key = 'rm136-assignment'",
 				Long.class)).isEqualTo(1L);
+		assertThat(jdbcTemplate.queryForObject(
+				"select count(*) from routemind.dispatch_decision_ledger where decision_id = 'compute-request-1'",
+				Integer.class)).isOne();
+		assertThat(jdbcTemplate.queryForObject(
+				"select clock_domain from routemind.dispatch_decision_ledger where decision_id = 'compute-request-1'",
+				String.class)).isEqualTo("WALL");
+		assertThat(jdbcTemplate.queryForObject(
+				"select input_snapshot_json || output_snapshot_json from routemind.dispatch_decision_ledger where decision_id = 'compute-request-1'",
+				String.class)).contains("reference_data_id", "strategy_version", "input_digest", "output_digest");
 	}
 
 	@Test
@@ -383,9 +392,9 @@ class BusinessApiApplicationTests {
 	@Test
 	void flywayOwnsTheApplicationSchema() {
 		Integer migrationCount = jdbcTemplate.queryForObject(
-				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11') and success = true",
+				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12') and success = true",
 				Integer.class);
 
-		assertThat(migrationCount).isEqualTo(11);
+		assertThat(migrationCount).isEqualTo(12);
 	}
 }
