@@ -612,13 +612,25 @@ jobs, including the Python compute and Web browser smoke gates. The task graph
 now records RM-158 passed (41/48 Round 2, 69/76 repository) and activates
 RM-162 strategy comparison visualizations; RM-160 and RM-161 are already passed.
 
+RM-162 local implementation is complete. The Strategy Comparison panel uses a
+bounded multi-variant What-if request and renders actual assignment rate,
+simulated duration, observed compute runtime, and scenario-risk bars. It keeps
+recorded-run, comparison, replay, manifest, and output digests visible, while
+completion, overtime, distance, utilization, fairness, and cost are explicitly
+shown as unavailable from the recorded run. Web check passes 49 tests/build;
+browser smoke passes 23 desktop/mobile tests with one existing desktop-only
+skip; full available gates pass Java 60, Python 142 at 95.88%, and 5 schemas/15
+fixtures. Evidence is recorded at `evidence/gates/RM-162/strategy-comparison.md`;
+remote Actions validation is pending.
+
 ## Current Resume Capsule
-- Resume at RM-162 strategy comparison visualizations; do not redo completed
-  RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158 green Actions runs.
+- Resume at RM-162 commit, push, and observe the real GitHub Actions run; do
+  not redo completed RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158
+  green Actions runs.
 - RM-158 evidence: Java 60, Python 142 at 95.88%, Web 47 unit/build, browser
   smoke 23 passed plus one existing desktop-only skip, and 5 schemas/15
   fixtures. GitHub Actions run `32607641909` passed all five jobs.
-- Round 2 is 41/48 and repository total is 69/76. Next action is to build
-  evidence-first strategy comparison visualizations over the existing
-  What-if/RouteBench provenance, including explicit unavailable metrics and
-  manifest/lineage inspection. RM-170 remains the next critical local E2E task.
+- Round 2 is 41/48 and repository total is 69/76 until RM-162's remote gate
+  passes. Next action is to commit, push, and observe Actions; after closure,
+  continue with RM-170 local golden delivery E2E. RM-162 remains an evidence
+  projection, not a production score.

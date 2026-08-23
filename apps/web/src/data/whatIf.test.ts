@@ -36,7 +36,7 @@ describe("what-if data source", () => {
       }),
     );
     const source = createWhatIfDataSource(fetchImpl);
-    const comparison = await source.run({
+    const variant = {
       variantId: "stress",
       label: "Traffic stress",
       demandMultiplier: 1.2,
@@ -45,18 +45,20 @@ describe("what-if data source", () => {
       trafficMultiplier: 1.4,
       strategy: "weighted-greedy",
       riskMultiplier: 1.5,
-    });
+    } as const;
+    const comparison = await source.runMany([variant, { ...variant, variantId: "light" }]);
 
     expect(comparison.claimLabel).toContain("not a causal");
     expect(comparison.results[0].manifestDigest).toBe("manifest-digest");
     const request = fetchImpl.mock.calls[0][1] as RequestInit;
     const body = JSON.parse(String(request.body)) as {
       recorded_run_id: string;
-      variants: [{ strategy: string; supply_delta: number }];
+      variants: [{ strategy: string; supply_delta: number }, { variant_id: string }];
     };
     expect(body.recorded_run_id).toBe("replay-control-default-v1");
     expect(body.variants[0].strategy).toBe("weighted-greedy");
     expect(body.variants[0].supply_delta).toBe(-1);
+    expect(body.variants[1].variant_id).toBe("light");
   });
 
   it("surfaces API failures", async () => {

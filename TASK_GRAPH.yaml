@@ -911,7 +911,7 @@
       "gates": ["L4-strategy-lab", "L6-strategy-visualization"],
       "evidence": ["evidence/gates/RM-162/strategy-comparison.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-158 passed; RM-160 and RM-161 are already passed. Charts are evidence projections, not decorative scores."
+      "notes": "Activated after RM-158 passed; RM-160 and RM-161 are already passed. Local full gate passes Java 60, Python 142 at 95.88%, Web 49 unit/build, 23 browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures. Strategy comparison projects actual assignment, simulated duration, observed runtime, and scenario-risk metrics; completion, overtime, distance, utilization, fairness, and cost are explicitly unavailable until produced. Provenance digests remain inspectable. Charts are evidence projections, not decorative scores. Remote Actions validation is pending."
     },
     {
       "id": "RM-163",

@@ -118,7 +118,7 @@ function asComparison(wire: WhatIfResponseWire): WhatIfComparison {
 
 export function createWhatIfDataSource(fetchImpl: typeof fetch = fetch) {
   return {
-    run: async (variant: WhatIfVariantInput): Promise<WhatIfComparison> => {
+    runMany: async (variants: readonly WhatIfVariantInput[]): Promise<WhatIfComparison> => {
       const wire = await fetchJson<WhatIfResponseWire>(
         `${computeApi}/api/v1/experiments/what-if`,
         {
@@ -126,23 +126,24 @@ export function createWhatIfDataSource(fetchImpl: typeof fetch = fetch) {
           headers: { Accept: "application/json", "Content-Type": "application/json" },
           body: JSON.stringify({
             ...basePayload,
-            variants: [
-              {
-                variant_id: variant.variantId,
-                label: variant.label,
-                demand_multiplier: variant.demandMultiplier,
-                supply_delta: variant.supplyDelta,
-                preparation_delay_ticks: variant.preparationDelayTicks,
-                traffic_multiplier: variant.trafficMultiplier,
-                strategy: variant.strategy,
-                risk_multiplier: variant.riskMultiplier,
-              },
-            ],
+            variants: variants.map((variant) => ({
+              variant_id: variant.variantId,
+              label: variant.label,
+              demand_multiplier: variant.demandMultiplier,
+              supply_delta: variant.supplyDelta,
+              preparation_delay_ticks: variant.preparationDelayTicks,
+              traffic_multiplier: variant.trafficMultiplier,
+              strategy: variant.strategy,
+              risk_multiplier: variant.riskMultiplier,
+            })),
           }),
         },
         fetchImpl,
       );
       return asComparison(wire);
+    },
+    run: async (variant: WhatIfVariantInput): Promise<WhatIfComparison> => {
+      return createWhatIfDataSource(fetchImpl).runMany([variant]);
     },
   };
 }

@@ -161,6 +161,12 @@ test.describe("role-aware web smoke", () => {
     await expect(page.getByRole("heading", { name: "Traffic stress" })).toBeVisible();
     await expect(page.getByText("Recorded run: replay-control-default-v1")).toBeVisible();
     await expect(page.getByText(/not a causal production claim/).last()).toBeVisible();
+    await page.getByRole("button", { name: "Compare strategies" }).click();
+    await expect(page.locator(".strategy-comparison-panel .what-if-status")).toHaveText(
+      "Comparison ready",
+    );
+    await expect(page.getByText("Assignment rate")).toBeVisible();
+    await expect(page.getByText("Unavailable from recorded run").first()).toBeVisible();
     await page.screenshot({ path: "test-results/what-if-comparison.png", fullPage: true });
   });
 

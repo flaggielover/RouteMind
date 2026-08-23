@@ -10,17 +10,17 @@ Current Task: RM-162 - Build strategy comparison visualizations
 
 Last Completed: RM-158 - Implement What-if scenario comparison
 
-Current Gate: RM-158 local/full/browser gates and remote Actions run 32607641909 passed; RM-162 is now active
+Current Gate: RM-162 local/full/browser gates passed; implementation checkpoint is pending remote Actions validation
 
-CI: PASS - RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, RM-155 run 32604701074, and RM-152 run 32603896737 passed all five jobs.
+CI: PASS - RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, RM-155 run 32604701074, and RM-152 run 32603896737 passed all five jobs; RM-162 remote validation is pending.
 
-Regression: PASS - Java 60, Python 142 / 95.88%, Web 47 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 60, Python 142 / 95.88%, Web 49 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-162 - build strategy comparison visualizations; RM-170 remains the next critical E2E task after the strategy lab path
+Next Candidates: RM-162 - complete remote Evidence Gate; RM-170 remains the next critical E2E task after the strategy lab path
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -309,3 +309,16 @@ The task is now passed and RM-120 is the active implementation.
   manifest/replay/output/comparison provenance.
 - RM-158 is now passed (41/48 Round 2, 69/76 repository); RM-162 strategy
   comparison visualizations are activated next.
+
+### RM-162 checkpoint - 2026-08-23
+- Added the Strategy Comparison visualization over the existing What-if
+  recorded-run adapter. Candidate strategies are compared on the same
+  baseline, with actual assignment rate, simulated duration, observed compute
+  runtime, scenario-risk index, and per-result replay/manifest/output digests.
+- Added an explicit unavailable metric inventory for completion, overtime,
+  distance, utilization, fairness, and cost; no combined score or causal
+  production claim is rendered.
+- Local full gate passes Java 60, Python 142 at 95.88%, Web 49 unit/build, 23
+  browser tests plus one existing desktop-only skip, and 5 schemas/15 fixtures.
+  Remote Actions validation is the remaining Evidence Gate before marking
+  RM-162 passed.
