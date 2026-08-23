@@ -41,6 +41,7 @@ def test_data_root_adapter_resolves_and_verifies_external_artifacts(tmp_path: Pa
     assert resolved.path == artifact_path.resolve()
     assert resolved.actual_sha256 == manifest.sha256
     assert resolved.metadata["manifest_digest"] == manifest.digest
+    assert resolved.metadata["reference_data_id"] == "road-graph:network-1:git:abc123"
 
 
 def test_manifest_digest_canonicalizes_configuration() -> None:

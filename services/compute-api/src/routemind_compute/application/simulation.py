@@ -54,6 +54,7 @@ class ScenarioManifest:
     delay_ticks: tuple[int, ...] = (0,)
     traffic_multiplier: float = 1.0
     clock_domain: ClockDomain = SIMULATED_CLOCK
+    reference_data_id: str = "travel:deterministic-local:v1"
 
     def __post_init__(self) -> None:
         if not self.scenario_id.strip():
@@ -70,6 +71,8 @@ class ScenarioManifest:
             raise ValueError("delay_ticks must contain non-negative values")
         if not isfinite(self.traffic_multiplier) or self.traffic_multiplier <= 0:
             raise ValueError("traffic_multiplier must be finite and positive")
+        if not self.reference_data_id.strip():
+            raise ValueError("reference_data_id must not be blank")
         validate_clock_domain(self.clock_domain, allowed=(SIMULATED_CLOCK, "REPLAY"))
 
 
@@ -198,6 +201,7 @@ class ScenarioKernel:
             "scenario_id": manifest.scenario_id,
             "seed": manifest.seed,
             "clock_domain": manifest.clock_domain,
+            "reference_data_id": manifest.reference_data_id,
             "simulated_end_tick": clock.tick,
             "decisions": [
                 {

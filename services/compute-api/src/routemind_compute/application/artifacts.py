@@ -9,7 +9,19 @@ from pathlib import Path
 from typing import Final
 
 _SHA256: Final = re.compile(r"^[0-9a-f]{64}$")
-_ALLOWED_TYPES: Final = frozenset({"artifact", "dataset", "matrix", "road-graph", "replay"})
+_ALLOWED_TYPES: Final = frozenset(
+    {
+        "artifact",
+        "dataset",
+        "matrix",
+        "road-graph",
+        "replay",
+        "travel",
+        "zone",
+        "strategy",
+        "analytical",
+    }
+)
 
 
 class ArtifactResolutionError(ValueError):
@@ -60,6 +72,12 @@ class DataArtifactManifest:
         encoded = json.dumps(self.payload(), sort_keys=True, separators=(",", ":")).encode()
         return hashlib.sha256(encoded).hexdigest()
 
+    @property
+    def reference_data_id(self) -> str:
+        """Stable identity that never changes for this artifact revision."""
+
+        return f"{self.artifact_type}:{self.artifact_id}:{self.revision}"
+
     def payload(self) -> dict[str, object]:
         return {
             "artifact_id": self.artifact_id,
@@ -100,6 +118,7 @@ class ResolvedArtifact:
             "producer": self.manifest.producer,
             "revision": self.manifest.revision,
             "manifest_digest": self.manifest.digest,
+            "reference_data_id": self.manifest.reference_data_id,
             "seed": self.manifest.seed,
         }
 

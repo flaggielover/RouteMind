@@ -50,6 +50,7 @@ class BenchmarkManifest:
     runtime: Metadata = ()
     failures: tuple[str, ...] = ()
     hardware: Metadata = ()
+    reference_data_id: str = "travel:deterministic-local:v1"
 
     def __post_init__(self) -> None:
         for value, name in (
@@ -64,6 +65,8 @@ class BenchmarkManifest:
                 raise ValueError(f"{name} must not be blank")
         if not self.strategies:
             raise ValueError("at least one strategy is required")
+        if not self.reference_data_id.strip():
+            raise ValueError("reference_data_id must not be blank")
         if any(not strategy.strip() for strategy in self.strategies):
             raise ValueError("strategy names must not be blank")
         if len(set(self.strategies)) != len(self.strategies):
@@ -90,6 +93,7 @@ class BenchmarkManifest:
             "runtime": self.runtime,
             "failures": self.failures,
             "hardware": self.hardware,
+            "reference_data_id": self.reference_data_id,
         }
 
     @property
