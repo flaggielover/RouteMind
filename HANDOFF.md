@@ -8,7 +8,7 @@ Current Phase: Round 2 P16 Strategy Laboratory
 
 Current Task: RM-171 - Implement failure and degradation E2E journeys
 
-Task Status: RM-170 is fully validated locally and remotely; RM-171 is the next highest-priority unblocked task
+Task Status: RM-171 local six-scenario failure/degradation gate is complete; remote Actions is the final Evidence Gate before marking it passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -649,3 +649,10 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   cleanup. GitHub Actions run `32612407286` for commit `a6f8163` passed all five
   jobs, including Web browser smoke and bounded degradation. RM-171 and RM-180
   are now unblocked; RM-171 is next by priority and is marked `in_progress`.
+- RM-171 checkpoint `427be52` adds the real failure/degradation E2E script and
+  design. Run `55b3b3bb-cab2-4175-895e-845058036cf6` passed Redis loss and
+  recovery, compute outage, RabbitMQ restart with Outbox recovery, duplicate
+  command replay, courier offline/stale version, and bounded dispatch timeout.
+  Resilience and full gates pass Java 61, Python 142 at 95.88%, Web 49
+  unit/build, and 5 schemas/15 fixtures. Evidence is in
+  `evidence/gates/RM-171/failure-e2e.md`; remote Actions remains pending.

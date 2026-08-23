@@ -10,7 +10,7 @@ Current Task: RM-171 - Implement failure and degradation E2E journeys
 
 Last Completed: RM-170 - Implement real local golden delivery E2E
 
-Current Gate: RM-170 local golden delivery, Java 61-test gate, verify gate, RabbitMQ/Redis probes, and Actions run 32612407286 (all five jobs) passed; RM-171 failure/degradation design is active
+Current Gate: RM-171 six-scenario real failure/degradation E2E, resilience, full, and verify gates pass locally; commit 427be52 Actions validation is pending
 
 CI: PASS through RM-170 run 32612407286 and RM-136 run 32609222189 with all five jobs; RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
 
@@ -366,3 +366,14 @@ The task is now passed and RM-120 is the active implementation.
   next highest-priority unblocked task.
 - Remote Evidence Gate: GitHub Actions run `32612407286` for commit `a6f8163`
   passed all five jobs, including Web browser smoke and bounded degradation.
+
+### RM-171 checkpoint - 2026-08-23
+- Added `scripts/failure-degradation-e2e.ps1` and its design. A real local run
+  `55b3b3bb-cab2-4175-895e-845058036cf6` passed Redis loss/recovery, compute
+  outage, RabbitMQ restart with Outbox recovery, duplicate command replay,
+  courier offline/stale version, and bounded dispatch timeout. Java remained
+  durable during compute and dispatch failures.
+- Supporting resilience and full gates pass Java 61, Python 142 at 95.88%,
+  Web 49 unit/build, five schemas/15 fixtures, and repository controls. The
+  implementation checkpoint is `427be52`; remote Actions is the remaining
+  Evidence Gate before marking RM-171 passed.

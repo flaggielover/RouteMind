@@ -950,7 +950,7 @@
       "gates": ["L5-failure-e2e", "L4-degraded-product"],
       "evidence": ["evidence/gates/RM-171/failure-e2e.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-170 passed local golden delivery and Actions run 32612407286. Claims remain limited to exercised failure modes."
+      "notes": "Local six-scenario failure/degradation E2E passes in commit 427be52: Redis loss/recovery, compute outage, RabbitMQ restart/Outbox recovery, duplicate command, courier offline/stale version, and bounded dispatch timeout. Supporting resilience/full/verify gates pass; remote Actions remains the final Evidence Gate. Claims remain limited to exercised failure modes."
     },
     {
       "id": "RM-180",
