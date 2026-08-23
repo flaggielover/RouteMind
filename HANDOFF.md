@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-171 - Implement failure and degradation E2E journeys
+Current Task: RM-180 - Add Round 2 performance and realtime resilience gates
 
-Task Status: RM-171 local six-scenario failure/degradation gate is complete; remote Actions is the final Evidence Gate before marking it passed
+Task Status: RM-171 is fully validated locally and remotely; RM-180 is the next highest-priority unblocked task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -655,4 +655,6 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   command replay, courier offline/stale version, and bounded dispatch timeout.
   Resilience and full gates pass Java 61, Python 142 at 95.88%, Web 49
   unit/build, and 5 schemas/15 fixtures. Evidence is in
-  `evidence/gates/RM-171/failure-e2e.md`; remote Actions remains pending.
+  `evidence/gates/RM-171/failure-e2e.md`; GitHub Actions run `32613079169`
+  passed all five jobs. RM-171 is passed (45/48 Round 2, 73/76 repository),
+  and RM-180 is now active.

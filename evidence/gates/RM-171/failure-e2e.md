@@ -3,7 +3,7 @@
 - Date: 2026-08-23 (Asia/Shanghai)
 - Design: `docs/superpowers/specs/2026-08-23-rm-171-failure-degradation-e2e-design.md`
 - Implementation checkpoint: `427be52`
-- Gate decision: LOCAL PASS; remote Actions pending
+- Gate decision: PASS
 - Script: `scripts/failure-degradation-e2e.ps1 -TimeoutSeconds 240`
 - Run ID: `55b3b3bb-cab2-4175-895e-845058036cf6`
 
@@ -39,6 +39,9 @@ preserved the named Compose volumes.
   unit tests, and Web production build.
 - `./scripts/verify.ps1` -> PASS, including PowerShell syntax for the failure
   script and task graph validation.
+- GitHub Actions run `32613079169` for commit `94c7ce4` passed all five jobs,
+  including Python, Java, Web browser smoke, bounded degradation, and control
+  plane.
 
 No browser fixture was used to produce the six failure claims. The script
 restores Redis/RabbitMQ and terminates child processes in `finally`; durable

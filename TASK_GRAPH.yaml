@@ -945,12 +945,12 @@
       "phase": "P17",
       "priority": "high",
       "depends_on": ["RM-170", "RM-080", "RM-083"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Selected Redis loss, compute outage, RabbitMQ restart, duplicate event, courier offline, and dispatch timeout journeys are exercised", "Durable truth and idempotency survive selected failures", "Product surfaces show bounded degraded state instead of stale success"],
       "gates": ["L5-failure-e2e", "L4-degraded-product"],
       "evidence": ["evidence/gates/RM-171/failure-e2e.md"],
       "blocked_by": [],
-      "notes": "Local six-scenario failure/degradation E2E passes in commit 427be52: Redis loss/recovery, compute outage, RabbitMQ restart/Outbox recovery, duplicate command, courier offline/stale version, and bounded dispatch timeout. Supporting resilience/full/verify gates pass; remote Actions remains the final Evidence Gate. Claims remain limited to exercised failure modes."
+      "notes": "Six-scenario real failure/degradation E2E passes in commit 427be52: Redis loss/recovery, compute outage, RabbitMQ restart/Outbox recovery, duplicate command, courier offline/stale version, and bounded dispatch timeout. Supporting resilience/full/verify gates pass; GitHub Actions run 32613079169 passed all five jobs. Claims remain limited to exercised failure modes."
     },
     {
       "id": "RM-180",
