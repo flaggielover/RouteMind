@@ -1093,7 +1093,7 @@
       "gates": ["L1-determinism", "L2-property-tests", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-207/determinism-audit.md"],
       "blocked_by": [],
-      "notes": "Active after RM-206 closure. Do not require bitwise equality for explicitly allowed nondeterministic subsystems."
+      "notes": "Passed in checkpoint 4f86ff8 with explicit determinism classifications, seeded double-run digest auditing, environment/configuration evidence, and a CI-invoked determinism gate. Local Compute gate passed with 160 tests at 95.84%; GitHub Actions run 32629142871 passed all five jobs. Do not require bitwise equality for explicitly allowed nondeterministic subsystems."
     },
     {
       "id": "RM-208",
@@ -1101,12 +1101,12 @@
       "phase": "P23",
       "priority": "critical",
       "depends_on": ["RM-201", "RM-202", "RM-203", "RM-204", "RM-205", "RM-206", "RM-207"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Round 2 customer, merchant, courier, operations, realtime, replay, simulation, What-if, dispatch, VRPTW, RADS, and degradation behavior remains green", "Real PostgreSQL/RabbitMQ/Redis checks cover changed consistency and recovery paths", "Local full gate and browser/API regression evidence are recorded"],
       "gates": ["L3-integration", "L4-regression", "L5-resilience", "L6-system"],
       "evidence": ["evidence/gates/RM-208/hardening-regression.md"],
       "blocked_by": [],
-      "notes": "No quality threshold is reduced; failures must be repaired or explicitly blocked."
+      "notes": "Active after RM-207 closure. No quality threshold is reduced; failures must be repaired or explicitly blocked."
     },
     {
       "id": "RM-209",

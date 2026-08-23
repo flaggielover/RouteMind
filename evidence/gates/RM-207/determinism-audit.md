@@ -34,7 +34,8 @@ stable=true
 
 Result: Ruff, formatting, mypy, contract validation, determinism gate, and
 160 Python tests passed. Coverage is 95.84% (threshold 95%). Focused
-determinism tests: 5 passed. GitHub Actions will be observed after push.
+determinism tests: 5 passed. GitHub Actions run 32629142871 passed all five
+jobs.
 
 ## Limits
 
