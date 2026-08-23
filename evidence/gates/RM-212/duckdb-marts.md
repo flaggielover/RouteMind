@@ -1,7 +1,7 @@
 # RM-212 DuckDB Marts Evidence
 
 Date: 2026-08-23  
-Implementation checkpoint: pending commit after local validation  
+Implementation checkpoint: `5f1cccf`
 Engine: DuckDB `1.5.5`, pinned in `pyproject.toml` and `uv.lock`
 
 ## Changed
@@ -28,6 +28,8 @@ Command: `./scripts/compute-api.ps1 -Action check`
 - Archive gate: PASS
 - Mart tests: PASS for full rebuild, stable logical digest, incremental
   idempotency/new records, missing manifest, invalid mode, and digest mismatch
+- GitHub Actions `32643098647`: PASS across all five jobs, including Linux
+  Python/DuckDB and browser smoke
 
 ## Boundaries
 

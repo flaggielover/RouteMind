@@ -1153,12 +1153,12 @@
       "phase": "P24",
       "priority": "high",
       "depends_on": ["RM-211"],
-      "status": "validating",
+      "status": "passed",
       "acceptance": ["Curated facts and only justified dimensions rebuild deterministically", "Incremental and full rebuild semantics are explicit", "Marts remain read-oriented and preserve source/reference-data lineage"],
       "gates": ["L2-analytics", "L6-reproducibility", "L6-data-quality"],
       "evidence": ["evidence/gates/RM-212/duckdb-marts.md"],
       "blocked_by": [],
-      "notes": "Implementation is complete locally and awaiting the remote Evidence Gate. DuckDB 1.5.5 is a pinned in-process analytical engine; no new network service or online extension is introduced."
+      "notes": "Passed in checkpoint 5f1cccf with local Compute gates (174 tests, 95.47% coverage, stable full/incremental mart gate) and GitHub Actions run 32643098647 green across all five jobs. DuckDB 1.5.5 is a pinned in-process analytical engine; no new service or online extension. RM-213 is now active."
     },
     {
       "id": "RM-213",
@@ -1166,12 +1166,12 @@
       "phase": "P24",
       "priority": "high",
       "depends_on": ["RM-212"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Named metrics have definitions, time semantics, source fields, and aggregation rules", "Denominators and unavailable-data behavior are tested", "Web, reports, and agents consume one metric definition instead of ad hoc calculations"],
       "gates": ["L2-analytics", "L6-data-quality", "L4-contracts"],
       "evidence": ["evidence/gates/RM-213/semantic-metrics.md"],
       "blocked_by": [],
-      "notes": "Metrics are analytical read models and never business authority."
+      "notes": "Active after RM-212 passed. Metrics are analytical read models and never business authority."
     },
     {
       "id": "RM-214",
