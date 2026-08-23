@@ -1413,12 +1413,12 @@
       "phase": "P28",
       "priority": "medium",
       "depends_on": ["RM-213", "RM-226", "RM-231"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Agents can query metrics, evidence, lineage, and X-Ray records through bounded read tools", "Tool calls are audited and state-changing operations remain mediated", "Agent output never owns dispatch correctness or invents unsupported metrics"],
       "gates": ["L2-compute", "L6-security", "L6-lineage"],
       "evidence": ["evidence/gates/RM-232/agent-analytics.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-231 passed. Reuse the existing Agent Runtime permission and audit boundary."
+      "notes": "Passed in checkpoint pending after Compute 236 tests at 95.28% coverage, strict Ruff/mypy/contract/determinism/archive/mart/semantic gates. Metrics, lineage, and Decision X-Ray read tools reuse role grants, audit records, and call budgets; state-changing tools are rejected. RM-235 is now active."
     },
     {
       "id": "RM-233",
@@ -1452,12 +1452,12 @@
       "phase": "P29",
       "priority": "critical",
       "depends_on": ["RM-216", "RM-218", "RM-221", "RM-225", "RM-229", "RM-230", "RM-231", "RM-232", "RM-234"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Cross-layer fulfillment, location, ETA, archive, mart, dashboard, and lineage journey is executable", "Redis/RabbitMQ/late-event/stale-location/invalid-solver/archive/SSE failure cases remain explicit", "Full local, E2E, adversarial, and CI evidence is recorded"],
       "gates": ["L4-enhancement-e2e", "L5-adversarial", "L6-system"],
       "evidence": ["evidence/gates/RM-235/enhancement-validation.md"],
       "blocked_by": [],
-      "notes": "Claims remain limited to exercised modes, datasets, hosts, and configurations."
+      "notes": "Activated after RM-232 passed. Claims remain limited to exercised modes, datasets, hosts, and configurations."
     },
     {
       "id": "RM-236",

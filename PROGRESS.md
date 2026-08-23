@@ -6,17 +6,17 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 24 / 27 tasks passed (RM-210 through RM-231, RM-233 through RM-234; RM-232 in progress; RM-235 through RM-236 pending)
+Enhancement Progress: 25 / 27 tasks passed (RM-210 through RM-234; RM-235 in progress; RM-236 pending)
 
-Repository Total: 110 / 113 tasks passed
+Repository Total: 111 / 113 tasks passed
 
-Current Task: RM-232 - Add agent analytical substrate and guardrails
+Current Task: RM-235 - Run Enhancement E2E and adversarial validation
 
-Last Completed: RM-231 - Build Research Center surface
+Last Completed: RM-232 - Add agent analytical substrate and guardrails
 
-Current Gate: RM-231 passed local validation; remote evidence is pending for its checkpoint. RM-232 is active; read tools must expose metrics/lineage/X-Ray evidence with audit records while preserving the mediated state-changing boundary.
+Current Gate: RM-232 passed local validation; remote evidence is pending for its checkpoint. RM-235 is active; cross-layer enhancement journeys and failure injection must be exercised with explicit limits and no unverified production claims.
 
-CI: PASS through RM-228 checkpoint afb6394 in run 32661874586; RM-234 checkpoint 9fe015d in run 32661326399; both passed all five jobs. RM-229 and RM-231 local gates pass; remote evidence is pending for the latest checkpoints. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-228 checkpoint afb6394 in run 32661874586; RM-234 checkpoint 9fe015d in run 32661326399; both passed all five jobs. RM-229, RM-231, and RM-232 local gates pass; remote evidence is pending for the latest checkpoints. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
@@ -24,7 +24,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement RM-232 agent analytical substrate and guardrails; RM-235 remains blocked until RM-232 and all prior dependencies pass.
+Next Candidates: Execute RM-235 full enhancement E2E/adversarial validation; RM-236 remains blocked until RM-235 passes.
 
 ### RM-230 closure and RM-234 activation - 2026-08-24
 
@@ -49,6 +49,12 @@ Next Candidates: Implement RM-232 agent analytical substrate and guardrails; RM-
 - RM-231 local implementation is complete: Web static/unit/build passes with 34 test files and 92 tests; Playwright passes 34 tests with 2 existing desktop-only skips across Strategy, What-if, role, mobile, and accessibility flows.
 - Research evidence is lineage-first and read-only. No experiment campaign, production ranking, scientific novelty claim, or artifact mutation is introduced.
 - Enhancement is now 24/27 and repository total is 110/113. RM-232 is active.
+
+### RM-232 closure and RM-235 activation - 2026-08-24
+
+- RM-232 local implementation is complete: Compute static/contract/determinism/archive/mart/semantic gates pass with 236 tests at 95.28% coverage.
+- Agent analytical tools are read-only, role-granted, audited, and budgeted. Unknown state-changing tools are rejected and deterministic fallback remains available.
+- Enhancement is now 25/27 and repository total is 111/113. RM-235 is active.
 
 ### RM-228 closure and RM-229 activation - 2026-08-24
 
