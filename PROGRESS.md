@@ -6,25 +6,25 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 11 / 27 tasks passed (RM-210 through RM-220; RM-221 in progress; RM-222 through RM-236 pending)
+Enhancement Progress: 12 / 27 tasks passed (RM-210 through RM-221; RM-222 in progress; RM-223 through RM-236 pending)
 
-Repository Total: 97 / 113 tasks passed
+Repository Total: 98 / 113 tasks passed
 
-Current Task: RM-221 - Add delay attribution accounting waterfall
+Current Task: RM-222 - Build multi-city geo operations foundation
 
 Last Completed: RM-219 - Build honest ETA intelligence foundation
 
-Current Gate: RM-220 passed local and remote validation in Actions run 32652719384. RM-221 is validating; local Compute 208/208 at 95.29% and full available gate pass. Delay accounting must reconcile observed duration and remain explicitly descriptive rather than causal.
+Current Gate: RM-221 passed local and remote validation in Actions run 32653393681. RM-222 is active; multi-city geo must use explicit DEMO/SIMULATION/REPLAY/BENCHMARK labels and bounded viewport semantics.
 
-CI: PASS through RM-220 checkpoint 7f7af74 in run 32652719384 with all five jobs; RM-219 run 32651955908 and RM-218 run 32651238530 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-221 checkpoint 88cdafa in run 32653393681 with all five jobs; RM-220 run 32652719384 and RM-219 run 32651955908 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely through RM-220 - Java 80/80, Python 201 / 95.23%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32652719384. RM-221 local regression is 208 / 95.29% and awaiting remote validation.
+Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32653393681.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Complete RM-221 delay attribution accounting waterfall; RM-233 remains independently dependency-eligible.
+Next Candidates: Complete RM-222 multi-city geo operations foundation; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -597,3 +597,11 @@ The task is now passed and RM-120 is the active implementation.
 - Local Compute/full gate passes 208 tests at 95.29%; strict mypy/Ruff/format,
   contracts, determinism, archive, marts, and semantic-metrics gates pass.
   RM-221 is validating pending commit and remote GitHub Actions evidence.
+
+### RM-221 closure and RM-222 activation - 2026-08-24
+- RM-221 checkpoint `88cdafa` passed all five GitHub Actions jobs in run
+  `32653393681`; reconciliation, residual, missing-component, and clock-domain
+  boundaries are fully validated as descriptive accounting only.
+- Enhancement is now 12/27 and repository total is 98/113. RM-222 is active to
+  build a bounded multi-city geo operations foundation with explicit data-source
+  and zoom semantics.

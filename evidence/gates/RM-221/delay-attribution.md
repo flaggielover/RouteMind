@@ -1,8 +1,8 @@
 # RM-221 Delay Attribution Accounting Evidence
 
 Date: 2026-08-24
-Implementation checkpoint: pending commit
-GitHub Actions: pending
+Implementation checkpoint: 88cdafa
+GitHub Actions: PASS - run 32653393681 (all five jobs)
 
 ## Scope
 
@@ -41,5 +41,6 @@ business-state owner. Clock-domain checks protect replay/live separation.
 
 ## Remote validation
 
-The implementation checkpoint and GitHub Actions run will be recorded here
-after the commit is pushed and all required jobs pass.
+GitHub Actions run `32653393681` passed the Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `88cdafa`.

@@ -1270,12 +1270,12 @@
       "phase": "P26",
       "priority": "medium",
       "depends_on": ["RM-219", "RM-220"],
-        "status": "validating",
+        "status": "passed",
       "acceptance": ["Per-order and aggregate delay components reconcile to observed duration", "Output is labeled accounting decomposition rather than causal inference", "Missing components and clock-domain mismatches are explicit"],
       "gates": ["L2-analytics", "L6-data-quality", "L4-operations"],
       "evidence": ["evidence/gates/RM-221/delay-attribution.md"],
       "blocked_by": [],
-        "notes": "Local implementation complete and validating: Compute 208 tests at 95.29% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, full available gate, explicit missing components, residuals, and clock-domain mismatch status. The waterfall is descriptive accounting only; GitHub Actions validation remains before pass."
+        "notes": "Passed in checkpoint 88cdafa after Compute 208 tests at 95.29% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, full available gate, explicit missing components, residuals, and clock-domain mismatch status. The waterfall is descriptive accounting only. GitHub Actions run 32653393681 passed all five jobs. RM-222 is now active."
     },
     {
       "id": "RM-222",
@@ -1283,12 +1283,12 @@
       "phase": "P27",
       "priority": "high",
       "depends_on": ["RM-210", "RM-211"],
-      "status": "pending",
+        "status": "in_progress",
       "acceptance": ["National and multi-city views use clearly labeled DEMO, SIMULATION, REPLAY, or BENCHMARK data", "Aggregated volume, supply, risk, and strategy signals are coordinate-backed", "Viewport and zoom semantics avoid rendering raw points at national scale"],
       "gates": ["L4-web", "L6-geospatial", "accessibility-review"],
       "evidence": ["evidence/gates/RM-222/national-geo.md"],
       "blocked_by": [],
-      "notes": "The surface must not imply nationwide production operation."
+        "notes": "Activated after RM-221 passed. The surface must not imply nationwide production operation; all data sources and viewport semantics remain explicit."
     },
     {
       "id": "RM-223",
