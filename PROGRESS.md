@@ -6,25 +6,25 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 13 / 27 tasks passed (RM-210 through RM-222; RM-223 validating; RM-224 through RM-236 pending)
+Enhancement Progress: 14 / 27 tasks passed (RM-210 through RM-223; RM-224 in progress; RM-225 through RM-236 pending)
 
-Repository Total: 99 / 113 tasks passed
+Repository Total: 100 / 113 tasks passed
 
-Current Task: RM-223 - Add city and zone operational drilldown
+Current Task: RM-224 - Add data-backed arc and flow visualization
 
-Last Completed: RM-222 - Build multi-city geo operations foundation
+Last Completed: RM-223 - Add city and zone operational drilldown
 
-Current Gate: RM-223 local implementation validation passed: Web 62 unit/build, 34 browser passes with 2 existing skips, Java 80/80, and Python 208 at 95.29%. The local Docker Compose probe is externally unresponsive; remote Actions validation is pending for the checkpoint.
+Current Gate: RM-223 passed local and remote validation in Actions run 32655392123. RM-224 is active; flow visualization must derive direction, volume, recency, and confidence from analytical records and expose honest empty states.
 
-CI: PASS through RM-222 checkpoint 1a6f2fb in run 32654207318 with all five jobs; RM-221 run 32653393681 and RM-220 run 32652719384 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-223 checkpoint c3f5587 in run 32655392123 with all five jobs; RM-222 run 32654399976 (closure docs) and implementation run 32654207318, RM-221 run 32653393681, and RM-220 run 32652719384 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS for all non-Docker local gates - Java 80/80, Python 208 / 95.29%, Web 62 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, and repository controls. Docker Compose config is pending local engine recovery and will be verified by the remote control-plane/Compose job.
+Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 62 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32655392123. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and push RM-223, observe all five Actions jobs, then activate RM-224; RM-233 remains independently dependency-eligible.
+Next Candidates: Implement RM-224 data-backed arc and flow visualization; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -635,3 +635,11 @@ The task is now passed and RM-120 is the active implementation.
   existing desktop-only skips. Java 80/80 and Python 208 at 95.29% pass.
   Local Docker Compose validation is externally blocked by an unresponsive
   Docker Desktop engine; remote Actions validation is pending.
+
+### RM-223 closure and RM-224 activation - 2026-08-24
+- Checkpoint `c3f5587` passed all five GitHub Actions jobs in run
+  `32655392123`, including the remote Compose validation that was unavailable
+  from the local Docker engine.
+- Enhancement is now 14/27 and repository total is 100/113. RM-224 is active
+  to add analytical-record-backed arcs and flow direction with explicit units,
+  confidence, recency, and honest empty states.

@@ -1296,12 +1296,12 @@
       "phase": "P27",
       "priority": "high",
       "depends_on": ["RM-222"],
-      "status": "validating",
+      "status": "passed",
       "acceptance": ["City/zone views show orders, merchants, couriers, service areas, density, supply, risk, and routes from real snapshot data", "Aggregation/clustering changes with zoom and handles empty/stale data", "Legend, units, and mode labels are visible"],
       "gates": ["L4-web", "L6-geospatial", "L4-mobile-closure"],
       "evidence": ["evidence/gates/RM-223/city-zone-drilldown.md"],
       "blocked_by": [],
-      "notes": "Implementation complete and local Web/Java/Python/browser evidence passes. City/zone metrics are snapshot-derived with explicit source, freshness, units, zoom aggregation, and honest empty/stale/unavailable states. Awaiting checkpoint commit and remote Actions validation; local Docker Compose probe is externally unresponsive."
+      "notes": "Passed in checkpoint c3f5587 after Web 62 unit tests/build, 34 browser passes with 2 existing desktop-only skips, Java 80/80, and Python 208 at 95.29%. City/zone metrics are snapshot-derived with explicit source, freshness, units, zoom aggregation, and honest empty/stale/unavailable states. GitHub Actions run 32655392123 passed all five jobs, including control-plane/Compose validation. RM-224 is now active."
     },
     {
       "id": "RM-224",
@@ -1309,12 +1309,12 @@
       "phase": "P27",
       "priority": "medium",
       "depends_on": ["RM-211", "RM-223"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Aggregated city/zone/cluster flows are derived from analytical records", "Volume, recency/confidence, and direction have defined units", "Interaction reveals the underlying metric/evidence and empty state is honest"],
       "gates": ["L4-web", "L6-geospatial", "L6-evidence-audit"],
       "evidence": ["evidence/gates/RM-224/arc-flow.md"],
       "blocked_by": [],
-      "notes": "Decorative arcs without data lineage are not accepted."
+      "notes": "Activated after RM-223 passed. Decorative arcs without analytical lineage are not accepted; derive direction, volume, recency, and confidence from existing flow records."
     },
     {
       "id": "RM-225",

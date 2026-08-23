@@ -1,8 +1,8 @@
 # RM-223 City and Zone Operational Drilldown Evidence
 
 Date: 2026-08-24
-Implementation checkpoint: pending commit
-GitHub Actions: pending remote validation
+Implementation checkpoint: c3f5587
+GitHub Actions: PASS - run 32655392123 (all five jobs)
 
 ## Scope
 
@@ -23,10 +23,10 @@ replay, simulation, stale, empty, and unavailable snapshots.
 - `./scripts/business-api.ps1 -Action test` - PASS, Java 80 tests.
 - `./scripts/compute-api.ps1 -Action check` - PASS, Python 208 tests at
   95.29% coverage, schemas, formatting, lint, and determinism evidence.
-- `./scripts/verify.ps1` reached all repository checks before the local
-  Docker Compose probe; `docker compose config --quiet` could not complete
-  because the local Docker Desktop engine pipe was unresponsive. The remote
-  control-plane/Compose job remains the authoritative Compose validation.
+- `./scripts/verify.ps1` reached all repository checks before the local Docker
+  Compose probe; `docker compose config --quiet` could not complete because
+  the local Docker Desktop engine pipe was unresponsive. The remote
+  control-plane/Compose job passed in Actions run `32655392123`.
 
 ## Boundary and limitations
 
@@ -37,5 +37,6 @@ unavailable sources render honest states rather than inferred zero supply.
 
 ## Remote validation
 
-To be filled after the checkpoint is pushed and all five GitHub Actions jobs
-complete successfully.
+GitHub Actions run `32655392123` passed the Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `c3f5587`.
