@@ -239,7 +239,9 @@ class BusinessApiApplicationTests {
 				.andExpect(jsonPath("$.version").value(2))
 				.andExpect(jsonPath("$.replayed").value(false))
 				.andExpect(jsonPath("$.contractVersion").value("v1"))
-				.andExpect(jsonPath("$.fallbackUsed").value(true));
+				.andExpect(jsonPath("$.fallbackUsed").value(true))
+				.andExpect(jsonPath("$.leaseId").isNotEmpty())
+				.andExpect(jsonPath("$.leaseGeneration").value(1));
 
 		mockMvc.perform(post("/api/v1/orders/{orderId}/dispatch-assignment", orderId)
 				.header("Idempotency-Key", "rm136-assignment")
@@ -267,6 +269,57 @@ class BusinessApiApplicationTests {
 		assertThat(jdbcTemplate.queryForObject(
 				"select payload_json from routemind.outbox_messages where event_type = 'dispatch.assignment.applied'",
 				String.class)).contains("risk-aware", "travel-provider-timeout", "inputDigest");
+		assertThat(jdbcTemplate.queryForObject(
+				"select lease_generation from routemind.dispatch_assignment_audits where idempotency_key = 'rm136-assignment'",
+				Long.class)).isEqualTo(1L);
+	}
+
+	@Test
+	void assignmentLeasePreventsOneCourierBeingCommittedToTwoOrders() throws Exception {
+		String courierId = java.util.UUID.randomUUID().toString();
+		String firstOrder = createConfirmedOrder("lease-order-1");
+		String secondOrder = createConfirmedOrder("lease-order-2");
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/dispatch-assignment", firstOrder)
+				.header("Idempotency-Key", "lease-assignment-1")
+				.contentType("application/json").content(dispatchBody(courierId, "lease-decision-1", 1)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.status").value("ASSIGNED"));
+
+		mockMvc.perform(post("/api/v1/orders/{orderId}/dispatch-assignment", secondOrder)
+				.header("Idempotency-Key", "lease-assignment-2")
+				.contentType("application/json").content(dispatchBody(courierId, "lease-decision-2", 1)))
+				.andExpect(status().isConflict())
+				.andExpect(jsonPath("$.code").value("courier_already_assigned"));
+
+		assertThat(jdbcTemplate.queryForObject(
+				"select count(*) from routemind.dispatch_assignment_leases where courier_id = ? and state = 'COMMITTED'",
+				Integer.class, java.util.UUID.fromString(courierId))).isOne();
+		assertThat(jdbcTemplate.queryForObject(
+				"select count(*) from routemind.dispatch_assignment_lease_events where courier_id = ?",
+				Integer.class, java.util.UUID.fromString(courierId))).isEqualTo(2);
+	}
+
+	private String createConfirmedOrder(String key) throws Exception {
+		String create = mockMvc.perform(post("/api/v1/orders")
+				.header("Idempotency-Key", key + "-create")
+				.header("X-Actor", "customer"))
+				.andExpect(status().isCreated()).andReturn().getResponse().getContentAsString();
+		String orderId = com.fasterxml.jackson.databind.json.JsonMapper.builder().build()
+				.readTree(create).get("orderId").asText();
+		transition(mockMvc, orderId, key + "-confirm", "customer", "CONFIRMED", 0)
+				.andExpect(status().isOk());
+		return orderId;
+	}
+
+	private static String dispatchBody(String courierId, String decisionId, long expectedVersion) {
+		return "{\"requestId\":\"" + decisionId + "\",\"contractVersion\":\"v1\","
+				+ "\"courierId\":\"" + courierId + "\",\"strategy\":\"risk-aware\","
+				+ "\"strategyVersion\":\"1.0.0\",\"inputDigest\":\""
+				+ "0000000000000000000000000000000000000000000000000000000000000000"
+				+ "\",\"outputDigest\":\""
+				+ "1111111111111111111111111111111111111111111111111111111111111111"
+				+ "\",\"fallbackUsed\":false,\"expectedOrderVersion\":" + expectedVersion + "}";
 	}
 
 	@Test
@@ -330,9 +383,9 @@ class BusinessApiApplicationTests {
 	@Test
 	void flywayOwnsTheApplicationSchema() {
 		Integer migrationCount = jdbcTemplate.queryForObject(
-				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10') and success = true",
+				"select count(*) from routemind.flyway_schema_history where version in ('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11') and success = true",
 				Integer.class);
 
-		assertThat(migrationCount).isEqualTo(10);
+		assertThat(migrationCount).isEqualTo(11);
 	}
 }
