@@ -1049,12 +1049,12 @@
       "phase": "P21",
       "priority": "critical",
       "depends_on": ["RM-200", "RM-203"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Durable lease state prevents two competing decisions from committing one courier", "Stale generation, duplicate commit, expiry, retry, release, and concurrent decisions are tested", "Java remains authority and lease transitions are auditable with bounded recovery"],
       "gates": ["L2-concurrency", "L3-postgres", "L5-failure", "L4-dispatch"],
       "evidence": ["evidence/gates/RM-204/assignment-leases.md"],
       "blocked_by": [],
-      "notes": "Passed in implementation checkpoint pending CI closure: V11 PostgreSQL lease/current-state and append-only transition events, Java pessimistic courier-row locking, explicit 30s expiry, generation checks, idempotent commit/release, and cross-order courier competition evidence. Redis is not durable truth."
+      "notes": "Passed in checkpoint e3b19e7 with V11 PostgreSQL lease/current-state and append-only transition events, Java pessimistic courier-row locking, explicit 30s expiry, generation checks, idempotent commit/release, and cross-order courier competition evidence. Local Java 66 tests pass; GitHub Actions run 32627357369 passed all five jobs. Redis is not durable truth."
     },
     {
       "id": "RM-205",
@@ -1062,12 +1062,12 @@
       "phase": "P21",
       "priority": "critical",
       "depends_on": ["RM-200", "RM-203"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Meaningful decisions have stable IDs and mandatory core provenance", "Canonical input/output snapshots include strategy, reference-data identity, clock domain, and digests", "Extended payloads are bounded or archived asynchronously without hot-path regression"],
       "gates": ["L3-postgres", "L4-dispatch", "L6-lineage", "L6-evidence-audit"],
       "evidence": ["evidence/gates/RM-205/decision-ledger.md"],
       "blocked_by": [],
-      "notes": "Reuse Outbox, deduplication, and content-addressing; do not introduce Kafka or a data lake."
+      "notes": "Active after RM-204 closure. Reuse Outbox, deduplication, and content-addressing; do not introduce Kafka or a data lake."
     },
     {
       "id": "RM-206",

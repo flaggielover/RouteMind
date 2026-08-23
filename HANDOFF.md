@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Architectural Hardening P20
 
-Current Task: RM-204 - Implement authoritative assignment lease protocol
+Current Task: RM-205 - Add durable dispatch decision ledger and content-addressed snapshots
 
-Task Status: RM-203 is fully validated locally and in Actions run 32626153743; RM-204 is now `in_progress`; Round 2 remains fully passed
+Task Status: RM-204 is fully validated locally with Java 66 tests and in Actions run 32627357369; RM-205 is now `in_progress`; Round 2 remains fully passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
