@@ -40,12 +40,12 @@ export function SimulationControlPanel({
     setStrategy(snapshot.strategy);
   }, [snapshot.speed, snapshot.scenarioId, snapshot.seed, snapshot.strategy]);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
       mounted.current = false;
-    },
-    [],
-  );
+    };
+  }, []);
 
   const issue = async (
     action: SimulationAction,

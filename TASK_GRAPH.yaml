@@ -971,12 +971,12 @@
       "phase": "P18",
       "priority": "medium",
       "depends_on": ["RM-124", "RM-156", "RM-162"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Loading, empty, error, stale, drawers, forms, charts, maps, and focus states are polished and accessible", "Desktop and mobile workflows remain usable across role surfaces", "Playwright and axe evidence covers live/demo/replay/simulation states"],
       "gates": ["L4-ux-closure", "accessibility-review", "L4-mobile-closure"],
       "evidence": ["evidence/gates/RM-181/ux-closure.md"],
       "blocked_by": [],
-      "notes": "Presentation improvements must not hide source truth or errors."
+      "notes": "Presentation improvements must not hide source truth or errors. RM-181 is active after RM-180 Actions run 32613965768 passed all five jobs."
     },
     {
       "id": "RM-190",

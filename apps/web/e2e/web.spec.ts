@@ -166,6 +166,8 @@ test.describe("role-aware web smoke", () => {
       "Comparison ready",
     );
     await expect(page.getByText("Assignment rate")).toBeVisible();
+    await expect(page.getByRole("group", { name: "Recorded strategy metrics" })).toBeVisible();
+    await expect(page.getByRole("group", { name: "Assignment rate comparison" })).toBeVisible();
     await expect(page.getByText("Unavailable from recorded run").first()).toBeVisible();
     await page.screenshot({ path: "test-results/what-if-comparison.png", fullPage: true });
   });
@@ -192,6 +194,29 @@ test.describe("role-aware web smoke", () => {
     await page.screenshot({ path: "test-results/operations-mobile.png", fullPage: true });
   });
 
+  test("keeps map, decision details, and queue filters keyboard reachable", async ({ page }) => {
+    await page.goto("/operations");
+    await selectDemo(page);
+    await page.getByRole("button", { name: "Select order RM-2042" }).focus();
+    await expect(page.getByRole("button", { name: "Select order RM-2042" })).toBeFocused();
+    await page.getByRole("button", { name: "Open decision details" }).click();
+    await expect(page.getByRole("region", { name: "Decision details" })).toBeVisible();
+    await page.getByRole("button", { name: "Filter board" }).click();
+    await page.locator(".operations-filters select").nth(1).selectOption("OUT_FOR_DELIVERY");
+    await expect(page.getByRole("button", { name: "Show all orders" })).toBeEnabled();
+    await page.getByRole("button", { name: "Show all orders" }).click();
+    await expect(page.getByRole("button", { name: "All orders visible" })).toBeDisabled();
+  });
+
+  test("opens the strategy registry as an inspectable local surface", async ({ page }) => {
+    await page.goto("/strategy");
+    await expect(page.getByRole("button", { name: "Open strategy registry" })).toBeVisible();
+    await page.getByRole("button", { name: "Open strategy registry" }).click();
+    await expect(page.getByRole("region", { name: "Strategy registry" })).toContainText(
+      "weighted-greedy",
+    );
+  });
+
   test("keeps role actions reachable through the mobile navigation drawer", async ({ page }) => {
     if (test.info().project.name !== "mobile") test.skip();
     await page.goto("/customer");
@@ -207,6 +232,168 @@ test.describe("role-aware web smoke", () => {
     await openMobileNavigation(page);
     await page.getByRole("link", { name: /Customer/ }).click();
     await expect(page.getByRole("button", { name: "Create order" })).toBeVisible();
+  });
+
+  test("keeps live loading and unavailable states explicit and accessible", async ({ page }) => {
+    let releaseOperations!: () => void;
+    const operationsPending = new Promise<void>((resolve) => {
+      releaseOperations = resolve;
+    });
+    await page.route("**/api/v1/operations/snapshot", async (route) => {
+      await operationsPending;
+      await route.fulfill({ status: 503, contentType: "application/json", body: "{}" });
+    });
+    await page.goto("/operations");
+    await expect(
+      page.getByRole("status").filter({ hasText: "Loading operational projections" }),
+    ).toBeVisible();
+    releaseOperations();
+    await expect(page.getByText("Live unavailable: HTTP 503")).toBeVisible();
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations, "live unavailable accessibility violations").toEqual([]);
+  });
+
+  test("surfaces stale courier data and stale realtime cursors", async ({ page }) => {
+    const operations = {
+      source: "live",
+      generatedAt: "2026-08-23T10:00:00.000Z",
+      orders: [],
+      parties: [],
+      courierLocations: [
+        {
+          courierId: "courier-stale",
+          latitude: 31.23,
+          longitude: 121.47,
+          observedAt: "2026-08-23T09:55:00.000Z",
+        },
+      ],
+    };
+    await page.route("**/api/v1/operations/snapshot", (route) =>
+      route.fulfill({ json: operations }),
+    );
+    await page.route("**/api/v1/dispatch/snapshot", (route) =>
+      route.fulfill({
+        json: {
+          source: "live",
+          strategy: "weighted-greedy",
+          strategy_version: "1.0.0",
+          selected_courier: null,
+          score: null,
+          rationale: ["No fresh courier candidates"],
+          latency_millis: 4,
+          trace_id: "trace-stale",
+        },
+      }),
+    );
+    await page.addInitScript(() => {
+      class StaleEventSource {
+        static CONNECTING = 0;
+        static OPEN = 1;
+        static CLOSED = 2;
+        readyState = StaleEventSource.CONNECTING;
+        onopen: ((event: Event) => void) | null = null;
+        onerror: ((event: Event) => void) | null = null;
+        onmessage: ((event: MessageEvent<string>) => void) | null = null;
+        listeners = new Map<string, Array<(event: MessageEvent<string>) => void>>();
+
+        constructor() {
+          window.setTimeout(() => {
+            this.readyState = StaleEventSource.OPEN;
+            this.onopen?.(new Event("open"));
+            const stale = JSON.stringify({
+              schemaVersion: "v1",
+              cursor: "1",
+              event: {
+                specVersion: "1.0",
+                eventId: "stale-event",
+                eventType: "order.created",
+                occurredAt: "2026-08-23T10:00:01.000Z",
+                producer: "test",
+                aggregateId: "order-stale",
+                aggregateVersion: 1,
+                correlationId: "correlation-stale",
+                causationId: null,
+                traceId: "trace-stale",
+                payload: { orderId: "order-stale", status: "CREATED" },
+              },
+              replay: false,
+              stale: true,
+              staleReason: "Retention boundary reached",
+            });
+            this.listeners
+              .get("order.created")
+              ?.forEach((listener) => listener({ data: stale } as MessageEvent<string>));
+          }, 30);
+        }
+
+        addEventListener(type: string, listener: (event: MessageEvent<string>) => void) {
+          this.listeners.set(type, [...(this.listeners.get(type) ?? []), listener]);
+        }
+
+        close() {
+          this.readyState = StaleEventSource.CLOSED;
+        }
+      }
+      Object.defineProperty(window, "EventSource", { configurable: true, value: StaleEventSource });
+    });
+    await page.goto("/operations");
+    await expect(page.getByText("Operational projections degraded")).toBeVisible();
+    await expect(page.getByText(/courier location stale/)).toBeVisible();
+    await expect(page.getByRole("status").filter({ hasText: "Stream stale" })).toBeVisible();
+    await expect(page.getByText("Retention boundary reached")).toBeVisible();
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations, "stale live accessibility violations").toEqual([]);
+  });
+
+  test("surfaces simulation control errors without losing the form state", async ({ page }) => {
+    await page.route("**/api/v1/twin/state", (route) =>
+      route.fulfill({
+        json: {
+          scenario_id: "control-default",
+          seed: 7,
+          strategy: "nearest",
+          strategy_version: "1.0.0",
+          status: "paused",
+          speed: 1,
+          simulated_time_seconds: 0,
+          tick: 0,
+          generation: 0,
+          event_count: 0,
+          last_command_id: null,
+          replay_digest: "simulation-digest",
+        },
+      }),
+    );
+    await page.route("**/api/v1/twin/control", (route) =>
+      route.fulfill({ status: 503, contentType: "application/json", body: "{}" }),
+    );
+    await page.goto("/operations");
+    await page.getByRole("combobox", { name: "Data source mode" }).selectOption("simulation");
+    await expect(page.getByRole("heading", { name: "Control the scenario clock." })).toBeVisible();
+    await page.getByRole("spinbutton", { name: "Step seconds" }).fill("45");
+    const step = page.getByRole("button", { name: "Step", exact: true });
+    await expect(step).toBeEnabled();
+    await step.click();
+    await expect(page.locator(".simulation-panel").getByRole("alert")).toContainText("HTTP 503");
+    await expect(page.getByRole("spinbutton", { name: "Step seconds" })).toHaveValue("45");
+  });
+
+  test("keeps mobile navigation focus contained and returns it to the toggle", async ({ page }) => {
+    if (test.info().project.name !== "mobile") test.skip();
+    await page.goto("/operations");
+    await selectDemo(page);
+    const toggle = page.getByRole("button", { name: "Open workspace navigation" });
+    await toggle.click();
+    const navigation = page.getByRole("navigation", { name: "RouteMind navigation" });
+    await expect(navigation).toBeVisible();
+    const links = navigation.getByRole("link");
+    await expect(links.first()).toBeFocused();
+    await page.keyboard.press("Shift+Tab");
+    await expect(links.last()).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(links.first()).toBeFocused();
+    await page.keyboard.press("Escape");
+    await expect(toggle).toBeFocused();
   });
 
   test("passes the accessibility smoke gate for every role route", async ({ page }) => {

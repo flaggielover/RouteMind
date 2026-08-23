@@ -10,7 +10,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { DataAvailability, DataSourceMode, Role, ServiceHealth } from "../domain/model";
 import type { RealtimeConnectionState } from "../data/realtime";
 import { StatusPill } from "./StatusPill";
@@ -46,14 +46,37 @@ export function AppShell({
 }: AppShellProps) {
   const unavailable = health.filter((item) => item.status === "unavailable").length;
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const mobileNavToggleRef = useRef<HTMLButtonElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!mobileNavOpen) return;
+    const firstLink = mobileNavRef.current?.querySelector<HTMLAnchorElement>("a");
+    firstLink?.focus();
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setMobileNavOpen(false);
     };
+    const keepFocusInNavigation = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+      const links = mobileNavRef.current?.querySelectorAll<HTMLAnchorElement>("a");
+      if (!links?.length) return;
+      const first = links[0];
+      const last = links[links.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
     window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
+    window.addEventListener("keydown", keepFocusInNavigation);
+    return () => {
+      window.removeEventListener("keydown", closeOnEscape);
+      window.removeEventListener("keydown", keepFocusInNavigation);
+      mobileNavToggleRef.current?.focus();
+    };
   }, [mobileNavOpen]);
 
   return (
@@ -71,6 +94,7 @@ export function AppShell({
           </div>
           <button
             className="mobile-nav-toggle"
+            ref={mobileNavToggleRef}
             type="button"
             aria-expanded={mobileNavOpen}
             aria-controls="role-navigation"
@@ -84,6 +108,7 @@ export function AppShell({
         <div className="sidebar-section-label">Workspace</div>
         <nav
           className={`role-nav ${mobileNavOpen ? "mobile-nav-open" : ""}`}
+          ref={mobileNavRef}
           id="role-navigation"
           aria-label="RouteMind navigation"
         >
@@ -105,14 +130,6 @@ export function AppShell({
           <div className="environment-chip">
             <span className="live-dot" /> local control plane
           </div>
-          <button
-            className="icon-button sidebar-menu"
-            type="button"
-            title="Open workspace settings"
-            aria-label="Open workspace settings"
-          >
-            <Menu size={17} />
-          </button>
         </div>
       </aside>
       <main className="main-column">

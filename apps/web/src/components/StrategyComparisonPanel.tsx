@@ -139,12 +139,21 @@ export function StrategyComparisonPanel({ onRun }: StrategyComparisonPanelProps)
             <code>comparison {comparison.comparisonDigest.slice(0, 12)}</code>
             <small>{comparison.claimLabel}</small>
           </div>
-          <div className="strategy-visualization">
+          <div
+            className="strategy-visualization"
+            role="group"
+            aria-label="Recorded strategy metrics"
+          >
             {actualMetrics.map(([label, key]) => {
               const values = comparison.results.map((result) => metricValue(result, key));
               const max = Math.max(...values, 0.0001);
               return (
-                <div className="strategy-metric-visual" key={key}>
+                <div
+                  className="strategy-metric-visual"
+                  key={key}
+                  role="group"
+                  aria-label={`${label} comparison`}
+                >
                   <div className="strategy-metric-heading">
                     <strong>{label}</strong>
                     <small>actual recorded metric</small>
@@ -152,7 +161,12 @@ export function StrategyComparisonPanel({ onRun }: StrategyComparisonPanelProps)
                   {comparison.results.map((result) => {
                     const value = metricValue(result, key);
                     return (
-                      <div className="strategy-bar-row" key={`${key}-${result.variantId}`}>
+                      <div
+                        className="strategy-bar-row"
+                        key={`${key}-${result.variantId}`}
+                        role="group"
+                        aria-label={`${result.label}: ${formatMetric(value, key)}`}
+                      >
                         <span>{result.label}</span>
                         <div className="strategy-bar-track" aria-hidden="true">
                           <span style={{ width: `${Math.max(2, (value / max) * 100)}%` }} />

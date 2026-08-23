@@ -259,6 +259,7 @@ function OperationsView({
   const [lifecycleFilter, setLifecycleFilter] = useState("all");
   const [exceptionsOnly, setExceptionsOnly] = useState(false);
   const [freshOnly, setFreshOnly] = useState(false);
+  const [decisionDetailsOpen, setDecisionDetailsOpen] = useState(false);
   const selectedOrder = snapshot.orders.length ? findOrder(snapshot, selectedOrderId) : undefined;
   const filteredOrders = snapshot.orders.filter((order) => {
     const courier = snapshot.couriers.find(
@@ -284,6 +285,14 @@ function OperationsView({
   const zones = new Set(snapshot.couriers.map((courier) => courier.zone).filter(Boolean)).size;
   const openExceptions = countOpenExceptions(snapshot);
   const hasDispatchLatency = snapshot.availability === "ready" && snapshot.dispatch.latencyMs > 0;
+  const filtersActive =
+    zoneFilter !== "all" || lifecycleFilter !== "all" || exceptionsOnly || freshOnly;
+  const clearFilters = () => {
+    setZoneFilter("all");
+    setLifecycleFilter("all");
+    setExceptionsOnly(false);
+    setFreshOnly(false);
+  };
   return (
     <div className="page-stack">
       <section className="page-intro">
@@ -503,12 +512,14 @@ function OperationsView({
           source={snapshot.source}
           generatedAt={snapshot.generatedAt}
         />
-        <OrderQueue
-          orders={filteredOrders}
-          selectedOrderId={selectedOrderId}
-          onSelectOrder={setSelectedOrderId}
-          availability={snapshot.availability}
-        />
+          <OrderQueue
+            orders={filteredOrders}
+            selectedOrderId={selectedOrderId}
+            onSelectOrder={setSelectedOrderId}
+            availability={snapshot.availability}
+            filtersActive={filtersActive}
+            onClearFilters={clearFilters}
+          />
       </section>
       <section className="secondary-grid">
         <section className="panel lifecycle-panel" aria-labelledby="lifecycle-title">
@@ -570,9 +581,41 @@ function OperationsView({
             </div>
           </dl>
           <ActivityStream snapshot={snapshot} realtime={realtime} />
-          <button className="text-button" type="button">
-            Open decision details <ArrowUpRight size={14} />
+          <button
+            className="text-button"
+            type="button"
+            aria-expanded={decisionDetailsOpen}
+            aria-controls="decision-details"
+            onClick={() => setDecisionDetailsOpen((open) => !open)}
+          >
+            {decisionDetailsOpen ? "Hide decision details" : "Open decision details"}{" "}
+            <ArrowUpRight size={14} />
           </button>
+          {decisionDetailsOpen && (
+            <div
+              className="decision-details"
+              id="decision-details"
+              role="region"
+              aria-label="Decision details"
+            >
+              <dl className="detail-list">
+                <div>
+                  <dt>Strategy version</dt>
+                  <dd>{snapshot.dispatch.version}</dd>
+                </div>
+                <div>
+                  <dt>Decision source</dt>
+                  <dd>
+                    {snapshot.source} · {formatFreshness(snapshot.generatedAt)}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Rationale</dt>
+                  <dd>{snapshot.dispatch.rationale}</dd>
+                </div>
+              </dl>
+            </div>
+          )}
         </section>
       </section>
       <section className="entity-drawers" aria-label="Selected entity details">
@@ -653,11 +696,15 @@ function OrderQueue({
   selectedOrderId,
   onSelectOrder,
   availability,
+  filtersActive,
+  onClearFilters,
 }: {
   orders: readonly Order[];
   selectedOrderId: string;
   onSelectOrder: (id: string) => void;
   availability: OperationsSnapshot["availability"];
+  filtersActive: boolean;
+  onClearFilters: () => void;
 }) {
   return (
     <section className="panel queue-panel" aria-labelledby="queue-title">
@@ -705,8 +752,13 @@ function OrderQueue({
           ))
         )}
       </div>
-      <button className="text-button" type="button">
-        View all orders <ArrowUpRight size={14} />
+      <button
+        className="text-button"
+        type="button"
+        disabled={!filtersActive}
+        onClick={onClearFilters}
+      >
+        {filtersActive ? "Show all orders" : "All orders visible"} <ArrowUpRight size={14} />
       </button>
     </section>
   );
@@ -743,6 +795,7 @@ function RolePage({
 }
 
 function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
+  const [registryOpen, setRegistryOpen] = useState(false);
   return (
     <RolePage
       eyebrow="Strategy lab / control"
@@ -803,9 +856,36 @@ function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
             <b>87.6</b>
             <span className="muted-label">Reference</span>
           </div>
-          <button className="text-button" type="button">
-            Open strategy registry <ArrowUpRight size={14} />
+          <button
+            className="text-button"
+            type="button"
+            aria-expanded={registryOpen}
+            aria-controls="strategy-registry"
+            onClick={() => setRegistryOpen((open) => !open)}
+          >
+            {registryOpen ? "Hide strategy registry" : "Open strategy registry"}{" "}
+            <ArrowUpRight size={14} />
           </button>
+          {registryOpen && (
+            <div
+              className="strategy-registry"
+              id="strategy-registry"
+              role="region"
+              aria-label="Strategy registry"
+            >
+              <p className="panel-subtitle">Registered locally for this control surface.</p>
+              <ul>
+                <li>
+                  <strong>weighted-greedy</strong>
+                  <span>v1.0.0 · active</span>
+                </li>
+                <li>
+                  <strong>nearest</strong>
+                  <span>v1.0.0 · baseline</span>
+                </li>
+              </ul>
+            </div>
+          )}
         </section>
       </section>
       <WhatIfComparisonPanel onRun={(variant) => whatIfDataSource.run(variant)} />
