@@ -30,6 +30,8 @@ from routemind_compute.api.schemas import (
     LocationIntegrityRequest,
     LocationIntegrityResponse,
     ParameterDefinitionResponse,
+    ReplayUpcastRequest,
+    ReplayUpcastResponse,
     RouteBenchExperimentRequest,
     SemanticMetricDefinitionResponse,
     ShadowEvaluateRequest,
@@ -47,6 +49,7 @@ from routemind_compute.api.schemas import (
     TwinControlResponse,
     TwinEventResponse,
     TwinStateResponse,
+    UpcastedEventResponse,
     WhatIfExperimentRequest,
     WhatIfExperimentResponse,
     WhatIfMetricResponse,
@@ -61,6 +64,11 @@ from routemind_compute.application.eta_calibration import (
     EtaCalibrationSample,
     calibrate,
     classify_sla_risk,
+)
+from routemind_compute.application.event_upcasting import (
+    EventUpcastError,
+    HistoricalEvent,
+    default_event_upcaster_registry,
 )
 from routemind_compute.application.execution import execution_provenance
 from routemind_compute.application.location_integrity import (
@@ -442,6 +450,36 @@ def twin_control(payload: TwinControlRequest, request: Request) -> TwinControlRe
         replayed=result.replayed,
         state=_twin_state_response(result.state, trace_id),
         events=tuple(_twin_event_response(event) for event in result.events),
+        trace_id=trace_id,
+    )
+
+
+@router.post("/api/v1/replay/upcast", response_model=ReplayUpcastResponse)
+def replay_upcast(payload: ReplayUpcastRequest, request: Request) -> ReplayUpcastResponse:
+    """Project immutable historical events into the current replay read model."""
+
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        events = tuple(HistoricalEvent.from_mapping(item.model_dump()) for item in payload.events)
+        projected = default_event_upcaster_registry().upcast_many(events)
+    except EventUpcastError as error:
+        raise HTTPException(
+            status_code=422,
+            detail={
+                "code": error.code,
+                "event_type": error.event_type,
+                "schema_version": error.schema_version,
+                "target_version": error.target_version,
+                "message": str(error),
+            },
+        ) from error
+    except (TypeError, ValueError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return ReplayUpcastResponse(
+        source="replay-compatibility",
+        events=tuple(
+            UpcastedEventResponse(**projection.as_read_model()) for projection in projected
+        ),
         trace_id=trace_id,
     )
 

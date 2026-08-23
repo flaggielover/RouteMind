@@ -1361,12 +1361,12 @@
       "phase": "P27",
       "priority": "medium",
       "depends_on": ["RM-210", "RM-211"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Twin event timeline and state charts expose seed, clock, scenario, and replay digest", "Simulation, replay, and benchmark modes are distinct", "Large event streams are bounded and empty/stale/error states are tested"],
       "gates": ["L2-compute", "L4-web", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-228/twin-visualization.md"],
       "blocked_by": [],
-      "notes": "Visualization consumes existing Twin contracts; it does not own simulation state."
+      "notes": "Activated after RM-234 passed. Visualization consumes existing Twin contracts; it does not own simulation state."
     },
     {
       "id": "RM-229",
@@ -1439,12 +1439,12 @@
       "phase": "P28",
       "priority": "high",
       "depends_on": ["RM-203", "RM-233"],
-      "status": "pending",
+      "status": "passed",
       "acceptance": ["Versioned historical events can be upcast into current read models", "Unknown/incompatible versions fail explicitly with evidence", "Replay preserves clock, reference-data, trace, and digest semantics"],
       "gates": ["L2-contracts", "L4-replay", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-234/event-upcasting.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-230 passed. Upcasters are pure compatibility adapters; original event records remain immutable."
+      "notes": "Passed in checkpoint pending after Compute 233 tests at 95.27% coverage, strict Ruff/mypy/contract/determinism/archive/mart/semantic gates. The read-only replay upcaster preserves event identity, clock, reference-data, trace, and replay digest semantics and fails explicitly on unsupported compatibility paths. RM-228 is now active."
     },
     {
       "id": "RM-235",

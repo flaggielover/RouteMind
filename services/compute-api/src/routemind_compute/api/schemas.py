@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -624,4 +624,50 @@ class TwinControlResponse(BaseModel):
     replayed: bool
     state: TwinStateResponse
     events: tuple[TwinEventResponse, ...]
+    trace_id: str
+
+
+class HistoricalEventRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    event_id: str = Field(min_length=1, max_length=256)
+    event_type: str = Field(min_length=1, max_length=160)
+    schema_version: str | int
+    event_time: datetime
+    clock_domain: Literal["WALL", "SIMULATED", "REPLAY"]
+    payload: dict[str, Any]
+    trace_id: str | None = Field(default=None, max_length=128)
+    reference_data_id: str | None = Field(default=None, max_length=256)
+    replay_digest: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+
+
+class ReplayUpcastRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    events: tuple[HistoricalEventRequest, ...] = Field(min_length=1, max_length=256)
+
+
+class UpcastedEventResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    event_id: str
+    event_type: str
+    schema_version: str
+    original_schema_version: str
+    upcast_path: tuple[str, ...]
+    event_time: datetime
+    clock_domain: Literal["WALL", "SIMULATED", "REPLAY"]
+    trace_id: str | None
+    reference_data_id: str | None
+    replay_digest: str | None
+    payload: dict[str, Any]
+    source_event_digest: str
+    read_model_digest: str
+
+
+class ReplayUpcastResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["replay-compatibility"]
+    events: tuple[UpcastedEventResponse, ...]
     trace_id: str
