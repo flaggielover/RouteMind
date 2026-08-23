@@ -1179,12 +1179,12 @@
       "phase": "P25",
       "priority": "high",
       "depends_on": ["RM-210"],
-      "status": "validating",
+      "status": "passed",
       "acceptance": ["Important HTTP, messaging, database, travel, solver, and decision boundaries preserve trace context", "Trace export is provider-neutral and optional locally", "Correlation, order, and decision identifiers are testable without a collector"],
       "gates": ["L2-observability", "L5-resilience", "L6-contracts"],
       "evidence": ["evidence/gates/RM-214/otel-tracing.md"],
       "blocked_by": [],
-      "notes": "Local implementation and focused/full runtime gates pass: W3C HTTP propagation, Java database/messaging/decision observations, Rabbit identity headers, and Python HTTP/travel/solver/verification spans are collector-free testable. Awaiting the implementation checkpoint and GitHub Actions before passed."
+      "notes": "Passed in checkpoint 9697a75 with local Java (71 tests), Compute (185 tests, 95.24% coverage), focused resilience, and repository gates. GitHub Actions run 32645791900 passed all five jobs. Export remains optional and no collector deployment is claimed. RM-215 is active."
     },
     {
       "id": "RM-215",
@@ -1192,12 +1192,12 @@
       "phase": "P25",
       "priority": "critical",
       "depends_on": ["RM-211", "RM-214"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Detect-only invariant checks expose status, last check, violations, and evidence", "Lease, assignment, projection, terminal-order, and decision-reference invariants are covered", "Repair is never silently applied without an explicit safe policy"],
       "gates": ["L5-reconciliation", "L6-evidence-audit", "L4-degraded-product"],
       "evidence": ["evidence/gates/RM-215/reconciliation.md"],
       "blocked_by": [],
-      "notes": "Initial mode is detect-only; Redis remains rebuildable hot state."
+      "notes": "Active after RM-214 passed. Initial mode is detect-only; Redis remains rebuildable hot state and repair is never implicit."
     },
     {
       "id": "RM-216",

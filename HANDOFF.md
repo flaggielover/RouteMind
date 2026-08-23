@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P25
 
-Current Task: RM-214 - Add useful end-to-end OpenTelemetry tracing boundaries
+Current Task: RM-215 - Add continuous reconciliation and invariant drift detection
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-213 are passed. RM-214 is validating locally with Java 71 and Compute 185 tests green. W3C context and the HTTP/database/messaging/travel/solver/decision boundaries are collector-free testable; implementation commit and GitHub Actions are pending. RM-214 unlocks critical RM-215; RM-216 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-214 are passed. RM-214 checkpoint 9697a75 and Actions run 32645791900 are green across all five jobs after Java 71, Compute 185, resilience, and control gates. RM-215 detect-only reconciliation is active; RM-216 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,14 +629,11 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-214 OpenTelemetry tracing validation. Do not mark it passed until
-  its implementation checkpoint has a green five-job GitHub Actions run.
-- Local evidence is `evidence/gates/RM-214/otel-tracing.md`. Java passes 71
-  tests; Compute passes 185 tests at 95.24% coverage plus contract,
-  determinism, archive, mart, and semantic-metric gates.
-- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 4/27.
-  Repository total is 90/113. RM-213 closure Actions run `32644103060` is green.
-- After RM-214 passes, immediately activate critical RM-215 reconciliation and
-  invariant drift detection. RM-216 is independently eligible but does not
-  supersede the RM-215 critical-path unlock.
+- Resume at RM-215 continuous reconciliation and invariant drift detection.
+  Implement detect-only checks before any explicit repair policy.
+- RM-214 evidence is `evidence/gates/RM-214/otel-tracing.md`; checkpoint
+  `9697a75` and GitHub Actions run `32645791900` passed all five jobs.
+- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 5/27.
+  Repository total is 91/113. RM-216 is independently eligible but RM-215 is
+  the active critical-path task.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.

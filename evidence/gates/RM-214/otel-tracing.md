@@ -1,8 +1,8 @@
 # RM-214 OpenTelemetry Tracing Evidence
 
 Date: 2026-08-23
-Implementation checkpoint: pending commit
-GitHub Actions: pending implementation run
+Implementation checkpoint: `9697a75`
+GitHub Actions: `32645791900` - PASS across all five jobs
 
 ## Scope
 
@@ -45,3 +45,9 @@ durable degradation behavior with tracing enabled and OTLP export disabled.
 - OTLP export is disabled by default and collector credentials are not stored.
 - No production collector, retention, sampling-performance, or vendor claim is
   made by this evidence.
+
+## Remote evidence
+
+GitHub Actions run `32645791900` passed control-plane/Compose, clean Java,
+frozen Python/contracts, bounded degradation, and Web static/unit/browser jobs
+for checkpoint `9697a75`.

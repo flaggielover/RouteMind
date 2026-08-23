@@ -6,17 +6,17 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 4 / 27 tasks passed (RM-210 through RM-213; RM-214 active; RM-215 through RM-236 pending)
+Enhancement Progress: 5 / 27 tasks passed (RM-210 through RM-214; RM-215 active; RM-216 through RM-236 pending)
 
-Repository Total: 90 / 113 tasks passed
+Repository Total: 91 / 113 tasks passed
 
-Current Task: RM-214 - Add useful end-to-end OpenTelemetry tracing boundaries
+Current Task: RM-215 - Add continuous reconciliation and invariant drift detection
 
-Last Completed: RM-213 - Define semantic metrics layer
+Last Completed: RM-214 - Add useful end-to-end OpenTelemetry tracing boundaries
 
-Current Gate: RM-214 local implementation gates pass Java 71 tests and Compute 185 tests at 95.24% coverage, including collector-free W3C propagation and HTTP/database/messaging/travel/solver/decision boundaries. Implementation commit and GitHub Actions validation are pending. Docker Desktop API remains an explicit historical infrastructure residual.
+Current Gate: RM-214 passed in checkpoint 9697a75 after local Java 71, Compute 185 at 95.24% coverage, focused resilience, and repository gates plus GitHub Actions run 32645791900 across all five jobs. RM-215 detect-only reconciliation is active. Docker Desktop API remains an explicit historical infrastructure residual.
 
-CI: PASS through RM-213 closure run 32644103060 with all five jobs; RM-214 is locally validated and awaits its implementation run. Earlier RM-213 implementation run 32643932098, hardening handoff run 32641575021, and recorded prior closure runs also passed. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-214 implementation run 32645791900 with all five jobs; RM-213 closure run 32644103060, RM-213 implementation run 32643932098, hardening handoff run 32641575021, and recorded prior closure runs also passed. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS - Java 71, Python 185 / 95.24%, Web 51 unit + build (unchanged), E2E 34 passed + 2 existing mobile-project skips (unchanged), and 5 schemas / 15 contract fixtures
 
@@ -24,7 +24,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-214 (active) tracing boundaries, then critical RM-215 reconciliation; RM-216 remains dependency-eligible.
+Next Candidates: RM-215 (active) reconciliation; RM-216 remains dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
