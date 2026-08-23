@@ -1,8 +1,8 @@
 # RM-217 Live Courier Location Streaming Evidence
 
 Date: 2026-08-23
-Implementation checkpoint: pending
-GitHub Actions: pending
+Implementation checkpoint: 7234ff6
+GitHub Actions: PASS - run 32650330974 (all five jobs)
 
 ## Scope
 
@@ -35,5 +35,8 @@ current state. Redis GEO and SSE are downstream projections; event payloads
 carry sequence, observed time, ingestion time, online state, and projection
 status so consumers can discard duplicates or late reports.
 
-Remote Actions evidence is intentionally pending until the implementation
-checkpoint is pushed and the five-job workflow completes.
+## Remote validation
+
+GitHub Actions run `32650330974` passed the Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `7234ff6`.

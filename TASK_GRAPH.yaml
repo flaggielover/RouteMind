@@ -1218,12 +1218,12 @@
       "phase": "P25",
       "priority": "high",
       "depends_on": ["RM-216"],
-      "status": "validating",
+      "status": "passed",
       "acceptance": ["Location reports include sequence, event/ingestion time, staleness, and online state", "Redis GEO remains hot projection with bounded durable history", "SSE/frontend updates and dispatch consumption handle duplicate and stale reports"],
       "gates": ["L3-postgres", "L4-realtime", "L5-degraded-product", "L6-contracts"],
       "evidence": ["evidence/gates/RM-217/location-streaming.md"],
       "blocked_by": [],
-      "notes": "Implementation is validating after Java 80, Python 185 at 95.24%, Web 52, 6 schemas/18 fixtures, full available, and verify gates. V15 stores the current report plus a maximum 128 accepted sequences per courier; Redis GEO/SSE remain downstream projections and stale/duplicate outcomes are explicit. Remote CI remains before passed. Unlimited raw trajectories are not persisted to PostgreSQL."
+      "notes": "Passed in checkpoint 7234ff6 after Java 80, Python 185 at 95.24%, Web 52, 6 schemas/18 fixtures, full available, and verify gates. V15 stores the current report plus a maximum 128 accepted sequences per courier; Redis GEO/SSE remain downstream projections and stale/duplicate outcomes are explicit. GitHub Actions run 32650330974 passed all five jobs. RM-218 is now active. Unlimited raw trajectories are not persisted to PostgreSQL."
     },
     {
       "id": "RM-218",
@@ -1231,12 +1231,12 @@
       "phase": "P25",
       "priority": "high",
       "depends_on": ["RM-217"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Impossible speed, teleport, sequence, gap, duplicate, and staleness signals are explicit", "Integrity states are HEALTHY, DEGRADED, SUSPECT, or STALE", "Anomaly signals do not silently ban couriers and aggregate hotspot data is privacy-bounded"],
       "gates": ["L2-compute", "L6-data-quality", "L4-operations"],
       "evidence": ["evidence/gates/RM-218/location-integrity.md"],
       "blocked_by": [],
-      "notes": "Integrity is an operational signal, not an autonomous disciplinary decision."
+      "notes": "Activated after RM-217 passed. Integrity is an operational signal, not an autonomous disciplinary decision."
     },
     {
       "id": "RM-219",

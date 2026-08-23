@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P25
 
-Current Task: RM-217 - Add live courier location streaming and bounded history
+Current Task: RM-218 - Add location history integrity and hotspot substrate
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-216 are passed. RM-216 checkpoint c98ea76 and Actions run 32649193769 passed all five jobs. RM-217 location streaming is validating after Java 80/80, Python 185, Web 52, full available, and verify gates; remote CI remains. RM-218 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-217 are passed. RM-217 checkpoint 7234ff6 and Actions run 32650330974 passed all five jobs. RM-218 location integrity is now active on the Java 80/80, Python 185, Web 52, full available, and verify baseline. RM-219 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,18 +629,19 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-217 remote CI observation and closure. Preserve Java lifecycle
+- Resume at RM-218 location integrity implementation. Preserve Java lifecycle
   authority, durable location sequence ordering, Redis-as-projection, and the
-  explicit bounded-history boundary.
+  explicit non-disciplinary anomaly boundary.
 - RM-215 evidence is `evidence/gates/RM-215/reconciliation.md`; checkpoint
   `d26a121` and GitHub Actions run `32647766636` passed all five jobs.
-- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 7/27 with
-  RM-217 validating.
-  Repository total is 93/113. RM-233 is independently eligible, while RM-217 is
-  the active critical path for RM-218 through RM-220.
+- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 8/27 with
+  RM-218 active.
+  Repository total is 94/113. RM-233 is independently eligible, while RM-218 is
+  the active critical path for RM-219 through RM-220.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
 
 RM-216 closure and RM-217 implementation notes: checkpoint `c98ea76` is
-remote-green in Actions run `32649193769`. RM-217 checkpoint is pending; V15
-adds bounded courier location history, while event sequence and ingestion
-metadata are propagated to operations snapshots and Web realtime handling.
+remote-green in Actions run `32649193769`, and RM-217 checkpoint `7234ff6` is
+remote-green in Actions run `32650330974`. V15 adds bounded courier location
+history; event sequence and ingestion metadata are propagated to operations
+snapshots and Web realtime handling. Continue with RM-218.
