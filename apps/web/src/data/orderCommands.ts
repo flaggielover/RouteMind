@@ -350,15 +350,25 @@ export async function recordCourierLocation(options: {
   latitude: number;
   longitude: number;
   observedAt?: string;
+  sequence?: number;
+  online?: boolean;
   fetchImpl?: typeof fetch;
   idempotencyKey?: string;
 }): Promise<CourierCommandResult> {
   const observedAt = options.observedAt ?? new Date().toISOString();
+  const sequence = options.sequence ?? 1;
+  const online = options.online ?? true;
   const idempotencyKey =
     options.idempotencyKey ?? `courier-location-${options.courierId}-${observedAt}`;
   return runCourierCommand(`/api/v1/couriers/${options.courierId}/location`, {
     idempotencyKey,
-    body: { latitude: options.latitude, longitude: options.longitude, observedAt },
+    body: {
+      latitude: options.latitude,
+      longitude: options.longitude,
+      observedAt,
+      sequence,
+      online,
+    },
     fetchImpl: options.fetchImpl,
   });
 }

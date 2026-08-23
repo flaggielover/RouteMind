@@ -1205,12 +1205,12 @@
       "phase": "P25",
       "priority": "critical",
       "depends_on": ["RM-210"],
-      "status": "validating",
+      "status": "passed",
       "acceptance": ["Merchant, courier, pickup, delivery, cancellation, timeout, rejection, reassignment, and compensation states are explicit", "Commands remain idempotent and transitions auditable", "Payment processing is not introduced"],
       "gates": ["L2-java", "L3-postgres", "L5-failure", "L4-contracts"],
       "evidence": ["evidence/gates/RM-216/fulfillment-saga.md"],
       "blocked_by": [],
-      "notes": "Implementation is validating after Java 79, Python 185, 6 schemas/18 fixtures, Web 52, full available, and verify gates. Explicit timeout, rejection, reassignment, compensation, and same-transaction lease release are covered; payment processing remains out of scope. Remote CI remains before passed."
+      "notes": "Passed in checkpoint c98ea76 after Java 79, Python 185, 6 schemas/18 fixtures, Web 52, full available, and verify gates. Explicit timeout, rejection, reassignment, compensation, and same-transaction lease release are covered; payment processing remains out of scope. GitHub Actions run 32649193769 passed all five jobs. RM-217 is now validating."
     },
     {
       "id": "RM-217",
@@ -1218,12 +1218,12 @@
       "phase": "P25",
       "priority": "high",
       "depends_on": ["RM-216"],
-      "status": "pending",
+      "status": "validating",
       "acceptance": ["Location reports include sequence, event/ingestion time, staleness, and online state", "Redis GEO remains hot projection with bounded durable history", "SSE/frontend updates and dispatch consumption handle duplicate and stale reports"],
       "gates": ["L3-postgres", "L4-realtime", "L5-degraded-product", "L6-contracts"],
       "evidence": ["evidence/gates/RM-217/location-streaming.md"],
       "blocked_by": [],
-      "notes": "Unlimited raw trajectories are not persisted to PostgreSQL."
+      "notes": "Implementation is validating after Java 80, Python 185 at 95.24%, Web 52, 6 schemas/18 fixtures, full available, and verify gates. V15 stores the current report plus a maximum 128 accepted sequences per courier; Redis GEO/SSE remain downstream projections and stale/duplicate outcomes are explicit. Remote CI remains before passed. Unlimited raw trajectories are not persisted to PostgreSQL."
     },
     {
       "id": "RM-218",

@@ -149,15 +149,25 @@ export function applyRealtimeItem(
     const latitude = numberValue(item.event.payload.latitude);
     const longitude = numberValue(item.event.payload.longitude);
     if (!courierId || latitude === null || longitude === null) return snapshot;
+    const sequence = numberValue(item.event.payload.sequence);
+    const observedAt = stringValue(item.event.payload.observedAt);
+    const ingestedAt = stringValue(item.event.payload.ingestedAt);
+    const online = item.event.payload.online !== false;
     const degraded = stringValue(item.event.payload.projectionStatus) === "DEGRADED";
     return {
       ...snapshot,
       couriers: snapshot.couriers.map((courier) =>
-        courier.id === courierId
+        courier.id === courierId &&
+        (sequence === null || courier.sequence === undefined || sequence > courier.sequence)
           ? {
               ...courier,
               position: { x: longitude, y: latitude },
               status: degraded ? "offline" : "available",
+              sequence: sequence ?? courier.sequence,
+              observedAt: observedAt ?? courier.observedAt,
+              ingestedAt: ingestedAt ?? courier.ingestedAt,
+              online,
+              stale: !online,
             }
           : courier,
       ),

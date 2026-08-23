@@ -1,8 +1,8 @@
 # RM-216 Fulfillment Saga Evidence
 
 Date: 2026-08-23
-Implementation checkpoint: pending
-GitHub Actions: pending
+Implementation checkpoint: c98ea76
+GitHub Actions: PASS - run 32649193769 (all five jobs)
 
 ## Scope
 
@@ -37,3 +37,8 @@ the order transition remains version-checked and auditable through
 `order_transitions` and Outbox events.
 
 No payment command, table, event, refund, or settlement claim is introduced.
+
+## Remote validation
+
+GitHub Actions run `32649193769` passed the Java, Python/contracts, Compose,
+Web static/unit/browser, and resilience jobs for checkpoint `c98ea76`.

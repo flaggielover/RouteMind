@@ -5,27 +5,42 @@ import com.routemind.business.domain.courier.CourierLocation;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.LockModeType;
 
 interface SpringDataCourierLocationRepository extends JpaRepository<CourierLocationEntity, UUID> {
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	@Query("select location from CourierLocationEntity location where location.courierId = :courierId")
+	java.util.Optional<CourierLocationEntity> findByIdForUpdate(UUID courierId);
 }
 
 @Repository
 class JpaCourierLocationStore implements CourierLocationStore {
 	private final SpringDataCourierLocationRepository repository;
+	private final SpringDataCourierLocationHistoryRepository history;
 
-	JpaCourierLocationStore(SpringDataCourierLocationRepository repository) {
+	JpaCourierLocationStore(SpringDataCourierLocationRepository repository,
+			SpringDataCourierLocationHistoryRepository history) {
 		this.repository = repository;
+		this.history = history;
 	}
 
 	@Override
 	@Transactional
 	public CourierLocation save(CourierLocation location) {
-		CourierLocationEntity entity = repository.findById(location.courierId()).orElseGet(() ->
-				CourierLocationEntity.from(location));
+		CourierLocationEntity existing = repository.findByIdForUpdate(location.courierId()).orElse(null);
+		if (existing != null && existing.sequence() >= location.sequence()) return existing.toDomain();
+		CourierLocationEntity entity = existing == null ? CourierLocationEntity.from(location) : existing;
 		entity.apply(location);
-		return repository.saveAndFlush(entity).toDomain();
+		CourierLocation saved = repository.saveAndFlush(entity).toDomain();
+		if (!history.existsByCourierIdAndSequence(location.courierId(), location.sequence())) {
+			history.saveAndFlush(CourierLocationHistoryEntity.from(location));
+			history.deleteByCourierIdAndSequenceLessThan(location.courierId(), Math.max(1, location.sequence() - 127));
+		}
+		return saved;
 	}
 
 	@Override

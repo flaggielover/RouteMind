@@ -40,13 +40,14 @@ public final class OperationsSnapshotController {
 				.toList();
 			var locations = snapshot.courierLocations().stream()
 				.map(location -> new CourierLocationResponse(location.courierId(), location.latitude(), location.longitude(),
-						location.observedAt()))
+						location.sequence(), location.observedAt(), location.ingestedAt(), location.online()))
 				.toList();
 			return new OperationsSnapshotResponse("v1", "live", snapshot.generatedAt(),
 				snapshot.orders().stream().map(order -> new OrderResponse(order.id(), order.status(), order.version(),
 						order.createdAt(), order.updatedAt())).toList(), parties, merchants, locations,
 				locations.stream().map(location -> new CourierResponse(location.courierId(), location.latitude(),
-						location.longitude(), location.observedAt())).toList(),
+					location.longitude(), location.sequence(), location.observedAt(), location.ingestedAt(),
+					location.online())).toList(),
 				new HealthResponse("UP", "available", "available"));
 		}
 	}
@@ -60,10 +61,12 @@ public final class OperationsSnapshotController {
 	public record MerchantResponse(UUID id, String displayName, String status) {
 	}
 
-	public record CourierLocationResponse(UUID courierId, double latitude, double longitude, Instant observedAt) {
+	public record CourierLocationResponse(UUID courierId, double latitude, double longitude, long sequence,
+			Instant observedAt, Instant ingestedAt, boolean online) {
 	}
 
-	public record CourierResponse(UUID courierId, double latitude, double longitude, Instant observedAt) {
+	public record CourierResponse(UUID courierId, double latitude, double longitude, long sequence,
+			Instant observedAt, Instant ingestedAt, boolean online) {
 	}
 
 	public record HealthResponse(String status, String durableState, String courierProjection) {

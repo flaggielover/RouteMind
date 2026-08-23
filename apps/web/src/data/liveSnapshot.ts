@@ -29,6 +29,9 @@ interface LiveCourierLocation {
   latitude: number;
   longitude: number;
   observedAt: string;
+  ingestedAt?: string;
+  sequence?: number;
+  online?: boolean;
 }
 
 interface LiveOperationsResponse {
@@ -137,6 +140,11 @@ function toCourier(location: LiveCourierLocation, reference: Date): Courier {
     zone: "live",
     eta: stale ? "stale" : "unknown",
     position: { x: location.longitude, y: location.latitude },
+    sequence: location.sequence ?? 1,
+    observedAt: location.observedAt,
+    ingestedAt: location.ingestedAt ?? location.observedAt,
+    online: location.online ?? !stale,
+    stale,
   };
 }
 

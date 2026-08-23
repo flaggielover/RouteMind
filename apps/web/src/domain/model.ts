@@ -60,6 +60,11 @@ export interface Courier {
   zone: string;
   eta: string;
   position: GeoPoint;
+  sequence?: number;
+  observedAt?: string;
+  ingestedAt?: string;
+  online?: boolean;
+  stale?: boolean;
 }
 
 export interface Merchant {

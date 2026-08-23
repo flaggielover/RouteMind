@@ -22,6 +22,10 @@ public record OperationsSnapshot(Instant generatedAt, List<OrderSummary> orders,
 	public record PartySummary(UUID id, String type, String displayName, String status) {
 	}
 
-	public record CourierLocationSummary(UUID courierId, double latitude, double longitude, Instant observedAt) {
+	public record CourierLocationSummary(UUID courierId, double latitude, double longitude, long sequence,
+			Instant observedAt, Instant ingestedAt, boolean online) {
+		public CourierLocationSummary(UUID courierId, double latitude, double longitude, Instant observedAt) {
+			this(courierId, latitude, longitude, 1, observedAt, observedAt, true);
+		}
 	}
 }

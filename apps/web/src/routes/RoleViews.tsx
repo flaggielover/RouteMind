@@ -609,6 +609,7 @@ export function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
   const submitLocation = async () => {
     if (!courier || !commandAvailable || locationCommand?.kind === "pending") return;
     const observedAt = new Date().toISOString();
+    const sequence = (courier.sequence ?? 0) + 1;
     const idempotencyKey = `courier-location-${courier.id}-${observedAt}`;
     setLocationCommand({ kind: "pending", idempotencyKey });
     setLocationCommand(
@@ -617,6 +618,8 @@ export function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
         latitude: courier.position.y,
         longitude: courier.position.x,
         observedAt,
+        sequence,
+        online: courier.online ?? courier.status === "available",
         idempotencyKey,
       }),
     );

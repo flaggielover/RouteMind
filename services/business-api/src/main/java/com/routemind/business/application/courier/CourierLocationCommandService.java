@@ -34,14 +34,23 @@ public class CourierLocationCommandService {
 	@Transactional
 	public CourierCommandResult record(UUID courierId, double latitude, double longitude, Instant observedAt,
 			String actor, UUID correlationId, String traceId, String idempotencyKey) {
+		return record(courierId, latitude, longitude, 1, observedAt, true, actor, correlationId, traceId,
+				idempotencyKey);
+	}
+
+	@Transactional
+	public CourierCommandResult record(UUID courierId, double latitude, double longitude, long sequence,
+			Instant observedAt, boolean online, String actor, UUID correlationId, String traceId,
+			String idempotencyKey) {
 		if (!"courier".equals(actor)) throw new CourierCommandAuthorizationException("actor_not_authorized");
 		String key = requireKey(idempotencyKey);
 		String requestHash = fingerprint("location", courierId.toString(), Double.toString(latitude),
-				Double.toString(longitude), observedAt.toString());
+				Double.toString(longitude), Long.toString(sequence), observedAt.toString(), Boolean.toString(online));
 		CourierCommandResult replay = replayIfPresent(key, requestHash, "location");
 		if (replay != null) return replay;
 		CourierLocation location = new CourierLocation(courierId,
-				new com.routemind.business.domain.courier.GeoPoint(latitude, longitude), observedAt);
+				new com.routemind.business.domain.courier.GeoPoint(latitude, longitude), sequence, observedAt,
+				clock.instant(), online);
 		ProjectionWriteStatus projectionStatus = locations.record(location);
 		String status = projectionStatus.name();
 		publish(location, projectionStatus, correlationId, traceId);
@@ -61,10 +70,12 @@ public class CourierLocationCommandService {
 
 	private void publish(CourierLocation location, ProjectionWriteStatus projectionStatus, UUID correlationId,
 			String traceId) {
-		EventEnvelope event = new EventEnvelope("1.0", UUID.randomUUID(), "courier.location.updated", clock.instant(),
-				"business-api", location.courierId(), 1, correlationId, null, traceId,
+		EventEnvelope event = new EventEnvelope("1.0", UUID.randomUUID(), "courier.location.updated", location.ingestedAt(),
+				"business-api", location.courierId(), location.sequence(), correlationId, null, traceId,
 				Map.of("courierId", location.courierId().toString(), "latitude", Double.toString(location.point().latitude()),
 						"longitude", Double.toString(location.point().longitude()), "observedAt", location.observedAt().toString(),
+						"ingestedAt", location.ingestedAt().toString(), "sequence", location.sequence(),
+						"online", location.online(),
 						"projectionStatus", projectionStatus.name()));
 		outbox.save(OutboxMessage.pending(event));
 	}

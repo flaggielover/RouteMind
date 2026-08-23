@@ -61,8 +61,10 @@ public final class CourierCommandController {
 		if (request == null) throw new IllegalArgumentException("location request is required");
 		Instant observedAt = request.observedAt() == null || request.observedAt().isBlank()
 				? Instant.now(clock) : Instant.parse(request.observedAt());
-		CourierCommandResult result = locations.record(courierId, request.latitude(), request.longitude(), observedAt,
-				normalizeActor(actor), correlation(correlationId), traceId(), idempotencyKey);
+		long sequence = request.sequence() == null ? 1 : request.sequence();
+		boolean online = request.online() == null || request.online();
+		CourierCommandResult result = locations.record(courierId, request.latitude(), request.longitude(), sequence,
+				observedAt, online, normalizeActor(actor), correlation(correlationId), traceId(), idempotencyKey);
 		return CourierCommandResponse.from(result, traceId());
 	}
 
@@ -114,7 +116,7 @@ public final class CourierCommandController {
 
 	public record ShiftRequest(String target, long expectedVersion) { }
 
-	public record LocationRequest(double latitude, double longitude, String observedAt) { }
+	public record LocationRequest(double latitude, double longitude, String observedAt, Long sequence, Boolean online) { }
 
 	public record CourierCommandResponse(UUID courierId, String status, long version, boolean replayed, String traceId) {
 		static CourierCommandResponse from(CourierCommandResult result, String traceId) {

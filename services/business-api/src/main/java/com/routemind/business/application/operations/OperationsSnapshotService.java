@@ -38,7 +38,8 @@ public class OperationsSnapshotService {
 						.toList(),
 				courierLocations.findAll().stream()
 						.map(location -> new OperationsSnapshot.CourierLocationSummary(location.courierId(),
-								location.point().latitude(), location.point().longitude(), location.observedAt()))
+								location.point().latitude(), location.point().longitude(), location.sequence(),
+								location.observedAt(), location.ingestedAt(), location.online()))
 						.toList());
 	}
 }

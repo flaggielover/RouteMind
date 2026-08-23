@@ -159,6 +159,7 @@ describe("browser realtime cursor and reconnect boundary", () => {
           courierId: "courier-17",
           latitude: 31.2,
           longitude: 121.5,
+          sequence: 10,
           projectionStatus: "DEGRADED",
         },
       },
@@ -166,6 +167,25 @@ describe("browser realtime cursor and reconnect boundary", () => {
     expect(location.couriers.find((courier) => courier.id === "courier-17")).toMatchObject({
       status: "offline",
       position: { x: 121.5, y: 31.2 },
+    });
+    const stale = applyRealtimeItem(location, {
+      ...item("0", "courier-location-stale"),
+      event: {
+        ...item("0").event,
+        eventType: "courier.location.updated",
+        aggregateId: "courier-17",
+        payload: {
+          courierId: "courier-17",
+          latitude: 31.1,
+          longitude: 121.4,
+          sequence: 9,
+          projectionStatus: "PROJECTED",
+        },
+      },
+    });
+    expect(stale.couriers.find((courier) => courier.id === "courier-17")?.position).toEqual({
+      x: 121.5,
+      y: 31.2,
     });
     expect(location.availability).toBe("degraded");
     const shift = applyRealtimeItem(location, {

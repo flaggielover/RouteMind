@@ -26,6 +26,9 @@ describe("live product data boundary", () => {
               latitude: 31.2,
               longitude: 121.4,
               observedAt: "2026-08-22T10:00:00Z",
+              ingestedAt: "2026-08-22T10:00:01Z",
+              sequence: 7,
+              online: true,
             },
           ],
         });
@@ -46,6 +49,7 @@ describe("live product data boundary", () => {
     expect(snapshot.availability).toBe("ready");
     expect(snapshot.merchants[0]?.name).toBe("Local Merchant");
     expect(snapshot.dispatch.selectedCourier).toBe("courier-1");
+    expect(snapshot.couriers[0]).toMatchObject({ sequence: 7, online: true, stale: false });
   });
 
   it("keeps service failure explicit instead of falling back to demo", async () => {

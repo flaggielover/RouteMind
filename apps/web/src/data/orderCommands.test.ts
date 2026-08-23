@@ -119,6 +119,8 @@ describe("customer order command boundary", () => {
       latitude: 31.2,
       longitude: 121.5,
       observedAt: "2026-08-22T12:00:00Z",
+      sequence: 4,
+      online: false,
       fetchImpl,
       idempotencyKey: "courier-location-fixed",
     });
@@ -130,7 +132,13 @@ describe("customer order command boundary", () => {
     expect(requests[0].body).toBe(JSON.stringify({ target: "ACCEPTED", expectedVersion: 2 }));
     expect(requests[1].body).toBe(JSON.stringify({ target: "ONLINE", expectedVersion: 0 }));
     expect(requests[2].body).toBe(
-      JSON.stringify({ latitude: 31.2, longitude: 121.5, observedAt: "2026-08-22T12:00:00Z" }),
+      JSON.stringify({
+        latitude: 31.2,
+        longitude: 121.5,
+        observedAt: "2026-08-22T12:00:00Z",
+        sequence: 4,
+        online: false,
+      }),
     );
   });
 

@@ -16,7 +16,11 @@ public class CourierLocationService {
 	}
 
 	public ProjectionWriteStatus record(CourierLocation location) {
-		store.save(location);
+		CourierLocation saved = store.save(location);
+		if (!saved.equals(location)) {
+			return saved.sequence() == location.sequence() ? ProjectionWriteStatus.DUPLICATE
+					: ProjectionWriteStatus.STALE;
+		}
 		try {
 			projection.upsert(location);
 			return ProjectionWriteStatus.PROJECTED;

@@ -6,19 +6,19 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 6 / 27 tasks passed (RM-210 through RM-215; RM-216 validating; RM-217 through RM-236 pending)
+Enhancement Progress: 7 / 27 tasks passed (RM-210 through RM-216; RM-217 validating; RM-218 through RM-236 pending)
 
-Repository Total: 92 / 113 tasks passed
+Repository Total: 93 / 113 tasks passed
 
-Current Task: RM-216 - Expand fulfillment saga and bounded exception paths
+Current Task: RM-217 - Add live courier location streaming and bounded history
 
-Last Completed: RM-215 - Add continuous reconciliation and invariant drift detection
+Last Completed: RM-216 - Expand fulfillment saga and bounded exception paths
 
-Current Gate: RM-216 is validating after Java 79/79, Python 185/185 at 95.24%, 6 schemas/18 fixtures, Web 52 unit + build, full available, and verify gates. Remote CI remains before passed.
+Current Gate: RM-217 is validating after Java 80/80, Python 185/185 at 95.24%, 6 schemas/18 fixtures, Web 52 unit + build, full available, and verify gates. Remote CI remains before passed.
 
-CI: PASS through RM-215 implementation run 32647766636 with all five jobs; RM-214 closure run 32645942196, RM-214 implementation run 32645791900, and recorded prior closure runs also passed. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-216 implementation checkpoint c98ea76 in run 32649193769 with all five jobs; RM-215 run 32647766636 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally - Java 79/79, Python 185 / 95.24%, Web 52 unit + build, 6 schemas / 18 contract fixtures, full available, and verify. Remote Web browser smoke remains part of the pending CI evidence.
+Regression: PASS locally - Java 80/80, Python 185 / 95.24%, Web 52 unit + build, 6 schemas / 18 contract fixtures, full available, and verify. Remote Web browser smoke remains part of the pending RM-217 CI evidence.
 
 Blocked: NONE
 
@@ -515,7 +515,19 @@ The task is now passed and RM-120 is the active implementation.
   `evidence/gates/RM-215/reconciliation.md` record the boundary.
 - Checkpoint `d26a121` and GitHub Actions run `32647766636` passed all five
   jobs, including Web browser smoke and bounded degradation. RM-215 is passed,
-  Enhancement is 6/27, repository total is 92/113, and RM-216 is active.
-- RM-216 local implementation is validating with explicit exception states,
-  bounded lease release, V14 migration, Web projection updates, and evidence at
+  Enhancement is 6/27, repository total is 92/113, and RM-216 was activated.
+- RM-216 is now fully validated with explicit exception states, bounded lease
+  release, V14 migration, Web projection updates, and evidence at
   `evidence/gates/RM-216/fulfillment-saga.md`.
+
+### RM-216 closure and RM-217 location streaming - 2026-08-23
+- RM-216 checkpoint `c98ea76` passed all five GitHub Actions jobs in run
+  `32649193769`; the saga exception states and same-transaction lease release
+  are now fully validated.
+- RM-217 adds sequenced courier reports, server ingestion metadata, online
+  state, strict stale/duplicate handling, Redis GEO projection ordering, and
+  bounded PostgreSQL history through V15. Local full gate passes Java 80,
+  Python 185 at 95.24%, Web 52, 6 schemas/18 fixtures, and repository verify.
+- RM-217 is validating pending remote CI. ADR 0015 and evidence are recorded at
+  `docs/adr/0015-courier-location-sequence-history.md` and
+  `evidence/gates/RM-217/location-streaming.md`.
