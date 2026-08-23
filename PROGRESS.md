@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Round 2 Progress: 46 / 48 tasks passed
+Round 2 Progress: 47 / 48 tasks passed
 
-Repository Total: 74 / 76 tasks passed
+Repository Total: 75 / 76 tasks passed
 
-Current Task: RM-181 - Close browser UX, accessibility, and mobile quality gates
+Current Task: RM-190 - Perform Round 2 adversarial closure audit
 
-Last Completed: RM-180 - Add Round 2 performance and realtime resilience gates
+Last Completed: RM-181 - Close browser UX, accessibility, and mobile quality gates
 
-Current Gate: RM-180 measured dispatch/Twin/SSE performance and realtime gate, full, verify, and Actions run 32613773339 (all five jobs) passed; RM-181 is active
+Current Gate: RM-181 browser UX, axe, mobile focus, state, form, map, full, verify, and Actions run 32614952772 (all five jobs) passed; RM-190 is active
 
-CI: PASS through RM-180 run 32613773339 and RM-171 run 32613079169 with all five jobs; RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
+CI: PASS through RM-181 run 32614952772 and RM-180 run 32613773339 with all five jobs; RM-171 run 32613079169, RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
 
 Regression: PASS - Java 61, Python 142 / 95.88%, Web 49 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-181 - close browser UX, accessibility, and mobile quality gates; RM-190 Round 2 adversarial closure follows after RM-181.
+Next Candidates: RM-190 - perform Round 2 adversarial closure audit; no other higher-priority unblocked task is present.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -404,3 +404,22 @@ The task is now passed and RM-120 is the active implementation.
 - GitHub Actions run `32613773339` passed all five jobs, including Python,
   Java, Web browser smoke, bounded degradation, and control plane. RM-180 is
   now passed (46/48 Round 2, 74/76 repository), and RM-181 is activated.
+
+### RM-181 completion - 2026-08-23
+- Closed the browser UX and accessibility gate with mobile navigation focus
+  containment and focus return, deterministic live loading/unavailable/degraded/
+  stale fixtures, simulation error feedback, replay inspection, map marker
+  focus, queue filter clearing, strategy registry expansion, and semantic
+  strategy metric groups. Removed the unused environment settings button and
+  made the remaining detail controls perform inspectable actions.
+- The local Playwright run passed 34 of 36 test instances with two existing
+  desktop-only skips under the mobile project. Desktop/mobile axe scans passed
+  for role routes and live degraded/unavailable fixtures. Full and verify gates
+  pass Java 61, Python 142 at 95.88%, Web 49 unit/build, and 5 schemas/15
+  fixtures. Evidence is recorded at
+  evidence/gates/RM-181/ux-closure.md; implementation checkpoint is b61c8c2.
+- The first remote attempt 32614866937 exposed only a formatting failure in
+  the Web job. After checkpoint b61c8c2, GitHub Actions run 32614952772
+  passed all five jobs, including Web browser smoke and bounded degradation.
+  RM-181 is now passed (47/48 Round 2, 75/76 repository), and RM-190 is
+  activated as the final critical closure audit.

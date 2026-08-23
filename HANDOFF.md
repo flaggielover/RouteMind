@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-181 - Close browser UX, accessibility, and mobile quality gates
+Current Task: RM-190 - Perform Round 2 adversarial closure audit
 
-Task Status: RM-180 is fully validated locally and remotely; RM-181 is the next highest-priority unblocked task
+Task Status: RM-181 is fully validated locally and remotely; RM-190 is the final highest-priority unblocked closure task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,9 +629,9 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-181 browser UX, accessibility, and mobile closure. Do not redo
+- Resume at RM-190 Round 2 adversarial closure audit. Do not redo
   RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162/RM-170/RM-171/
-  RM-180; their local evidence and green Actions runs are recorded.
+  RM-180/RM-181; their local evidence and green Actions runs are recorded.
 - RM-180 is fully validated locally and remotely. Implementation checkpoint is
   `56c17be`; evidence checkpoint is `7c7773e`; evidence is in
   `evidence/gates/RM-180/round2-performance.md`.
@@ -642,8 +642,16 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   with p95 `16.107 ms`; SSE streamed 64 ordered events from 80 creates in
   `69.106 ms`, and stale cursor returned HTTP 409. Result digest is
   `92f8396b9184f2b1be3bc7f3b77c9d23a4644f9c4e108156565fcded2cf50316`.
+- RM-181 is fully validated locally and remotely. Evidence is in
+  evidence/gates/RM-181/ux-closure.md; checkpoint b61c8c2. Playwright passed
+  34 of 36 instances with two existing mobile-project skips, desktop/mobile axe
+  scans passed, and the closure covers live state, stale realtime, forms, maps,
+  strategy metrics, and keyboard focus. Actions run 32614952772 passed all five
+  jobs; the earlier 32614866937 formatting failure was repaired and retained as
+  recovery evidence.
 - `./scripts/verify.ps1` and `./scripts/full-gate.ps1` pass Java 61, Python 142
   at 95.88%, Web 49 unit/build, five schemas/15 fixtures, and control checks.
   GitHub Actions run `32613773339` passed all five jobs, including Web browser
   smoke and bounded degradation. RM-180 is passed (46/48 Round 2, 74/76
-  repository); RM-181 is now active.
+  repository); RM-181 is passed (47/48 Round 2, 75/76 repository), and RM-190
+  is now active as the final critical closure audit.

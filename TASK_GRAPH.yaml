@@ -971,12 +971,12 @@
       "phase": "P18",
       "priority": "medium",
       "depends_on": ["RM-124", "RM-156", "RM-162"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Loading, empty, error, stale, drawers, forms, charts, maps, and focus states are polished and accessible", "Desktop and mobile workflows remain usable across role surfaces", "Playwright and axe evidence covers live/demo/replay/simulation states"],
       "gates": ["L4-ux-closure", "accessibility-review", "L4-mobile-closure"],
       "evidence": ["evidence/gates/RM-181/ux-closure.md"],
       "blocked_by": [],
-      "notes": "Presentation improvements must not hide source truth or errors. RM-181 is active after RM-180 Actions run 32613965768 passed all five jobs."
+      "notes": "Browser UX, axe, mobile focus, loading/error/stale state, form, map, and strategy evidence pass in commit b61c8c2; GitHub Actions run 32614952772 passed all five jobs. Claims remain limited to deterministic local fixtures and configured browser projects."
     },
     {
       "id": "RM-190",
