@@ -512,14 +512,14 @@ function OperationsView({
           source={snapshot.source}
           generatedAt={snapshot.generatedAt}
         />
-          <OrderQueue
-            orders={filteredOrders}
-            selectedOrderId={selectedOrderId}
-            onSelectOrder={setSelectedOrderId}
-            availability={snapshot.availability}
-            filtersActive={filtersActive}
-            onClearFilters={clearFilters}
-          />
+        <OrderQueue
+          orders={filteredOrders}
+          selectedOrderId={selectedOrderId}
+          onSelectOrder={setSelectedOrderId}
+          availability={snapshot.availability}
+          filtersActive={filtersActive}
+          onClearFilters={clearFilters}
+        />
       </section>
       <section className="secondary-grid">
         <section className="panel lifecycle-panel" aria-labelledby="lifecycle-title">
