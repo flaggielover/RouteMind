@@ -25,6 +25,7 @@ Round 3 research.
 | RM-226-RM-229 | Decision X-Ray, strategy/Pareto analytics, Digital Twin center, What-if deltas | `470d67f`, `c63d336`, `afb6394`, `5600487` | RM-226-RM-229 gate files; Actions `32658324255`, `32659202824`, `32661874586`, `32662337844` |
 | RM-230-RM-234 | Reliability Center, Research Center, analytical-agent substrate, reference identities, event upcasting | `39c5dcb`, `fb9bd77`, `bc00832`, `b5174d8`, `9fe015d` | RM-230-RM-234 gate files; Actions `32660524649`, `32662606286`, `32662822033`, `32659704665`, `32661326399` |
 | RM-235 | Cross-layer enhancement E2E and adversarial validation | `bc00832` | `evidence/gates/RM-235/enhancement-validation.md`; Actions `32662822033` |
+| RM-236 | Enhancement closure and Round 3 graph preparation | `98febed` | This report and `docs/research/ROUND_3_TASK_GRAPH.yaml`; Actions `32663948087` |
 
 ## Capabilities and data boundaries
 
@@ -58,6 +59,8 @@ Round 3 research.
 - GitHub Actions run `32662822033` for the final implementation checkpoint passed
   all five jobs: control/Compose, Java, Python/contracts, Web/browser, and
   resilience.
+- GitHub Actions run `32663948087` for the RM-236 closure checkpoint passed all
+  five jobs: control/Compose, Java, Python/contracts, Web/browser, and resilience.
 
 ## Limitations and deferred work
 

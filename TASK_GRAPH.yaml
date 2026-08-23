@@ -1470,7 +1470,7 @@
       "gates": ["L1-enhancement-closure", "L6-evidence-audit", "architecture-review"],
       "evidence": ["docs/enhancement/ENHANCEMENT_CLOSURE_REPORT.md", "docs/research/ROUND_3_TASK_GRAPH.yaml"],
       "blocked_by": [],
-      "notes": "Passed in closure checkpoint pending after Enhancement Closure Report and prepared Round 3 graph were added, control-plane/verify gates passed, and the preceding RM-235 checkpoint run 32662822033 was green. Round 3 graph is prepared only; no deep research or production claim is implied. Final synchronization is completed by the closure checkpoint push."
+      "notes": "Passed in closure checkpoint 98febed after Enhancement Closure Report and prepared Round 3 graph were added, control-plane/verify gates passed, and GitHub Actions run 32663948087 passed all five jobs. Round 3 graph is prepared only; no deep research or production claim is implied."
     }
   ]
 }
