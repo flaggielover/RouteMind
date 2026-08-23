@@ -2,13 +2,18 @@ from __future__ import annotations
 
 import sys
 from datetime import UTC, datetime
-from typing import cast
+from typing import Literal, cast
 
 from fastapi import APIRouter, HTTPException, Request, Response
 
 from routemind_compute.api.observability import metrics_response
 from routemind_compute.api.runtime import ComputeRuntime
 from routemind_compute.api.schemas import (
+    DelayAccountingAggregateResponse,
+    DelayAccountingComponentResponse,
+    DelayAccountingRecordResponse,
+    DelayAccountingRequest,
+    DelayAccountingResponse,
     DispatchSnapshotRequest,
     DispatchSnapshotResponse,
     EtaCalibrationRequest,
@@ -45,6 +50,11 @@ from routemind_compute.api.schemas import (
     WhatIfExperimentRequest,
     WhatIfExperimentResponse,
     WhatIfMetricResponse,
+)
+from routemind_compute.application.delay_accounting import (
+    DelayAccountingComponent,
+    DelayAccountingRecord,
+    account_records,
 )
 from routemind_compute.application.eta import EtaBaseline
 from routemind_compute.application.eta_calibration import (
@@ -298,6 +308,73 @@ def eta_calibration(payload: EtaCalibrationRequest, request: Request) -> EtaCali
         sla_seconds=risk.sla_seconds,
         margin_seconds=risk.margin_seconds,
         customer_confidence=risk.customer_confidence,
+        trace_id=trace_id,
+    )
+
+
+@router.post("/api/v1/eta/delay-accounting", response_model=DelayAccountingResponse)
+def eta_delay_accounting(
+    payload: DelayAccountingRequest, request: Request
+) -> DelayAccountingResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        records, aggregate = account_records(
+            tuple(
+                DelayAccountingRecord(
+                    record_id=item.record_id,
+                    observed_duration_seconds=item.observed_duration_seconds,
+                    clock_domain=item.clock_domain,
+                    components=tuple(
+                        DelayAccountingComponent(
+                            name=component.name,
+                            seconds=component.seconds,
+                            clock_domain=component.clock_domain,
+                        )
+                        for component in item.components
+                    ),
+                )
+                for item in payload.records
+            )
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return DelayAccountingResponse(
+        source="compute",
+        claim_label="accounting decomposition; not causal inference",
+        records=tuple(
+            DelayAccountingRecordResponse(
+                record_id=result.record_id,
+                status=result.status,
+                observed_duration_seconds=result.observed_duration_seconds,
+                accounted_duration_seconds=result.accounted_duration_seconds,
+                residual_seconds=result.residual_seconds,
+                components=tuple(
+                    DelayAccountingComponentResponse(
+                        name=cast(
+                            Literal["dispatch", "travel", "preparation", "pickup", "delivery"],
+                            component.name,
+                        ),
+                        seconds=component.seconds,
+                        clock_domain=component.clock_domain,
+                    )
+                    for component in result.components
+                ),
+                missing_components=result.missing_components,
+                mismatched_components=result.mismatched_components,
+                digest=result.digest,
+            )
+            for result in records
+        ),
+        aggregate=DelayAccountingAggregateResponse(
+            record_count=aggregate.record_count,
+            observed_duration_seconds=aggregate.observed_duration_seconds,
+            accounted_duration_seconds=aggregate.accounted_duration_seconds,
+            residual_seconds=aggregate.residual_seconds,
+            reconciled_count=aggregate.reconciled_count,
+            incomplete_count=aggregate.incomplete_count,
+            clock_domain_mismatch_count=aggregate.clock_domain_mismatch_count,
+            digest=aggregate.digest,
+        ),
         trace_id=trace_id,
     )
 

@@ -215,3 +215,70 @@ def test_eta_calibration_gates_confidence_without_samples() -> None:
     assert body["status"] == "UNAVAILABLE"
     assert body["customer_confidence"] == "unavailable"
     assert body["mae_seconds"] is None
+
+
+def test_eta_delay_accounting_reconciles_and_labels_boundaries() -> None:
+    response = client.post(
+        "/api/v1/eta/delay-accounting",
+        json={
+            "records": [
+                {
+                    "record_id": "order-1",
+                    "observed_duration_seconds": 130,
+                    "clock_domain": "wall",
+                    "components": [
+                        {"name": "dispatch", "seconds": 10, "clock_domain": "wall"},
+                        {"name": "travel", "seconds": 20, "clock_domain": "wall"},
+                        {"name": "preparation", "seconds": 30, "clock_domain": "wall"},
+                        {"name": "pickup", "seconds": 5, "clock_domain": "wall"},
+                        {"name": "delivery", "seconds": 65, "clock_domain": "wall"},
+                    ],
+                },
+                {
+                    "record_id": "order-2",
+                    "observed_duration_seconds": 120,
+                    "clock_domain": "wall",
+                    "components": [
+                        {"name": "dispatch", "seconds": 10, "clock_domain": "wall"},
+                        {"name": "travel", "seconds": 20, "clock_domain": "wall"},
+                    ],
+                },
+            ],
+        },
+        headers={"X-Trace-Id": "delay-trace"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["claim_label"] == "accounting decomposition; not causal inference"
+    assert body["trace_id"] == "delay-trace"
+    assert [record["status"] for record in body["records"]] == ["RECONCILED", "INCOMPLETE"]
+    assert body["records"][1]["missing_components"] == ["preparation", "pickup", "delivery"]
+    assert body["aggregate"]["record_count"] == 2
+    assert body["aggregate"]["incomplete_count"] == 1
+
+
+def test_eta_delay_accounting_rejects_duplicate_component_or_record_ids() -> None:
+    response = client.post(
+        "/api/v1/eta/delay-accounting",
+        json={
+            "records": [
+                {
+                    "record_id": "order-1",
+                    "observed_duration_seconds": 10,
+                    "clock_domain": "wall",
+                    "components": [
+                        {"name": "travel", "seconds": 5, "clock_domain": "wall"},
+                        {"name": "travel", "seconds": 5, "clock_domain": "wall"},
+                    ],
+                },
+                {
+                    "record_id": "order-1",
+                    "observed_duration_seconds": 10,
+                    "clock_domain": "wall",
+                },
+            ],
+        },
+    )
+
+    assert response.status_code == 422

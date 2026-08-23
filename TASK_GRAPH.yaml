@@ -1270,12 +1270,12 @@
       "phase": "P26",
       "priority": "medium",
       "depends_on": ["RM-219", "RM-220"],
-        "status": "in_progress",
+        "status": "validating",
       "acceptance": ["Per-order and aggregate delay components reconcile to observed duration", "Output is labeled accounting decomposition rather than causal inference", "Missing components and clock-domain mismatches are explicit"],
       "gates": ["L2-analytics", "L6-data-quality", "L4-operations"],
       "evidence": ["evidence/gates/RM-221/delay-attribution.md"],
       "blocked_by": [],
-        "notes": "Activated after RM-220 passed. The waterfall is descriptive accounting only; it must reconcile observed duration without causal inference."
+        "notes": "Local implementation complete and validating: Compute 208 tests at 95.29% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, full available gate, explicit missing components, residuals, and clock-domain mismatch status. The waterfall is descriptive accounting only; GitHub Actions validation remains before pass."
     },
     {
       "id": "RM-222",

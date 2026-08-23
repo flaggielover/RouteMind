@@ -14,11 +14,11 @@ Current Task: RM-221 - Add delay attribution accounting waterfall
 
 Last Completed: RM-219 - Build honest ETA intelligence foundation
 
-Current Gate: RM-220 passed local and remote validation in Actions run 32652719384. RM-221 is active; delay accounting must reconcile observed duration and remain explicitly descriptive rather than causal.
+Current Gate: RM-220 passed local and remote validation in Actions run 32652719384. RM-221 is validating; local Compute 208/208 at 95.29% and full available gate pass. Delay accounting must reconcile observed duration and remain explicitly descriptive rather than causal.
 
 CI: PASS through RM-220 checkpoint 7f7af74 in run 32652719384 with all five jobs; RM-219 run 32651955908 and RM-218 run 32651238530 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely - Java 80/80, Python 201 / 95.23%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32652719384.
+Regression: PASS locally and remotely through RM-220 - Java 80/80, Python 201 / 95.23%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32652719384. RM-221 local regression is 208 / 95.29% and awaiting remote validation.
 
 Blocked: NONE
 
@@ -589,3 +589,11 @@ The task is now passed and RM-120 is the active implementation.
   state, SLA thresholds, and confidence gating are fully validated.
 - Enhancement is now 11/27 and repository total is 97/113. RM-221 is active to
   add descriptive delay-accounting reconciliation without causal inference.
+
+### RM-221 delay accounting validation - 2026-08-24
+- Added the compute-owned `/api/v1/eta/delay-accounting` contract with stable
+  five-component normalization, observed/accounted totals, residuals, explicit
+  missing components, and wall/simulated clock-domain mismatch detection.
+- Local Compute/full gate passes 208 tests at 95.29%; strict mypy/Ruff/format,
+  contracts, determinism, archive, marts, and semantic-metrics gates pass.
+  RM-221 is validating pending commit and remote GitHub Actions evidence.

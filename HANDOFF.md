@@ -8,7 +8,7 @@ Current Phase: Enhancement Pass P25
 
 Current Task: RM-221 - Add delay attribution accounting waterfall
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-220 are passed. RM-220 checkpoint 7f7af74 and Actions run 32652719384 passed all five jobs. RM-221 delay attribution is now active on the Java 80/80, Python 201/95.23%, Web 52, full available, and verify baseline. RM-222 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-220 are passed. RM-220 checkpoint 7f7af74 and Actions run 32652719384 passed all five jobs. RM-221 delay attribution is validating on the Java 80/80, Python 208/95.29%, Web 52, full available, and verify baseline. RM-222 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

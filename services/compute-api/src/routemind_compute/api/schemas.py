@@ -200,6 +200,74 @@ class EtaCalibrationResponse(BaseModel):
     trace_id: str
 
 
+class DelayAccountingComponentRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    name: Literal["dispatch", "travel", "preparation", "pickup", "delivery"]
+    seconds: float | None = Field(default=None, ge=0)
+    clock_domain: Literal["wall", "simulated"] | None = None
+
+
+class DelayAccountingRecordRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    record_id: str = Field(min_length=1, max_length=128)
+    observed_duration_seconds: float = Field(ge=0)
+    clock_domain: Literal["wall", "simulated"]
+    components: tuple[DelayAccountingComponentRequest, ...] = Field(default=(), max_length=5)
+
+
+class DelayAccountingRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    records: tuple[DelayAccountingRecordRequest, ...] = Field(min_length=1, max_length=1000)
+
+
+class DelayAccountingComponentResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    name: Literal["dispatch", "travel", "preparation", "pickup", "delivery"]
+    seconds: float | None
+    clock_domain: Literal["wall", "simulated"] | None
+
+
+class DelayAccountingRecordResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    record_id: str
+    status: Literal["RECONCILED", "UNRECONCILED", "INCOMPLETE", "CLOCK_DOMAIN_MISMATCH"]
+    observed_duration_seconds: float
+    accounted_duration_seconds: float
+    residual_seconds: float | None
+    components: tuple[DelayAccountingComponentResponse, ...]
+    missing_components: tuple[str, ...]
+    mismatched_components: tuple[str, ...]
+    digest: str
+
+
+class DelayAccountingAggregateResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    record_count: int
+    observed_duration_seconds: float
+    accounted_duration_seconds: float
+    residual_seconds: float | None
+    reconciled_count: int
+    incomplete_count: int
+    clock_domain_mismatch_count: int
+    digest: str
+
+
+class DelayAccountingResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["compute"]
+    claim_label: Literal["accounting decomposition; not causal inference"]
+    records: tuple[DelayAccountingRecordResponse, ...]
+    aggregate: DelayAccountingAggregateResponse
+    trace_id: str
+
+
 class CourierCandidateRequest(BaseModel):
     model_config = ConfigDict(frozen=True)
 
