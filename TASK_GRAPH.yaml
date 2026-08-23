@@ -1166,12 +1166,12 @@
       "phase": "P24",
       "priority": "high",
       "depends_on": ["RM-212"],
-      "status": "validating",
+      "status": "passed",
       "acceptance": ["Named metrics have definitions, time semantics, source fields, and aggregation rules", "Denominators and unavailable-data behavior are tested", "Web, reports, and agents consume one metric definition instead of ad hoc calculations"],
       "gates": ["L2-analytics", "L6-data-quality", "L4-contracts"],
       "evidence": ["evidence/gates/RM-213/semantic-metrics.md"],
       "blocked_by": [],
-      "notes": "Implementation passes local Compute gates (181 tests, 95.25% coverage, semantic metric gate) and Web gates (51 tests, static checks, production build); remote Evidence Gate is next. Metrics are analytical read models and never business authority."
+      "notes": "Passed in checkpoint 394ccf5 with local Compute gates (181 tests, 95.25% coverage, semantic metric gate), Web gates (51 tests, static checks, production build), and GitHub Actions run 32643932098 green across all five jobs. Metrics are analytical read models and never business authority. RM-214 is now active."
     },
     {
       "id": "RM-214",
@@ -1179,12 +1179,12 @@
       "phase": "P25",
       "priority": "high",
       "depends_on": ["RM-210"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Important HTTP, messaging, database, travel, solver, and decision boundaries preserve trace context", "Trace export is provider-neutral and optional locally", "Correlation, order, and decision identifiers are testable without a collector"],
       "gates": ["L2-observability", "L5-resilience", "L6-contracts"],
       "evidence": ["evidence/gates/RM-214/otel-tracing.md"],
       "blocked_by": [],
-      "notes": "Instrument useful boundaries only; no collector deployment is required for the local contract."
+      "notes": "Active after RM-213 passed. Instrument useful boundaries only; no collector deployment is required for the local contract."
     },
     {
       "id": "RM-215",

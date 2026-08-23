@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P24
 
-Current Task: RM-213 - Define semantic metrics layer
+Current Task: RM-214 - Add useful end-to-end OpenTelemetry tracing boundaries
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-212 are passed. RM-212 closure run 32643329851 is green. RM-213 centralized semantic metrics passes local Compute gates at 181 tests/95.25% and Web gates at 51 tests/build, and is preparing remote validation. RM-214 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-213 are passed. RM-213 checkpoint 394ccf5 and Actions run 32643932098 are green across all five jobs, including Linux DuckDB/metrics and Web browser smoke. RM-214 tracing is active and unlocks critical RM-215; RM-216 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

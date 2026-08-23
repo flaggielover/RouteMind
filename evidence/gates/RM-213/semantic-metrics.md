@@ -1,7 +1,7 @@
 # RM-213 Semantic Metrics Evidence
 
 Date: 2026-08-23  
-Implementation checkpoint: pending commit after local validation
+Implementation checkpoint: `394ccf5`
 
 ## Scope
 
@@ -46,6 +46,10 @@ explicit HTTP failure behavior without duplicating a metric calculation.
 
 Local result: PASS - 181 Compute tests at 95.25% coverage and 51 Web tests;
 all listed static, contract, deterministic, analytical, and build gates passed.
+
+GitHub Actions `32643932098`: PASS across all five jobs, including frozen Linux
+Python/DuckDB metric gates, Web static/unit/browser gates, Java, resilience, and
+control-plane validation.
 
 ## Boundaries
 
