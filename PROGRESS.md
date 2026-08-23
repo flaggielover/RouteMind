@@ -6,17 +6,17 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 18 / 27 tasks passed (RM-210 through RM-227; RM-228 through RM-232 pending; RM-233 in progress; RM-234 through RM-236 pending)
+Enhancement Progress: 19 / 27 tasks passed (RM-210 through RM-227, RM-233; RM-228 through RM-229 and RM-231 through RM-232 pending; RM-230 in progress; RM-234 through RM-236 pending)
 
-Repository Total: 104 / 113 tasks passed
+Repository Total: 105 / 113 tasks passed
 
-Current Task: RM-233 - Add reference data versioning and identity contracts
+Current Task: RM-230 - Build Reliability Center surface
 
-Last Completed: RM-227 - Add strategy analytics and Pareto visualization
+Last Completed: RM-233 - Add reference data versioning and identity contracts
 
-Current Gate: RM-227 passed local and remote validation in Actions run 32659202824. RM-233 is active; reference identities must remain immutable, additive, and linked across decisions, archives, marts, and replay manifests.
+Current Gate: RM-233 passed local and remote validation in Actions run 32659704665. RM-230 is active; reliability evidence must expose timelines, invariant state, degradation, trace links, and bounded recovery without claiming unavailable telemetry as healthy.
 
-CI: PASS through RM-227 checkpoint c63d336 in run 32659202824 with all five jobs; RM-226 run 32658324255, RM-225 run 32657006258, RM-224 run 32656271920, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-233 checkpoint b5174d8 in run 32659704665 with all five jobs; RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
@@ -24,7 +24,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement RM-233 reference data versioning and identity contracts; RM-230 remains independently dependency-eligible.
+Next Candidates: Implement RM-230 Reliability Center surface; RM-228 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -684,6 +684,12 @@ The task is now passed and RM-120 is the active implementation.
   existing skips.
 - Enhancement is now 18/27 and repository total is 104/113. RM-233 is active
   for immutable reference-data identity contracts.
+
+### RM-233 reference-data closure and RM-230 activation - 2026-08-24
+- Checkpoint `b5174d8` passed all five GitHub Actions jobs in run
+  `32659704665`, including Compute 212 tests at 95.17% coverage.
+- Enhancement is now 19/27 and repository total is 105/113. RM-230 is active
+  for read-only Reliability Center evidence.
 
 ### RM-223 closure and RM-224 activation - 2026-08-24
 - Checkpoint `c3f5587` passed all five GitHub Actions jobs in run

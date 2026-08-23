@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Enhancement Pass P25
 
-Current Task: RM-233 - Add reference data versioning and identity contracts
+Current Task: RM-230 - Build Reliability Center surface
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-227 are passed. RM-227 checkpoint c63d336 and Actions run 32659202824 passed all five jobs. RM-233 reference-data identity contracts are now active; RM-228 through RM-232 and RM-234 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-227 and RM-233 are passed. RM-233 checkpoint b5174d8 and Actions run 32659704665 passed all five jobs. RM-230 Reliability Center is now active; RM-228, RM-229, RM-231, RM-232, and RM-234 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,14 +629,14 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-233 reference data versioning and identity contracts. Preserve Java lifecycle
+- Resume at RM-230 Reliability Center surface. Preserve Java lifecycle
   authority, durable location sequence ordering, Redis-as-projection, and the
   explicit non-disciplinary anomaly boundary and honest ETA lineage boundary.
 - RM-215 evidence is `evidence/gates/RM-215/reconciliation.md`; checkpoint
   `d26a121` and GitHub Actions run `32647766636` passed all five jobs.
-- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 18/27 with
-  RM-233 active. Repository total is 104/113. RM-230 remains independently
-  eligible, while RM-233 is the active lineage sequence.
+- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 19/27 with
+  RM-230 active. Repository total is 105/113. RM-228 remains independently
+  eligible, while RM-230 is the active reliability sequence.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
 
 RM-216 closure, RM-217 implementation, RM-218 notes, and RM-219 status: checkpoint `c98ea76` is
@@ -663,4 +663,7 @@ RM-226 is closed in checkpoint `470d67f` with evidence in
 `evidence/gates/RM-226/decision-xray.md` and Actions run `32658324255`.
 RM-227 is closed in checkpoint `c63d336` with evidence in
 `evidence/gates/RM-227/strategy-analytics.md` and Actions run `32659202824`.
-Continue autonomously with RM-233.
+RM-233 is closed in checkpoint `b5174d8` with evidence in
+`evidence/gates/RM-233/reference-data-versioning.md` and Actions run
+`32659704665`.
+Continue autonomously with RM-230.

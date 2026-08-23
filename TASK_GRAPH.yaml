@@ -1387,12 +1387,12 @@
       "phase": "P28",
       "priority": "high",
       "depends_on": ["RM-214", "RM-215"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Reliability timeline, invariant matrix, degradation state, trace links, and recovery evidence are inspectable", "Unavailable telemetry is explicit and never shown as healthy", "Operator actions remain bounded and authorized"],
       "gates": ["L4-web", "L5-resilience", "L6-evidence-audit"],
       "evidence": ["evidence/gates/RM-230/reliability-center.md"],
       "blocked_by": [],
-      "notes": "The surface is read-oriented; no autonomous remediation is introduced."
+      "notes": "Activated after RM-233 passed. The surface is read-oriented; no autonomous remediation is introduced."
     },
     {
       "id": "RM-231",
@@ -1426,12 +1426,12 @@
       "phase": "P28",
       "priority": "high",
       "depends_on": ["RM-205", "RM-211"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Travel, zone, strategy, and analytical reference data have immutable version identities", "Decisions, archives, marts, and replay manifests link the identity", "Updates are additive/versioned and do not silently rewrite history"],
       "gates": ["L6-lineage", "L3-postgres", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-233/reference-data-versioning.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-227 passed. Provider-neutral and local deterministic fixtures remain supported; preserve immutable identities across decisions, archives, marts, and replay manifests."
+      "notes": "Passed in checkpoint b5174d8 after Compute 212 tests at 95.17% coverage, contract/determinism/archive/mart gates, and all five GitHub Actions jobs in run 32659704665. Immutable content-addressed identities, explicit additive supersession, artifact metadata, replay manifests, benchmark manifests, archive links, and existing Java ledger reference identity are covered. RM-230 is now active."
     },
     {
       "id": "RM-234",
