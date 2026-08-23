@@ -86,6 +86,19 @@ class BusinessApiApplicationTests {
 	}
 
 	@Test
+	void w3cTraceContextIsContinuedWithoutACollector() throws Exception {
+		String traceId = "11111111111111111111111111111111";
+		mockMvc.perform(get("/api/v1/system")
+				.header("traceparent", "00-" + traceId + "-2222222222222222-01")
+				.header("X-Request-Id", "rm214-request")
+				.header("X-Correlation-Id", "rm214-correlation"))
+				.andExpect(status().isOk())
+				.andExpect(header().string("X-Request-Id", "rm214-request"))
+				.andExpect(header().string("X-Trace-Id", traceId))
+				.andExpect(header().string("traceparent", org.hamcrest.Matchers.startsWith("00-" + traceId + "-")));
+	}
+
+	@Test
 	void orderCommandsAreIdempotentAndRejectKeyReuse() throws Exception {
 		String create = mockMvc.perform(post("/api/v1/orders")
 				.header("Idempotency-Key", "create-1")

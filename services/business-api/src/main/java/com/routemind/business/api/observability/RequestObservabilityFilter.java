@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import io.micrometer.tracing.Span;
+import io.micrometer.tracing.Tracer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -22,21 +24,36 @@ public final class RequestObservabilityFilter extends OncePerRequestFilter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RequestObservabilityFilter.class);
 	private static final Pattern SAFE_IDENTIFIER = Pattern.compile("[A-Za-z0-9._:-]{1,128}");
 	private final MeterRegistry meterRegistry;
+	private final Tracer tracer;
 
-	public RequestObservabilityFilter(MeterRegistry meterRegistry) {
+	public RequestObservabilityFilter(MeterRegistry meterRegistry, Tracer tracer) {
 		this.meterRegistry = meterRegistry;
+		this.tracer = tracer;
 	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 			FilterChain filterChain) throws ServletException, java.io.IOException {
 		String requestId = normalize(request.getHeader("X-Request-Id"), UUID.randomUUID().toString());
-		String traceId = normalize(request.getHeader("X-Trace-Id"), UUID.randomUUID().toString().replace("-", ""));
+		Span currentSpan = tracer.currentSpan();
+		String otelTraceId = currentSpan == null ? UUID.randomUUID().toString().replace("-", "")
+				: currentSpan.context().traceId();
+		String traceId = normalize(request.getHeader("X-Trace-Id"), otelTraceId);
+		String correlationId = normalize(request.getHeader("X-Correlation-Id"), "");
 		long started = System.nanoTime();
 		MDC.put("request_id", requestId);
 		MDC.put("trace_id", traceId);
+		if (currentSpan != null) {
+			currentSpan.tag("routemind.request_id", requestId);
+			if (!correlationId.isEmpty()) currentSpan.tag("routemind.correlation_id", correlationId);
+		}
 		response.setHeader("X-Request-Id", requestId);
 		response.setHeader("X-Trace-Id", traceId);
+		if (currentSpan != null) {
+			String traceFlags = Boolean.TRUE.equals(currentSpan.context().sampled()) ? "01" : "00";
+			response.setHeader("traceparent", "00-" + currentSpan.context().traceId() + "-"
+					+ currentSpan.context().spanId() + "-" + traceFlags);
+		}
 		try {
 			filterChain.doFilter(request, response);
 		} finally {

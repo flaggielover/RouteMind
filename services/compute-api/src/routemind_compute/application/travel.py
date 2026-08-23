@@ -9,6 +9,8 @@ from heapq import heappop, heappush
 from math import isfinite
 from typing import Protocol
 
+from opentelemetry.trace import Tracer, get_tracer
+
 from routemind_compute.application.nearest import great_circle_distance_kilometres
 from routemind_compute.domain.dispatch import GeoPoint
 
@@ -207,6 +209,54 @@ class TravelTimeProvider(Protocol):
     def matrix(
         self, origins: Sequence[GeoPoint], destinations: Sequence[GeoPoint]
     ) -> TravelTimeMatrix: ...
+
+
+class TracedTravelTimeProvider:
+    """Trace provider calls while preserving the provider abstraction."""
+
+    def __init__(self, delegate: TravelTimeProvider, *, tracer: Tracer | None = None) -> None:
+        self.delegate = delegate
+        self.name = delegate.name
+        self._tracer = tracer or get_tracer("routemind.compute.travel", "v1")
+
+    def estimate(
+        self,
+        origin: GeoPoint,
+        destination: GeoPoint,
+        context: DynamicTravelContext | None = None,
+    ) -> TravelTime:
+        with self._tracer.start_as_current_span(
+            "routemind.travel.estimate",
+            attributes={"routemind.travel.provider": self.delegate.name},
+        ) as span:
+            result = _invoke_with_context(self.delegate.estimate, (origin, destination), context)
+            if not isinstance(result, TravelTime):
+                raise TypeError("travel provider returned an invalid point result")
+            span.set_attribute("routemind.travel.result_provider", result.provider)
+            span.set_attribute("routemind.travel.fallback_used", result.fallback_used)
+            span.set_attribute("routemind.travel.seconds", result.seconds)
+            return result
+
+    def matrix(
+        self,
+        origins: Sequence[GeoPoint],
+        destinations: Sequence[GeoPoint],
+        context: DynamicTravelContext | None = None,
+    ) -> TravelTimeMatrix:
+        with self._tracer.start_as_current_span(
+            "routemind.travel.matrix",
+            attributes={
+                "routemind.travel.provider": self.delegate.name,
+                "routemind.travel.origins": len(origins),
+                "routemind.travel.destinations": len(destinations),
+            },
+        ) as span:
+            result = _invoke_with_context(self.delegate.matrix, (origins, destinations), context)
+            if not isinstance(result, TravelTimeMatrix):
+                raise TypeError("travel provider returned an invalid matrix result")
+            span.set_attribute("routemind.travel.result_provider", result.provider)
+            span.set_attribute("routemind.travel.fallback_used", result.fallback_used)
+            return result
 
 
 class DeterministicLocalTravelProvider:

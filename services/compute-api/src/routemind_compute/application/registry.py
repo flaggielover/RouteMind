@@ -2,6 +2,8 @@ from dataclasses import dataclass, replace
 from time import perf_counter
 from typing import Literal
 
+from opentelemetry.trace import Tracer, get_tracer
+
 from routemind_compute.application.parameters import Metadata, StrategyParameterSchema, schema_for
 from routemind_compute.application.verification import (
     SolverOutputInvalidError,
@@ -53,8 +55,11 @@ class StrategyDescriptor:
 class StrategyRegistry:
     """Versioned strategy lookup and result instrumentation boundary."""
 
-    def __init__(self, strategies: tuple[DispatchStrategy, ...] = ()) -> None:
+    def __init__(
+        self, strategies: tuple[DispatchStrategy, ...] = (), *, tracer: Tracer | None = None
+    ) -> None:
         self._strategies: dict[str, DispatchStrategy] = {}
+        self._tracer = tracer or get_tracer("routemind.compute.solver", "v1")
         for strategy in strategies:
             self.register(strategy)
 
@@ -105,19 +110,39 @@ class StrategyRegistry:
         self, name: str, problem: DispatchProblem, configuration: Metadata = ()
     ) -> DispatchDecision:
         strategy = self._configured(name, configuration)
-        started = perf_counter()
-        decision = strategy.solve(problem)
-        elapsed_millis = (perf_counter() - started) * 1000
-        if decision.request_id != problem.request_id:
-            raise ValueError("strategy returned a decision for a different request")
-        if decision.strategy != strategy.name:
-            raise ValueError("strategy returned a decision with a different strategy name")
-        version = str(getattr(strategy, "version", decision.strategy_version)).strip()
-        if not version:
-            raise ValueError("strategy version must not be blank")
-        report = verify_dispatch_decision(problem, decision, strategy)
-        if not report.valid:
-            raise SolverOutputInvalidError(report)
+        with self._tracer.start_as_current_span(
+            "routemind.solver.solve",
+            attributes={
+                "routemind.request_id": problem.request_id,
+                "routemind.strategy": strategy.name,
+                "routemind.candidate_count": len(problem.candidates),
+            },
+        ) as solver_span:
+            started = perf_counter()
+            decision = strategy.solve(problem)
+            elapsed_millis = (perf_counter() - started) * 1000
+            solver_span.set_attribute("routemind.solver.duration_ms", elapsed_millis)
+            solver_span.set_attribute(
+                "routemind.decision.assigned", decision.courier_id is not None
+            )
+            if decision.request_id != problem.request_id:
+                raise ValueError("strategy returned a decision for a different request")
+            if decision.strategy != strategy.name:
+                raise ValueError("strategy returned a decision with a different strategy name")
+            version = str(getattr(strategy, "version", decision.strategy_version)).strip()
+            if not version:
+                raise ValueError("strategy version must not be blank")
+            with self._tracer.start_as_current_span(
+                "routemind.decision.verify",
+                attributes={
+                    "routemind.decision_id": decision.request_id,
+                    "routemind.strategy": strategy.name,
+                },
+            ) as verification_span:
+                report = verify_dispatch_decision(problem, decision, strategy)
+                verification_span.set_attribute("routemind.decision.valid", report.valid)
+                if not report.valid:
+                    raise SolverOutputInvalidError(report)
         metadata = (
             *decision.metadata,
             ("candidate_count", str(len(problem.candidates))),
@@ -164,7 +189,7 @@ class StrategyRegistry:
         raise ValueError(f"strategy does not expose configurable parameters: {name}")
 
 
-def default_registry() -> StrategyRegistry:
+def default_registry(*, tracer: Tracer | None = None) -> StrategyRegistry:
     from routemind_compute.application.baselines import HungarianStrategy, WeightedGreedyStrategy
     from routemind_compute.application.flow import (
         MinimumCostFlowStrategy,
@@ -183,5 +208,6 @@ def default_registry() -> StrategyRegistry:
             MinimumCostFlowStrategy(),
             PartitionedAssignmentStrategy(),
             VrptwStrategy(),
-        )
+        ),
+        tracer=tracer,
     )

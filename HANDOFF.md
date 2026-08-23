@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Enhancement Pass P24
+Current Phase: Enhancement Pass P25
 
 Current Task: RM-214 - Add useful end-to-end OpenTelemetry tracing boundaries
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-213 are passed. RM-213 checkpoint 394ccf5 and Actions run 32643932098 are green across all five jobs, including Linux DuckDB/metrics and Web browser smoke. RM-214 tracing is active and unlocks critical RM-215; RM-216 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-213 are passed. RM-214 is validating locally with Java 71 and Compute 185 tests green. W3C context and the HTTP/database/messaging/travel/solver/decision boundaries are collector-free testable; implementation commit and GitHub Actions are pending. RM-214 unlocks critical RM-215; RM-216 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,48 +629,14 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-204 authoritative assignment lease protocol. RM-200 through
-  RM-203 are passed; RM-205 and RM-206 are also eligible, while RM-204 is the
-  critical-path active task. RM-203 evidence is
-  `evidence/gates/RM-203/clock-domains.md` and Actions run `32626153743` passed
-  all five jobs.
-- Round 2 is complete at 48/48 tasks and the hardening program is 4/10; the
-  repository total is 80/86. Do not
-  redo RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162/
-  RM-170/RM-171/RM-180/RM-181/RM-190; their local evidence and green Actions
-  runs are recorded.
-- RM-180 is fully validated locally and remotely. Implementation checkpoint is
-  `56c17be`; evidence checkpoint is `7c7773e`; evidence is in
-  `evidence/gates/RM-180/round2-performance.md`.
-- The deterministic RM-180 run used seed `18023` on Windows 11 with PostgreSQL
-  18.6, RabbitMQ 4.3.5, Redis 8.10.1, Java 17.0.1, and Python 3.14.6. Dispatch
-  (128 requests/concurrency 8) passed with p95 `33.850 ms` and wall-clock
-  throughput `305.510 RPS`; Twin (64 steps) reached simulated time `64.0 s`
-  with p95 `16.107 ms`; SSE streamed 64 ordered events from 80 creates in
-  `69.106 ms`, and stale cursor returned HTTP 409. Result digest is
-  `92f8396b9184f2b1be3bc7f3b77c9d23a4644f9c4e108156565fcded2cf50316`.
-- RM-181 is fully validated locally and remotely. Evidence is in
-  evidence/gates/RM-181/ux-closure.md; checkpoint b61c8c2. Playwright passed
-  34 of 36 instances with two existing mobile-project skips, desktop/mobile axe
-  scans passed, and the closure covers live state, stale realtime, forms, maps,
-  strategy metrics, and keyboard focus. Actions run 32614952772 passed all five
-  jobs; the earlier 32614866937 formatting failure was repaired and retained as
-  recovery evidence.
-- `./scripts/verify.ps1` and `./scripts/full-gate.ps1` pass Java 61, Python 142
-  at 95.88%, Web 49 unit/build, five schemas/15 fixtures, and control checks.
-  GitHub Actions run `32613773339` passed all five jobs, including Web browser
-  smoke and bounded degradation. RM-180 is passed (46/48 Round 2, 74/76
-  repository); RM-181 is passed (47/48 Round 2, 75/76 repository).
-- RM-190 is fully validated in checkpoint `bd58002`; its evidence is in
-  `evidence/gates/RM-190/round2-closure.md`. The source audit removed known
-  fabricated live metrics/role copy, added explicit unavailable states, and
-  passed the deterministic audit script. The final demo sequence is in
-  `docs/runbooks/round2-final-demo.md`; proposed Round 3 gaps are in
-  `docs/reviews/ROUND_3_GAPS.md`. Actions run `32616020918` passed all five
-  jobs. There is no remaining unblocked Round 2 task.
-- The hardening graph is present in `TASK_GRAPH.yaml`: RM-200 through RM-209
-  are passed, all dependencies are explicit, and the Enhancement Pass handoff
-  is recorded. The current Docker-backed rerun stopped at a silent Docker
-  Compose CLI hang; targeted local gates, reused real-service evidence, and the
-  complete remote Actions runs are recorded in the RM-208/RM-209 closure
-  evidence.
+- Resume at RM-214 OpenTelemetry tracing validation. Do not mark it passed until
+  its implementation checkpoint has a green five-job GitHub Actions run.
+- Local evidence is `evidence/gates/RM-214/otel-tracing.md`. Java passes 71
+  tests; Compute passes 185 tests at 95.24% coverage plus contract,
+  determinism, archive, mart, and semantic-metric gates.
+- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 4/27.
+  Repository total is 90/113. RM-213 closure Actions run `32644103060` is green.
+- After RM-214 passes, immediately activate critical RM-215 reconciliation and
+  invariant drift detection. RM-216 is independently eligible but does not
+  supersede the RM-215 critical-path unlock.
+- Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.

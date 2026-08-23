@@ -7,6 +7,7 @@ param(
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 $serviceRoot = Join-Path $root "services/business-api"
+$mavenRepository = Join-Path $root ".tools/m2"
 $onWindows = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT
 $wrapperName = if ($onWindows) { "mvnw.cmd" } else { "mvnw" }
 $wrapper = Join-Path $serviceRoot $wrapperName
@@ -52,10 +53,10 @@ Set-RepositoryJavaHome
 Push-Location $serviceRoot
 try {
     switch ($Action) {
-        "test" { & $wrapper "clean" "test" }
-        "package" { & $wrapper "clean" "package" }
-        "run" { & $wrapper "spring-boot:run" }
-        "resilience" { & $wrapper "test" "-Dtest=BusinessApiApplicationTests" }
+        "test" { & $wrapper "-Dmaven.repo.local=$mavenRepository" "clean" "test" }
+        "package" { & $wrapper "-Dmaven.repo.local=$mavenRepository" "clean" "package" }
+        "run" { & $wrapper "-Dmaven.repo.local=$mavenRepository" "spring-boot:run" }
+        "resilience" { & $wrapper "-Dmaven.repo.local=$mavenRepository" "test" "-Dtest=BusinessApiApplicationTests" }
     }
     if ($LASTEXITCODE -ne 0) {
         throw "Business API $Action failed with exit code $LASTEXITCODE"

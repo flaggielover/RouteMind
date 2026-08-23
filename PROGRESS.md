@@ -1,6 +1,6 @@
 # RouteMind Progress
 
-Current Phase: Enhancement Pass P24
+Current Phase: Enhancement Pass P25
 
 Round 2 Progress: 48 / 48 tasks passed
 
@@ -14,11 +14,11 @@ Current Task: RM-214 - Add useful end-to-end OpenTelemetry tracing boundaries
 
 Last Completed: RM-213 - Define semantic metrics layer
 
-Current Gate: RM-213 semantic metrics passed local Compute gates (181 tests, 95.25% coverage), Web gates (15 files / 51 tests and build), and GitHub Actions run 32643932098 across all five jobs. RM-214 tracing is active. Docker Desktop API remains an explicit historical infrastructure residual.
+Current Gate: RM-214 local implementation gates pass Java 71 tests and Compute 185 tests at 95.24% coverage, including collector-free W3C propagation and HTTP/database/messaging/travel/solver/decision boundaries. Implementation commit and GitHub Actions validation are pending. Docker Desktop API remains an explicit historical infrastructure residual.
 
-CI: PASS through final handoff run 32641575021 with all five jobs; earlier handoff run 32630456710, closure runs 32629951315, 32630183684, and 32630339004, and RM-208 run 32629363069 also passed all five jobs; RM-207 run 32629142871, RM-206 run 32628787160, RM-205 closure run 32628007666, RM-205 implementation run 32627857784, RM-204 run 32627357369, RM-203 run 32626153743, RM-202 run 32625597945, RM-201 run 32624822845, RM-190 run 32616020918, RM-181 run 32615330788 and implementation run 32614952772, RM-180 run 32613773339, RM-171 run 32613079169, RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-213 closure run 32644103060 with all five jobs; RM-214 is locally validated and awaits its implementation run. Earlier RM-213 implementation run 32643932098, hardening handoff run 32641575021, and recorded prior closure runs also passed. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS - Java 61, Python 181 / 95.25%, Web 51 unit + build, E2E 34 passed + 2 existing mobile-project skips, and 5 schemas / 15 contract fixtures
+Regression: PASS - Java 71, Python 185 / 95.24%, Web 51 unit + build (unchanged), E2E 34 passed + 2 existing mobile-project skips (unchanged), and 5 schemas / 15 contract fixtures
 
 Blocked: NONE
 

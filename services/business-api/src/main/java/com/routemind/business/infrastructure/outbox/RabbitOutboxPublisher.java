@@ -17,6 +17,7 @@ public class RabbitOutboxPublisher implements EventPublisher {
 
 	public RabbitOutboxPublisher(RabbitTemplate rabbitTemplate, ObjectMapper mapper) {
 		this.rabbitTemplate = rabbitTemplate;
+		this.rabbitTemplate.setObservationEnabled(true);
 		this.mapper = mapper;
 	}
 
@@ -42,9 +43,19 @@ public class RabbitOutboxPublisher implements EventPublisher {
 			throw new IllegalArgumentException("event payload cannot be serialized", exception);
 		}
 		rabbitTemplate.invoke(operations -> {
-			operations.convertAndSend("", "routemind.events." + event.eventType(), payload);
+			operations.convertAndSend("", "routemind.events." + event.eventType(), payload,
+					message -> addEnvelopeHeaders(message, event));
 			operations.waitForConfirmsOrDie(5_000);
 			return null;
 		});
+	}
+
+	static org.springframework.amqp.core.Message addEnvelopeHeaders(
+			org.springframework.amqp.core.Message message, EventEnvelope event) {
+		message.getMessageProperties().setHeader("X-Trace-Id", event.traceId());
+		message.getMessageProperties().setHeader("X-Correlation-Id", event.correlationId().toString());
+		message.getMessageProperties().setHeader("X-Event-Id", event.eventId().toString());
+		message.getMessageProperties().setHeader("X-Aggregate-Id", event.aggregateId().toString());
+		return message;
 	}
 }

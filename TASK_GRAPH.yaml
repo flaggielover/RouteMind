@@ -1179,12 +1179,12 @@
       "phase": "P25",
       "priority": "high",
       "depends_on": ["RM-210"],
-      "status": "in_progress",
+      "status": "validating",
       "acceptance": ["Important HTTP, messaging, database, travel, solver, and decision boundaries preserve trace context", "Trace export is provider-neutral and optional locally", "Correlation, order, and decision identifiers are testable without a collector"],
       "gates": ["L2-observability", "L5-resilience", "L6-contracts"],
       "evidence": ["evidence/gates/RM-214/otel-tracing.md"],
       "blocked_by": [],
-      "notes": "Active after RM-213 passed. Instrument useful boundaries only; no collector deployment is required for the local contract."
+      "notes": "Local implementation and focused/full runtime gates pass: W3C HTTP propagation, Java database/messaging/decision observations, Rabbit identity headers, and Python HTTP/travel/solver/verification spans are collector-free testable. Awaiting the implementation checkpoint and GitHub Actions before passed."
     },
     {
       "id": "RM-215",
