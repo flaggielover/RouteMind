@@ -796,6 +796,18 @@ function RolePage({
 
 function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
   const [registryOpen, setRegistryOpen] = useState(false);
+  const strategyAvailable =
+    snapshot.availability === "ready" && snapshot.dispatch.strategy !== "unavailable";
+  const activeStrategy = snapshot.dispatch.strategy;
+  const assignedOrders = snapshot.orders.filter((candidate) =>
+    ["ASSIGNED", "ACCEPTED", "ARRIVED", "PICKED_UP", "OUT_FOR_DELIVERY", "DELIVERED"].includes(
+      candidate.status,
+    ),
+  ).length;
+  const assignmentSignal =
+    snapshot.orders.length > 0
+      ? `${assignedOrders}/${snapshot.orders.length} assigned`
+      : "Not recorded";
   return (
     <RolePage
       eyebrow="Strategy lab / control"
@@ -808,14 +820,17 @@ function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
           <div className="panel-heading">
             <div>
               <p className="eyebrow">Active policy</p>
-              <h2>{snapshot.dispatch.strategy}</h2>
+              <h2>{activeStrategy}</h2>
             </div>
-            <StatusPill status="healthy" label="Registered" />
+            <StatusPill
+              status={strategyAvailable ? "healthy" : "unavailable"}
+              label={strategyAvailable ? "Registered" : "Unavailable"}
+            />
           </div>
           <div className="strategy-score">
-            <span>Assignment quality</span>
-            <strong>92.4</strong>
-            <small>+4.8 vs nearest baseline</small>
+            <span>Recorded assignment signal</span>
+            <strong>{assignmentSignal}</strong>
+            <small>Quality and baseline deltas require a recorded comparison run.</small>
           </div>
           <dl className="detail-list">
             <div>
@@ -824,11 +839,11 @@ function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
             </div>
             <div>
               <dt>Last decision</dt>
-              <dd>{snapshot.dispatch.latencyMs} ms</dd>
+              <dd>{strategyAvailable ? `${snapshot.dispatch.latencyMs} ms` : "Unavailable"}</dd>
             </div>
             <div>
               <dt>Shadow mode</dt>
-              <dd>Ready</dd>
+              <dd>Not recorded</dd>
             </div>
           </dl>
         </section>
@@ -842,19 +857,24 @@ function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
           </div>
           <div className="strategy-row active">
             <span>
-              <strong>weighted-greedy</strong>
-              <small>v1.0.0 · active</small>
+              <strong>{activeStrategy}</strong>
+              <small>{snapshot.dispatch.version} · active policy</small>
             </span>
-            <b>92.4</b>
-            <StatusPill status="healthy" label="Live" />
+            <span className="muted-label">
+              {strategyAvailable ? "Current policy" : "No active policy"}
+            </span>
+            <StatusPill
+              status={strategyAvailable ? "healthy" : "unavailable"}
+              label={strategyAvailable ? "Registered" : "Not available"}
+            />
           </div>
           <div className="strategy-row">
             <span>
               <strong>nearest</strong>
               <small>v1.0.0 · baseline</small>
             </span>
-            <b>87.6</b>
-            <span className="muted-label">Reference</span>
+            <span className="muted-label">No recorded run</span>
+            <StatusPill status="checking" label="Reference only" />
           </div>
           <button
             className="text-button"
@@ -908,6 +928,7 @@ function CustomerView({
   realtime: RealtimeConnectionState;
 }) {
   const order = snapshot.orders[0];
+  const courier = snapshot.couriers[0];
   const [command, setCommand] = useState<CustomerCommandState>(null);
   const [idempotencyKey, setIdempotencyKey] = useState(createIdempotencyKey);
   const commandAvailable = snapshot.source === "live" && snapshot.availability === "ready";
@@ -979,20 +1000,28 @@ function CustomerView({
           )}
         </section>
         <section className="panel">
-          <div className="panel-heading">
-            <div>
-              <p className="eyebrow">Courier</p>
-              <h2>Ari Singh</h2>
-            </div>
-            <Bike size={18} className="heading-icon" />
-          </div>
-          <div className="courier-card">
-            <div className="avatar">AS</div>
-            <div>
-              <strong>Delivery complete</strong>
-              <p>Thanks for using RouteMind.</p>
-            </div>
-          </div>
+          {!courier ? (
+            <p className="empty-state">No courier is available in the selected source.</p>
+          ) : (
+            <>
+              <div className="panel-heading">
+                <div>
+                  <p className="eyebrow">Courier</p>
+                  <h2>{courier.name}</h2>
+                </div>
+                <Bike size={18} className="heading-icon" />
+              </div>
+              <div className="courier-card">
+                <div className="avatar">{courier.name.slice(0, 2).toUpperCase()}</div>
+                <div>
+                  <strong>{order ? orderStatusLabel[order.status] : "No active order"}</strong>
+                  <p>
+                    {courier.zone} · {courier.status.replace("_", " ")}
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
           <div className="customer-command" aria-label="Create customer order">
             <div className="panel-heading">
               <div>
@@ -1074,13 +1103,21 @@ function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
           : null
     : null;
   const commandAvailable = snapshot.source === "live" && snapshot.availability === "ready";
-  const ordersInPrep = snapshot.orders.filter(
-    (candidate) => candidate.status === "PREPARING",
-  ).length;
-  const handoffsNext = snapshot.orders.filter(
-    (candidate) => candidate.status === "READY_FOR_PICKUP",
-  ).length;
+  const ordersInPrep =
+    snapshot.availability === "ready"
+      ? snapshot.orders.filter((candidate) => candidate.status === "PREPARING").length
+      : null;
+  const handoffsNext =
+    snapshot.availability === "ready"
+      ? snapshot.orders.filter((candidate) => candidate.status === "READY_FOR_PICKUP").length
+      : null;
   const prepMinutes = snapshot.merchants[0]?.prepMinutes ?? 0;
+  const queueStatus =
+    snapshot.availability !== "ready"
+      ? "unavailable"
+      : ordersInPrep !== null && ordersInPrep > 0
+        ? "busy"
+        : "open";
   const readyEvent = order?.events.find((event) => event.status === "READY_FOR_PICKUP");
   const submitTransition = async () => {
     if (!order || !nextCommand || !commandAvailable || command?.kind === "pending") return;
@@ -1108,11 +1145,20 @@ function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
               <p className="eyebrow">Kitchen queue</p>
               <h2>Today at a glance</h2>
             </div>
-            <StatusPill status="busy" label="Busy" />
+            <StatusPill
+              status={queueStatus}
+              label={
+                queueStatus === "unavailable"
+                  ? "Unavailable"
+                  : queueStatus === "busy"
+                    ? "Busy"
+                    : "Ready"
+              }
+            />
           </div>
           <div className="merchant-stats">
             <div>
-              <strong>{ordersInPrep}</strong>
+              <strong>{ordersInPrep ?? "Unavailable"}</strong>
               <span>orders in prep</span>
             </div>
             <div>
@@ -1120,7 +1166,7 @@ function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
               <span>avg prep time</span>
             </div>
             <div>
-              <strong>{handoffsNext}</strong>
+              <strong>{handoffsNext ?? "Unavailable"}</strong>
               <span>handoffs next</span>
             </div>
           </div>
@@ -1140,7 +1186,7 @@ function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
           <div className="panel-heading">
             <div>
               <p className="eyebrow">Next handoff</p>
-              <h2>RM-2043</h2>
+              <h2>{order?.shortId ?? "No active handoff"}</h2>
             </div>
             <PackageCheck size={18} className="heading-icon" />
           </div>
