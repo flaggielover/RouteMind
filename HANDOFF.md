@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Current Task: RM-180 - Add Round 2 performance and realtime resilience gates
+Current Task: RM-181 - Close browser UX, accessibility, and mobile quality gates
 
-Task Status: RM-171 is fully validated locally and remotely; RM-180 is the next highest-priority unblocked task
+Task Status: RM-180 is fully validated locally and remotely; RM-181 is the next highest-priority unblocked task
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,32 +629,21 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-171 failure and degradation E2E journeys; do not redo
-  completed RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162
-  green Actions runs.
-- RM-136 is fully validated after Actions run `32609222189`. Its Python `v1` live
-  dispatch responses expose input/output digests and fallback metadata; Java
-  V10 writes durable dispatch audits and a detailed Outbox event in the same
-  transaction as the authoritative order assignment. Golden-path, duplicate,
-  key-reuse, stale-version, full, and browser gates pass.
-- RM-136 evidence is recorded at `evidence/gates/RM-136/dispatch-integration.md`;
-  all five Actions jobs are green.
-- RM-162 evidence: Java 60, Python 142 at 95.88%, Web 49 unit/build, browser
-  smoke 23 passed plus one existing desktop-only skip, and 5 schemas/15
-  fixtures. GitHub Actions run `32608343277` passed all five jobs.
-- RM-170 is passed locally (44/48 Round 2, 72/76 repository). The real run
-  `38385309-478b-44ce-997e-eb54744cafe1` completed the Java/Python/PostgreSQL/
-  RabbitMQ/Redis delivery path and observed `PUBLISHED` assignment Outbox state.
-  Commit `13b08a9` fixes stable Rabbit event serialization and process-tree
-  cleanup. GitHub Actions run `32612407286` for commit `a6f8163` passed all five
-  jobs, including Web browser smoke and bounded degradation. RM-171 and RM-180
-  are now unblocked; RM-171 is next by priority and is marked `in_progress`.
-- RM-171 checkpoint `427be52` adds the real failure/degradation E2E script and
-  design. Run `55b3b3bb-cab2-4175-895e-845058036cf6` passed Redis loss and
-  recovery, compute outage, RabbitMQ restart with Outbox recovery, duplicate
-  command replay, courier offline/stale version, and bounded dispatch timeout.
-  Resilience and full gates pass Java 61, Python 142 at 95.88%, Web 49
-  unit/build, and 5 schemas/15 fixtures. Evidence is in
-  `evidence/gates/RM-171/failure-e2e.md`; GitHub Actions run `32613079169`
-  passed all five jobs. RM-171 is passed (45/48 Round 2, 73/76 repository),
-  and RM-180 is now active.
+- Resume at RM-181 browser UX, accessibility, and mobile closure. Do not redo
+  RM-133/RM-134/RM-135/RM-152/RM-155/RM-156/RM-157/RM-158/RM-162/RM-170/RM-171/
+  RM-180; their local evidence and green Actions runs are recorded.
+- RM-180 is fully validated locally and remotely. Implementation checkpoint is
+  `56c17be`; evidence checkpoint is `7c7773e`; evidence is in
+  `evidence/gates/RM-180/round2-performance.md`.
+- The deterministic RM-180 run used seed `18023` on Windows 11 with PostgreSQL
+  18.6, RabbitMQ 4.3.5, Redis 8.10.1, Java 17.0.1, and Python 3.14.6. Dispatch
+  (128 requests/concurrency 8) passed with p95 `33.850 ms` and wall-clock
+  throughput `305.510 RPS`; Twin (64 steps) reached simulated time `64.0 s`
+  with p95 `16.107 ms`; SSE streamed 64 ordered events from 80 creates in
+  `69.106 ms`, and stale cursor returned HTTP 409. Result digest is
+  `92f8396b9184f2b1be3bc7f3b77c9d23a4644f9c4e108156565fcded2cf50316`.
+- `./scripts/verify.ps1` and `./scripts/full-gate.ps1` pass Java 61, Python 142
+  at 95.88%, Web 49 unit/build, five schemas/15 fixtures, and control checks.
+  GitHub Actions run `32613773339` passed all five jobs, including Web browser
+  smoke and bounded degradation. RM-180 is passed (46/48 Round 2, 74/76
+  repository); RM-181 is now active.

@@ -958,12 +958,12 @@
       "phase": "P18",
       "priority": "high",
       "depends_on": ["RM-136", "RM-155", "RM-170"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Dispatch, event fanout, simulation tick, and browser update hot paths are measured", "Benchmarks record hardware, configuration, seed, and artifact provenance", "Backpressure, timeout, and resource bounds are verified"],
       "gates": ["L5-realtime-load", "L6-performance", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-180/round2-performance.md"],
       "blocked_by": [],
-      "notes": "No performance claim without measured context."
+      "notes": "Measured local gate and reproducibility evidence pass in commit 7c7773e; GitHub Actions run 32613773339 passed all five jobs. Claims remain limited to the stated host, configuration, and seed."
     },
     {
       "id": "RM-181",

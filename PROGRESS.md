@@ -2,17 +2,17 @@
 
 Current Phase: Round 2 P16 Strategy Laboratory
 
-Round 2 Progress: 45 / 48 tasks passed
+Round 2 Progress: 46 / 48 tasks passed
 
-Repository Total: 73 / 76 tasks passed
+Repository Total: 74 / 76 tasks passed
 
-Current Task: RM-180 - Add Round 2 performance and realtime resilience gates
+Current Task: RM-181 - Close browser UX, accessibility, and mobile quality gates
 
-Last Completed: RM-171 - Implement failure and degradation E2E journeys
+Last Completed: RM-180 - Add Round 2 performance and realtime resilience gates
 
-Current Gate: RM-171 six-scenario real failure/degradation E2E, resilience, full, verify, and Actions run 32613079169 (all five jobs) passed; RM-180 is active
+Current Gate: RM-180 measured dispatch/Twin/SSE performance and realtime gate, full, verify, and Actions run 32613773339 (all five jobs) passed; RM-181 is active
 
-CI: PASS through RM-171 run 32613079169 and RM-170 run 32612407286 with all five jobs; RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
+CI: PASS through RM-180 run 32613773339 and RM-171 run 32613079169 with all five jobs; RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs.
 
 Regression: PASS - Java 61, Python 142 / 95.88%, Web 49 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-180 - add Round 2 performance and realtime resilience gates; RM-181 UX closure remains eligible after its existing dependencies.
+Next Candidates: RM-181 - close browser UX, accessibility, and mobile quality gates; RM-190 Round 2 adversarial closure follows after RM-181.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -384,3 +384,23 @@ The task is now passed and RM-120 is the active implementation.
   all five jobs, including Web browser smoke and bounded degradation.
 - RM-171 is now passed (45/48 Round 2, 73/76 repository). RM-180 performance
   and realtime resilience gates are activated next.
+
+### RM-180 completion - 2026-08-23
+- Added the deterministic `scripts/performance-realtime-gate.ps1` wrapper and
+  Python runner. The measured local run uses seed `18023`, 128 dispatch requests
+  at concurrency 8, 64 Twin steps, 80 durable order events, and a 64-event SSE
+  batch limit. It verifies candidate/resource bounds, timeout-safe HTTP paths,
+  cursor ordering, stale-cursor conflict, metrics availability, simulated-time
+  advancement, and idempotent Twin replay.
+- The local result passed with dispatch p95 `33.850 ms` and wall-clock
+  throughput `305.510 RPS`; Twin reached simulated time `64.0 s` with p95
+  `16.107 ms` and `124.606 RPS`; SSE returned 64 ordered events from 80 creates
+  in `69.106 ms`, with stale cursor HTTP 409. Result digest is
+  `92f8396b9184f2b1be3bc7f3b77c9d23a4644f9c4e108156565fcded2cf50316`.
+- Full and verify gates pass Java 61, Python 142 at 95.88%, Web 49 unit/build,
+  five schemas/15 fixtures, and repository control checks. Evidence is recorded
+  at `evidence/gates/RM-180/round2-performance.md`; implementation checkpoint
+  is `56c17be` and evidence checkpoint is `7c7773e`.
+- GitHub Actions run `32613773339` passed all five jobs, including Python,
+  Java, Web browser smoke, bounded degradation, and control plane. RM-180 is
+  now passed (46/48 Round 2, 74/76 repository), and RM-181 is activated.
