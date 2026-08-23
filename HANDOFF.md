@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Enhancement Pass preparation / Round 3 gap execution
+Current Phase: Enhancement Pass P24
 
-Current Task: Architectural Hardening complete; next is Enhancement Pass / Round 3 gap execution
+Current Task: RM-210 - Perform Enhancement architecture and dependency audit
 
-Task Status: RM-209 is fully validated in closure checkpoint 2f90655 with synchronized control-plane records and final Actions run 32629951315 passing all five jobs. Hardening is 10/10 and the repository graph is 86/86. Docker Desktop API hung during a fresh infra rerun; prior RM-170/RM-171 real-service evidence is reused with the residual explicitly recorded. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 is passed in the task graph and RM-210 is active. RM-210 audit evidence is in docs/enhancement/ENHANCEMENT_ARCHITECTURE_AUDIT.md and evidence/gates/RM-210/enhancement-architecture-audit.md. RM-211 through RM-236 are dependency-ordered; Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
