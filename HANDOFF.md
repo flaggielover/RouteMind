@@ -8,7 +8,7 @@ Current Phase: Enhancement Pass P24
 
 Current Task: RM-213 - Define semantic metrics layer
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-212 are passed. RM-212 checkpoint 5f1cccf and Actions run 32643098647 are green, including Linux DuckDB installation and mart gates. RM-213 is active for centralized semantic metrics; RM-214 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-212 are passed. RM-212 closure run 32643329851 is green. RM-213 centralized semantic metrics passes local Compute gates at 181 tests/95.25% and Web gates at 51 tests/build, and is preparing remote validation. RM-214 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

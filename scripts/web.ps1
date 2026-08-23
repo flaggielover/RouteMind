@@ -7,6 +7,7 @@ param(
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 $webRoot = Join-Path $root "apps/web"
+$env:NPM_CONFIG_CACHE = Join-Path $root ".tools/npm-cache"
 
 if (-not (Test-Path -LiteralPath (Join-Path $webRoot "package.json") -PathType Leaf)) {
     throw "Web application package is missing: $webRoot"

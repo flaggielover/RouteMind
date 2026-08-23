@@ -16,6 +16,7 @@ from routemind_compute.api.schemas import (
     HealthResponse,
     ParameterDefinitionResponse,
     RouteBenchExperimentRequest,
+    SemanticMetricDefinitionResponse,
     ShadowEvaluateRequest,
     ShadowEvaluateResponse,
     ShadowMetricsResponse,
@@ -39,6 +40,7 @@ from routemind_compute.application.execution import execution_provenance
 from routemind_compute.application.parameters import Metadata
 from routemind_compute.application.registry import StrategyRegistry
 from routemind_compute.application.routebench import BenchmarkManifest, RouteBenchRunner
+from routemind_compute.application.semantic_metrics import MetricConsumer, metric_catalog
 from routemind_compute.application.shadow import (
     RegressionGate,
     RegressionPolicy,
@@ -91,6 +93,19 @@ def system_info() -> SystemInfoResponse:
         runtime="python",
         architecture_version="v1",
         durable_state_owner=False,
+    )
+
+
+@router.get(
+    "/api/v1/analytics/metrics/catalog",
+    response_model=tuple[SemanticMetricDefinitionResponse, ...],
+)
+def semantic_metric_catalog(
+    consumer: MetricConsumer | None = None,
+) -> tuple[SemanticMetricDefinitionResponse, ...]:
+    return tuple(
+        SemanticMetricDefinitionResponse(**definition.contract())
+        for definition in metric_catalog(consumer)
     )
 
 

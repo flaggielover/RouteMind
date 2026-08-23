@@ -1166,12 +1166,12 @@
       "phase": "P24",
       "priority": "high",
       "depends_on": ["RM-212"],
-      "status": "in_progress",
+      "status": "validating",
       "acceptance": ["Named metrics have definitions, time semantics, source fields, and aggregation rules", "Denominators and unavailable-data behavior are tested", "Web, reports, and agents consume one metric definition instead of ad hoc calculations"],
       "gates": ["L2-analytics", "L6-data-quality", "L4-contracts"],
       "evidence": ["evidence/gates/RM-213/semantic-metrics.md"],
       "blocked_by": [],
-      "notes": "Active after RM-212 passed. Metrics are analytical read models and never business authority."
+      "notes": "Implementation passes local Compute gates (181 tests, 95.25% coverage, semantic metric gate) and Web gates (51 tests, static checks, production build); remote Evidence Gate is next. Metrics are analytical read models and never business authority."
     },
     {
       "id": "RM-214",

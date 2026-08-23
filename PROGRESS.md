@@ -6,7 +6,7 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 3 / 27 tasks passed (RM-210, RM-211, RM-212; RM-213 active; RM-214 through RM-236 pending)
+Enhancement Progress: 3 / 27 tasks passed (RM-210, RM-211, RM-212; RM-213 validating; RM-214 through RM-236 pending)
 
 Repository Total: 89 / 113 tasks passed
 
@@ -14,7 +14,7 @@ Current Task: RM-213 - Define semantic metrics layer
 
 Last Completed: RM-209 - Close architectural hardening and prepare Enhancement Pass
 
-Current Gate: RM-212 DuckDB marts passed local Compute gates (174 tests, 95.47% coverage, stable full/incremental mart gate) and GitHub Actions run 32643098647 across all five jobs. RM-213 is active; Docker Desktop API remains an explicit historical infrastructure residual.
+Current Gate: RM-213 semantic metrics passed local Compute gates (181 tests, 95.25% coverage, Ruff, mypy, contracts, determinism, archive, mart, semantic metrics) and Web gates (15 files / 51 tests, format, lint, typecheck, build). Remote validation is next. RM-212 closure Actions run 32643329851 passed all five jobs. Docker Desktop API remains an explicit historical infrastructure residual.
 
 CI: PASS through final handoff run 32641575021 with all five jobs; earlier handoff run 32630456710, closure runs 32629951315, 32630183684, and 32630339004, and RM-208 run 32629363069 also passed all five jobs; RM-207 run 32629142871, RM-206 run 32628787160, RM-205 closure run 32628007666, RM-205 implementation run 32627857784, RM-204 run 32627357369, RM-203 run 32626153743, RM-202 run 32625597945, RM-201 run 32624822845, RM-190 run 32616020918, RM-181 run 32615330788 and implementation run 32614952772, RM-180 run 32613773339, RM-171 run 32613079169, RM-170 run 32612407286, RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
@@ -24,7 +24,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-213 (active) semantic metrics layer; RM-214 and RM-216 are also dependency-eligible after RM-210, but RM-213 remains the current P24 critical path.
+Next Candidates: RM-213 (validating) semantic metrics layer; RM-214 and RM-216 are dependency-eligible but RM-213 remains the active Evidence Gate.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

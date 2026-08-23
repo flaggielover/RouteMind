@@ -23,6 +23,25 @@ class SystemInfoResponse(BaseModel):
     durable_state_owner: Literal[False]
 
 
+class SemanticMetricDefinitionResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    name: str
+    display_name: str
+    description: str
+    unit: str
+    value_type: Literal["count", "ratio"]
+    source_view: str
+    source_fields: tuple[str, ...]
+    aggregation: str
+    numerator: str
+    denominator: str | None
+    time_semantics: str
+    unavailable_when: str
+    consumers: tuple[Literal["web", "report", "agent"], ...]
+    definition_digest: str
+
+
 class GeoPointRequest(BaseModel):
     model_config = ConfigDict(frozen=True)
 
