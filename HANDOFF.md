@@ -8,7 +8,7 @@ Current Phase: Round 3 Research Preparation
 
 Current Task: Enhancement Pass CLOSED; Round 3 Research Task Graph PREPARED
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-236 are passed locally. The Enhancement Closure Report and prepared Round 3 Research Task Graph are committed in closure checkpoint `98febed`. RM-236 Actions run `32663948087`, RM-229 run `32662337844`, RM-231 run `32662606286`, RM-232/RM-235 run `32662822033`, and RM-234 run `32661326399` passed all five jobs. Round 3 research execution and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-236 are passed locally. The Enhancement Closure Report and prepared Round 3 Research Task Graph are committed in closure checkpoint `98febed`; final documentation synchronization is checkpoint `4950611`. RM-236 run `32663948087` and final synchronization run `32664121577`, plus RM-229 run `32662337844`, RM-231 run `32662606286`, RM-232/RM-235 run `32662822033`, and RM-234 run `32661326399`, passed all five jobs. Round 3 research execution and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

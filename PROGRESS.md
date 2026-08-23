@@ -16,7 +16,7 @@ Last Completed: RM-236 - Close Enhancement Pass and prepare Round 3 research gra
 
 Current Gate: RM-236 closure report, Round 3 prepared graph, control-plane and verify gates passed. Closure checkpoint 98febed Actions run 32663948087 passed all five jobs; no production or scientific claim is made.
 
-CI: PASS through RM-236 closure checkpoint 98febed in run 32663948087; RM-235 checkpoint bc00832 in run 32662822033; RM-229 checkpoint 5600487 in run 32662337844; RM-231 checkpoint fb9bd77 in run 32662606286; RM-234 checkpoint 9fe015d in run 32661326399; all passed all five jobs. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through final documentation synchronization checkpoint 4950611 in run 32664121577; RM-236 closure checkpoint 98febed in run 32663948087; RM-235 checkpoint bc00832 in run 32662822033; RM-229 checkpoint 5600487 in run 32662337844; RM-231 checkpoint fb9bd77 in run 32662606286; RM-234 checkpoint 9fe015d in run 32661326399; all passed all five jobs. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
@@ -756,4 +756,6 @@ The task is now passed and RM-120 is the active implementation.
   dependency-ordered graph with no started research tasks.
 - Control-plane validation and `./scripts/verify.ps1` pass after the closure
   artifacts. Enhancement is now 27/27 and repository total is 113/113.
-- Closure checkpoint `98febed` Actions run `32663948087` passed all five jobs.
+- Closure checkpoint `98febed` Actions run `32663948087` and final documentation
+  synchronization checkpoint `4950611` Actions run `32664121577` both passed all
+  five jobs.
