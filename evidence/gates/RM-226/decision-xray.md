@@ -1,6 +1,8 @@
 # RM-226 Decision X-Ray Evidence
 
-Status: validating
+Status: passed
+Implementation checkpoint: 470d67f
+GitHub Actions: PASS - run 32658324255 (all five jobs)
 
 ## Scope
 
@@ -25,7 +27,9 @@ Status: validating
 
 ## Remote evidence
 
-Pending checkpoint commit and GitHub Actions run.
+GitHub Actions run `32658324255` passed the Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `470d67f`.
 
 ## Boundaries
 

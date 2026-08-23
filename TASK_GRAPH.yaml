@@ -1335,12 +1335,12 @@
       "phase": "P27",
       "priority": "critical",
       "depends_on": ["RM-205", "RM-206", "RM-210"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Decision ID, provenance, candidates, rejection reasons, travel, objective, risk, selected action, alternatives, verification, and digests are inspectable", "Bounded replay uses captured snapshots and flags deterministic digest changes", "Natural-language summaries are grounded in structured evidence"],
       "gates": ["L3-java", "L4-web", "L6-lineage", "L6-correctness"],
       "evidence": ["evidence/gates/RM-226/decision-xray.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-225 passed. The ledger remains durable authority; X-Ray is read-only and must expose structured provenance rather than unsupported narrative."
+      "notes": "Passed in checkpoint 470d67f after Web 74 unit tests/build, 34 browser passes with 2 existing desktop-only skips, Java BusinessApiApplicationTests 15/15 under JDK 17, and all five GitHub Actions jobs in run 32658324255. The Java read-only ledger endpoint and Web X-Ray expose provenance, candidates/rejections, selected action, alternatives, objective/risk, verification, digests, and bounded replay change detection. RM-227 is now active."
     },
     {
       "id": "RM-227",
@@ -1348,12 +1348,12 @@
       "phase": "P27",
       "priority": "high",
       "depends_on": ["RM-213", "RM-226"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Strategy metadata, maturity, parameters, constraints, fallback, and verification status are visible", "Scenario comparisons cover latency, quality, risk, fairness, cost, fallback, and verification", "Pareto points are computed rather than asserted"],
       "gates": ["L2-compute", "L4-web", "L6-statistics"],
       "evidence": ["evidence/gates/RM-227/strategy-analytics.md"],
       "blocked_by": [],
-      "notes": "Existing Strategy Comparison UI is extended only where data contracts support it."
+      "notes": "Activated after RM-226 passed. Existing Strategy Comparison UI is extended only where data contracts support it."
     },
     {
       "id": "RM-228",

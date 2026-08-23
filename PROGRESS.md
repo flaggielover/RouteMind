@@ -6,17 +6,17 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 16 / 27 tasks passed (RM-210 through RM-225; RM-226 in progress; RM-227 through RM-236 pending)
+Enhancement Progress: 17 / 27 tasks passed (RM-210 through RM-226; RM-227 in progress; RM-228 through RM-236 pending)
 
-Repository Total: 102 / 113 tasks passed
+Repository Total: 103 / 113 tasks passed
 
-Current Task: RM-226 - Build Decision X-Ray over the durable ledger
+Current Task: RM-227 - Add strategy analytics and Pareto visualization
 
-Last Completed: RM-225 - Add toggleable geo analytical layers
+Last Completed: RM-226 - Build Decision X-Ray over the durable ledger
 
-Current Gate: RM-225 passed local and remote validation in Actions run 32657006258. RM-226 is active; Decision X-Ray must expose durable-ledger provenance, candidates, rejection reasons, travel/objective/risk, selected action, alternatives, verification, and bounded replay digest changes.
+Current Gate: RM-226 passed local and remote validation in Actions run 32658324255. RM-227 is active; strategy analytics must expose supported metadata, scenario comparisons, and computed Pareto points.
 
-CI: PASS through RM-225 checkpoint 71f1c18 in run 32657006258 with all five jobs; RM-224 run 32656271920, RM-223 run 32655392123, RM-222 run 32654399976 (closure docs) and implementation run 32654207318, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-226 checkpoint 470d67f in run 32658324255 with all five jobs; RM-225 run 32657006258, RM-224 run 32656271920, RM-223 run 32655392123, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
@@ -24,7 +24,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement RM-226 Decision X-Ray; RM-233 remains independently dependency-eligible.
+Next Candidates: Implement RM-227 strategy analytics and Pareto visualization; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -670,6 +670,13 @@ The task is now passed and RM-120 is the active implementation.
   `32657006258`, including Web static/unit/browser validation.
 - Enhancement is now 16/27 and repository total is 102/113. RM-226 is active
   to build a read-only Decision X-Ray over durable dispatch evidence.
+
+### RM-226 Decision X-Ray closure and RM-227 activation - 2026-08-24
+- Checkpoint `470d67f` passed all five GitHub Actions jobs in run
+  `32658324255`, including Web 74 unit/build tests, 34 browser passes with 2
+  existing skips, and the Java ledger lookup assertions.
+- Enhancement is now 17/27 and repository total is 103/113. RM-227 is active
+  for strategy analytics and computed Pareto visualization.
 
 ### RM-223 closure and RM-224 activation - 2026-08-24
 - Checkpoint `c3f5587` passed all five GitHub Actions jobs in run
