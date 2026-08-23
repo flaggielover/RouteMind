@@ -1379,7 +1379,7 @@
       "gates": ["L2-compute", "L4-web", "L6-correctness"],
       "evidence": ["evidence/gates/RM-229/what-if-delta.md"],
       "blocked_by": [],
-      "notes": "Passed in checkpoint pending after Web 32 test files/88 tests, full Playwright 34 passes with 2 existing desktop-only skips, and Strategy/What-if accessibility smoke on desktop/mobile. The delta projection compares each variant to the recorded baseline using coverage objective, duration, and risk; it preserves run and digest provenance and makes no causal claim. RM-231 is now active."
+      "notes": "Passed in checkpoint 5600487 after Web 32 test files/88 tests, full Playwright 34 passes with 2 existing desktop-only skips, and Strategy/What-if accessibility smoke on desktop/mobile. GitHub Actions run 32662337844 passed all five jobs. The delta projection compares each variant to the recorded baseline using coverage objective, duration, and risk; it preserves run and digest provenance and makes no causal claim. RM-231 is now active."
     },
     {
       "id": "RM-230",
@@ -1405,7 +1405,7 @@
       "gates": ["L2-compute", "L4-web", "L6-lineage"],
       "evidence": ["evidence/gates/RM-231/research-center.md"],
       "blocked_by": [],
-      "notes": "Passed in checkpoint pending after Web 34 test files/92 tests, full Playwright 34 passes with 2 existing desktop-only skips, and Strategy/What-if accessibility smoke on desktop/mobile. The Research Center exposes manifest, engineering observations, lineage, artifact references, and explicit scientific-claim boundaries without launching experiments. RM-232 is now active."
+      "notes": "Passed in checkpoint fb9bd77 after Web 34 test files/92 tests, full Playwright 34 passes with 2 existing desktop-only skips, and Strategy/What-if accessibility smoke on desktop/mobile. GitHub Actions run 32662606286 passed all five jobs. The Research Center exposes manifest, engineering observations, lineage, artifact references, and explicit scientific-claim boundaries without launching experiments. RM-232 is now active."
     },
     {
       "id": "RM-232",
@@ -1418,7 +1418,7 @@
       "gates": ["L2-compute", "L6-security", "L6-lineage"],
       "evidence": ["evidence/gates/RM-232/agent-analytics.md"],
       "blocked_by": [],
-      "notes": "Passed in checkpoint pending after Compute 236 tests at 95.28% coverage, strict Ruff/mypy/contract/determinism/archive/mart/semantic gates. Metrics, lineage, and Decision X-Ray read tools reuse role grants, audit records, and call budgets; state-changing tools are rejected. RM-235 is now active."
+      "notes": "Passed in checkpoint bc00832 after Compute 236 tests at 95.28% coverage, strict Ruff/mypy/contract/determinism/archive/mart/semantic gates, and GitHub Actions run 32662822033 passing all five jobs. Metrics, lineage, and Decision X-Ray read tools reuse role grants, audit records, and call budgets; state-changing tools are rejected. RM-235 is now active."
     },
     {
       "id": "RM-233",
@@ -1452,12 +1452,12 @@
       "phase": "P29",
       "priority": "critical",
       "depends_on": ["RM-216", "RM-218", "RM-221", "RM-225", "RM-229", "RM-230", "RM-231", "RM-232", "RM-234"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Cross-layer fulfillment, location, ETA, archive, mart, dashboard, and lineage journey is executable", "Redis/RabbitMQ/late-event/stale-location/invalid-solver/archive/SSE failure cases remain explicit", "Full local, E2E, adversarial, and CI evidence is recorded"],
       "gates": ["L4-enhancement-e2e", "L5-adversarial", "L6-system"],
       "evidence": ["evidence/gates/RM-235/enhancement-validation.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-232 passed. Claims remain limited to exercised modes, datasets, hosts, and configurations."
+      "notes": "Passed in checkpoint bc00832 after full-gate, Java/Python resilience, and static adversarial audit passed locally; RM-170/RM-171 real Compose E2E evidence covers the cross-layer and failure journeys, and GitHub Actions run 32662822033 passed all five jobs. The current host Docker daemon did not respond during a bounded re-run, so no new local Compose result is claimed. Claims remain limited to exercised modes, datasets, hosts, and configurations. RM-236 is now active."
     },
     {
       "id": "RM-236",
@@ -1465,12 +1465,12 @@
       "phase": "P29",
       "priority": "critical",
       "depends_on": ["RM-235"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Enhancement closure report names commits, capabilities, data/marts, visualizations, tests, CI, limitations, and deferred work", "Round 3 Research Task Graph is prepared without launching deep research", "TASK_GRAPH, Progress, Handoff, and main/origin are synchronized"],
       "gates": ["L1-enhancement-closure", "L6-evidence-audit", "architecture-review"],
       "evidence": ["docs/enhancement/ENHANCEMENT_CLOSURE_REPORT.md", "docs/research/ROUND_3_TASK_GRAPH.yaml"],
       "blocked_by": [],
-      "notes": "Success requires green CI and a clean synchronized main branch; no production or scientific claim is implied."
+      "notes": "Activated after RM-235 passed. Success requires a closure report, prepared Round 3 research graph, green CI, and a clean synchronized main branch; no production or scientific claim is implied."
     }
   ]
 }

@@ -1,22 +1,22 @@
 # RouteMind Progress
 
-Current Phase: Enhancement Pass P28
+Current Phase: Enhancement Pass P29
 
 Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 25 / 27 tasks passed (RM-210 through RM-234; RM-235 in progress; RM-236 pending)
+Enhancement Progress: 26 / 27 tasks passed (RM-210 through RM-235; RM-236 in progress)
 
-Repository Total: 111 / 113 tasks passed
+Repository Total: 112 / 113 tasks passed
 
-Current Task: RM-235 - Run Enhancement E2E and adversarial validation
+Current Task: RM-236 - Close Enhancement Pass and prepare Round 3 research graph
 
-Last Completed: RM-232 - Add agent analytical substrate and guardrails
+Last Completed: RM-235 - Run Enhancement E2E and adversarial validation
 
-Current Gate: RM-232 passed local validation; remote evidence is pending for its checkpoint. RM-235 is active; cross-layer enhancement journeys and failure injection must be exercised with explicit limits and no unverified production claims.
+Current Gate: RM-235 passed local full-gate, resilience, adversarial, historical real E2E, and remote CI evidence. RM-236 is active for closure reporting and Round 3 research graph preparation.
 
-CI: PASS through RM-228 checkpoint afb6394 in run 32661874586; RM-234 checkpoint 9fe015d in run 32661326399; both passed all five jobs. RM-229, RM-231, and RM-232 local gates pass; remote evidence is pending for the latest checkpoints. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-235 checkpoint bc00832 in run 32662822033; RM-229 checkpoint 5600487 in run 32662337844; RM-231 checkpoint fb9bd77 in run 32662606286; RM-234 checkpoint 9fe015d in run 32661326399; all passed all five jobs. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
@@ -24,7 +24,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Execute RM-235 full enhancement E2E/adversarial validation; RM-236 remains blocked until RM-235 passes.
+Next Candidates: Complete RM-236 closure report and Round 3 research task graph, then run final control-plane validation and synchronize main with origin/main.
 
 ### RM-230 closure and RM-234 activation - 2026-08-24
 
@@ -734,3 +734,17 @@ The task is now passed and RM-120 is the active implementation.
 - Enhancement is now 14/27 and repository total is 100/113. RM-224 is active
   to add analytical-record-backed arcs and flow direction with explicit units,
   confidence, recency, and honest empty states.
+
+### RM-235 closure and RM-236 activation - 2026-08-24
+- RM-235 passed in checkpoint `bc00832`. The current `full-gate` passed all
+  available control-plane, Java, Python, Web, contract, security, recovery,
+  determinism, archive, mart, and semantic gates; Java resilience passed 15/15,
+  Python resilience passed 2/2, and the static adversarial audit passed all four
+  repository checks.
+- Real local RM-170 and RM-171 evidence remains the accepted Compose-backed
+  golden/failure journey evidence for PostgreSQL, RabbitMQ, Redis, Outbox,
+  location degradation, duplicate delivery, stale/offline courier handling, and
+  bounded timeout/SSE behavior. A bounded current Docker re-run was stopped when
+  the host daemon did not respond; no new local Compose result is claimed.
+- GitHub Actions run `32662822033` passed all five jobs for RM-235. Enhancement is
+  now 26/27 and repository total is 112/113. RM-236 is active.

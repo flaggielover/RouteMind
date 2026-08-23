@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Enhancement Pass P28
+Current Phase: Enhancement Pass P29
 
-Current Task: RM-235 - Run Enhancement E2E and adversarial validation
+Current Task: RM-236 - Close Enhancement Pass and prepare Round 3 research graph
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-234 are passed locally. RM-234 Actions run 32661326399 and RM-228 Actions run 32661874586 passed all five jobs; RM-229/RM-231/RM-232 remote evidence is pending. RM-235 Enhancement E2E and adversarial validation is now active; RM-236 remains dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-235 are passed locally. RM-229 run 32662337844, RM-231 run 32662606286, RM-232/RM-235 run 32662822033, and RM-234 run 32661326399 passed all five jobs. RM-236 closure reporting and Round 3 research graph preparation is active. Round 3 research execution and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
