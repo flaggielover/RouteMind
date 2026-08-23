@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Enhancement Pass P25
+Current Phase: Enhancement Pass P28
 
-Current Task: RM-230 - Build Reliability Center surface
+Current Task: RM-234 - Add event upcasting and historical replay compatibility
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-227 and RM-233 are passed. RM-233 checkpoint b5174d8 and Actions run 32659704665 passed all five jobs. RM-230 Reliability Center is now active; RM-228, RM-229, RM-231, RM-232, and RM-234 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-227, RM-230, and RM-233 are passed. RM-230 checkpoint 39c5dcb and Actions run 32660524649 passed all five jobs. RM-234 event upcasting is now active; RM-228, RM-229, RM-231, RM-232, RM-235, and RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

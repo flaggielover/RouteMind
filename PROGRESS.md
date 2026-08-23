@@ -1,22 +1,22 @@
 # RouteMind Progress
 
-Current Phase: Enhancement Pass P25
+Current Phase: Enhancement Pass P28
 
 Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 19 / 27 tasks passed (RM-210 through RM-227, RM-233; RM-228 through RM-229 and RM-231 through RM-232 pending; RM-230 in progress; RM-234 through RM-236 pending)
+Enhancement Progress: 20 / 27 tasks passed (RM-210 through RM-227, RM-230, RM-233; RM-228 through RM-229 and RM-231 through RM-232 pending; RM-234 in progress; RM-235 through RM-236 pending)
 
-Repository Total: 105 / 113 tasks passed
+Repository Total: 106 / 113 tasks passed
 
-Current Task: RM-230 - Build Reliability Center surface
+Current Task: RM-234 - Add event upcasting and historical replay compatibility
 
-Last Completed: RM-233 - Add reference data versioning and identity contracts
+Last Completed: RM-230 - Build Reliability Center surface
 
-Current Gate: RM-233 passed local and remote validation in Actions run 32659704665. RM-230 is active; reliability evidence must expose timelines, invariant state, degradation, trace links, and bounded recovery without claiming unavailable telemetry as healthy.
+Current Gate: RM-230 passed local and remote validation in Actions run 32660524649. RM-234 is active; historical event compatibility must preserve clock, reference-data, trace, and digest semantics while rejecting unknown versions explicitly.
 
-CI: PASS through RM-233 checkpoint b5174d8 in run 32659704665 with all five jobs; RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-230 checkpoint 39c5dcb in run 32660524649 with all five jobs; RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
@@ -24,7 +24,13 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement RM-230 Reliability Center surface; RM-228 remains independently dependency-eligible.
+Next Candidates: Implement RM-234 event upcasting and historical replay compatibility; RM-228 remains independently dependency-eligible.
+
+### RM-230 closure and RM-234 activation - 2026-08-24
+
+- RM-230 passed in checkpoint `39c5dcb`; Web static/unit/build passed with 29 test files and 81 tests, and Playwright passed 34 tests with 2 existing desktop-only skips.
+- GitHub Actions run `32660524649` passed all five jobs. Enhancement is now 20/27 and repository total is 106/113.
+- RM-234 is active. Its compatibility adapter must leave immutable historical events untouched, preserve replay provenance, and fail closed on unsupported schema versions.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

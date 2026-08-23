@@ -1392,7 +1392,7 @@
       "gates": ["L4-web", "L5-resilience", "L6-evidence-audit"],
       "evidence": ["evidence/gates/RM-230/reliability-center.md"],
       "blocked_by": [],
-      "notes": "Activated after RM-233 passed. The surface is read-oriented; no autonomous remediation is introduced."
+      "notes": "Passed in checkpoint 39c5dcb after Web 29 test files/81 tests, full Playwright 34 passed with 2 existing desktop-only skips, and all five GitHub Actions jobs in run 32660524649. The surface is read-oriented; no autonomous remediation is introduced. RM-234 is now active."
     },
     {
       "id": "RM-231",
@@ -1444,7 +1444,7 @@
       "gates": ["L2-contracts", "L4-replay", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-234/event-upcasting.md"],
       "blocked_by": [],
-      "notes": "Upcasters are pure compatibility adapters; original event records remain immutable."
+      "notes": "Activated after RM-230 passed. Upcasters are pure compatibility adapters; original event records remain immutable."
     },
     {
       "id": "RM-235",

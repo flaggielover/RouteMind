@@ -1,7 +1,7 @@
 # RM-230 Reliability Center Evidence
 
 Date: 2026-08-24
-Status: validating
+Status: passed
 
 ## Scope
 
@@ -24,7 +24,9 @@ Status: validating
 
 ## Remote evidence
 
-Pending checkpoint commit and GitHub Actions run.
+Checkpoint: `39c5dcb`
+
+GitHub Actions: PASS - run `32660524649`, all five jobs.
 
 ## Boundaries
 
