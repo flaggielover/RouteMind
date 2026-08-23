@@ -138,6 +138,8 @@ catch {
 }
 finally {
     foreach ($process in $started) {
-        if ($process -and -not $process.HasExited) { Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue }
+        if ($process -and -not $process.HasExited) {
+            & taskkill /PID $process.Id /T /F 2>$null | Out-Null
+        }
     }
 }
