@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Architectural Hardening P20
 
-Current Task: RM-205 - Add durable dispatch decision ledger and content-addressed snapshots
+Current Task: RM-206 - Build independent solver verification kernel and maturity labels
 
-Task Status: RM-204 is fully validated locally with Java 66 tests and in Actions run 32627357369; RM-205 is now `in_progress`; Round 2 remains fully passed
+Task Status: RM-205 is fully validated locally with Java 66 tests and in Actions run 32627857784; RM-206 is now `in_progress`; Round 2 remains fully passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

@@ -1062,12 +1062,12 @@
       "phase": "P21",
       "priority": "critical",
       "depends_on": ["RM-200", "RM-203"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Meaningful decisions have stable IDs and mandatory core provenance", "Canonical input/output snapshots include strategy, reference-data identity, clock domain, and digests", "Extended payloads are bounded or archived asynchronously without hot-path regression"],
       "gates": ["L3-postgres", "L4-dispatch", "L6-lineage", "L6-evidence-audit"],
       "evidence": ["evidence/gates/RM-205/decision-ledger.md"],
       "blocked_by": [],
-      "notes": "Active after RM-204 closure. Reuse Outbox, deduplication, and content-addressing; do not introduce Kafka or a data lake."
+      "notes": "Passed in checkpoint f7f48ac with V12 PostgreSQL ledger, stable request/decision IDs, WALL clock and reference-data identity, bounded canonical input/output snapshots, content digests, and idempotent replay/conflict behavior. Local Java 66 tests pass; GitHub Actions run 32627857784 passed all five jobs. Reuse Outbox and content-addressing; no Kafka or data lake."
     },
     {
       "id": "RM-206",
@@ -1075,12 +1075,12 @@
       "phase": "P22",
       "priority": "critical",
       "depends_on": ["RM-200"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Solver outputs are independently checked for membership, capacity, windows, travel, feasibility, and objective", "Invalid output fails safely with structured reasons and cannot silently pass", "Registered strategies carry honest BASELINE, ENGINEERING, PRODUCTION-CANDIDATE, RESEARCH, or EXTERNAL-VALIDATED maturity labels"],
       "gates": ["L2-solver", "L6-correctness", "L6-property-tests"],
       "evidence": ["evidence/gates/RM-206/solver-verification.md"],
       "blocked_by": [],
-      "notes": "Verifier must minimize shared feasibility code with the solver and does not claim theorem-prover coverage."
+      "notes": "Active after RM-205 closure. Verifier must minimize shared feasibility code with the solver and does not claim theorem-prover coverage."
     },
     {
       "id": "RM-207",
