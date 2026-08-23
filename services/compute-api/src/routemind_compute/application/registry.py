@@ -1,8 +1,26 @@
 from dataclasses import dataclass, replace
 from time import perf_counter
+from typing import Literal
 
 from routemind_compute.application.parameters import Metadata, StrategyParameterSchema, schema_for
+from routemind_compute.application.verification import (
+    SolverOutputInvalidError,
+    verify_dispatch_decision,
+)
 from routemind_compute.domain.dispatch import DispatchDecision, DispatchProblem, DispatchStrategy
+
+StrategyMaturity = Literal[
+    "BASELINE", "ENGINEERING", "PRODUCTION-CANDIDATE", "RESEARCH", "EXTERNAL-VALIDATED"
+]
+_MATURITY_BY_STRATEGY: dict[str, StrategyMaturity] = {
+    "nearest": "BASELINE",
+    "weighted-greedy": "BASELINE",
+    "hungarian": "BASELINE",
+    "minimum-cost-flow": "ENGINEERING",
+    "partitioned-assignment": "ENGINEERING",
+    # This is a bounded deterministic insertion heuristic for small instances.
+    "vrptw": "BASELINE",
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -11,6 +29,7 @@ class StrategyDescriptor:
     version: str
     capabilities: tuple[str, ...]
     status: str = "available"
+    maturity: StrategyMaturity = "BASELINE"
 
     def __post_init__(self) -> None:
         if not self.name.strip():
@@ -21,6 +40,14 @@ class StrategyDescriptor:
             raise ValueError("strategy capabilities must not be blank")
         if self.status != "available":
             raise ValueError("registered strategy status must be available")
+        if self.maturity not in {
+            "BASELINE",
+            "ENGINEERING",
+            "PRODUCTION-CANDIDATE",
+            "RESEARCH",
+            "EXTERNAL-VALIDATED",
+        }:
+            raise ValueError("strategy maturity label is not supported")
 
 
 class StrategyRegistry:
@@ -55,7 +82,8 @@ class StrategyRegistry:
                     }
                 )
             )
-            descriptors.append(StrategyDescriptor(name, version, capabilities))
+            maturity = getattr(strategy, "maturity", _MATURITY_BY_STRATEGY.get(name, "BASELINE"))
+            descriptors.append(StrategyDescriptor(name, version, capabilities, maturity=maturity))
         return tuple(descriptors)
 
     def parameter_schemas(self) -> tuple[StrategyParameterSchema, ...]:
@@ -87,6 +115,9 @@ class StrategyRegistry:
         version = str(getattr(strategy, "version", decision.strategy_version)).strip()
         if not version:
             raise ValueError("strategy version must not be blank")
+        report = verify_dispatch_decision(problem, decision, strategy)
+        if not report.valid:
+            raise SolverOutputInvalidError(report)
         metadata = (
             *decision.metadata,
             ("candidate_count", str(len(problem.candidates))),

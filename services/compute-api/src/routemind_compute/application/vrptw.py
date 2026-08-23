@@ -364,6 +364,16 @@ class VrptwStrategy:
             return_to_depot=False,
         )
         plan = self.planner.plan(route_problem)
+        # Validate the complete route plan independently before adapting it to
+        # the single-request dispatch contract.
+        from routemind_compute.application.verification import (
+            SolverOutputInvalidError,
+            verify_vrptw_plan,
+        )
+
+        report = verify_vrptw_plan(route_problem, plan, self.planner.travel_provider)
+        if not report.valid:
+            raise SolverOutputInvalidError(report)
         if plan.unassigned or not plan.routes:
             reasons = tuple(f"{request_id}:{reason}" for request_id, reason in plan.unassigned)
             return DispatchDecision(

@@ -1080,7 +1080,7 @@
       "gates": ["L2-solver", "L6-correctness", "L6-property-tests"],
       "evidence": ["evidence/gates/RM-206/solver-verification.md"],
       "blocked_by": [],
-      "notes": "Active after RM-205 closure. Verifier must minimize shared feasibility code with the solver and does not claim theorem-prover coverage."
+      "notes": "Implementation is locally green with an independent dispatch/VRPTW verification kernel, structured solver_output_invalid failures, maturity labels, and 155 Compute tests at 95.78%; checkpoint and Actions evidence are pending. Verifier minimizes shared feasibility code and does not claim theorem-prover coverage."
     },
     {
       "id": "RM-207",

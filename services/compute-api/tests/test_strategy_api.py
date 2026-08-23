@@ -29,6 +29,7 @@ def test_catalog_is_sorted_and_versioned() -> None:
     assert all(
         item["version"] and item["capabilities"] and item["status"] == "available" for item in body
     )
+    assert {item["maturity"] for item in body} == {"BASELINE", "ENGINEERING"}
 
 
 def test_execution_returns_stable_provenance_and_metrics() -> None:

@@ -100,6 +100,9 @@ class StrategyDescriptorResponse(BaseModel):
     version: str
     capabilities: tuple[str, ...]
     status: Literal["available"]
+    maturity: Literal[
+        "BASELINE", "ENGINEERING", "PRODUCTION-CANDIDATE", "RESEARCH", "EXTERNAL-VALIDATED"
+    ]
 
 
 class StrategyExecutionMetrics(BaseModel):

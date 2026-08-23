@@ -52,6 +52,7 @@ from routemind_compute.application.twin_control import (
     TwinControlEvent,
     TwinControlState,
 )
+from routemind_compute.application.verification import SolverOutputInvalidError
 from routemind_compute.application.what_if import WhatIfVariant
 from routemind_compute.domain.dispatch import (
     CourierCandidate,
@@ -168,6 +169,7 @@ def strategy_catalog(request: Request) -> tuple[StrategyDescriptorResponse, ...]
             version=descriptor.version,
             capabilities=descriptor.capabilities,
             status="available",
+            maturity=descriptor.maturity,
         )
         for descriptor in _registry(request).descriptors()
     )
@@ -239,6 +241,19 @@ def execute_strategy(
         decision = _registry(request).solve(payload.strategy, problem)
     except KeyError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
+    except SolverOutputInvalidError as error:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                **error.as_detail(),
+                "trace_id": trace_id,
+                "metadata": {
+                    "requested_strategy": payload.strategy,
+                    "fallback_strategy": "nearest",
+                    "fallback_available": str("nearest" in _registry(request).names()).lower(),
+                },
+            },
+        ) from error
     except (TimeoutError, RuntimeError, TypeError, ValueError) as error:
         raise HTTPException(
             status_code=503,
@@ -523,6 +538,18 @@ def dispatch_snapshot(
         decision = _registry(request).solve(payload.strategy, problem)
     except KeyError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
+    except SolverOutputInvalidError as error:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                **error.as_detail(),
+                "trace_id": trace_id,
+                "metadata": {
+                    "fallback_strategy": "nearest",
+                    "fallback_available": "true",
+                },
+            },
+        ) from error
     except (TimeoutError, RuntimeError, TypeError, ValueError) as error:
         raise HTTPException(
             status_code=503,

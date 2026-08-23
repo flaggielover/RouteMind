@@ -100,6 +100,28 @@ def test_dispatch_snapshot_exposes_explicit_strategy_failure_fallback_metadata(
         "failure_type": "RuntimeError",
     }
 
+    class InvalidStrategy:
+        name = "invalid"
+        version = "1.0.0"
+
+        def solve(self, problem: DispatchProblem) -> DispatchDecision:
+            return DispatchDecision(problem.request_id, self.name, "missing", 1.0)
+
+    monkeypatch.setattr(app_module, "REGISTRY", StrategyRegistry((InvalidStrategy(),)))
+    invalid = client.post(
+        "/api/v1/dispatch/snapshot",
+        json={
+            "request_id": "ops-invalid-1",
+            "strategy": "invalid",
+            "pickup": {"latitude": 0, "longitude": 0},
+            "candidates": [{"courier_id": "known", "location": {"latitude": 0, "longitude": 0}}],
+        },
+    )
+    assert invalid.status_code == 503
+    invalid_detail = invalid.json()["detail"]
+    assert invalid_detail["code"] == "solver_output_invalid"
+    assert invalid_detail["reasons"][0]["code"] == "membership_violation"
+
 
 def test_dispatch_snapshot_applies_constraints_and_exposes_infeasibility_metadata() -> None:
     response = client.post(
