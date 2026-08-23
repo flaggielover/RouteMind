@@ -132,6 +132,21 @@ describe("browser realtime cursor and reconnect boundary", () => {
     });
   });
 
+  it("projects bounded fulfillment exception states without treating them as created", () => {
+    const snapshot = demoDataSource.getSnapshot();
+    const projected = applyRealtimeItem(snapshot, {
+      ...item("2", "event-rejected", "ASSIGNMENT_REJECTED"),
+      event: {
+        ...item("2").event,
+        aggregateVersion: 2,
+        payload: { orderId: "order-2042", status: "ASSIGNMENT_REJECTED" },
+      },
+    });
+    expect(projected.orders.find((order) => order.id === "order-2042")?.status).toBe(
+      "ASSIGNMENT_REJECTED",
+    );
+  });
+
   it("projects courier location and shift events with explicit degradation", () => {
     const snapshot = demoDataSource.getSnapshot();
     const location = applyRealtimeItem(snapshot, {

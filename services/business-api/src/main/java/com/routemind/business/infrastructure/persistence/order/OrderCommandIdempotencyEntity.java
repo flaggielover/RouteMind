@@ -25,7 +25,7 @@ class OrderCommandIdempotencyEntity {
 	@Column(name = "order_id", nullable = false)
 	private UUID orderId;
 
-	@Column(name = "response_status", nullable = false, length = 16)
+	@Column(name = "response_status", nullable = false, length = 32)
 	private String responseStatus;
 
 	@Column(name = "response_version", nullable = false)

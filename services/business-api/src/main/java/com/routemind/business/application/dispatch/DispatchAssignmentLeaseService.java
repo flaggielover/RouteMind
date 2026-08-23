@@ -43,4 +43,14 @@ public final class DispatchAssignmentLeaseService {
     public DispatchAssignmentLease expire(DispatchAssignmentLease lease, String reason) {
         return leases.expire(lease.leaseId(), lease.generation(), reason, clock.instant());
     }
+
+    public void releaseCommittedForOrder(UUID orderId, String reason) {
+        var committed = leases.findCommittedByOrderId(orderId);
+        if (committed.size() > 1) {
+            throw new DispatchAssignmentLeaseConflictException("multiple_committed_leases");
+        }
+        if (!committed.isEmpty()) {
+            release(committed.get(0), reason);
+        }
+    }
 }

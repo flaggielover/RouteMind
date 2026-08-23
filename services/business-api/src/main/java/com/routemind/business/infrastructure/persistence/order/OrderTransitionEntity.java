@@ -31,11 +31,11 @@ class OrderTransitionEntity {
 	private long sequenceNumber;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "from_status", nullable = false, length = 16)
+	@Column(name = "from_status", nullable = false, length = 32)
 	private OrderStatus from;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "to_status", nullable = false, length = 16)
+	@Column(name = "to_status", nullable = false, length = 32)
 	private OrderStatus to;
 
 	@Column(nullable = false, length = 64)

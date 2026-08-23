@@ -16,7 +16,13 @@ export type OrderStatus =
   | "ARRIVED"
   | "PICKED_UP"
   | "OUT_FOR_DELIVERY"
-  | "DELIVERED";
+  | "DELIVERED"
+  | "ASSIGNMENT_TIMED_OUT"
+  | "ASSIGNMENT_REJECTED"
+  | "REASSIGNMENT_PENDING"
+  | "COMPENSATING"
+  | "COMPENSATED"
+  | "CANCELLED";
 
 export type ServiceStatus = "healthy" | "unavailable" | "checking";
 

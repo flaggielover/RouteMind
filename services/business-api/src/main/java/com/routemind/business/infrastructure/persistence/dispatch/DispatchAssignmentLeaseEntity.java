@@ -100,7 +100,8 @@ class DispatchAssignmentLeaseEntity {
     void release(long expectedGeneration, String expectedDecisionId, Instant now) {
         validateLease(expectedGeneration, expectedDecisionId);
         if (state == DispatchAssignmentLeaseState.RELEASED) return;
-        if (state != DispatchAssignmentLeaseState.PROVISIONALLY_RESERVED) {
+        if (state != DispatchAssignmentLeaseState.PROVISIONALLY_RESERVED
+                && state != DispatchAssignmentLeaseState.COMMITTED) {
             throw new DispatchAssignmentLeaseConflictException("lease_not_active");
         }
         state = DispatchAssignmentLeaseState.RELEASED;

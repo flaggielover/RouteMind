@@ -8,7 +8,7 @@ Current Phase: Enhancement Pass P25
 
 Current Task: RM-216 - Expand fulfillment saga and bounded exception paths
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-215 are passed. RM-215 checkpoint d26a121 and Actions run 32647766636 passed all five jobs after final Java 77/77, full available, verify, and focused resilience gates. RM-216 fulfillment saga expansion is active; RM-217 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-215 are passed. RM-215 checkpoint d26a121 and Actions run 32647766636 passed all five jobs. RM-216 fulfillment saga expansion is validating after Java 79/79, Python 185, Web 52, full available, and verify gates; remote CI remains. RM-217 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,12 +629,13 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-216 fulfillment saga and bounded exception paths. Preserve Java
-  lifecycle authority, idempotent/audited commands, and the explicit no-payment
-  boundary.
+- Resume at RM-216 remote CI observation and closure. Preserve Java lifecycle
+  authority, idempotent/audited commands, same-transaction lease release, and
+  the explicit no-payment boundary.
 - RM-215 evidence is `evidence/gates/RM-215/reconciliation.md`; checkpoint
   `d26a121` and GitHub Actions run `32647766636` passed all five jobs.
-- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 6/27.
+- Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 6/27 with
+  RM-216 validating.
   Repository total is 92/113. RM-233 is independently eligible, while RM-216 is
   the active critical path for RM-217 through RM-220.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.

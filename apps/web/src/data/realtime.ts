@@ -188,7 +188,7 @@ export function applyRealtimeItem(
     if (
       order.id !== orderId ||
       item.event.aggregateVersion <= (order.version ?? 0) ||
-      statusRank(status) < statusRank(order.status)
+      (isTerminalOrderStatus(order.status) && status !== order.status)
     )
       return order;
     return {
@@ -394,25 +394,20 @@ function orderStatus(value: unknown): OrderStatus | null {
     "PICKED_UP",
     "OUT_FOR_DELIVERY",
     "DELIVERED",
+    "ASSIGNMENT_TIMED_OUT",
+    "ASSIGNMENT_REJECTED",
+    "REASSIGNMENT_PENDING",
+    "COMPENSATING",
+    "COMPENSATED",
+    "CANCELLED",
   ];
   return typeof value === "string" && statuses.includes(value as OrderStatus)
     ? (value as OrderStatus)
     : null;
 }
 
-function statusRank(status: OrderStatus): number {
-  return [
-    "CREATED",
-    "CONFIRMED",
-    "PREPARING",
-    "READY_FOR_PICKUP",
-    "ASSIGNED",
-    "ACCEPTED",
-    "ARRIVED",
-    "PICKED_UP",
-    "OUT_FOR_DELIVERY",
-    "DELIVERED",
-  ].indexOf(status);
+function isTerminalOrderStatus(status: OrderStatus): boolean {
+  return status === "DELIVERED" || status === "CANCELLED";
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

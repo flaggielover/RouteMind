@@ -4,6 +4,7 @@
     {"schema": "api/v1/health.schema.json", "valid": ["examples/valid/health.json", "compatibility/v1/health-baseline.json"], "invalid": ["examples/invalid/health.json"]},
     {"schema": "api/v1/dispatch-request.schema.json", "valid": ["examples/valid/dispatch-request.json", "compatibility/v1/dispatch-request-baseline.json"], "invalid": ["examples/invalid/dispatch-request.json"]},
     {"schema": "api/v1/dispatch-decision.schema.json", "valid": ["examples/valid/dispatch-decision.json", "compatibility/v1/dispatch-decision-baseline.json"], "invalid": ["examples/invalid/dispatch-decision.json"]},
+    {"schema": "api/v1/order-transition-command.schema.json", "valid": ["examples/valid/order-transition-command.json", "compatibility/v1/order-transition-command-baseline.json"], "invalid": ["examples/invalid/order-transition-command.json"]},
     {"schema": "events/v1/event-envelope.schema.json", "valid": ["examples/valid/event-envelope.json", "compatibility/v1/event-envelope-baseline.json"], "invalid": ["examples/invalid/event-envelope.json"]},
     {"schema": "events/v1/event-stream-item.schema.json", "valid": ["examples/valid/event-stream-item.json", "compatibility/v1/event-stream-item-baseline.json"], "invalid": ["examples/invalid/event-stream-item.json"]}
   ]

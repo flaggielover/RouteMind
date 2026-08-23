@@ -22,13 +22,16 @@ public class OrderCommandService {
 	private final OrderRepository orders;
 	private final OutboxRepository outbox;
 	private final OrderCommandIdempotencyRepository idempotency;
+	private final FulfillmentAssignmentCoordinator assignments;
 	private final Clock clock;
 
 	public OrderCommandService(OrderRepository orders, OutboxRepository outbox,
-			OrderCommandIdempotencyRepository idempotency, Clock clock) {
+			OrderCommandIdempotencyRepository idempotency,
+			FulfillmentAssignmentCoordinator assignments, Clock clock) {
 		this.orders = orders;
 		this.outbox = outbox;
 		this.idempotency = idempotency;
+		this.assignments = assignments;
 		this.clock = clock;
 	}
 
@@ -73,6 +76,7 @@ public class OrderCommandService {
 			throw new OrderCommandConflictException("stale_version");
 		}
 		OrderCommandAuthorization.requireTransition(actor, current.status(), target);
+		assignments.beforeTransition(id.value(), current.status(), target);
 		Order next = current.transitionTo(target, actor, clock.instant(), expectedVersion);
 		Order saved = orders.save(next);
 		publish(saved, correlationId, causationId, traceId, "order.status.changed", actor, saved.version());

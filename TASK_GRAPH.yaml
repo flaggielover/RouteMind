@@ -1205,12 +1205,12 @@
       "phase": "P25",
       "priority": "critical",
       "depends_on": ["RM-210"],
-      "status": "in_progress",
+      "status": "validating",
       "acceptance": ["Merchant, courier, pickup, delivery, cancellation, timeout, rejection, reassignment, and compensation states are explicit", "Commands remain idempotent and transitions auditable", "Payment processing is not introduced"],
       "gates": ["L2-java", "L3-postgres", "L5-failure", "L4-contracts"],
       "evidence": ["evidence/gates/RM-216/fulfillment-saga.md"],
       "blocked_by": [],
-      "notes": "Active after RM-215 passed. Java remains authoritative for lifecycle and compensation state; payment processing remains out of scope."
+      "notes": "Implementation is validating after Java 79, Python 185, 6 schemas/18 fixtures, Web 52, full available, and verify gates. Explicit timeout, rejection, reassignment, compensation, and same-transaction lease release are covered; payment processing remains out of scope. Remote CI remains before passed."
     },
     {
       "id": "RM-217",

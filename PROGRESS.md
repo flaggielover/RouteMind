@@ -6,7 +6,7 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 6 / 27 tasks passed (RM-210 through RM-215; RM-216 active; RM-217 through RM-236 pending)
+Enhancement Progress: 6 / 27 tasks passed (RM-210 through RM-215; RM-216 validating; RM-217 through RM-236 pending)
 
 Repository Total: 92 / 113 tasks passed
 
@@ -14,17 +14,17 @@ Current Task: RM-216 - Expand fulfillment saga and bounded exception paths
 
 Last Completed: RM-215 - Add continuous reconciliation and invariant drift detection
 
-Current Gate: RM-215 passed in checkpoint d26a121 after final Java 77/77, full available, verify, and focused resilience gates plus GitHub Actions run 32647766636 across all five jobs. RM-216 fulfillment saga expansion is active.
+Current Gate: RM-216 is validating after Java 79/79, Python 185/185 at 95.24%, 6 schemas/18 fixtures, Web 52 unit + build, full available, and verify gates. Remote CI remains before passed.
 
 CI: PASS through RM-215 implementation run 32647766636 with all five jobs; RM-214 closure run 32645942196, RM-214 implementation run 32645791900, and recorded prior closure runs also passed. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS - final Java 77/77, Python 185 / 95.24%, Web 51 unit + build, 5 schemas / 15 contract fixtures, focused resilience Java 15/Python 2, and remote Web browser smoke passed.
+Regression: PASS locally - Java 79/79, Python 185 / 95.24%, Web 52 unit + build, 6 schemas / 18 contract fixtures, full available, and verify. Remote Web browser smoke remains part of the pending CI evidence.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-216 (active) fulfillment saga expansion; RM-233 remains independently dependency-eligible.
+Next Candidates: Complete RM-216 remote CI closure, then activate RM-217 location streaming; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -516,3 +516,6 @@ The task is now passed and RM-120 is the active implementation.
 - Checkpoint `d26a121` and GitHub Actions run `32647766636` passed all five
   jobs, including Web browser smoke and bounded degradation. RM-215 is passed,
   Enhancement is 6/27, repository total is 92/113, and RM-216 is active.
+- RM-216 local implementation is validating with explicit exception states,
+  bounded lease release, V14 migration, Web projection updates, and evidence at
+  `evidence/gates/RM-216/fulfillment-saga.md`.

@@ -338,8 +338,8 @@ class BusinessApiApplicationTests {
 				.content(dispatchBody(courierId, "rm215-decision", 1)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.status").value("ASSIGNED"));
-		transition(mockMvc, orderId, "rm215-cancel", "customer", "CANCELLED", 2)
-				.andExpect(status().isOk());
+		jdbcTemplate.update("update routemind.orders set status = 'CANCELLED' where id = ?",
+				java.util.UUID.fromString(orderId));
 		jdbcTemplate.update("delete from routemind.dispatch_decision_ledger where decision_id = ?",
 				"rm215-decision");
 

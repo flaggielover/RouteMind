@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.routemind.local/api/v1/order-transition-command.schema.json",
+  "title": "RouteMind order transition command v1",
+  "type": "object",
+  "required": ["target", "expectedVersion"],
+  "properties": {
+    "target": {
+      "type": "string",
+      "enum": [
+        "CREATED",
+        "CONFIRMED",
+        "PREPARING",
+        "READY_FOR_PICKUP",
+        "ASSIGNED",
+        "ACCEPTED",
+        "ARRIVED",
+        "PICKED_UP",
+        "DELIVERED",
+        "ASSIGNMENT_TIMED_OUT",
+        "ASSIGNMENT_REJECTED",
+        "REASSIGNMENT_PENDING",
+        "COMPENSATING",
+        "COMPENSATED",
+        "CANCELLED"
+      ]
+    },
+    "expectedVersion": {"type": "integer", "minimum": 0}
+  },
+  "additionalProperties": false
+}

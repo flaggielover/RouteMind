@@ -28,7 +28,7 @@ class OrderEntity {
 	private UUID id;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, length = 16)
+	@Column(nullable = false, length = 32)
 	private OrderStatus status;
 
 	@Column(name = "created_at", nullable = false)

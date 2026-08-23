@@ -1,5 +1,7 @@
 package com.routemind.business.infrastructure.persistence.dispatch;
 
+import com.routemind.business.domain.dispatch.DispatchAssignmentLeaseState;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +17,9 @@ interface SpringDataDispatchAssignmentLeaseRepository extends JpaRepository<Disp
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<DispatchAssignmentLeaseEntity> findByLeaseId(UUID leaseId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select lease from DispatchAssignmentLeaseEntity lease where lease.orderId = :orderId and lease.state = :state")
+    List<DispatchAssignmentLeaseEntity> findByOrderIdAndStateForUpdate(UUID orderId,
+            DispatchAssignmentLeaseState state);
 }

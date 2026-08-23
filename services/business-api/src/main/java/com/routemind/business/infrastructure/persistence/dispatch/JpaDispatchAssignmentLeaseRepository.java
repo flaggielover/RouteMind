@@ -6,6 +6,7 @@ import com.routemind.business.domain.dispatch.DispatchAssignmentLease;
 import com.routemind.business.domain.dispatch.DispatchAssignmentLeaseState;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,6 +93,13 @@ public class JpaDispatchAssignmentLeaseRepository implements DispatchAssignmentL
             events.save(DispatchAssignmentLeaseEventEntity.of(lease, previous, requireReason(reason), now));
         }
         return lease.toDomain();
+    }
+
+    @Override
+    @Transactional
+    public List<DispatchAssignmentLease> findCommittedByOrderId(UUID orderId) {
+        return leases.findByOrderIdAndStateForUpdate(orderId, DispatchAssignmentLeaseState.COMMITTED)
+                .stream().map(DispatchAssignmentLeaseEntity::toDomain).toList();
     }
 
     private DispatchAssignmentLeaseEntity findForUpdate(UUID leaseId) {

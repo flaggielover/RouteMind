@@ -61,4 +61,24 @@ class OrderTests {
 				Order.create(OrderId.newId(), created).transitionTo(
 						OrderStatus.CONFIRMED, "customer", created, 0));
 	}
+
+	@Test
+	void followsTimeoutReassignmentAndCompensationPathsWithoutSkippingStates() {
+		Order reassigned = Order.create(OrderId.newId(), created)
+				.transitionTo(OrderStatus.CONFIRMED, "merchant", created.plusSeconds(1), 0)
+				.transitionTo(OrderStatus.ASSIGNED, "dispatch", created.plusSeconds(2), 1)
+				.transitionTo(OrderStatus.ASSIGNMENT_TIMED_OUT, "system", created.plusSeconds(3), 2)
+				.transitionTo(OrderStatus.REASSIGNMENT_PENDING, "dispatch", created.plusSeconds(4), 3)
+				.transitionTo(OrderStatus.ASSIGNED, "dispatch", created.plusSeconds(5), 4)
+				.transitionTo(OrderStatus.COMPENSATING, "customer", created.plusSeconds(6), 5)
+				.transitionTo(OrderStatus.COMPENSATED, "system", created.plusSeconds(7), 6)
+				.transitionTo(OrderStatus.CANCELLED, "system", created.plusSeconds(8), 7);
+
+		assertThat(reassigned.transitions()).extracting(OrderTransition::to).containsExactly(
+				OrderStatus.CONFIRMED, OrderStatus.ASSIGNED, OrderStatus.ASSIGNMENT_TIMED_OUT,
+				OrderStatus.REASSIGNMENT_PENDING, OrderStatus.ASSIGNED, OrderStatus.COMPENSATING,
+				OrderStatus.COMPENSATED, OrderStatus.CANCELLED);
+		assertThatIllegalStateException().isThrownBy(() -> Order.create(OrderId.newId(), created)
+				.transitionTo(OrderStatus.COMPENSATED, "system", created.plusSeconds(1), 0));
+	}
 }
