@@ -8,7 +8,7 @@ Current Phase: Enhancement Pass P25
 
 Current Task: RM-223 - Add city and zone operational drilldown
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-222 are passed. RM-222 checkpoint 1a6f2fb and Actions run 32654207318 passed all five jobs. RM-223 city and zone drilldown is now active on the Java 80/80, Python 208/95.29%, Web 57 unit/build plus 34 browser passes, full available, and verify baseline. RM-224 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
+Task Status: Hardening is verified 10/10; RM-209 through RM-222 are passed. RM-222 checkpoint 1a6f2fb and Actions run 32654207318 passed all five jobs. RM-223 implementation is locally validated on Java 80/80, Python 208/95.29%, Web 62 unit/build, and 34 browser passes with 2 existing skips; its checkpoint is awaiting commit and remote Actions validation. RM-224 through RM-236 remain dependency-ordered. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -629,13 +629,13 @@ RM-162 passed (42/48 Round 2, 70/76 repository) and activates RM-136 advanced
 dispatch integration and audit; RM-170 remains blocked by RM-136.
 
 ## Current Resume Capsule
-- Resume at RM-223 city and zone operational drilldown implementation. Preserve Java lifecycle
+- Resume at RM-223 city and zone operational drilldown checkpoint commit and remote validation. Preserve Java lifecycle
   authority, durable location sequence ordering, Redis-as-projection, and the
   explicit non-disciplinary anomaly boundary and honest ETA lineage boundary.
 - RM-215 evidence is `evidence/gates/RM-215/reconciliation.md`; checkpoint
   `d26a121` and GitHub Actions run `32647766636` passed all five jobs.
 - Round 2 remains 48/48, Hardening remains 10/10, and Enhancement is 13/27 with
-  RM-223 active.
+  RM-223 validating.
   Repository total is 99/113. RM-233 is independently eligible, while RM-223 is
   the active geo-operations sequence.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
@@ -653,4 +653,6 @@ Python tests at 95.23%, full available gate green, and explicit calibration-
 confidence gating. RM-220 is fully validated in Actions run `32652719384`.
 RM-221 is fully validated in Actions run `32653393681`; keep the waterfall
 descriptive and reconcile observed duration without causal claims. RM-222 is
-fully validated in Actions run `32654207318`. Continue autonomously with RM-223.
+fully validated in Actions run `32654207318`. RM-223 local evidence is recorded
+in `evidence/gates/RM-223/city-zone-drilldown.md`; continue with its checkpoint
+commit, remote Actions observation, and then RM-224.

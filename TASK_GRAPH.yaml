@@ -1296,12 +1296,12 @@
       "phase": "P27",
       "priority": "high",
       "depends_on": ["RM-222"],
-        "status": "in_progress",
+      "status": "validating",
       "acceptance": ["City/zone views show orders, merchants, couriers, service areas, density, supply, risk, and routes from real snapshot data", "Aggregation/clustering changes with zoom and handles empty/stale data", "Legend, units, and mode labels are visible"],
       "gates": ["L4-web", "L6-geospatial", "L4-mobile-closure"],
       "evidence": ["evidence/gates/RM-223/city-zone-drilldown.md"],
       "blocked_by": [],
-        "notes": "Activated after RM-222 passed. Use existing provider-neutral geospatial adapters where sufficient; city/zone detail must preserve source and freshness labels."
+      "notes": "Implementation complete and local Web/Java/Python/browser evidence passes. City/zone metrics are snapshot-derived with explicit source, freshness, units, zoom aggregation, and honest empty/stale/unavailable states. Awaiting checkpoint commit and remote Actions validation; local Docker Compose probe is externally unresponsive."
     },
     {
       "id": "RM-224",

@@ -33,6 +33,7 @@ import { LifecycleTimeline } from "./components/LifecycleTimeline";
 import { MetricCell } from "./components/MetricCell";
 import { OperationsMap } from "./components/OperationsMap";
 import { MultiCityGeoPanel } from "./components/MultiCityGeoPanel";
+import { CityZoneDrilldownPanel } from "./components/CityZoneDrilldownPanel";
 import { ActivityStream } from "./components/ActivityStream";
 import { SimulationControlPanel } from "./components/SimulationControlPanel";
 import { ReplayPlaybackPanel } from "./components/ReplayPlaybackPanel";
@@ -421,6 +422,7 @@ function OperationsView({
         />
       </section>
       <MultiCityGeoPanel />
+      <CityZoneDrilldownPanel snapshot={snapshot} />
       {openExceptions > 0 && (
         <div className="exception-banner" role="alert">
           <AlertTriangle size={16} aria-hidden="true" />

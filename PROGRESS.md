@@ -6,25 +6,25 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 13 / 27 tasks passed (RM-210 through RM-222; RM-223 in progress; RM-224 through RM-236 pending)
+Enhancement Progress: 13 / 27 tasks passed (RM-210 through RM-222; RM-223 validating; RM-224 through RM-236 pending)
 
 Repository Total: 99 / 113 tasks passed
 
 Current Task: RM-223 - Add city and zone operational drilldown
 
-Last Completed: RM-221 - Add delay attribution accounting waterfall
+Last Completed: RM-222 - Build multi-city geo operations foundation
 
-Current Gate: RM-222 passed local and remote validation in Actions run 32654207318. RM-223 is active; city/zone drilldown must show source-backed orders, merchants, couriers, service areas, density, supply, risk, and routes with empty/stale states.
+Current Gate: RM-223 local implementation validation passed: Web 62 unit/build, 34 browser passes with 2 existing skips, Java 80/80, and Python 208 at 95.29%. The local Docker Compose probe is externally unresponsive; remote Actions validation is pending for the checkpoint.
 
 CI: PASS through RM-222 checkpoint 1a6f2fb in run 32654207318 with all five jobs; RM-221 run 32653393681 and RM-220 run 32652719384 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 57 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32654207318.
+Regression: PASS for all non-Docker local gates - Java 80/80, Python 208 / 95.29%, Web 62 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, and repository controls. Docker Compose config is pending local engine recovery and will be verified by the remote control-plane/Compose job.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Complete RM-223 city and zone operational drilldown; RM-233 remains independently dependency-eligible.
+Next Candidates: Commit and push RM-223, observe all five Actions jobs, then activate RM-224; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -622,3 +622,16 @@ The task is now passed and RM-120 is the active implementation.
   validated.
 - Enhancement is now 13/27 and repository total is 99/113. RM-223 is active to
   add source-backed city and zone operational drilldown with stale/empty states.
+
+### RM-223 city and zone validation - 2026-08-24
+- Added a source- and freshness-labeled city/zone projection over the selected
+  Operations snapshot. Bounded zoom switches city aggregation to zone detail;
+  the table exposes orders, merchants, courier supply, density per 100, risk,
+  and descriptive route counts with explicit units and legend.
+- Empty, stale, and unavailable snapshots remain honest and inspectable. The
+  overflow region is keyboard focusable after Axe found the initial mobile
+  accessibility regression.
+- Web check passes 62 unit tests/build; browser smoke passes 34 tests with 2
+  existing desktop-only skips. Java 80/80 and Python 208 at 95.29% pass.
+  Local Docker Compose validation is externally blocked by an unresponsive
+  Docker Desktop engine; remote Actions validation is pending.
