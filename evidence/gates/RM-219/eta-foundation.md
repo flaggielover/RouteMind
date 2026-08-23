@@ -1,8 +1,8 @@
 # RM-219 Honest ETA Foundation Evidence
 
 Date: 2026-08-24
-Implementation checkpoint: pending
-GitHub Actions: pending
+Implementation checkpoint: 8fab1a6
+GitHub Actions: PASS - run 32651955908 (all five jobs)
 
 ## Scope
 
@@ -37,4 +37,8 @@ No calibration, MAE, quantile coverage, SLA confidence, or AI accuracy is
 claimed. No Java order state or durable business record is mutated by this
 read-oriented baseline endpoint. RM-220 owns calibration and risk thresholds.
 
-Remote Actions evidence remains pending until this checkpoint is pushed.
+## Remote validation
+
+GitHub Actions run `32651955908` passed the Java, control-plane/Compose,
+Python/contracts, Web static/unit/browser, and bounded degradation/resilience
+jobs for checkpoint `8fab1a6`.

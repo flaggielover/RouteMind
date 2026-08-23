@@ -6,25 +6,25 @@ Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 9 / 27 tasks passed (RM-210 through RM-218; RM-219 in progress; RM-220 through RM-236 pending)
+Enhancement Progress: 10 / 27 tasks passed (RM-210 through RM-219; RM-220 in progress; RM-221 through RM-236 pending)
 
-Repository Total: 95 / 113 tasks passed
+Repository Total: 96 / 113 tasks passed
 
-Current Task: RM-219 - Build honest ETA intelligence foundation
+Current Task: RM-220 - Add ETA calibration and SLA risk contract
 
-Last Completed: RM-218 - Add location history integrity and hotspot substrate
+Last Completed: RM-219 - Build honest ETA intelligence foundation
 
-Current Gate: RM-219 is validating after Compute 196/196 at 95.30% coverage, full available, verify, and local full gate. RM-218 passed in GitHub Actions run 32651238530; RM-219 remote CI remains.
+Current Gate: RM-220 is validating; local Compute 201/201 at 95.23%, full available, verify, and strict quality gates pass. RM-219 passed in GitHub Actions run 32651955908; RM-220 remote evidence remains pending.
 
-CI: PASS through RM-218 checkpoint a61b559 in run 32651238530 with all five jobs; RM-217 run 32650330974 and RM-216 run 32649193769 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS through RM-219 checkpoint 8fab1a6 in run 32651955908 with all five jobs; RM-218 run 32651238530 and RM-217 run 32650330974 also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally - Java 80/80, Python 196 / 95.30%, Web 52 unit + build, 6 schemas / 18 contract fixtures, full available, verify, and full gate. Remote RM-219 browser/CI evidence remains pending.
+Regression: PASS locally and remotely for the RM-219 baseline - Java 80/80, Python 196 / 95.30%, Web 52 unit + build plus browser smoke, 6 schemas / 18 contract fixtures, full available, verify, and Actions run 32651955908. RM-220 local regression is 201 / 95.23% and awaiting remote validation.
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Complete RM-219 honest ETA intelligence foundation; RM-233 remains independently dependency-eligible.
+Next Candidates: Complete RM-220 ETA calibration and SLA risk contract; RM-233 remains independently dependency-eligible.
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data
@@ -564,3 +564,21 @@ The task is now passed and RM-120 is the active implementation.
   never silently imputed.
 - Local Compute/full gate passes 196 tests at 95.30%; ADR 0017 and evidence are
   recorded. RM-219 is validating pending remote CI.
+
+### RM-219 closure and RM-220 activation - 2026-08-24
+- RM-219 checkpoint `8fab1a6` passed all five GitHub Actions jobs in run
+  `32651955908`; the five-component ETA baseline, explicit unavailable inputs,
+  prediction lineage, and optional actual outcome are fully validated.
+- Enhancement is now 10/27 and repository total is 96/113. RM-220 is active to
+  add data-backed calibration metrics and explicit SLA risk thresholds without
+  presenting uncalibrated confidence to customers.
+
+### RM-220 ETA calibration validation - 2026-08-24
+- Added the compute-owned `/api/v1/eta/calibration` contract with MAE, median,
+  interpolated p90 error, interval coverage, stable sample digest, and explicit
+  `UNAVAILABLE` behavior for empty evidence. SLA labels are deterministic:
+  `ON_TRACK` (<=90%), `AT_RISK` (>90% through 100%), and `LIKELY_LATE` (>100%).
+- Local Compute/full gate passes 201 tests at 95.23%; strict mypy/Ruff/format,
+  contracts, determinism, archive, marts, and semantic-metrics gates pass.
+  Customer confidence remains unavailable without outcome samples. RM-220 is
+  validating pending commit and remote GitHub Actions evidence.

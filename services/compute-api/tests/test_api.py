@@ -165,3 +165,53 @@ def test_eta_predict_keeps_missing_preparation_explicit() -> None:
         "source": "merchant preparation",
         "available": False,
     }
+
+
+def test_eta_calibration_returns_metrics_and_gates_customer_confidence() -> None:
+    response = client.post(
+        "/api/v1/eta/calibration",
+        json={
+            "samples": [
+                {
+                    "sample_id": "a",
+                    "predicted_seconds": 100,
+                    "actual_seconds": 110,
+                    "interval_lower_seconds": 90,
+                    "interval_upper_seconds": 120,
+                },
+                {
+                    "sample_id": "b",
+                    "predicted_seconds": 120,
+                    "actual_seconds": 100,
+                    "interval_lower_seconds": 110,
+                    "interval_upper_seconds": 130,
+                },
+            ],
+            "predicted_seconds": 95,
+            "sla_seconds": 100,
+        },
+        headers={"X-Trace-Id": "calibration-trace"},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["claim_label"] == "calibration evidence only; not a customer guarantee"
+    assert body["status"] == "AVAILABLE"
+    assert body["mae_seconds"] == 15
+    assert body["interval_coverage"] == 0.5
+    assert body["sla_status"] == "AT_RISK"
+    assert body["customer_confidence"] == "available"
+    assert body["trace_id"] == "calibration-trace"
+
+
+def test_eta_calibration_gates_confidence_without_samples() -> None:
+    response = client.post(
+        "/api/v1/eta/calibration",
+        json={"predicted_seconds": 80, "sla_seconds": 100},
+    )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "UNAVAILABLE"
+    assert body["customer_confidence"] == "unavailable"
+    assert body["mae_seconds"] is None

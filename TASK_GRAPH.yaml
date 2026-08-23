@@ -1244,12 +1244,12 @@
       "phase": "P26",
       "priority": "high",
       "depends_on": ["RM-216"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["ETA composes dispatch, travel, preparation, pickup, and delivery components", "Prediction timestamp, horizon, model/version, input digest, and actual outcome are recorded", "Baseline estimates are labeled and unavailable inputs are explicit"],
       "gates": ["L2-compute", "L6-lineage", "L4-product"],
       "evidence": ["evidence/gates/RM-219/eta-foundation.md"],
       "blocked_by": [],
-      "notes": "Implementation is validating after Compute 196 tests at 95.30% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, determinism, archive, marts, semantic-metrics, and full local gate. The ETA baseline composes dispatch, travel, preparation, pickup, and delivery; prediction timestamp, horizon, model/version, input digest, and optional actual outcome are explicit. Missing preparation leaves predicted ETA unavailable. Remote CI remains before passed; no unsupported AI or calibration claim."
+      "notes": "Passed in checkpoint 8fab1a6 after Compute 196 tests at 95.30% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, determinism, archive, marts, semantic-metrics, and full local gate. The ETA baseline composes dispatch, travel, preparation, pickup, and delivery; prediction timestamp, horizon, model/version, input digest, and optional actual outcome are explicit. Missing preparation leaves predicted ETA unavailable. GitHub Actions run 32651955908 passed all five jobs; no unsupported AI or calibration claim. RM-220 is now active."
     },
     {
       "id": "RM-220",
@@ -1257,12 +1257,12 @@
       "phase": "P26",
       "priority": "high",
       "depends_on": ["RM-219"],
-      "status": "pending",
+      "status": "validating",
       "acceptance": ["Quantile/interval evaluation includes MAE, median, p90, and coverage where data exists", "ON_TRACK, AT_RISK, and LIKELY_LATE thresholds are defined and tested", "Customer confidence is gated when calibration evidence is absent"],
       "gates": ["L2-analytics", "L6-statistics", "L4-product"],
       "evidence": ["evidence/gates/RM-220/eta-calibration.md"],
       "blocked_by": [],
-      "notes": "Calibration is not claimed from training fixtures alone."
+      "notes": "Local implementation complete and validating: Compute 201 tests at 95.23% coverage, strict mypy/Ruff/format, 6 schemas/18 fixtures, full available gate, and explicit unavailable confidence when no outcomes exist. Calibration is not claimed from training fixtures alone; GitHub Actions validation remains before pass."
     },
     {
       "id": "RM-221",

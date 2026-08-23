@@ -11,6 +11,8 @@ from routemind_compute.api.runtime import ComputeRuntime
 from routemind_compute.api.schemas import (
     DispatchSnapshotRequest,
     DispatchSnapshotResponse,
+    EtaCalibrationRequest,
+    EtaCalibrationResponse,
     EtaComponentResponse,
     EtaPredictionRequest,
     EtaPredictionResponse,
@@ -45,6 +47,11 @@ from routemind_compute.api.schemas import (
     WhatIfMetricResponse,
 )
 from routemind_compute.application.eta import EtaBaseline
+from routemind_compute.application.eta_calibration import (
+    EtaCalibrationSample,
+    calibrate,
+    classify_sla_risk,
+)
 from routemind_compute.application.execution import execution_provenance
 from routemind_compute.application.location_integrity import (
     LocationObservation,
@@ -253,6 +260,44 @@ def eta_predict(payload: EtaPredictionRequest, request: Request) -> EtaPredictio
         outcome_available=prediction.outcome_available,
         actual_delivered_at=prediction.actual_delivered_at,
         actual_duration_seconds=prediction.actual_duration_seconds,
+        trace_id=trace_id,
+    )
+
+
+@router.post("/api/v1/eta/calibration", response_model=EtaCalibrationResponse)
+def eta_calibration(payload: EtaCalibrationRequest, request: Request) -> EtaCalibrationResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        calibration = calibrate(
+            tuple(
+                EtaCalibrationSample(
+                    sample_id=item.sample_id,
+                    predicted_seconds=item.predicted_seconds,
+                    actual_seconds=item.actual_seconds,
+                    interval_lower_seconds=item.interval_lower_seconds,
+                    interval_upper_seconds=item.interval_upper_seconds,
+                )
+                for item in payload.samples
+            )
+        )
+        risk = classify_sla_risk(payload.predicted_seconds, payload.sla_seconds, calibration)
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    return EtaCalibrationResponse(
+        source="compute",
+        claim_label="calibration evidence only; not a customer guarantee",
+        status=calibration.status,
+        sample_count=calibration.sample_count,
+        mae_seconds=calibration.mae_seconds,
+        median_error_seconds=calibration.median_error_seconds,
+        p90_error_seconds=calibration.p90_error_seconds,
+        interval_coverage=calibration.interval_coverage,
+        calibration_digest=calibration.digest,
+        sla_status=risk.status,
+        predicted_seconds=risk.predicted_seconds,
+        sla_seconds=risk.sla_seconds,
+        margin_seconds=risk.margin_seconds,
+        customer_confidence=risk.customer_confidence,
         trace_id=trace_id,
     )
 

@@ -162,6 +162,44 @@ class EtaPredictionResponse(BaseModel):
     trace_id: str
 
 
+class EtaCalibrationSampleRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    sample_id: str = Field(min_length=1, max_length=128)
+    predicted_seconds: float = Field(ge=0)
+    actual_seconds: float = Field(ge=0)
+    interval_lower_seconds: float | None = Field(default=None, ge=0)
+    interval_upper_seconds: float | None = Field(default=None, ge=0)
+
+
+class EtaCalibrationRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    samples: tuple[EtaCalibrationSampleRequest, ...] = Field(default=(), max_length=1000)
+    predicted_seconds: float = Field(ge=0)
+    sla_seconds: float = Field(gt=0)
+
+
+class EtaCalibrationResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["compute"]
+    claim_label: Literal["calibration evidence only; not a customer guarantee"]
+    status: Literal["AVAILABLE", "UNAVAILABLE"]
+    sample_count: int
+    mae_seconds: float | None
+    median_error_seconds: float | None
+    p90_error_seconds: float | None
+    interval_coverage: float | None
+    calibration_digest: str
+    sla_status: Literal["ON_TRACK", "AT_RISK", "LIKELY_LATE"]
+    predicted_seconds: float
+    sla_seconds: float
+    margin_seconds: float
+    customer_confidence: Literal["available", "unavailable"]
+    trace_id: str
+
+
 class CourierCandidateRequest(BaseModel):
     model_config = ConfigDict(frozen=True)
 
