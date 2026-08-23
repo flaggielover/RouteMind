@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Architectural Hardening P20
 
-Current Task: RM-206 - Build independent solver verification kernel and maturity labels
+Current Task: Architectural Hardening complete; next is Enhancement Pass / Round 3 gap execution
 
-Task Status: RM-208 is fully validated with local Java 68, Python 160/95.84%, Web/Playwright gates and Actions run 32629363069; Docker Desktop API hung during a fresh infra rerun but prior RM-170/RM-171 real-service evidence is reused with the residual explicitly recorded. RM-209 is now `in_progress`; Round 2 remains fully passed
+Task Status: RM-209 is fully validated in closure checkpoint 2f90655 with synchronized control-plane records and final Actions run 32629951315 passing all five jobs. Hardening is 10/10 and the repository graph is 86/86. Docker Desktop API hung during a fresh infra rerun; prior RM-170/RM-171 real-service evidence is reused with the residual explicitly recorded. Round 3 research and production verification remain deferred.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

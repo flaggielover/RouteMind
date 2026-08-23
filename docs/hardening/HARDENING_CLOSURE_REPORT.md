@@ -3,12 +3,13 @@
 Date: 2026-08-23  
 Starting hardening checkpoint: `6b742b7` (RM-200 audit)  
 Ending implementation/regression checkpoint: `15f86f8`  
+Closure documentation checkpoint: `2f90655`
 Current branch: `main`  
 Remote: `origin/main` (`https://github.com/flaggielover/RouteMind.git`)
 
 ## Scope and result
 
-Architectural Hardening P20-P23 is complete for RM-200 through RM-208. The
+Architectural Hardening P20-P23 is complete for RM-200 through RM-209. The
 repository retains the Java/PostgreSQL authority boundary, Python compute and
 research boundary, RabbitMQ Outbox/Inbox contracts, Redis as rebuildable hot
 state, and the role-aware web presentation boundary. No accepted capability was
@@ -31,6 +32,7 @@ travel validation, or complete Round 3 research.
 | RM-206 solver verification | `c3c5d51`, docs `d52fa1f` | Python 155 tests / 95.78%, verifier evidence | `32628787160`, `32628947556` | passed |
 | RM-207 determinism contract | `4f86ff8`, docs `fad9628`, state fix `15f86f8` | Python 160 tests / 95.84%, double-run gate | `32629142871`; failed control-state run `32629250028`; fixed `32629363069` | passed |
 | RM-208 integration/regression | `15f86f8` | Java 68, Python 160/95.84%, Web 49/build, Playwright 34 + 2 existing skips | `32629363069` | passed with explicit infra residual |
+| RM-209 closure and Enhancement Pass handoff | `2f90655` | control-plane synchronization, local `verify.ps1`, closure evidence audit | `32629951315` | passed |
 
 All five jobs in the final successful Actions run passed: control plane and
 Compose, Java business runtime, Python compute/contracts, role-aware browser,

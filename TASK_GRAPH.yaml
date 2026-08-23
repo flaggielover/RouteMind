@@ -1119,7 +1119,7 @@
       "gates": ["L1-closure", "L6-evidence-audit", "architecture-review"],
       "evidence": ["docs/hardening/HARDENING_CLOSURE_REPORT.md"],
       "blocked_by": [],
-      "notes": "Active after RM-208 regression closure. Closure does not claim production verification or complete research validation."
+      "notes": "Passed in closure checkpoint 2f90655 with synchronized architecture/progress/handoff/task-graph records and final Actions run 32629951315 passing all five jobs. Closure does not claim production verification or complete research validation; Docker Desktop API rerun remains an explicit environment residual. Enhancement Pass candidates are dependency-ordered in docs/reviews/ROUND_3_GAPS.md."
     }
   ]
 }
