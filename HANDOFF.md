@@ -8,7 +8,7 @@ Current Phase: Round 2 P16 Strategy Laboratory
 
 Current Task: RM-170 - Implement real local golden delivery E2E
 
-Task Status: RM-170 is in progress; RM-136 is fully validated
+Task Status: RM-170 implementation is complete; execution evidence is pending Docker Desktop engine recovery; RM-136 is fully validated
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -643,4 +643,7 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   smoke 23 passed plus one existing desktop-only skip, and 5 schemas/15
   fixtures. GitHub Actions run `32608343277` passed all five jobs.
 - Round 2 is 43/48 and repository total is 71/76. RM-170 is now the highest
-  priority unblocked task; RM-171 and RM-180 remain blocked by RM-170.
+  priority active task. Its implementation checkpoint adds
+  `scripts/golden-delivery.ps1` and scheduled Outbox publication, but Docker
+  Desktop currently returns HTTP 500 from both contexts. RM-171 and RM-180
+  remain blocked by RM-170.

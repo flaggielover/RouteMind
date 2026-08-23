@@ -10,9 +10,9 @@ Current Task: RM-170 - Implement real local golden delivery E2E
 
 Last Completed: RM-136 - Integrate advanced dispatch decisions and audit
 
-Current Gate: RM-136 local/full/browser gates and Actions run 32609222189 passed; RM-170 is now active
+Current Gate: RM-136 local/full/browser gates and Actions run 32609222189 passed; RM-170 golden path implemented, execution pending Docker Desktop engine recovery
 
-CI: PASS - RM-136 run 32609222189, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 passed all five jobs.
+CI: PASS - RM-136 run 32609222189 and docs run 32609413087, RM-162 run 32608343277, RM-158 run 32607641909, RM-157 run 32606493460, RM-156 run 32605590683, and RM-155 run 32604701074 passed all five jobs.
 
 Regression: PASS - Java 61, Python 142 / 95.88%, Web 49 unit + build, E2E 23 passed + 1 skipped desktop-only, and 5 schemas / 15 contract fixtures
 
@@ -20,7 +20,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: RM-170 - real local golden delivery E2E; RM-171 and RM-180 remain blocked by RM-170
+Next Candidates: RM-170 - execute real local golden delivery E2E after Docker engine recovery; RM-171 and RM-180 remain blocked by RM-170
 
 State Basis: Greenfield directory discovered 2026-08-21. No prior Git repository or
 source tree existed. `F:\Projects\RouteMind-Data` is an existing external data

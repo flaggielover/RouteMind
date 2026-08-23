@@ -937,7 +937,7 @@
       "gates": ["L3-local-e2e", "L4-golden-delivery"],
       "evidence": ["evidence/gates/RM-170/local-golden-e2e.md"],
       "blocked_by": [],
-      "notes": "Pure browser mocks do not satisfy this task."
+      "notes": "Implementation checkpoint adds scripts/golden-delivery.ps1 for real PostgreSQL/RabbitMQ/Redis plus Java/Python public-command flow and scheduled Outbox publication. Pure browser mocks do not satisfy this task. Execution evidence is pending Docker Desktop engine recovery."
     },
     {
       "id": "RM-171",
