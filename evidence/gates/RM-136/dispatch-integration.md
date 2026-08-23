@@ -2,8 +2,8 @@
 
 - Date: 2026-08-23 (Asia/Shanghai)
 - Design: `docs/superpowers/specs/2026-08-23-rm-136-dispatch-integration-design.md`
-- Checkpoint: local implementation checkpoint pending commit
-- Gate decision: LOCAL PASS; awaiting GitHub Actions validation
+- Checkpoint: `1d172ec`
+- Gate decision: PASS; fully validated after GitHub Actions run `32609222189`
 
 ## Boundary and behavior
 
@@ -42,5 +42,5 @@ result with `replayed=true`; key reuse with a changed decision returns
 - Strategy/input/output/trace/fallback audit linkage: PASS locally.
 - Duplicate and stale decision safety: PASS locally.
 
-Remote Actions evidence will be appended after the pushed implementation
-checkpoint completes all five jobs.
+5. GitHub Actions run `32609222189` -> PASS: Control plane and Compose, Java,
+   Python/contract, Web/browser smoke, and bounded resilience jobs all green.

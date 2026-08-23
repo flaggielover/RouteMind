@@ -698,12 +698,12 @@
       "phase": "P13",
       "priority": "critical",
       "depends_on": ["RM-135", "RM-103", "RM-106"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Advanced decisions flow through versioned compute contracts and durable assignment boundaries", "Dispatch audit links strategy, input, output, trace, and fallback", "Duplicate and stale decisions are rejected or deduplicated safely"],
       "gates": ["L3-dispatch-integration", "L4-dispatch-golden-path", "L5-dispatch-retry"],
       "evidence": ["evidence/gates/RM-136/dispatch-integration.md"],
       "blocked_by": [],
-      "notes": "Local implementation and full/browser gates pass: Python v1 decision envelope carries input/output digests and fallback metadata; Java V10 durable audit and Outbox-backed assignment command pass golden-path, duplicate, stale, and key-reuse tests. Awaiting remote Actions validation; no shortcut around Outbox/Inbox or Java authority."
+      "notes": "Local implementation and full/browser gates pass: Python v1 decision envelope carries input/output digests and fallback metadata; Java V10 durable audit and Outbox-backed assignment command pass golden-path, duplicate, stale, and key-reuse tests. GitHub Actions run 32609222189 passed all five jobs; no shortcut around Outbox/Inbox or Java authority."
     },
     {
       "id": "RM-140",
