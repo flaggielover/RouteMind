@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "graph": "RouteMind Round 3 Research",
+  "state": "PREPARED",
+  "prepared_from": "RM-236 Enhancement Pass closure",
+  "launch_policy": "This graph is prepared only. No deep research, production deployment, live provider call, or large experiment campaign is launched by this file.",
+  "data_boundary": "Large datasets and artifacts stay under ROUTEMIND_DATA_ROOT (F:/Projects/RouteMind-Data); Git stores manifests, schemas, checksums, and small fixtures only.",
+  "architecture_constraints": [
+    "Java/PostgreSQL owns durable business state, transactions, commands, and event production.",
+    "Python owns dispatch, optimization, simulation, analytics, experiments, and research orchestration.",
+    "RabbitMQ Outbox/Inbox and Redis GEO remain infrastructure boundaries; Redis is never durable business truth.",
+    "Analytical or LLM agents may analyze and orchestrate bounded experiments but never own real-time dispatch correctness."
+  ],
+  "tasks": [
+    {
+      "id": "R3-300",
+      "title": "Define production readiness and evidence contract",
+      "priority": "critical",
+      "depends_on": ["RM-236"],
+      "status": "prepared",
+      "owner": "platform + Java/Python",
+      "gates": ["secret-isolation", "migration-rehearsal", "backup-restore", "slo-contract", "rollback-rehearsal"],
+      "evidence": ["docs/research/r3/production-readiness-contract.md"],
+      "non_claims": ["No production deployment or credential acquisition is implied."]
+    },
+    {
+      "id": "R3-301",
+      "title": "Measure provider-backed travel quality, freshness, and budgets",
+      "priority": "critical",
+      "depends_on": ["RM-140", "RM-141", "RM-233", "RM-236"],
+      "status": "prepared",
+      "owner": "Python compute + external provider adapter",
+      "gates": ["provider-contract", "quota-budget", "freshness", "fallback", "lineage"],
+      "evidence": ["docs/research/r3/travel-provider-benchmark.md", "manifests/r3/travel-provider.yaml"],
+      "non_claims": ["No external provider is called until credentials, privacy, and budget gates pass."]
+    },
+    {
+      "id": "R3-302",
+      "title": "Benchmark larger VRPTW and dynamic replanning workloads",
+      "priority": "high",
+      "depends_on": ["RM-133", "RM-135", "R3-301"],
+      "status": "prepared",
+      "owner": "Python compute",
+      "gates": ["seeded-reproducibility", "resource-bound", "assignment-integrity", "routebench"],
+      "evidence": ["docs/research/r3/dispatch-scale-benchmark.md", "manifests/r3/dispatch-scale.yaml"],
+      "non_claims": ["No production capacity or nationwide optimization claim is implied."]
+    },
+    {
+      "id": "R3-303",
+      "title": "Extend RouteBench and RADS with statistical confidence and drift review",
+      "priority": "high",
+      "depends_on": ["RM-091", "RM-213", "RM-227", "RM-231", "R3-302"],
+      "status": "prepared",
+      "owner": "Python research",
+      "gates": ["dataset-lineage", "confidence-interval", "ablation", "drift", "review-approval"],
+      "evidence": ["docs/research/r3/statistical-routebench-rads.md", "manifests/r3/research-review.yaml"],
+      "non_claims": ["No novelty, causal, or strategy-promotion claim is made without recorded datasets and review."]
+    },
+    {
+      "id": "R3-304",
+      "title": "Add authenticated multi-tenant identity and operator audit evidence",
+      "priority": "critical",
+      "depends_on": ["RM-086", "RM-088", "RM-236"],
+      "status": "prepared",
+      "owner": "Java + platform",
+      "gates": ["oidc-jwks", "tenant-isolation", "deny-by-default", "audit-retention", "rotation"],
+      "evidence": ["docs/research/r3/identity-tenancy-contract.md"],
+      "non_claims": ["No identity provider integration or production tenant is activated by preparation."]
+    },
+    {
+      "id": "R3-305",
+      "title": "Productize authenticated preferences, notifications, and accessibility coverage",
+      "priority": "medium",
+      "depends_on": ["RM-060", "RM-124", "R3-304"],
+      "status": "prepared",
+      "owner": "Web + Java",
+      "gates": ["session-boundary", "retention-deletion", "mobile-device", "assistive-tech", "localization"],
+      "evidence": ["docs/research/r3/product-surface-contract.md"],
+      "non_claims": ["Role switching in the current shell is not treated as authenticated tenancy."]
+    },
+    {
+      "id": "R3-306",
+      "title": "Add distributed tracing export, cost attribution, and incident drills",
+      "priority": "high",
+      "depends_on": ["RM-214", "RM-230", "RM-235"],
+      "status": "prepared",
+      "owner": "platform + operations",
+      "gates": ["trace-export", "sampling", "cost-lineage", "incident-rehearsal", "failure-recovery"],
+      "evidence": ["docs/research/r3/operations-observability.md"],
+      "non_claims": ["Current local traces and metrics do not imply an exported production telemetry system."]
+    },
+    {
+      "id": "R3-307",
+      "title": "Turn Digital Twin perturbations into approved scheduled experiments",
+      "priority": "high",
+      "depends_on": ["RM-228", "RM-231", "RM-233", "R3-300"],
+      "status": "prepared",
+      "owner": "Python research + operations",
+      "gates": ["approval", "seeded-replay", "artifact-retention", "lineage", "resource-bound"],
+      "evidence": ["docs/research/r3/twin-experiment-contract.md"],
+      "non_claims": ["No scheduled experiment or artifact mutation is launched in Round 3 preparation."]
+    },
+    {
+      "id": "R3-308",
+      "title": "Define analytical-agent evaluation and guardrail harness",
+      "priority": "high",
+      "depends_on": ["RM-232", "R3-303", "R3-306", "R3-307"],
+      "status": "prepared",
+      "owner": "Python agent boundary + security",
+      "gates": ["tool-permission", "groundedness", "budget", "prompt-injection", "dispatch-isolation"],
+      "evidence": ["docs/research/r3/agent-evaluation-contract.md"],
+      "non_claims": ["Agents remain advisory and cannot become the hard real-time dispatch authority."]
+    },
+    {
+      "id": "R3-309",
+      "title": "Review Round 3 evidence and close the research cycle",
+      "priority": "critical",
+      "depends_on": ["R3-300", "R3-303", "R3-304", "R3-305", "R3-306", "R3-308"],
+      "status": "prepared",
+      "owner": "architecture + evidence review",
+      "gates": ["evidence-audit", "architecture-review", "reproducibility", "deferred-work-review"],
+      "evidence": ["docs/research/r3/ROUND_3_CLOSURE_REPORT.md"],
+      "non_claims": ["Closure may retain deferred_external outcomes; green local checks do not prove production readiness."]
+    }
+  ]
+}

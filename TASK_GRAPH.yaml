@@ -1465,12 +1465,12 @@
       "phase": "P29",
       "priority": "critical",
       "depends_on": ["RM-235"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Enhancement closure report names commits, capabilities, data/marts, visualizations, tests, CI, limitations, and deferred work", "Round 3 Research Task Graph is prepared without launching deep research", "TASK_GRAPH, Progress, Handoff, and main/origin are synchronized"],
       "gates": ["L1-enhancement-closure", "L6-evidence-audit", "architecture-review"],
       "evidence": ["docs/enhancement/ENHANCEMENT_CLOSURE_REPORT.md", "docs/research/ROUND_3_TASK_GRAPH.yaml"],
       "blocked_by": [],
-      "notes": "Activated after RM-235 passed. Success requires a closure report, prepared Round 3 research graph, green CI, and a clean synchronized main branch; no production or scientific claim is implied."
+      "notes": "Passed in closure checkpoint pending after Enhancement Closure Report and prepared Round 3 graph were added, control-plane/verify gates passed, and the preceding RM-235 checkpoint run 32662822033 was green. Round 3 graph is prepared only; no deep research or production claim is implied. Final synchronization is completed by the closure checkpoint push."
     }
   ]
 }

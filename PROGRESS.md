@@ -1,20 +1,20 @@
 # RouteMind Progress
 
-Current Phase: Enhancement Pass P29
+Current Phase: Round 3 Research Preparation
 
 Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 26 / 27 tasks passed (RM-210 through RM-235; RM-236 in progress)
+Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 112 / 113 tasks passed
+Repository Total: 113 / 113 tasks passed
 
-Current Task: RM-236 - Close Enhancement Pass and prepare Round 3 research graph
+Current Task: Enhancement Pass CLOSED; Round 3 Research Task Graph PREPARED
 
-Last Completed: RM-235 - Run Enhancement E2E and adversarial validation
+Last Completed: RM-236 - Close Enhancement Pass and prepare Round 3 research graph
 
-Current Gate: RM-235 passed local full-gate, resilience, adversarial, historical real E2E, and remote CI evidence. RM-236 is active for closure reporting and Round 3 research graph preparation.
+Current Gate: RM-236 closure report, Round 3 prepared graph, control-plane and verify gates passed. Final CI for the closure checkpoint is pending observation; no production or scientific claim is made.
 
 CI: PASS through RM-235 checkpoint bc00832 in run 32662822033; RM-229 checkpoint 5600487 in run 32662337844; RM-231 checkpoint fb9bd77 in run 32662606286; RM-234 checkpoint 9fe015d in run 32661326399; all passed all five jobs. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
@@ -24,7 +24,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Complete RM-236 closure report and Round 3 research task graph, then run final control-plane validation and synchronize main with origin/main.
+Next Candidates: None in Enhancement Pass. Round 3 tasks are prepared only and must remain unstarted until their evidence gates are satisfied.
 
 ### RM-230 closure and RM-234 activation - 2026-08-24
 
@@ -748,3 +748,13 @@ The task is now passed and RM-120 is the active implementation.
   the host daemon did not respond; no new local Compose result is claimed.
 - GitHub Actions run `32662822033` passed all five jobs for RM-235. Enhancement is
   now 26/27 and repository total is 112/113. RM-236 is active.
+
+### RM-236 Enhancement closure and Round 3 preparation - 2026-08-24
+- `docs/enhancement/ENHANCEMENT_CLOSURE_REPORT.md` records the RM-210 through
+  RM-236 capability, checkpoint, evidence, validation, residual-risk, and
+  deferred-work ledger. `docs/research/ROUND_3_TASK_GRAPH.yaml` is a prepared,
+  dependency-ordered graph with no started research tasks.
+- Control-plane validation and `./scripts/verify.ps1` pass after the closure
+  artifacts. Enhancement is now 27/27 and repository total is 113/113.
+- The closure checkpoint is pushed next; final GitHub Actions observation must
+  remain green before the branch is declared synchronized.
