@@ -1075,12 +1075,12 @@
       "phase": "P22",
       "priority": "critical",
       "depends_on": ["RM-200"],
-      "status": "in_progress",
+      "status": "passed",
       "acceptance": ["Solver outputs are independently checked for membership, capacity, windows, travel, feasibility, and objective", "Invalid output fails safely with structured reasons and cannot silently pass", "Registered strategies carry honest BASELINE, ENGINEERING, PRODUCTION-CANDIDATE, RESEARCH, or EXTERNAL-VALIDATED maturity labels"],
       "gates": ["L2-solver", "L6-correctness", "L6-property-tests"],
       "evidence": ["evidence/gates/RM-206/solver-verification.md"],
       "blocked_by": [],
-      "notes": "Implementation is locally green with an independent dispatch/VRPTW verification kernel, structured solver_output_invalid failures, maturity labels, and 155 Compute tests at 95.78%; checkpoint and Actions evidence are pending. Verifier minimizes shared feasibility code and does not claim theorem-prover coverage."
+      "notes": "Passed in checkpoint c3c5d51 with an independent dispatch/VRPTW verification kernel, structured solver_output_invalid failures, maturity labels, local fast gate, 155 Compute tests at 95.78%, and GitHub Actions run 32628787160 green across all five jobs. Verifier minimizes shared feasibility code and does not claim theorem-prover coverage."
     },
     {
       "id": "RM-207",
@@ -1088,12 +1088,12 @@
       "phase": "P22",
       "priority": "high",
       "depends_on": ["RM-203", "RM-206"],
-      "status": "pending",
+      "status": "in_progress",
       "acceptance": ["Subsystems are classified DETERMINISM_CRITICAL, DETERMINISTIC_IF_CONFIGURED, or NONDETERMINISTIC_ALLOWED", "Canonical scenarios run twice and compare stable digests with seed/configuration/environment recorded", "CI fails when a deterministic contract regresses without an explicit classification change"],
       "gates": ["L1-determinism", "L2-property-tests", "L6-reproducibility"],
       "evidence": ["evidence/gates/RM-207/determinism-audit.md"],
       "blocked_by": [],
-      "notes": "Do not require bitwise equality for explicitly allowed nondeterministic subsystems."
+      "notes": "Active after RM-206 closure. Do not require bitwise equality for explicitly allowed nondeterministic subsystems."
     },
     {
       "id": "RM-208",

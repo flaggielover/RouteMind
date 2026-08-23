@@ -8,7 +8,7 @@ Current Phase: Architectural Hardening P20
 
 Current Task: RM-206 - Build independent solver verification kernel and maturity labels
 
-Task Status: RM-205 is fully validated locally with Java 66 tests and in Actions runs 32627857784 and 32628007666; RM-206 implementation is locally green with 155 Python tests and 95.78% coverage, pending checkpoint CI; Round 2 remains fully passed
+Task Status: RM-206 is fully validated locally with 155 Python tests and 95.78% coverage and in Actions run 32628787160; RM-207 is now `in_progress`; Round 2 remains fully passed
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
