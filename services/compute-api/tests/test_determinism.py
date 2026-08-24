@@ -47,6 +47,7 @@ def test_contract_catalog_and_environment_are_explicit() -> None:
     assert contract_for("routebench-statistics").comparison == "digest"
     assert contract_for("routebench-power").comparison == "digest"
     assert contract_for("routebench-multiplicity").comparison == "digest"
+    assert contract_for("routebench-campaign").classification == "DETERMINISTIC_IF_CONFIGURED"
     assert {key for key, _ in environment_metadata()} == {
         "implementation",
         "python_version",

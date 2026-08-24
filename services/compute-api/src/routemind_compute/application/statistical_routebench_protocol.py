@@ -39,6 +39,47 @@ class StatisticalRouteBenchProtocolError(ValueError):
 
 
 @dataclass(frozen=True, slots=True)
+class StatisticalRouteBenchArm:
+    strategy: str
+    version: str
+    parameters: tuple[tuple[str, float], ...]
+
+
+@dataclass(frozen=True, slots=True)
+class StatisticalRouteBenchRegime:
+    regime_id: str
+    demand_multiplier: float
+    demand_burst_size: int
+    supply_multiplier: float
+    merchant_delay_ticks: int
+    traffic_multiplier: float
+    location_staleness_seconds: int
+    decision_budget_millis: float
+    merchant_queue_capacity: int
+
+
+@dataclass(frozen=True, slots=True)
+class StatisticalRouteBenchScenarioDesign:
+    generator_version: str
+    ticks_per_hour: int
+    horizon_ticks: int
+    base_demand_rate_per_hour: float
+    base_courier_count: int
+    regimes: tuple[StatisticalRouteBenchRegime, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class StatisticalRouteBenchResourceEnvelope:
+    threads_per_arm: int
+    arm_wall_timeout_seconds: int
+    pilot_arm_runs: int
+    maximum_confirmatory_arm_runs: int
+    expected_peak_memory_mebibytes: int
+    maximum_external_artifact_mebibytes: int
+    external_cost_usd: float
+
+
+@dataclass(frozen=True, slots=True)
 class StatisticalRouteBenchProtocol:
     protocol_id: str
     manifest_sha256: str
@@ -58,6 +99,11 @@ class StatisticalRouteBenchProtocol:
     number_of_confirmatory_tests: int
     multiplicity_method: str
     multiplicity_family: str
+    candidate: StatisticalRouteBenchArm
+    comparator: StatisticalRouteBenchArm
+    scenario_design: StatisticalRouteBenchScenarioDesign
+    resource_envelope: StatisticalRouteBenchResourceEnvelope
+    artifact_relative_root: str
 
 
 def load_statistical_routebench_protocol(path: Path) -> StatisticalRouteBenchProtocol:
@@ -107,9 +153,10 @@ def load_statistical_routebench_protocol(path: Path) -> StatisticalRouteBenchPro
     prerequisite_ci_run = _positive_integer(root, "prerequisite_ci_run")
 
     _validate_research(_mapping(root.get("research"), "research"))
-    _validate_arms(_mapping(root.get("arms"), "arms"))
+    candidate, comparator = _validate_arms(_mapping(root.get("arms"), "arms"))
     _validate_estimands(_mapping(root.get("primary_estimands"), "primary estimands"))
-    regimes = _validate_scenarios(_mapping(root.get("scenario_design"), "scenario design"))
+    scenario_design = _validate_scenarios(_mapping(root.get("scenario_design"), "scenario design"))
+    regimes = tuple(item.regime_id for item in scenario_design.regimes)
     randomization = _mapping(root.get("randomization"), "randomization")
     streams = _validate_randomization(randomization)
     power = _mapping(root.get("prospective_power"), "prospective power")
@@ -119,8 +166,8 @@ def load_statistical_routebench_protocol(path: Path) -> StatisticalRouteBenchPro
     _validate_safety(_mapping(root.get("mandatory_safety_diagnostics"), "safety diagnostics"))
     _validate_outcomes(_mapping(root.get("outcome_handling"), "outcome handling"))
     _validate_stopping(_mapping(root.get("stopping"), "stopping"))
-    _validate_resources(_mapping(root.get("resource_envelope"), "resource envelope"))
-    _validate_lineage(_mapping(root.get("lineage"), "lineage"))
+    resources = _validate_resources(_mapping(root.get("resource_envelope"), "resource envelope"))
+    artifact_relative_root = _validate_lineage(_mapping(root.get("lineage"), "lineage"))
     if not _string(root, "supported_wording").startswith("This protocol prospectively fixes"):
         raise StatisticalRouteBenchProtocolError("supported wording drifted")
     if len(_strings(root.get("prohibited_wording"), "prohibited wording")) != 4:
@@ -150,6 +197,11 @@ def load_statistical_routebench_protocol(path: Path) -> StatisticalRouteBenchPro
         number_of_confirmatory_tests=tests,
         multiplicity_method=_string(inference, "multiplicity"),
         multiplicity_family=_string(inference, "multiplicity_family"),
+        candidate=candidate,
+        comparator=comparator,
+        scenario_design=scenario_design,
+        resource_envelope=resources,
+        artifact_relative_root=artifact_relative_root,
     )
 
 
@@ -162,7 +214,9 @@ def _validate_research(value: Mapping[str, object]) -> None:
         raise StatisticalRouteBenchProtocolError("assignment hypothesis margin drifted")
 
 
-def _validate_arms(value: Mapping[str, object]) -> None:
+def _validate_arms(
+    value: Mapping[str, object],
+) -> tuple[StatisticalRouteBenchArm, StatisticalRouteBenchArm]:
     _exact_keys(value, {"candidate", "comparator"}, "arms")
     candidate = _mapping(value.get("candidate"), "candidate arm")
     comparator = _mapping(value.get("comparator"), "comparator arm")
@@ -181,6 +235,18 @@ def _validate_arms(value: Mapping[str, object]) -> None:
         None,
         {"distance_weight": 1.0},
         "comparator parameters",
+    )
+    return (
+        StatisticalRouteBenchArm(
+            _string(candidate, "strategy"),
+            _string(candidate, "version"),
+            _numeric_metadata(_mapping(candidate.get("parameters"), "candidate parameters")),
+        ),
+        StatisticalRouteBenchArm(
+            _string(comparator, "strategy"),
+            _string(comparator, "version"),
+            _numeric_metadata(_mapping(comparator.get("parameters"), "comparator parameters")),
+        ),
     )
 
 
@@ -202,7 +268,7 @@ def _validate_estimands(value: Mapping[str, object]) -> None:
     _equal(assignment, "denominator", "every_preregistered_request", "assignment denominator")
 
 
-def _validate_scenarios(value: Mapping[str, object]) -> tuple[str, ...]:
+def _validate_scenarios(value: Mapping[str, object]) -> StatisticalRouteBenchScenarioDesign:
     _equal(value, "generator_version", "r3-b-stress-generator-v1", "generator version")
     _equal(value, "ticks_per_hour", 60, "tick rate")
     _equal(value, "horizon_ticks", 360, "horizon")
@@ -229,7 +295,27 @@ def _validate_scenarios(value: Mapping[str, object]) -> tuple[str, ...]:
     for regime in mapped:
         key, expected = expected_changes[_string(regime, "regime_id")]
         _equal(regime, key, expected, f"{_string(regime, 'regime_id')} perturbation")
-    return ids
+    return StatisticalRouteBenchScenarioDesign(
+        generator_version=_string(value, "generator_version"),
+        ticks_per_hour=_integer(value, "ticks_per_hour"),
+        horizon_ticks=_integer(value, "horizon_ticks"),
+        base_demand_rate_per_hour=_number(base, "demand_rate_per_hour"),
+        base_courier_count=_integer(base, "courier_count"),
+        regimes=tuple(
+            StatisticalRouteBenchRegime(
+                regime_id=_string(item, "regime_id"),
+                demand_multiplier=_number(item, "demand_multiplier"),
+                demand_burst_size=_integer(item, "demand_burst_size"),
+                supply_multiplier=_number(item, "supply_multiplier"),
+                merchant_delay_ticks=_integer(item, "merchant_delay_ticks"),
+                traffic_multiplier=_number(item, "traffic_multiplier"),
+                location_staleness_seconds=_integer(item, "location_staleness_seconds"),
+                decision_budget_millis=_number(item, "decision_budget_millis"),
+                merchant_queue_capacity=_integer(item, "merchant_queue_capacity"),
+            )
+            for item in mapped
+        ),
+    )
 
 
 def _validate_randomization(value: Mapping[str, object]) -> tuple[str, ...]:
@@ -321,7 +407,7 @@ def _validate_stopping(value: Mapping[str, object]) -> None:
         raise StatisticalRouteBenchProtocolError("early-stop reasons drifted")
 
 
-def _validate_resources(value: Mapping[str, object]) -> None:
+def _validate_resources(value: Mapping[str, object]) -> StatisticalRouteBenchResourceEnvelope:
     _equal(value, "execution", "local_only", "execution boundary")
     _equal(value, "threads_per_arm", 1, "thread limit")
     _equal(value, "arm_wall_timeout_seconds", 30, "arm timeout")
@@ -329,9 +415,18 @@ def _validate_resources(value: Mapping[str, object]) -> None:
     _equal(value, "maximum_confirmatory_arm_runs", 3200, "campaign arm runs")
     _equal(value, "external_cost_usd", 0.0, "external cost")
     _equal(value, "material_execution_task", "R3-325", "material task")
+    return StatisticalRouteBenchResourceEnvelope(
+        threads_per_arm=_integer(value, "threads_per_arm"),
+        arm_wall_timeout_seconds=_integer(value, "arm_wall_timeout_seconds"),
+        pilot_arm_runs=_integer(value, "pilot_arm_runs"),
+        maximum_confirmatory_arm_runs=_integer(value, "maximum_confirmatory_arm_runs"),
+        expected_peak_memory_mebibytes=_integer(value, "expected_peak_memory_mebibytes"),
+        maximum_external_artifact_mebibytes=_integer(value, "maximum_external_artifact_mebibytes"),
+        external_cost_usd=_number(value, "external_cost_usd"),
+    )
 
 
-def _validate_lineage(value: Mapping[str, object]) -> None:
+def _validate_lineage(value: Mapping[str, object]) -> str:
     required = _strings(value.get("required"), "lineage fields")
     if len(required) != 14 or len(set(required)) != len(required):
         raise StatisticalRouteBenchProtocolError("lineage field set drifted")
@@ -349,6 +444,16 @@ def _validate_lineage(value: Mapping[str, object]) -> None:
         "R3-324 passed",
     ):
         raise StatisticalRouteBenchProtocolError("campaign prerequisite gates drifted")
+    return "experiments/r3/R3-325"
+
+
+def _numeric_metadata(value: Mapping[str, object]) -> tuple[tuple[str, float], ...]:
+    normalized: list[tuple[str, float]] = []
+    for key, item in value.items():
+        if not isinstance(item, (int, float)) or isinstance(item, bool) or not isfinite(item):
+            raise StatisticalRouteBenchProtocolError("arm parameters must be finite numbers")
+        normalized.append((key, float(item)))
+    return tuple(sorted(normalized))
 
 
 def _mapping(value: object, label: str) -> Mapping[str, object]:
@@ -410,7 +515,11 @@ def _exact_keys(value: Mapping[str, object], expected: set[str], label: str) -> 
 
 
 __all__ = [
+    "StatisticalRouteBenchArm",
     "StatisticalRouteBenchProtocol",
     "StatisticalRouteBenchProtocolError",
+    "StatisticalRouteBenchRegime",
+    "StatisticalRouteBenchResourceEnvelope",
+    "StatisticalRouteBenchScenarioDesign",
     "load_statistical_routebench_protocol",
 ]

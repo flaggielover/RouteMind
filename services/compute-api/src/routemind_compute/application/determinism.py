@@ -41,6 +41,7 @@ DEFAULT_CONTRACTS: tuple[DeterminismContract, ...] = (
     DeterminismContract("routebench-statistics", "DETERMINISM_CRITICAL"),
     DeterminismContract("routebench-power", "DETERMINISM_CRITICAL"),
     DeterminismContract("routebench-multiplicity", "DETERMINISM_CRITICAL"),
+    DeterminismContract("routebench-campaign", "DETERMINISTIC_IF_CONFIGURED"),
     DeterminismContract("rads", "DETERMINISTIC_IF_CONFIGURED"),
     DeterminismContract("api-observability", "NONDETERMINISTIC_ALLOWED", "observational"),
 )

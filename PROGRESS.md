@@ -14,7 +14,7 @@ Current Task: R3-325 - Execute preregistered RouteBench robustness matrix
 
 Last Completed: R3-324 - Implement multiple-comparison control
 
-Current Gate: R3-325 is E-IN-PROGRESS / X-PENDING / S-PENDING / C-DEFERRED. Its runner implementation must pass remote CI before any material pilot execution.
+Current Gate: R3-325 implementation is locally validated as E-PASS, while X-PENDING / S-PENDING / C-DEFERRED remain. The synthetic full matrix retained NON_ESTIMABLE assignment outcomes and correctly blocked confirmatory design; no material pilot ran. The committed implementation must pass remote CI before material execution.
 
 CI: PASS for the R3-324 implementation checkpoint c3e394b in run 32720233681 and R3-323 implementation checkpoint b18d171 in run 32718029279 across all five jobs.
 
@@ -28,7 +28,26 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement and synthetically validate the R3-325 runner, resource estimate, seed/failure retention, and lineage; push a remote-green implementation checkpoint before executing its bounded pilot. R3-350 remains independently eligible.
+Next Candidates: Commit and push the R3-325 runner/evidence, observe the real implementation checkpoint Actions run, then execute the bounded material pilot only after remote green. R3-350 remains independently eligible.
+
+### R3-325 implementation checkpoint - 2026-08-24
+- The manifest-bound runner now freezes all eight R3-320 regimes, 64 pilot pairs,
+  128 arm runs, parity-alternated execution, disjoint confirmatory identities,
+  resource limits, and full implementation/CI authorization.
+- Immutable external artifacts retain plan/environment/pair/ledger/analysis
+  lineage with SHA-256 digests, write-once verification, resumable records,
+  one retry for harness/infrastructure defects, and worst-case scoring for
+  timeout/strategy failure. The CLI refuses dirty or non-green checkpoints.
+- Synthetic full-matrix execution completed 64/64 pairs and 128 attempts in
+  about 1.356 seconds. Assignment-rate zero variance produced retained
+  `NON_ESTIMABLE` outcomes and `CONFIRMATORY_BLOCKED_NON_ESTIMABLE_PILOT_RETAINED`;
+  this is not material evidence and no confirmatory campaign ran.
+- Ruff, strict mypy, lock check, focused tests, compute check, and full gate pass.
+  Full gate totals are Java 81/81, Python 755/755 at 96.17%, and Web 92/92 plus
+  production build. Evidence: `evidence/gates/R3-325/robustness-matrix.md`.
+- Current disposition is `E-PASS / X-PENDING / S-PENDING / C-DEFERRED`; next
+  action is the explicit implementation commit/push and real GitHub Actions
+  observation before material pilot execution.
 
 ### R3-324 multiple-comparison implementation - 2026-08-24
 - The frozen protocol now exposes the exact `holm_bonferroni_familywise` method

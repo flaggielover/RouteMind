@@ -8,7 +8,7 @@ Current Phase: Round 3 Scientific Research - Workstream B
 
 Current Task: R3-325 - Execute preregistered RouteBench robustness matrix
 
-Task Status: R3-324 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after implementation revision c3e394b passed all five jobs in Actions run 32720233681. R3-325 is active, but material pilot execution is prohibited until its runner implementation checkpoint is remote green.
+Task Status: R3-324 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after implementation revision c3e394b passed all five jobs in Actions run 32720233681. R3-325 implementation is locally E-PASS, but material pilot execution remains prohibited until its committed runner checkpoint is remote green.
 
 R3-324 resume capsule: the exact frozen 16-test Holm step-down family retains
 protocol/regime/metric/hypothesis identity, raw p-values, stable family ranks,
@@ -24,11 +24,13 @@ determinism gates. During validation, a real Java same-instant transition flake
 was diagnosed and repaired with monotonic aggregate/outbox event time; the fixed
 clock regression and originally failing lease test pass. Implementation revision
 `c3e394b` passed all five jobs in Actions run `32720233681`; R3-324 is closed.
-Next: implement and synthetically validate the manifest-bound R3-325 runner,
-resource estimate, complete seed/failure retention, and artifact lineage, then
-commit, push, and require a remote-green implementation checkpoint before any
-material pilot. No observed pilot, confirmatory campaign, statistical effect, or
-strategy claim exists.
+Next: commit and push the manifest-bound R3-325 runner and evidence, require a
+remote-green implementation checkpoint, then run the authorized material pilot.
+The local synthetic full matrix covered 64/64 pairs and 128 attempts; assignment
+zero variance retained `NON_ESTIMABLE` outcomes and blocked confirmatory design
+without imputation. No observed pilot, confirmatory campaign, statistical
+effect, or strategy claim exists. Evidence is in
+`evidence/gates/R3-325/robustness-matrix.md`.
 
 R3-323 resume capsule: exact SciPy 1.18.0 one-sided noncentral paired-t planning
 records the content-addressed variance source, frozen MDE/noninferiority distance,

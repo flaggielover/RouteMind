@@ -49,6 +49,24 @@ def test_frozen_protocol_loads_with_content_identity_and_prerequisites() -> None
         protocol.multiplicity_family
         == "eight_risk_superiority_and_eight_assignment_noninferiority_tests"
     )
+    assert protocol.candidate.strategy == "risk-aware"
+    assert protocol.candidate.version == "1.0.0"
+    assert dict(protocol.candidate.parameters) == {
+        "balance": 0.5,
+        "distance": 1.0,
+        "overtime": 2.0,
+        "readiness": 0.5,
+        "service_risk": 2.0,
+    }
+    assert protocol.comparator.strategy == "weighted-greedy"
+    assert dict(protocol.comparator.parameters) == {"distance_weight": 1.0}
+    assert protocol.scenario_design.generator_version == "r3-b-stress-generator-v1"
+    assert protocol.scenario_design.horizon_ticks == 360
+    assert protocol.scenario_design.base_courier_count == 12
+    assert len(protocol.scenario_design.regimes) == 8
+    assert protocol.resource_envelope.pilot_arm_runs == 128
+    assert protocol.resource_envelope.maximum_confirmatory_arm_runs == 3200
+    assert protocol.artifact_relative_root == "experiments/r3/R3-325"
 
 
 @pytest.mark.parametrize(
