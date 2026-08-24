@@ -44,6 +44,11 @@ def test_frozen_protocol_loads_with_content_identity_and_prerequisites() -> None
     assert protocol.pilot_replicates_per_regime == 8
     assert protocol.maximum_confirmatory_pairs_per_regime == 200
     assert protocol.number_of_confirmatory_tests == 16
+    assert protocol.multiplicity_method == "holm_bonferroni_familywise"
+    assert (
+        protocol.multiplicity_family
+        == "eight_risk_superiority_and_eight_assignment_noninferiority_tests"
+    )
 
 
 @pytest.mark.parametrize(

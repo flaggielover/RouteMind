@@ -56,6 +56,8 @@ class StatisticalRouteBenchProtocol:
     maximum_confirmatory_pairs_per_regime: int
     round_up_to_pairs: int
     number_of_confirmatory_tests: int
+    multiplicity_method: str
+    multiplicity_family: str
 
 
 def load_statistical_routebench_protocol(path: Path) -> StatisticalRouteBenchProtocol:
@@ -146,6 +148,8 @@ def load_statistical_routebench_protocol(path: Path) -> StatisticalRouteBenchPro
         maximum_confirmatory_pairs_per_regime=maximum_pairs,
         round_up_to_pairs=_integer(power, "round_up_to_pairs"),
         number_of_confirmatory_tests=tests,
+        multiplicity_method=_string(inference, "multiplicity"),
+        multiplicity_family=_string(inference, "multiplicity_family"),
     )
 
 

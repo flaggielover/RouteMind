@@ -7,9 +7,10 @@ import com.routemind.business.domain.order.OrderId;
 import com.routemind.business.domain.order.OrderStatus;
 import com.routemind.business.domain.outbox.OutboxMessage;
 import java.nio.charset.StandardCharsets;
-import java.time.Clock;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
 import java.util.HexFormat;
@@ -77,7 +78,7 @@ public class OrderCommandService {
 		}
 		OrderCommandAuthorization.requireTransition(actor, current.status(), target);
 		assignments.beforeTransition(id.value(), current.status(), target);
-		Order next = current.transitionTo(target, actor, clock.instant(), expectedVersion);
+		Order next = current.transitionTo(target, actor, transitionTime(current.updatedAt()), expectedVersion);
 		Order saved = orders.save(next);
 		publish(saved, correlationId, causationId, traceId, "order.status.changed", actor, saved.version());
 		idempotency.save(new OrderCommandIdempotency(idempotencyKey, requestHash, "transition", saved.id().value(),
@@ -103,9 +104,14 @@ public class OrderCommandService {
 		return key.trim();
 	}
 
+	private Instant transitionTime(Instant updatedAt) {
+		Instant observed = clock.instant();
+		return observed.isAfter(updatedAt) ? observed : updatedAt.plusNanos(1);
+	}
+
 	private void publish(Order saved, UUID correlationId, UUID causationId, String traceId, String eventType,
 			String actor, long aggregateVersion) {
-		EventEnvelope event = new EventEnvelope("1.0", UUID.randomUUID(), eventType, clock.instant(), "business-api",
+		EventEnvelope event = new EventEnvelope("1.0", UUID.randomUUID(), eventType, saved.updatedAt(), "business-api",
 				saved.id().value(), aggregateVersion, correlationId, causationId, traceId,
 				Map.of("orderId", saved.id().value().toString(), "status", saved.status().name(), "actor", actor));
 		outbox.save(OutboxMessage.pending(event));

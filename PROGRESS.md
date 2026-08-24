@@ -14,11 +14,11 @@ Current Task: R3-324 - Implement multiple-comparison control
 
 Last Completed: R3-323 - Implement prospective power analysis
 
-Current Gate: R3-324 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. It must implement the frozen Holm family without losing raw/corrected hypothesis identity.
+Current Gate: R3-324 is locally validated and remains E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE until its implementation checkpoint passes remote CI.
 
 CI: PASS for the R3-323 implementation checkpoint b18d171 in run 32718029279 and R3-322 implementation checkpoint 349a27e in run 32715625853 across all five jobs.
 
-Regression: PASS locally and remotely for R3-323 - Java 80/80, Python 635/635 at 95.83% coverage, the power module at 100% with 41 directed tests, Web 92/92 plus production build/browser smoke, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
+Regression: PASS locally for R3-324 - Java 81/81, Python 657/657 at 95.88% coverage, the multiplicity module at 100% statement/branch coverage with 22 directed tests, statistical integration 143/143, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls. Remote R3-324 validation is pending.
 
 Round 3 Scientific Tasks: 12 / 45 passed; R3-324 in progress; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,26 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement and remotely validate R3-324 multiplicity control, then implement R3-325 behind a remote-green checkpoint before any pilot or confirmatory execution. R3-350 remains independently eligible.
+Next Candidates: Commit and remotely validate R3-324 multiplicity control, then implement R3-325 behind a remote-green checkpoint before any pilot or confirmatory execution. R3-350 remains independently eligible.
+
+### R3-324 multiple-comparison implementation - 2026-08-24
+- The frozen protocol now exposes the exact `holm_bonferroni_familywise` method
+  and 16-test family. Reports retain protocol/regime/metric/hypothesis identity,
+  raw p-value, stable rank, multiplier, sequential alpha, monotonic adjusted
+  p-value, rejection decision, family disposition, claim boundary, and digest.
+- The reference raw vector `0.001, 0.002, 0.003, 0.004, 1.0 x 12` adjusts first
+  to `0.016, 0.030, 0.042, 0.052`, rejects 3/16, and has digest
+  `53580e4f...e18c`. Equal boundary values deterministically adjust to `0.05`.
+- Invalid p-values, protocol/method/family/count/alpha drift, duplicate or missing
+  hypotheses, and duplicate regime identities fail closed. Input order cannot
+  change the report; `routebench-multiplicity` is DETERMINISM_CRITICAL.
+- 22 directed tests pass with 100% statement/branch module coverage; statistical
+  integration is 143/143. The full local gate passes Java 81/81, Python 657/657
+  at 95.88%, Web 92/92 plus build, contracts, controls, and deterministic gates.
+- The gate exposed and repaired an existing Java same-instant order-transition
+  flake. Fixed-clock regression and the formerly failing lease integration test
+  pass; aggregate and outbox event times now remain monotonic. Remote validation
+  is pending. No observed pilot or confirmatory campaign ran.
 
 ### R3-323 prospective power implementation - 2026-08-24
 - Exact `scipy==1.18.0` one-sided noncentral paired-t planning consumes a

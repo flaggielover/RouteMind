@@ -8,7 +8,25 @@ Current Phase: Round 3 Scientific Research - Workstream B
 
 Current Task: R3-324 - Implement multiple-comparison control
 
-Task Status: R3-323 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after implementation revision b18d171 passed all five jobs in Actions run 32718029279. R3-324 is active and must implement the frozen Holm family with stable raw/corrected hypothesis identity.
+Task Status: R3-324 implementation is locally green and remains E-IN-PROGRESS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE pending its commit and remote GitHub Actions checkpoint.
+
+R3-324 resume capsule: the exact frozen 16-test Holm step-down family retains
+protocol/regime/metric/hypothesis identity, raw p-values, stable family ranks,
+multipliers, sequential thresholds, monotonic adjusted p-values, rejection
+decisions, family disposition, claim boundary, and content digest. The reference
+vector adjusts first to 0.016/0.030/0.042/0.052, rejects 3/16, and has digest
+`53580e4f...e18c`; ties at the boundary adjust deterministically to 0.05.
+Invalid values, identity drift, incomplete/duplicate families, and frozen
+protocol drift fail closed. Twenty-two directed tests pass at 100% module branch
+coverage; statistical integration is 143/143. The full local gate passes Java
+81/81, Python 657/657 at 95.88%, Web 92/92 plus build, contracts, controls, and
+determinism gates. During validation, a real Java same-instant transition flake
+was diagnosed and repaired with monotonic aggregate/outbox event time; the fixed
+clock regression and originally failing lease test pass. Next: commit, push, and
+observe all five Actions jobs. Only after remote green may R3-324 close and
+R3-325 implementation begin; material pilot execution remains prohibited until
+the R3-325 implementation checkpoint itself is remote green. No observed pilot,
+confirmatory campaign, statistical effect, or strategy claim exists.
 
 R3-323 resume capsule: exact SciPy 1.18.0 one-sided noncentral paired-t planning
 records the content-addressed variance source, frozen MDE/noninferiority distance,
