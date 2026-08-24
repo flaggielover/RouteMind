@@ -163,3 +163,12 @@ and final claim disposition without rewriting earlier entries.
   component removal remains exploratory only. This is
   `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`, not evidence of component
   importance or effect.
+- `NR-R3-025`: R3-343 froze an empirical-only stability map over relative
+  advantage, dwell, pressure, regime, and strategy-pair axes with explicit
+  coverage and uncertainty rules. Frozen R3-325 artifacts contain none of the
+  eight tick-level state, selection, switching, performance, instability,
+  regime, or pairing fields. The result is `INSUFFICIENT_DATA`,
+  `NO_ELIGIBLE_CELLS`, and `NOT_ESTIMATED_NO_CELL_SUPPORT`; every axis is
+  `NOT_MAPPED_NO_TICK_LOGS`. No synthetic map, empirical stability region,
+  performance interval, or theoretical-stability claim was created. This is
+  `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
