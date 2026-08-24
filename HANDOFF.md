@@ -8,9 +8,11 @@ Current Phase: Round 3 Scientific Research - Workstream E
 
 Current Task: R3-357 - Perform adversarial prior-art audit
 
-Task Status: R3-347 closed `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM` after implementation `09d4194` passed all five jobs in Actions run `32785397588`; formal audit returned `INSUFFICIENT_DATA`. R3-357 is active.
+Task Status: R3-357 bounded audit is complete and validating. Sixteen original or peer-reviewed sources cover nine categories: five `SUBSUMED`, two `CLOSE_PRIOR`, two `PARTIAL_GAP`, and no `PLAUSIBLE_GAP`. Local Java/Python/Web and pre-Compose controls pass; remote CI is pending because the local Docker Desktop CLI is unresponsive.
 
-Next: perform R3-357 adversarial web research with current original or peer-reviewed sources for every candidate novelty category. Classify each as SUBSUMED, CLOSE_PRIOR, PARTIAL_GAP, PLAUSIBLE_GAP, or UNRESOLVED; a plausible gap is not a novelty finding.
+Next: commit and push the R3-357 audit checkpoint, observe all five real Actions jobs, and require remote-green Compose/repository controls before closing R3-357 and activating R3-359 final claim assignment.
+
+R3-357 evidence is `docs/research/r3/PRIOR_ART_AUDIT.md`; byte SHA-256 is `5978c859247230566e77d9573c2b4d62cb3b960555e3d4e035d85c6660052f4c`. The Claim Matrix now maps every proposed claim to a prior-art audit identity and completed reproduction status. No `C-PASS` or novelty claim was created. Local evidence is Java 81/81, Python 920/920 at 95.11%, Web 92/92 plus build, and all controls before Compose. R3-325 remains frozen exactly as `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM` and was not rerun.
 
 R3-347 evidence is `evidence/gates/R3-347/counterfactual-xray.md`. Plan digest is `4c76ce8200f00adeeb2690051d7615fa47d710523b78d631e849385b135047ce`, byte SHA is `d7306891950446216d4188a672a0ebfd6d5154b76555d65208b4d12f2a261f90`, and audit digest is `9c4be0fd4c7d2f7b54e1ccc92fd34ef84e7bb37e6f4a2e1ccc488673996107d8`. Two summaries, zero replays, and eight missing fields prohibit perturbation/delta/minimality claims. R3-325 remains frozen and was not rerun.
 
