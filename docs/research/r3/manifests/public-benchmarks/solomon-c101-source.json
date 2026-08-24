@@ -1,0 +1,54 @@
+{
+  "schema_version": "public-benchmark-source-v1",
+  "source_id": "sintef-solomon-c101-2026-08-24",
+  "family": "SOLOMON_VRPTW_100",
+  "instance_id": "C101",
+  "source_page_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+  "download_url": "https://www.sintef.no/globalassets/project/top/vrptw/solomon/solomon-100.zip",
+  "retrieved_at_utc": "2026-08-24T05:12:00Z",
+  "license_status": "PUBLIC_BENCHMARK_NO_EXPLICIT_LICENSE",
+  "terms_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+  "redistribution_allowed": false,
+  "distribution_sha256": "8a0a72cbe6b7f8f9988ace4ebde0378ec34943acaaac47f2c408915e41887747",
+  "archive_member": "In/c101.txt",
+  "parser_id": "solomon-vrptw-text",
+  "parser_version": "1.0.0",
+  "artifact": {
+    "artifact_id": "solomon-c101",
+    "artifact_type": "benchmark",
+    "relative_path": "datasets/public-benchmarks/solomon/solomon-100/In/c101.txt",
+    "sha256": "a6da75152d182d60ecd2c6f854296f5be452f92282d096adebcf5d99a7f16516",
+    "producer": "SINTEF Solomon 100-customer backup archive",
+    "revision": "sha256:8a0a72cbe6b7f8f9988ace4ebde0378ec34943acaaac47f2c408915e41887747",
+    "configuration": [
+      ["archive_member", "In/c101.txt"],
+      ["distance_semantics", "EUCLIDEAN_DOUBLE"],
+      ["objective_semantics", "HIERARCHICAL_VEHICLES_THEN_DISTANCE"]
+    ],
+    "seed": 0
+  },
+  "references": [
+    {
+      "reference_id": "sintef-c101-hierarchical-double-2026-08-24",
+      "instance_id": "C101",
+      "reference_status": "BEST_KNOWN",
+      "vehicle_count": 10,
+      "distance": 828.94,
+      "objective_semantics": "HIERARCHICAL_VEHICLES_THEN_DISTANCE",
+      "numeric_semantics": "EUCLIDEAN_DOUBLE_DISTANCE_ROUNDED_2DP",
+      "source_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+      "notes": "SINTEF reports a checked detailed solution and warns that monolithic or lower-precision results may not be directly comparable."
+    },
+    {
+      "reference_id": "cvrplib-c101-catalog-2026-08-24",
+      "instance_id": "C101",
+      "reference_status": "REPORTED",
+      "vehicle_count": null,
+      "distance": 827.3,
+      "objective_semantics": "CVRPLIB_CATALOG_OBJECTIVE_REQUIRES_R3_311_VERIFICATION",
+      "numeric_semantics": "CVRPLIB_REPORTED_2DP",
+      "source_url": "https://galgos.inf.puc-rio.br/cvrplib/en/instances/2",
+      "notes": "CVRPLIB marks the entry optimal but does not show a vehicle count in the catalog row; retain separately until objective and precision semantics are verified."
+    }
+  ]
+}

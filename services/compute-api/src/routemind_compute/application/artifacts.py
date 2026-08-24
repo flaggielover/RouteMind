@@ -12,6 +12,7 @@ _SHA256: Final = re.compile(r"^[0-9a-f]{64}$")
 _ALLOWED_TYPES: Final = frozenset(
     {
         "artifact",
+        "benchmark",
         "dataset",
         "matrix",
         "road-graph",

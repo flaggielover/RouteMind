@@ -14,13 +14,13 @@ Current Task: R3-310 - Build public benchmark adapter framework
 
 Last Completed: R3-300 - Establish Round 3 scientific research contract and claim control plane
 
-Current Gate: R3-310 is implementing immutable public-source, license, checksum, parser, canonical-instance, reference-value, and transformation provenance contracts over `ROUTEMIND_DATA_ROOT`. No benchmark result or scientific claim has passed.
+Current Gate: R3-310 implementation passes local parser, strict static, full Python/contract, determinism, archive, mart, and semantic-metric gates and is validating in repository/remote CI. No solver benchmark result or scientific claim has passed.
 
 CI: PASS for R3-300 checkpoint 59eb53b in run 32692144152 across all five jobs. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
-Round 3 Scientific Tasks: 1 / 45 passed; R3-310 in progress; R3-355 deferred and non-blocking; all material experiment/statistical/claim gates remain open.
+Round 3 Scientific Tasks: 1 / 45 passed; R3-310 validating; R3-355 deferred and non-blocking; all material experiment/statistical/claim gates remain open.
 
 Research Gate: R3-310 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
@@ -28,7 +28,23 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Finish R3-310 public benchmark adapter framework, then activate R3-314 independent public-instance verification. Do not execute material experiments before source/license/checksum and manifest controls exist.
+Next Candidates: Finish R3-310 repository/CI validation, then activate R3-314 independent public-instance verification. Do not execute material solver experiments before independent verification exists.
+
+### R3-310 public benchmark adapter validation - 2026-08-24
+- Immutable public-source, licensing, distribution/member checksums, canonical
+  Cartesian VRPTW, reference-value, parser identity, and transformation lineage
+  contracts are implemented. Geographic `GeoPoint` conversion is deliberately
+  absent because it would change Solomon semantics.
+- A synthetic tiny Solomon-format fixture exercises success and fail-closed paths.
+  The committed C101 source manifest retains conflicting SINTEF/CVRPLIB reference
+  values separately rather than choosing the more favorable number.
+- The SINTEF archive remains under `ROUTEMIND_DATA_ROOT`; its archive checksum is
+  `8a0a72...87747`, C101 member checksum `a6da75...16516`. A real loader probe
+  parsed 100 customers, 25 vehicles, capacity 200, canonical instance digest
+  `4aaf1b...17a` and lineage digest `3f78d9...e2`.
+- The first full gate correctly failed at 94.08% coverage despite 244 passing
+  tests. Negative-path tests were added without lowering the threshold; the final
+  local full gate passed 264 tests at 95.55% coverage. Remote CI is pending.
 
 ### RM-230 closure and RM-234 activation - 2026-08-24
 

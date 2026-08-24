@@ -8,7 +8,7 @@ Current Phase: Round 3 Scientific Research - Workstream A
 
 Current Task: R3-310 - Build public benchmark adapter framework
 
-Task Status: R3-300 passed locally and in GitHub Actions run 32692144152. The prior prepared graph is now a 45-task scientific graph with independent E/X/S/C states. R3-310 is active and building the public benchmark provenance/parser boundary; no Round 3 experiment, statistical support, or scientific claim has passed.
+Task Status: R3-300 passed locally and in GitHub Actions run 32692144152. R3-310 public benchmark provenance/parser implementation passes local Python and contract gates and is validating in repository/remote CI. No solver experiment, statistical support, or scientific claim has passed.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -676,7 +676,10 @@ Continue autonomously with RM-230.
 - Statistical Gate: S-NOT-APPLICABLE.
 - Claim Gate: C-NOT-APPLICABLE.
 - Evidence: R3-300 `evidence/gates/R3-300/scientific-control-plane.md`; R3-310
-  implementation and evidence are in progress.
+  `evidence/gates/R3-310/public-benchmark-adapter.md`.
 - CI: R3-300 checkpoint `59eb53b`, run `32692144152`, all five jobs green.
-- Next: implement and validate R3-310, push, observe CI, then activate R3-314.
+- Next: finish R3-310 repository/remote validation, then activate R3-314.
+- Concurrent state: untracked `research/level4/spatial_lockin/` appeared during
+  R3-310 from external activity. It is unrelated and must not be edited, deleted,
+  staged, or claimed by this task.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
