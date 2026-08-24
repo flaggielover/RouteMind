@@ -1,0 +1,77 @@
+{
+  "plan_digest": "02304c1910463a30a481070382d76bb55c01c76be1bd6b7bcbeba972b14da5dd",
+  "schema_version": "routemind-policy-boundaries-v1",
+  "task_id": "R3-346",
+  "study_id": "r3-346-interpretable-policy-boundaries-v1",
+  "frozen_at_utc": "2026-08-25T22:30:00Z",
+  "question": "Which empirically supported RADS decision regions admit stable, uncertainty-qualified, and sensitivity-tested interpretable policy boundaries?",
+  "boundary_axes": [
+    {"axis": "relative_advantage", "role": "continuous_state"},
+    {"axis": "dwell_ticks", "role": "duration_state"},
+    {"axis": "pressure_ticks", "role": "duration_state"},
+    {"axis": "regime_id", "role": "categorical_context"},
+    {"axis": "strategy_pair", "role": "categorical_decision"},
+    {"axis": "risk_score", "role": "continuous_constraint"},
+    {"axis": "feasibility_margin", "role": "continuous_constraint"}
+  ],
+  "required_outputs": [
+    "decision_regions",
+    "boundary_rules",
+    "support_counts",
+    "uncertainty_intervals",
+    "sensitivity_results"
+  ],
+  "learning_policy": {
+    "model_family": "SHALLOW_AXIS_ALIGNED_RULE_TREE",
+    "maximum_depth": 3,
+    "selection_objective": "INTERPRETABILITY_WITH_EMPIRICAL_SUPPORT",
+    "predictive_accuracy_only": false
+  },
+  "coverage_policy": {
+    "minimum_strategy_classes": 2,
+    "minimum_records_per_strategy": 30,
+    "minimum_eligible_stability_cells": 2,
+    "unsupported_outcome": "INSUFFICIENT_DATA"
+  },
+  "uncertainty_policy": {
+    "confidence_level": 0.95,
+    "interval": "PAIRED_BOOTSTRAP_PERCENTILE",
+    "bootstrap_resamples": 2000,
+    "unit": "paired_seed_regime_stream"
+  },
+  "sensitivity_policy": {
+    "analyses": ["LEAVE_ONE_REGIME_OUT", "THRESHOLD_PERTURBATION_PLUS_MINUS_10_PERCENT"],
+    "required_for_boundary": true
+  },
+  "support_requirements": {
+    "required_fields": [
+      "empirical_stability_cells",
+      "selected_strategy_labels",
+      "alternate_strategy_outcomes",
+      "risk_outcomes",
+      "feasibility_outcomes",
+      "pairing_unit",
+      "regime_identity"
+    ],
+    "source_status": "INSUFFICIENT_DATA",
+    "synthetic_substitution": false,
+    "reason": "R3-343 has no eligible stability cells, R3-345 has no Safe-RADS outcomes, and the R3-350 corpus has two records without alternate outcomes"
+  },
+  "source_lineage": {
+    "stability_map_plan": "c6d7d4a5ac088570731e80a189c12cd79792256ac3669bdeed5f9049d6b4ee14",
+    "safe_rads_experiment": "182a3e6217f2c8e918049a4d55b78e340c8882a58e5dad106a7f738c3433783c",
+    "decision_corpus_manifest": "d92c58cbf196e3f9ab7a157e575831f4c35a9508d3482a6f6ba90728c89e569b",
+    "decision_corpus_records": "a9fbc9d01cf8bddff917e3b067342b091877bc24cbabbf9e776cc8e74e06799f"
+  },
+  "execution_policy": {
+    "material_run_authorized": false,
+    "r3_325_rerun": false,
+    "write_external_artifacts": false,
+    "synthetic_fill": false,
+    "black_box_substitution": false,
+    "predictive_accuracy_claim": false,
+    "manifest_changes": "NEW_VERSION_REQUIRED",
+    "resource_envelope": "read-only policy-boundary support audit; zero external writes"
+  },
+  "claim_boundary": "INTERPRETABLE_POLICY_BOUNDARY_REQUIRES_EMPIRICAL_SUPPORT_UNCERTAINTY_AND_SENSITIVITY"
+}

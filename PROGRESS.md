@@ -14,11 +14,11 @@ Current Task: R3-346 - Learn interpretable policy boundaries
 
 Last Completed: R3-358 - Review and preserve negative scientific results
 
-Current Gate: R3-358 closed after implementation `200c4d4` passed all five jobs in Actions run `32782886790`. R3-346 is active; it must audit frozen R3-343, R3-345, and R3-350 support before estimating any decision region, uncertainty, sensitivity, or interpretable boundary.
+Current Gate: R3-346 implementation passes the full local gate. The frozen protocol requires complete empirical cells, strategy labels, alternate outcomes, risk/feasibility outcomes, pairing, and regime identity, plus at least two strategies with 30 records each and two eligible stability cells. Remote implementation CI is pending before the read-only material audit.
 
 CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168, R3-342 implementation SHA d82138b394e7ab0832acb85a6575931054eff48c in run 32758618433, R3-343 implementation SHA 44df8e2c1215230ca5a7ee24f13f87d708050bcc in run 32776065978, R3-344 implementation SHA 65c992fce1b73495c01b650996c167fe9c7ec86e in run 32759977254, R3-345 implementation SHA bdb6967 in run 32761030125, R3-348 implementation SHA 771e8a81c819c2006473fa6a0a55fef5bcfc7fe6 in run 32774570495, R3-349 implementation SHA 94f1a3e3000fa645a775f3ffca3de3157bf3df97 in run 32777694427, R3-356 recovery SHA 76468caf2f5f50806b86b3b5da5a444b3605856a in run 32781478836, and R3-358 implementation SHA 200c4d41bf93a0199b389770c3edb2dbb469a792 in run 32782886790; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-358 - 31 frozen entries, 24 task-coverage identities, six negative-result categories, seven source-artifact hashes, three append/mutation/deletion tests, Java 81/81, Python 905/905 at 95.17%, Web 92/92 plus build, and all static/contract/research controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally for R3-346 - seven directed tests, Java 81/81, Python 912/912 at 95.04%, Web 92/92 plus build, and all static, contract, research, determinism, and bounded-resilience controls. The first complete Python run exposed 94.97% coverage; added protocol-drift tests restored the 95% gate without weakening it. R3-358 closure passed all five jobs in Actions run `32783455622`. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
 Round 3 Scientific Tasks: 37 / 45 passed; R3-346 active; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,27 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Audit R3-346 support from the frozen R3-343 stability result, R3-345 Safe-RADS result, and R3-350 decision corpus. Produce interpretable boundaries only if the existing evidence supports them; otherwise close with explicit `INSUFFICIENT_DATA/C-NO-CLAIM`. R3-313 remains optional and non-blocking.
+Next Candidates: Commit and push the R3-346 frozen support protocol and fail-closed audit implementation, observe all five real CI jobs, then run the read-only current-source audit. Produce boundaries only if support passes; otherwise close with explicit `INSUFFICIENT_DATA/C-NO-CLAIM`. R3-313 remains optional and non-blocking.
+
+### R3-346 interpretable policy-boundary implementation - 2026-08-25
+- Frozen plan digest:
+  `02304c1910463a30a481070382d76bb55c01c76be1bd6b7bcbeba972b14da5dd`;
+  byte SHA:
+  `daa5e1a3ca7bf423eb1c1fa99ed50d1a25a35683a84751f926c056de234a7e8d`.
+- The only eligible learner is a depth-three shallow axis-aligned rule tree.
+  Predictive accuracy alone, black-box substitution, synthetic filling,
+  external writes, and R3-325 reruns are prohibited.
+- Support requires seven exact fields, at least two strategy classes with 30
+  records each, and at least two eligible stability cells. Uncertainty uses
+  paired-bootstrap intervals and both leave-one-regime-out and threshold
+  perturbation sensitivity are required before a boundary can be reported.
+- Seven directed tests cover current missing support, complete support,
+  underpowered classes/cells, malformed inputs, and method, coverage,
+  uncertainty, sensitivity, lineage, claim, and execution-policy drift.
+- The first full Python run passed all 911 tests but measured 94.97% total
+  coverage. Additional protocol failure-path tests raised the validated result
+  to 912/912 at 95.04% without changing the coverage threshold. The full local
+  gate also passes Java 81/81 and Web 92/92 plus build. Remote CI is pending.
 
 ### R3-358 append-only negative-results audit closure - 2026-08-25
 - Entries NR-R3-001 through 031 are frozen under prefix digest
