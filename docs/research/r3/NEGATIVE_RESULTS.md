@@ -89,3 +89,11 @@ and final claim disposition without rewriting earlier entries.
   transfer, causal estimate, external-validity wording, or Twin-validity claim
   was promoted. This is `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
   C-NO-CLAIM`.
+- `NR-R3-015`: R3-336 aggregated the frozen Twin evidence into a read-only
+  non-fidelity report. With zero authorized observed records, all four fidelity
+  thresholds are `NOT_EVALUATED_NO_DATA`, the time/zone/demand/traffic regimes
+  are `NOT_ANALYZED_NO_DATA`, sensitivity is `NOT_RUN_NO_DATA`, data limits are
+  `INSUFFICIENT_DATA`, and claim status is `C-NO-CLAIM`. No Twin-validity,
+  causal, external-validity, stability, or simulation-transfer claim is
+  permitted. This is valid scientific negative evidence, not an implementation
+  failure.

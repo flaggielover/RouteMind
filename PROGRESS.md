@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 136 / 158 tasks passed
+Repository Total: 137 / 158 tasks passed
 
-Current Task: R3-336 - Publish Twin failure and non-fidelity report
+Current Task: R3-340 - Freeze RADS-BASELINE-v1
 
-Last Completed: R3-335 - Formalize What-if validity boundaries
+Last Completed: R3-336 - Publish Twin failure and non-fidelity report
 
-Current Gate: R3-335 closed E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM. Its boundary plan separates counterfactual replay, simulation comparison, and causal inference; R3-332 INSUFFICIENT_DATA yields NO_VALIDITY_CLAIM with all modes BOUNDARY_ONLY, no allowed scope, and no causal/external-validity/Twin-validity wording. R3-336 is now the highest-priority unblocked critical task.
+Current Gate: R3-336 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM. Its read-only report retains NOT_EVALUATED_NO_DATA thresholds, NOT_ANALYZED_NO_DATA regimes, NOT_RUN_NO_DATA sensitivity, INSUFFICIENT_DATA limits, and C-NO-CLAIM. No Twin-validity, causal, external-validity, stability, or simulation-transfer claim is permitted. R3-340 is now the highest-priority unblocked critical task.
 
-CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, and R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
+CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, and R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-335 - Java 81/81, Python 826/826 at 95.62% coverage, Twin What-if validity tests 6/6 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally and remotely for R3-336 - Java 81/81, Python 831/831 at 95.68% coverage, Twin non-fidelity report tests 5/5 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 23 / 45 passed; R3-336 active next; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 24 / 45 passed; R3-340 active next; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Publish R3-336 Twin failure/non-fidelity report combining R3-330 through R3-335 evidence, preserving all no-data and boundary outcomes. R3-337 remains dependent on the report; R3-353, R3-351, and R3-313 remain lower-priority or optional.
+Next Candidates: Freeze R3-340 RADS-BASELINE-v1 from the existing deterministic RADS contracts, preserving objective/risk/selector/threshold/fallback semantics. R3-353 and R3-351 are also unblocked after their prerequisites; R3-313 remains optional and non-blocking.
 
 ### R3-330 Digital Twin dataset split contract - 2026-08-24
 - The frozen contract uses temporal primary and scenario secondary split axes,
@@ -118,6 +118,23 @@ Next Candidates: Publish R3-336 Twin failure/non-fidelity report combining R3-33
   transfer, external-validity, or Twin-validity claim was produced.
 - Commit `4fb44c1` passed all five jobs in Actions run `32750946090`; evidence:
   `evidence/gates/R3-335/what-if-validity.md`.
+
+### R3-336 Twin failure and non-fidelity report - 2026-08-25
+- The read-only report plan aggregates R3-330 through R3-335 lineage without
+  running optimization, replay, simulation, causal inference, or synthetic
+  substitution. Plan digest:
+  `ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94`; byte
+  SHA: `87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571`.
+- With zero authorized observed records, the report returned
+  `INSUFFICIENT_DATA`, thresholds `NOT_EVALUATED_NO_DATA`, unsupported regimes
+  `NOT_ANALYZED_NO_DATA`, sensitivity `NOT_RUN_NO_DATA`, data limits
+  `INSUFFICIENT_DATA`, and claim status `C-NO-CLAIM`. No Twin-validity, causal,
+  external-validity, stability, or simulation-transfer claim is permitted.
+- Five directed tests pass with 100% module statement/branch coverage; the full
+  gate passes 831/831 Python tests at 95.68% total coverage. Implementation
+  commit `2d06001` passed all five jobs in Actions run `32752905068`; evidence:
+  `evidence/gates/R3-336/twin-non-fidelity.md`. R3-325 remains frozen at
+  `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
 
 ### R3-352 simulation switchback design - 2026-08-24
 - The frozen design manifest uses six 30-tick zone-time blocks over three zones,

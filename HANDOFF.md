@@ -6,11 +6,13 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream C
 
-Current Task: R3-336 - Publish Twin failure and non-fidelity report
+Current Task: R3-340 - Freeze RADS-BASELINE-v1
 
-Task Status: R3-335 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NO-CLAIM. Commit `4fb44c1` passed all five jobs in GitHub Actions run `32750946090`; the boundary assessor separates counterfactual replay, simulation comparison, and causal inference, and R3-332 INSUFFICIENT_DATA yields NO_VALIDITY_CLAIM with all modes BOUNDARY_ONLY. No causal, simulation-transfer, external-validity, or Twin-validity claim was produced. R3-336 is now the highest-priority eligible critical task.
+Task Status: R3-336 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. Implementation commit `2d06001` passed all five jobs in GitHub Actions run `32752905068`; the read-only report retains every no-data threshold, unsupported regime, sensitivity boundary, and claim prohibition from R3-330 through R3-335. No Twin-validity, causal, simulation-transfer, external-validity, or stability claim was produced. R3-325 remains frozen exactly at E-PASS/X-PASS/S-FAIL/C-NO-CLAIM. R3-340 is now the highest-priority eligible critical task.
 
-Next: publish the R3-336 Twin failure and non-fidelity report from the frozen R3-330 through R3-335 evidence. Retain every unsupported regime, no-data outcome, prohibited claim, and boundary digest; do not collapse valid scientific negative evidence into an implementation failure; then continue to R3-337.
+Next: freeze `RADS-BASELINE-v1` for R3-340 from the existing deterministic RADS contracts. Content-address state, strategies, objective, risk, selector, thresholds, weights, fallbacks, determinism, and limitations; require a version bump for any later baseline change. Then continue to R3-341/R3-344 and other eligible Round 3 tasks without weakening the scientific boundaries.
+
+R3-336 evidence is `evidence/gates/R3-336/twin-non-fidelity.md`; plan digest is `ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94` and byte SHA is `87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571`.
 
 R3-335 evidence is `evidence/gates/R3-335/what-if-validity.md`; plan digest is `81c52721886c646d2ff468f500c334566e3ed7f4f66bf0f63a9c4478f4b42023` and byte SHA is `20640a2cd366fd992dec681c3dc4139b4b352cb9609bf71ba0542a9bceb9a57d`.
 
