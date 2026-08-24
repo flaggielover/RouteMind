@@ -141,3 +141,8 @@ and final claim disposition without rewriting earlier entries.
   absent, so the report is `INSUFFICIENT_DATA` with zero reported
   disagreements. No replay, candidate promotion, OPE, causal, or superiority
   claim is made. This is `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
+- `NR-R3-022`: R3-353 audited the frozen R3-352 switchback interference design.
+  Shared-supply, zone-spillover, carryover, treatment-assignment, and outcome
+  fields have no simulation records. The status is `INSUFFICIENT_DATA`; no A/B,
+  causal, spillover, or production inference is made. This is
+  `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
