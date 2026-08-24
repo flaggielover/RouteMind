@@ -1,0 +1,10 @@
+{
+  "manifest_id": "r3-350-source-fixture-v1",
+  "schema": "routemind-decision-ledger-summary-fixture-v1",
+  "source": "synthetic-ledger-summary",
+  "purpose": "bounded fixture for privacy retention and lineage checks",
+  "raw_payload_retained": false,
+  "raw_trajectory_retained": false,
+  "direct_identifiers_retained": false,
+  "record_ids": ["decision-fixture-1", "decision-fixture-2"]
+}

@@ -25,6 +25,7 @@ dependencies = [
 routemind-compute-api = "routemind_compute.__main__:main"
 routemind-statistical-routebench = "routemind_compute.application.statistical_routebench_runner:main"
 routemind-statistical-routebench-report = "routemind_compute.application.statistical_routebench_report_cli:main"
+routemind-decision-corpus = "routemind_compute.application.decision_corpus_cli:main"
 
 [dependency-groups]
 dev = [

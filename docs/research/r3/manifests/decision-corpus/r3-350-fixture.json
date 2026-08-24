@@ -1,0 +1,42 @@
+{
+  "corpus_id": "r3-350-fixture-20260824",
+  "source_manifest_id": "r3-350-source-fixture-v1",
+  "source_manifest_digest": "b5201a9b37bd6a23ac63bfecd110232e6b93ba02a613dcd891eb77e8847a1cb7",
+  "code_revision": "r3-350-fixture-v1",
+  "records": [
+    {
+      "decision_id": "decision-fixture-1",
+      "state": {"state_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "state_version": "state-v1"},
+      "strategy": {"id": "shadow", "version": "2.1.0"},
+      "candidates": [
+        {"candidate_id": "candidate-summary-1", "score": 0.25, "score_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "feasible": true, "reason_code": "selected"},
+        {"candidate_id": "candidate-summary-2", "score": 0.75, "score_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "feasible": false, "reason_code": "capacity"}
+      ],
+      "action": {"candidate_id": "candidate-summary-1", "action_code": "assign"},
+      "alternatives": [{"candidate_id": "candidate-summary-2", "reason_code": "capacity", "score_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}],
+      "objective": {"objective_id": "lateness-risk", "value": 0.25, "risk": 0.05, "objective_digest": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"},
+      "verification": {"status": "verified", "checks": ["capacity", "clock"], "verification_digest": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"},
+      "reference": {"reference_data_id": "travel:deterministic-local:v1", "version": "v1", "content_digest": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"},
+      "clock": {"domain": "SIMULATED", "event_time": "tick-42", "sequence": 42},
+      "outcome": {"outcome_id": "outcome-fixture-1", "status": "accepted", "outcome_digest": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"},
+      "source_event_digest": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "decision_id": "decision-fixture-2",
+      "state": {"state_digest": "1111111111111111111111111111111111111111111111111111111111111111", "state_version": "state-v1"},
+      "strategy": {"id": "shadow", "version": "2.1.0"},
+      "candidates": [
+        {"candidate_id": "candidate-summary-3", "score": 0.3, "score_digest": "1212121212121212121212121212121212121212121212121212121212121212", "feasible": true, "reason_code": "selected"},
+        {"candidate_id": "candidate-summary-4", "score": 0.8, "score_digest": "1313131313131313131313131313131313131313131313131313131313131313", "feasible": false, "reason_code": "stale"}
+      ],
+      "action": {"candidate_id": "candidate-summary-3", "action_code": "assign"},
+      "alternatives": [{"candidate_id": "candidate-summary-4", "reason_code": "stale", "score_digest": "1313131313131313131313131313131313131313131313131313131313131313"}],
+      "objective": {"objective_id": "lateness-risk", "value": 0.3, "risk": 0.08, "objective_digest": "1414141414141414141414141414141414141414141414141414141414141414"},
+      "verification": {"status": "verified", "checks": ["capacity", "reference"], "verification_digest": "1515151515151515151515151515151515151515151515151515151515151515"},
+      "reference": {"reference_data_id": "travel:deterministic-local:v1", "version": "v1", "content_digest": "1616161616161616161616161616161616161616161616161616161616161616"},
+      "clock": {"domain": "SIMULATED", "event_time": "tick-43", "sequence": 43},
+      "outcome": {"outcome_id": "outcome-fixture-2", "status": "accepted", "outcome_digest": "1717171717171717171717171717171717171717171717171717171717171717"},
+      "source_event_digest": "1818181818181818181818181818181818181818181818181818181818181818"
+    }
+  ]
+}
