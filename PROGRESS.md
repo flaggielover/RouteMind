@@ -16,9 +16,9 @@ Last Completed: R3-311 - Evaluate Solomon VRPTW benchmark family
 
 Current Gate: R3-315 is E/X-IN-PROGRESS, S-NOT-APPLICABLE, and C-DEFERRED. It must freeze a bounded tractable subset and independently configured exact/reference path before execution; only proven optimality may be labeled ground truth.
 
-CI: PASS for R3-311 closure checkpoint 7588757 in run 32699784206, implementation checkpoint 8a0a4ea in run 32699067563, and preregistration checkpoint de2674f in run 32697011223 across all five jobs. Earlier R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-315 preregistration checkpoint 117b755 in run 32700423191 and R3-311 closure checkpoint 7588757 in run 32699784206 across all five jobs. The R3-315 implementation is locally green and not yet committed. Earlier R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely for the R3-311 implementation - Java 80/80, Python 352 / 95.31%, Web 34 files / 92 tests plus local build and remote browser smoke, 6 schemas / 18 contract fixtures, repository controls, Compose, resilience, and Actions run 32699067563.
+Regression: PASS locally for the R3-315 implementation - Java 80/80, Python 371 / 95.16%, Web 34 files / 92 tests plus local build, 6 schemas / 18 contract fixtures, and repository controls. Remote implementation validation is pending; R3-311 remains remote-green in Actions run 32699784206.
 
 Round 3 Scientific Tasks: 5 / 45 passed; R3-315 in progress; R3-355 deferred and non-blocking.
 
@@ -872,3 +872,14 @@ The task is now passed and RM-120 is the active implementation.
 - Ground truth is scoped to the conservative scale-1000 derived model and is
   allowed only after complete enumeration, CP-SAT `OPTIMAL`, and independent
   verification. Source-double distances remain descriptive.
+
+### R3-315 exact/reference implementation - 2026-08-24
+- Added a canonical RoutingModel helper and a frozen-protocol exact runner with
+  deterministic prefix derivation, exhaustive feasible-route enumeration,
+  single-thread CP-SAT set partitioning, independent verification, hierarchical
+  gaps, immutable artifacts, and campaign summaries.
+- The exact path is distinct from RoutingModel configuration but shares the
+  OR-Tools distribution; no independent-software reproduction is claimed.
+- Nineteen directed tests and the full local gate pass: Java 80, Python 371 at
+  95.16% coverage, Web 92 plus build, contracts, and controls. No frozen public
+  derived instance ran; material execution waits for remote-green implementation.

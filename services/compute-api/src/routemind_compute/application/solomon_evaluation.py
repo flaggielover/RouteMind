@@ -9,12 +9,12 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from hashlib import sha256
+from importlib.metadata import version
 from math import ceil, hypot, isfinite, sqrt
 from pathlib import Path
 from time import perf_counter
 from typing import cast
 
-import ortools  # type: ignore[import-untyped]
 from ortools.constraint_solver import pywrapcp, routing_enums_pb2  # type: ignore[import-untyped]
 
 from routemind_compute.application.artifacts import (
@@ -52,6 +52,7 @@ _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _REVISION = re.compile(r"^[0-9a-f]{40}$")
 _SUPPORTED_SCHEMA = "routemind-solomon-experiment-v1"
 _STATUS_ERROR = {"ROUTING_INVALID", "ROUTING_NOT_SOLVED"}
+_ORTOOLS_VERSION = version("ortools")
 
 
 class SolomonEvaluationError(ValueError):
@@ -151,7 +152,7 @@ class SolomonSolverRun:
             "environment": {
                 "python": platform.python_version(),
                 "platform": platform.platform(),
-                "ortools": ortools.__version__,
+                "ortools": _ORTOOLS_VERSION,
             },
             "instance": {
                 "family": self.selection.family,
@@ -163,7 +164,7 @@ class SolomonSolverRun:
             },
             "solver": {
                 "name": "Google OR-Tools RoutingModel",
-                "version": ortools.__version__,
+                "version": _ORTOOLS_VERSION,
                 "status_code": self.ortools_status_code,
                 "status": self.ortools_status,
                 "routing_random_seed": "SEED_API_NOT_AVAILABLE",
@@ -177,6 +178,16 @@ class SolomonSolverRun:
             "verification": _verification_payload(self.verification),
             "reference_comparison": self.comparison.payload(),
         }
+
+
+@dataclass(frozen=True, slots=True)
+class CanonicalRoutingRun:
+    status_code: int
+    status: str
+    elapsed_seconds: float
+    fixed_vehicle_cost: int
+    solution: PublicVrptwSolution | None
+    verification: PublicVrptwVerificationReport | None
 
 
 def load_solomon_protocol(path: Path) -> SolomonProtocol:
@@ -241,7 +252,7 @@ def load_solomon_protocol(path: Path) -> SolomonProtocol:
         integer_scale=integer_scale,
         result_relative_root=_string(artifact_value, "result_relative_root"),
     )
-    if protocol.solver_version != ortools.__version__:
+    if protocol.solver_version != _ORTOOLS_VERSION:
         raise SolomonEvaluationError("installed OR-Tools version differs from frozen protocol")
     return protocol
 
@@ -306,15 +317,69 @@ def solve_solomon_instance(
     if parsed.instance.instance_id.casefold() != selected.instance_id.casefold():
         raise SolomonEvaluationError("parsed instance does not match selected instance")
     started_at = _utc_now()
-    model = _build_model(parsed.instance, protocol.integer_scale)
+    canonical_run = solve_canonical_vrptw(
+        parsed.instance,
+        integer_scale=protocol.integer_scale,
+        wall_time_seconds=protocol.wall_time_seconds,
+        threads=protocol.threads,
+        seed=protocol.seed,
+    )
+    termination, proof, failure_code = _termination(canonical_run.status)
+    limits = SolverResourceLimits(
+        wall_time_seconds=protocol.wall_time_seconds,
+        threads=protocol.threads,
+    )
+    observation = SolverRunObservation(
+        run_id=f"{campaign_id}:{selected.instance_id.lower()}",
+        solver_name="Google OR-Tools RoutingModel",
+        solver_version=_ORTOOLS_VERSION,
+        termination=termination,
+        proof=proof,
+        usage=SolverResourceUsage(elapsed_seconds=canonical_run.elapsed_seconds),
+        incumbent_present=canonical_run.solution is not None,
+        verification_report=canonical_run.verification,
+        failure_code=failure_code,
+    )
+    classified = classify_solver_run(observation, limits)
+    comparison = compare_reference(selected, canonical_run.verification)
+    return SolomonSolverRun(
+        run_id=observation.run_id,
+        campaign_id=campaign_id,
+        code_revision=code_revision,
+        started_at_utc=started_at,
+        completed_at_utc=_utc_now(),
+        selection=selected,
+        parsed=parsed,
+        ortools_status_code=canonical_run.status_code,
+        ortools_status=canonical_run.status,
+        elapsed_seconds=canonical_run.elapsed_seconds,
+        fixed_vehicle_cost=canonical_run.fixed_vehicle_cost,
+        solution=canonical_run.solution,
+        verification=canonical_run.verification,
+        classified=classified,
+        comparison=comparison,
+    )
+
+
+def solve_canonical_vrptw(
+    instance: CanonicalVrptwInstance,
+    *,
+    integer_scale: int,
+    wall_time_seconds: float,
+    threads: int,
+    seed: int,
+) -> CanonicalRoutingRun:
+    if integer_scale <= 0 or wall_time_seconds <= 0 or threads != 1:
+        raise SolomonEvaluationError("canonical routing limits are invalid")
+    model = _build_model(instance, integer_scale)
     parameters = pywrapcp.DefaultRoutingSearchParameters()
     parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
     parameters.local_search_metaheuristic = (
         routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
     )
-    parameters.time_limit.FromMilliseconds(round(protocol.wall_time_seconds * 1000))
-    parameters.sat_parameters.num_search_workers = protocol.threads
-    parameters.sat_parameters.random_seed = protocol.seed
+    parameters.time_limit.FromMilliseconds(round(wall_time_seconds * 1000))
+    parameters.sat_parameters.num_search_workers = threads
+    parameters.sat_parameters.random_seed = seed
     started = perf_counter()
     assignment = model.routing.SolveWithParameters(parameters)
     elapsed = perf_counter() - started
@@ -324,42 +389,15 @@ def solve_solomon_instance(
     verification = (
         None
         if solution is None
-        else verify_public_vrptw_solution(parsed.instance, solution, require_complete=True)
+        else verify_public_vrptw_solution(instance, solution, require_complete=True)
     )
-    termination, proof, failure_code = _termination(status_name)
-    limits = SolverResourceLimits(
-        wall_time_seconds=protocol.wall_time_seconds,
-        threads=protocol.threads,
-    )
-    observation = SolverRunObservation(
-        run_id=f"{campaign_id}:{selected.instance_id.lower()}",
-        solver_name="Google OR-Tools RoutingModel",
-        solver_version=ortools.__version__,
-        termination=termination,
-        proof=proof,
-        usage=SolverResourceUsage(elapsed_seconds=elapsed),
-        incumbent_present=solution is not None,
-        verification_report=verification,
-        failure_code=failure_code,
-    )
-    classified = classify_solver_run(observation, limits)
-    comparison = compare_reference(selected, verification)
-    return SolomonSolverRun(
-        run_id=observation.run_id,
-        campaign_id=campaign_id,
-        code_revision=code_revision,
-        started_at_utc=started_at,
-        completed_at_utc=_utc_now(),
-        selection=selected,
-        parsed=parsed,
-        ortools_status_code=status_code,
-        ortools_status=status_name,
+    return CanonicalRoutingRun(
+        status_code=status_code,
+        status=status_name,
         elapsed_seconds=elapsed,
         fixed_vehicle_cost=model.fixed_vehicle_cost,
         solution=solution,
         verification=verification,
-        classified=classified,
-        comparison=comparison,
     )
 
 
