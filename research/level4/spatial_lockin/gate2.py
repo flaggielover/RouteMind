@@ -5,7 +5,7 @@ import random
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from itertools import pairwise
-from math import isfinite, sqrt
+from math import isclose, isfinite, sqrt
 from pathlib import Path
 from statistics import fmean, median, pstdev
 from typing import cast
@@ -387,7 +387,20 @@ def verify_frozen_inputs(package_root: Path, store: ArtifactStore) -> dict[str, 
         (layer_m.get("alpha_c_ci95"), list(FROZEN_M_INTERVAL)),
     )
     for observed, expected in checks:
-        if observed != expected:
+        if isinstance(expected, list):
+            valid = (
+                isinstance(observed, list)
+                and len(observed) == len(expected)
+                and all(
+                    isclose(float(actual), float(target), rel_tol=0.0, abs_tol=1e-12)
+                    for actual, target in zip(observed, expected, strict=True)
+                )
+            )
+        else:
+            valid = isinstance(observed, (float, int)) and isclose(
+                float(observed), expected, rel_tol=0.0, abs_tol=1e-12
+            )
+        if not valid:
             raise ResearchGateError(
                 "FROZEN_INPUT_MISMATCH", f"expected {expected}, got {observed}"
             )
