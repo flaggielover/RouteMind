@@ -1,0 +1,130 @@
+{
+  "schema_version": "routemind-gehring-homberger-experiment-v1",
+  "manifest_id": "r3-312-gh-scale-first-replicates-v1",
+  "task_id": "R3-312",
+  "frozen_at_utc": "2026-08-24T07:45:22Z",
+  "frozen_against_revision": "f9e9a494163a870b7e13f28b045e16d79be7a78a",
+  "material_execution_started": false,
+  "source": {
+    "family": "GEHRING_HOMBERGER_VRPTW",
+    "catalog_url": "https://www.sintef.no/projectweb/top/vrptw/homberger-benchmark/",
+    "documentation_url": "https://www.sintef.no/projectweb/top/vrptw/documentation2/",
+    "license_status": "PUBLIC_BENCHMARK_NO_EXPLICIT_LICENSE",
+    "redistribution_allowed": false,
+    "parser_id": "solomon-vrptw-text",
+    "parser_version": "1.0.0",
+    "archives": [
+      {"customer_count": 200, "source_page_url": "https://www.sintef.no/projectweb/top/vrptw/200-customers/", "download_url": "https://www.sintef.no/globalassets/project/top/vrptw/homberger/200/homberger_200_customer_instances.zip", "relative_path": "datasets/public-benchmarks/gehring-homberger/200/homberger_200_customer_instances.zip", "bytes": 172162, "sha256": "79092cc627135f370a6381b0c64afc8403e4d4ff74afa8808d28d208ac784571", "member_count": 60},
+      {"customer_count": 400, "source_page_url": "https://www.sintef.no/projectweb/top/vrptw/400-customers/", "download_url": "https://www.sintef.no/globalassets/project/top/vrptw/homberger/400/homberger_400_customer_instances.zip", "relative_path": "datasets/public-benchmarks/gehring-homberger/400/homberger_400_customer_instances.zip", "bytes": 330106, "sha256": "669e9e7c6fe3513b2c62028d17b67aa5829d94cf2b379f362c8c71236e6a366c", "member_count": 60},
+      {"customer_count": 600, "source_page_url": "https://www.sintef.no/projectweb/top/vrptw/600-customers/", "download_url": "https://www.sintef.no/globalassets/project/top/vrptw/homberger/600/homberger_600_customer_instances.zip", "relative_path": "datasets/public-benchmarks/gehring-homberger/600/homberger_600_customer_instances.zip", "bytes": 497241, "sha256": "df4c40d2191f7e854c46f5422a89055bae93fb1f880692181ee8ee7bf629636b", "member_count": 60},
+      {"customer_count": 800, "source_page_url": "https://www.sintef.no/projectweb/top/vrptw/800-customers/", "download_url": "https://www.sintef.no/globalassets/project/top/vrptw/homberger/800/homberger_800_customer_instances.zip", "relative_path": "datasets/public-benchmarks/gehring-homberger/800/homberger_800_customer_instances.zip", "bytes": 665429, "sha256": "19cad076841f8bf6e8d05ee4d5c56ef2925dacfce64495e003d65bfc6d8545aa", "member_count": 60},
+      {"customer_count": 1000, "source_page_url": "https://www.sintef.no/projectweb/top/vrptw/1000-customers/", "download_url": "https://www.sintef.no/globalassets/project/top/vrptw/homberger/1000/homberger_1000_customer_instances.zip", "relative_path": "datasets/public-benchmarks/gehring-homberger/1000/homberger_1000_customer_instances.zip", "bytes": 835533, "sha256": "2e96845ee870ef21f833a216a79866e812232d3d922db3e14c30790f06780a81", "member_count": 60}
+    ]
+  },
+  "selection": {
+    "rule": "For each customer count 200, 400, 600, 800, and 1000 and each structural family C1, C2, R1, R2, RC1, and RC2, select the lexicographically first instance replicate (suffix _1).",
+    "cherry_picking_allowed": false,
+    "customer_counts": [200, 400, 600, 800, 1000],
+    "structural_families": ["C1", "C2", "R1", "R2", "RC1", "RC2"],
+    "selected_count": 30,
+    "instances": [
+      {"customer_count": 200, "family": "C1", "instance_id": "C1_2_1", "archive_member": "C1_2_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/200/instances/C1_2_1.TXT", "sha256": "b0352e8c02428c8404c5cb18b81195f285410311c725a8b8f1ee34c619e1c751", "reference_vehicle_count": 20, "reference_distance": 2704.57, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 200, "family": "C2", "instance_id": "C2_2_1", "archive_member": "C2_2_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/200/instances/C2_2_1.TXT", "sha256": "15a3dbcd078b9dfff90c682b0b752e0fb4012258a9156540168a3181090ecf66", "reference_vehicle_count": 6, "reference_distance": 1931.44, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 200, "family": "R1", "instance_id": "R1_2_1", "archive_member": "R1_2_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/200/instances/R1_2_1.TXT", "sha256": "bf13ca27d85efac8218d908b45ff164ad848d8b15d0c170c9572b22caababdf1", "reference_vehicle_count": 20, "reference_distance": 4784.11, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 200, "family": "R2", "instance_id": "R2_2_1", "archive_member": "R2_2_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/200/instances/R2_2_1.TXT", "sha256": "b6547795be5a6588fdf705b7b20449ccf02b806ae78b9c327346cecc24208ecc", "reference_vehicle_count": 4, "reference_distance": 4483.16, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 200, "family": "RC1", "instance_id": "RC1_2_1", "archive_member": "RC1_2_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/200/instances/RC1_2_1.TXT", "sha256": "adbf41192345f3f559a75819e5b0d4273017fec73d0be2764882343a036e42f2", "reference_vehicle_count": 18, "reference_distance": 3602.8, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 200, "family": "RC2", "instance_id": "RC2_2_1", "archive_member": "RC2_2_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/200/instances/RC2_2_1.TXT", "sha256": "3e3acf61842af2690f72c8f8b6ba4910949d43e29ab9f47da18056d80665f0ff", "reference_vehicle_count": 6, "reference_distance": 3099.53, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 400, "family": "C1", "instance_id": "C1_4_1", "archive_member": "C1_4_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/400/instances/C1_4_1.TXT", "sha256": "8ffba283e6cbc49b4fc0482e30785e99ff81455ba0cbca3e3ece34e85b7fa496", "reference_vehicle_count": 40, "reference_distance": 7152.02, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": false, "reference_note": "SINTEF questions whether 7152.02 is valid and says several authors report 7152.06."},
+      {"customer_count": 400, "family": "C2", "instance_id": "C2_4_1", "archive_member": "C2_4_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/400/instances/C2_4_1.TXT", "sha256": "140548f4996b0896cad822ff21f56199854c6f972f612edf43891a6adf3d8482", "reference_vehicle_count": 12, "reference_distance": 4116.05, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": false, "reference_note": "SINTEF questions whether 4116.05 is valid and says several authors report 4116.14."},
+      {"customer_count": 400, "family": "R1", "instance_id": "R1_4_1", "archive_member": "R1_4_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/400/instances/R1_4_1.TXT", "sha256": "0f4517e2106d917f9e8a9ccab6e8d92ffbc09effcc735222d5265c4208b5c4b7", "reference_vehicle_count": 40, "reference_distance": 10372.31, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 400, "family": "R2", "instance_id": "R2_4_1", "archive_member": "R2_4_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/400/instances/R2_4_1.TXT", "sha256": "868de509de289871e53052ada1185bcfff125f48a1e557a4bfb8806cc16c44b3", "reference_vehicle_count": 8, "reference_distance": 9210.15, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 400, "family": "RC1", "instance_id": "RC1_4_1", "archive_member": "RC1_4_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/400/instances/RC1_4_1.TXT", "sha256": "774b5f3030a31b217eb9eb52a789ee2be228b1dc03aaecdb2d6f0c01f70a3623", "reference_vehicle_count": 36, "reference_distance": 8571.32, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 400, "family": "RC2", "instance_id": "RC2_4_1", "archive_member": "RC2_4_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/400/instances/RC2_4_1.TXT", "sha256": "d4afb6096d8a0f2069f0f3c863aba4cda99640498edfe5d4271b98f2a41ddfc6", "reference_vehicle_count": 11, "reference_distance": 6682.37, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 600, "family": "C1", "instance_id": "C1_6_1", "archive_member": "C1_6_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/600/instances/C1_6_1.TXT", "sha256": "ba461c8109973c73ffdaf7cf2d840ae8ec34ff89f7b346a949721f0d732c82d8", "reference_vehicle_count": 60, "reference_distance": 14095.64, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 600, "family": "C2", "instance_id": "C2_6_1", "archive_member": "C2_6_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/600/instances/C2_6_1.TXT", "sha256": "935202980d57d31e685ea4ad8c6c72bf1799c4beaf6c3877ef2ef93fa403cfa1", "reference_vehicle_count": 18, "reference_distance": 7774.1, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": false, "reference_note": "SINTEF questions whether 7774.10 is valid and says several authors report 7774.16."},
+      {"customer_count": 600, "family": "R1", "instance_id": "R1_6_1", "archive_member": "R1_6_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/600/instances/R1_6_1.TXT", "sha256": "bf98fcc4fc9cef040c256be0c63b6dcff66ce9a60ec2dcafc19433e89447b6f5", "reference_vehicle_count": 59, "reference_distance": 21394.95, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 600, "family": "R2", "instance_id": "R2_6_1", "archive_member": "R2_6_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/600/instances/R2_6_1.TXT", "sha256": "e5aa976e14f709b839d2f454d3a70c88593051986aa5766e9ef640a291b0cc7c", "reference_vehicle_count": 11, "reference_distance": 18205.58, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 600, "family": "RC1", "instance_id": "RC1_6_1", "archive_member": "RC1_6_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/600/instances/RC1_6_1.TXT", "sha256": "eeea2e9b41c7164cdea79bbb4f8b8d5e4d3964755aca4b1980d242edb45568f8", "reference_vehicle_count": 55, "reference_distance": 16982.86, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 600, "family": "RC2", "instance_id": "RC2_6_1", "archive_member": "RC2_6_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/600/instances/RC2_6_1.TXT", "sha256": "aaaadadad59841360baa19b43612dda899c9da60133ad41e6e8f5e16b2919c2d", "reference_vehicle_count": 14, "reference_distance": 13324.93, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 800, "family": "C1", "instance_id": "C1_8_1", "archive_member": "C1_8_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/800/instances/C1_8_1.TXT", "sha256": "d0092f724c1a7351c906478d99e8fc92b593183259ad90c2db6c58613627d44c", "reference_vehicle_count": 80, "reference_distance": 25030.36, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": false, "reference_note": "SINTEF questions whether the result is valid and says several authors report 80 vehicles and 25184.38."},
+      {"customer_count": 800, "family": "C2", "instance_id": "C2_8_1", "archive_member": "C2_8_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/800/instances/C2_8_1.TXT", "sha256": "b59d456da88ea2be9e682b256c254fd4f84543f03b40854bac4a6c4964f0bca9", "reference_vehicle_count": 24, "reference_distance": 11662.08, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 800, "family": "R1", "instance_id": "R1_8_1", "archive_member": "R1_8_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/800/instances/R1_8_1.TXT", "sha256": "ef327de727b36bfc99f201ee6a5aa6145920214a1b6b4b2a49601475410b37b3", "reference_vehicle_count": 80, "reference_distance": 36767.92, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 800, "family": "R2", "instance_id": "R2_8_1", "archive_member": "R2_8_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/800/instances/R2_8_1.TXT", "sha256": "ccf0b68e9045e04d4fc163f763f06ea32dc7ad05463c3334f5f908ac319c39ef", "reference_vehicle_count": 15, "reference_distance": 28112.36, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 800, "family": "RC1", "instance_id": "RC1_8_1", "archive_member": "RC1_8_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/800/instances/RC1_8_1.TXT", "sha256": "30868d1a4601946445b5cc11547ac1f16d297d27202cadf95af843cf1c6d0380", "reference_vehicle_count": 72, "reference_distance": 30464.65, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 800, "family": "RC2", "instance_id": "RC2_8_1", "archive_member": "RC2_8_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/800/instances/RC2_8_1.TXT", "sha256": "b44cfef740e883904b1d4798b0da9b81568f7a4063aa748e2c3615664780736e", "reference_vehicle_count": 18, "reference_distance": 20981.14, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 1000, "family": "C1", "instance_id": "C1_10_1", "archive_member": "C1_10_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/1000/instances/C1_10_1.TXT", "sha256": "71212f0276856362239cd696673d2bc31f83c8561dc784260b495718ac852aff", "reference_vehicle_count": 100, "reference_distance": 42478.95, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": false, "reference_note": "SINTEF appends an unexplained q marker to the instance label; comparison is withheld pending source-marker audit."},
+      {"customer_count": 1000, "family": "C2", "instance_id": "C2_10_1", "archive_member": "C2_10_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/1000/instances/C2_10_1.TXT", "sha256": "a714abab4d36bcbfd4c31c50986818a0fa44f4c6332b265ecd4599152f930634", "reference_vehicle_count": 30, "reference_distance": 16879.24, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": false, "reference_note": "SINTEF appends an unexplained s marker to the instance label; comparison is withheld pending source-marker audit."},
+      {"customer_count": 1000, "family": "R1", "instance_id": "R1_10_1", "archive_member": "R1_10_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/1000/instances/R1_10_1.TXT", "sha256": "4fdd2a2f4d369724ba3d7f038a4a709ebd095b48fc7a5ba6829a191d10b6a8fa", "reference_vehicle_count": 100, "reference_distance": 53380.18, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 1000, "family": "R2", "instance_id": "R2_10_1", "archive_member": "R2_10_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/1000/instances/R2_10_1.TXT", "sha256": "5da1c7b570f131d05a516aa3cd59909e37df52bbd24a9d751db9fa88c32ceae7", "reference_vehicle_count": 19, "reference_distance": 42182.57, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 1000, "family": "RC1", "instance_id": "RC1_10_1", "archive_member": "RC1_10_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/1000/instances/RC1_10_1.TXT", "sha256": "2595ef62630050a5bc331ec25a63ebf4ec03b843bdb3dd479459007d43245cfe", "reference_vehicle_count": 90, "reference_distance": 45830.62, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true},
+      {"customer_count": 1000, "family": "RC2", "instance_id": "RC2_10_1", "archive_member": "RC2_10_1.TXT", "relative_path": "datasets/public-benchmarks/gehring-homberger/1000/instances/RC2_10_1.TXT", "sha256": "a2f226b174967844e071e817a4f2ad6f8fa49d912d2ec221175da6cf335576e2", "reference_vehicle_count": 20, "reference_distance": 30276.27, "reference_status": "BEST_KNOWN", "reference_comparison_allowed": true}
+    ]
+  },
+  "solver": {
+    "name": "Google OR-Tools RoutingModel",
+    "package": "ortools",
+    "version": "9.15.6755",
+    "first_solution_strategy": "PATH_CHEAPEST_ARC",
+    "local_search_metaheuristic": "GUIDED_LOCAL_SEARCH",
+    "routing_random_seed": "SEED_API_NOT_AVAILABLE",
+    "sat_random_seed": 0,
+    "threads": 1
+  },
+  "resource_policy": {
+    "wall_time_seconds_per_instance": 5.0,
+    "maximum_instances": 30,
+    "maximum_campaign_solver_wall_time_seconds": 150.0,
+    "process_isolation": "ONE_INSTANCE_PER_PROCESS_SEQUENTIAL",
+    "memory_limit_bytes": null,
+    "memory_limit_note": "No enforceable cross-platform native memory cap is available. Each process is isolated; allocation failure or external termination is retained as a resource/failure outcome and stops only if artifact integrity is impossible.",
+    "estimated_peak_memory_bytes_per_process": 2147483648,
+    "estimated_output_bytes": 104857600,
+    "external_cost_usd": 0,
+    "authorization": "BOUNDED_LOCAL_AUTONOMOUS"
+  },
+  "modeling": {
+    "source_distance_semantics": "EUCLIDEAN_DOUBLE",
+    "source_travel_time_semantics": "DISTANCE_EQUALS_TRAVEL_TIME",
+    "source_objective_semantics": "HIERARCHICAL_VEHICLES_THEN_DISTANCE",
+    "integer_scale": 1000,
+    "arc_transform": "ceil(euclidean_double * 1000)",
+    "transformation_class": "TRANSFORMED_CONSERVATIVE",
+    "objective_encoding": "Fixed vehicle cost strictly greater than maximum possible total transformed arc cost, then transformed distance.",
+    "proof_scope": "No optimality proof is attempted; independently recomputed source-double feasibility and distance are reported separately."
+  },
+  "verification": {
+    "verifier": "routemind_compute.application.verification.verify_public_vrptw_solution",
+    "verifier_revision": "R3-314",
+    "trust_solver_feasibility": false,
+    "require_complete": true,
+    "outcome_contract": "routemind_compute.application.solver_outcomes.classify_solver_run",
+    "outcome_contract_revision": "R3-317"
+  },
+  "reference_gap_policy": {
+    "questioned_or_marked_reference": "REFERENCE_QUALITY_REVIEW; retain the displayed value but do not calculate a scalar distance gap.",
+    "same_vehicle_count_and_allowed": "Round independently recomputed source-double distance to two decimals, then report (result-reference)/reference as a descriptive percent gap.",
+    "different_vehicle_count": "Report hierarchical vehicle-count direction and no scalar distance gap.",
+    "unverified_or_incomplete": "REFERENCE_GAP_NOT_APPLICABLE",
+    "source_warning": "SINTEF states exact/integer or lower-precision objective values are not directly comparable to its hierarchical double-precision references."
+  },
+  "analysis_plan": {
+    "primary_by_scale": "For each customer count, report verified-complete incumbents divided by all six fixed structural families and the full R3-317 outcome distribution.",
+    "scale_label": {"6_of_6": "SUPPORTED_UNDER_FROZEN_POLICY", "1_to_5_of_6": "DEGRADED_UNDER_FROZEN_POLICY", "0_of_6": "NO_VERIFIED_INCUMBENT_UNDER_FROZEN_POLICY"},
+    "secondary": ["elapsed_seconds", "vehicle_count_direction", "allowed_same-vehicle_distance_gap", "verification_issue_count"],
+    "statistical_disposition": "S-NOT-APPLICABLE",
+    "reason": "The 30 selected instances are a deterministic fixed benchmark census across five sizes and six families, not a random population sample. No p-value or population-level trend claim is authorized.",
+    "downstream": "R3-316 may aggregate the frozen descriptive gaps and outcome rates without removing unfavorable instances."
+  },
+  "exclusions_and_stopping": {
+    "allowed_exclusions": ["PARSER_INVALID", "CHECKSUM_INVALID", "LICENSE_DISALLOWED", "EXECUTION_DEFECT", "VERIFIER_DEFECT"],
+    "forbidden_exclusions": ["POOR_OBJECTIVE", "TIMEOUT", "INFEASIBLE", "RESOURCE_LIMIT", "UNVERIFIED_INCUMBENT", "UNFAVORABLE_RESULT", "QUESTIONED_REFERENCE"],
+    "instance_policy": "Retain all 30 selected identities and continue after valid solver outcomes.",
+    "campaign_stop": "Stop only for invalid source identity, implementation/verifier defect, or uncontrolled resource growth that prevents safe isolation; do not substitute instances."
+  },
+  "artifact_policy": {
+    "data_root_environment_variable": "ROUTEMIND_DATA_ROOT",
+    "result_relative_root": "experiments/r3/R3-312",
+    "commit_large_results": false,
+    "commit_manifest_checksums_and_summary": true
+  }
+}

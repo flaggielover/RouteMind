@@ -8,7 +8,7 @@ Current Phase: Round 3 Scientific Research - Workstream A
 
 Current Task: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
 
-Task Status: R3-315 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM after all six frozen derived instances were solved exactly and retained. R3-312 is active and must freeze its scale/timeout protocol before implementation or material execution.
+Task Status: R3-315 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM after all six frozen derived instances were solved exactly and retained. R3-312's 30-instance scale/timeout protocol is frozen before implementation or material execution.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -673,7 +673,7 @@ Continue autonomously with RM-230.
 - Current task: R3-312 Gehring-Homberger scale/timeout evaluation.
 - Engineering Gate: E-IN-PROGRESS.
 - Experiment Gate: X-IN-PROGRESS.
-- Statistical Gate: S-IN-PROGRESS.
+- Statistical Gate: S-NOT-APPLICABLE.
 - Claim Gate: C-DEFERRED.
 - R3-311 evidence: `evidence/gates/R3-311/solomon-vrptw.md`; compact result
   `docs/research/r3/results/solomon/solomon-stratified-six-results-v1.json`.
@@ -689,8 +689,16 @@ Continue autonomously with RM-230.
   `r3-315-20260824T073439Z-1bae0447b562` retained 6/6; complete enumeration,
   CP-SAT `OPTIMAL`, independent verification, and 0% transformed candidate gaps
   held for all six. Proof scope is the derived conservative model only.
-- Next: freeze R3-312's non-cherry-picked Gehring-Homberger scale subset,
-  resource bounds, outcome mapping, exclusion/stopping rules, and analysis plan.
+- R3-312 protocol: replicate `_1` for all six structural families at each of
+  200/400/600/800/1000 customers, 30 total; five seconds, one thread, one
+  isolated process each. Archive/member hashes are frozen under the external
+  data root, and questioned/marked SINTEF references cannot receive scalar gaps.
+  Manifest SHA-256 is
+  `6c35a47e03d53a71f32240953fe1a088412637b893cb6d5a25a924a7bef9a2d2`.
+- Next: commit and require the R3-312 preregistration CI to pass, then implement
+  protocol validation, R3-317 classification, R3-314 verification, reference-
+  quality guards, immutable artifacts, and descriptive scale summaries using
+  only synthetic test fixtures.
 - Concurrent state: `741c8ef` closed the separate spatial-lock-in Gate 2 work.
   Preserve subsequent `research/level4/spatial_lockin/` changes and do not claim
   them as R3-311 work.

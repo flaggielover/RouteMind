@@ -14,21 +14,21 @@ Current Task: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
 
 Last Completed: R3-315 - Cross-check tractable instances with an exact reference solver
 
-Current Gate: R3-312 is E/X/S-IN-PROGRESS and C-DEFERRED. It must freeze a resource-bounded non-cherry-picked scale subset, outcome handling, and analysis plan before execution.
+Current Gate: R3-312 is E/X-IN-PROGRESS, S-NOT-APPLICABLE, and C-DEFERRED. Its 30-instance five-scale fixed-census protocol is frozen before implementation and material execution.
 
-CI: PASS for R3-315 implementation checkpoint 1bae044 in run 32701927556 and preregistration checkpoint 117b755 in run 32700423191 across all five jobs. Earlier R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-315 closure checkpoint f9e9a49 in run 32702505551, implementation checkpoint 1bae044 in run 32701927556, and preregistration checkpoint 117b755 in run 32700423191 across all five jobs. Earlier R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely for the R3-315 implementation - Java 80/80, Python 371 / 95.16%, Web 34 files / 92 tests plus local build and remote browser smoke, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32701927556.
 
 Round 3 Scientific Tasks: 6 / 45 passed; R3-312 in progress; R3-355 deferred and non-blocking.
 
-Research Gate: R3-312 E-IN-PROGRESS / X-IN-PROGRESS / S-IN-PROGRESS / C-DEFERRED
+Research Gate: R3-312 E-IN-PROGRESS / X-IN-PROGRESS / S-NOT-APPLICABLE / C-DEFERRED
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Freeze R3-312's Gehring-Homberger scale/timeout protocol before implementation or material execution. R3-350 remains independently eligible.
+Next Candidates: Commit and implement the frozen R3-312 Gehring-Homberger protocol without material solver execution. R3-350 remains independently eligible.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and
@@ -897,3 +897,16 @@ The task is now passed and RM-120 is the active implementation.
   transfer to source-double or 100-customer problems. Compact result SHA-256 is
   `61f9207c4b9788aaf320ded2953420347b419bb54370bc470e00aaeae6939c3f`.
   R3-312 is active.
+
+### R3-312 scale/timeout preregistration - 2026-08-24
+- Downloaded the five official SINTEF Gehring-Homberger archives to the external
+  data root, verified 60 members per archive, and froze every archive/member
+  digest without committing benchmark payloads. The frozen manifest SHA-256 is
+  `6c35a47e03d53a71f32240953fe1a088412637b893cb6d5a25a924a7bef9a2d2`.
+- Selection is 200/400/600/800/1000 customers crossed with six structural
+  families, always replicate `_1`: 30 fixed identities, five seconds and one
+  isolated process each, no unfavorable-result exclusion.
+- Six source references with explicit validity questions or unexplained label
+  markers remain in lineage but cannot receive scalar gaps. The fixed benchmark
+  census is descriptive (`S-NOT-APPLICABLE`) and cannot support population trend,
+  superiority, or optimality claims.
