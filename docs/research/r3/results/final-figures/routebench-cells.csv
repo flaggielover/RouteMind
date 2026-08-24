@@ -1,0 +1,17 @@
+regime_id,metric_id,unit,n_pairs,status,mean_difference,ci95_lower,ci95_upper,uncertainty_method,exclusion_status,negative_outcome,confirmatory_status
+normal,scenario_risk_index,unitless paired difference,8,PLANNED,-0.19033867608537597,-0.25750533523618524,-0.12317201693456671,two-sided Student-t interval on paired differences,RETAINED,NONE,NOT_EXECUTED
+normal,assignment_rate,proportion paired difference,8,NON_ESTIMABLE,,,,NOT_ESTIMABLE,RETAINED,NON_ESTIMABLE_PAIRED_VARIANCE_OR_POWER,NOT_EXECUTED
+surge,scenario_risk_index,unitless paired difference,8,PLANNED,-0.1188164897381796,-0.16576692432223428,-0.07186605515412492,two-sided Student-t interval on paired differences,RETAINED,NONE,NOT_EXECUTED
+surge,assignment_rate,proportion paired difference,8,NON_ESTIMABLE,,,,NOT_ESTIMABLE,RETAINED,NON_ESTIMABLE_PAIRED_VARIANCE_OR_POWER,NOT_EXECUTED
+shortage,scenario_risk_index,unitless paired difference,8,PLANNED,-0.08753747272333487,-0.1434514316932816,-0.03162351375338814,two-sided Student-t interval on paired differences,RETAINED,NONE,NOT_EXECUTED
+shortage,assignment_rate,proportion paired difference,8,PLANNED,-0.0017361111111111188,-0.00584136154790416,0.0023691393256819225,two-sided Student-t interval on paired differences,RETAINED,NONE,NOT_EXECUTED
+merchant-delay,scenario_risk_index,unitless paired difference,8,PLANNED,-0.10632628552530865,-0.15461221400927097,-0.05804035704134633,two-sided Student-t interval on paired differences,RETAINED,NONE,NOT_EXECUTED
+merchant-delay,assignment_rate,proportion paired difference,8,NON_ESTIMABLE,,,,NOT_ESTIMABLE,RETAINED,NON_ESTIMABLE_PAIRED_VARIANCE_OR_POWER,NOT_EXECUTED
+travel-degradation,scenario_risk_index,unitless paired difference,8,PLANNED,-0.16277210715098464,-0.20134589614957202,-0.12419831815239726,two-sided Student-t interval on paired differences,RETAINED,NONE,NOT_EXECUTED
+travel-degradation,assignment_rate,proportion paired difference,8,NON_ESTIMABLE,,,,NOT_ESTIMABLE,RETAINED,NON_ESTIMABLE_PAIRED_VARIANCE_OR_POWER,NOT_EXECUTED
+location-staleness,scenario_risk_index,unitless paired difference,8,PLANNED,-0.1566895027211756,-0.2290195791523749,-0.08435942628997631,two-sided Student-t interval on paired differences,RETAINED,NONE,NOT_EXECUTED
+location-staleness,assignment_rate,proportion paired difference,8,NON_ESTIMABLE,,,,NOT_ESTIMABLE,RETAINED,NON_ESTIMABLE_PAIRED_VARIANCE_OR_POWER,NOT_EXECUTED
+compute-budget,scenario_risk_index,unitless paired difference,8,PLANNED,-0.18396344216531044,-0.23207635124233456,-0.13585053308828632,two-sided Student-t interval on paired differences,RETAINED,NONE,NOT_EXECUTED
+compute-budget,assignment_rate,proportion paired difference,8,NON_ESTIMABLE,,,,NOT_ESTIMABLE,RETAINED,NON_ESTIMABLE_PAIRED_VARIANCE_OR_POWER,NOT_EXECUTED
+queue-pressure,scenario_risk_index,unitless paired difference,8,PLANNED,-0.07848422301155436,-0.12093825897839265,-0.03603018704471607,two-sided Student-t interval on paired differences,RETAINED,NONE,NOT_EXECUTED
+queue-pressure,assignment_rate,proportion paired difference,8,PLANNED,-0.0011574074074073987,-0.00389424103193606,0.0015794262171212625,two-sided Student-t interval on paired differences,RETAINED,NONE,NOT_EXECUTED

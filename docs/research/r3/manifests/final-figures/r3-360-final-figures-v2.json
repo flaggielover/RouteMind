@@ -1,0 +1,84 @@
+{
+  "schema_version": "routemind-final-scientific-figures-plan-v1",
+  "task_id": "R3-360",
+  "plan_id": "r3-360-final-scientific-figures-v2",
+  "frozen_at_utc": "2026-08-25T07:35:00Z",
+  "sources": {
+    "routebench_report": {
+      "scope": "external_data_root",
+      "relative_path": "experiments/r3/R3-325/r3-325-pilot-20260824-ce8dafb/statistical-report.json",
+      "byte_sha256": "7cd21530778e815d83a51bcdccb186717aca9f5f044de4ed9e00cdaf2e536913",
+      "content_digest": "0c7e29af8c89ed9ca7cb094525745f488c4b4d69e73ab6a4a7f47dd4e5ae9eac",
+      "protocol_sha256": "a6dae9d55641ff7966ef4a50cc00a63da3e936620c3c48f23cd2c2ce039375b5"
+    },
+    "twin_manifest": {
+      "scope": "repository",
+      "relative_path": "docs/research/r3/manifests/twin/r3-336-twin-non-fidelity-v1.json",
+      "byte_sha256": "87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571",
+      "content_digest": "ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94"
+    },
+    "rads_manifest": {
+      "scope": "repository",
+      "relative_path": "docs/research/r3/manifests/rads/r3-349-rads-robustness-v1.json",
+      "byte_sha256": "e58abf5ac7498a3564c3a9dc7d001ae34da2d79ccde6a54d41a2c4fc091d7f5b",
+      "content_digest": "379f5087f3114f50cd9bb8cefff62af0d9a35e0ea3e1ba12544b9fafc52527a2"
+    },
+    "independent_reproduction": {
+      "scope": "repository",
+      "relative_path": "docs/research/r3/results/reproduction/r3-356-independent-reproduction-v1.json",
+      "byte_sha256": "feb374e75420ec6c9e100dde634c80f936c8bf10d19da182562c879154dc61e7",
+      "content_digest": "9eea07d71c037199eca311e242308da1f517904f082099098dea409fd985c36e"
+    },
+    "claim_matrix": {
+      "scope": "repository",
+      "relative_path": "docs/research/r3/CLAIM_MATRIX.md",
+      "byte_sha256": "c6656ac6a1f4634c001cace78867c924b950eebef944380f8a26c556fac9d4cc"
+    }
+  },
+  "figures": [
+    {
+      "id": "routebench_pilot_intervals",
+      "file": "routebench-pilot-intervals.svg",
+      "axes": [
+        {"metric_id": "scenario_risk_index", "unit": "unitless paired difference", "minimum": -0.30, "maximum": 0.02},
+        {"metric_id": "assignment_rate", "unit": "proportion paired difference", "minimum": -0.025, "maximum": 0.01}
+      ],
+      "uncertainty": "two-sided 95% Student-t interval on paired differences where estimable",
+      "negative_outcomes": "six assignment-rate cells remain NON_ESTIMABLE; confirmatory inference was not executed"
+    },
+    {
+      "id": "evidence_support_status",
+      "file": "evidence-support-status.svg",
+      "axes": [{"name": "support category", "unit": "observed paired units or records versus frozen requirement"}],
+      "uncertainty": "not computed where data or RADS outcomes are absent",
+      "negative_outcomes": "Twin no-data and RADS unsupported/no-outcome states remain visible"
+    },
+    {
+      "id": "claim_dispositions",
+      "file": "claim-dispositions.svg",
+      "axes": [{"name": "final C status", "unit": "claim row count", "minimum": 0, "maximum": 7}],
+      "uncertainty": "not applicable to categorical claim review",
+      "negative_outcomes": "zero C-PASS rows are displayed explicitly"
+    }
+  ],
+  "tables": [
+    {"id": "routebench_cells", "file": "routebench-cells.csv", "row_count": 16},
+    {"id": "evidence_support", "file": "evidence-support.csv", "row_count": 12},
+    {"id": "claim_dispositions", "file": "claim-dispositions.csv", "row_count": 7}
+  ],
+  "output": {
+    "repository_relative_root": "docs/research/r3/results/final-figures",
+    "external_relative_root": "research/r3/R3-360/r3-360-final-figures-v2",
+    "external_write_policy": "WRITE_ONCE_WITH_SHA256_SIDECARS",
+    "index_file": "r3-360-final-scientific-figures-v2.json"
+  },
+  "claim_boundary": "FIGURES_AND_TABLES_REPORT_FROZEN_EVIDENCE_AND_DO_NOT_CREATE_C_PASS",
+  "execution_policy": {
+    "run_experiments": false,
+    "rerun_r3_325": false,
+    "tune_or_reinterpret": false,
+    "synthetic_fill": false,
+    "drop_negative_outcomes": false
+  },
+  "plan_digest": "10e12aa0f586ad94e963396feb0a045fc1b21fe4ff0cd7537d0d769f145bb30d"
+}

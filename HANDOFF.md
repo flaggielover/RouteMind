@@ -8,9 +8,11 @@ Current Phase: Round 3 Scientific Research - Workstream E
 
 Current Task: R3-360 - Generate final scientific figures and tables
 
-Task Status: R3-359 is closed `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM`; implementation `46b1674` passed all five jobs in Actions run `32787968109`. Final status is zero `C-PASS`, two `C-NO-NOVELTY`, five `C-NO-CLAIM`, zero deferred. R3-360 is active.
+Task Status: R3-360 is locally complete and validating `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE`. The final v2 bundle preserves all negative/no-data outcomes and zero supported scientific claims. Remote CI is pending.
 
-Next: generate R3-360 final figures/tables only from manifest-linked compact results, with units, uncertainty, exclusions, failures, non-estimability, and no-data states visible. Large rendered artifacts remain under `ROUTEMIND_DATA_ROOT`.
+Next: commit and push the R3-360 implementation checkpoint, observe all five real GitHub Actions jobs, close with evidence only after green, and activate R3-365 immediately.
+
+R3-360 final plan is `docs/research/r3/manifests/final-figures/r3-360-final-figures-v2.json` with digest `10e12aa0f586ad94e963396feb0a045fc1b21fe4ff0cd7537d0d769f145bb30d`. Its committed index has bundle digest `2b230697ea367ace51afcd52c7544efd6cd024abca0104f10a35b50ebce34684` across three SVG and three CSV artifacts. Exact row counts are 16/12/7; negative outcomes are six non-estimable assignment cells, confirmatory inference not executed, zero Twin observations, unsupported RADS `location_noise`, zero exclusions, and zero `C-PASS`. Browser-rendered QA passed after v2 corrected a column overlap found in the immutable v1 draft. Automated validator plus six tests and all non-Docker control gates pass. Large v2 artifacts, sidecars, and QA screenshots are under `ROUTEMIND_DATA_ROOT/research/r3/R3-360/r3-360-final-figures-v2/`. No experiment or R3-325 rerun occurred.
 
 R3-359 evidence is `evidence/gates/R3-359/claim-review.md`; Claim Matrix byte SHA-256 is `c6656ac6a1f4634c001cace78867c924b950eebef944380f8a26c556fac9d4cc`. Actions run `32787968109` passed all five jobs. The executable gate enforces seven identities, final dispositions, R3-357/R3-356 mappings, supported-claim equality, and frozen R3-325 status. No experiment or external artifact was rerun.
 

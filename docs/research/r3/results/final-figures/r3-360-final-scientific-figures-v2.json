@@ -1,0 +1,98 @@
+{
+  "artifacts": [
+    {
+      "bytes": 379,
+      "external_relative_path": "research/r3/R3-360/r3-360-final-figures-v2/claim-dispositions.csv",
+      "file": "claim-dispositions.csv",
+      "repository_relative_path": "docs/research/r3/results/final-figures/claim-dispositions.csv",
+      "sha256": "2efc29e70a6fa4993598dd120685f9675f064d5af1fb67097f42a600053855bc"
+    },
+    {
+      "bytes": 4089,
+      "external_relative_path": "research/r3/R3-360/r3-360-final-figures-v2/claim-dispositions.svg",
+      "file": "claim-dispositions.svg",
+      "repository_relative_path": "docs/research/r3/results/final-figures/claim-dispositions.svg",
+      "sha256": "d4c1399113416b250d9e5878c27f8fab3fd7beb9297b0175b5dc168d9f55cfe0"
+    },
+    {
+      "bytes": 9886,
+      "external_relative_path": "research/r3/R3-360/r3-360-final-figures-v2/evidence-support-status.svg",
+      "file": "evidence-support-status.svg",
+      "repository_relative_path": "docs/research/r3/results/final-figures/evidence-support-status.svg",
+      "sha256": "9fbf2e435afa4acbbf4783deaaca3f033f39b858d3d0eaf1001996f1ddfff01c"
+    },
+    {
+      "bytes": 2014,
+      "external_relative_path": "research/r3/R3-360/r3-360-final-figures-v2/evidence-support.csv",
+      "file": "evidence-support.csv",
+      "repository_relative_path": "docs/research/r3/results/final-figures/evidence-support.csv",
+      "sha256": "d09bf69731b4c6b88f6aa37d0cd8da201eecec857398f4a4ae8727605bedbdef"
+    },
+    {
+      "bytes": 3173,
+      "external_relative_path": "research/r3/R3-360/r3-360-final-figures-v2/routebench-cells.csv",
+      "file": "routebench-cells.csv",
+      "repository_relative_path": "docs/research/r3/results/final-figures/routebench-cells.csv",
+      "sha256": "5a74a9a68c14e4c3214f5900bcc8db15c85ead748f6428036bfd03becef12603"
+    },
+    {
+      "bytes": 11348,
+      "external_relative_path": "research/r3/R3-360/r3-360-final-figures-v2/routebench-pilot-intervals.svg",
+      "file": "routebench-pilot-intervals.svg",
+      "repository_relative_path": "docs/research/r3/results/final-figures/routebench-pilot-intervals.svg",
+      "sha256": "84b3e9a76ab82618c014a2b26c8b5b41a2f279c0cfe67574633a421dfb051d8e"
+    }
+  ],
+  "bundle_digest": "2b230697ea367ace51afcd52c7544efd6cd024abca0104f10a35b50ebce34684",
+  "claim_boundary": "FIGURES_AND_TABLES_REPORT_FROZEN_EVIDENCE_AND_DO_NOT_CREATE_C_PASS",
+  "negative_outcomes": {
+    "c_pass_claims": 0,
+    "confirmatory_inference": "NOT_EXECUTED",
+    "excluded_rows": 0,
+    "rads_unsupported_axes": [
+      "location_noise"
+    ],
+    "routebench_non_estimable_cells": 6,
+    "twin_observed_records": 0
+  },
+  "plan_digest": "10e12aa0f586ad94e963396feb0a045fc1b21fe4ff0cd7537d0d769f145bb30d",
+  "plan_id": "r3-360-final-scientific-figures-v2",
+  "row_counts": {
+    "claim_dispositions": 7,
+    "evidence_support": 12,
+    "routebench_cells": 16
+  },
+  "schema_version": "routemind-final-scientific-figures-index-v1",
+  "source_lineage": {
+    "claim_matrix": {
+      "byte_sha256": "c6656ac6a1f4634c001cace78867c924b950eebef944380f8a26c556fac9d4cc",
+      "relative_path": "docs/research/r3/CLAIM_MATRIX.md",
+      "scope": "repository"
+    },
+    "independent_reproduction": {
+      "byte_sha256": "feb374e75420ec6c9e100dde634c80f936c8bf10d19da182562c879154dc61e7",
+      "content_digest": "9eea07d71c037199eca311e242308da1f517904f082099098dea409fd985c36e",
+      "relative_path": "docs/research/r3/results/reproduction/r3-356-independent-reproduction-v1.json",
+      "scope": "repository"
+    },
+    "rads_manifest": {
+      "byte_sha256": "e58abf5ac7498a3564c3a9dc7d001ae34da2d79ccde6a54d41a2c4fc091d7f5b",
+      "content_digest": "379f5087f3114f50cd9bb8cefff62af0d9a35e0ea3e1ba12544b9fafc52527a2",
+      "relative_path": "docs/research/r3/manifests/rads/r3-349-rads-robustness-v1.json",
+      "scope": "repository"
+    },
+    "routebench_report": {
+      "byte_sha256": "7cd21530778e815d83a51bcdccb186717aca9f5f044de4ed9e00cdaf2e536913",
+      "content_digest": "0c7e29af8c89ed9ca7cb094525745f488c4b4d69e73ab6a4a7f47dd4e5ae9eac",
+      "relative_path": "experiments/r3/R3-325/r3-325-pilot-20260824-ce8dafb/statistical-report.json",
+      "scope": "external_data_root"
+    },
+    "twin_manifest": {
+      "byte_sha256": "87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571",
+      "content_digest": "ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94",
+      "relative_path": "docs/research/r3/manifests/twin/r3-336-twin-non-fidelity-v1.json",
+      "scope": "repository"
+    }
+  },
+  "task_id": "R3-360"
+}
