@@ -4,15 +4,15 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Round 3 Scientific Research - Workstream D
+Current Phase: Round 3 Scientific Research - Workstream E
 
-Current Task: R3-356 - Independently reproduce major Round 3 results
+Current Task: R3-358 - Review and preserve negative scientific results
 
-Task Status: R3-356 recovery implementation is in progress. Original implementation `f17fed2` passed all five jobs in Actions run `32779935291`; material attempt 1 reproduced R3-316, R3-336, and R3-349 and retained an order-only R3-327 contradiction. The observed and expected six-regime sets were identical, but the checker compared alphabetical observation order with frozen protocol order.
+Task Status: R3-356 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. Recovery `76468ca` passed all five jobs in Actions run `32781478836`, and the alternate checker reproduced R3-316, R3-327, R3-336, and R3-349 with zero contradictions while preserving all NO-CLAIM outcomes. R3-358 is active.
 
-Next: commit and push the retained failed attempt plus order-semantics recovery, observe all five real CI jobs, and only after green CI rerun the checker against the unchanged frozen inputs. The recovery full local gate passed Python 905/905 at 95.17%, Java 81/81, and Web 92/92 plus build. Retain contradictions and fail the recovery reproduction if any target differs; CI success alone is not scientific reproduction.
+Next: audit `docs/research/r3/NEGATIVE_RESULTS.md` against Round 3 task/evidence/result artifacts and close every append-only coverage gap. Preserve failed hypotheses, nulls, instability, sensitivity limits, benchmark failures, Twin failures, unsupported claims, and both R3-356 attempts; do not treat scientific failure as engineering failure.
 
-R3-356 plan digest is `aaab4e70a7daa04d6850c886edb80ac652d47f0fad89e89e75b550530f874d93` and byte SHA is `06463bdc496f8d2504db054ca67b37d017493b8a0659542de1872f91bf2daf50`. Attempt 1 is retained byte-for-byte as `docs/research/r3/results/reproduction/r3-356-independent-reproduction-attempt-1.json`, SHA-256 `09897e3db418cb5a41aa8343f009c50fd7bf7ee7b187cc58981b313b0427d307`. Recovery projects the observed non-estimable set in frozen regime order and adds a deliberately non-alphabetic regression fixture; expected outcomes are unchanged. The checker leaves R3-325 frozen at `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
+R3-356 evidence is `evidence/gates/R3-356/independent-reproduction.md`. Plan digest is `aaab4e70a7daa04d6850c886edb80ac652d47f0fad89e89e75b550530f874d93`; formal result digest is `9eea07d71c037199eca311e242308da1f517904f082099098dea409fd985c36e` and byte SHA is `feb374e75420ec6c9e100dde634c80f936c8bf10d19da182562c879154dc61e7`. Attempt 1 remains byte-for-byte with SHA-256 `09897e3db418cb5a41aa8343f009c50fd7bf7ee7b187cc58981b313b0427d307`. The order-only recovery changed no expectation, and R3-325 remains frozen at `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
 
 R3-349 evidence is `evidence/gates/R3-349/rads-robustness.md`; plan digest is `379f5087f3114f50cd9bb8cefff62af0d9a35e0ea3e1ba12544b9fafc52527a2` and byte SHA is `e58abf5ac7498a3564c3a9dc7d001ae34da2d79ccde6a54d41a2c4fc091d7f5b`. Seven axes preserve source regimes without RADS outcomes, location noise is unsupported, and broad robustness claims are prohibited. R3-325 remains frozen and was not rerun.
 
