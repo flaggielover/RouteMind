@@ -1,0 +1,43 @@
+{
+  "schema_version": "routemind-twin-non-fidelity-report-v1",
+  "task_id": "R3-336",
+  "report_id": "r3-336-twin-non-fidelity-v1",
+  "frozen_at_utc": "2026-08-25T02:00:00Z",
+  "question": "What Twin thresholds, unsupported regimes, sensitivity limits, and claim boundaries remain after the no-data calibration and held-out gates?",
+  "source_digests": {
+    "split_contract": "fb3f3162ac073815cba838f3fde5a3b8ac94604e21dc4f9049bdf3785d108eaa",
+    "fidelity_protocol": "de453fdf1181b2e5a52839eb9f1b7536db3f5f5fb1177f4b5351269cfa3c1825",
+    "calibration_plan": "86f17d2edb74a25a806348461917c9943fa9cb765579c01becccb82def02937f",
+    "validation_plan": "348150cc5bd4bd6dea1261a81e13e7240606bb24cbc1898504ec34d4c8d9cfee",
+    "drift_plan": "587d71667062561ee98c4fe17434178dead070df30b4f1b7e33538d3bb7c3478",
+    "what_if_plan": "81c52721886c646d2ff468f500c334566e3ed7f4f66bf0f63a9c4478f4b42023"
+  },
+  "section_ids": [
+    "thresholds",
+    "unsupported_regimes",
+    "sensitivity",
+    "data_limits",
+    "claim_status"
+  ],
+  "threshold_policy": {
+    "metric_ids": [
+      "assignment_rate",
+      "scenario_risk_index",
+      "dispatch_latency_seconds",
+      "fallback_rate"
+    ],
+    "status_when_no_data": "NOT_EVALUATED_NO_DATA"
+  },
+  "claim_policy": {
+    "status": "C-NO-CLAIM",
+    "prohibited_claims": [
+      "Twin_validity",
+      "external_validity",
+      "causal_effect",
+      "stability",
+      "simulation_transfer"
+    ]
+  },
+  "claim_boundary": "NON_FIDELITY_REPORT_DOES_NOT_ESTABLISH_TWIN_VALIDITY",
+  "plan_digest": "ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94"
+}
