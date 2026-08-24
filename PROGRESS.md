@@ -834,3 +834,16 @@ The task is now passed and RM-120 is the active implementation.
 - `NR-R3-006` records a pre-experiment design limitation: at n=6, even 6/6 has
   Wilson 95% lower bound `0.6096657120978346`, so H1-A1 cannot pass. The pilot
   remains useful descriptively but is precommitted to `S-FAIL` and `C-NO-CLAIM`.
+
+### R3-311 Solomon runner implementation - 2026-08-24
+- Pinned OR-Tools 9.15.6755 and implemented frozen-protocol loading,
+  conservative integer VRPTW modeling, official status mapping, exact route
+  extraction, independent verification, hierarchical reference comparisons,
+  Wilson summaries, and immutable external artifacts with SHA-256 sidecars.
+- Public instances run one process at a time. The installed RoutingModel API
+  exposes no routing-level seed/workers fields, so artifacts record that fact;
+  nested SAT seed/workers are set without claiming runtime determinism.
+- Full local validation passes Java 80, Python 352 at 95.31% coverage, Web 92
+  plus build, and all available control/contract/research gates. No material
+  Solomon instance has run; the implementation checkpoint must pass Actions
+  before campaign execution.

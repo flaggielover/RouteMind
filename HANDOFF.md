@@ -679,9 +679,13 @@ Continue autonomously with RM-230.
   `docs/research/r3/manifests/solomon/solomon-stratified-six-v1.json`.
 - CI baseline: R3-317 closure run `32696140251` and latest main run
   `32696483083` passed all five jobs.
-- Next: validate and commit the preregistration checkpoint, then install the
-  frozen OR-Tools dependency and execute all six selected instances through the
-  R3-314 verifier and R3-317 outcome contract.
+- Implementation: OR-Tools 9.15.6755 is locked; the frozen protocol runner,
+  independent verification integration, immutable output/checksum handling,
+  and 14 synthetic tests pass the full local gate (Java 80, Python 352 at
+  95.31%, Web 92/build). No selected public instance has run.
+- Next: commit/push this implementation checkpoint and require remote CI green;
+  then execute C101/C201/R101/R201/RC101/RC201 as six separate processes, write
+  the campaign summary, and audit every retained result.
 - Statistical/claim boundary: `NR-R3-006` precommits H1-A1 to `S-FAIL` and
   `C-NO-CLAIM` because n=6 cannot attain the frozen Wilson lower bound. Do not
   enlarge or substitute the set after inspecting results.
