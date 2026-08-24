@@ -14,11 +14,11 @@ Current Task: R3-322 - Implement paired estimation and uncertainty
 
 Last Completed: R3-321 - Implement common-random-number stream ownership
 
-Current Gate: R3-322 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. It must implement and independently test every frozen paired estimate and degenerate-sample disposition.
+Current Gate: R3-322 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. Its implementation and local gates pass; remote CI is the remaining evidence gate.
 
-CI: PASS for the R3-321 implementation checkpoint 00475b8 in run 32714350193 and R3-320 closure checkpoint 6d7a2f1 in run 32713474028 across all five jobs.
+CI: PASS for the R3-321 closure checkpoint d848593 in run 32714698835 and implementation checkpoint 00475b8 in run 32714350193 across all five jobs. R3-322 implementation CI is pending.
 
-Regression: PASS locally and remotely for R3-321 - Java 80/80, Python 565/565 at 95.76% coverage, the CRN module at 96.12% with 21 directed tests, Web 92/92 plus production build/browser smoke, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
+Regression: PASS locally for R3-322 - Java 80/80, Python 594/594 at 95.76% coverage, the paired-estimation module at 95.71% with 29 directed tests, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
 
 Round 3 Scientific Tasks: 10 / 45 passed; R3-322 in progress; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,25 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement and remotely validate R3-322 paired estimation, then activate R3-323 and R3-324 in dependency/priority order. R3-350 remains independently eligible.
+Next Candidates: Push and remotely validate the locally green R3-322 implementation, then activate R3-323 and R3-324 in dependency/priority order. R3-350 remains independently eligible.
+
+### R3-322 paired estimation implementation - 2026-08-24
+- Every sample retains its R3-321 CRN plan and must share protocol, phase, and
+  regime with unique replicates. Seed and stream digests are revalidated before
+  estimation; forged, mixed, incomplete, non-finite, bounded-domain-invalid, and
+  zero-variance samples fail explicitly.
+- Reports retain n, every four-stream seed/digest, arm means, paired mean,
+  median, sample SD, standard error, two-sided 95% Student-t interval, paired
+  Cohen's dz, 10% Winsorized mean, and every leave-one-pair-out mean.
+- Five reference critical values pass within `5e-10`. The standard five-pair
+  vector report digest is `8cc4f549...e585c`, and `routebench-statistics` is
+  registered DETERMINISM_CRITICAL.
+- 29 directed tests pass at 95.71% module coverage; protocol/CRN/estimation
+  integration is 101/101. The full local gate passes Java 80/80, Python 594/594
+  at 95.76%, Web 92/92 plus build, contracts, determinism, analytics, semantic
+  metrics, and repository controls.
+- R3-322 remains E-IN-PROGRESS pending its remote implementation CI. No pilot,
+  confirmatory observation, statistical effect, or strategy claim exists.
 
 ### R3-321 common-random-number implementation - 2026-08-24
 - Pair identity is protocol, phase, regime, and replicate. Demand, merchant,

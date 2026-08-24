@@ -8,7 +8,20 @@ Current Phase: Round 3 Scientific Research - Workstream B
 
 Current Task: R3-322 - Implement paired estimation and uncertainty
 
-Task Status: R3-321 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after implementation revision 00475b8 passed all five jobs in Actions run 32714350193. R3-322 is active and must implement the preregistered candidate-minus-comparator paired estimates and uncertainty without running campaign data.
+Task Status: R3-321 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE; closure revision d848593 passed all five jobs in Actions run 32714698835. R3-322 implementation and all local gates pass; remote CI is the remaining gate before closure.
+
+R3-322 resume capsule: validated CRN plans feed candidate-minus-comparator paired
+mean, median, sample SD, standard error, two-sided 95% Student-t interval,
+paired Cohen's dz, 10% Winsorized mean, and complete leave-one-pair-out
+sensitivity. Reports retain every four-stream seed/digest and have stable content
+digests; forged, mixed, duplicate, incomplete, non-finite, out-of-range, and
+zero-variance samples fail explicitly. Five Student-t references pass within
+`5e-10`; 29 directed tests pass at 95.71% module coverage, integration is
+101/101, and the full local gate passes Java 80/80, Python 594/594 at 95.76%, Web
+92/92 plus build, contracts, determinism, analytics, semantic metrics, and
+controls. Standard vector report digest: `8cc4f549...e585c`. No campaign ran.
+Next: commit/push, observe CI, close R3-322 only on remote green, then activate
+R3-323 prospective power analysis.
 
 R3-321 closure capsule: demand, merchant, courier, and traffic have distinct
 logical owners; preregistered SHA-256 derivation produces arm-independent 63-bit
