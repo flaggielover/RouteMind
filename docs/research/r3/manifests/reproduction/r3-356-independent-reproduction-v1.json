@@ -1,0 +1,111 @@
+{
+  "plan_digest": "aaab4e70a7daa04d6850c886edb80ac652d47f0fad89e89e75b550530f874d93",
+  "schema_version": "routemind-independent-reproduction-v1",
+  "task_id": "R3-356",
+  "reproduction_id": "r3-356-independent-reproduction-v1",
+  "frozen_at_utc": "2026-08-25T23:50:00Z",
+  "disclosure": {
+    "upstream_results_existed_before_freeze": true,
+    "upstream_results_were_inspected_before_freeze": true,
+    "classification": "RETROSPECTIVE_CLEAN_ROOM_REPRODUCTION",
+    "purpose": "Freeze source identities, reported outcomes, alternate computations, and contradiction handling before R3-356 material execution."
+  },
+  "independence_policy": {
+    "implementation": "STANDARD_LIBRARY_ONLY_ALTERNATE_CHECKER",
+    "same_function_stack_used": false,
+    "imports_original_analysis_modules": false,
+    "allowed_import_roots": ["argparse", "collections", "dataclasses", "hashlib", "json", "math", "os", "pathlib", "platform", "sys", "typing"],
+    "forbidden_import_prefixes": ["routemind_compute.application.benchmark_gap_analysis", "routemind_compute.application.statistical_routebench", "routemind_compute.application.twin_", "routemind_compute.application.rads_"]
+  },
+  "targets": [
+    {
+      "task_id": "R3-316",
+      "checker": "RECOMPUTE_LEDGER_COUNTS_AND_TYPE7_DISTRIBUTIONS",
+      "external_result_path": "experiments/r3/R3-316/r3-316-20260824T092121Z-9f68e9902a9b/gap-analysis.json",
+      "external_result_sha256": "6e5571fcba1fd7069e4eb6604fff3f70533495fe1970fb2b5c0df257514eefb1",
+      "reported_result_path": "docs/research/r3/results/gap-analysis/bks-gap-analysis-results-v1.json",
+      "reported_result_sha256": "7a5299bf0827d6c102a42f8991bb398a7bade74905487c182ded1e5ec064a98e",
+      "expected": {
+        "record_count": 42,
+        "source_records": 36,
+        "derived_records": 6,
+        "source_outcomes": {"FEASIBLE_INCUMBENT": 1, "TIMEOUT_WITH_FEASIBLE": 32, "TIMEOUT_NO_FEASIBLE": 3},
+        "reference_comparisons": {"COMPARABLE_SAME_VEHICLE_COUNT": 4, "VEHICLE_COUNT_WORSE": 23, "REFERENCE_QUALITY_REVIEW": 6, "REFERENCE_GAP_NOT_APPLICABLE": 3},
+        "vehicle_gap_percent": {"n": 27, "minimum": 0.0, "median": 31.666666666666668, "p90": 349.4545454545455, "maximum": 484.2105263157895},
+        "same_vehicle_distance_gap_percent": {"n": 4, "minimum": 0.0, "median": 2.674529092839976, "p90": 8.818457913719254, "maximum": 10.305343511450381},
+        "transformed_exact_gap_percent": {"n": 6, "minimum": 0.0, "median": 0.0, "p90": 0.0, "maximum": 0.0},
+        "statistical_disposition": "S-PASS",
+        "claim_disposition": "C-NO-CLAIM"
+      }
+    },
+    {
+      "task_id": "R3-327",
+      "checker": "RECOMPUTE_REPORT_DIGEST_CELL_IDENTITIES_PAIR_SUPPORT_AND_NON_ESTIMABLE_SET",
+      "external_result_path": "experiments/r3/R3-325/r3-325-pilot-20260824-ce8dafb/statistical-report.json",
+      "external_result_sha256": "7cd21530778e815d83a51bcdccb186717aca9f5f044de4ed9e00cdaf2e536913",
+      "expected": {
+        "report_digest": "0c7e29af8c89ed9ca7cb094525745f488c4b4d69e73ab6a4a7f47dd4e5ae9eac",
+        "regimes": ["normal", "surge", "shortage", "merchant-delay", "travel-degradation", "location-staleness", "compute-budget", "queue-pressure"],
+        "metrics": ["scenario_risk_index", "assignment_rate"],
+        "pairs_per_cell": 8,
+        "stream_names": ["demand", "merchant", "courier", "traffic"],
+        "non_estimable_assignment_regimes": ["normal", "surge", "merchant-delay", "travel-degradation", "location-staleness", "compute-budget"],
+        "multiplicity_disposition": "CONFIRMATORY_NOT_EXECUTED",
+        "arm_count": 128,
+        "failure_count": 0,
+        "fallback_count": 0,
+        "timeout_count": 0,
+        "statistical_disposition": "S-FAIL",
+        "claim_disposition": "C-NO-CLAIM"
+      }
+    },
+    {
+      "task_id": "R3-336",
+      "checker": "DERIVE_NO_DATA_SECTIONS_FROM_SPLIT_AND_REPORT_MANIFESTS",
+      "split_contract_path": "docs/research/r3/manifests/twin/r3-330-twin-split-contract-v1.json",
+      "split_contract_sha256": "5a1436facd2a673686d0fd8831b9b45afb0e5574604a263598672d3981730daa",
+      "report_plan_path": "docs/research/r3/manifests/twin/r3-336-twin-non-fidelity-v1.json",
+      "report_plan_sha256": "87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571",
+      "expected": {
+        "observed_record_count": 0,
+        "calibration_record_count": 0,
+        "held_out_record_count": 0,
+        "status": "INSUFFICIENT_DATA",
+        "thresholds": "NOT_EVALUATED_NO_DATA",
+        "unsupported_regimes": "NOT_ANALYZED_NO_DATA",
+        "sensitivity": "NOT_RUN_NO_DATA",
+        "data_limits": "INSUFFICIENT_DATA",
+        "claim_status": "C-NO-CLAIM"
+      }
+    },
+    {
+      "task_id": "R3-349",
+      "checker": "DERIVE_AXIS_SUPPORT_FROM_FROZEN_REPORT_AND_ROBUSTNESS_MANIFEST",
+      "robustness_plan_path": "docs/research/r3/manifests/rads/r3-349-rads-robustness-v1.json",
+      "robustness_plan_sha256": "e58abf5ac7498a3564c3a9dc7d001ae34da2d79ccde6a54d41a2c4fc091d7f5b",
+      "external_result_path": "experiments/r3/R3-325/r3-325-pilot-20260824-ce8dafb/statistical-report.json",
+      "external_result_sha256": "7cd21530778e815d83a51bcdccb186717aca9f5f044de4ed9e00cdaf2e536913",
+      "expected": {
+        "source_regime_axes": ["seeds", "demand", "supply", "merchant_delay", "traffic", "location_staleness", "compute_constraints"],
+        "unsupported_axes": ["location_noise"],
+        "pairs_per_existing_regime": 8,
+        "minimum_pairs_per_axis_level": 30,
+        "observed_strategy_identities": ["risk-aware", "weighted-greedy"],
+        "absent_variant_identities": ["RADS-H-v1", "Safe-RADS-v1"],
+        "status": "INSUFFICIENT_DATA",
+        "broad_claim_status": "PROHIBITED_NO_CROSS_REGIME_EVIDENCE",
+        "claim_disposition": "C-NO-CLAIM"
+      }
+    }
+  ],
+  "execution_policy": {
+    "material_run_before_green_implementation_ci": false,
+    "r3_325_rerun": false,
+    "source_writes": false,
+    "synthetic_substitution": false,
+    "contradictions": "RETAIN_AND_FAIL_REPRODUCTION",
+    "missing_source": "RETAIN_AS_NOT_REPRODUCIBLE",
+    "result_path": "docs/research/r3/results/reproduction/r3-356-independent-reproduction-v1.json"
+  },
+  "claim_boundary": "INDEPENDENT_REPRODUCTION_IS_CLAIM_INPUT_NOT_CI_OR_NEW_EFFECT_EVIDENCE"
+}

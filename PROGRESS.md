@@ -14,11 +14,11 @@ Current Task: R3-356 - Independently reproduce major Round 3 results
 
 Last Completed: R3-349 - Execute RADS robustness study
 
-Current Gate: R3-349 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM after its `INSUFFICIENT_DATA` audit passed all five CI jobs. Seven axes retain source regimes but no RADS outcomes, location noise is unsupported, and eight pairs per regime are below the frozen minimum of 30. R3-356 is active for genuinely independent reproduction of major results.
+Current Gate: R3-356 implementation is locally validated and awaiting its remote implementation checkpoint. The frozen retrospective clean-room path uses a standard-library-only alternate checker for R3-316, R3-327, R3-336, and R3-349, retains contradictions, and has not yet performed the material reproduction run.
 
 CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168, R3-342 implementation SHA d82138b394e7ab0832acb85a6575931054eff48c in run 32758618433, R3-343 implementation SHA 44df8e2c1215230ca5a7ee24f13f87d708050bcc in run 32776065978, R3-344 implementation SHA 65c992fce1b73495c01b650996c167fe9c7ec86e in run 32759977254, R3-345 implementation SHA bdb6967 in run 32761030125, R3-348 implementation SHA 771e8a81c819c2006473fa6a0a55fef5bcfc7fe6 in run 32774570495, and R3-349 implementation SHA 94f1a3e3000fa645a775f3ffca3de3157bf3df97 in run 32777694427; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for the R3-349 implementation checkpoint - Python 893/893 at 95.08% coverage, R3-349 directed tests 6/6, Java 81/81, Web 92/92 plus production build/browser smoke, Ruff, formatting, strict mypy, contracts, determinism, analytics, semantic metrics, repository controls, and resilience. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally for the R3-356 implementation checkpoint - Python 905/905 at 95.17% coverage, R3-356 directed tests 12/12, Java 81/81, Web 92/92 plus production build/browser smoke, Ruff, formatting, strict mypy, contracts, determinism, analytics, semantic metrics, repository controls, and resilience. Remote implementation CI is pending. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
 Round 3 Scientific Tasks: 35 / 45 passed; R3-356 active; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,21 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Build a genuinely alternate R3-356 checker/clean-room manifest path for the major benchmark, statistical-report, Twin non-fidelity, and RADS robustness results. Do not call the original function stack independent; retain contradictions. R3-313 remains optional and non-blocking.
+Next Candidates: Commit and push the R3-356 implementation checkpoint, observe all five real CI jobs, then execute the frozen material reproduction only after green implementation CI. Retain every contradiction and do not promote any upstream scientific claim. R3-313 remains optional and non-blocking.
+
+### R3-356 independent reproduction implementation - 2026-08-25
+- The frozen retrospective clean-room plan covers R3-316 benchmark gap accounting,
+  R3-327 statistical-report identity and estimability, R3-336 Twin non-fidelity,
+  and R3-349 RADS robustness support. Its alternate checker imports only the
+  Python standard library and does not call the original analysis modules.
+- The checker verifies frozen source byte hashes and embedded digests, recomputes
+  target observations, retains contradictions, and fails the CLI after writing a
+  contradictory result. R3-325 is read-only and will not be rerun.
+- Plan digest: `aaab4e70a7daa04d6850c886edb80ac652d47f0fad89e89e75b550530f874d93`;
+  byte SHA: `06463bdc496f8d2504db054ca67b37d017493b8a0659542de1872f91bf2daf50`.
+  Local full gate passed Java 81/81, Python 905/905 at 95.17%, and Web 92/92
+  plus build. Material execution and scientific reproduction status remain pending
+  until the implementation checkpoint passes real GitHub Actions.
 
 ### R3-349 RADS robustness support audit - 2026-08-25
 - The frozen plan covers seeds, demand, supply, merchant delay, traffic,

@@ -8,9 +8,11 @@ Current Phase: Round 3 Scientific Research - Workstream D
 
 Current Task: R3-356 - Independently reproduce major Round 3 results
 
-Task Status: R3-349 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. Its fail-closed robustness audit returned `INSUFFICIENT_DATA`; implementation `94f1a3e` passed all five jobs in Actions run `32777694427`. R3-356 is active and must use an alternate checker, environment, or clean-room path rather than the original function stack alone.
+Task Status: R3-356 implementation is locally validated and awaiting its remote implementation checkpoint. The frozen retrospective clean-room manifest and standard-library-only alternate checker cover R3-316, R3-327, R3-336, and R3-349 without importing the original analysis modules. Material reproduction has not run yet.
 
-Next: inspect R3-316, R3-327, R3-336, and R3-349 result artifacts and build a clean-room reproduction manifest plus alternate checker. Reproduction status is claim input, contradictions remain retained, and CI success alone is not scientific reproduction.
+Next: commit and push the R3-356 implementation checkpoint, observe all five real CI jobs, and only after green CI execute the frozen checker against `F:\Projects\RouteMind-Data`. Retain contradictions and fail the reproduction if any target differs; CI success alone is not scientific reproduction.
+
+R3-356 plan digest is `aaab4e70a7daa04d6850c886edb80ac652d47f0fad89e89e75b550530f874d93` and byte SHA is `06463bdc496f8d2504db054ca67b37d017493b8a0659542de1872f91bf2daf50`. Local validation passed 12/12 directed tests, Python 905/905 at 95.17% coverage, Java 81/81, and Web 92/92 plus production build. The checker verifies raw byte identities and embedded digests, writes contradictions before returning failure, and leaves R3-325 frozen at `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
 
 R3-349 evidence is `evidence/gates/R3-349/rads-robustness.md`; plan digest is `379f5087f3114f50cd9bb8cefff62af0d9a35e0ea3e1ba12544b9fafc52527a2` and byte SHA is `e58abf5ac7498a3564c3a9dc7d001ae34da2d79ccde6a54d41a2c4fc091d7f5b`. Seven axes preserve source regimes without RADS outcomes, location noise is unsupported, and broad robustness claims are prohibited. R3-325 remains frozen and was not rerun.
 
