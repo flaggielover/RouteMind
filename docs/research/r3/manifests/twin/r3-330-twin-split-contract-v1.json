@@ -1,0 +1,55 @@
+{
+  "schema_version": "routemind-twin-split-contract-v1",
+  "task_id": "R3-330",
+  "contract_id": "r3-330-twin-split-contract-v1",
+  "frozen_at_utc": "2026-08-24T15:20:00Z",
+  "scope": "Digital Twin calibration and held-out validation data contract; no observed data is bundled",
+  "data_availability": {
+    "status": "INSUFFICIENT_DATA",
+    "observed_record_count": 0,
+    "required_minimum_records": 100,
+    "reason": "No immutable observed dispatch outcomes with the required state, action, timing, and outcome fields are available under the authorized local data root.",
+    "unlock_condition": "Register an authorized observed-outcome manifest with non-overlapping calibration and held-out identities before calibration or validation execution."
+  },
+  "split_rationale": {
+    "primary_axis": "temporal",
+    "secondary_axis": "scenario",
+    "ordering": "Earlier contiguous observation windows are calibration; later windows are held-out, with scenario strata present in both only when independently observed.",
+    "reason": "Temporal ordering limits future leakage while scenario strata prevent a single easy regime from defining Twin fidelity. Geographic checks remain mandatory when location fields exist."
+  },
+  "splits": {
+    "calibration": {
+      "split_id": "r3-330-calibration-observed-v1",
+      "selection": "authorized observed outcomes in the preregistered calibration time window",
+      "partition_key": "event_time_bucket|scenario_id|geography_id",
+      "artifact_status": "UNAVAILABLE_NO_OBSERVED_DATA",
+      "artifact_sha256": null,
+      "record_count": 0,
+      "identity_digest": "00226911b80061f9c3eeeccbe3ca2bff7b86e252c999dbdc5c3cdfc463e51b9e"
+    },
+    "held_out": {
+      "split_id": "r3-330-held-out-observed-v1",
+      "selection": "authorized observed outcomes in a later, disjoint held-out time window",
+      "partition_key": "event_time_bucket|scenario_id|geography_id",
+      "artifact_status": "UNAVAILABLE_NO_OBSERVED_DATA",
+      "artifact_sha256": null,
+      "record_count": 0,
+      "identity_digest": "68fa75e30f5889ecf5320e98f7a2c52b2cee364ff07f12ecab6ab1ba087a60e1"
+    }
+  },
+  "leakage_checks": [
+    {"check_id": "event_identity", "method": "reject duplicate event/decision identity across both split manifests", "expected": "zero overlap", "status": "NOT_RUN_NO_DATA"},
+    {"check_id": "temporal", "method": "compare normalized event-time intervals and reject boundary overlap", "expected": "held-out starts after calibration ends", "status": "NOT_RUN_NO_DATA"},
+    {"check_id": "scenario", "method": "compare scenario and seed identity sets with preregistered strata", "expected": "no row identity reuse; strata rationale retained", "status": "NOT_RUN_NO_DATA"},
+    {"check_id": "geographic", "method": "compare geography partition keys without exporting precise coordinates", "expected": "no partition leakage; aggregate geography only", "status": "NOT_RUN_NO_DATA"},
+    {"check_id": "source_manifest", "method": "verify immutable source manifest and artifact checksums before reading records", "expected": "both manifests authorized and content-addressed", "status": "NOT_RUN_NO_DATA"}
+  ],
+  "protocol": {
+    "calibration_use": "fit only on calibration split; retain parameter and artifact digests",
+    "held_out_use": "evaluate once on held-out split after calibration is frozen",
+    "fit_may_read_held_out": false,
+    "validation_requires_observed_outcomes": true
+  },
+  "claim_boundary": "TWIN_FIDELITY_NOT_ESTABLISHED_WITHOUT_HELD_OUT_OBSERVATIONS",
+  "contract_digest": "fb3f3162ac073815cba838f3fde5a3b8ac94604e21dc4f9049bdf3785d108eaa"
+}
