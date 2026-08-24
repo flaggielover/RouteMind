@@ -75,3 +75,10 @@ and final claim disposition without rewriting earlier entries.
   interval. No retuning, synthetic replay, external-validity claim, or missing
   value imputation occurred. This is `E-PASS / X-PASS / S-NOT-APPLICABLE /
   C-NO-CLAIM`; the no-data outcome is valid scientific boundary evidence.
+- `NR-R3-013`: R3-334 froze time, zone, demand, and traffic regime axes and
+  separated parameter drift from fidelity degradation. Both authorized split
+  artifacts contain zero records, so the overall result is `INSUFFICIENT_DATA`
+  and every regime/path is `NOT_ANALYZED_NO_DATA`. No parameter delta, fidelity
+  estimate, unsupported-regime imputation, synthetic replay, or solved
+  auto-calibration wording was introduced. This is `E-PASS / X-PASS /
+  S-NOT-APPLICABLE / C-NO-CLAIM`.

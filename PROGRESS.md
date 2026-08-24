@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 134 / 158 tasks passed
+Repository Total: 135 / 158 tasks passed
 
-Current Task: R3-334 - Measure Twin calibration drift
+Current Task: R3-335 - Formalize What-if validity boundaries
 
-Last Completed: R3-332 - Execute held-out Digital Twin validation
+Last Completed: R3-334 - Measure Twin calibration drift
 
-Current Gate: R3-332 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM. Its one-shot held-out gate validated R3-331/R3-330/R3-333 lineage and returned INSUFFICIENT_DATA with all four metrics NOT_REPORTED_NO_DATA because the authorized held-out split contains zero records; no estimate, uncertainty interval, retuning, synthetic replay, or Twin-validity claim was produced. R3-334 is now the highest-priority unblocked high task.
+Current Gate: R3-334 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM. Its drift report froze time/zone/demand/traffic axes and separate parameter/fidelity paths, all returning NOT_ANALYZED_NO_DATA because both authorized splits contain zero records; no drift estimate, stability claim, or solved auto-calibration wording was produced. R3-335 is now the highest-priority unblocked high task.
 
-CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, and R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
+CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, and R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-332 - Java 81/81, Python 814/814 at 95.50% coverage, Twin held-out validation tests 7/7 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally and remotely for R3-334 - Java 81/81, Python 820/820 at 95.57% coverage, Twin drift tests 6/6 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 21 / 45 passed; R3-334 active next; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 22 / 45 passed; R3-335 active next; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Measure R3-334 calibration drift across supported time, zone, demand, and traffic regimes without inventing unsupported regimes. The held-out result is INSUFFICIENT_DATA, so drift metrics must remain explicit no-data outcomes. R3-335 follows as a parallel high task; R3-353, R3-351, and R3-313 remain lower-priority or optional.
+Next Candidates: Formalize R3-335 What-if validity boundaries, keeping counterfactual replay, simulation comparison, and causal inference distinct and bounded by the R3-332 INSUFFICIENT_DATA result. R3-336 follows after R3-335; R3-353, R3-351, and R3-313 remain lower-priority or optional.
 
 ### R3-330 Digital Twin dataset split contract - 2026-08-24
 - The frozen contract uses temporal primary and scenario secondary split axes,
@@ -90,6 +90,20 @@ Next Candidates: Measure R3-334 calibration drift across supported time, zone, d
 - Commit `311d7a0` passed all five jobs in Actions run `32748083203`; evidence:
   `evidence/gates/R3-332/held-out-validation.md`. No Twin or external-validity
   claim was produced.
+
+### R3-334 Twin calibration drift - 2026-08-25
+- The drift plan freezes time, zone, demand, and traffic axes; parameter drift
+  is measured separately from fidelity degradation, with mandatory parameter
+  before/after checksums and the R3-333 metric baseline. Synthetic data is
+  forbidden and a recalibration script is not called solved auto-calibration.
+  Plan digest:
+  `587d71667062561ee98c4fe17434178dead070df30b4f1b7e33538d3bb7c3478`; byte
+  SHA: `c9c85367985a04a7cd965448a23781f097eea58e7fc2905c7063d302ffc6aa14`.
+- Both authorized splits contain zero records, so the overall status is
+  `INSUFFICIENT_DATA`; all four regime axes and both separated paths are
+  `NOT_ANALYZED_NO_DATA`. No drift estimate or stability claim was produced.
+- Commit `46b179c` passed all five jobs in Actions run `32749546141`; evidence:
+  `evidence/gates/R3-334/calibration-drift.md`.
 
 ### R3-352 simulation switchback design - 2026-08-24
 - The frozen design manifest uses six 30-tick zone-time blocks over three zones,

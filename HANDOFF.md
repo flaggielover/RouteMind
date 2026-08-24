@@ -6,13 +6,13 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream C
 
-Current Task: R3-334 - Measure Twin calibration drift
+Current Task: R3-335 - Formalize What-if validity boundaries
 
-Task Status: R3-332 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. Commit `311d7a0` passed all five jobs in GitHub Actions run `32748083203`; the one-shot held-out gate validated R3-331/R3-330/R3-333 lineage and returned INSUFFICIENT_DATA with all four metrics NOT_REPORTED_NO_DATA because the authorized held-out split has zero records. No estimates, uncertainty intervals, retuning, synthetic replay, or Twin-validity claim was produced. R3-334 is now the highest-priority eligible high task.
+Task Status: R3-334 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. Commit `46b179c` passed all five jobs in GitHub Actions run `32749546141`; the drift report froze four regime axes and separate parameter/fidelity paths, all returning NOT_ANALYZED_NO_DATA because both authorized splits contain zero records. No drift estimate, stability claim, synthetic replay, or solved auto-calibration wording was produced. R3-335 is now the highest-priority eligible high task.
 
-Next: implement and execute R3-334 calibration-drift measurement across supported regimes only. Preserve the R3-332 INSUFFICIENT_DATA boundary, separate parameter drift from fidelity degradation, and do not call a one-shot recalibration script solved auto-calibration; record evidence, then continue to R3-335.
+Next: implement and execute R3-335 What-if validity boundaries using the frozen R3-332 INSUFFICIENT_DATA result. Separate counterfactual replay, simulation comparison, and causal inference; scope any validity wording to observed held-out evidence, which is currently absent; record evidence, then continue to R3-336.
 
-R3-332 evidence is `evidence/gates/R3-332/held-out-validation.md`; plan digest is `348150cc5bd4bd6dea1261a81e13e7240606bb24cbc1898504ec34d4c8d9cfee` and byte SHA is `3f27f1a35f074ace24a215abd9c70875d2c67267ca70266737ba6f32455eb14c`.
+R3-334 evidence is `evidence/gates/R3-334/calibration-drift.md`; plan digest is `587d71667062561ee98c4fe17434178dead070df30b4f1b7e33538d3bb7c3478` and byte SHA is `c9c85367985a04a7cd965448a23781f097eea58e7fc2905c7063d302ffc6aa14`.
 
 R3-333 evidence is `evidence/gates/R3-333/fidelity-protocol.md`; protocol digest is `de453fdf1181b2e5a52839eb9f1b7536db3f5f5fb1177f4b5351269cfa3c1825` and byte SHA is `a3007f1ca9892fd0b7746797e53dec9ab5aecc5e243d188b16f12564df2ea8ff`.
 
