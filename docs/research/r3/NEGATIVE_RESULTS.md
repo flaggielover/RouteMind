@@ -30,8 +30,16 @@ unsupported claims remain here even when engineering gates are green.
   failed as precommitted. Same-vehicle distance gaps were 0% for C101/C201,
   5.3491% for R201, and 10.3053% for RC201. This is `S-FAIL` and
   `C-NO-CLAIM`; no instance was excluded and no threshold was revised.
+- `NR-R3-008`: R3-315 campaign
+  `r3-315-20260824T073439Z-1bae0447b562` proved the optimum of all six frozen
+  eight-customer conservative integer models, and every independently verified
+  RoutingModel candidate matched that hierarchical objective. This does not
+  prove optimality for the Euclidean-double source models or original
+  100-customer instances, does not use an independent solver distribution, and
+  does not establish broad quality, superiority, or external validity. The task
+  therefore closes `S-NOT-APPLICABLE / C-NO-CLAIM` despite its engineering and
+  experiment gates passing.
 
-No material Round 3 experiment had executed through the R3-311 preregistration
-checkpoint. Future entries record manifest IDs, code commits, datasets, seeds,
-statistical outcomes, sensitivity, and final claim disposition without rewriting
-earlier entries.
+Material R3-311 and R3-315 outcomes are recorded above. Future entries retain
+manifest IDs, code commits, datasets, seeds, statistical outcomes, sensitivity,
+and final claim disposition without rewriting earlier entries.

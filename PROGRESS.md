@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 118 / 158 tasks passed
+Repository Total: 119 / 158 tasks passed
 
-Current Task: R3-315 - Cross-check tractable instances with an exact reference solver
+Current Task: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
 
-Last Completed: R3-311 - Evaluate Solomon VRPTW benchmark family
+Last Completed: R3-315 - Cross-check tractable instances with an exact reference solver
 
-Current Gate: R3-315 is E/X-IN-PROGRESS, S-NOT-APPLICABLE, and C-DEFERRED. It must freeze a bounded tractable subset and independently configured exact/reference path before execution; only proven optimality may be labeled ground truth.
+Current Gate: R3-312 is E/X/S-IN-PROGRESS and C-DEFERRED. It must freeze a resource-bounded non-cherry-picked scale subset, outcome handling, and analysis plan before execution.
 
-CI: PASS for R3-315 preregistration checkpoint 117b755 in run 32700423191 and R3-311 closure checkpoint 7588757 in run 32699784206 across all five jobs. The R3-315 implementation is locally green and not yet committed. Earlier R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-315 implementation checkpoint 1bae044 in run 32701927556 and preregistration checkpoint 117b755 in run 32700423191 across all five jobs. Earlier R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally for the R3-315 implementation - Java 80/80, Python 371 / 95.16%, Web 34 files / 92 tests plus local build, 6 schemas / 18 contract fixtures, and repository controls. Remote implementation validation is pending; R3-311 remains remote-green in Actions run 32699784206.
+Regression: PASS locally and remotely for the R3-315 implementation - Java 80/80, Python 371 / 95.16%, Web 34 files / 92 tests plus local build and remote browser smoke, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32701927556.
 
-Round 3 Scientific Tasks: 5 / 45 passed; R3-315 in progress; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 6 / 45 passed; R3-312 in progress; R3-355 deferred and non-blocking.
 
-Research Gate: R3-315 E-IN-PROGRESS / X-IN-PROGRESS / S-NOT-APPLICABLE / C-DEFERRED
+Research Gate: R3-312 E-IN-PROGRESS / X-IN-PROGRESS / S-IN-PROGRESS / C-DEFERRED
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement and validate the frozen R3-315 exact-cross-check protocol before material execution. R3-312 remains independently eligible and is required with R3-315 before R3-316.
+Next Candidates: Freeze R3-312's Gehring-Homberger scale/timeout protocol before implementation or material execution. R3-350 remains independently eligible.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and
@@ -883,3 +883,17 @@ The task is now passed and RM-120 is the active implementation.
 - Nineteen directed tests and the full local gate pass: Java 80, Python 371 at
   95.16% coverage, Web 92 plus build, contracts, and controls. No frozen public
   derived instance ran; material execution waits for remote-green implementation.
+
+### R3-315 exact/reference closure - 2026-08-24
+- Implementation revision `1bae044` passed all five Actions jobs in run
+  `32701927556`; campaign `r3-315-20260824T073439Z-1bae0447b562` then executed
+  all six frozen derived instances in separate bounded processes.
+- All six enumerations completed, all six CP-SAT solves returned `OPTIMAL` with
+  objective equal to best bound, and all exact/candidate outputs passed the
+  independent verifier. Candidate vehicle counts and transformed distances
+  matched every exact result, yielding six 0% comparable gaps.
+- R3-315 closes `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`. Proven
+  optimality is limited to the derived conservative integer models and does not
+  transfer to source-double or 100-customer problems. Compact result SHA-256 is
+  `61f9207c4b9788aaf320ded2953420347b419bb54370bc470e00aaeae6939c3f`.
+  R3-312 is active.

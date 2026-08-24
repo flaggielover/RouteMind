@@ -51,3 +51,37 @@ implementation checkpoint passes its required validation. Current gates:
 No frozen C101/C201/R101/R201/RC101/RC201 derived instance was executed during
 implementation validation. Material execution remains gated on a committed,
 remote-green implementation revision.
+
+## Material results
+
+Implementation revision `1bae0447b562ed7fd4cf5c7fc8e10bc66713cd11`
+passed all five jobs in GitHub Actions run `32701927556`. Campaign
+`r3-315-20260824T073439Z-1bae0447b562` then executed every frozen instance in a
+separate process. Full artifacts are under
+`experiments/r3/R3-315/r3-315-20260824T073439Z-1bae0447b562` in
+`ROUTEMIND_DATA_ROOT`; the committed compact ledger is
+`docs/research/r3/results/exact-cross-check/solomon-prefix-eight-exact-results-v1.json`
+with SHA-256
+`61f9207c4b9788aaf320ded2953420347b419bb54370bc470e00aaeae6939c3f`.
+
+- Selection/exclusion: 6 selected, 6 executed, 6 retained, 0 excluded.
+- Enumeration: all six completed below the 109,600-sequence ceiling; feasible
+  route-column counts ranged from 45 to 924. Constraint-monotone pruning explains
+  why complete enumeration need not visit every possible ordered subset.
+- Exact proof: all six returned CP-SAT `OPTIMAL`; every integer objective equaled
+  its best bound and its fixed-cost-plus-distance recomputation.
+- Verification: all six exact outputs and all six candidate outputs were complete
+  and valid under the R3-314 independent verifier.
+- Gap: candidate vehicle counts and transformed distances matched the exact path
+  on all six, so every transformed same-vehicle distance gap is `0%`.
+- Resource/identity: candidate elapsed times were about two seconds; exact solve
+  times ranged from `0.004703` to `0.058999` seconds. Source, derived-instance,
+  lineage, route-column, run-artifact, and summary digests were retained.
+- Artifact integrity: all seven artifacts matched their sidecars; campaign
+  summary SHA-256 is
+  `8276a1e6c46a129ec6402148d2c3e909de3a8069c125fe818e401175f89ed05b`.
+
+Final gates: `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`. The exact
+ground-truth label applies only to each frozen eight-customer conservative
+integer model. It does not prove source-double or 100-customer optimality and is
+not an independent-software reproduction.

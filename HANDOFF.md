@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream A
 
-Current Task: R3-315 - Cross-check tractable instances with an exact reference solver
+Current Task: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
 
-Task Status: R3-311 closed E-PASS/X-PASS/S-FAIL/C-NO-CLAIM after all six frozen Solomon instances ran and were retained. R3-315's frozen exact-reference runner and directed tests pass locally; commit, remote validation, and only then material execution are next.
+Task Status: R3-315 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM after all six frozen derived instances were solved exactly and retained. R3-312 is active and must freeze its scale/timeout protocol before implementation or material execution.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -670,10 +670,10 @@ Continue autonomously with RM-230.
 
 ## Current Research Resume Capsule
 - Workstream: A - External Validity and Solver Science.
-- Current task: R3-315 exact/reference cross-check.
+- Current task: R3-312 Gehring-Homberger scale/timeout evaluation.
 - Engineering Gate: E-IN-PROGRESS.
 - Experiment Gate: X-IN-PROGRESS.
-- Statistical Gate: S-NOT-APPLICABLE.
+- Statistical Gate: S-IN-PROGRESS.
 - Claim Gate: C-DEFERRED.
 - R3-311 evidence: `evidence/gates/R3-311/solomon-vrptw.md`; compact result
   `docs/research/r3/results/solomon/solomon-stratified-six-results-v1.json`.
@@ -682,20 +682,15 @@ Continue autonomously with RM-230.
 - R3-311 result: campaign `r3-311-20260824T065444Z-8a0a4ea5c098` retained all
   six; 4 verified complete incumbents, 2 no-incumbent timeouts, Wilson 95%
   `[0.299993, 0.903229]`, final `E-PASS/X-PASS/S-FAIL/C-NO-CLAIM`.
-- R3-315 protocol: all six R3-311 instances use a frozen eight-smallest-customer
-  derived subset; manifest SHA-256 is `18785fe8...43e55`. The exact path
-  exhaustively enumerates transformed feasible routes and runs one-thread
-  CP-SAT for at most 30 seconds per instance. Preregistration checkpoint
-  `117b755` is green in Actions run `32700423191`.
-- R3-315 implementation: 19 directed tests and the full local gate pass (Java
-  80, Python 371 at 95.16%, Web 92 plus build). The exact path is separate from
-  RoutingModel configuration but shares OR-Tools, so it is not an independent-
-  software reproduction.
-- Next: commit and require a remote-green implementation checkpoint, then execute
-  all six frozen instances in separate bounded processes. Never label an
-  incumbent ground truth unless enumeration is complete, CP-SAT is `OPTIMAL`,
-  and independent verification passes; any proof is limited to the conservative
-  transformed model.
+- R3-315 evidence: `evidence/gates/R3-315/exact-cross-check.md`; compact result
+  `docs/research/r3/results/exact-cross-check/solomon-prefix-eight-exact-results-v1.json`.
+- R3-315 CI/results: preregistration run `32700423191` and implementation run
+  `32701927556` passed all five jobs. Campaign
+  `r3-315-20260824T073439Z-1bae0447b562` retained 6/6; complete enumeration,
+  CP-SAT `OPTIMAL`, independent verification, and 0% transformed candidate gaps
+  held for all six. Proof scope is the derived conservative model only.
+- Next: freeze R3-312's non-cherry-picked Gehring-Homberger scale subset,
+  resource bounds, outcome mapping, exclusion/stopping rules, and analysis plan.
 - Concurrent state: `741c8ef` closed the separate spatial-lock-in Gate 2 work.
   Preserve subsequent `research/level4/spatial_lockin/` changes and do not claim
   them as R3-311 work.
