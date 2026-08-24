@@ -51,6 +51,8 @@ the manifest and realization digests.
 - R3-320 closure revision `6d7a2f1` passed all five GitHub Actions jobs in run
   `32713474028`, so this implementation began from a remote-green prerequisite.
 
-Current disposition: `E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
-C-NOT-APPLICABLE`. Local gates are complete; remote CI for the implementation
-checkpoint is pending. No pilot observations or strategy-effect claims exist.
+Implementation revision `00475b8` passed all five GitHub Actions jobs in run
+`32714350193`, including frozen Python/contracts and browser smoke.
+
+Final disposition: `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
+C-NOT-APPLICABLE`. No pilot observations or strategy-effect claims exist.

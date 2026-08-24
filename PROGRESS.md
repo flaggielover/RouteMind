@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 122 / 158 tasks passed
+Repository Total: 123 / 158 tasks passed
 
-Current Task: R3-321 - Implement common-random-number stream ownership
+Current Task: R3-322 - Implement paired estimation and uncertainty
 
-Last Completed: R3-320 - Pre-register the Statistical RouteBench protocol
+Last Completed: R3-321 - Implement common-random-number stream ownership
 
-Current Gate: R3-321 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. Its local implementation and all local gates pass; remote CI is the remaining evidence gate.
+Current Gate: R3-322 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. It must implement and independently test every frozen paired estimate and degenerate-sample disposition.
 
-CI: PASS for the R3-320 closure checkpoint 6d7a2f1 in run 32713474028 and freeze checkpoint 8c592d4 in run 32713127743 across all five jobs. R3-321 implementation CI is pending.
+CI: PASS for the R3-321 implementation checkpoint 00475b8 in run 32714350193 and R3-320 closure checkpoint 6d7a2f1 in run 32713474028 across all five jobs.
 
-Regression: PASS locally for R3-321 - Java 80/80, Python 565/565 at 95.76% coverage, the CRN module at 96.12% with 21 directed tests, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
+Regression: PASS locally and remotely for R3-321 - Java 80/80, Python 565/565 at 95.76% coverage, the CRN module at 96.12% with 21 directed tests, Web 92/92 plus production build/browser smoke, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
 
-Round 3 Scientific Tasks: 9 / 45 passed; R3-321 in progress; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 10 / 45 passed; R3-322 in progress; R3-355 deferred and non-blocking.
 
-Research Gate: R3-321 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-322 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Push and remotely validate the locally green R3-321 implementation, then activate R3-322 paired estimation. R3-350 remains independently eligible.
+Next Candidates: Implement and remotely validate R3-322 paired estimation, then activate R3-323 and R3-324 in dependency/priority order. R3-350 remains independently eligible.
 
 ### R3-321 common-random-number implementation - 2026-08-24
 - Pair identity is protocol, phase, regime, and replicate. Demand, merchant,
@@ -43,8 +43,10 @@ Next Candidates: Push and remotely validate the locally green R3-321 implementat
 - 21 directed tests passed at 96.12% module coverage. The full local gate passed
   Java 80/80, Python 565/565 at 95.76%, Web 92/92 plus build, 6 schemas / 18
   fixtures, determinism, analytics, semantic metrics, and repository controls.
-- R3-321 remains E-IN-PROGRESS until its implementation checkpoint passes all
-  GitHub Actions jobs. No RouteBench pilot or effect estimation has run.
+- Implementation revision `00475b8` passed all five GitHub Actions jobs in run
+  `32714350193`. R3-321 closes E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/
+  C-NOT-APPLICABLE, and R3-322 is active. No RouteBench pilot or effect
+  estimation has run.
 
 ### R3-320 Statistical RouteBench protocol freeze - 2026-08-24
 - Protocol `r3-320-statistical-routebench-v1` prospectively fixes
