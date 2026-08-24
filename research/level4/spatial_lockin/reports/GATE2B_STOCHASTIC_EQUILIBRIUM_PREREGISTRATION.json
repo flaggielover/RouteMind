@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "protocol_id": "gate2b-stochastic-equilibrium-v1",
+  "status": "FROZEN_BEFORE_ANY_GATE2B_OUTPUT",
+  "historical_state": {
+    "gate1": "PASS",
+    "gate2": "FAIL_UNCHANGED",
+    "negative_control_diagnostic": "PASS",
+    "gate3_eligibility": "NO",
+    "gate3_executed": false,
+    "primary_diagnostic_root_cause": "STABLE_STOCHASTIC_EQUILIBRIUM_CLASSIFIER_MISMATCH"
+  },
+  "frozen_inputs": {
+    "layer_r": {
+      "predicted_alpha_c": 2.60097908919399,
+      "identification_interval_95": [2.59684653524659, 2.60537444184453]
+    },
+    "layer_m": {
+      "predicted_alpha_c": 3.29064597856242,
+      "identification_interval_95": [3.28304848117258, 3.29797102241973]
+    },
+    "main_preregistration_content_digest": "e90ae55058610a28a16d06e26f120d7509e0d3ec2b804e6c08bea02fc09a929a",
+    "frozen_threshold_artifact_sha256": "85c06e9186a069739b75be40015b2c53350bc589c16121151d2c71aca812a8bb",
+    "frozen_threshold_report_sha256": "4a86d0c0989c8512182665e49f34f6aa35a83a2fcc5841e3534fada37f6d7656",
+    "gate2_definition_sha256": "edea51eb1fc44054a67b335bec1ee004c5b1d0d0d10cb6dcbdaed3343c71c828",
+    "gate2_report_sha256": "4a184998e15c02c9e9a54bbb681b0d1d0dbbf6a17b5eed81c24c614a1d9a1a97",
+    "gate2_summary_sha256": "6a56279dae504dc01bf3d8109c74a5aecc7d70af5ab19bede8b360be9d77b72f",
+    "diagnostic_preregistration_sha256": "0db5478439e28aa979b5eb845d2ad65abc49e2add096c4f94797cbb9f5c9bfc9",
+    "diagnostic_report_sha256": "2592c58a44b6e92d6d91dbd5a9dfa7caa7a9f55a0b803981d34daf20e9b79185",
+    "diagnostic_summary_sha256": "37689c3037bbce16d2ca194fd061fd0c03252ef9ddfe0f7aaf8a66d6cb2afc25"
+  },
+  "artifact_policy": {
+    "root_environment": "ROUTEMIND_DATA_ROOT",
+    "relative_root": "research/level4/spatial_lockin/confirmatory/gate2b_stochastic_equilibrium",
+    "overwrite": false,
+    "digest": "sha256",
+    "confirmatory_diagnostic_isolation": true,
+    "existing_output_before_freeze": "ABORT"
+  },
+  "trajectory_protocol": {
+    "confirmatory_seeds": {"start": 51000, "end": 51063, "count": 64},
+    "initial_conditions": {
+      "zero": [0.0, 0.0, 0.0],
+      "positive": [0.01, 0.01, 0.01],
+      "negative": [-0.01, -0.01, -0.01]
+    },
+    "common_random_numbers_for_sign_pairs": true,
+    "horizon": 4800,
+    "discard_through_state_index": 2400,
+    "terminal_window_state_indices": [3001, 4800],
+    "terminal_window_count": 1800,
+    "terminal_blocks": 6,
+    "terminal_block_count": 300,
+    "noise_sd": {"layer_r": 0.00002, "layer_m": 0.00002},
+    "projection_weights_l1_normalized": [0.3333333333333333, 0.2916666666666667, 0.375]
+  },
+  "classifier": {
+    "version": "stochastic-equilibrium-effect-bounds-v1",
+    "labels": ["STOCHASTIC_RESTORED", "LOCKED", "TRANSITIONAL", "INVALID"],
+    "material_sign_threshold": 0.002,
+    "restored": {
+      "coordinate_mean_abs_max": 0.002,
+      "projection_mean_abs_max": 0.002,
+      "covariance_trace_max": 0.000025,
+      "projection_ols_cumulative_drift_max": 0.002,
+      "projection_block_mean_span_max": 0.004,
+      "material_sign_occupancy_max_exclusive": 0.9
+    },
+    "locked": {
+      "projection_mean_abs_min": 0.01,
+      "same_material_sign_occupancy_min": 0.9,
+      "covariance_trace_max": 0.001,
+      "projection_ols_cumulative_drift_max": 0.004,
+      "all_block_means_same_sign_as_projection_mean": true
+    },
+    "precedence": ["INVALID", "STOCHASTIC_RESTORED", "LOCKED", "TRANSITIONAL"]
+  },
+  "synthetic_controls": {
+    "calibration_seeds": {"start": 61000, "end": 61255, "count": 256},
+    "holdout_seeds": {"start": 62000, "end": 62255, "count": 256},
+    "strict_split": true,
+    "holdout_unreadable_until_calibration_frozen_pass": true,
+    "classifier_changes_after_freeze": false,
+    "classifier_changes_after_holdout": false,
+    "families": {
+      "stable": {
+        "transition_matrix": [[0.72, 0.05, 0.0], [0.0, 0.65, 0.04], [0.0, 0.0, 0.58]],
+        "noise_sd": 0.0005,
+        "initial": [0.0, 0.0, 0.0]
+      },
+      "locked": {
+        "scalar_rule": "z_next=0.90*z+0.12*tanh(8*z)+N(0,0.0005)",
+        "state_map": [1.0, 0.875, 1.125],
+        "paired_initial_z": [0.01, -0.01]
+      },
+      "near_critical": {
+        "transition_matrix": [[0.9992, 0.0, 0.0], [0.0, 0.9988, 0.0], [0.0, 0.0, 0.9984]],
+        "noise_sd": 0.0008,
+        "initial": [0.0, 0.0, 0.0]
+      }
+    },
+    "gates_applied_separately_to_calibration_and_holdout": {
+      "stable_sensitivity_min": 0.95,
+      "locked_pair_sensitivity_min": 0.95,
+      "sensitivity_wilson95_lower_min": 0.9,
+      "stable_to_locked_false_positive_rate_max": 0.01,
+      "locked_to_restored_false_negative_rate_max": 0.01,
+      "near_critical_transitional_rate_min": 0.6
+    }
+  },
+  "sweep": {
+    "coarse_multipliers": [0.0, 0.4, 0.65, 0.8, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.4, 1.6],
+    "weak_control_multipliers": [0.4, 0.65],
+    "strong_control_multipliers": [1.4, 1.6],
+    "fine_interval_subdivisions": 16,
+    "fine_interior_points": 15,
+    "fine_bracket_selection": "first ascending adjacent coarse ROBUST_RESTORED to ROBUST_LOCKED pair",
+    "manual_points_prohibited": true
+  },
+  "aggregation": {
+    "seed_units": 64,
+    "paired_restored": "positive and negative are both STOCHASTIC_RESTORED",
+    "paired_locked": "positive and negative are both LOCKED with opposite projection signs",
+    "paired_other": "TRANSITIONAL",
+    "regime_count_min": 48,
+    "regime_rate_min": 0.75,
+    "regime_wilson95_lower_exclusive": 0.6,
+    "alpha_zero_restored_count_min": 58,
+    "alpha_zero_restored_rate_min": 0.90625,
+    "alpha_zero_wilson95_lower_exclusive": 0.8,
+    "transition_estimator": "midpoint of largest robust-restored alpha and smallest higher robust-locked alpha",
+    "monotonicity_required": true
+  },
+  "threshold_gate": {
+    "relative_prediction_error_max": 0.01,
+    "relative_transition_width_max": 0.025,
+    "partial_relative_prediction_error_max": 0.02,
+    "partial_relative_transition_width_max": 0.05,
+    "identification_interval_overlap_role": "SUPPLEMENTARY_CORRESPONDENCE_DIAGNOSTIC_ONLY",
+    "identification_interval_overlap_is_pass_condition": false
+  },
+  "path_dependence_gate": {
+    "applies_to_strong_control_multipliers": [1.4, 1.6],
+    "paired_locked_count_min": 48,
+    "paired_locked_wilson95_lower_exclusive": 0.6,
+    "opposite_projection_signs_required": true
+  },
+  "layer_m_operational_gate": {
+    "primary_metric": "service_inequality",
+    "primary_upper_minus_lower_min": 0.005,
+    "paired_bootstrap_interval_lower_exclusive": 0.0,
+    "locked_projection_to_served_sign_count_min": 48,
+    "locked_projection_to_served_sign_wilson95_lower_exclusive": 0.6,
+    "supporting_metrics": [
+      "acceptance_imbalance",
+      "wait_imbalance",
+      "sla_12_minute_violation_rate_difference",
+      "courier_density_imbalance",
+      "merchant_utilization_imbalance",
+      "served_demand_imbalance"
+    ],
+    "supporting_positive_contrast_count_min": 2,
+    "prep_time_imbalance": "NOT_IDENTIFIABLE_NO_PROXY"
+  },
+  "uncertainty": {
+    "binomial_interval": "two-sided Wilson 95%",
+    "paired_bootstrap_resamples": 1000,
+    "layer_r_bootstrap_seed": 73000,
+    "layer_m_bootstrap_seed": 74000,
+    "minimum_valid_transition_bootstrap_fraction": 0.95,
+    "invalid_bootstrap_policy": "retain and fail GATE2B_INCONCLUSIVE"
+  },
+  "verdict": {
+    "pass_requires_all_fail_closed_gates": true,
+    "partial_only_for_threshold_error_or_width_in_partial_band": true,
+    "gate3_eligibility": {"PASS": "YES", "PARTIAL": "CONDITIONAL", "FAIL": "NO", "ABORT": "NO"},
+    "original_gate2_always": "FAIL_UNCHANGED"
+  },
+  "execution_order": [
+    "freeze_preregistration_commit_push_ci",
+    "implementation_commit_push_ci",
+    "synthetic_calibration_freeze",
+    "synthetic_holdout_freeze",
+    "confirmatory_coarse",
+    "deterministic_fine",
+    "replay_and_gate",
+    "freeze_report_and_summary_commit_push_ci"
+  ]
+}
