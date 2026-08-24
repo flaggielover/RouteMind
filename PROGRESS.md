@@ -8,19 +8,19 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 153 / 158 tasks passed
+Repository Total: 154 / 158 tasks passed
 
-Current Task: R3-359 - Assign final scientific claim statuses
+Current Task: R3-360 - Generate final scientific figures and tables
 
-Last Completed: R3-357 - Perform adversarial prior-art audit
+Last Completed: R3-359 - Assign final scientific claim statuses
 
-Current Gate: R3-359 final seven-row review is complete and validating: zero `C-PASS`, two `C-NO-NOVELTY`, five `C-NO-CLAIM`, and zero deferred. The executable matrix gate and five drift tests pass locally; remote CI is pending.
+Current Gate: R3-359 closed after implementation `46b1674` passed all five jobs in Actions run `32787968109`. Final status is zero `C-PASS`, two `C-NO-NOVELTY`, five `C-NO-CLAIM`, zero deferred. R3-360 is active.
 
 CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168, R3-342 implementation SHA d82138b394e7ab0832acb85a6575931054eff48c in run 32758618433, R3-343 implementation SHA 44df8e2c1215230ca5a7ee24f13f87d708050bcc in run 32776065978, R3-344 implementation SHA 65c992fce1b73495c01b650996c167fe9c7ec86e in run 32759977254, R3-345 implementation SHA bdb6967 in run 32761030125, R3-348 implementation SHA 771e8a81c819c2006473fa6a0a55fef5bcfc7fe6 in run 32774570495, R3-349 implementation SHA 94f1a3e3000fa645a775f3ffca3de3157bf3df97 in run 32777694427, R3-356 recovery SHA 76468caf2f5f50806b86b3b5da5a444b3605856a in run 32781478836, R3-358 implementation SHA 200c4d41bf93a0199b389770c3edb2dbb469a792 in run 32782886790, R3-346 implementation SHA 43e3549cf2db17b3554637b9406c2395d60eefb9 in run 32784278395, and R3-347 closure SHA ddb998e5d5d1ca50810478831d9c2240ea18e99c in run 32785809240; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
 Regression: PASS locally for R3-359 claim-matrix validation, five status/mapping/frozen-boundary drift tests, task graph, security/supply-chain, recovery, release, staged release, and PowerShell syntax. R3-357 closure commit `d728910` passed all five jobs in Actions run `32787502208`. The unchanged Java 81/81, Python 920/920 at 95.11%, and Web 92/92/build gates passed immediately before this documentation/control change. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
-Round 3 Scientific Tasks: 40 / 45 passed; R3-359 active; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 41 / 45 passed; R3-360 active; R3-355 deferred and non-blocking.
 
 Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-347 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
 
@@ -28,7 +28,15 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and push the R3-359 final-claim implementation, observe all five real CI jobs, then close and activate R3-360 final figures/tables. Preserve the explicit empty supported-claims section. R3-313 remains optional and non-blocking.
+Next Candidates: Generate R3-360 figures/tables only from manifest-linked compact results. Show units, uncertainty, exclusions, failures, non-estimability, and no-data states; never turn a decorative chart into measured evidence. R3-313 remains optional and non-blocking.
+
+### R3-359 final claim assignment closure - 2026-08-25
+- Implementation `46b1674` passed all five jobs in Actions run `32787968109`.
+  The control-plane job executed the live final-claim gate and mutation tests.
+- Evidence: `evidence/gates/R3-359/claim-review.md`. R3-359 closes with zero
+  `C-PASS`, two `C-NO-NOVELTY`, five `C-NO-CLAIM`, and zero deferred.
+- The supported scientific claims section remains explicitly `None`; R3-325
+  remains frozen and was not rerun. R3-360 is active.
 
 ### R3-359 final claim assignment implementation - 2026-08-25
 - Claim Matrix v2 assigns `C-PASS=0`, `C-NO-NOVELTY=2` (`R3-A2`,

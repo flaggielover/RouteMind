@@ -6,13 +6,13 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream E
 
-Current Task: R3-359 - Assign final scientific claim statuses
+Current Task: R3-360 - Generate final scientific figures and tables
 
-Task Status: R3-359 final seven-row review is complete and validating with zero `C-PASS`, two `C-NO-NOVELTY`, five `C-NO-CLAIM`, and zero deferred. The matrix gate and five mutation tests pass locally; R3-357 closure commit `d728910` passed all five jobs in Actions run `32787502208`.
+Task Status: R3-359 is closed `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM`; implementation `46b1674` passed all five jobs in Actions run `32787968109`. Final status is zero `C-PASS`, two `C-NO-NOVELTY`, five `C-NO-CLAIM`, zero deferred. R3-360 is active.
 
-Next: commit and push the R3-359 implementation, observe all five real Actions jobs, then close R3-359 and activate R3-360 final figures/tables. Keep the supported scientific claims section explicitly empty.
+Next: generate R3-360 final figures/tables only from manifest-linked compact results, with units, uncertainty, exclusions, failures, non-estimability, and no-data states visible. Large rendered artifacts remain under `ROUTEMIND_DATA_ROOT`.
 
-R3-359 evidence is `docs/research/r3/CLAIM_MATRIX.md`; byte SHA-256 is `c6656ac6a1f4634c001cace78867c924b950eebef944380f8a26c556fac9d4cc`. `scripts/claim_matrix_gate.py` and five mutation tests enforce the seven identities, final dispositions, R3-357/R3-356 mappings, supported-claim equality, and frozen R3-325 status. No experiment or external artifact was rerun.
+R3-359 evidence is `evidence/gates/R3-359/claim-review.md`; Claim Matrix byte SHA-256 is `c6656ac6a1f4634c001cace78867c924b950eebef944380f8a26c556fac9d4cc`. Actions run `32787968109` passed all five jobs. The executable gate enforces seven identities, final dispositions, R3-357/R3-356 mappings, supported-claim equality, and frozen R3-325 status. No experiment or external artifact was rerun.
 
 R3-357 evidence is `docs/research/r3/PRIOR_ART_AUDIT.md`; byte SHA-256 is `5978c859247230566e77d9573c2b4d62cb3b960555e3d4e035d85c6660052f4c`. The Claim Matrix maps every proposed claim to a prior-art audit identity and completed reproduction status. No `C-PASS` or novelty claim was created. Actions run `32787178651` passed all five jobs. R3-325 remains frozen exactly as `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM` and was not rerun.
 
