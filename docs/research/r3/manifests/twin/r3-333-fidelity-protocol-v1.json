@@ -1,0 +1,74 @@
+{
+  "schema_version": "routemind-twin-fidelity-protocol-v1",
+  "task_id": "R3-333",
+  "protocol_id": "r3-333-twin-fidelity-protocol-v1",
+  "frozen_at_utc": "2026-08-24T15:45:00Z",
+  "question": "Does calibration on the immutable calibration split improve prespecified fidelity metrics on the disjoint held-out split within the frozen scope thresholds?",
+  "metrics": [
+    {
+      "metric_id": "assignment_rate",
+      "source_variable": "verified_assignment_indicator",
+      "aggregation": "mean_absolute_error",
+      "unit": "proportion",
+      "direction": "lower_absolute_error_is_better",
+      "absolute_threshold": 0.05,
+      "minimum_calibration_records": 100,
+      "minimum_held_out_records": 100,
+      "improvement_test": "paired_absolute_error_delta_vs_naive_uncalibrated_baseline",
+      "improvement_alpha": 0.05,
+      "improvement_effect": 0.0
+    },
+    {
+      "metric_id": "scenario_risk_index",
+      "source_variable": "scenario_risk_index",
+      "aggregation": "mean_absolute_error",
+      "unit": "bounded_index_0_1",
+      "direction": "lower_absolute_error_is_better",
+      "absolute_threshold": 0.05,
+      "minimum_calibration_records": 100,
+      "minimum_held_out_records": 100,
+      "improvement_test": "paired_absolute_error_delta_vs_naive_uncalibrated_baseline",
+      "improvement_alpha": 0.05,
+      "improvement_effect": 0.0
+    },
+    {
+      "metric_id": "dispatch_latency_seconds",
+      "source_variable": "dispatch_latency_seconds",
+      "aggregation": "p90_absolute_error",
+      "unit": "seconds",
+      "direction": "lower_absolute_error_is_better",
+      "absolute_threshold": 30.0,
+      "minimum_calibration_records": 100,
+      "minimum_held_out_records": 100,
+      "improvement_test": "paired_absolute_error_delta_vs_naive_uncalibrated_baseline",
+      "improvement_alpha": 0.05,
+      "improvement_effect": 0.0
+    },
+    {
+      "metric_id": "fallback_rate",
+      "source_variable": "fallback_used_indicator",
+      "aggregation": "mean_absolute_error",
+      "unit": "proportion",
+      "direction": "lower_absolute_error_is_better",
+      "absolute_threshold": 0.02,
+      "minimum_calibration_records": 100,
+      "minimum_held_out_records": 100,
+      "improvement_test": "paired_absolute_error_delta_vs_naive_uncalibrated_baseline",
+      "improvement_alpha": 0.05,
+      "improvement_effect": 0.0
+    }
+  ],
+  "support_policy": {
+    "minimum_calibration_records": 100,
+    "minimum_held_out_records": 100,
+    "status_when_missing": "INSUFFICIENT_DATA"
+  },
+  "improvement_policy": {
+    "comparison": "naive_uncalibrated_baseline",
+    "confidence_level": 0.95,
+    "rule": "Report a paired error delta and two-sided 95% interval; improvement is supported only when the upper interval bound is below the frozen zero effect.",
+    "required_before_validation": true
+  },
+  "claim_boundary": "FIDELITY_PROTOCOL_DOES_NOT_ESTABLISH_TWIN_VALIDITY",
+  "protocol_digest": "de453fdf1181b2e5a52839eb9f1b7536db3f5f5fb1177f4b5351269cfa3c1825"
+}
