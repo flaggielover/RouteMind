@@ -103,3 +103,9 @@ and final claim disposition without rewriting earlier entries.
   risk bounds, selector, fallbacks, and digest rules are content-addressed;
   baseline reproducibility is an engineering/research-infrastructure result,
   not a RADS-H or Safe-RADS claim.
+- `NR-R3-017`: R3-341 formalized `RADS-H-v1` with explicit threshold band,
+  pressure persistence, minimum dwell, switching cost, regime reset, and
+  switch/hold reasons. It intentionally executes no material comparison and
+  therefore provides no empirical stability, switching-reduction, service,
+  cost, safety, or superiority evidence. A minimum-dwell cooldown remains a
+  separate comparator; it is not relabeled as hysteresis.
