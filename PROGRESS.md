@@ -8,27 +8,40 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 129 / 158 tasks passed
+Repository Total: 130 / 158 tasks passed
 
-Current Task: R3-352 - Design simulation switchback experiments
+Current Task: R3-330 - Define Digital Twin calibration dataset and split contract
 
-Last Completed: R3-350 - Build privacy-bounded research Decision Corpus
+Last Completed: R3-352 - Design simulation switchback experiments
 
-Current Gate: R3-350 closed E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. The manifest-linked Decision Corpus preserves required decision/outcome lineage, rejects raw trajectories and direct identifiers, and round-trips through immutable SHA-256 sidecars. R3-352 is the highest-priority unblocked substantive task; R3-351 is medium priority and R3-313 remains optional.
+Current Gate: R3-352 closed E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED. The frozen simulation-only switchback design uses zone-time-block assignment, alternating arms, warmup/washout, and explicit shared-supply, spillover, and carryover diagnostics; no simulation or causal result was produced. R3-330 is now the highest-priority unblocked critical task.
 
-CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, and R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
+CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, and R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-350 - Java 81/81, Python 766/766 at 95.11% coverage, Decision Corpus directed tests 7/7, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally and remotely for R3-352 - Java 81/81, Python 774/774 at 95.16% coverage, switchback design tests 7/7, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 16 / 45 passed; R3-352 active next; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 17 / 45 passed; R3-330 active next; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Design the simulation switchback experiment for R3-352 with preregistered time blocks, zones, washout, assignment, and interference controls. R3-351 shadow disagreement mining is also unblocked; R3-313 is optional and non-blocking.
+Next Candidates: Define the Digital Twin calibration/held-out dataset split for R3-330 with disjoint identities, leakage checks, and an explicit insufficient-data outcome. R3-353, R3-351, and R3-313 remain unblocked at lower priority or optional scope.
+
+### R3-352 simulation switchback design - 2026-08-24
+- The frozen design manifest uses six 30-tick zone-time blocks over three zones,
+  deterministic seeded block assignment, alternating candidate/comparator arms,
+  five warmup and five washout ticks, and equal arm balance. Per-order
+  randomization is rejected because shared supply creates interference.
+- Shared-supply, zone-spillover, and carryover risks each retain a mechanism,
+  unit, mitigation, and diagnostic. Primary metrics are descriptive by paired
+  zone-time block; washout is excluded from primary summaries but retained for
+  boundary diagnostics. Design digest is `4d3b69cf8f5bb3bea317885f4d849367aa9c8b530b35de4485820fefbe063785`.
+- Commit `c36881e` passed all five jobs in Actions run `32740971993`; no
+  simulation campaign, effect estimate, A/B claim, or real-world causal claim
+  was produced. Evidence: `evidence/gates/R3-352/switchback-design.md`.
 
 ### R3-350 privacy-bounded Decision Corpus - 2026-08-24
 - The allow-list normalizer preserves decision/state/strategy/candidate/action/

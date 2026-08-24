@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream B
 
-Current Task: R3-352 - Design simulation switchback experiments
+Current Task: R3-330 - Define Digital Twin calibration dataset and split contract
 
-Task Status: R3-350 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE. Commit `15c29fe` passed all five jobs in GitHub Actions run `32739524990`; the external fixture corpus is checksum-verified, deterministic, and contains only allow-listed decision summaries. R3-352 is now the highest-priority eligible task; R3-351 is also unblocked at medium priority and R3-313 remains optional.
+Task Status: R3-352 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-DEFERRED. Commit `c36881e` passed all five jobs in GitHub Actions run `32740971993`; the frozen simulation-only manifest has six alternating zone-time blocks, explicit washout and interference diagnostics, and no causal result. R3-330 is now the highest-priority eligible critical task; R3-353 and R3-351 are also unblocked, while R3-313 remains optional.
 
 R3-324 resume capsule: the exact frozen 16-test Holm step-down family retains
 protocol/regime/metric/hypothesis identity, raw p-values, stable family ranks,
@@ -24,9 +24,11 @@ determinism gates. During validation, a real Java same-instant transition flake
 was diagnosed and repaired with monotonic aggregate/outbox event time; the fixed
 clock regression and originally failing lease test pass. Implementation revision
 `c3e394b` passed all five jobs in Actions run `32720233681`; R3-324 is closed.
-Next: design R3-352's simulation switchback experiment with preregistered time
-blocks, zones, washout, assignment, and interference review; then continue in
-dependency order. R3-350 evidence is `evidence/gates/R3-350/decision-corpus.md`.
+Next: define R3-330's Digital Twin calibration and held-out split contract with
+disjoint identities, temporal/scenario/geographic leakage checks, and an
+explicit insufficient-data outcome. R3-352 evidence is
+`evidence/gates/R3-352/switchback-design.md`; its design digest is
+`4d3b69cf8f5bb3bea317885f4d849367aa9c8b530b35de4485820fefbe063785`.
 The R3-327 report implementation `ed01044` passed all five jobs in Actions run
 `32737520239`; its report digest remains
 `0c7e29af8c89ed9ca7cb094525745f488c4b4d69e73ab6a4a7f47dd4e5ae9eac`.
