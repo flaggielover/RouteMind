@@ -4,11 +4,15 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Round 3 Scientific Research - Workstream B
+Current Phase: Round 3 Scientific Research - Workstream C
 
-Current Task: R3-333 - Define preregistered Twin fidelity metrics and thresholds
+Current Task: R3-331 - Implement and execute bounded Twin calibration
 
-Task Status: R3-330 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE. Commit `825384d` passed all five jobs in GitHub Actions run `32742587929`; the frozen split contract has disjoint calibration/held-out identities and five leakage checks, but no authorized observed data is available. Outcome is INSUFFICIENT_DATA and no Twin fidelity claim is allowed. R3-333 is now the highest-priority eligible critical task.
+Task Status: R3-333 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE. Commit `c0283c7` passed all five jobs in GitHub Actions run `32744065301`; its four variable-appropriate metrics, absolute thresholds, paired improvement tests, 100+100 support requirements, and INSUFFICIENT_DATA behavior are frozen. No Twin validity claim is allowed. R3-331 is now the highest-priority eligible critical task.
+
+Next: implement and execute the bounded R3-331 calibration runner using only the R3-330 split contract and R3-333 protocol. Because no authorized observed data is available, the runner must return the predeclared INSUFFICIENT_DATA outcome without fitting, synthetic substitution, or held-out reuse; record checksums and evidence, then continue to R3-332.
+
+R3-333 evidence is `evidence/gates/R3-333/fidelity-protocol.md`; protocol digest is `de453fdf1181b2e5a52839eb9f1b7536db3f5f5fb1177f4b5351269cfa3c1825` and byte SHA is `a3007f1ca9892fd0b7746797e53dec9ab5aecc5e243d188b16f12564df2ea8ff`.
 
 R3-324 resume capsule: the exact frozen 16-test Holm step-down family retains
 protocol/regime/metric/hypothesis identity, raw p-values, stable family ranks,

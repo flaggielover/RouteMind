@@ -1,6 +1,6 @@
 # RouteMind Progress
 
-Current Phase: Round 3 Scientific Research - Workstream B
+Current Phase: Round 3 Scientific Research - Workstream C
 
 Round 2 Progress: 48 / 48 tasks passed
 
@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 131 / 158 tasks passed
+Repository Total: 132 / 158 tasks passed
 
-Current Task: R3-333 - Define preregistered Twin fidelity metrics and thresholds
+Current Task: R3-331 - Implement and execute bounded Twin calibration
 
-Last Completed: R3-330 - Define Digital Twin calibration dataset and split contract
+Last Completed: R3-333 - Define preregistered Twin fidelity metrics and thresholds
 
-Current Gate: R3-330 closed E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. Its temporal/scenario split contract freezes disjoint calibration and held-out identities, five leakage checks, and an explicit INSUFFICIENT_DATA outcome; no observed data, calibration, held-out validation, or Twin fidelity claim was produced. R3-333 is now the highest-priority unblocked critical task.
+Current Gate: R3-333 closed E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. Its preregistered protocol freezes four variable-appropriate metrics, absolute thresholds, paired improvement tests, 100+100 support requirements, and fail-closed INSUFFICIENT_DATA behavior; it does not establish Twin validity. R3-331 is now the highest-priority unblocked critical task.
 
-CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, and R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
+CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, and R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-330 - Java 81/81, Python 786/786 at 95.24% coverage, Twin split contract tests 12/12 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally and remotely for R3-333 - Java 81/81, Python 798/798 at 95.32% coverage, Twin fidelity protocol tests 12/12 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 18 / 45 passed; R3-333 active next; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 19 / 45 passed; R3-331 active next; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Freeze variable-appropriate Digital Twin fidelity metrics, absolute thresholds, improvement tests, and INSUFFICIENT_DATA behavior for R3-333. R3-331 remains dependent on R3-333; R3-353, R3-351, and R3-313 remain lower-priority or optional.
+Next Candidates: Implement the bounded R3-331 calibration runner against the frozen R3-330 split contract and R3-333 protocol. With no authorized observed data, execution must return INSUFFICIENT_DATA without fitting or synthetic substitution. R3-332 remains dependent on calibration; R3-353, R3-351, and R3-313 remain lower-priority or optional.
 
 ### R3-330 Digital Twin dataset split contract - 2026-08-24
 - The frozen contract uses temporal primary and scenario secondary split axes,
@@ -43,6 +43,22 @@ Next Candidates: Freeze variable-appropriate Digital Twin fidelity metrics, abso
   Contract digest: `fb3f3162ac073815cba838f3fde5a3b8ac94604e21dc4f9049bdf3785d108eaa`.
 - Commit `825384d` passed all five jobs in Actions run `32742587929`. Evidence:
   `evidence/gates/R3-330/twin-dataset-contract.md`.
+
+### R3-333 Twin fidelity protocol - 2026-08-24
+- The preregistered protocol freezes four variable-appropriate metrics in a
+  stable order: assignment-rate MAE (0.05), scenario-risk-index MAE (0.05),
+  dispatch-latency p90 absolute error (30 seconds), and fallback-rate MAE
+  (0.02). Each requires at least 100 calibration and 100 held-out records and
+  uses a paired absolute-error improvement test against the naive uncalibrated
+  baseline at alpha 0.05.
+- Empty or sub-threshold support returns `INSUFFICIENT_DATA`; complete support
+  only returns `READY_FOR_VALIDATION` and does not estimate effects. The
+  protocol digest is
+  `de453fdf1181b2e5a52839eb9f1b7536db3f5f5fb1177f4b5351269cfa3c1825` and its
+  byte SHA is `a3007f1ca9892fd0b7746797e53dec9ab5aecc5e243d188b16f12564df2ea8ff`.
+- Commit `c0283c7` passed all five jobs in Actions run `32744065301`; evidence:
+  `evidence/gates/R3-333/fidelity-protocol.md`. No observed Twin outcome or
+  validity claim was produced.
 
 ### R3-352 simulation switchback design - 2026-08-24
 - The frozen design manifest uses six 30-tick zone-time blocks over three zones,
