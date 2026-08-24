@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream B
 
-Current Task: R3-327 - Generate statistical RouteBench reports
+Current Task: R3-350 - Build privacy-bounded research Decision Corpus
 
-Task Status: R3-325 closed E-PASS/X-PASS/S-FAIL/C-NO-CLAIM. Implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f passed all five jobs in Actions run 32725900984. The authorized material pilot completed 64/64 pairs and 128 arm attempts, retained six non-estimable assignment cells, and correctly blocked confirmatory execution. R3-327 is now active.
+Task Status: R3-327 closed E-PASS/X-PASS/S-FAIL/C-NO-CLAIM. Its read-only report verified the retained material pilot, all 16 family identities, seeds/distributions/uncertainty and safety diagnostics; six assignment-rate cells remain non-estimable and no confirmatory inference ran. Report implementation is pending commit/remote CI. R3-350 is the next active task after that checkpoint.
 
 R3-324 resume capsule: the exact frozen 16-test Holm step-down family retains
 protocol/regime/metric/hypothesis identity, raw p-values, stable family ranks,
@@ -24,13 +24,11 @@ determinism gates. During validation, a real Java same-instant transition flake
 was diagnosed and repaired with monotonic aggregate/outbox event time; the fixed
 clock regression and originally failing lease test pass. Implementation revision
 `c3e394b` passed all five jobs in Actions run `32720233681`; R3-324 is closed.
-Next: generate the R3-327 statistical report from the retained external pilot
-ledger and analysis. Preserve all 16 family identities, seeds and stream
-digests, uncertainty and effect-size fields where estimable, corrected-test
-boundaries, runtime/failure/fallback diagnostics, and explicit S-FAIL/C-NO-CLAIM
-dispositions. The pilot produced no strategy claim. Evidence is in
-`evidence/gates/R3-325/robustness-matrix.md` and the external F-drive campaign
-directory.
+Next: commit and push the R3-327 report generator/evidence, observe its real
+GitHub Actions run, then implement R3-350's privacy-bounded Decision Corpus.
+The report digest is
+`0c7e29af8c89ed9ca7cb094525745f488c4b4d69e73ab6a4a7f47dd4e5ae9eac`; it
+retains the six `NON_ESTIMABLE` assignment cells and makes no strategy claim.
 
 R3-323 resume capsule: exact SciPy 1.18.0 one-sided noncentral paired-t planning
 records the content-addressed variance source, frozen MDE/noninferiority distance,

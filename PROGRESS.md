@@ -10,11 +10,11 @@ Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
 Repository Total: 126 / 158 tasks passed
 
-Current Task: R3-327 - Generate statistical RouteBench reports
+Current Task: R3-350 - Build privacy-bounded research Decision Corpus
 
-Last Completed: R3-325 - Execute preregistered RouteBench robustness matrix
+Last Completed: R3-327 - Generate statistical RouteBench reports
 
-Current Gate: R3-325 closed E-PASS / X-PASS / S-FAIL / C-NO-CLAIM. Its material pilot completed 64/64 pairs and 128 arms; six assignment-rate cells had zero paired variance and confirmatory execution was blocked fail-closed. R3-327 is now the highest-priority unblocked task.
+Current Gate: R3-327 closed E-PASS / X-PASS / S-FAIL / C-NO-CLAIM. Its read-only report verified the material pilot and retained six assignment-rate NON_ESTIMABLE cells; no confirmatory inference or claim was promoted. R3-350 is now the highest-priority unblocked substantive task.
 
 CI: PASS for the R3-325 implementation checkpoint SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984 across all five jobs; the earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
@@ -28,7 +28,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Generate the R3-327 report from the retained pilot ledger, including all 16 family cells, uncertainty, power/planning dispositions, corrected-test boundary, runtime/failure/fallback diagnostics, and explicit S-FAIL/C-NO-CLAIM wording. R3-350 remains independently eligible.
+Next Candidates: Build the privacy-bounded Decision Corpus for R3-350 with manifest/checksum, retention minimization, and full decision/outcome linkage. R3-313 is optional and non-blocking.
 
 ### R3-325 implementation checkpoint - 2026-08-24
 - The manifest-bound runner now freezes all eight R3-320 regimes, 64 pilot pairs,
@@ -65,6 +65,22 @@ Next Candidates: Generate the R3-327 report from the retained pilot ledger, incl
   artifact envelope is under the frozen 512 MiB limit. R3-325 closes
   `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`. Evidence:
   `evidence/gates/R3-325/robustness-matrix.md`.
+
+### R3-327 statistical report - 2026-08-24
+- The read-only report generator verifies every retained campaign JSON and SHA
+  sidecar, plan/ledger/analysis digests, protocol manifest identity, all 64 pair
+  identities, and the complete 16-cell family before writing a write-once report.
+- Report digest is `0c7e29af8c89ed9ca7cb094525745f488c4b4d69e73ab6a4a7f47dd4e5ae9eac`.
+  Every cell retains n=8, all four stream seeds/digests, value distributions,
+  Student-t/Cohen's dz/winsorized/leave-one-out fields where estimable,
+  prospective power lineage, scenario/code versions, runtime/failure/fallback/
+  timeout diagnostics, and an explicit 16-test Holm table with null p-values.
+- Ten cells are planned and six assignment-rate cells remain
+  `NON_ESTIMABLE_PAIRED_VARIANCE_OR_POWER`; multiplicity disposition is
+  `CONFIRMATORY_NOT_EXECUTED`. No claim was promoted. Focused report tests are
+  5 passed, and the material CLI rerun is idempotent. Evidence:
+  `evidence/gates/R3-327/statistical-report.md`.
+- R3-327 closes `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`; R3-350 is active next.
 
 ### R3-324 multiple-comparison implementation - 2026-08-24
 - The frozen protocol now exposes the exact `holm_bonferroni_familywise` method
