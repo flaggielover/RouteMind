@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream B
 
-Current Task: R3-320 - Pre-register the Statistical RouteBench protocol
+Current Task: R3-321 - Implement common-random-number stream ownership
 
-Task Status: R3-316 closed E-PASS/X-PASS/S-PASS/C-NO-CLAIM after all 42 frozen upstream records were accounted for with zero exclusions or audit errors. R3-320 is active and must freeze the Statistical RouteBench protocol before any R3-B campaign data.
+Task Status: R3-320 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after its content-addressed prospective protocol passed local and remote gates before campaign data. R3-321 is active and must implement explicit reproducible ownership for the four frozen common-random-number streams.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -670,7 +670,7 @@ Continue autonomously with RM-230.
 
 ## Current Research Resume Capsule
 - Workstream: B - Statistical RouteBench.
-- Current task: R3-320 Statistical RouteBench protocol preregistration.
+- Current task: R3-321 common-random-number stream ownership.
 - Engineering Gate: E-IN-PROGRESS.
 - Experiment Gate: X-NOT-REQUIRED.
 - Statistical Gate: S-NOT-APPLICABLE.
@@ -751,6 +751,11 @@ Continue autonomously with RM-230.
   Local full gates pass: Java 80/80, Python 544/544 at 95.76% (protocol loader
   97.46% across 51 directed tests), Web 92/92 plus build, 6 schemas / 18
   fixtures, determinism, analytics, semantic metrics, Ruff, and mypy.
+- R3-320 freeze revision `8c592d4` passed all five jobs in Actions run
+  `32713127743` and closes `E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/
+  C-NOT-APPLICABLE`. R3-321 is active; implement the exact frozen SHA-256 seed
+  derivation and prove stable demand/merchant/courier/traffic digests without
+  claiming independent observations.
 - Concurrent state: `465488f` implements the separate spatial-lock-in
   negative-control diagnostic. Preserve subsequent `research/level4/spatial_lockin/`
   changes and do not claim them as Round 3 task work.

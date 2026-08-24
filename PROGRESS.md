@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 121 / 158 tasks passed
+Repository Total: 122 / 158 tasks passed
 
-Current Task: R3-320 - Pre-register the Statistical RouteBench protocol
+Current Task: R3-321 - Implement common-random-number stream ownership
 
-Last Completed: R3-316 - Analyze best-known-solution and optimality gaps
+Last Completed: R3-320 - Pre-register the Statistical RouteBench protocol
 
-Current Gate: R3-320 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. Its machine-verifiable protocol is frozen locally before any R3-B campaign data.
+Current Gate: R3-321 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. It must implement the four frozen CRN streams and reproducible digest ownership.
 
-CI: PASS for the R3-316 closure checkpoint c0967c1 in run 32711507127 and implementation checkpoint 9f68e99 in run 32710816931 across all five jobs. The frozen manifest was accepted through descendant d86c41e in run 32708578105; direct run 32708520338 was concurrency-cancelled and is not accepted as green evidence. R3-320 freeze CI is pending. Earlier R3-312/R3-315/R3-311/R3-317/R3-314/R3-310 evidence remains recorded below.
+CI: PASS for the R3-320 freeze checkpoint 8c592d4 in run 32713127743 and R3-316 closure checkpoint c0967c1 in run 32711507127 across all five jobs. Earlier R3-316 implementation/manifest and R3-312/R3-315/R3-311/R3-317/R3-314/R3-310 evidence remains recorded below.
 
-Regression: PASS locally and remotely for the R3-316 implementation - Java 80/80, Python 493/493 at 95.70% coverage, the new module at 99%, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
+Regression: PASS locally and remotely for the R3-320 freeze - Java 80/80, Python 544/544 at 95.76% coverage, the protocol module at 97.46%, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
 
-Round 3 Scientific Tasks: 8 / 45 passed; R3-320 in progress; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 9 / 45 passed; R3-321 in progress; R3-355 deferred and non-blocking.
 
-Research Gate: R3-320 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-321 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Validate and remotely accept the frozen R3-320 protocol, then activate R3-321 common-random-number stream ownership. R3-350 remains independently eligible.
+Next Candidates: Implement and remotely validate R3-321 common-random-number stream ownership, then activate R3-322 paired estimation. R3-350 remains independently eligible.
 
 ### R3-320 Statistical RouteBench protocol freeze - 2026-08-24
 - Protocol `r3-320-statistical-routebench-v1` prospectively fixes
@@ -49,8 +49,12 @@ Next Candidates: Validate and remotely accept the frozen R3-320 protocol, then a
   the protocol module at 97.46% with 51 directed tests, Web 92/92 plus build,
   6 schemas / 18 fixtures, determinism, analytics, and semantic metrics.
 - Material R3-325 execution is prohibited until R3-321/322/323/324 pass and the
-  R3-325 implementation checkpoint is remote green. R3-320 remains in progress
-  until its loader/tests and frozen manifest pass remote CI.
+  R3-325 implementation checkpoint is remote green. The R3-320 loader, tests,
+  and frozen manifest have passed remote CI.
+- Freeze revision `8c592d4` passed all five GitHub Actions jobs in run
+  `32713127743`. R3-320 closes `E-PASS / X-NOT-REQUIRED /
+  S-NOT-APPLICABLE / C-NOT-APPLICABLE`; no experiment or effect claim belongs
+  to this task. R3-321 is active.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and

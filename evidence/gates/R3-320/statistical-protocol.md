@@ -72,5 +72,12 @@ the complete Python suite at `544/544` and 95.76% total coverage, Java `80/80`,
 Web `92/92` plus production build, 6 schemas / 18 contract fixtures,
 determinism, analytics, semantic metrics, repository controls, Ruff, and mypy.
 
-Current disposition: `E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
-C-NOT-APPLICABLE`. Remote CI is required before R3-320 can close.
+Freeze revision `8c592d4baffbb4b07dafde678be7880922d45ed9` passed Control
+plane and Compose, Java business runtime, Python compute and contracts, bounded
+degradation and resilience, and role-aware web application in GitHub Actions run
+`32713127743`.
+
+Final disposition: `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
+C-NOT-APPLICABLE`. This is a preregistration engineering result only; it executes
+no campaign and supports no statistical effect or strategy claim. R3-321 is
+activated.
