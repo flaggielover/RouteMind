@@ -1,0 +1,145 @@
+{
+  "schema_version": "gate2b-validation-summary-v1",
+  "protocol_id": "gate2b-stochastic-equilibrium-v1",
+  "status": "FAIL",
+  "gate3_eligibility": "NO",
+  "research_line_status": "NO-GO",
+  "claim_limit": "No novelty or external-validity claim; Gate 3 not executed",
+  "historical_gate2": "FAIL_UNCHANGED",
+  "preregistration": {
+    "commit": "49e5689",
+    "ci_run": "32721829559",
+    "json_sha256": "aac5da0419b77bf76e8740dc7cc7ed2cff232f1b3299e1395d2bace60697dd26"
+  },
+  "implementation": {
+    "commit": "a6e85f5",
+    "ci_run": "32723911174",
+    "digest": "4526621f6e01a480c097d26a089a850f9bcfd9617bcb4eebc26fd58547ad8861"
+  },
+  "frozen_design": {
+    "confirm_seeds": [51000, 51063],
+    "calibration_seeds": [61000, 61255],
+    "holdout_seeds": [62000, 62255],
+    "horizon": 4800,
+    "burn_in_through": 2400,
+    "terminal_states": [3001, 4800],
+    "terminal_count": 1800,
+    "blocks": 6,
+    "block_size": 300,
+    "coarse_multipliers": [0, 0.4, 0.65, 0.8, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.4, 1.6],
+    "fine_subdivisions": 16,
+    "classifier_after_holdout_tuning": false,
+    "synthetic_holdout_isolation": true,
+    "identification_interval_overlap_is_pass_condition": false
+  },
+  "classifier": {
+    "calibration": {
+      "status": "PASS",
+      "invalid_count": 0,
+      "stable_sensitivity": 1.0,
+      "stable_wilson95_lower": 0.9852161435741286,
+      "locked_pair_sensitivity": 1.0,
+      "locked_wilson95_lower": 0.9852161435741286,
+      "near_critical_transitional_rate": 0.96875,
+      "stable_to_locked_false_positive_rate": 0.0,
+      "locked_to_restored_false_negative_rate": 0.0,
+      "sha256": "8681666af677fb958dd8de426bf6ce91a270e962f488c2c97db5bfac14480273"
+    },
+    "holdout": {
+      "status": "PASS",
+      "invalid_count": 0,
+      "stable_sensitivity": 1.0,
+      "stable_wilson95_lower": 0.9852161435741286,
+      "locked_pair_sensitivity": 1.0,
+      "locked_wilson95_lower": 0.9852161435741286,
+      "near_critical_transitional_rate": 0.96875,
+      "stable_to_locked_false_positive_rate": 0.0,
+      "locked_to_restored_false_negative_rate": 0.0,
+      "sha256": "ae91966355d062eb656e8e6ec5da7c7620974310ca2bc4b23979b693c85cb480"
+    }
+  },
+  "layers": {
+    "R": {
+      "frozen_alpha": 2.60097908919399,
+      "observed_transition_interval": [2.47093013473429, 2.73102804365369],
+      "observed_alpha": 2.60097908919399,
+      "transition_width": 0.260097908919399,
+      "relative_prediction_error": 0.0,
+      "relative_transition_width": 0.1,
+      "primary_error_pass": true,
+      "primary_width_pass": false,
+      "partial_error_pass": true,
+      "partial_width_pass": false,
+      "identification_interval_intersects_bracket": true,
+      "identification_interval_overlap_role": "SUPPLEMENTARY_CORRESPONDENCE_DIAGNOSTIC_ONLY",
+      "weak_controls_pass": true,
+      "strong_controls_pass": true,
+      "path_dependence_pass": true,
+      "bootstrap_valid_fraction": 1.0,
+      "bootstrap_invalid_count": 0,
+      "status": "FAIL",
+      "reason_codes": ["GATE2B_TRANSITION_TOO_WIDE", "GATE2B_NO_TRANSITION"],
+      "coarse_sha256": "4316eee82609ddd104bca1c2ff23477efb2f4393239565cf5e42b1b1fc398e21",
+      "fine_sha256": "f9b4f8aa6dd03329a3d76337dbf3c60f73693fd41dac5ea591e263b3e009d546"
+    },
+    "M": {
+      "frozen_alpha": 3.29064597856242,
+      "observed_transition_interval": [3.1261136796343, 3.45517827749054],
+      "observed_alpha": 3.29064597856242,
+      "transition_width": 0.329064597856243,
+      "relative_prediction_error": 0.0,
+      "relative_transition_width": 0.1,
+      "primary_error_pass": true,
+      "primary_width_pass": false,
+      "partial_error_pass": true,
+      "partial_width_pass": false,
+      "identification_interval_intersects_bracket": true,
+      "identification_interval_overlap_role": "SUPPLEMENTARY_CORRESPONDENCE_DIAGNOSTIC_ONLY",
+      "weak_controls_pass": true,
+      "strong_controls_pass": true,
+      "path_dependence_pass": true,
+      "bootstrap_valid_fraction": 1.0,
+      "bootstrap_invalid_count": 0,
+      "status": "FAIL",
+      "reason_codes": ["GATE2B_TRANSITION_TOO_WIDE", "GATE2B_NO_TRANSITION"],
+      "coarse_sha256": "a40c8573fbe43eaa1d7dc77ea098da65c11baf147a4e76a645942c485dd7c3d1",
+      "fine_sha256": "1b2e64cdbc9ab7d042b5d3defccee20f1f38e037d66f0467d1c761870bffb3de"
+    }
+  },
+  "operational_correspondence": {
+    "status": "PASS",
+    "service_inequality_pass": true,
+    "projection_to_served_sign_pass": true,
+    "projection_to_served_sign_count": 64,
+    "projection_to_served_sign_wilson95": [0.9433759402071946, 1.0],
+    "supporting_positive_contrast_count": 5,
+    "supporting_positive_contrast_required": 2,
+    "prep_time_imbalance": "NOT_IDENTIFIABLE_NO_PROXY"
+  },
+  "replay": {
+    "status": "PASS",
+    "sha256": "fefa37151bf0d695fcddf402bcc1273e57a490c1aca5eb61fe3e6b16c120a1aa",
+    "content_digest": "5958b5b3885bce8c447332fcdb101d17ebfb38a5c073d8ca113c19c3dcde2681"
+  },
+  "final_external_summary": {
+    "sha256": "a8da384878467595d64f025eb8df5fac9ad1d840c1b1027dd8f223b084437643",
+    "content_digest": "91a6a19c7e6f9139d6074a825c80f5d422520caae14bbdf2222dd2df78208701"
+  },
+  "reason_codes": [
+    "GATE2B_TRANSITION_TOO_WIDE",
+    "GATE2B_NO_TRANSITION",
+    "GATE2B_LAYER_R_FAILED",
+    "GATE2B_LAYER_M_FAILED"
+  ],
+  "artifact_integrity": {
+    "json_artifact_count": 8,
+    "sidecar_match_count": 8,
+    "all_sidecars_match": true,
+    "confirmatory_root": "F:\\Projects\\RouteMind-Data\\research\\level4\\spatial_lockin\\confirmatory\\gate2b_stochastic_equilibrium"
+  },
+  "negative_evidence": [
+    "No adjacent ROBUST_RESTORED to ROBUST_LOCKED coarse pair existed in either layer.",
+    "The transitional regime occupied the frozen 1.00x coarse point in both layers.",
+    "Endpoint bracket relative width was 10%, exceeding both 2.5% PASS and 5% PARTIAL bounds."
+  ]
+}
