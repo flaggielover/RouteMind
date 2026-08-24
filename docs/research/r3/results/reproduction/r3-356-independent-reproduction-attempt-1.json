@@ -1,0 +1,154 @@
+{
+  "checker_environment": {
+    "implementation": "CPython",
+    "platform": "win32",
+    "python_version": "3.14.6"
+  },
+  "claim_boundary": "INDEPENDENT_REPRODUCTION_IS_CLAIM_INPUT_NOT_CI_OR_NEW_EFFECT_EVIDENCE",
+  "contradictions": [
+    "R3-327:non_estimable_assignment_regimes differs: ['compute-budget', 'location-staleness', 'merchant-delay', 'normal', 'surge', 'travel-degradation'] != ['normal', 'surge', 'merchant-delay', 'travel-degradation', 'location-staleness', 'compute-budget']"
+  ],
+  "implementation_ci_run": 32779935291,
+  "implementation_revision": "f17fed261798fab98d6201d4e19d032af094070c",
+  "independence": {
+    "implementation": "STANDARD_LIBRARY_ONLY_ALTERNATE_CHECKER",
+    "imports_original_analysis_modules": false,
+    "same_function_stack_used": false
+  },
+  "overall_status": "CONTRADICTIONS_RETAINED",
+  "plan_digest": "aaab4e70a7daa04d6850c886edb80ac652d47f0fad89e89e75b550530f874d93",
+  "reproduction_id": "r3-356-independent-reproduction-v1",
+  "result_digest": "3cb48122c4be9b23491d8cee7d2c824613eaed9a4323a87b056b79c7c51e823c",
+  "schema_version": "routemind-independent-reproduction-result-v1",
+  "target_results": [
+    {
+      "checker": "RECOMPUTE_LEDGER_COUNTS_AND_TYPE7_DISTRIBUTIONS",
+      "contradictions": [],
+      "observations": {
+        "claim_disposition": "C-NO-CLAIM",
+        "derived_records": 6,
+        "record_count": 42,
+        "reference_comparisons": {
+          "COMPARABLE_SAME_VEHICLE_COUNT": 4,
+          "REFERENCE_GAP_NOT_APPLICABLE": 3,
+          "REFERENCE_QUALITY_REVIEW": 6,
+          "VEHICLE_COUNT_WORSE": 23
+        },
+        "same_vehicle_distance_gap_percent": {
+          "maximum": 10.305343511450381,
+          "median": 2.674529092839976,
+          "minimum": 0.0,
+          "n": 4,
+          "p90": 8.818457913719254
+        },
+        "source_outcomes": {
+          "FEASIBLE_INCUMBENT": 1,
+          "TIMEOUT_NO_FEASIBLE": 3,
+          "TIMEOUT_WITH_FEASIBLE": 32
+        },
+        "source_records": 36,
+        "statistical_disposition": "S-PASS",
+        "transformed_exact_gap_percent": {
+          "maximum": 0.0,
+          "median": 0.0,
+          "minimum": 0.0,
+          "n": 6,
+          "p90": 0.0
+        },
+        "unique_record_count": 42,
+        "vehicle_gap_percent": {
+          "maximum": 484.2105263157895,
+          "median": 31.666666666666668,
+          "minimum": 0.0,
+          "n": 27,
+          "p90": 349.4545454545455
+        }
+      },
+      "status": "REPRODUCED",
+      "task_id": "R3-316"
+    },
+    {
+      "checker": "RECOMPUTE_REPORT_DIGEST_CELL_IDENTITIES_PAIR_SUPPORT_AND_NON_ESTIMABLE_SET",
+      "contradictions": [
+        "non_estimable_assignment_regimes differs: ['compute-budget', 'location-staleness', 'merchant-delay', 'normal', 'surge', 'travel-degradation'] != ['normal', 'surge', 'merchant-delay', 'travel-degradation', 'location-staleness', 'compute-budget']"
+      ],
+      "observations": {
+        "arm_count": 128,
+        "artifact_report_digest": "0c7e29af8c89ed9ca7cb094525745f488c4b4d69e73ab6a4a7f47dd4e5ae9eac",
+        "cell_count": 16,
+        "cell_identities_complete": true,
+        "claim_disposition": "C-NO-CLAIM",
+        "confirmatory_inference_absent": true,
+        "failure_count": 0,
+        "fallback_count": 0,
+        "multiplicity_disposition": "CONFIRMATORY_NOT_EXECUTED",
+        "multiplicity_tests": 16,
+        "non_estimable_assignment_regimes": [
+          "compute-budget",
+          "location-staleness",
+          "merchant-delay",
+          "normal",
+          "surge",
+          "travel-degradation"
+        ],
+        "pairs_and_streams_complete": true,
+        "report_digest": "0c7e29af8c89ed9ca7cb094525745f488c4b4d69e73ab6a4a7f47dd4e5ae9eac",
+        "statistical_disposition": "S-FAIL",
+        "timeout_count": 0
+      },
+      "status": "CONTRADICTED",
+      "task_id": "R3-327"
+    },
+    {
+      "checker": "DERIVE_NO_DATA_SECTIONS_FROM_SPLIT_AND_REPORT_MANIFESTS",
+      "contradictions": [],
+      "observations": {
+        "calibration_record_count": 0,
+        "claim_status": "C-NO-CLAIM",
+        "data_limits": "INSUFFICIENT_DATA",
+        "held_out_record_count": 0,
+        "observed_record_count": 0,
+        "sensitivity": "NOT_RUN_NO_DATA",
+        "status": "INSUFFICIENT_DATA",
+        "thresholds": "NOT_EVALUATED_NO_DATA",
+        "unsupported_regimes": "NOT_ANALYZED_NO_DATA"
+      },
+      "status": "REPRODUCED",
+      "task_id": "R3-336"
+    },
+    {
+      "checker": "DERIVE_AXIS_SUPPORT_FROM_FROZEN_REPORT_AND_ROBUSTNESS_MANIFEST",
+      "contradictions": [],
+      "observations": {
+        "absent_variant_identities": [
+          "RADS-H-v1",
+          "Safe-RADS-v1"
+        ],
+        "broad_claim_status": "PROHIBITED_NO_CROSS_REGIME_EVIDENCE",
+        "claim_disposition": "C-NO-CLAIM",
+        "minimum_pairs_per_axis_level": 30,
+        "observed_strategy_identities": [
+          "risk-aware",
+          "weighted-greedy"
+        ],
+        "pairs_per_existing_regime": 8,
+        "source_regime_axes": [
+          "seeds",
+          "demand",
+          "supply",
+          "merchant_delay",
+          "traffic",
+          "location_staleness",
+          "compute_constraints"
+        ],
+        "status": "INSUFFICIENT_DATA",
+        "unsupported_axes": [
+          "location_noise"
+        ]
+      },
+      "status": "REPRODUCED",
+      "task_id": "R3-349"
+    }
+  ],
+  "task_id": "R3-356"
+}

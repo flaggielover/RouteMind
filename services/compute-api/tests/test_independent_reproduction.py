@@ -89,19 +89,17 @@ def _fixture(tmp_path: Path) -> tuple[IndependentReproductionPlan, Path, Path]:
     }
     cells = [
         {
-            "regime_id": "normal",
-            "metric_id": "scenario_risk_index",
-            "status": "PLANNED",
+            "regime_id": regime,
+            "metric_id": metric,
+            "status": status,
             "n": 1,
             "pair_seeds": [pair],
-        },
-        {
-            "regime_id": "normal",
-            "metric_id": "assignment_rate",
-            "status": "NON_ESTIMABLE",
-            "n": 1,
-            "pair_seeds": [pair],
-        },
+        }
+        for regime in ("normal", "compute-budget")
+        for metric, status in (
+            ("scenario_risk_index", "PLANNED"),
+            ("assignment_rate", "NON_ESTIMABLE"),
+        )
     ]
     tests = [
         {
@@ -109,13 +107,13 @@ def _fixture(tmp_path: Path) -> tuple[IndependentReproductionPlan, Path, Path]:
             "adjusted_p_value": None,
             "rejected": False,
         }
-        for _ in range(2)
+        for _ in range(4)
     ]
     report = {
         "cells": cells,
         "multiplicity": {"disposition": "CONFIRMATORY_NOT_EXECUTED", "tests": tests},
         "diagnostics": {
-            "arm_count": 4,
+            "arm_count": 8,
             "failure_count": 0,
             "fallback_count": 0,
             "timeout_count": 0,
@@ -166,13 +164,13 @@ def _fixture(tmp_path: Path) -> tuple[IndependentReproductionPlan, Path, Path]:
     }
     statistical_expected = {
         "report_digest": report_digest,
-        "regimes": ["normal"],
+        "regimes": ["normal", "compute-budget"],
         "metrics": ["scenario_risk_index", "assignment_rate"],
         "pairs_per_cell": 1,
         "stream_names": ["demand", "merchant", "courier", "traffic"],
-        "non_estimable_assignment_regimes": ["normal"],
+        "non_estimable_assignment_regimes": ["normal", "compute-budget"],
         "multiplicity_disposition": "CONFIRMATORY_NOT_EXECUTED",
-        "arm_count": 4,
+        "arm_count": 8,
         "failure_count": 0,
         "fallback_count": 0,
         "timeout_count": 0,

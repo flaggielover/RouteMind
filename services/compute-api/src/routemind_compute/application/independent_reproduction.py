@@ -224,11 +224,12 @@ def _check_statistical(target: Mapping[str, object], data: Path) -> JsonObject:
     metrics = tuple(_string_array(expected, "metrics"))
     cell_ids = tuple((_text(cell, "regime_id"), _text(cell, "metric_id")) for cell in cells)
     expected_ids = tuple((regime, metric) for regime in regimes for metric in metrics)
-    non_estimable = sorted(
+    non_estimable_set = {
         _text(cell, "regime_id")
         for cell in cells
         if cell.get("metric_id") == "assignment_rate" and cell.get("status") == "NON_ESTIMABLE"
-    )
+    }
+    non_estimable = [regime for regime in regimes if regime in non_estimable_set]
     pair_shapes_ok = all(
         _integer(cell, "n") == _integer(expected, "pairs_per_cell")
         and len(_array(cell, "pair_seeds")) == _integer(expected, "pairs_per_cell")
