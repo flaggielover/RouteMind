@@ -172,3 +172,13 @@ and final claim disposition without rewriting earlier entries.
   `NOT_MAPPED_NO_TICK_LOGS`. No synthetic map, empirical stability region,
   performance interval, or theoretical-stability claim was created. This is
   `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
+- `NR-R3-026`: R3-349 froze a cross-regime RADS robustness audit over seeds,
+  demand, supply, merchant delay, traffic, location noise/staleness, and
+  compute constraints. R3-325 preserves source regimes for seven axes but no
+  RADS-H/Safe-RADS identity or outcomes; location noise has no frozen regime,
+  and eight pairs per existing regime are below the frozen 30-pair minimum.
+  The result is `INSUFFICIENT_DATA`; all metrics are
+  `NOT_REPORTED_NO_CROSS_REGIME_RADS_OUTCOMES`, and broad claims are
+  `PROHIBITED_NO_CROSS_REGIME_EVIDENCE`. R3-325 was not rerun, tuned,
+  reinterpreted, or optimized. This is
+  `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
