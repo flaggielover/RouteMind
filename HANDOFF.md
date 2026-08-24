@@ -6,13 +6,13 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream E
 
-Current Task: R3-357 - Perform adversarial prior-art audit
+Current Task: R3-359 - Assign final scientific claim statuses
 
-Task Status: R3-357 bounded audit is complete and validating. Sixteen original or peer-reviewed sources cover nine categories: five `SUBSUMED`, two `CLOSE_PRIOR`, two `PARTIAL_GAP`, and no `PLAUSIBLE_GAP`. Local Java/Python/Web and pre-Compose controls pass; remote CI is pending because the local Docker Desktop CLI is unresponsive.
+Task Status: R3-357 is closed `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM`; implementation `8caa7a2` passed all five jobs in Actions run `32787178651`, including remote Compose and browser smoke. R3-359 is active.
 
-Next: commit and push the R3-357 audit checkpoint, observe all five real Actions jobs, and require remote-green Compose/repository controls before closing R3-357 and activating R3-359 final claim assignment.
+Next: assign every Claim Matrix row one final `C-PASS`, `C-NO-NOVELTY`, `C-NO-CLAIM`, or `C-DEFERRED` status from the full outcome/prior-art/uncertainty/verification/reproduction record. Do not force a supported claim.
 
-R3-357 evidence is `docs/research/r3/PRIOR_ART_AUDIT.md`; byte SHA-256 is `5978c859247230566e77d9573c2b4d62cb3b960555e3d4e035d85c6660052f4c`. The Claim Matrix now maps every proposed claim to a prior-art audit identity and completed reproduction status. No `C-PASS` or novelty claim was created. Local evidence is Java 81/81, Python 920/920 at 95.11%, Web 92/92 plus build, and all controls before Compose. R3-325 remains frozen exactly as `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM` and was not rerun.
+R3-357 evidence is `docs/research/r3/PRIOR_ART_AUDIT.md`; byte SHA-256 is `5978c859247230566e77d9573c2b4d62cb3b960555e3d4e035d85c6660052f4c`. The Claim Matrix maps every proposed claim to a prior-art audit identity and completed reproduction status. No `C-PASS` or novelty claim was created. Actions run `32787178651` passed all five jobs. R3-325 remains frozen exactly as `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM` and was not rerun.
 
 R3-347 evidence is `evidence/gates/R3-347/counterfactual-xray.md`. Plan digest is `4c76ce8200f00adeeb2690051d7615fa47d710523b78d631e849385b135047ce`, byte SHA is `d7306891950446216d4188a672a0ebfd6d5154b76555d65208b4d12f2a261f90`, and audit digest is `9c4be0fd4c7d2f7b54e1ccc92fd34ef84e7bb37e6f4a2e1ccc488673996107d8`. Two summaries, zero replays, and eight missing fields prohibit perturbation/delta/minimality claims. R3-325 remains frozen and was not rerun.
 
