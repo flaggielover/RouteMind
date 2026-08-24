@@ -8,27 +8,41 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 126 / 158 tasks passed
+Repository Total: 129 / 158 tasks passed
 
-Current Task: R3-350 - Build privacy-bounded research Decision Corpus
+Current Task: R3-352 - Design simulation switchback experiments
 
-Last Completed: R3-327 - Generate statistical RouteBench reports
+Last Completed: R3-350 - Build privacy-bounded research Decision Corpus
 
-Current Gate: R3-327 closed E-PASS / X-PASS / S-FAIL / C-NO-CLAIM. Its read-only report verified the material pilot and retained six assignment-rate NON_ESTIMABLE cells; no confirmatory inference or claim was promoted. R3-350 is now the highest-priority unblocked substantive task.
+Current Gate: R3-350 closed E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. The manifest-linked Decision Corpus preserves required decision/outcome lineage, rejects raw trajectories and direct identifiers, and round-trips through immutable SHA-256 sidecars. R3-352 is the highest-priority unblocked substantive task; R3-351 is medium priority and R3-313 remains optional.
 
-CI: PASS for the R3-325 implementation checkpoint SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984 across all five jobs; the earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
+CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, and R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-325 - Java 81/81, Python 755/755 at 96.17% coverage, R3-325 modules covered at analysis 100%, artifacts 96%, campaign 98%, local executor 100%, runner 100%, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls.
+Regression: PASS locally and remotely for R3-350 - Java 81/81, Python 766/766 at 95.11% coverage, Decision Corpus directed tests 7/7, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 14 / 45 passed; R3-327 active; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 16 / 45 passed; R3-352 active next; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PENDING / X-PENDING / S-PENDING / C-DEFERRED
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Build the privacy-bounded Decision Corpus for R3-350 with manifest/checksum, retention minimization, and full decision/outcome linkage. R3-313 is optional and non-blocking.
+Next Candidates: Design the simulation switchback experiment for R3-352 with preregistered time blocks, zones, washout, assignment, and interference controls. R3-351 shadow disagreement mining is also unblocked; R3-313 is optional and non-blocking.
+
+### R3-350 privacy-bounded Decision Corpus - 2026-08-24
+- The allow-list normalizer preserves decision/state/strategy/candidate/action/
+  alternative/objective/verification/reference/clock/outcome linkage and source
+  digests while recursively rejecting raw payloads, trajectories, coordinates,
+  addresses, and direct identifiers. Java remains the durable ledger owner.
+- A committed synthetic source manifest and fixture generated the external,
+  write-once corpus at `F:\Projects\RouteMind-Data\research\r3\R3-350\r3-350-fixture-20260824`.
+  It contains two records, manifest digest `d92c58cbf196e3f9ab7a157e575831f4c35a9508d3482a6f6ba90728c89e569b`,
+  records digest `a9fbc9d01cf8bddff917e3b067342b091877bc24cbabbf9e776cc8e74e06799f`,
+  and matching SHA-256 sidecars. The artifact is a research read model, not a
+  scientific effect or OPE conclusion.
+- Commit `15c29fe` passed all five jobs in GitHub Actions run `32739524990`.
+  Evidence: `evidence/gates/R3-350/decision-corpus.md`.
 
 ### R3-325 implementation checkpoint - 2026-08-24
 - The manifest-bound runner now freezes all eight R3-320 regimes, 64 pilot pairs,
