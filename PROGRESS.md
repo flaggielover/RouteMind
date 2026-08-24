@@ -1,6 +1,6 @@
 # RouteMind Progress
 
-Current Phase: Round 3 Research Preparation
+Current Phase: Round 3 Scientific Research - Workstream A
 
 Round 2 Progress: 48 / 48 tasks passed
 
@@ -10,21 +10,25 @@ Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
 Repository Total: 113 / 113 tasks passed
 
-Current Task: Enhancement Pass CLOSED; Round 3 Research Task Graph PREPARED
+Current Task: R3-300 - Establish Round 3 scientific research contract and claim control plane
 
 Last Completed: RM-236 - Close Enhancement Pass and prepare Round 3 research graph
 
-Current Gate: RM-236 closure report, Round 3 prepared graph, control-plane and verify gates passed. Closure checkpoint 98febed Actions run 32663948087 passed all five jobs; no production or scientific claim is made.
+Current Gate: R3-300 is validating the authoritative scientific graph, four-dimensional E/X/S/C state model, Research Contract, Claim Matrix, and negative-result ledger. No experiment or scientific claim has passed.
 
 CI: PASS through final documentation synchronization checkpoint 4950611 in run 32664121577; RM-236 closure checkpoint 98febed in run 32663948087; RM-235 checkpoint bc00832 in run 32662822033; RM-229 checkpoint 5600487 in run 32662337844; RM-231 checkpoint fb9bd77 in run 32662606286; RM-234 checkpoint 9fe015d in run 32661326399; all passed all five jobs. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
+Round 3 Scientific Tasks: 45 tracked; R3-300 validating; R3-355 deferred and non-blocking; all material experiment/statistical/claim gates remain open.
+
+Research Gate: E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: None in Enhancement Pass. Round 3 tasks are prepared only and must remain unstarted until their evidence gates are satisfied.
+Next Candidates: Finish R3-300 local/CI validation, then activate R3-310 public benchmark adapter framework. Do not execute material experiments before source/license/checksum and manifest controls exist.
 
 ### RM-230 closure and RM-234 activation - 2026-08-24
 
@@ -759,3 +763,15 @@ The task is now passed and RM-120 is the active implementation.
 - Closure checkpoint `98febed` Actions run `32663948087` and final documentation
   synchronization checkpoint `4950611` Actions run `32664121577` both passed all
   five jobs.
+
+### R3-300 scientific control-plane audit - 2026-08-24
+- The previous prepared graph was audited and its production-heavy work preserved
+  in Round 4 or non-blocking lanes. Scientific work is now decomposed into 45
+  tasks across external validity, Statistical RouteBench, Digital Twin science,
+  RADS research, and advanced evaluation/closure.
+- `TASK_GRAPH.yaml` is authoritative and every R3 task carries separate E/X/S/C
+  status. The current task is E-IN-PROGRESS; no experiment, statistical result,
+  or scientific claim is implied.
+- Research Contract, Claim Matrix, Negative Results, graph audit, and revised
+  scientific graph are present. Local validation and remote CI are the remaining
+  R3-300 engineering gates before R3-310 starts.

@@ -30,6 +30,12 @@ try {
     Write-Host ""
     Write-Host "Phase: $((Get-Content PROGRESS.md | Select-String '^Current Phase:').Line -replace '^Current Phase:\s*', '')"
     Write-Host "Current: $(if ($current) { ($current | ForEach-Object { "$($_.id) $($_.title) [$($_.status)]" }) -join '; ' } else { 'NONE' })"
+    $researchCurrent = @($current | Where-Object { $_.id -like "R3-*" })
+    if ($researchCurrent) {
+        foreach ($task in $researchCurrent) {
+            Write-Host "Research gates: $($task.id) $($task.engineering_status) / $($task.experiment_status) / $($task.statistical_status) / $($task.claim_status)"
+        }
+    }
     Write-Host "Passed: $($passed.Count) / $($graph.tasks.Count)"
     Write-Host "Next eligible: $(if ($eligible) { ($eligible | ForEach-Object { $_.id }) -join ', ' } else { 'NONE' })"
     Write-Host "Human action: NONE recorded"

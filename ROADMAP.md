@@ -98,3 +98,26 @@ The closure report is `docs/hardening/HARDENING_CLOSURE_REPORT.md`. The next
 Enhancement Pass follows the deferred production and research gaps in
 `docs/reviews/ROUND_3_GAPS.md`; hardening does not claim production deployment,
 external provider validation, or theorem-prover coverage.
+
+## Round 3 Scientific Research
+
+Round 3 is an evidence-gated scientific program rather than a production release
+phase. Its authoritative tasks are R3-300 through R3-365 in `TASK_GRAPH.yaml`,
+indexed by `docs/research/ROUND_3_TASK_GRAPH.yaml`:
+
+- Workstream A integrates public VRPTW benchmarks, independent verification,
+  exact small-instance cross-checks, reference gaps, and timeout semantics.
+- Workstream B preregisters Statistical RouteBench, common random numbers, paired
+  estimation, power, multiplicity, stress matrices, and reports.
+- Workstream C separates Twin calibration from immutable held-out validation,
+  defines fidelity thresholds, drift, and non-fidelity reporting.
+- Workstream D freezes RADS-BASELINE-v1 before RADS-H, Safe-RADS, policy-boundary,
+  counterfactual, ablation, and robustness research.
+- Workstream E covers the Decision Corpus, interference/OPE feasibility,
+  independent reproduction, prior art, negative results, claim review, and
+  scientific closure.
+
+Each task records independent engineering, experiment, statistical, and claim
+status. Production identity/tenancy, preferences/notifications, full operations
+telemetry, deployment readiness, and broad agent productization are preserved for
+Round 4 or a non-blocking parallel lane.

@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Round 3 Research Preparation
+Current Phase: Round 3 Scientific Research - Workstream A
 
-Current Task: Enhancement Pass CLOSED; Round 3 Research Task Graph PREPARED
+Current Task: R3-300 - Establish Round 3 scientific research contract and claim control plane
 
-Task Status: Hardening is verified 10/10; RM-209 through RM-236 are passed locally. The Enhancement Closure Report and prepared Round 3 Research Task Graph are committed in closure checkpoint `98febed`; final documentation synchronization is checkpoint `4950611`. RM-236 run `32663948087` and final synchronization run `32664121577`, plus RM-229 run `32662337844`, RM-231 run `32662606286`, RM-232/RM-235 run `32662822033`, and RM-234 run `32661326399`, passed all five jobs. Round 3 research execution and production verification remain deferred.
+Task Status: Enhancement is closed and R3-300 is validating. The prior prepared graph was reclassified into a 45-task scientific graph with independent E/X/S/C states. Research Contract, Claim Matrix, graph audit, and Negative Results exist locally; no Round 3 experiment, statistical support, or scientific claim has passed. R3-310 is dependency-blocked until R3-300 engineering validation and CI complete.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -667,3 +667,17 @@ RM-233 is closed in checkpoint `b5174d8` with evidence in
 `evidence/gates/RM-233/reference-data-versioning.md` and Actions run
 `32659704665`.
 Continue autonomously with RM-230.
+
+## Current Research Resume Capsule
+- Workstream: A - External Validity and Solver Science.
+- Current task: R3-300 scientific research contract and claim control plane.
+- Engineering Gate: E-IN-PROGRESS.
+- Experiment Gate: X-NOT-REQUIRED.
+- Statistical Gate: S-NOT-APPLICABLE.
+- Claim Gate: C-NOT-APPLICABLE.
+- Evidence: `docs/research/r3/ROUND_3_GRAPH_AUDIT.md`,
+  `RESEARCH_CONTRACT.md`, `CLAIM_MATRIX.md`, and `NEGATIVE_RESULTS.md`.
+- CI: latest pre-Round-3 main run `32664304602` is green; R3-300 checkpoint not
+  pushed yet.
+- Next: validate, commit, push, observe CI, then activate R3-310.
+- Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.

@@ -8,6 +8,46 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 GRAPH_PATH = ROOT / "TASK_GRAPH.yaml"
 ALLOWED_PRIORITIES = {"critical", "high", "medium", "low"}
+RESEARCH_CLASSIFICATIONS = {
+    "CORE_RESEARCH",
+    "RESEARCH_INFRASTRUCTURE",
+    "PARALLEL_ENGINEERING",
+    "ROUND_4_PRODUCTION",
+    "DEFERRED",
+    "REMOVE_FROM_ROUND_3_CRITICAL_PATH",
+}
+ENGINEERING_STATUSES = {
+    "E-PENDING",
+    "E-IN-PROGRESS",
+    "E-PASS",
+    "E-FAIL",
+    "E-DEFERRED",
+    "E-NOT-REQUIRED",
+}
+EXPERIMENT_STATUSES = {
+    "X-PENDING",
+    "X-IN-PROGRESS",
+    "X-PASS",
+    "X-FAIL",
+    "X-DEFERRED",
+    "X-NOT-REQUIRED",
+}
+STATISTICAL_STATUSES = {
+    "S-PENDING",
+    "S-IN-PROGRESS",
+    "S-PASS",
+    "S-FAIL",
+    "S-DEFERRED",
+    "S-NOT-APPLICABLE",
+}
+CLAIM_STATUSES = {
+    "C-PENDING",
+    "C-PASS",
+    "C-NO-NOVELTY",
+    "C-NO-CLAIM",
+    "C-DEFERRED",
+    "C-NOT-APPLICABLE",
+}
 
 
 def fail(message: str) -> None:
@@ -65,6 +105,33 @@ def validate(graph: dict) -> list[str]:
             unmet = [dep for dep in dependencies if by_id.get(dep, {}).get("status") != "passed"]
             if unmet:
                 errors.append(f"{task_id}: active state has unmet dependencies {unmet}")
+        if str(task_id).startswith("R3-"):
+            if task.get("classification") not in RESEARCH_CLASSIFICATIONS:
+                errors.append(
+                    f"{task_id}: invalid research classification {task.get('classification')!r}"
+                )
+            if not task.get("workstream"):
+                errors.append(f"{task_id}: research workstream is required")
+            scientific_fields = (
+                ("engineering_status", ENGINEERING_STATUSES),
+                ("experiment_status", EXPERIMENT_STATUSES),
+                ("statistical_status", STATISTICAL_STATUSES),
+                ("claim_status", CLAIM_STATUSES),
+            )
+            for field_name, allowed in scientific_fields:
+                if task.get(field_name) not in allowed:
+                    errors.append(
+                        f"{task_id}: invalid {field_name} {task.get(field_name)!r}"
+                    )
+            if task.get("status") == "passed":
+                if task.get("engineering_status") not in {"E-PASS", "E-NOT-REQUIRED"}:
+                    errors.append(f"{task_id}: passed research task requires a final E gate")
+                if task.get("experiment_status") in {"X-PENDING", "X-IN-PROGRESS"}:
+                    errors.append(f"{task_id}: passed research task cannot have an open X gate")
+                if task.get("statistical_status") in {"S-PENDING", "S-IN-PROGRESS"}:
+                    errors.append(f"{task_id}: passed research task cannot have an open S gate")
+                if task.get("claim_status") == "C-PENDING":
+                    errors.append(f"{task_id}: passed research task cannot have an open C gate")
 
     visiting: set[str] = set()
     visited: set[str] = set()

@@ -1,126 +1,35 @@
 {
-  "schema_version": 1,
-  "graph": "RouteMind Round 3 Research",
-  "state": "PREPARED",
-  "prepared_from": "RM-236 Enhancement Pass closure",
-  "launch_policy": "This graph is prepared only. No deep research, production deployment, live provider call, or large experiment campaign is launched by this file.",
-  "data_boundary": "Large datasets and artifacts stay under ROUTEMIND_DATA_ROOT (F:/Projects/RouteMind-Data); Git stores manifests, schemas, checksums, and small fixtures only.",
-  "architecture_constraints": [
-    "Java/PostgreSQL owns durable business state, transactions, commands, and event production.",
-    "Python owns dispatch, optimization, simulation, analytics, experiments, and research orchestration.",
-    "RabbitMQ Outbox/Inbox and Redis GEO remain infrastructure boundaries; Redis is never durable business truth.",
-    "Analytical or LLM agents may analyze and orchestrate bounded experiments but never own real-time dispatch correctness."
+  "schema_version": 2,
+  "graph": "RouteMind Round 3 Scientific Research",
+  "state": "EXECUTING_CONTROL_PLANE",
+  "authority": "TASK_GRAPH.yaml contains the executable task records; this file is the scientific graph index and reclassification record.",
+  "pass_model": {
+    "engineering": ["E-PENDING", "E-IN-PROGRESS", "E-PASS", "E-FAIL", "E-DEFERRED", "E-NOT-REQUIRED"],
+    "experiment": ["X-PENDING", "X-IN-PROGRESS", "X-PASS", "X-FAIL", "X-DEFERRED", "X-NOT-REQUIRED"],
+    "statistical": ["S-PENDING", "S-IN-PROGRESS", "S-PASS", "S-FAIL", "S-DEFERRED", "S-NOT-APPLICABLE"],
+    "claim": ["C-PENDING", "C-PASS", "C-NO-NOVELTY", "C-NO-CLAIM", "C-DEFERRED", "C-NOT-APPLICABLE"]
+  },
+  "reclassified_prepared_tasks": [
+    {"old_id": "R3-300", "old_title": "Production readiness contract", "classification": "ROUND_4_PRODUCTION", "preserved_as": "Round 4 production readiness lane"},
+    {"old_id": "R3-301", "old_title": "Provider-backed travel quality", "classification": "PARALLEL_ENGINEERING", "preserved_as": "Non-blocking provider validation lane"},
+    {"old_id": "R3-302", "old_title": "Larger VRPTW workloads", "classification": "CORE_RESEARCH", "preserved_as": "R3-311, R3-312, R3-315, R3-316, R3-317"},
+    {"old_id": "R3-303", "old_title": "Statistical RouteBench and RADS", "classification": "CORE_RESEARCH", "preserved_as": "R3-320 through R3-327 and R3-340 through R3-349"},
+    {"old_id": "R3-304", "old_title": "Authenticated multi-tenant identity", "classification": "ROUND_4_PRODUCTION", "preserved_as": "Round 4 identity and tenancy lane"},
+    {"old_id": "R3-305", "old_title": "Preferences, notifications, accessibility productization", "classification": "ROUND_4_PRODUCTION", "preserved_as": "Round 4 product surface lane"},
+    {"old_id": "R3-306", "old_title": "Tracing export, cost attribution, incident drills", "classification": "PARALLEL_ENGINEERING", "preserved_as": "Round 4 operations lane; not a scientific prerequisite"},
+    {"old_id": "R3-307", "old_title": "Scheduled Twin experiments", "classification": "RESEARCH_INFRASTRUCTURE", "preserved_as": "R3-330 through R3-336 with bounded manifests; scheduling remains Round 4"},
+    {"old_id": "R3-308", "old_title": "Analytical-agent evaluation", "classification": "REMOVE_FROM_ROUND_3_CRITICAL_PATH", "preserved_as": "Round 4 agent evaluation lane"},
+    {"old_id": "R3-309", "old_title": "Round 3 closure", "classification": "CORE_RESEARCH", "preserved_as": "R3-365 scientific closure"}
   ],
-  "tasks": [
-    {
-      "id": "R3-300",
-      "title": "Define production readiness and evidence contract",
-      "priority": "critical",
-      "depends_on": ["RM-236"],
-      "status": "prepared",
-      "owner": "platform + Java/Python",
-      "gates": ["secret-isolation", "migration-rehearsal", "backup-restore", "slo-contract", "rollback-rehearsal"],
-      "evidence": ["docs/research/r3/production-readiness-contract.md"],
-      "non_claims": ["No production deployment or credential acquisition is implied."]
-    },
-    {
-      "id": "R3-301",
-      "title": "Measure provider-backed travel quality, freshness, and budgets",
-      "priority": "critical",
-      "depends_on": ["RM-140", "RM-141", "RM-233", "RM-236"],
-      "status": "prepared",
-      "owner": "Python compute + external provider adapter",
-      "gates": ["provider-contract", "quota-budget", "freshness", "fallback", "lineage"],
-      "evidence": ["docs/research/r3/travel-provider-benchmark.md", "manifests/r3/travel-provider.yaml"],
-      "non_claims": ["No external provider is called until credentials, privacy, and budget gates pass."]
-    },
-    {
-      "id": "R3-302",
-      "title": "Benchmark larger VRPTW and dynamic replanning workloads",
-      "priority": "high",
-      "depends_on": ["RM-133", "RM-135", "R3-301"],
-      "status": "prepared",
-      "owner": "Python compute",
-      "gates": ["seeded-reproducibility", "resource-bound", "assignment-integrity", "routebench"],
-      "evidence": ["docs/research/r3/dispatch-scale-benchmark.md", "manifests/r3/dispatch-scale.yaml"],
-      "non_claims": ["No production capacity or nationwide optimization claim is implied."]
-    },
-    {
-      "id": "R3-303",
-      "title": "Extend RouteBench and RADS with statistical confidence and drift review",
-      "priority": "high",
-      "depends_on": ["RM-091", "RM-213", "RM-227", "RM-231", "R3-302"],
-      "status": "prepared",
-      "owner": "Python research",
-      "gates": ["dataset-lineage", "confidence-interval", "ablation", "drift", "review-approval"],
-      "evidence": ["docs/research/r3/statistical-routebench-rads.md", "manifests/r3/research-review.yaml"],
-      "non_claims": ["No novelty, causal, or strategy-promotion claim is made without recorded datasets and review."]
-    },
-    {
-      "id": "R3-304",
-      "title": "Add authenticated multi-tenant identity and operator audit evidence",
-      "priority": "critical",
-      "depends_on": ["RM-086", "RM-088", "RM-236"],
-      "status": "prepared",
-      "owner": "Java + platform",
-      "gates": ["oidc-jwks", "tenant-isolation", "deny-by-default", "audit-retention", "rotation"],
-      "evidence": ["docs/research/r3/identity-tenancy-contract.md"],
-      "non_claims": ["No identity provider integration or production tenant is activated by preparation."]
-    },
-    {
-      "id": "R3-305",
-      "title": "Productize authenticated preferences, notifications, and accessibility coverage",
-      "priority": "medium",
-      "depends_on": ["RM-060", "RM-124", "R3-304"],
-      "status": "prepared",
-      "owner": "Web + Java",
-      "gates": ["session-boundary", "retention-deletion", "mobile-device", "assistive-tech", "localization"],
-      "evidence": ["docs/research/r3/product-surface-contract.md"],
-      "non_claims": ["Role switching in the current shell is not treated as authenticated tenancy."]
-    },
-    {
-      "id": "R3-306",
-      "title": "Add distributed tracing export, cost attribution, and incident drills",
-      "priority": "high",
-      "depends_on": ["RM-214", "RM-230", "RM-235"],
-      "status": "prepared",
-      "owner": "platform + operations",
-      "gates": ["trace-export", "sampling", "cost-lineage", "incident-rehearsal", "failure-recovery"],
-      "evidence": ["docs/research/r3/operations-observability.md"],
-      "non_claims": ["Current local traces and metrics do not imply an exported production telemetry system."]
-    },
-    {
-      "id": "R3-307",
-      "title": "Turn Digital Twin perturbations into approved scheduled experiments",
-      "priority": "high",
-      "depends_on": ["RM-228", "RM-231", "RM-233", "R3-300"],
-      "status": "prepared",
-      "owner": "Python research + operations",
-      "gates": ["approval", "seeded-replay", "artifact-retention", "lineage", "resource-bound"],
-      "evidence": ["docs/research/r3/twin-experiment-contract.md"],
-      "non_claims": ["No scheduled experiment or artifact mutation is launched in Round 3 preparation."]
-    },
-    {
-      "id": "R3-308",
-      "title": "Define analytical-agent evaluation and guardrail harness",
-      "priority": "high",
-      "depends_on": ["RM-232", "R3-303", "R3-306", "R3-307"],
-      "status": "prepared",
-      "owner": "Python agent boundary + security",
-      "gates": ["tool-permission", "groundedness", "budget", "prompt-injection", "dispatch-isolation"],
-      "evidence": ["docs/research/r3/agent-evaluation-contract.md"],
-      "non_claims": ["Agents remain advisory and cannot become the hard real-time dispatch authority."]
-    },
-    {
-      "id": "R3-309",
-      "title": "Review Round 3 evidence and close the research cycle",
-      "priority": "critical",
-      "depends_on": ["R3-300", "R3-303", "R3-304", "R3-305", "R3-306", "R3-308"],
-      "status": "prepared",
-      "owner": "architecture + evidence review",
-      "gates": ["evidence-audit", "architecture-review", "reproducibility", "deferred-work-review"],
-      "evidence": ["docs/research/r3/ROUND_3_CLOSURE_REPORT.md"],
-      "non_claims": ["Closure may retain deferred_external outcomes; green local checks do not prove production readiness."]
-    }
-  ]
+  "workstreams": [
+    {"id": "A", "title": "External Validity and Solver Science", "tasks": ["R3-300", "R3-310", "R3-311", "R3-312", "R3-313", "R3-314", "R3-315", "R3-316", "R3-317"]},
+    {"id": "B", "title": "Statistical RouteBench", "tasks": ["R3-320", "R3-321", "R3-322", "R3-323", "R3-324", "R3-325", "R3-327"]},
+    {"id": "C", "title": "Digital Twin Science", "tasks": ["R3-330", "R3-331", "R3-332", "R3-333", "R3-334", "R3-335", "R3-336"]},
+    {"id": "D", "title": "RADS Research", "tasks": ["R3-340", "R3-341", "R3-342", "R3-343", "R3-344", "R3-345", "R3-346", "R3-347", "R3-348", "R3-349"]},
+    {"id": "E", "title": "Advanced Evaluation and Scientific Closure", "tasks": ["R3-350", "R3-351", "R3-352", "R3-353", "R3-354", "R3-355", "R3-356", "R3-357", "R3-358", "R3-359", "R3-360", "R3-365"]}
+  ],
+  "critical_spine": ["R3-300", "R3-310", "R3-314", "R3-317", "R3-311", "R3-315", "R3-316", "R3-320", "R3-321", "R3-322", "R3-323", "R3-324", "R3-325", "R3-327", "R3-330", "R3-333", "R3-331", "R3-332", "R3-336", "R3-340", "R3-341", "R3-342", "R3-348", "R3-349", "R3-356", "R3-357", "R3-358", "R3-359", "R3-365"],
+  "non_blocking": ["R3-313", "R3-355", "provider-backed travel validation", "production readiness", "production identity and tenancy", "preferences and notifications", "broad agent productization"],
+  "resource_policy": "Only bounded local pilots are autonomous. Expensive campaigns require a recorded estimate and authorization. Large datasets and results remain under ROUTEMIND_DATA_ROOT.",
+  "closure_rule": "Engineering CI is necessary but cannot set X, S, or C status. Round 3 closes only after external benchmark, statistical RouteBench, held-out Twin validation or honest insufficient-data outcome, substantive RADS E/X evidence, independent reproduction, prior-art audit, negative-result review, and final claim review."
 }

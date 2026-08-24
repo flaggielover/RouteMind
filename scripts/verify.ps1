@@ -27,6 +27,11 @@ try {
         throw "Task graph validation failed"
     }
 
+    python scripts/validate_control_plane_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Task graph validator self-tests failed"
+    }
+
     python scripts/security_gate.py
     if ($LASTEXITCODE -ne 0) {
         throw "Security and supply-chain hygiene gate failed"
