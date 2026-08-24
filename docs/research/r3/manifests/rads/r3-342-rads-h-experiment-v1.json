@@ -1,0 +1,59 @@
+{
+  "plan_digest": "725bce8111db8652c6b52ef1c71e63429594aa4a329e0372e524471ea41ac967",
+  "schema_version": "routemind-rads-h-experiment-v1",
+  "task_id": "R3-342",
+  "experiment_id": "r3-342-rads-h-v1",
+  "baseline_reference": "RADS-BASELINE-v1",
+  "hysteresis_reference": "RADS-H-v1",
+  "frozen_at_utc": "2026-08-25T18:00:00Z",
+  "question": "Does formal RADS-H reduce harmful switching while preserving service and route-cost bounds?",
+  "comparison_arms": [
+    "no_hysteresis",
+    "fixed",
+    "rads_baseline",
+    "cooldown",
+    "rads_h"
+  ],
+  "required_metrics": [
+    "switching_rate",
+    "dwell_ticks",
+    "service_metric",
+    "route_cost",
+    "dispatch_latency",
+    "instability",
+    "recovery"
+  ],
+  "thresholds": {
+    "switch_reduction_target": 0.25,
+    "service_noninferiority_margin": -0.02,
+    "route_cost_relative_bound": 0.03,
+    "holm_family_size": 16
+  },
+  "support_requirements": {
+    "required_fields": [
+      "tick_level_strategy_sequence",
+      "switch_events",
+      "dwell_observations",
+      "service_outcomes",
+      "latency_observations",
+      "recovery_windows"
+    ],
+    "source_status": "INSUFFICIENT_DATA",
+    "reason": "R3-325 pair artifacts retain arm summaries but no tick-level switching observations",
+    "synthetic_replay": false
+  },
+  "artifact_lineage": {
+    "baseline_plan": "a907a0a722e8782aa76277637fa92205cc10046e5aca85b2de81e555623016c3",
+    "hysteresis_plan": "4b846bc8b971df269c1c6439b325ab61b7803a83812ced39b352f519acb929c5",
+    "pilot_plan": "8880268766523069ad3db523a5babf2170eed47a34489d2850c89a46c76929be",
+    "pilot_ledger": "d8c00899785cc9c9cfd7bd7eac1a25513d8131a1c992b60e106ba12709bc5d76",
+    "pilot_analysis": "5c1c0963b3cb9d8809dd7d02355ef6f401ddd8c69b55dc1d6dc74c17a898a10c"
+  },
+  "execution_policy": {
+    "material_run_authorized": false,
+    "r3_325_rerun": false,
+    "write_external_artifacts": false,
+    "resource_envelope": "read-only support audit; zero external writes"
+  },
+  "claim_boundary": "RADS_H_EXPERIMENT_DOES_NOT_ESTABLISH_SWITCHING_OR_SERVICE_EFFECT"
+}
