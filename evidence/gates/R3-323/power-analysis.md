@@ -70,7 +70,9 @@ The standard one-sided reference `effect=0.5, alpha=0.05` yields power
 - `routebench-power` is registered `DETERMINISM_CRITICAL`; plan payloads are
   content-addressed.
 
-Current disposition: `E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
-C-NOT-APPLICABLE`. Local gates pass; remote GitHub Actions validation is pending.
-No observed pilot, confirmatory campaign, statistical effect, or strategy claim
-was produced.
+Implementation revision `b18d171` passed all five GitHub Actions jobs in run
+`32718029279`, including frozen Python/contracts and browser smoke.
+
+Final disposition: `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
+C-NOT-APPLICABLE`. No observed pilot, confirmatory campaign, statistical effect,
+or strategy claim was produced.

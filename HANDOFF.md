@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream B
 
-Current Task: R3-323 - Implement prospective power analysis
+Current Task: R3-324 - Implement multiple-comparison control
 
-Task Status: R3-323 implementation is locally green and remains E-IN-PROGRESS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE pending commit/push and real GitHub Actions. Synthetic validation is not observed pilot variance.
+Task Status: R3-323 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after implementation revision b18d171 passed all five jobs in Actions run 32718029279. R3-324 is active and must implement the frozen Holm family with stable raw/corrected hypothesis identity.
 
 R3-323 resume capsule: exact SciPy 1.18.0 one-sided noncentral paired-t planning
 records the content-addressed variance source, frozen MDE/noninferiority distance,
@@ -22,8 +22,11 @@ observed R3-325 pilot must contain exactly eight pairs. Forty-one directed tests
 at 100% module coverage; integration is 120/120; the full local gate passes Java
 80/80, Python 635/635 at 95.83%, and Web 92/92 plus build. Ruff, strict mypy,
 contracts, lock/security, determinism, analytics, semantic metrics, and controls
-pass. Next: commit and push R3-323, watch all GitHub jobs, repair any failures,
-then close R3-323 and activate R3-324. No pilot or confirmatory campaign ran.
+pass. Implementation revision `b18d171` passed all five jobs in Actions run
+`32718029279`; R3-323 is closed. R3-324 is active. Next: implement the exact
+16-test Holm step-down family with stable identities, ties, monotonic adjusted
+p-values, reject decisions, and fail-closed family validation; then run local and
+remote gates. No pilot or confirmatory campaign ran.
 
 R3-322 resume capsule: validated CRN plans feed candidate-minus-comparator paired
 mean, median, sample SD, standard error, two-sided 95% Student-t interval,

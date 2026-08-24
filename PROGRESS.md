@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 124 / 158 tasks passed
+Repository Total: 125 / 158 tasks passed
 
-Current Task: R3-323 - Implement prospective power analysis
+Current Task: R3-324 - Implement multiple-comparison control
 
-Last Completed: R3-322 - Implement paired estimation and uncertainty
+Last Completed: R3-323 - Implement prospective power analysis
 
-Current Gate: R3-323 is locally validated and remains E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE pending real GitHub Actions. Synthetic fixtures remain explicitly distinct from observed pilot variance.
+Current Gate: R3-324 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. It must implement the frozen Holm family without losing raw/corrected hypothesis identity.
 
-CI: PASS for the R3-322 implementation checkpoint 349a27e in run 32715625853 and R3-321 closure checkpoint d848593 in run 32714698835 across all five jobs.
+CI: PASS for the R3-323 implementation checkpoint b18d171 in run 32718029279 and R3-322 implementation checkpoint 349a27e in run 32715625853 across all five jobs.
 
-Regression: PASS locally for R3-323 - Java 80/80, Python 635/635 at 95.83% coverage, the power module at 100% with 41 directed tests, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls. Remote validation is pending.
+Regression: PASS locally and remotely for R3-323 - Java 80/80, Python 635/635 at 95.83% coverage, the power module at 100% with 41 directed tests, Web 92/92 plus production build/browser smoke, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
 
-Round 3 Scientific Tasks: 11 / 45 passed; R3-323 in progress; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 12 / 45 passed; R3-324 in progress; R3-355 deferred and non-blocking.
 
-Research Gate: R3-323 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-324 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit, push, and remotely validate R3-323 prospective power analysis, then activate R3-324 multiplicity control. R3-350 remains independently eligible.
+Next Candidates: Implement and remotely validate R3-324 multiplicity control, then implement R3-325 behind a remote-green checkpoint before any pilot or confirmatory execution. R3-350 remains independently eligible.
 
 ### R3-323 prospective power implementation - 2026-08-24
 - Exact `scipy==1.18.0` one-sided noncentral paired-t planning consumes a
@@ -49,7 +49,9 @@ Next Candidates: Commit, push, and remotely validate R3-323 prospective power an
   `routebench-power` is registered `DETERMINISM_CRITICAL`.
 - The full local gate passes Java 80/80, Python 635/635 at 95.83%, Web 92/92 plus
   build, contracts, lock/security checks, determinism, analytics, semantic
-  metrics, and controls. Remote CI remains pending; no observed pilot or
+  metrics, and controls. Implementation revision `b18d171` passed all five jobs
+  in Actions run `32718029279`. R3-323 closes E-PASS/X-NOT-REQUIRED/
+  S-NOT-APPLICABLE/C-NOT-APPLICABLE, and R3-324 is active. No observed pilot or
   confirmatory campaign ran.
 
 ### R3-322 paired estimation implementation - 2026-08-24
