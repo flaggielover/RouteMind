@@ -1,28 +1,27 @@
 # RouteMind Round 3 Scientific Closure Report
 
 Date: 2026-08-25 (Asia/Shanghai)
-Status: closure candidate; R3-365 remote validation pending
+Status: CLOSED - 43 passed, 2 explicitly deferred/reclassified
 Control-plane inception: `59eb53b` (`research: establish round 3 scientific control plane`)
-Latest accepted upstream closure: `98687b1` (Actions run `32789978016`, all five jobs)
+Closure implementation: `9e9537e6775fa908b910ebb060fd66662ba3a05c` (Actions run `32790948926`, all five jobs)
 
 ## Closure decision
 
-Round 3 is scientifically complete when the R3-365 implementation and closure
-checkpoints pass real GitHub Actions. This report does not turn engineering
-success into experimental, statistical, novelty, or production support.
+Round 3 is scientifically closed. The R3-365 implementation passed real GitHub
+Actions. This report does not turn engineering success into experimental,
+statistical, novelty, or production support.
 
-The closure candidate contains 45 Round 3 task records:
+The closed graph contains 45 Round 3 task records:
 
-- 42 upstream tasks are passed;
-- R3-365 is locally complete and awaiting its implementation CI;
+- 43 tasks, including R3-365, are passed;
 - R3-313 was optional and non-blocking, performed no Li and Lim compatibility
   assessment, and is preserved as prepared Round 4 task R4-437; and
 - R3-355 remains deferred because R3-354 established
   `OPE_NOT_IDENTIFIABLE_FROM_CURRENT_LOGS`; no propensity was fabricated and no
   IPS or doubly robust estimator ran.
 
-After R3-365 remote-green closure, the terminal inventory is 43 passed and two
-explicitly deferred/reclassified tasks. No required task is left pending.
+The terminal inventory is 43 passed and two explicitly deferred/reclassified
+tasks. No required task is left pending.
 
 ## Gate inventory
 
@@ -246,10 +245,16 @@ six workstreams. Its executable gate verifies:
 Round 4 preparation proves no production, provider, agent, scientific, or thesis
 claim and starts no R4 task.
 
-## Remaining closure gate
+## Closure evidence
 
-R3-365 can close only after its report, Round 4 graph, graph validator, directed
-tests, and synchronized control documents pass local gates and all five real
-GitHub Actions jobs. The final closure checkpoint must then record Round 3 as
-closed, R3-313/R3-355 as explicit deferred/reclassified dispositions, Round 4 as
-prepared, a clean tracked worktree, and `main == origin/main`.
+R3-365 implementation `9e9537e6775fa908b910ebb060fd66662ba3a05c`
+passed all five jobs in GitHub Actions run `32790948926`: Control plane and
+Compose, Java, Python, bounded degradation/resilience, and Web
+static/unit/browser. The control job executed the Round 4 graph gate and all
+seven mutation tests in a clean checkout.
+
+The final synchronization checkpoint records Round 3 as closed, R3-313/R3-355
+as explicit deferred/reclassified dispositions, and Round 4 as
+`PREPARED_NOT_STARTED`. It still requires its own green Actions run before the
+repository-level handoff may claim final CI green, clean tracked worktree, and
+`main == origin/main`.

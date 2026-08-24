@@ -4,15 +4,15 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Round 3 Scientific Research - Workstream E
+Current Phase: Round 3 Scientific Research - CLOSED; Round 4 PREPARED_NOT_STARTED
 
-Current Task: R3-365 - Close Round 3 science and prepare Round 4 graph
+Current Task: NONE - Round 3 closed; Round 4 prepared but not started
 
-Task Status: R3-365 closure report, prepared Round 4 graph, graph validator, and mutation tests are locally complete. R3-365 is validating `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM`; remote CI is pending.
+Task Status: R3-365 is closed `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM`; implementation `9e9537e` passed all five jobs in Actions run `32790948926`. Final synchronization CI is pending.
 
-Next: run final local gates, commit/push the R3-365 implementation, observe all five real Actions jobs, then perform the final closure transition and synchronization.
+Next: push and observe the final synchronization checkpoint. After green, stop with Round 4 `PREPARED_NOT_STARTED`; do not promote or execute R4 tasks under this request.
 
-R3-365 closure candidate is `docs/research/r3/ROUND_3_SCIENTIFIC_CLOSURE_REPORT.md`, byte SHA-256 `52e2ba79a7fcbbf45ff819e1b438ff76bc7e90cc8cd9c188e806d5b8480d4025`. The prepared `docs/research/ROUND_4_TASK_GRAPH.yaml`, byte SHA-256 `d2d55a2982821b2bc7d744a727900eecaaae5479212a53149f4361e7d1c8f145`, has 38 pending tasks across six workstreams, 15 external gates, 12 human approvals, three conditional tasks, and 11 preserved Round 3 reclassification lanes. `scripts/round4_graph_gate.py` plus seven mutation tests keep it `PREPARED_NOT_STARTED`, reject R4 activation or claim promotion, and bind R3-325 plus the zero-`C-PASS` Claim Matrix. R3-313 maps to optional R4-437; R3-355 maps to R4-438/R4-439 and conditional R4-440. No R4 task, external call, production action, experiment, or R3-325 rerun occurred.
+R3-365 closure report is `docs/research/r3/ROUND_3_SCIENTIFIC_CLOSURE_REPORT.md`, byte SHA-256 `2c6e6438dd0a732944235e646daf1d879c4c5cb401ebdd2b97b7883c25bfd885`. The prepared `docs/research/ROUND_4_TASK_GRAPH.yaml`, byte SHA-256 `d2d55a2982821b2bc7d744a727900eecaaae5479212a53149f4361e7d1c8f145`, has 38 pending tasks across six workstreams, 15 external gates, 12 human approvals, three conditional tasks, and 11 preserved Round 3 reclassification lanes. `scripts/round4_graph_gate.py` plus seven mutation tests keep it `PREPARED_NOT_STARTED`, reject R4 activation or claim promotion, and bind R3-325 plus the zero-`C-PASS` Claim Matrix. R3-313 maps to optional R4-437; R3-355 maps to R4-438/R4-439 and conditional R4-440. No R4 task, external call, production action, experiment, or R3-325 rerun occurred.
 
 R3-360 evidence is `evidence/gates/R3-360/final-figures.md`. Final plan digest is `10e12aa0f586ad94e963396feb0a045fc1b21fe4ff0cd7537d0d769f145bb30d`; bundle digest is `2b230697ea367ace51afcd52c7544efd6cd024abca0104f10a35b50ebce34684`. Actions run `32789597203` passed all five jobs. The final 16/12/7 rows retain six non-estimable cells, unexecuted confirmatory inference, zero Twin observations, unsupported RADS location noise, zero exclusions, and zero `C-PASS`. R3-325 was not rerun.
 
