@@ -61,3 +61,10 @@ and final claim disposition without rewriting earlier entries.
   explicit outcome is `INSUFFICIENT_DATA`. Synthetic Twin replay is not used as
   held-out evidence; no fidelity, calibration, or external-validity claim is
   permitted.
+- `NR-R3-011`: R3-331 loaded the content-addressed R3-330 split contract and
+  R3-333 fidelity protocol, then executed the frozen bounded calibration gate.
+  The calibration split and held-out split both contain zero authorized
+  observed records, so all four targets returned `INSUFFICIENT_DATA`. No
+  optimization, parameter-before/after artifact, checksum, held-out read, or
+  synthetic replay occurred. This is `E-PASS / X-PASS / S-NOT-APPLICABLE /
+  C-NO-CLAIM`; it is valid data-boundary evidence, not a Twin-fidelity result.
