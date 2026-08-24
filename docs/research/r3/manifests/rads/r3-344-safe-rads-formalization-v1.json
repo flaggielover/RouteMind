@@ -1,0 +1,62 @@
+{
+  "plan_digest": "82fed4dc95bec7ccbfa10ead770d63e2de6f47bb081d0b5d05672382462f6644",
+  "schema_version": "routemind-safe-rads-formalization-v1",
+  "task_id": "R3-344",
+  "mechanism_id": "Safe-RADS-v1",
+  "baseline_reference": "RADS-BASELINE-v1",
+  "frozen_at_utc": "2026-08-25T19:00:00Z",
+  "question": "Can an explicitly constrained Safe-RADS variant satisfy a preregistered risk and service constraint with a measured bounded efficiency cost?",
+  "semantics": {
+    "hard": "deterministic bound; a violating candidate is infeasible and cannot be committed",
+    "chance": "probability of violation is at most epsilon under a declared uncertainty model",
+    "risk": "expected, quantile, or tail-risk functional used as a measured constraint quantity",
+    "penalty": "objective weight that trades cost against risk and cannot establish safety"
+  },
+  "primary_constraint": {
+    "metric": "late_service_probability",
+    "operator": "less_than_or_equal",
+    "bound": 0.05,
+    "epsilon": 0.05,
+    "direction": "lower_is_safer",
+    "unit": "probability"
+  },
+  "uncertainty": {
+    "model": "one_sided_wilson_upper_bound",
+    "confidence_level": 0.95,
+    "minimum_observations": 100,
+    "calibration_required": true
+  },
+  "efficiency_cost": {
+    "metric": "route_cost",
+    "relative_bound": 0.03,
+    "accounting_rule": "report_cost_of_feasibility_separately_from_safety"
+  },
+  "fallback": {
+    "on_hard_violation": "reject_or_verified_safe_fallback",
+    "on_uncertainty_failure": "reject_candidate_and_emit_no_claim",
+    "penalty_only_allowed": false
+  },
+  "validation_authority": {
+    "proposal_owner": "Python compute proposal boundary",
+    "durable_enforcer": "Java durable assignment boundary",
+    "claim_boundary": "Java verifies hard constraints before commit; Python never owns durable correctness"
+  },
+  "execution_policy": {
+    "material_run_authorized": false,
+    "write_external_artifacts": false,
+    "penalty_only_claims": false,
+    "resource_envelope": "read-only semantic formalization; zero external writes"
+  },
+  "limitations": [
+    "Formal constraint semantics do not establish observed safety or service performance.",
+    "A chance constraint requires calibrated uncertainty and observed outcomes before any claim.",
+    "Penalty-only variants remain objective tradeoffs and cannot use safety wording.",
+    "Efficiency cost is reported separately and cannot offset a violated hard constraint.",
+    "Any parameter or metric change requires a new mechanism version and digest."
+  ],
+  "source_lineage": {
+    "baseline_plan": "a907a0a722e8782aa76277637fa92205cc10046e5aca85b2de81e555623016c3",
+    "rads_source": "d72caf93a53c9bc10ebdc4e0ebeecad13381c7cae4bb09531715bf385d29f22a"
+  },
+  "claim_boundary": "SAFE_RADS_FORMALIZATION_DOES_NOT_ESTABLISH_SAFETY_OR_EFFECT"
+}
