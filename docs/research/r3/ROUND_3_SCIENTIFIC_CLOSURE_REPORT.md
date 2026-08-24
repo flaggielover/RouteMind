@@ -253,8 +253,11 @@ Compose, Java, Python, bounded degradation/resilience, and Web
 static/unit/browser. The control job executed the Round 4 graph gate and all
 seven mutation tests in a clean checkout.
 
-The final synchronization checkpoint records Round 3 as closed, R3-313/R3-355
-as explicit deferred/reclassified dispositions, and Round 4 as
-`PREPARED_NOT_STARTED`. It still requires its own green Actions run before the
-repository-level handoff may claim final CI green, clean tracked worktree, and
-`main == origin/main`.
+Closure checkpoint `5dc668496225e333d1996b66c925bdd309985ac6` then recorded
+Round 3 as closed, R3-313/R3-355 as explicit deferred/reclassified
+dispositions, and Round 4 as `PREPARED_NOT_STARTED`. All five jobs passed again
+in Actions run `32791413681`.
+
+The final evidence-synchronization checkpoint records this accepted closure run.
+It still requires its own green Actions run before the repository-level handoff
+may claim final CI green, clean tracked worktree, and `main == origin/main`.
