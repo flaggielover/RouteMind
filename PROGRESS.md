@@ -1,6 +1,6 @@
 # RouteMind Progress
 
-Current Phase: Round 3 Scientific Research - Workstream D
+Current Phase: Round 3 Scientific Research - Workstream E
 
 Round 2 Progress: 48 / 48 tasks passed
 
@@ -8,27 +8,41 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 151 / 158 tasks passed
+Repository Total: 152 / 158 tasks passed
 
-Current Task: R3-347 - Run counterfactual Decision X-Ray experiments
+Current Task: R3-357 - Perform adversarial prior-art audit
 
-Last Completed: R3-346 - Learn interpretable policy boundaries
+Last Completed: R3-347 - Run counterfactual Decision X-Ray experiments
 
-Current Gate: R3-347 frozen counterfactual replay protocol and fail-closed support auditor pass the full local gate. Remote implementation CI is pending before the formal read-only source audit; no executable replay or causal claim is authorized without complete state, policy, perturbation, delta, lineage, and minimality support.
+Current Gate: R3-347 closed `INSUFFICIENT_DATA/C-NO-CLAIM` after implementation `09d4194` passed all five jobs in Actions run `32785397588`. R3-357 is active and must adversarially classify each candidate novelty category from current primary or peer-reviewed sources without turning a plausible gap into a novelty claim.
 
 CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168, R3-342 implementation SHA d82138b394e7ab0832acb85a6575931054eff48c in run 32758618433, R3-343 implementation SHA 44df8e2c1215230ca5a7ee24f13f87d708050bcc in run 32776065978, R3-344 implementation SHA 65c992fce1b73495c01b650996c167fe9c7ec86e in run 32759977254, R3-345 implementation SHA bdb6967 in run 32761030125, R3-348 implementation SHA 771e8a81c819c2006473fa6a0a55fef5bcfc7fe6 in run 32774570495, R3-349 implementation SHA 94f1a3e3000fa645a775f3ffca3de3157bf3df97 in run 32777694427, R3-356 recovery SHA 76468caf2f5f50806b86b3b5da5a444b3605856a in run 32781478836, R3-358 implementation SHA 200c4d41bf93a0199b389770c3edb2dbb469a792 in run 32782886790, and R3-346 implementation SHA 43e3549cf2db17b3554637b9406c2395d60eefb9 in run 32784278395; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally for R3-347 - eight directed tests with 100% module statement/branch coverage, Java 81/81, Python 920/920 at 95.11%, Web 92/92 plus build, and all static, contract, research, determinism, and bounded-resilience controls. R3-346 closure passed all five jobs in Actions run `32784679499`. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally and remotely for R3-347 - eight directed tests with 100% module statement/branch coverage, Java 81/81, Python 920/920 at 95.11%, Web 92/92 plus build, and all static, contract, research, determinism, and bounded-resilience controls. R3-346 closure passed all five jobs in Actions run `32784679499`. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 38 / 45 passed; R3-347 active; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 39 / 45 passed; R3-357 active; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-347 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and push the R3-347 frozen replay protocol and support auditor, observe all five real CI jobs, then run the formal read-only source audit. Require original/new decision linkage, perturbation provenance, same-metric objective/risk deltas, and minimality verification; make no causal claim. R3-313 remains optional and non-blocking.
+Next Candidates: Perform R3-357 adversarial web research with current original or peer-reviewed sources for every candidate novelty category, classify each as SUBSUMED, CLOSE_PRIOR, PARTIAL_GAP, PLAUSIBLE_GAP, or UNRESOLVED, and preserve the rule that PLAUSIBLE_GAP is not novelty. R3-313 remains optional and non-blocking.
+
+### R3-347 counterfactual Decision X-Ray closure - 2026-08-25
+- Implementation `09d4194` passed all five jobs in Actions run `32785397588`
+  before the formal read-only source audit.
+- Formal status is `INSUFFICIENT_DATA`; audit digest is
+  `9c4be0fd4c7d2f7b54e1ccc92fd34ef84e7bb37e6f4a2e1ccc488673996107d8`.
+  Two source summaries and zero replays provide only
+  `original_decision_summary`; eight executable replay fields are absent.
+- All six dimensions are `NOT_PERTURBED_NO_EXECUTABLE_REPLAY`; objective/risk
+  deltas are not computed, minimality is not verified, and replay lineage is
+  unavailable. Generic What-if was not substituted for missing corpus evidence.
+- Evidence: `evidence/gates/R3-347/counterfactual-xray.md`. R3-347 closes
+  `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`; no replay, causal claim,
+  external write, or R3-325 rerun occurred. R3-357 is active.
 
 ### R3-347 counterfactual Decision X-Ray implementation - 2026-08-25
 - Frozen plan digest:
