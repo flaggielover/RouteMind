@@ -94,6 +94,47 @@ manifest gate.
   production build, 6 schemas / 18 contract fixtures, determinism, analytics,
   and semantic-metric gates.
 
-No material R3-316 analysis has run. The implementation checkpoint is ready for
-commit and remote CI; real-input execution remains prohibited until that run is
-green.
+Implementation revision `9f68e9902a9b81e3830c189ba16b847badebae65`
+passed all five GitHub Actions jobs in run `32710816931`. Only then was the
+frozen material analysis executed.
+
+## Material result and independent audit
+
+- Campaign: `r3-316-20260824T092121Z-9f68e9902a9b`.
+- External artifact:
+  `experiments/r3/R3-316/r3-316-20260824T092121Z-9f68e9902a9b/gap-analysis.json`
+  under `ROUTEMIND_DATA_ROOT`, 29,943 bytes, SHA-256
+  `6e5571fcba1fd7069e4eb6604fff3f70533495fe1970fb2b5c0df257514eefb1`.
+- The sidecar, three frozen input digests, and all six R3-315 external artifact
+  digests/sidecars matched. The independent audit found 42 unique ledger records,
+  split 36 source-double/BKS and six derived exact, with zero exclusions,
+  duplicates, or errors.
+- Source outcomes were `TIMEOUT_WITH_FEASIBLE=32`, `TIMEOUT_NO_FEASIBLE=3`,
+  and `FEASIBLE_INCUMBENT=1`. Thus 35/36 timed out and 33/36 yielded accepted,
+  independently verified complete incumbents. No source result was optimal,
+  infeasible-proven, resource-limited, or failed.
+- Reference classifications were four same-vehicle, 23 vehicle-worse, six
+  reference-quality-review, and three not-applicable. All remained in the
+  denominator and ledger even when a numeric gap was prohibited.
+- Approved vehicle gaps: `n=27`, min `0%`, median `31.666666666666668%`, Type-7
+  p90 `349.4545454545455%`, max `484.2105263157895%`. Conditional same-vehicle
+  distance gaps: `n=4`, min `0%`, median `2.674529092839976%`, p90
+  `8.818457913719254%`, max `10.305343511450381%`.
+- The six derived conservative integer cases were independently proven optimal
+  and verified; their separate transformed exact-gap distribution was `n=6`
+  with min/median/p90/max all `0%`.
+- An independent PowerShell recomputation matched ledger identities, source
+  vehicle-gap formulas, complete outcome/reference counts, and all three Type-7
+  distributions. Compact committed result:
+  `docs/research/r3/results/gap-analysis/bks-gap-analysis-results-v1.json`.
+
+## Gate disposition
+
+- Engineering: `E-PASS`.
+- Experiment: `X-PASS`.
+- Statistical: `S-PASS` for the frozen deterministic descriptive analysis only.
+- Claim: `C-NO-CLAIM`.
+
+R3-316 supports only the frozen descriptive wording. It does not establish
+source-instance optimality, RouteMind superiority, one pooled scalar gap, or
+population behavior. R3-320 is activated.

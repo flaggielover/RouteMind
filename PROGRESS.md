@@ -1,6 +1,6 @@
 # RouteMind Progress
 
-Current Phase: Round 3 Scientific Research - Workstream A
+Current Phase: Round 3 Scientific Research - Workstream B
 
 Round 2 Progress: 48 / 48 tasks passed
 
@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 120 / 158 tasks passed
+Repository Total: 121 / 158 tasks passed
 
-Current Task: R3-316 - Analyze best-known-solution and optimality gaps
+Current Task: R3-320 - Pre-register the Statistical RouteBench protocol
 
-Last Completed: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
+Last Completed: R3-316 - Analyze best-known-solution and optimality gaps
 
-Current Gate: R3-316 is E/X/S-IN-PROGRESS and C-DEFERRED. Its all-outcome analyzer is locally green; real-input execution waits for remote-green implementation CI.
+Current Gate: R3-320 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. R3-316 is locally closed and its closure checkpoint awaits remote CI.
 
-CI: PASS for the R3-316 frozen manifest through descendant d86c41e in run 32708578105 across all five jobs; direct run 32708520338 was concurrency-cancelled and is not accepted as green evidence. R3-312 closure checkpoint 4f678fd in run 32707794770, implementation checkpoint eac087e in run 32706450863, and preregistration checkpoint ac33c10 in run 32703904849 also passed all five jobs. The R3-316 implementation is locally green and awaits its remote run. Earlier R3-315/R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for the R3-316 implementation checkpoint 9f68e99 in run 32710816931 across all five jobs. The frozen manifest was accepted through descendant d86c41e in run 32708578105; direct run 32708520338 was concurrency-cancelled and is not accepted as green evidence. The R3-316 closure checkpoint is pending. Earlier R3-312/R3-315/R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally for the R3-316 implementation - Java 80/80, Python 493/493 at 95.70% coverage, the new module at 99%, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls. Remote implementation validation is pending.
+Regression: PASS locally and remotely for the R3-316 implementation - Java 80/80, Python 493/493 at 95.70% coverage, the new module at 99%, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
 
-Round 3 Scientific Tasks: 7 / 45 passed; R3-316 in progress; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 8 / 45 passed; R3-320 in progress; R3-355 deferred and non-blocking.
 
-Research Gate: R3-316 E-IN-PROGRESS / X-IN-PROGRESS / S-IN-PROGRESS / C-DEFERRED
+Research Gate: R3-320 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and remotely validate the R3-316 analyzer, then execute and audit the frozen real-input analysis only after that run is green. R3-350 remains independently eligible.
+Next Candidates: Commit and remotely validate the R3-316 closure, then freeze the R3-320 Statistical RouteBench protocol before any R3-B campaign data. R3-350 remains independently eligible.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and
@@ -968,3 +968,27 @@ The task is now passed and RM-120 is the active implementation.
   Web 92/92 plus build, contracts, determinism, analytics, and controls.
 - Material R3-316 execution remains prohibited until the implementation commit
   passes all remote CI jobs.
+
+### R3-316 gap-analysis closure - 2026-08-24
+- Implementation revision `9f68e9902a9b81e3830c189ba16b847badebae65`
+  passed all five GitHub Actions jobs in run `32710816931` before material
+  execution began.
+- Campaign `r3-316-20260824T092121Z-9f68e9902a9b` accounted for all 42 frozen
+  records: 36 source-double/BKS and six derived conservative integer optima,
+  with zero exclusions, duplicate identities, or audit errors.
+- Source outcomes were 32 timeout-with-feasible, three timeout-no-feasible, and
+  one feasible incumbent: timeout rate 35/36 and verified-complete rate 33/36.
+  No source run was classified optimal, infeasible-proven, resource-limited, or
+  failed.
+- Approved vehicle gaps had `n=27`, min `0%`, median `31.6667%`, Type-7 p90
+  `349.4545%`, and max `484.2105%`. Same-vehicle distance gaps had `n=4`, min
+  `0%`, median `2.6745%`, p90 `8.8185%`, and max `10.3053%`; all six scoped
+  transformed exact gaps were `0%`.
+- Independent PowerShell audit matched the result sidecar SHA-256
+  `6e5571fcba1fd7069e4eb6604fff3f70533495fe1970fb2b5c0df257514eefb1`,
+  all three frozen inputs, all six exact artifacts, ledger identities, formulas,
+  and Type-7 summaries. Compact committed result is
+  `docs/research/r3/results/gap-analysis/bks-gap-analysis-results-v1.json`.
+- R3-316 closes `E-PASS / X-PASS / S-PASS / C-NO-CLAIM`. These deterministic
+  descriptive results do not establish source-instance optimality, RouteMind
+  superiority, or population behavior. R3-320 is active.

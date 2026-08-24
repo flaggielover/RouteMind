@@ -4,11 +4,11 @@ Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
 
 Current Branch: main
 
-Current Phase: Round 3 Scientific Research - Workstream A
+Current Phase: Round 3 Scientific Research - Workstream B
 
-Current Task: R3-316 - Analyze best-known-solution and optimality gaps
+Current Task: R3-320 - Pre-register the Statistical RouteBench protocol
 
-Task Status: R3-312 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM after all 30 frozen Homberger instances were retained, 29 yielded verified complete incumbents, and the external artifact audit passed. R3-316 is active and must analyze all R3-311/R3-312/R3-315 outcomes without removing failures or unfavorable results.
+Task Status: R3-316 closed E-PASS/X-PASS/S-PASS/C-NO-CLAIM after all 42 frozen upstream records were accounted for with zero exclusions or audit errors. R3-320 is active and must freeze the Statistical RouteBench protocol before any R3-B campaign data.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -669,12 +669,12 @@ RM-233 is closed in checkpoint `b5174d8` with evidence in
 Continue autonomously with RM-230.
 
 ## Current Research Resume Capsule
-- Workstream: A - External Validity and Solver Science.
-- Current task: R3-316 best-known-solution and optimality-gap analysis.
+- Workstream: B - Statistical RouteBench.
+- Current task: R3-320 Statistical RouteBench protocol preregistration.
 - Engineering Gate: E-IN-PROGRESS.
-- Experiment Gate: X-IN-PROGRESS.
-- Statistical Gate: S-IN-PROGRESS.
-- Claim Gate: C-DEFERRED.
+- Experiment Gate: X-NOT-REQUIRED.
+- Statistical Gate: S-NOT-APPLICABLE.
+- Claim Gate: C-NOT-APPLICABLE.
 - R3-311 evidence: `evidence/gates/R3-311/solomon-vrptw.md`; compact result
   `docs/research/r3/results/solomon/solomon-stratified-six-results-v1.json`.
 - R3-311 CI: preregistration run `32697011223`, implementation run
@@ -719,15 +719,22 @@ Continue autonomously with RM-230.
 - The R3-316 freeze is explicitly post-inspection, not blinded preregistration.
   Direct run `32708520338` was concurrency-cancelled; descendant `d86c41e`
   contains the unchanged freeze and passed all five jobs in run `32708578105`.
-- R3-316 implementation is locally complete in `benchmark_gap_analysis.py` with
-  62 synthetic directed tests. It validates all three frozen summaries and the
-  six external exact artifacts, preserves all 42 ledger records, separates
-  source-BKS and transformed-exact domains, recomputes Type-7 summaries, and
-  writes one immutable result plus sidecar.
-- Full local implementation gates pass: Java 80/80, Python 493/493 at 95.70%
-  total coverage (new module 99%), Web 92/92 plus build, 6 schemas / 18 fixtures,
-  determinism, analytics, semantic metrics, and controls. Commit/push the
-  implementation and require remote green before running the real inputs.
+- R3-316 implementation revision `9f68e99` passed all five jobs in Actions run
+  `32710816931`. Campaign `r3-316-20260824T092121Z-9f68e9902a9b` then retained
+  all 42 records with zero exclusions/errors: 32 timeout-with-feasible, three
+  timeout-no-feasible, and one feasible incumbent among 36 source results.
+- Approved source vehicle gaps had `n=27`, median `31.6667%`, p90 `349.4545%`,
+  and max `484.2105%`; conditional same-vehicle distance gaps had `n=4`, median
+  `2.6745%`, p90 `8.8185%`, and max `10.3053%`. Six scoped transformed exact
+  gaps were all `0%`; the domains were never pooled.
+- Independent audit verified the immutable result SHA-256
+  `6e5571fcba1fd7069e4eb6604fff3f70533495fe1970fb2b5c0df257514eefb1`,
+  all inputs, exact artifacts, identities, formulas, and Type-7 summaries.
+  Compact result is
+  `docs/research/r3/results/gap-analysis/bks-gap-analysis-results-v1.json`.
+- R3-316 is `E-PASS/X-PASS/S-PASS/C-NO-CLAIM`; no source optimality,
+  superiority, or population claim is authorized. Commit/push its closure and
+  require remote green while continuing R3-320 protocol work.
 - Concurrent state: `465488f` implements the separate spatial-lock-in
   negative-control diagnostic. Preserve subsequent `research/level4/spatial_lockin/`
   changes and do not claim them as Round 3 task work.

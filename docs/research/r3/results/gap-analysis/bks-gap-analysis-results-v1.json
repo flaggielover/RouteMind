@@ -1,0 +1,105 @@
+{
+  "schema_version": "routemind-benchmark-gap-analysis-committed-summary-v1",
+  "task_id": "R3-316",
+  "manifest_id": "r3-316-bks-gap-analysis-v1",
+  "manifest_sha256": "6c6332896dff30e878f77a161e576b88b42422cc2e2a617c1fa4f43f9ca6f77b",
+  "campaign_id": "r3-316-20260824T092121Z-9f68e9902a9b",
+  "code_revision": "9f68e9902a9b81e3830c189ba16b847badebae65",
+  "implementation_ci_run": 32710816931,
+  "completed_at_utc": "2026-08-24T09:21:34Z",
+  "external_result_relative_root": "experiments/r3/R3-316/r3-316-20260824T092121Z-9f68e9902a9b",
+  "external_result": {
+    "name": "gap-analysis.json",
+    "bytes": 29943,
+    "sha256": "6e5571fcba1fd7069e4eb6604fff3f70533495fe1970fb2b5c0df257514eefb1",
+    "sidecar_verified": true
+  },
+  "selection": {
+    "upstream_records": 42,
+    "accounted_records": 42,
+    "source_double_bks_records": 36,
+    "derived_exact_records": 6,
+    "excluded_records": 0,
+    "duplicate_record_ids": 0
+  },
+  "source_double_bks": {
+    "outcomes": {
+      "OPTIMAL": 0,
+      "FEASIBLE_INCUMBENT": 1,
+      "INFEASIBLE_PROVEN": 0,
+      "TIMEOUT_WITH_FEASIBLE": 32,
+      "TIMEOUT_NO_FEASIBLE": 3,
+      "RESOURCE_LIMIT_WITH_FEASIBLE": 0,
+      "RESOURCE_LIMIT_NO_FEASIBLE": 0,
+      "FAILED": 0
+    },
+    "rates": {
+      "verified_complete_rate": 0.9166666666666666,
+      "any_timeout_rate": 0.9722222222222222,
+      "timeout_with_feasible_rate": 0.8888888888888888,
+      "timeout_no_feasible_rate": 0.08333333333333333,
+      "infeasible_proven_rate": 0.0,
+      "resource_limit_rate": 0.0,
+      "failed_rate": 0.0
+    },
+    "reference_comparisons": {
+      "COMPARABLE_SAME_VEHICLE_COUNT": 4,
+      "VEHICLE_COUNT_WORSE": 23,
+      "VEHICLE_COUNT_BETTER": 0,
+      "REFERENCE_QUALITY_REVIEW": 6,
+      "REFERENCE_GAP_NOT_APPLICABLE": 3
+    },
+    "vehicle_gap_percent": {
+      "n": 27,
+      "minimum": 0.0,
+      "median": 31.666666666666668,
+      "p90": 349.4545454545455,
+      "maximum": 484.2105263157895
+    },
+    "same_vehicle_distance_gap_percent": {
+      "n": 4,
+      "minimum": 0.0,
+      "median": 2.674529092839976,
+      "p90": 8.818457913719254,
+      "maximum": 10.305343511450381
+    },
+    "numeric_omissions": {
+      "vehicle_gap": {
+        "REFERENCE_GAP_NOT_APPLICABLE": 3,
+        "REFERENCE_QUALITY_REVIEW": 6
+      },
+      "distance_gap": {
+        "REFERENCE_GAP_NOT_APPLICABLE": 3,
+        "REFERENCE_QUALITY_REVIEW": 6,
+        "VEHICLE_COUNT_MISMATCH": 23
+      }
+    }
+  },
+  "derived_conservative_integer_optimum": {
+    "records": 6,
+    "exact_statuses": {"OPTIMAL": 6},
+    "candidate_statuses": {"ROUTING_SUCCESS": 6},
+    "transformed_exact_gap_percent": {
+      "n": 6,
+      "minimum": 0.0,
+      "median": 0.0,
+      "p90": 0.0,
+      "maximum": 0.0
+    }
+  },
+  "audit": {
+    "input_files": 3,
+    "input_hashes_verified": 3,
+    "verified_external_exact_artifacts": 6,
+    "independent_type7_recomputation": "PASS",
+    "audit_errors": 0
+  },
+  "statistical_disposition": "S-PASS",
+  "claim_disposition": "C-NO-CLAIM",
+  "supported_wording": "Deterministic descriptive gap and outcome summaries were reproduced for all 42 frozen records with source-BKS and derived-exact domains kept separate.",
+  "prohibited_wording": [
+    "RouteMind is optimal or superior on Solomon or Gehring-Homberger.",
+    "Vehicle, distance, source-model, and transformed-model gaps form one scalar.",
+    "The fixed descriptive census establishes population behavior."
+  ]
+}
