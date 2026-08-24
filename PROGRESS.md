@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 117 / 158 tasks passed
+Repository Total: 118 / 158 tasks passed
 
-Current Task: R3-311 - Evaluate Solomon VRPTW benchmark family
+Current Task: R3-315 - Cross-check tractable instances with an exact reference solver
 
-Last Completed: R3-317 - Define solver scale, timeout, and incumbent semantics
+Last Completed: R3-311 - Evaluate Solomon VRPTW benchmark family
 
-Current Gate: R3-311 is E/X/S-IN-PROGRESS. It must freeze a non-cherry-picked Solomon subset, resource limits, solver identity, exclusion/stopping rules, and reference semantics before material execution. No public solver benchmark result or scientific claim has passed yet.
+Current Gate: R3-315 is E/X-IN-PROGRESS, S-NOT-APPLICABLE, and C-DEFERRED. It must freeze a bounded tractable subset and independently configured exact/reference path before execution; only proven optimality may be labeled ground truth.
 
-CI: PASS for R3-317 checkpoint c05d482 in run 32695879055, R3-314 closure checkpoint 128ccf7 in run 32695073223, and R3-310 closure checkpoint beb5883 in run 32693996068 across all five jobs. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-311 implementation checkpoint 8a0a4ea in run 32699067563 and preregistration checkpoint de2674f in run 32697011223 across all five jobs. Earlier R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely for R3-317 - Java 80/80, Python 338 / 95.74%, Web 34 files / 92 tests plus local build and remote browser smoke, 6 schemas / 18 contract fixtures, repository controls, Compose, resilience, and Actions run 32695879055.
+Regression: PASS locally and remotely for the R3-311 implementation - Java 80/80, Python 352 / 95.31%, Web 34 files / 92 tests plus local build and remote browser smoke, 6 schemas / 18 contract fixtures, repository controls, Compose, resilience, and Actions run 32699067563.
 
-Round 3 Scientific Tasks: 4 / 45 passed; R3-311 in progress; R3-355 deferred and non-blocking; all public benchmark/statistical/claim results remain open.
+Round 3 Scientific Tasks: 5 / 45 passed; R3-315 in progress; R3-355 deferred and non-blocking.
 
-Research Gate: R3-311 E-IN-PROGRESS / X-IN-PROGRESS / S-IN-PROGRESS / C-DEFERRED
+Research Gate: R3-315 E-IN-PROGRESS / X-IN-PROGRESS / S-NOT-APPLICABLE / C-DEFERRED
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Freeze and execute R3-311's bounded Solomon protocol through the R3-314 verifier and R3-317 outcome contract. Preserve every selected instance and unfavorable result.
+Next Candidates: Freeze R3-315's tractable exact-cross-check protocol before execution. R3-312 remains independently eligible and is required with R3-315 before R3-316.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and
@@ -847,3 +847,15 @@ The task is now passed and RM-120 is the active implementation.
   plus build, and all available control/contract/research gates. No material
   Solomon instance has run; the implementation checkpoint must pass Actions
   before campaign execution.
+
+### R3-311 Solomon campaign closure - 2026-08-24
+- Actions run `32699067563` passed all five jobs for implementation revision
+  `8a0a4ea`; only then did campaign
+  `r3-311-20260824T065444Z-8a0a4ea5c098` execute the six frozen instances in
+  separate bounded processes.
+- All six results were retained and their hashes verified. Four complete
+  incumbents passed independent verification; R101 and RC101 timed out without
+  incumbents. The 4/6 rate has Wilson 95% interval `[0.299993, 0.903229]`.
+- H1-A1 failed as precommitted (`S-FAIL / C-NO-CLAIM`). Same-vehicle distance
+  gaps were 0% for C101/C201, 5.3491% for R201, and 10.3053% for RC201. R3-311
+  closes truthfully and activates R3-315; no optimality or superiority follows.

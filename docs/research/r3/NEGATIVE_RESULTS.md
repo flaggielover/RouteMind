@@ -22,6 +22,14 @@ unsupported claims remain here even when engineering gates are green.
   below the frozen `0.95` gate. R3-311 may still produce descriptive engineering
   evidence, but this manifest is precommitted to `S-FAIL` and `C-NO-CLAIM` for
   H1-A1; the threshold will not be changed after results.
+- `NR-R3-007`: R3-311 campaign
+  `r3-311-20260824T065444Z-8a0a4ea5c098` retained all six frozen Solomon
+  instances. Four produced independently verified complete incumbents; R101 and
+  RC101 timed out without an incumbent. The verified completion rate was 4/6
+  with Wilson 95% interval `[0.299993315138392, 0.9032285888942195]`, so H1-A1
+  failed as precommitted. Same-vehicle distance gaps were 0% for C101/C201,
+  5.3491% for R201, and 10.3053% for RC201. This is `S-FAIL` and
+  `C-NO-CLAIM`; no instance was excluded and no threshold was revised.
 
 No material Round 3 experiment had executed through the R3-311 preregistration
 checkpoint. Future entries record manifest IDs, code commits, datasets, seeds,

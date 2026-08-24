@@ -24,7 +24,32 @@ precommitted to `S-FAIL` and `C-NO-CLAIM` for H1-A1.
 
 ## Material results
 
-Not executed at this preregistration checkpoint.
+Campaign `r3-311-20260824T065444Z-8a0a4ea5c098` executed all six frozen
+instances using remote-green implementation revision
+`8a0a4ea5c098347b2224ec8ef9b2b8aef66564e5` (Actions run `32699067563`).
+Full artifacts are below
+`experiments/r3/R3-311/r3-311-20260824T065444Z-8a0a4ea5c098` in
+`ROUTEMIND_DATA_ROOT`; the committed compact ledger is
+`docs/research/r3/results/solomon/solomon-stratified-six-results-v1.json`.
+
+- Selection/exclusion: 6 selected, 6 executed, 6 retained, 0 excluded.
+- Outcomes: 4 `TIMEOUT_WITH_FEASIBLE`, 2 `TIMEOUT_NO_FEASIBLE`.
+- Independent verification: every incumbent was verified; 4/4 were complete
+  and valid. R101 and RC101 produced no incumbent, so no feasibility output was
+  available to verify or compare.
+- Primary result: 4/6 = `0.6666666666666666`; two-sided Wilson 95% interval
+  `[0.299993315138392, 0.9032285888942195]`. The frozen lower-bound gate failed.
+- Hierarchical reference comparison: C101 and C201 match the cited distance at
+  two decimals with the same vehicle count; R201 is `5.349058185679953%` and
+  RC201 `10.305343511450381%` above reference distance with the same vehicle
+  count. No scalar gap applies to the two no-incumbent outcomes.
+- Artifact integrity: all seven JSON artifacts matched their sidecars; campaign
+  summary SHA-256 is
+  `e5fc0c512f906ffd5370fbb77ac4fe942ae63d796b7930321ed61111545e89ee`.
+
+Final gates: `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`. X-PASS means the frozen
+campaign executed with complete retention and verification semantics; it does
+not convert the failed hypothesis or descriptive reference gaps into a claim.
 
 ## Implementation validation checkpoint
 

@@ -1,0 +1,158 @@
+{
+  "schema_version": "routemind-solomon-committed-summary-v1",
+  "task_id": "R3-311",
+  "manifest_id": "r3-311-solomon-stratified-six-v1",
+  "manifest_sha256": "27a1e5039529f7cd62a0a2d255f63f6f93eafafc49e528187e34873b6ad9428b",
+  "campaign_id": "r3-311-20260824T065444Z-8a0a4ea5c098",
+  "code_revision": "8a0a4ea5c098347b2224ec8ef9b2b8aef66564e5",
+  "implementation_ci_run": 32699067563,
+  "completed_at_utc": "2026-08-24T06:56:14Z",
+  "external_result_relative_root": "experiments/r3/R3-311/r3-311-20260824T065444Z-8a0a4ea5c098",
+  "selection": {
+    "selected": 6,
+    "executed": 6,
+    "retained": 6,
+    "excluded": 0
+  },
+  "primary_result": {
+    "verified_complete_count": 4,
+    "verified_complete_rate": 0.6666666666666666,
+    "wilson_95_lower": 0.299993315138392,
+    "wilson_95_upper": 0.9032285888942195,
+    "frozen_success_gate": 0.95,
+    "hypothesis_passed": false,
+    "statistical_disposition": "S-FAIL",
+    "claim_disposition": "C-NO-CLAIM"
+  },
+  "outcomes": {
+    "TIMEOUT_WITH_FEASIBLE": 4,
+    "TIMEOUT_NO_FEASIBLE": 2
+  },
+  "runs": [
+    {
+      "instance_id": "C101",
+      "outcome": "TIMEOUT_WITH_FEASIBLE",
+      "ortools_status": "ROUTING_SUCCESS",
+      "accepted_verified_complete": true,
+      "vehicles": 10,
+      "exact_distance": 828.9368669428341,
+      "distance_2dp": 828.94,
+      "reference_vehicles": 10,
+      "reference_distance": 828.94,
+      "reference_comparison": "COMPARABLE_SAME_VEHICLE_COUNT",
+      "distance_gap_percent": 0.0,
+      "elapsed_seconds": 10.001122599991504,
+      "artifact": {
+        "name": "c101.json",
+        "bytes": 27421,
+        "sha256": "9e38dfbdeeb4a23a008f5d38cd59461db04e35685afd13d69a96ba6a93beb03d"
+      }
+    },
+    {
+      "instance_id": "C201",
+      "outcome": "TIMEOUT_WITH_FEASIBLE",
+      "ortools_status": "ROUTING_SUCCESS",
+      "accepted_verified_complete": true,
+      "vehicles": 3,
+      "exact_distance": 591.5565566715014,
+      "distance_2dp": 591.56,
+      "reference_vehicles": 3,
+      "reference_distance": 591.56,
+      "reference_comparison": "COMPARABLE_SAME_VEHICLE_COUNT",
+      "distance_gap_percent": 0.0,
+      "elapsed_seconds": 10.000619800004642,
+      "artifact": {
+        "name": "c201.json",
+        "bytes": 24389,
+        "sha256": "0670f870884b352de518c0f509baf10290d8adc27e81c3a9b1b89c01b511aafc"
+      }
+    },
+    {
+      "instance_id": "R101",
+      "outcome": "TIMEOUT_NO_FEASIBLE",
+      "ortools_status": "ROUTING_FAIL_TIMEOUT",
+      "accepted_verified_complete": false,
+      "vehicles": null,
+      "exact_distance": null,
+      "distance_2dp": null,
+      "reference_vehicles": 19,
+      "reference_distance": 1650.8,
+      "reference_comparison": "REFERENCE_GAP_NOT_APPLICABLE",
+      "distance_gap_percent": null,
+      "elapsed_seconds": 10.000216900021769,
+      "artifact": {
+        "name": "r101.json",
+        "bytes": 2028,
+        "sha256": "426e8efbcc58b54e8af48f9163aa036ed97162902a92e2338eaf81d2fc83cd31"
+      }
+    },
+    {
+      "instance_id": "R201",
+      "outcome": "TIMEOUT_WITH_FEASIBLE",
+      "ortools_status": "ROUTING_SUCCESS",
+      "accepted_verified_complete": true,
+      "vehicles": 4,
+      "exact_distance": 1319.3586745965413,
+      "distance_2dp": 1319.36,
+      "reference_vehicles": 4,
+      "reference_distance": 1252.37,
+      "reference_comparison": "COMPARABLE_SAME_VEHICLE_COUNT",
+      "distance_gap_percent": 5.349058185679953,
+      "elapsed_seconds": 10.000924099993426,
+      "artifact": {
+        "name": "r201.json",
+        "bytes": 24071,
+        "sha256": "d849aca3a0ba055950e771f73c844ad00c03620230e8723a8faffa3ca0239269"
+      }
+    },
+    {
+      "instance_id": "RC101",
+      "outcome": "TIMEOUT_NO_FEASIBLE",
+      "ortools_status": "ROUTING_FAIL_TIMEOUT",
+      "accepted_verified_complete": false,
+      "vehicles": null,
+      "exact_distance": null,
+      "distance_2dp": null,
+      "reference_vehicles": 14,
+      "reference_distance": 1696.95,
+      "reference_comparison": "REFERENCE_GAP_NOT_APPLICABLE",
+      "distance_gap_percent": null,
+      "elapsed_seconds": 10.00044859998161,
+      "artifact": {
+        "name": "rc101.json",
+        "bytes": 2033,
+        "sha256": "f2d178907533bdf0013949b97ccbf11c1e70b5c0dcad76719a8b74cbf631fb3e"
+      }
+    },
+    {
+      "instance_id": "RC201",
+      "outcome": "TIMEOUT_WITH_FEASIBLE",
+      "ortools_status": "ROUTING_SUCCESS",
+      "accepted_verified_complete": true,
+      "vehicles": 4,
+      "exact_distance": 1551.932685984732,
+      "distance_2dp": 1551.93,
+      "reference_vehicles": 4,
+      "reference_distance": 1406.94,
+      "reference_comparison": "COMPARABLE_SAME_VEHICLE_COUNT",
+      "distance_gap_percent": 10.305343511450381,
+      "elapsed_seconds": 10.000742700009141,
+      "artifact": {
+        "name": "rc201.json",
+        "bytes": 24164,
+        "sha256": "2392e7280e1daae364f4d6af3b4597351e218abf6fcadf34f8ee4d8af8ae3cfe"
+      }
+    }
+  ],
+  "campaign_summary_artifact": {
+    "name": "campaign-summary.json",
+    "bytes": 928,
+    "sha256": "e5fc0c512f906ffd5370fbb77ac4fe942ae63d796b7930321ed61111545e89ee"
+  },
+  "supported_wording": "A bounded six-instance engineering pilot with a configured ten-second search policy produced independently verified complete incumbents for four instances; all four were classified with a wall-time limit event.",
+  "prohibited_wording": [
+    "RouteMind achieves a 95% verified feasibility lower bound on Solomon.",
+    "RouteMind is optimal or superior on Solomon.",
+    "The six-instance pilot establishes broad external validity."
+  ]
+}
