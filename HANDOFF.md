@@ -8,7 +8,18 @@ Current Phase: Round 3 Scientific Research - Workstream B
 
 Current Task: R3-321 - Implement common-random-number stream ownership
 
-Task Status: R3-320 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after its content-addressed prospective protocol passed local and remote gates before campaign data. R3-321 is active and must implement explicit reproducible ownership for the four frozen common-random-number streams.
+Task Status: R3-320 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after closure revision 6d7a2f1 passed all five jobs in Actions run 32713474028. R3-321's explicit content-addressed four-stream CRN ownership is locally complete and green; its implementation checkpoint still needs commit, push, and remote CI before closure.
+
+R3-321 resume capsule: demand, merchant, courier, and traffic have distinct
+logical owners; preregistered SHA-256 derivation produces arm-independent 63-bit
+seeds; each stream is realized once and both arms bind identical realization
+digests; order alternates by replicate parity. The implementation explicitly
+records `VARIANCE_CONTROL_NOT_OBSERVATION_INDEPENDENCE`. Directed tests passed
+21/21 at 96.12% module coverage. The full local gate passed Java 80/80, Python
+565/565 at 95.76%, Web 92/92 plus production build, 6 schemas / 18 fixtures,
+determinism, analytics, semantic metrics, and repository controls. No pilot was
+executed. Next: commit/push, observe CI, close R3-321 only on remote green, then
+activate R3-322 paired estimation immediately.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task

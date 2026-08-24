@@ -14,11 +14,11 @@ Current Task: R3-321 - Implement common-random-number stream ownership
 
 Last Completed: R3-320 - Pre-register the Statistical RouteBench protocol
 
-Current Gate: R3-321 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. It must implement the four frozen CRN streams and reproducible digest ownership.
+Current Gate: R3-321 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. Its local implementation and all local gates pass; remote CI is the remaining evidence gate.
 
-CI: PASS for the R3-320 freeze checkpoint 8c592d4 in run 32713127743 and R3-316 closure checkpoint c0967c1 in run 32711507127 across all five jobs. Earlier R3-316 implementation/manifest and R3-312/R3-315/R3-311/R3-317/R3-314/R3-310 evidence remains recorded below.
+CI: PASS for the R3-320 closure checkpoint 6d7a2f1 in run 32713474028 and freeze checkpoint 8c592d4 in run 32713127743 across all five jobs. R3-321 implementation CI is pending.
 
-Regression: PASS locally and remotely for the R3-320 freeze - Java 80/80, Python 544/544 at 95.76% coverage, the protocol module at 97.46%, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
+Regression: PASS locally for R3-321 - Java 80/80, Python 565/565 at 95.76% coverage, the CRN module at 96.12% with 21 directed tests, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
 
 Round 3 Scientific Tasks: 9 / 45 passed; R3-321 in progress; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,23 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement and remotely validate R3-321 common-random-number stream ownership, then activate R3-322 paired estimation. R3-350 remains independently eligible.
+Next Candidates: Push and remotely validate the locally green R3-321 implementation, then activate R3-322 paired estimation. R3-350 remains independently eligible.
+
+### R3-321 common-random-number implementation - 2026-08-24
+- Pair identity is protocol, phase, regime, and replicate. Demand, merchant,
+  courier, and traffic have explicit logical owners and arm-independent 63-bit
+  seeds derived by the preregistered SHA-256 formula.
+- Each environmental stream is content-addressed and realized once. Candidate and
+  comparator arms bind the same four realization digests; execution order
+  alternates by replicate parity without changing pair identity.
+- The disposition `VARIANCE_CONTROL_NOT_OBSERVATION_INDEPENDENCE` prevents CRN
+  reuse from being misreported as observation independence. Invalid identities,
+  owners, ranges, canonical payloads, and realization bindings fail closed.
+- 21 directed tests passed at 96.12% module coverage. The full local gate passed
+  Java 80/80, Python 565/565 at 95.76%, Web 92/92 plus build, 6 schemas / 18
+  fixtures, determinism, analytics, semantic metrics, and repository controls.
+- R3-321 remains E-IN-PROGRESS until its implementation checkpoint passes all
+  GitHub Actions jobs. No RouteBench pilot or effect estimation has run.
 
 ### R3-320 Statistical RouteBench protocol freeze - 2026-08-24
 - Protocol `r3-320-statistical-routebench-v1` prospectively fixes

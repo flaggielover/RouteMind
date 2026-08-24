@@ -46,6 +46,7 @@ class StatisticalRouteBenchProtocol:
     regime_ids: tuple[str, ...]
     common_streams: tuple[str, ...]
     pilot_replicates_per_regime: int
+    confirmatory_replicate_start: int
     maximum_confirmatory_pairs_per_regime: int
     number_of_confirmatory_tests: int
 
@@ -127,6 +128,7 @@ def load_statistical_routebench_protocol(path: Path) -> StatisticalRouteBenchPro
         regime_ids=regimes,
         common_streams=streams,
         pilot_replicates_per_regime=_integer(randomization, "pilot_replicates_per_regime"),
+        confirmatory_replicate_start=_integer(randomization, "confirmatory_replicate_start"),
         maximum_confirmatory_pairs_per_regime=maximum_pairs,
         number_of_confirmatory_tests=tests,
     )
