@@ -62,6 +62,16 @@ try {
         throw "Final scientific figures self-tests failed"
     }
 
+    python scripts/round4_graph_gate.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Prepared Round 4 task graph gate failed"
+    }
+
+    python scripts/round4_graph_gate_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Prepared Round 4 task graph self-tests failed"
+    }
+
     python scripts/security_gate.py
     if ($LASTEXITCODE -ne 0) {
         throw "Security and supply-chain hygiene gate failed"
