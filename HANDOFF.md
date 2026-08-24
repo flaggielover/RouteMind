@@ -6,11 +6,13 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream E
 
-Current Task: R3-360 - Generate final scientific figures and tables
+Current Task: R3-365 - Close Round 3 science and prepare Round 4 graph
 
-Task Status: R3-360 is locally complete and validating `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE`. The final v2 bundle preserves all negative/no-data outcomes and zero supported scientific claims. Remote CI is pending.
+Task Status: R3-360 is closed `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE`; implementation `8753c7e` passed all five jobs in Actions run `32789597203`. R3-365 is active.
 
-Next: commit and push the R3-360 implementation checkpoint, observe all five real GitHub Actions jobs, close with evidence only after green, and activate R3-365 immediately.
+Next: produce the R3-365 scientific closure report and dependency-ordered Round 4 graph, validate them, commit/push, and require clean real CI before final closure.
+
+R3-360 evidence is `evidence/gates/R3-360/final-figures.md`. Final plan digest is `10e12aa0f586ad94e963396feb0a045fc1b21fe4ff0cd7537d0d769f145bb30d`; bundle digest is `2b230697ea367ace51afcd52c7544efd6cd024abca0104f10a35b50ebce34684`. Actions run `32789597203` passed all five jobs. The final 16/12/7 rows retain six non-estimable cells, unexecuted confirmatory inference, zero Twin observations, unsupported RADS location noise, zero exclusions, and zero `C-PASS`. R3-325 was not rerun.
 
 R3-360 final plan is `docs/research/r3/manifests/final-figures/r3-360-final-figures-v2.json` with digest `10e12aa0f586ad94e963396feb0a045fc1b21fe4ff0cd7537d0d769f145bb30d`. Its committed index has bundle digest `2b230697ea367ace51afcd52c7544efd6cd024abca0104f10a35b50ebce34684` across three SVG and three CSV artifacts. Exact row counts are 16/12/7; negative outcomes are six non-estimable assignment cells, confirmatory inference not executed, zero Twin observations, unsupported RADS `location_noise`, zero exclusions, and zero `C-PASS`. Browser-rendered QA passed after v2 corrected a column overlap found in the immutable v1 draft. Automated validator plus six tests and all non-Docker control gates pass. Large v2 artifacts, sidecars, and QA screenshots are under `ROUTEMIND_DATA_ROOT/research/r3/R3-360/r3-360-final-figures-v2/`. No experiment or R3-325 rerun occurred.
 

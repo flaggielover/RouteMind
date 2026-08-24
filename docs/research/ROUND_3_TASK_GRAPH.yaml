@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "graph": "RouteMind Round 3 Scientific Research",
-  "state": "EXECUTING_CONTROL_PLANE",
+  "state": "SCIENTIFIC_CLOSURE_IN_PROGRESS",
   "authority": "TASK_GRAPH.yaml contains the executable task records; this file is the scientific graph index and reclassification record.",
   "pass_model": {
     "engineering": ["E-PENDING", "E-IN-PROGRESS", "E-PASS", "E-FAIL", "E-DEFERRED", "E-NOT-REQUIRED"],
