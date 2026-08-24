@@ -822,3 +822,15 @@ The task is now passed and RM-120 is the active implementation.
   scientific graph are present. Local validation and remote CI are the remaining
   R3-300 engineering gates before R3-310 starts.
 - R3-300 passed locally and in GitHub Actions run `32692144152`; R3-310 is active.
+
+### R3-311 Solomon preregistration - 2026-08-24
+- Frozen manifest `r3-311-solomon-stratified-six-v1` selects the
+  lexicographically first C1, C2, R1, R2, RC1, and RC2 source members before
+  material execution. Every distribution/member checksum was reverified under
+  `ROUTEMIND_DATA_ROOT`.
+- The bounded campaign permits six single-thread OR-Tools 9.15.6755 runs at ten
+  seconds each. Conservative integer modeling is separated from independent
+  Cartesian-double feasibility and objective verification.
+- `NR-R3-006` records a pre-experiment design limitation: at n=6, even 6/6 has
+  Wilson 95% lower bound `0.6096657120978346`, so H1-A1 cannot pass. The pilot
+  remains useful descriptively but is precommitted to `S-FAIL` and `C-NO-CLAIM`.

@@ -675,12 +675,17 @@ Continue autonomously with RM-230.
 - Experiment Gate: X-IN-PROGRESS.
 - Statistical Gate: S-IN-PROGRESS.
 - Claim Gate: C-DEFERRED.
-- Evidence: R3-317 `evidence/gates/R3-317/solver-outcomes.md`; local full gate and
-  all five jobs in GitHub Actions run `32695879055` passed.
-- CI: R3-317 checkpoint `c05d482`, run `32695879055`, all five jobs green.
-- Next: freeze R3-311 protocol, then execute every selected instance through the
-  independent verifier and typed outcome contract.
-- Concurrent state: commits through `2d6eb08` updated only the separate
-  `research/level4/spatial_lockin/` work while R3-317 was active. They were
-  preserved and are not claimed as R3-317 work.
+- Evidence: `evidence/gates/R3-311/solomon-vrptw.md`; frozen manifest
+  `docs/research/r3/manifests/solomon/solomon-stratified-six-v1.json`.
+- CI baseline: R3-317 closure run `32696140251` and latest main run
+  `32696483083` passed all five jobs.
+- Next: validate and commit the preregistration checkpoint, then install the
+  frozen OR-Tools dependency and execute all six selected instances through the
+  R3-314 verifier and R3-317 outcome contract.
+- Statistical/claim boundary: `NR-R3-006` precommits H1-A1 to `S-FAIL` and
+  `C-NO-CLAIM` because n=6 cannot attain the frozen Wilson lower bound. Do not
+  enlarge or substitute the set after inspecting results.
+- Concurrent state: `741c8ef` closed the separate spatial-lock-in Gate 2 work.
+  Preserve subsequent `research/level4/spatial_lockin/` changes and do not claim
+  them as R3-311 work.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.

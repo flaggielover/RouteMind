@@ -1,0 +1,173 @@
+{
+  "schema_version": "routemind-solomon-experiment-v1",
+  "manifest_id": "r3-311-solomon-stratified-six-v1",
+  "task_id": "R3-311",
+  "hypothesis_id": "H1-A1",
+  "frozen_at_utc": "2026-08-24T06:17:53Z",
+  "frozen_against_revision": "741c8ef93a40f0b82bb0ea375aab292e58ca4505",
+  "material_execution_started": false,
+  "source": {
+    "family": "SOLOMON_VRPTW_100",
+    "source_page_url": "https://www.sintef.no/projectweb/top/vrptw/100-customers/",
+    "download_url": "https://www.sintef.no/globalassets/project/top/vrptw/solomon/solomon-100.zip",
+    "license_status": "PUBLIC_BENCHMARK_NO_EXPLICIT_LICENSE",
+    "redistribution_allowed": false,
+    "distribution_relative_path": "datasets/public-benchmarks/solomon/solomon-100.zip",
+    "distribution_sha256": "8a0a72cbe6b7f8f9988ace4ebde0378ec34943acaaac47f2c408915e41887747",
+    "parser_id": "solomon-vrptw-text",
+    "parser_version": "1.0.0"
+  },
+  "selection": {
+    "rule": "Select every structural family C1, C2, R1, R2, RC1, and RC2, then choose the lexicographically first archive member in each family.",
+    "cherry_picking_allowed": false,
+    "selected_count": 6,
+    "instances": [
+      {
+        "family": "C1",
+        "instance_id": "C101",
+        "archive_member": "In/c101.txt",
+        "relative_path": "datasets/public-benchmarks/solomon/solomon-100/In/c101.txt",
+        "sha256": "a6da75152d182d60ecd2c6f854296f5be452f92282d096adebcf5d99a7f16516",
+        "reference_vehicle_count": 10,
+        "reference_distance": 828.94,
+        "reference_status": "BEST_KNOWN"
+      },
+      {
+        "family": "C2",
+        "instance_id": "C201",
+        "archive_member": "In/c201.txt",
+        "relative_path": "datasets/public-benchmarks/solomon/solomon-100/In/c201.txt",
+        "sha256": "d8d9834087ae2326fa23a8510533060233dc9fb481873be60956eb26a880ad63",
+        "reference_vehicle_count": 3,
+        "reference_distance": 591.56,
+        "reference_status": "BEST_KNOWN"
+      },
+      {
+        "family": "R1",
+        "instance_id": "R101",
+        "archive_member": "In/r101.txt",
+        "relative_path": "datasets/public-benchmarks/solomon/solomon-100/In/r101.txt",
+        "sha256": "3f3655182bc0fe44ce5de65fdcd2ee2f9c7fb9ed055f923635151d9d6f76d3ed",
+        "reference_vehicle_count": 19,
+        "reference_distance": 1650.8,
+        "reference_status": "BEST_KNOWN"
+      },
+      {
+        "family": "R2",
+        "instance_id": "R201",
+        "archive_member": "In/r201.txt",
+        "relative_path": "datasets/public-benchmarks/solomon/solomon-100/In/r201.txt",
+        "sha256": "0be960ec998fff2cab0bdbcc5194c617e5ca0a79c82c5b32b1d4bd98b2cae210",
+        "reference_vehicle_count": 4,
+        "reference_distance": 1252.37,
+        "reference_status": "BEST_KNOWN"
+      },
+      {
+        "family": "RC1",
+        "instance_id": "RC101",
+        "archive_member": "In/rc101.txt",
+        "relative_path": "datasets/public-benchmarks/solomon/solomon-100/In/rc101.txt",
+        "sha256": "ef6893ffd9746ad96de8e4da6e64e2c4ba6e08a1c7eb9457276a9f1caf01ca12",
+        "reference_vehicle_count": 14,
+        "reference_distance": 1696.95,
+        "reference_status": "BEST_KNOWN",
+        "source_label_note": "The SINTEF table labels this row RC101b; the archive member identity remains rc101.txt."
+      },
+      {
+        "family": "RC2",
+        "instance_id": "RC201",
+        "archive_member": "In/rc201.txt",
+        "relative_path": "datasets/public-benchmarks/solomon/solomon-100/In/rc201.txt",
+        "sha256": "288836e2d8c2ace83ebbff77e03ac8cdffc574fc134cade21ef92713f8c52d44",
+        "reference_vehicle_count": 4,
+        "reference_distance": 1406.94,
+        "reference_status": "BEST_KNOWN"
+      }
+    ]
+  },
+  "solver": {
+    "name": "Google OR-Tools RoutingModel",
+    "package": "ortools",
+    "version": "9.15.6755",
+    "package_url": "https://pypi.org/project/ortools/9.15.6755/",
+    "documentation_url": "https://developers.google.com/optimization/routing/vrptw",
+    "license": "Apache-2.0",
+    "first_solution_strategy": "PATH_CHEAPEST_ARC",
+    "local_search_metaheuristic": "GUIDED_LOCAL_SEARCH",
+    "seed": 0,
+    "seed_policy": "Use seed 0 when the installed public API exposes a supported seed field; otherwise record SEED_API_NOT_AVAILABLE and rely on frozen single-thread settings without claiming bitwise runtime determinism."
+  },
+  "resource_policy": {
+    "wall_time_seconds_per_instance": 10.0,
+    "maximum_instances": 6,
+    "maximum_campaign_solver_wall_time_seconds": 60.0,
+    "threads": 1,
+    "memory_limit_bytes": null,
+    "memory_limit_note": "No enforceable cross-platform native memory cap is available in the selected in-process API; observed peak memory may be unavailable and must not be fabricated.",
+    "node_limit": null,
+    "estimated_peak_memory_bytes": 1073741824,
+    "estimated_output_bytes": 10485760,
+    "external_cost_usd": 0,
+    "authorization": "BOUNDED_LOCAL_AUTONOMOUS"
+  },
+  "modeling": {
+    "source_distance_semantics": "EUCLIDEAN_DOUBLE",
+    "source_travel_time_semantics": "DISTANCE_EQUALS_TRAVEL_TIME",
+    "source_objective_semantics": "HIERARCHICAL_VEHICLES_THEN_DISTANCE",
+    "integer_scale": 1000,
+    "arc_transform": "ceil(euclidean_double * 1000)",
+    "time_transform": "ready, due, and service values multiplied exactly by 1000; transformed arc travel uses the conservative ceiling",
+    "transformation_class": "TRANSFORMED_CONSERVATIVE",
+    "objective_encoding": "Set a fixed cost per used vehicle strictly greater than the maximum possible total scaled arc cost, then minimize scaled travel cost.",
+    "independent_reporting": "Recompute route timing, feasibility, vehicle count, and distance from canonical Cartesian doubles; never report the transformed integer objective as the public reference distance."
+  },
+  "verification": {
+    "verifier": "routemind_compute.application.verification.verify_public_vrptw_solution",
+    "verifier_revision": "R3-314",
+    "trust_solver_feasibility": false,
+    "require_complete": true,
+    "tolerance": 1e-6,
+    "accepted_incumbent": "VERIFIED_COMPLETE only",
+    "outcome_contract": "routemind_compute.application.solver_outcomes.classify_solver_run",
+    "outcome_contract_revision": "R3-317"
+  },
+  "reference_gap_policy": {
+    "objective_order": ["vehicle_count", "euclidean_double_distance"],
+    "same_vehicle_count": "Round independently recomputed total distance to two decimals, then report (result-reference)/reference as a descriptive percent gap.",
+    "more_vehicles": "VEHICLE_COUNT_WORSE; do not collapse the hierarchical difference into a scalar distance gap.",
+    "fewer_vehicles": "REFERENCE_CONTRADICTION_REVIEW; retain the output and do not claim improvement until independent review.",
+    "unverified_or_incomplete": "REFERENCE_GAP_NOT_APPLICABLE"
+  },
+  "statistical_plan": {
+    "primary_metric": "verified complete feasible outcomes divided by all six selected instances",
+    "interval": "two-sided 95% Wilson score interval",
+    "success_gate": "lower_bound >= 0.95",
+    "maximum_possible_lower_bound_at_n_6": 0.6096657120978346,
+    "design_capacity_disposition": "S-FAIL",
+    "claim_disposition": "C-NO-CLAIM",
+    "reason": "Even 6/6 successes cannot meet the frozen H1-A1 lower-bound threshold. Results remain a descriptive engineering pilot and cannot support the scoped feasibility claim."
+  },
+  "exclusions_and_stopping": {
+    "allowed_exclusions": [
+      "PARSER_INVALID",
+      "CHECKSUM_INVALID",
+      "LICENSE_DISALLOWED",
+      "EXECUTION_DEFECT"
+    ],
+    "forbidden_exclusions": [
+      "POOR_OBJECTIVE",
+      "TIMEOUT",
+      "INFEASIBLE",
+      "UNVERIFIED_INCUMBENT",
+      "UNFAVORABLE_RESULT"
+    ],
+    "instance_policy": "Retain every selected instance in the ledger and continue after solver outcomes that are valid observations.",
+    "campaign_stop": "Stop only for an implementation defect, invalid source identity, verifier defect, or uncontrolled resource growth; record the stop and do not substitute instances."
+  },
+  "artifact_policy": {
+    "data_root_environment_variable": "ROUTEMIND_DATA_ROOT",
+    "result_relative_root": "experiments/r3/R3-311",
+    "commit_large_results": false,
+    "commit_manifest_checksums_and_summary": true
+  }
+}
