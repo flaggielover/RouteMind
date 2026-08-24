@@ -1,0 +1,30 @@
+{
+  "schema_version": "solver-outcome-matrix-v1",
+  "contract_version": "solver-outcome-contract-v1",
+  "frozen_at_utc": "2026-08-24T06:02:00Z",
+  "limits": {
+    "wall_time_seconds": 10.0,
+    "memory_bytes": 1000,
+    "node_limit": 500,
+    "threads": 1
+  },
+  "cases": [
+    {"id":"optimal-verified","termination":"COMPLETED","proof":"OPTIMALITY","incumbent":true,"verification":"VERIFIED_COMPLETE","usage":[2.0,100,50],"expected":"OPTIMAL","accepted":true},
+    {"id":"feasible-verified","termination":"COMPLETED","proof":"NONE","incumbent":true,"verification":"VERIFIED_COMPLETE","usage":[2.0,100,50],"expected":"FEASIBLE_INCUMBENT","accepted":true},
+    {"id":"infeasible-proven","termination":"COMPLETED","proof":"INFEASIBILITY","incumbent":false,"verification":"NOT_PRESENT","usage":[2.0,100,50],"expected":"INFEASIBLE_PROVEN","accepted":false},
+    {"id":"timeout-verified","termination":"WALL_TIME_LIMIT","proof":"NONE","incumbent":true,"verification":"VERIFIED_COMPLETE","usage":[10.0,100,50],"expected":"TIMEOUT_WITH_FEASIBLE","accepted":true},
+    {"id":"timeout-absent","termination":"WALL_TIME_LIMIT","proof":"NONE","incumbent":false,"verification":"NOT_PRESENT","usage":[10.0,100,50],"expected":"TIMEOUT_NO_FEASIBLE","accepted":false},
+    {"id":"timeout-unverified","termination":"WALL_TIME_LIMIT","proof":"NONE","incumbent":true,"verification":"NOT_RUN","usage":[10.0,100,50],"expected":"TIMEOUT_NO_FEASIBLE","accepted":false},
+    {"id":"timeout-rejected","termination":"WALL_TIME_LIMIT","proof":"NONE","incumbent":true,"verification":"REJECTED","usage":[10.0,100,50],"expected":"TIMEOUT_NO_FEASIBLE","accepted":false},
+    {"id":"timeout-partial","termination":"WALL_TIME_LIMIT","proof":"NONE","incumbent":true,"verification":"VERIFIED_PARTIAL","usage":[10.0,100,50],"expected":"TIMEOUT_NO_FEASIBLE","accepted":false},
+    {"id":"memory-verified","termination":"MEMORY_LIMIT","proof":"NONE","incumbent":true,"verification":"VERIFIED_COMPLETE","usage":[2.0,1000,50],"expected":"RESOURCE_LIMIT_WITH_FEASIBLE","accepted":true},
+    {"id":"memory-absent","termination":"MEMORY_LIMIT","proof":"NONE","incumbent":false,"verification":"NOT_PRESENT","usage":[2.0,1000,50],"expected":"RESOURCE_LIMIT_NO_FEASIBLE","accepted":false},
+    {"id":"nodes-verified","termination":"NODE_LIMIT","proof":"NONE","incumbent":true,"verification":"VERIFIED_COMPLETE","usage":[2.0,100,500],"expected":"RESOURCE_LIMIT_WITH_FEASIBLE","accepted":true},
+    {"id":"nodes-absent","termination":"NODE_LIMIT","proof":"NONE","incumbent":false,"verification":"NOT_PRESENT","usage":[2.0,100,500],"expected":"RESOURCE_LIMIT_NO_FEASIBLE","accepted":false},
+    {"id":"observed-time-breach","termination":"COMPLETED","proof":"NONE","incumbent":true,"verification":"VERIFIED_COMPLETE","usage":[10.1,100,50],"expected":"TIMEOUT_WITH_FEASIBLE","accepted":true},
+    {"id":"observed-memory-breach-rejected","termination":"COMPLETED","proof":"NONE","incumbent":true,"verification":"REJECTED","usage":[2.0,1001,50],"expected":"RESOURCE_LIMIT_NO_FEASIBLE","accepted":false},
+    {"id":"error-with-verified-output","termination":"ERROR","proof":"NONE","incumbent":true,"verification":"VERIFIED_COMPLETE","usage":[2.0,100,50],"failure_code":"backend_error","expected":"FAILED","accepted":false},
+    {"id":"cancelled-no-output","termination":"CANCELLED","proof":"NONE","incumbent":false,"verification":"NOT_PRESENT","usage":[2.0,100,50],"expected":"FAILED","accepted":false},
+    {"id":"completed-no-output","termination":"COMPLETED","proof":"NONE","incumbent":false,"verification":"NOT_PRESENT","usage":[2.0,100,50],"expected":"FAILED","accepted":false}
+  ]
+}

@@ -14,21 +14,32 @@ Current Task: R3-317 - Define solver scale, timeout, and incumbent semantics
 
 Last Completed: R3-314 - Extend independent solver verification for public instances
 
-Current Gate: R3-317 is E-IN-PROGRESS and defining mutually exclusive solver outcome, timeout, incumbent, resource-limit, and verification semantics. No solver benchmark result or scientific claim has passed.
+Current Gate: R3-317 is validating with E-IN-PROGRESS / X-IN-PROGRESS. Its frozen 17-case contract matrix covers all eight mutually exclusive outcome classes and passed the full local gate; GitHub Actions replay is pending. No public solver benchmark result or scientific claim has passed.
 
-CI: PASS for R3-314 checkpoint 921a0d0 in run 32694841407, R3-310 closure checkpoint beb5883 in run 32693996068, and R3-300 checkpoint 59eb53b in run 32692144152 across all five jobs. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for the R3-314 closure checkpoint 128ccf7 in run 32695073223, R3-314 implementation checkpoint 921a0d0 in run 32694841407, and R3-310 closure checkpoint beb5883 in run 32693996068 across all five jobs. R3-317 remote evidence is pending. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely for R3-314 - Java 80/80, Python 296 / 95.59%, Web 34 files / 92 tests plus local build and remote browser smoke, 6 schemas / 18 contract fixtures, repository controls, Compose configuration, resilience, and Actions run 32694841407.
+Regression: PASS locally for the R3-317 worktree - Java 80/80, Python 338 / 95.74%, Web 34 files / 92 tests plus build, 6 schemas / 18 contract fixtures, repository controls, Compose configuration, determinism, archive, mart, and semantic metrics. The previous remote full gate passed in Actions run 32695073223; R3-317 remote evidence is pending.
 
-Round 3 Scientific Tasks: 3 / 45 passed; R3-317 in progress; R3-355 deferred and non-blocking; all material experiment/statistical/claim gates remain open.
+Round 3 Scientific Tasks: 3 / 45 passed; R3-317 validating; R3-355 deferred and non-blocking; all material public benchmark/statistical/claim gates remain open.
 
-Research Gate: R3-317 E-IN-PROGRESS / X-PENDING / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-317 E-IN-PROGRESS / X-IN-PROGRESS (contract matrix) / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement and validate R3-317 solver outcome/timeout semantics, then activate preregistered Solomon evaluation R3-311. Do not collapse timeouts, failures, infeasibility, or unverified incumbents into success.
+Next Candidates: Obtain remote replay evidence for R3-317, then activate preregistered Solomon evaluation R3-311. Do not collapse timeouts, failures, infeasibility, or unverified incumbents into success.
+
+### R3-317 solver outcome contract validation - 2026-08-24
+- Termination, proof, incumbent, independent verification, configured limits, and
+  measured usage are separate typed inputs. Classification preserves eight
+  outcomes, including separate timeout and non-time resource-limit outcomes with
+  and without a verified complete incumbent.
+- The frozen 17-case matrix covers every outcome and all verification dispositions.
+  It passed 42 directed tests; its SHA-256 is `4ab08b71...383262`.
+- The full local gate passed Java 80/80, Python 338 at 95.74% coverage (the new
+  outcome module is 100%), Web 34 files/92 tests plus build, contracts and controls.
+- Evidence is in `evidence/gates/R3-317/solver-outcomes.md`; remote CI is pending.
 
 ### R3-314 independent public verifier validation - 2026-08-24
 - Untrusted visit, route, and solution contracts remain separate from solver internals.
