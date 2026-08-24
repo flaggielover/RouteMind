@@ -1,0 +1,40 @@
+{
+  "schema_version": "routemind-twin-held-out-validation-v1",
+  "task_id": "R3-332",
+  "validation_id": "r3-332-held-out-validation-v1",
+  "frozen_at_utc": "2026-08-24T16:30:00Z",
+  "question": "Does the frozen calibration outcome meet the preregistered fidelity thresholds on the disjoint held-out split without retuning?",
+  "source_calibration_plan_digest": "86f17d2edb74a25a806348461917c9943fa9cb765579c01becccb82def02937f",
+  "split_contract_digest": "fb3f3162ac073815cba838f3fde5a3b8ac94604e21dc4f9049bdf3785d108eaa",
+  "fidelity_protocol_digest": "de453fdf1181b2e5a52839eb9f1b7536db3f5f5fb1177f4b5351269cfa3c1825",
+  "metric_ids": [
+    "assignment_rate",
+    "scenario_risk_index",
+    "dispatch_latency_seconds",
+    "fallback_rate"
+  ],
+  "uncertainty_policy": {
+    "method": "paired_bootstrap_percentile_95",
+    "confidence_level": 0.95,
+    "minimum_pairs": 100,
+    "report_when_missing": "NOT_REPORTED_NO_DATA"
+  },
+  "data_policy": {
+    "calibration_split_id": "r3-330-calibration-observed-v1",
+    "held_out_split_id": "r3-330-held-out-observed-v1",
+    "held_out_read_only": true,
+    "retune_on_held_out": false
+  },
+  "outcome_policy": {
+    "allowed_outcomes": [
+      "VALIDATED_FOR_SCOPE",
+      "PARTIALLY_VALIDATED",
+      "FAILED_VALIDATION",
+      "INSUFFICIENT_DATA"
+    ],
+    "status_when_missing": "INSUFFICIENT_DATA",
+    "reason": "No held-out estimate or uncertainty interval may be reported without the minimum authorized observed pairs."
+  },
+  "claim_boundary": "HELD_OUT_VALIDATION_DOES_NOT_ESTABLISH_EXTERNAL_VALIDITY",
+  "plan_digest": "348150cc5bd4bd6dea1261a81e13e7240606bb24cbc1898504ec34d4c8d9cfee"
+}

@@ -32,7 +32,7 @@ _PARAMETER_NAMES = (
     "fallback_bias",
 )
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
-_STATUS = Literal["INSUFFICIENT_DATA"]
+_STATUS = Literal["INSUFFICIENT_DATA", "CALIBRATED"]
 
 
 class TwinCalibrationError(ValueError):
