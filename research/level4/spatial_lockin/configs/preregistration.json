@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "experiment_id": "routemind-level4-spatial-lockin-v1",
+  "artifact_policy": {
+    "root_environment": "ROUTEMIND_DATA_ROOT",
+    "relative_root": "research/level4/spatial_lockin",
+    "classes": ["confirmatory", "diagnostic"],
+    "overwrite": false,
+    "digest": "sha256"
+  },
+  "identification": {
+    "horizon": 12,
+    "perturbation_magnitudes": [0.005, 0.01, 0.02, 0.04],
+    "perturbation_directions": [
+      [1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1],
+      [1, 1, 0], [1, -1, 0], [1, 0, -1], [0, 1, -1]
+    ],
+    "feedback_settings": [0.0, 0.35],
+    "seeds": [11000, 11001, 11002, 11003, 11004, 11005, 11006, 11007, 11008, 11009, 11010, 11011, 11012, 11013, 11014, 11015, 11016, 11017, 11018, 11019, 11020, 11021, 11022, 11023, 11024, 11025, 11026, 11027, 11028, 11029, 11030, 11031, 11032, 11033, 11034, 11035, 11036, 11037, 11038, 11039, 11040, 11041, 11042, 11043, 11044, 11045, 11046, 11047, 11048, 11049, 11050, 11051, 11052, 11053, 11054, 11055, 11056, 11057, 11058, 11059, 11060, 11061, 11062, 11063],
+    "bootstrap_resamples": 1000,
+    "bootstrap_seed": 31000,
+    "bootstrap_confidence": 0.95,
+    "layer_r_noise_sd": 0.00002,
+    "layer_m_noise_sd": 0.00002
+  },
+  "validation": {
+    "seeds": [21000, 21001, 21002, 21003, 21004, 21005, 21006, 21007, 21008, 21009, 21010, 21011, 21012, 21013, 21014, 21015, 21016, 21017, 21018, 21019, 21020, 21021, 21022, 21023, 21024, 21025, 21026, 21027, 21028, 21029, 21030, 21031, 21032, 21033, 21034, 21035, 21036, 21037, 21038, 21039, 21040, 21041, 21042, 21043, 21044, 21045, 21046, 21047, 21048, 21049, 21050, 21051, 21052, 21053, 21054, 21055, 21056, 21057, 21058, 21059, 21060, 21061, 21062, 21063],
+    "horizon": 1200,
+    "burn_in": 600,
+    "tail_window": 300,
+    "coarse_alpha_multipliers": [0.4, 0.6, 0.8, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.4, 1.6],
+    "fine_alpha_multiplier_start": 0.9,
+    "fine_alpha_multiplier_stop": 1.1,
+    "fine_alpha_multiplier_step": 0.025,
+    "tail_magnitude_floor": 0.02,
+    "noise_floor_multiplier": 5.0,
+    "sign_persistence_min": 0.9,
+    "classification_rate_min": 0.8,
+    "classification_ci_excludes": 0.5,
+    "threshold_normalized_error_max": 0.1
+  },
+  "nonlinearities": ["tanh", "logistic", "clipped_linear", "atan"],
+  "gates": {
+    "condition_number_max": 1000000.0,
+    "spectral_radius_max": 0.98,
+    "kappa_ci_relative_width_max": 0.5,
+    "local_linearity_drift_max": 0.1,
+    "residual_nrmse_max": 0.2,
+    "residual_autocorrelation_max": 0.25,
+    "residual_mean_sd_max": 0.1,
+    "layer_r_a_relative_error_max": 0.05,
+    "layer_r_m_relative_error_max": 0.1,
+    "layer_r_threshold_relative_error_max": 0.05
+  },
+  "layer_r": {
+    "model_version": "layer-r-v1",
+    "a": [[0.5, 0.03, 0.12], [0.02, 0.52, 0.1], [0.01, 0.04, 0.58]],
+    "b": [0.07, 0.06, 0.05],
+    "c": [0.8, 0.7, 0.9],
+    "nonlinearity": "tanh"
+  },
+  "layer_m": {
+    "model_version": "layer-m-v1",
+    "baseline_couriers": 100.0,
+    "baseline_merchant_capacity": 100.0,
+    "baseline_demand": 100.0,
+    "base_acceptance": 0.78,
+    "courier_persistence": 0.65,
+    "merchant_persistence": 0.6,
+    "demand_persistence": 0.62,
+    "courier_response": 0.16,
+    "merchant_response": 0.12,
+    "customer_response": 0.14,
+    "supply_acceptance_weight": 0.04,
+    "merchant_acceptance_weight": 0.05,
+    "dispatch_priority_weight": 0.28,
+    "wait_supply_weight": 0.08,
+    "wait_merchant_weight": 0.08,
+    "wait_priority_weight": 0.15,
+    "wait_reliability_weight": 0.1,
+    "service_score_weights": [0.8, 0.7, 0.9],
+    "priority_clip": 0.8,
+    "population_floor_ratio": 0.2,
+    "population_ceiling_ratio": 1.8,
+    "nonlinearity": "tanh"
+  },
+  "robustness_cases": [
+    {"id": "r01", "noise_scale": 0.0, "baseline_offset": 0.0, "customer_delay": 0, "coupling": "primary", "nonlinearity": "tanh"},
+    {"id": "r02", "noise_scale": 1.0, "baseline_offset": 0.0, "customer_delay": 0, "coupling": "primary", "nonlinearity": "logistic"},
+    {"id": "r03", "noise_scale": 2.0, "baseline_offset": 0.0, "customer_delay": 0, "coupling": "primary", "nonlinearity": "clipped_linear"},
+    {"id": "r04", "noise_scale": 1.0, "baseline_offset": 0.03, "customer_delay": 0, "coupling": "primary", "nonlinearity": "atan"},
+    {"id": "r05", "noise_scale": 1.0, "baseline_offset": 0.0, "customer_delay": 1, "coupling": "primary", "nonlinearity": "tanh"},
+    {"id": "r06", "noise_scale": 1.0, "baseline_offset": 0.0, "customer_delay": 3, "coupling": "primary", "nonlinearity": "tanh"},
+    {"id": "r07", "noise_scale": 1.0, "baseline_offset": 0.0, "customer_delay": 0, "coupling": "variant_a", "nonlinearity": "tanh"},
+    {"id": "r08", "noise_scale": 1.0, "baseline_offset": 0.0, "customer_delay": 0, "coupling": "variant_b", "nonlinearity": "tanh"},
+    {"id": "r09", "noise_scale": 2.0, "baseline_offset": 0.03, "customer_delay": 1, "coupling": "variant_a", "nonlinearity": "logistic"},
+    {"id": "r10", "noise_scale": 0.0, "baseline_offset": 0.03, "customer_delay": 3, "coupling": "variant_b", "nonlinearity": "clipped_linear"},
+    {"id": "r11", "noise_scale": 2.0, "baseline_offset": 0.0, "customer_delay": 3, "coupling": "variant_a", "nonlinearity": "atan"},
+    {"id": "r12", "noise_scale": 0.0, "baseline_offset": 0.03, "customer_delay": 1, "coupling": "variant_b", "nonlinearity": "logistic"}
+  ],
+  "intervention": {
+    "stress_alpha_multiplier": 1.25,
+    "lambda_multipliers": [0.0, 0.5, 0.8, 0.95, 1.0, 1.05, 1.2, 1.5],
+    "midpoint_absolute_error_max": 0.05,
+    "served_demand_drop_max": 0.1,
+    "mean_wait_increase_max": 0.2
+  }
+}
