@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream D
 
-Current Task: R3-351 - Mine shadow strategy disagreements
+Current Task: R3-353 - Analyze dispatch interference
 
-Task Status: R3-345 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. The Safe-RADS four-arm support audit found no violation, feasibility, cost, lateness, calibration, fallback, or tightness records in frozen R3-325 artifacts; all metrics are NOT_REPORTED_NO_SAFE_OUTCOMES. Implementation commit `bdb6967` passed all five jobs in GitHub Actions run `32761030125`. R3-325 remains frozen exactly at E-PASS/X-PASS/S-FAIL/C-NO-CLAIM and was not rerun, tuned, reinterpreted, or replaced by synthetic replay. R3-351 is now the highest-priority eligible task.
+Task Status: R3-351 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. The two-record Decision Corpus lacks alternate strategy outcomes and all six disagreement strata; the report is INSUFFICIENT_DATA with zero reported disagreements. Implementation commit `d9aefea` passed all five jobs in GitHub Actions run `32761814137`. Disagreement remains diagnostic only and does not imply candidate superiority. R3-353 is now the highest-priority eligible task.
 
-Next: mine shadow strategy disagreements in R3-351 from privacy-bounded Decision Corpus evidence. Categorize disagreement without treating it as candidate superiority; preserve no-data outcomes and the R3-325 freeze.
+Next: analyze dispatch interference in R3-353 from the frozen switchback design. Keep the result simulation-scoped, preserve no-data outcomes, and do not claim an A/B or real-world causal effect.
 
 R3-336 evidence is `evidence/gates/R3-336/twin-non-fidelity.md`; plan digest is `ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94` and byte SHA is `87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571`.
 
@@ -23,6 +23,8 @@ R3-342 evidence is `evidence/gates/R3-342/hysteresis-experiments.md`; plan diges
 R3-344 evidence is `evidence/gates/R3-344/safe-rads-formalization.md`; plan digest is `82fed4dc95bec7ccbfa10ead770d63e2de6f47bb081d0b5d05672382462f6644` and byte SHA is `a3570615177b19fa59688b23a0e85f76957c6090b75f1fd6d165f3506b171163`. This is a formal preregistration boundary only; no safety, calibration, efficiency, or superiority claim is authorized.
 
 R3-345 evidence is `evidence/gates/R3-345/safe-rads-experiments.md`; plan digest is `182a3e6217f2c8e918049a4d55b78e340c8882a58e5dad106a7f738c3433783c` and byte SHA is `74d83b8fc695e623d6b1a89466f3836bcf6dec618745080920df8080dbb68288`. The support audit returned `INSUFFICIENT_DATA`; all seven metrics are `NOT_REPORTED_NO_SAFE_OUTCOMES`.
+
+R3-351 evidence is `evidence/gates/R3-351/shadow-disagreements.md`; plan digest is `f2dfc31a57db3dcd7c3ad2c4f432b41efcbdd7c252274904550a818508734022` and byte SHA is `00a79ee8571465197f43f6c47c43b7a328f11724cca2cf482253cfdfbdb847dc`. The two-record corpus lacks alternate outcomes and disagreement strata; result is `INSUFFICIENT_DATA`, not superiority evidence.
 
 R3-335 evidence is `evidence/gates/R3-335/what-if-validity.md`; plan digest is `81c52721886c646d2ff468f500c334566e3ed7f4f66bf0f63a9c4478f4b42023` and byte SHA is `20640a2cd366fd992dec681c3dc4139b4b352cb9609bf71ba0542a9bceb9a57d`.
 

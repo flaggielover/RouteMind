@@ -135,3 +135,9 @@ and final claim disposition without rewriting earlier entries.
   reinterpreted, or replaced by synthetic replay; no safety, calibration,
   feasibility, or efficiency claim is made. This is
   `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`, valid negative evidence.
+- `NR-R3-021`: R3-351 audited the privacy-bounded two-record Decision Corpus
+  for shadow strategy disagreements. Alternate strategy outcomes and all six
+  required strata (regime, geography, delay, scarcity, risk, compute) are
+  absent, so the report is `INSUFFICIENT_DATA` with zero reported
+  disagreements. No replay, candidate promotion, OPE, causal, or superiority
+  claim is made. This is `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
