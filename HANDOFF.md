@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream A
 
-Current Task: R3-314 - Extend independent solver verification for public instances
+Current Task: R3-317 - Define solver scale, timeout, and incumbent semantics
 
-Task Status: R3-314 is validating with E-IN-PROGRESS. Its independent canonical VRPTW verifier, 32-case failure matrix, and full local repository gate passed; E-PASS still requires GitHub Actions evidence. No solver experiment, statistical support, or scientific claim has passed.
+Task Status: R3-314 passed locally and in GitHub Actions run 32694841407. R3-317 is active and defining outcome/timeout/incumbent semantics before any material public solver evaluation. No solver experiment, statistical support, or scientific claim has passed.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -670,16 +670,15 @@ Continue autonomously with RM-230.
 
 ## Current Research Resume Capsule
 - Workstream: A - External Validity and Solver Science.
-- Current task: R3-314 independent public-instance verifier.
-- Engineering Gate: E-IN-PROGRESS (task status: validating).
-- Experiment Gate: X-NOT-REQUIRED.
+- Current task: R3-317 solver outcome, timeout, incumbent, and resource semantics.
+- Engineering Gate: E-IN-PROGRESS.
+- Experiment Gate: X-PENDING.
 - Statistical Gate: S-NOT-APPLICABLE.
 - Claim Gate: C-NOT-APPLICABLE.
 - Evidence: R3-314 `evidence/gates/R3-314/public-verifier.md`; local full gate
-  passed Java 80, Python 296 at 95.59%, Web 92 plus build, contracts and controls.
-- CI: R3-310 closure checkpoint `beb5883`, run `32693996068`, all five jobs green;
-  R3-314 validation checkpoint is not pushed yet.
-- Next: push and observe R3-314 validation, then close it and activate R3-317.
+  and all five jobs in GitHub Actions run `32694841407` passed.
+- CI: R3-314 checkpoint `921a0d0`, run `32694841407`, all five jobs green.
+- Next: implement and validate R3-317, then activate R3-311.
 - Concurrent state: commits `779b331`, `6b2e0fa`, and `c2ac98f` added the separate
   `research/level4/spatial_lockin/` work while R3-314 was active. They were
   preserved and the full gate ran on top of `c2ac98f`; do not claim them as

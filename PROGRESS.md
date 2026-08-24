@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 115 / 158 tasks passed
+Repository Total: 116 / 158 tasks passed
 
-Current Task: R3-314 - Extend independent solver verification for public instances
+Current Task: R3-317 - Define solver scale, timeout, and incumbent semantics
 
-Last Completed: R3-310 - Build public benchmark adapter framework
+Last Completed: R3-314 - Extend independent solver verification for public instances
 
-Current Gate: R3-314 is validating with E-IN-PROGRESS after its solver-independent Cartesian VRPTW verifier and failure matrix passed the full local repository gate. E-PASS requires GitHub Actions evidence; no solver benchmark result or scientific claim has passed.
+Current Gate: R3-317 is E-IN-PROGRESS and defining mutually exclusive solver outcome, timeout, incumbent, resource-limit, and verification semantics. No solver benchmark result or scientific claim has passed.
 
-CI: PASS for the R3-310 closure checkpoint beb5883 in run 32693996068, R3-310 implementation checkpoint 407e422 in run 32693781672, and R3-300 checkpoint 59eb53b in run 32692144152 across all five jobs. R3-314 remote evidence is pending. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-314 checkpoint 921a0d0 in run 32694841407, R3-310 closure checkpoint beb5883 in run 32693996068, and R3-300 checkpoint 59eb53b in run 32692144152 across all five jobs. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally for the R3-314 worktree - Java 80/80, Python 296 / 95.59%, Web 34 files / 92 tests plus build, 6 schemas / 18 contract fixtures, repository controls, and Compose configuration. The previous remote full gate passed in Actions run 32693996068; R3-314 remote evidence is pending.
+Regression: PASS locally and remotely for R3-314 - Java 80/80, Python 296 / 95.59%, Web 34 files / 92 tests plus local build and remote browser smoke, 6 schemas / 18 contract fixtures, repository controls, Compose configuration, resilience, and Actions run 32694841407.
 
-Round 3 Scientific Tasks: 2 / 45 passed; R3-314 validating; R3-355 deferred and non-blocking; all material experiment/statistical/claim gates remain open.
+Round 3 Scientific Tasks: 3 / 45 passed; R3-317 in progress; R3-355 deferred and non-blocking; all material experiment/statistical/claim gates remain open.
 
-Research Gate: R3-314 E-IN-PROGRESS (validating) / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-317 E-IN-PROGRESS / X-PENDING / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Obtain remote CI evidence for R3-314, then activate R3-317 solver outcome/timeout semantics. Do not execute material solver experiments before independent verification passes.
+Next Candidates: Implement and validate R3-317 solver outcome/timeout semantics, then activate preregistered Solomon evaluation R3-311. Do not collapse timeouts, failures, infeasibility, or unverified incumbents into success.
 
 ### R3-314 independent public verifier validation - 2026-08-24
 - Untrusted visit, route, and solution contracts remain separate from solver internals.
@@ -41,8 +41,9 @@ Next Candidates: Obtain remote CI evidence for R3-314, then activate R3-317 solv
 - The full local gate passed Java 80/80, Python 296 at 95.59% coverage, Web 34
   files/92 tests plus build, 6 schemas/18 fixtures, Compose, controls,
   determinism, archive, mart, and semantic metric gates.
-- Durable evidence is in `evidence/gates/R3-314/public-verifier.md`; GitHub Actions
-  validation is pending.
+- Durable evidence is in `evidence/gates/R3-314/public-verifier.md`; checkpoint
+  `921a0d0` passed all five jobs in GitHub Actions run `32694841407`. R3-314 is
+  closed with E-PASS, while X/S/C remain not required or not applicable.
 
 ### R3-310 public benchmark adapter validation - 2026-08-24
 - Immutable public-source, licensing, distribution/member checksums, canonical

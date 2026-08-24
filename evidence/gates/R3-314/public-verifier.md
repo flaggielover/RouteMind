@@ -4,7 +4,7 @@ Date: 2026-08-24 (Asia/Shanghai)
 
 Base revision: `c2ac98f7f56019c02224f1948ff1ee59c4ac47b7`
 
-Engineering Gate: E-IN-PROGRESS (task status: validating; remote CI pending)
+Engineering Gate: E-PASS
 
 Experiment Gate: X-NOT-REQUIRED
 
@@ -71,4 +71,8 @@ It does not establish solver feasibility rates, optimality, performance, public
 benchmark quality, or external validity. Those claims remain gated by later Round
 3 experiments and statistical review.
 
-Remote GitHub Actions evidence is pending for the validation checkpoint.
+## Remote Evidence
+
+Checkpoint `921a0d0` passed all five jobs in GitHub Actions run `32694841407`:
+control plane and Compose, Java, Python and contracts, bounded degradation and
+resilience, and Web static/unit/build/browser smoke.
