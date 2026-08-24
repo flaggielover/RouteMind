@@ -52,6 +52,8 @@ inspect campaign outcomes, or support a strategy-effect claim.
 - R3-321 closure revision `d848593` passed all five GitHub Actions jobs in run
   `32714698835`.
 
-Current disposition: `E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
-C-NOT-APPLICABLE`. Local gates are complete; implementation remote CI is
-pending. No campaign data or effect claim exists.
+Implementation revision `349a27e` passed all five GitHub Actions jobs in run
+`32715625853`, including frozen Python/contracts and browser smoke.
+
+Final disposition: `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
+C-NOT-APPLICABLE`. No campaign data or effect claim exists.

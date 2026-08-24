@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream B
 
-Current Task: R3-322 - Implement paired estimation and uncertainty
+Current Task: R3-323 - Implement prospective power analysis
 
-Task Status: R3-321 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE; closure revision d848593 passed all five jobs in Actions run 32714698835. R3-322 implementation and all local gates pass; remote CI is the remaining gate before closure.
+Task Status: R3-322 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after implementation revision 349a27e passed all five jobs in Actions run 32715625853. R3-323 is active and must implement prospective paired-t power accounting without claiming synthetic validation as observed pilot variance.
 
 R3-322 resume capsule: validated CRN plans feed candidate-minus-comparator paired
 mean, median, sample SD, standard error, two-sided 95% Student-t interval,
@@ -20,8 +20,11 @@ zero-variance samples fail explicitly. Five Student-t references pass within
 101/101, and the full local gate passes Java 80/80, Python 594/594 at 95.76%, Web
 92/92 plus build, contracts, determinism, analytics, semantic metrics, and
 controls. Standard vector report digest: `8cc4f549...e585c`. No campaign ran.
-Next: commit/push, observe CI, close R3-322 only on remote green, then activate
-R3-323 prospective power analysis.
+Implementation revision `349a27e` passed all five jobs in Actions run
+`32715625853`; R3-322 is closed. R3-323 is active. Next: freeze the power method,
+record supplied variance/MDE/alpha/power/count/cap/disposition, validate against
+independent vectors and underpowered cases, then run local and remote gates. Any
+fixture variance must remain labeled synthetic until R3-325 runs the real pilot.
 
 R3-321 closure capsule: demand, merchant, courier, and traffic have distinct
 logical owners; preregistered SHA-256 derivation produces arm-independent 63-bit

@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 123 / 158 tasks passed
+Repository Total: 124 / 158 tasks passed
 
-Current Task: R3-322 - Implement paired estimation and uncertainty
+Current Task: R3-323 - Implement prospective power analysis
 
-Last Completed: R3-321 - Implement common-random-number stream ownership
+Last Completed: R3-322 - Implement paired estimation and uncertainty
 
-Current Gate: R3-322 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. Its implementation and local gates pass; remote CI is the remaining evidence gate.
+Current Gate: R3-323 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. It must freeze and validate prospective paired-t power accounting without treating synthetic fixtures as pilot observations.
 
-CI: PASS for the R3-321 closure checkpoint d848593 in run 32714698835 and implementation checkpoint 00475b8 in run 32714350193 across all five jobs. R3-322 implementation CI is pending.
+CI: PASS for the R3-322 implementation checkpoint 349a27e in run 32715625853 and R3-321 closure checkpoint d848593 in run 32714698835 across all five jobs.
 
-Regression: PASS locally for R3-322 - Java 80/80, Python 594/594 at 95.76% coverage, the paired-estimation module at 95.71% with 29 directed tests, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
+Regression: PASS locally and remotely for R3-322 - Java 80/80, Python 594/594 at 95.76% coverage, the paired-estimation module at 95.71% with 29 directed tests, Web 92/92 plus production build/browser smoke, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
 
-Round 3 Scientific Tasks: 10 / 45 passed; R3-322 in progress; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 11 / 45 passed; R3-323 in progress; R3-355 deferred and non-blocking.
 
-Research Gate: R3-322 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-323 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Push and remotely validate the locally green R3-322 implementation, then activate R3-323 and R3-324 in dependency/priority order. R3-350 remains independently eligible.
+Next Candidates: Implement and remotely validate R3-323 prospective power analysis, then activate R3-324 multiplicity control. R3-350 remains independently eligible.
 
 ### R3-322 paired estimation implementation - 2026-08-24
 - Every sample retains its R3-321 CRN plan and must share protocol, phase, and
@@ -45,8 +45,10 @@ Next Candidates: Push and remotely validate the locally green R3-322 implementat
   integration is 101/101. The full local gate passes Java 80/80, Python 594/594
   at 95.76%, Web 92/92 plus build, contracts, determinism, analytics, semantic
   metrics, and repository controls.
-- R3-322 remains E-IN-PROGRESS pending its remote implementation CI. No pilot,
-  confirmatory observation, statistical effect, or strategy claim exists.
+- Implementation revision `349a27e` passed all five GitHub Actions jobs in run
+  `32715625853`. R3-322 closes E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/
+  C-NOT-APPLICABLE, and R3-323 is active. No pilot, confirmatory observation,
+  statistical effect, or strategy claim exists.
 
 ### R3-321 common-random-number implementation - 2026-08-24
 - Pair identity is protocol, phase, regime, and replicate. Demand, merchant,
