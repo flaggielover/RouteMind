@@ -1,0 +1,37 @@
+{
+  "plan_digest": "182a3e6217f2c8e918049a4d55b78e340c8882a58e5dad106a7f738c3433783c",
+  "schema_version": "routemind-safe-rads-experiment-v1",
+  "task_id": "R3-345",
+  "experiment_id": "r3-345-safe-rads-v1",
+  "safe_rads_reference": "Safe-RADS-v1",
+  "baseline_reference": "RADS-BASELINE-v1",
+  "frozen_at_utc": "2026-08-25T20:00:00Z",
+  "question": "Does an explicitly constrained Safe-RADS variant satisfy the frozen risk constraint with bounded route-cost and service impact?",
+  "comparison_arms": ["unconstrained", "fixed", "penalty_only", "conservative"],
+  "required_metrics": ["constraint_violation", "feasibility", "route_cost", "lateness", "calibration", "fallback_rate", "tightness_sensitivity"],
+  "support_requirements": {
+    "required_fields": ["violation_events", "feasibility_outcomes", "route_cost_observations", "lateness_observations", "calibration_records", "tightness_sensitivity_runs"],
+    "source_status": "INSUFFICIENT_DATA",
+    "synthetic_replay": false,
+    "reason": "R3-325 pair artifacts retain arm summaries but no Safe-RADS constraint outcomes"
+  },
+  "thresholds": {
+    "violation_bound": 0.05,
+    "confidence_level": 0.95,
+    "minimum_observations": 100,
+    "route_cost_relative_bound": 0.03
+  },
+  "artifact_lineage": {
+    "safe_rads_plan": "82fed4dc95bec7ccbfa10ead770d63e2de6f47bb081d0b5d05672382462f6644",
+    "baseline_plan": "a907a0a722e8782aa76277637fa92205cc10046e5aca85b2de81e555623016c3",
+    "pilot_plan": "8880268766523069ad3db523a5babf2170eed47a34489d2850c89a46c76929be",
+    "pilot_ledger": "d8c00899785cc9c9cfd7bd7eac1a25513d8131a1c992b60e106ba12709bc5d76"
+  },
+  "execution_policy": {
+    "material_run_authorized": false,
+    "r3_325_rerun": false,
+    "write_external_artifacts": false,
+    "resource_envelope": "read-only Safe-RADS support audit; zero external writes"
+  },
+  "claim_boundary": "SAFE_RADS_EXPERIMENT_DOES_NOT_ESTABLISH_SAFETY_OR_EFFECT"
+}
