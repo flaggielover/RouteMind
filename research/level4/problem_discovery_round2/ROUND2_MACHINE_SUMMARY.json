@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-24T00:00:00+08:00",
+  "campaign": "RouteMind Level-4 Problem Discovery Round 2",
+  "status": "COMPLETE",
+  "spatial_lockin": {
+    "gate2": "FAIL_UNCHANGED",
+    "gate2b": "FAIL",
+    "gate3_eligible": false,
+    "lean_eligible": false,
+    "research_line": "NO-GO",
+    "closure_record": "../spatial_lockin/reports/SPATIAL_LOCKIN_FINAL_CLOSURE.md"
+  },
+  "decision": {
+    "code": "B",
+    "label": "ONLY_APPLICATION_OR_INCREMENTAL_CANDIDATES",
+    "level4_core_viable": false,
+    "lead_candidate": null,
+    "next_decisive_action": "Reclassify RouteMind as an engineering/research-platform project and pause the Level-4 theorem campaign until an external or quasi-experimental anomaly not explained by the Failure Atlas is available."
+  },
+  "candidate_count": 14,
+  "class_counts": {
+    "class_0": 0,
+    "class_1": 7,
+    "class_2": 7,
+    "class_3": 0,
+    "class_4": 0
+  },
+  "top3": [
+    {
+      "rank": 1,
+      "id": "R2-04",
+      "name": "Policy-induced informative coarsening of preparation completion",
+      "prior_art_class": 2,
+      "estimated_specialist_survival_probability": 0.22,
+      "strongest_reduction": "Informative coarsening and endogenous censoring",
+      "level4_status": "KILLED"
+    },
+    {
+      "rank": 2,
+      "id": "R2-02",
+      "name": "Endogenous preparation-arrival synchronization instability",
+      "prior_art_class": 2,
+      "estimated_specialist_survival_probability": 0.18,
+      "strongest_reduction": "State-dependent queueing with delayed feedback",
+      "level4_status": "KILLED"
+    },
+    {
+      "rank": 3,
+      "id": "R2-05",
+      "name": "OPE support collapse under reusable-resource interference",
+      "prior_art_class": 2,
+      "estimated_specialist_survival_probability": 0.14,
+      "strongest_reduction": "Sequential positivity, interference OPE, and matching-market OPE",
+      "level4_status": "KILLED"
+    }
+  ],
+  "candidate_ids": [
+    "R2-01",
+    "R2-02",
+    "R2-03",
+    "R2-04",
+    "R2-05",
+    "R2-06",
+    "R2-07",
+    "R2-08",
+    "R2-09",
+    "R2-10",
+    "R2-11",
+    "R2-12",
+    "R2-13",
+    "R2-14"
+  ],
+  "killed_as_level4": [
+    "R2-01",
+    "R2-02",
+    "R2-03",
+    "R2-04",
+    "R2-05",
+    "R2-06",
+    "R2-07",
+    "R2-08",
+    "R2-09",
+    "R2-10",
+    "R2-11",
+    "R2-12",
+    "R2-13",
+    "R2-14"
+  ],
+  "retained_platform_questions": [
+    "R2-04",
+    "R2-02",
+    "R2-05"
+  ],
+  "authorizations": {
+    "candidate_experimentation": false,
+    "confirmatory_experimentation": false,
+    "theorem_derivation": false,
+    "lean_formalization": false,
+    "engineering_test_design_from_atlases": true
+  },
+  "evidence_scope": {
+    "kind": "TARGETED_ADVERSARIAL_AUDIT",
+    "systematic_review": false,
+    "absence_implies_novelty": false,
+    "claim_labels": [
+      "KNOWN",
+      "SUPPORTED",
+      "INFERRED",
+      "SPECULATIVE",
+      "UNKNOWN"
+    ]
+  },
+  "artifacts": [
+    "ROUND2_FINAL_REPORT.md",
+    "FRONTIER_MAP.md",
+    "FAILURE_ATLAS.md",
+    "CONTRADICTION_ATLAS.md",
+    "ASSUMPTION_STRESS_MAP.md",
+    "CANDIDATE_MATRIX.md",
+    "TOP3_ADVERSARIAL_AUDIT.md",
+    "EVIDENCE_INDEX.md",
+    "ROUND2_MACHINE_SUMMARY.json"
+  ]
+}
