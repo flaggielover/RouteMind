@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream A
 
-Current Task: R3-310 - Build public benchmark adapter framework
+Current Task: R3-314 - Extend independent solver verification for public instances
 
-Task Status: R3-300 passed locally and in GitHub Actions run 32692144152. R3-310 public benchmark provenance/parser implementation passes local Python and contract gates and is validating in repository/remote CI. No solver experiment, statistical support, or scientific claim has passed.
+Task Status: R3-310 passed locally and in GitHub Actions run 32693781672. R3-314 is active and implementing an independent canonical VRPTW result verifier. No solver experiment, statistical support, or scientific claim has passed.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -670,15 +670,15 @@ Continue autonomously with RM-230.
 
 ## Current Research Resume Capsule
 - Workstream: A - External Validity and Solver Science.
-- Current task: R3-310 public benchmark adapter framework.
+- Current task: R3-314 independent public-instance verifier.
 - Engineering Gate: E-IN-PROGRESS.
 - Experiment Gate: X-NOT-REQUIRED.
 - Statistical Gate: S-NOT-APPLICABLE.
 - Claim Gate: C-NOT-APPLICABLE.
-- Evidence: R3-300 `evidence/gates/R3-300/scientific-control-plane.md`; R3-310
-  `evidence/gates/R3-310/public-benchmark-adapter.md`.
-- CI: R3-300 checkpoint `59eb53b`, run `32692144152`, all five jobs green.
-- Next: finish R3-310 repository/remote validation, then activate R3-314.
+- Evidence: R3-310 `evidence/gates/R3-310/public-benchmark-adapter.md`; R3-314
+  evidence and implementation are in progress.
+- CI: R3-310 checkpoint `407e422`, run `32693781672`, all five jobs green.
+- Next: implement and validate R3-314, then activate R3-317.
 - Concurrent state: untracked `research/level4/spatial_lockin/` appeared during
   R3-310 from external activity. It is unrelated and must not be edited, deleted,
   staged, or claimed by this task.

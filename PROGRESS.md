@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 114 / 158 tasks passed
+Repository Total: 115 / 158 tasks passed
 
-Current Task: R3-310 - Build public benchmark adapter framework
+Current Task: R3-314 - Extend independent solver verification for public instances
 
-Last Completed: R3-300 - Establish Round 3 scientific research contract and claim control plane
+Last Completed: R3-310 - Build public benchmark adapter framework
 
-Current Gate: R3-310 implementation passes local parser, strict static, full Python/contract, determinism, archive, mart, and semantic-metric gates and is validating in repository/remote CI. No solver benchmark result or scientific claim has passed.
+Current Gate: R3-314 is implementing solver-independent Cartesian VRPTW route, depot, continuity, capacity, window, service, completion, unassigned, vehicle-count, and objective recomputation. No solver benchmark result or scientific claim has passed.
 
-CI: PASS for R3-300 checkpoint 59eb53b in run 32692144152 across all five jobs. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-310 checkpoint 407e422 in run 32693781672 and R3-300 checkpoint 59eb53b in run 32692144152 across all five jobs. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
+Regression: PASS locally and remotely - Java 80/80, Python 264 / 95.55%, Web 34 files / 92 tests plus build and browser smoke, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32693781672. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
-Round 3 Scientific Tasks: 1 / 45 passed; R3-310 validating; R3-355 deferred and non-blocking; all material experiment/statistical/claim gates remain open.
+Round 3 Scientific Tasks: 2 / 45 passed; R3-314 in progress; R3-355 deferred and non-blocking; all material experiment/statistical/claim gates remain open.
 
-Research Gate: R3-310 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-314 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Finish R3-310 repository/CI validation, then activate R3-314 independent public-instance verification. Do not execute material solver experiments before independent verification exists.
+Next Candidates: Finish R3-314 independent public-instance verification, then activate R3-317 solver outcome/timeout semantics. Do not execute material solver experiments before independent verification exists.
 
 ### R3-310 public benchmark adapter validation - 2026-08-24
 - Immutable public-source, licensing, distribution/member checksums, canonical
@@ -44,7 +44,9 @@ Next Candidates: Finish R3-310 repository/CI validation, then activate R3-314 in
   `4aaf1b...17a` and lineage digest `3f78d9...e2`.
 - The first full gate correctly failed at 94.08% coverage despite 244 passing
   tests. Negative-path tests were added without lowering the threshold; the final
-  local full gate passed 264 tests at 95.55% coverage. Remote CI is pending.
+  local full gate passed 264 tests at 95.55% coverage.
+- Checkpoint `407e422` passed all five jobs in GitHub Actions run `32693781672`;
+  R3-310 is closed and R3-314 is active.
 
 ### RM-230 closure and RM-234 activation - 2026-08-24
 

@@ -1,8 +1,8 @@
 # R3-310 Public Benchmark Adapter Evidence
 
 Date: 2026-08-24 (Asia/Shanghai)
-Status: validating
-Scientific gates: E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
+Status: passed
+Scientific gates: E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
 C-NOT-APPLICABLE
 
 ## Scope and non-claims
@@ -89,5 +89,6 @@ lineage digest: 3f78d911431aa728717d37bcea2f3ff5cf65138c1162deda5d34abd92c4e4ce2
 references: CVRPLIB reported 827.3; SINTEF best-known 10 vehicles / 828.94
 ```
 
-This probe validates parsing and lineage only. Repository gates and GitHub
-Actions remain required before E-PASS.
+This probe validates parsing and lineage only. Validation checkpoint `407e422`
+passed all five jobs in GitHub Actions run `32693781672`; that establishes
+engineering integrity, not benchmark performance.
