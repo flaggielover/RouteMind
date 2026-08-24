@@ -1,0 +1,39 @@
+{
+  "experiment_id": "routemind-level4-spatial-lockin-v1",
+  "stage": "gate2-long-horizon-validation",
+  "status": "FAIL",
+  "gate3_eligibility": "NO",
+  "frozen_threshold_sha256": "85c06e9186a069739b75be40015b2c53350bc589c16121151d2c71aca812a8bb",
+  "transition_definition_sha256": "84ea80c161f9b19d6cadd31f5c0cd8ff773f8394",
+  "external_summary": {
+    "relative_path": "confirmatory/gate2_long_horizon/gate2_validation.json",
+    "sha256": "c81c3d67d8834abab58344b022e39a9e2d7b3a6aa429f63404f9a214cb1953c5",
+    "content_digest": "984aa25739fbb2a1a67fa7357cd878d501b94b4a28beeb91030939de94232773"
+  },
+  "layers": {
+    "R": {
+      "frozen_alpha": 2.60097908919399,
+      "observed_bracket": [2.60097908919399, 2.66600356642384],
+      "observed_alpha": 2.63349132780891,
+      "absolute_error": 0.0325122386149248,
+      "relative_error": 0.0123456790123457,
+      "transition_width": 0.0650244772298496,
+      "multistability": true,
+      "negative_control": false,
+      "reason_codes": ["NEGATIVE_CONTROL_FAILED"]
+    },
+    "M": {
+      "frozen_alpha": 3.29064597856242,
+      "observed_bracket": [3.29064597856242, 3.37291212802648],
+      "observed_alpha": 3.33177905329445,
+      "absolute_error": 0.0411330747320302,
+      "relative_error": 0.0123456790123457,
+      "transition_width": 0.0822661494640604,
+      "multistability": true,
+      "negative_control": false,
+      "reason_codes": ["NEGATIVE_CONTROL_FAILED"]
+    }
+  },
+  "operational_correspondence": true,
+  "gate3_executed": false
+}
