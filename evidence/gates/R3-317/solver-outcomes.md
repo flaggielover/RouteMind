@@ -4,10 +4,9 @@ Date: 2026-08-24 (Asia/Shanghai)
 
 Base revision: `2d6eb08f18ca28b55b9185e8573d1796c6aae13a`
 
-Engineering Gate: E-IN-PROGRESS (task status: validating; remote CI pending)
+Engineering Gate: E-PASS
 
-Experiment Gate: X-IN-PROGRESS (frozen contract-matrix replay passed locally;
-remote replay pending)
+Experiment Gate: X-PASS (frozen contract-matrix replay only)
 
 Statistical Gate: S-NOT-APPLICABLE
 
@@ -85,4 +84,9 @@ no empirical scale, timeout rate, solver feasibility, objective quality,
 optimality, or external-validity claim. Those remain gated by R3-311/R3-312 and
 later statistical/reproduction tasks.
 
-Remote GitHub Actions evidence is pending for the validation checkpoint.
+## Remote Evidence
+
+Checkpoint `c05d482` passed all five jobs in GitHub Actions run `32695879055`:
+control plane and Compose, Java, Python and contracts, bounded degradation and
+resilience, and Web static/unit/build/browser smoke. The Python job replayed the
+same frozen matrix on Linux.

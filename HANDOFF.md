@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream A
 
-Current Task: R3-317 - Define solver scale, timeout, and incumbent semantics
+Current Task: R3-311 - Evaluate Solomon VRPTW benchmark family
 
-Task Status: R3-317 is validating with E-IN-PROGRESS / X-IN-PROGRESS. Its 17-case frozen contract matrix and full local repository gate passed; remote Actions replay is pending. This is not a public solver benchmark result, statistical support, or scientific claim.
+Task Status: R3-317 passed locally and in GitHub Actions run 32695879055. R3-311 is active and must freeze its Solomon selection/resource protocol before material execution. No public solver result, statistical support, or scientific claim has passed yet.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -670,16 +670,16 @@ Continue autonomously with RM-230.
 
 ## Current Research Resume Capsule
 - Workstream: A - External Validity and Solver Science.
-- Current task: R3-317 solver outcome contract remote validation.
+- Current task: R3-311 preregistered Solomon VRPTW evaluation.
 - Engineering Gate: E-IN-PROGRESS.
-- Experiment Gate: X-IN-PROGRESS (frozen contract matrix; remote replay pending).
-- Statistical Gate: S-NOT-APPLICABLE.
-- Claim Gate: C-NOT-APPLICABLE.
-- Evidence: R3-317 `evidence/gates/R3-317/solver-outcomes.md`; local full gate
-  passed Java 80, Python 338 at 95.74%, Web 92 plus build, contracts and controls.
-- CI: R3-314 closure checkpoint `128ccf7`, run `32695073223`, all five jobs green;
-  R3-317 validation checkpoint is not pushed yet.
-- Next: push and observe R3-317 validation, then close it and activate R3-311.
+- Experiment Gate: X-IN-PROGRESS.
+- Statistical Gate: S-IN-PROGRESS.
+- Claim Gate: C-DEFERRED.
+- Evidence: R3-317 `evidence/gates/R3-317/solver-outcomes.md`; local full gate and
+  all five jobs in GitHub Actions run `32695879055` passed.
+- CI: R3-317 checkpoint `c05d482`, run `32695879055`, all five jobs green.
+- Next: freeze R3-311 protocol, then execute every selected instance through the
+  independent verifier and typed outcome contract.
 - Concurrent state: commits through `2d6eb08` updated only the separate
   `research/level4/spatial_lockin/` work while R3-317 was active. They were
   preserved and are not claimed as R3-317 work.

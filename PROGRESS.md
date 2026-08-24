@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 116 / 158 tasks passed
+Repository Total: 117 / 158 tasks passed
 
-Current Task: R3-317 - Define solver scale, timeout, and incumbent semantics
+Current Task: R3-311 - Evaluate Solomon VRPTW benchmark family
 
-Last Completed: R3-314 - Extend independent solver verification for public instances
+Last Completed: R3-317 - Define solver scale, timeout, and incumbent semantics
 
-Current Gate: R3-317 is validating with E-IN-PROGRESS / X-IN-PROGRESS. Its frozen 17-case contract matrix covers all eight mutually exclusive outcome classes and passed the full local gate; GitHub Actions replay is pending. No public solver benchmark result or scientific claim has passed.
+Current Gate: R3-311 is E/X/S-IN-PROGRESS. It must freeze a non-cherry-picked Solomon subset, resource limits, solver identity, exclusion/stopping rules, and reference semantics before material execution. No public solver benchmark result or scientific claim has passed yet.
 
-CI: PASS for the R3-314 closure checkpoint 128ccf7 in run 32695073223, R3-314 implementation checkpoint 921a0d0 in run 32694841407, and R3-310 closure checkpoint beb5883 in run 32693996068 across all five jobs. R3-317 remote evidence is pending. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-317 checkpoint c05d482 in run 32695879055, R3-314 closure checkpoint 128ccf7 in run 32695073223, and R3-310 closure checkpoint beb5883 in run 32693996068 across all five jobs. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally for the R3-317 worktree - Java 80/80, Python 338 / 95.74%, Web 34 files / 92 tests plus build, 6 schemas / 18 contract fixtures, repository controls, Compose configuration, determinism, archive, mart, and semantic metrics. The previous remote full gate passed in Actions run 32695073223; R3-317 remote evidence is pending.
+Regression: PASS locally and remotely for R3-317 - Java 80/80, Python 338 / 95.74%, Web 34 files / 92 tests plus local build and remote browser smoke, 6 schemas / 18 contract fixtures, repository controls, Compose, resilience, and Actions run 32695879055.
 
-Round 3 Scientific Tasks: 3 / 45 passed; R3-317 validating; R3-355 deferred and non-blocking; all material public benchmark/statistical/claim gates remain open.
+Round 3 Scientific Tasks: 4 / 45 passed; R3-311 in progress; R3-355 deferred and non-blocking; all public benchmark/statistical/claim results remain open.
 
-Research Gate: R3-317 E-IN-PROGRESS / X-IN-PROGRESS (contract matrix) / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-311 E-IN-PROGRESS / X-IN-PROGRESS / S-IN-PROGRESS / C-DEFERRED
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Obtain remote replay evidence for R3-317, then activate preregistered Solomon evaluation R3-311. Do not collapse timeouts, failures, infeasibility, or unverified incumbents into success.
+Next Candidates: Freeze and execute R3-311's bounded Solomon protocol through the R3-314 verifier and R3-317 outcome contract. Preserve every selected instance and unfavorable result.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and
@@ -39,7 +39,9 @@ Next Candidates: Obtain remote replay evidence for R3-317, then activate preregi
   It passed 42 directed tests; its SHA-256 is `4ab08b71...383262`.
 - The full local gate passed Java 80/80, Python 338 at 95.74% coverage (the new
   outcome module is 100%), Web 34 files/92 tests plus build, contracts and controls.
-- Evidence is in `evidence/gates/R3-317/solver-outcomes.md`; remote CI is pending.
+- Evidence is in `evidence/gates/R3-317/solver-outcomes.md`; checkpoint `c05d482`
+  passed all five jobs in GitHub Actions run `32695879055`. R3-317 is closed with
+  E-PASS / X-PASS for contract replay only; no public solver claim is implied.
 
 ### R3-314 independent public verifier validation - 2026-08-24
 - Untrusted visit, route, and solution contracts remain separate from solver internals.
