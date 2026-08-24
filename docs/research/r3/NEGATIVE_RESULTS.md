@@ -153,3 +153,13 @@ and final claim disposition without rewriting earlier entries.
   `OPE_NOT_IDENTIFIABLE_FROM_CURRENT_LOGS`; propensities are never fabricated
   retroactively and no IPS, doubly robust, causal, or superiority claim is
   made. This is `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
+- `NR-R3-024`: R3-348 froze six RADS ablation dimensions before any task-level
+  material execution. Frozen R3-325 artifacts lack common component streams,
+  decision/switching/constraint outcomes, uncertainty calibration, and
+  threshold sensitivity runs. Five applicable dimensions are therefore
+  `NOT_EVALUATED_NO_ABLATION_LOGS`; the counterfactual-feature dimension is
+  retained as `NOT_APPLICABLE_FEATURE_ABSENT`, and all eight metrics are
+  `NOT_REPORTED_NO_ABLATION_LOGS`. R3-325 was not rerun and post-result
+  component removal remains exploratory only. This is
+  `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`, not evidence of component
+  importance or effect.

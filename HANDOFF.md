@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream D
 
-Current Task: R3-348 - Execute preregistered RADS ablation
+Current Task: R3-343 - Map empirical switching stability regions
 
-Task Status: R3-348 is active at E-IN-PROGRESS/X-IN-PROGRESS/S-IN-PROGRESS/C-DEFERRED. The six-dimension plan and fail-closed support audit pass Java 81/81, Python 881/881 at 95.43% coverage, six directed tests, and Web 92/92 plus build locally. R3-342 and R3-345 retain `INSUFFICIENT_DATA`; R3-325 was not rerun. Remote CI is pending, and R3-356 is not eligible until R3-349 passes.
+Task Status: R3-348 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. The six-dimension plan and fail-closed audit returned `INSUFFICIENT_DATA`; five applicable dimensions lack component logs and counterfactual feature is explicitly not applicable. Implementation `771e8a8` passed all five jobs in Actions run `32774570495`. R3-343 is active; R3-356 remains blocked until R3-349 passes.
 
-Next: implement and validate the R3-348 fail-closed RADS ablation plan/support audit, record its truthful outcome, then continue to R3-343 and R3-349 by dependency order.
+Next: implement and validate the R3-343 empirical switching stability-region support audit. Map coverage and uncertainty explicitly, and never relabel an empirical map as theoretical stability.
 
 R3-336 evidence is `evidence/gates/R3-336/twin-non-fidelity.md`; plan digest is `ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94` and byte SHA is `87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571`.
 
@@ -23,6 +23,8 @@ R3-342 evidence is `evidence/gates/R3-342/hysteresis-experiments.md`; plan diges
 R3-344 evidence is `evidence/gates/R3-344/safe-rads-formalization.md`; plan digest is `82fed4dc95bec7ccbfa10ead770d63e2de6f47bb081d0b5d05672382462f6644` and byte SHA is `a3570615177b19fa59688b23a0e85f76957c6090b75f1fd6d165f3506b171163`. This is a formal preregistration boundary only; no safety, calibration, efficiency, or superiority claim is authorized.
 
 R3-345 evidence is `evidence/gates/R3-345/safe-rads-experiments.md`; plan digest is `182a3e6217f2c8e918049a4d55b78e340c8882a58e5dad106a7f738c3433783c` and byte SHA is `74d83b8fc695e623d6b1a89466f3836bcf6dec618745080920df8080dbb68288`. The support audit returned `INSUFFICIENT_DATA`; all seven metrics are `NOT_REPORTED_NO_SAFE_OUTCOMES`.
+
+R3-348 evidence is `evidence/gates/R3-348/rads-ablation.md`; plan digest is `c5644b75580db5d95f33a28ea6cd367906a235aac777f46890f862cdf952d2e7` and byte SHA is `388598f7c0265ecfad9f99247b6efc8124b8bc53383d49d102f4be269879d2b4`. The audit returned `INSUFFICIENT_DATA`; five applicable dimensions are `NOT_EVALUATED_NO_ABLATION_LOGS`, counterfactual feature is `NOT_APPLICABLE_FEATURE_ABSENT`, and no R3-325 rerun or component-effect claim occurred.
 
 R3-351 evidence is `evidence/gates/R3-351/shadow-disagreements.md`; plan digest is `f2dfc31a57db3dcd7c3ad2c4f432b41efcbdd7c252274904550a818508734022` and byte SHA is `00a79ee8571465197f43f6c47c43b7a328f11724cca2cf482253cfdfbdb847dc`. The two-record corpus lacks alternate outcomes and disagreement strata; result is `INSUFFICIENT_DATA`, not superiority evidence.
 
