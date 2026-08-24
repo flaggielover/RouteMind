@@ -8,7 +8,7 @@ Current Phase: Round 3 Scientific Research - Workstream A
 
 Current Task: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
 
-Task Status: R3-315 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM after all six frozen derived instances were solved exactly and retained. R3-312's 30-instance scale/timeout protocol is frozen before implementation or material execution.
+Task Status: R3-315 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM after all six frozen derived instances were solved exactly and retained. R3-312's 30-instance scale/timeout protocol is frozen and its implementation checkpoint is locally green; remote validation and material execution remain pending.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -695,10 +695,17 @@ Continue autonomously with RM-230.
   data root, and questioned/marked SINTEF references cannot receive scalar gaps.
   Manifest SHA-256 is
   `6c35a47e03d53a71f32240953fe1a088412637b893cb6d5a25a924a7bef9a2d2`.
-- Next: commit and require the R3-312 preregistration CI to pass, then implement
-  protocol validation, R3-317 classification, R3-314 verification, reference-
-  quality guards, immutable artifacts, and descriptive scale summaries using
-  only synthetic test fixtures.
+- R3-312 implementation is locally complete: protocol validation, R3-317
+  classification, R3-314 verification, reference-quality guards, immutable
+  artifacts, and descriptive scale summaries were exercised only with synthetic
+  fixtures before the remote implementation gate. The checkpoint has
+  60 directed tests and the full local gate pass (Java 80/80, Python 431/431 at
+  95.50%, Web 92/92 plus build, contracts, and controls). Preregistration CI
+  `32703904849` is green; implementation CI is the next gate.
+- No material Homberger instance has run. After remote implementation CI is
+  green, execute all 30 selected instances sequentially in isolated processes,
+  retain every outcome, summarize by scale, audit artifact digests, and only
+  then close R3-312.
 - Concurrent state: `741c8ef` closed the separate spatial-lock-in Gate 2 work.
   Preserve subsequent `research/level4/spatial_lockin/` changes and do not claim
   them as R3-311 work.

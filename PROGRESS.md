@@ -14,11 +14,11 @@ Current Task: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
 
 Last Completed: R3-315 - Cross-check tractable instances with an exact reference solver
 
-Current Gate: R3-312 is E/X-IN-PROGRESS, S-NOT-APPLICABLE, and C-DEFERRED. Its 30-instance five-scale fixed-census protocol is frozen before implementation and material execution.
+Current Gate: R3-312 is E/X-IN-PROGRESS, S-NOT-APPLICABLE, and C-DEFERRED. Its 30-instance five-scale fixed-census protocol is frozen, and the implementation checkpoint is locally green before material execution.
 
-CI: PASS for R3-315 closure checkpoint f9e9a49 in run 32702505551, implementation checkpoint 1bae044 in run 32701927556, and preregistration checkpoint 117b755 in run 32700423191 across all five jobs. Earlier R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-312 preregistration checkpoint ac33c10 in run 32703904849 across all five jobs; R3-315 closure checkpoint f9e9a49 in run 32702505551, implementation checkpoint 1bae044 in run 32701927556, and preregistration checkpoint 117b755 in run 32700423191 also passed all five jobs. The R3-312 implementation is locally green and awaits remote validation. Earlier R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally and remotely for the R3-315 implementation - Java 80/80, Python 371 / 95.16%, Web 34 files / 92 tests plus local build and remote browser smoke, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32701927556.
+Regression: PASS locally for the R3-312 implementation - Java 80/80, Python 431/431 at 95.50% coverage, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, and all repository controls. Remote implementation validation is pending.
 
 Round 3 Scientific Tasks: 6 / 45 passed; R3-312 in progress; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and implement the frozen R3-312 Gehring-Homberger protocol without material solver execution. R3-350 remains independently eligible.
+Next Candidates: Commit and push the locally green R3-312 implementation, observe remote CI, then execute the frozen 30-instance campaign only after the implementation run is green. R3-350 remains independently eligible.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and
@@ -910,3 +910,15 @@ The task is now passed and RM-120 is the active implementation.
   markers remain in lineage but cannot receive scalar gaps. The fixed benchmark
   census is descriptive (`S-NOT-APPLICABLE`) and cannot support population trend,
   superiority, or optimality claims.
+
+### R3-312 scale/timeout implementation - 2026-08-24
+- `homberger_evaluation.py` validates the frozen manifest and five source archives,
+  checks archive/member checksums before parsing, reuses the canonical VRPTW
+  runner, classifies R3-317 outcomes, independently verifies R3-314 incumbents,
+  and withholds scalar gaps for all six questioned/marked references.
+- Immutable per-instance artifacts and a 30-result summary bind manifest,
+  campaign, revision, schema, and selected identity. Timeout, infeasible,
+  resource-limit, verification, and unfavorable results are retained.
+- Sixty directed tests and the full local gate pass: Java 80/80, Python 431/431
+  at 95.50%, Web 92/92 plus build, contracts, and controls. No material
+  instance has run; remote implementation CI is the next evidence gate.
