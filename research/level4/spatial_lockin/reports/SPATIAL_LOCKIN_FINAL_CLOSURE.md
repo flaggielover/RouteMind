@@ -105,4 +105,3 @@ definition, prior-art audit, and fresh falsification plan.
 
 Round 2 therefore starts in a new namespace and does not reuse Spatial Lock-In
 seeds, thresholds, classifier labels, or confirmatory conclusions as evidence.
-
