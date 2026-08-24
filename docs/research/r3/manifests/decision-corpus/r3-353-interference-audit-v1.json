@@ -1,0 +1,11 @@
+{
+  "schema_version": "routemind-interference-audit-v1",
+  "task_id": "R3-353",
+  "report_id": "r3-353-interference-audit-v1",
+  "switchback_design_digest": "4d3b69cf8f5bb3bea317885f4d849367aa9c8b530b35de4485820fefbe063785",
+  "required_fields": ["shared_supply", "zone_spillover", "carryover", "treatment_assignments", "outcome_observations"],
+  "source_status": "INSUFFICIENT_DATA",
+  "execution_policy": {"simulation": false, "write_external_artifacts": false, "ab_claims": false},
+  "claim_boundary": "DISPATCH_INTERFERENCE_AUDIT_DOES_NOT_ESTABLISH_AB_OR_CAUSAL_EFFECT",
+  "plan_digest": "4a1b3477a7da89e42ded5d58e38b086bf459863cd2e320bf038f383b2438de8c"
+}
