@@ -10,25 +10,25 @@ Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
 Repository Total: 145 / 158 tasks passed
 
-Current Task: R3-356 - Independently reproduce major Round 3 results
+Current Task: R3-348 - Execute preregistered RADS ablation
 
 Last Completed: R3-354 - Assess off-policy evaluation identifiability
 
-Current Gate: R3-354 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM. Current Decision Corpus logs lack propensity, exploration, verified action overlap, sufficient state richness, and shared-resource context; result is `OPE_NOT_IDENTIFIABLE_FROM_CURRENT_LOGS`. Propensities and effects were not fabricated. R3-356 is now the highest-priority eligible critical task.
+Current Gate: R3-348 is active at E-IN-PROGRESS / X-IN-PROGRESS / S-IN-PROGRESS / C-DEFERRED. R3-342 and R3-345 are passed but both retain `INSUFFICIENT_DATA`; the ablation manifest must freeze risk, adaptation, hysteresis, uncertainty, counterfactual-feature, and threshold removals before any supported material execution. R3-356 remains blocked by R3-349.
 
 CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168, R3-342 implementation SHA d82138b394e7ab0832acb85a6575931054eff48c in run 32758618433, R3-344 implementation SHA 65c992fce1b73495c01b650996c167fe9c7ec86e in run 32759977254, and R3-345 implementation SHA bdb6967 in run 32761030125; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-354 - Java 81/81, Python 875/875 at 95.62% coverage, R3-354 OPE-audit tests 3/3, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally for the R3-348 implementation checkpoint - Java 81/81, Python 881/881 at 95.43% coverage, R3-348 directed tests 6/6, Web 92/92 plus production build, contracts, determinism, analytics, semantic metrics, and repository controls. Remote CI is pending this checkpoint. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 32 / 45 passed; R3-356 active next; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 32 / 45 passed; R3-348 active; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-IN-PROGRESS / X-IN-PROGRESS / S-IN-PROGRESS / C-DEFERRED
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Prepare independent reproduction of major Round 3 results in R3-356 using an alternate checker/manifest path; preserve contradictions and do not call same-stack replay independent. R3-313 remains optional and non-blocking.
+Next Candidates: Complete the fail-closed R3-348 preregistered ablation support audit without rerunning R3-325. Then execute R3-343; R3-349 unlocks only after both pass. R3-313 remains optional and non-blocking.
 
 ### R3-330 Digital Twin dataset split contract - 2026-08-24
 - The frozen contract uses temporal primary and scenario secondary split axes,

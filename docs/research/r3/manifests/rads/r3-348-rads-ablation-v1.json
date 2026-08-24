@@ -1,0 +1,47 @@
+{
+  "plan_digest": "c5644b75580db5d95f33a28ea6cd367906a235aac777f46890f862cdf952d2e7",
+  "schema_version": "routemind-rads-ablation-v1",
+  "task_id": "R3-348",
+  "experiment_id": "r3-348-rads-ablation-v1",
+  "frozen_at_utc": "2026-08-25T22:00:00Z",
+  "question": "Which preregistered RADS components have measurable paired effects under the frozen Round 3 evidence contract?",
+  "ablations": [
+    {"dimension": "risk", "intervention": "set risk objective weight to zero while retaining the frozen distance objective", "applicability": "APPLICABLE_RADS_BASELINE", "phase": "CONFIRMATORY_PREREGISTERED", "support_field": "decision_outcomes"},
+    {"dimension": "adaptation", "intervention": "freeze the active strategy instead of allowing state-dependent strategy selection", "applicability": "APPLICABLE_RADS_H", "phase": "CONFIRMATORY_PREREGISTERED", "support_field": "decision_outcomes"},
+    {"dimension": "hysteresis", "intervention": "replace RADS-H with the preregistered no-hysteresis comparator", "applicability": "APPLICABLE_RADS_H", "phase": "CONFIRMATORY_PREREGISTERED", "support_field": "switching_observations"},
+    {"dimension": "uncertainty", "intervention": "replace calibrated upper-bound gating with a point-estimate diagnostic that cannot use safety wording", "applicability": "APPLICABLE_SAFE_RADS", "phase": "CONFIRMATORY_DIAGNOSTIC", "support_field": "uncertainty_calibration"},
+    {"dimension": "counterfactual_feature", "intervention": "omit the counterfactual-derived feature if a future version introduces one", "applicability": "NOT_APPLICABLE_FEATURE_ABSENT", "phase": "PREREGISTERED_NOT_RUN", "support_field": null},
+    {"dimension": "threshold", "intervention": "evaluate frozen low, base, and high threshold variants without selecting a favorable value", "applicability": "APPLICABLE_RADS_H_AND_SAFE_RADS", "phase": "CONFIRMATORY_SENSITIVITY", "support_field": "threshold_sensitivity_runs"}
+  ],
+  "required_metrics": ["assignment_rate", "route_cost", "service_metric", "switching_rate", "constraint_violation", "calibration_error", "fallback_rate", "dispatch_latency"],
+  "analysis_plan": {
+    "unit": "paired_seed_regime_stream",
+    "estimator": "paired_difference_by_ablation_dimension",
+    "confidence_level": 0.95,
+    "minimum_pairs": 30,
+    "multiplicity": "HOLM_ACROSS_APPLICABLE_DIMENSION_METRIC_FAMILY",
+    "missing_support_outcome": "INSUFFICIENT_DATA"
+  },
+  "support_requirements": {
+    "required_fields": ["common_stream_identity", "decision_outcomes", "switching_observations", "constraint_outcomes", "uncertainty_calibration", "threshold_sensitivity_runs"],
+    "source_status": "INSUFFICIENT_DATA",
+    "synthetic_substitution": false,
+    "reason": "R3-325 artifacts retain aggregate paired arm summaries but not preregistered component-level ablation outcomes"
+  },
+  "source_lineage": {
+    "baseline_plan": "a907a0a722e8782aa76277637fa92205cc10046e5aca85b2de81e555623016c3",
+    "hysteresis_experiment": "725bce8111db8652c6b52ef1c71e63429594aa4a329e0372e524471ea41ac967",
+    "safe_rads_experiment": "182a3e6217f2c8e918049a4d55b78e340c8882a58e5dad106a7f738c3433783c",
+    "pilot_plan": "8880268766523069ad3db523a5babf2170eed47a34489d2850c89a46c76929be",
+    "pilot_ledger": "d8c00899785cc9c9cfd7bd7eac1a25513d8131a1c992b60e106ba12709bc5d76"
+  },
+  "execution_policy": {
+    "material_run_authorized": false,
+    "r3_325_rerun": false,
+    "write_external_artifacts": false,
+    "post_result_removals": "EXPLORATORY_ONLY",
+    "manifest_changes": "NEW_VERSION_REQUIRED",
+    "resource_envelope": "read-only support audit; zero external writes"
+  },
+  "claim_boundary": "RADS_ABLATION_DOES_NOT_ESTABLISH_COMPONENT_IMPORTANCE_OR_EFFECT"
+}
