@@ -16,7 +16,7 @@ Last Completed: R3-311 - Evaluate Solomon VRPTW benchmark family
 
 Current Gate: R3-315 is E/X-IN-PROGRESS, S-NOT-APPLICABLE, and C-DEFERRED. It must freeze a bounded tractable subset and independently configured exact/reference path before execution; only proven optimality may be labeled ground truth.
 
-CI: PASS for R3-311 implementation checkpoint 8a0a4ea in run 32699067563 and preregistration checkpoint de2674f in run 32697011223 across all five jobs. Earlier R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-311 closure checkpoint 7588757 in run 32699784206, implementation checkpoint 8a0a4ea in run 32699067563, and preregistration checkpoint de2674f in run 32697011223 across all five jobs. Earlier R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely for the R3-311 implementation - Java 80/80, Python 352 / 95.31%, Web 34 files / 92 tests plus local build and remote browser smoke, 6 schemas / 18 contract fixtures, repository controls, Compose, resilience, and Actions run 32699067563.
 
@@ -28,7 +28,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Freeze R3-315's tractable exact-cross-check protocol before execution. R3-312 remains independently eligible and is required with R3-315 before R3-316.
+Next Candidates: Implement and validate the frozen R3-315 exact-cross-check protocol before material execution. R3-312 remains independently eligible and is required with R3-315 before R3-316.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and
@@ -859,3 +859,16 @@ The task is now passed and RM-120 is the active implementation.
 - H1-A1 failed as precommitted (`S-FAIL / C-NO-CLAIM`). Same-vehicle distance
   gaps were 0% for C101/C201, 5.3491% for R201, and 10.3053% for RC201. R3-311
   closes truthfully and activates R3-315; no optimality or superiority follows.
+
+### R3-315 exact/reference preregistration - 2026-08-24
+- The frozen protocol applies a deterministic eight-smallest-customer prefix
+  rule to every one of the six R3-311 structural representatives; no outcome-
+  based selection or substitution is allowed. Its SHA-256 is
+  `18785fe80e9f4f05490e9c06cf89c12d3457bab539e4dee4518ab8dc05f43e55`.
+- The independent path exhaustively enumerates transformed feasible single-
+  vehicle routes, then solves exact set partitioning with single-thread CP-SAT
+  under a 30-second per-instance bound. Candidate RoutingModel runs are bounded
+  at two seconds each.
+- Ground truth is scoped to the conservative scale-1000 derived model and is
+  allowed only after complete enumeration, CP-SAT `OPTIMAL`, and independent
+  verification. Source-double distances remain descriptive.

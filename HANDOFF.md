@@ -8,7 +8,7 @@ Current Phase: Round 3 Scientific Research - Workstream A
 
 Current Task: R3-315 - Cross-check tractable instances with an exact reference solver
 
-Task Status: R3-311 closed E-PASS/X-PASS/S-FAIL/C-NO-CLAIM after all six frozen Solomon instances ran and were retained. R3-315 is active and must freeze its tractable exact-reference protocol before material execution.
+Task Status: R3-311 closed E-PASS/X-PASS/S-FAIL/C-NO-CLAIM after all six frozen Solomon instances ran and were retained. R3-315 is active with its tractable exact-reference protocol frozen before material execution; implementation and remote validation are next.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -677,14 +677,19 @@ Continue autonomously with RM-230.
 - Claim Gate: C-DEFERRED.
 - R3-311 evidence: `evidence/gates/R3-311/solomon-vrptw.md`; compact result
   `docs/research/r3/results/solomon/solomon-stratified-six-results-v1.json`.
-- R3-311 CI: preregistration run `32697011223` and implementation run
-  `32699067563` passed all five jobs.
+- R3-311 CI: preregistration run `32697011223`, implementation run
+  `32699067563`, and closure run `32699784206` passed all five jobs.
 - R3-311 result: campaign `r3-311-20260824T065444Z-8a0a4ea5c098` retained all
   six; 4 verified complete incumbents, 2 no-incumbent timeouts, Wilson 95%
   `[0.299993, 0.903229]`, final `E-PASS/X-PASS/S-FAIL/C-NO-CLAIM`.
-- Next: freeze R3-315's tractable subset, exact/reference solver identity,
-  proof semantics, and resource bounds before any exact solve. Never label an
-  incumbent ground truth unless optimality is proven.
+- R3-315 protocol: all six R3-311 instances use a frozen eight-smallest-customer
+  derived subset; manifest SHA-256 is `18785fe8...43e55`. The exact path
+  exhaustively enumerates transformed feasible routes and runs one-thread
+  CP-SAT for at most 30 seconds per instance.
+- Next: implement and validate R3-315 without material public-instance execution,
+  then require a remote-green checkpoint. Never label an incumbent ground truth
+  unless enumeration is complete, CP-SAT is `OPTIMAL`, and independent
+  verification passes; any proof is limited to the conservative transformed model.
 - Concurrent state: `741c8ef` closed the separate spatial-lock-in Gate 2 work.
   Preserve subsequent `research/level4/spatial_lockin/` changes and do not claim
   them as R3-311 work.

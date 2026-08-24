@@ -1,0 +1,103 @@
+{
+  "schema_version": "routemind-exact-cross-check-experiment-v1",
+  "manifest_id": "r3-315-solomon-prefix-eight-exact-v1",
+  "task_id": "R3-315",
+  "frozen_at_utc": "2026-08-24T07:08:05Z",
+  "frozen_against_revision": "7588757ad08b97630239ebe8441e3fab345d140f",
+  "material_execution_started": false,
+  "source_protocol": {
+    "manifest_id": "r3-311-solomon-stratified-six-v1",
+    "relative_path": "docs/research/r3/manifests/solomon/solomon-stratified-six-v1.json",
+    "sha256": "27a1e5039529f7cd62a0a2d255f63f6f93eafafc49e528187e34873b6ad9428b"
+  },
+  "selection": {
+    "rule": "For every instance frozen by R3-311, retain the depot and the eight customers with the smallest numeric node IDs. Preserve capacity, coordinates, demand, time windows, service times, and objective semantics; reduce max_vehicles to min(source max_vehicles, 8) because empty vehicles cannot improve the objective.",
+    "transformation_label": "DERIVED_PREFIX_SUBINSTANCE",
+    "customer_count": 8,
+    "cherry_picking_allowed": false,
+    "selected_count": 6,
+    "instances": [
+      {"family": "C1", "source_instance_id": "C101", "derived_instance_id": "C101-PREFIX-08", "source_sha256": "a6da75152d182d60ecd2c6f854296f5be452f92282d096adebcf5d99a7f16516"},
+      {"family": "C2", "source_instance_id": "C201", "derived_instance_id": "C201-PREFIX-08", "source_sha256": "d8d9834087ae2326fa23a8510533060233dc9fb481873be60956eb26a880ad63"},
+      {"family": "R1", "source_instance_id": "R101", "derived_instance_id": "R101-PREFIX-08", "source_sha256": "3f3655182bc0fe44ce5de65fdcd2ee2f9c7fb9ed055f923635151d9d6f76d3ed"},
+      {"family": "R2", "source_instance_id": "R201", "derived_instance_id": "R201-PREFIX-08", "source_sha256": "0be960ec998fff2cab0bdbcc5194c617e5ca0a79c82c5b32b1d4bd98b2cae210"},
+      {"family": "RC1", "source_instance_id": "RC101", "derived_instance_id": "RC101-PREFIX-08", "source_sha256": "ef6893ffd9746ad96de8e4da6e64e2c4ba6e08a1c7eb9457276a9f1caf01ca12"},
+      {"family": "RC2", "source_instance_id": "RC201", "derived_instance_id": "RC201-PREFIX-08", "source_sha256": "288836e2d8c2ace83ebbff77e03ac8cdffc574fc134cade21ef92713f8c52d44"}
+    ]
+  },
+  "modeling": {
+    "source_distance_semantics": "EUCLIDEAN_DOUBLE",
+    "transformed_arc_cost": "ceil(euclidean_double * 1000)",
+    "integer_scale": 1000,
+    "time_transform": "ready, due, and service values multiplied exactly by 1000; transformed travel uses the conservative arc ceiling",
+    "objective_order": ["vehicle_count", "transformed_integer_distance"],
+    "objective_encoding": "fixed_vehicle_cost * selected_route_count + transformed_integer_distance, where fixed_vehicle_cost = max_arc_cost * (customer_count + max_vehicles) + 1",
+    "proof_scope": "Optimality applies only to the derived conservative integer model. Independently recomputed Euclidean-double distance is descriptive and is not an optimality proof for the source model or the 100-customer instance."
+  },
+  "candidate_solver": {
+    "name": "Google OR-Tools RoutingModel",
+    "package": "ortools",
+    "version": "9.15.6755",
+    "first_solution_strategy": "PATH_CHEAPEST_ARC",
+    "local_search_metaheuristic": "GUIDED_LOCAL_SEARCH",
+    "wall_time_seconds_per_instance": 2.0,
+    "threads": 1,
+    "sat_random_seed": 0,
+    "routing_random_seed": "SEED_API_NOT_AVAILABLE"
+  },
+  "exact_reference_solver": {
+    "name": "Exhaustive feasible-route enumeration plus Google OR-Tools CP-SAT set partitioning",
+    "package": "ortools",
+    "version": "9.15.6755",
+    "documentation_url": "https://developers.google.com/optimization/cp/cp_solver",
+    "license": "Apache-2.0",
+    "enumeration": "Depth-first enumerate every non-empty ordered customer subset that satisfies transformed capacity and time windows and can return to the depot. Each complete feasible route becomes one set-partitioning column.",
+    "enumeration_sequence_ceiling_per_instance": 109600,
+    "coverage_constraints": "Select feasible route columns so every one of the eight customers is covered exactly once and selected route count does not exceed max_vehicles.",
+    "wall_time_seconds_per_instance": 30.0,
+    "threads": 1,
+    "random_seed": 0,
+    "required_proof_status": "OPTIMAL",
+    "ground_truth_policy": "Use TRANSFORMED_MODEL_GROUND_TRUTH only when enumeration completes without hitting its ceiling, CP-SAT returns OPTIMAL, and the selected solution passes the independent R3-314 verifier. Otherwise retain the incumbent/status but do not use a ground-truth label."
+  },
+  "comparison": {
+    "candidate_acceptance": "A candidate is comparable only when the independent R3-314 verifier accepts a complete solution.",
+    "vehicle_gap": "candidate_vehicle_count - exact_vehicle_count",
+    "same_vehicle_distance_gap_percent": "100 * (candidate_transformed_distance - exact_transformed_distance) / exact_transformed_distance",
+    "different_vehicle_policy": "Report the vehicle-count gap and do not collapse the hierarchical difference into a scalar distance gap.",
+    "source_double_policy": "Report independently recomputed double distances descriptively; do not treat their difference as a proven source-model optimality gap."
+  },
+  "verification": {
+    "verifier": "routemind_compute.application.verification.verify_public_vrptw_solution",
+    "verifier_revision": "R3-314",
+    "trust_solver_feasibility": false,
+    "require_complete": true,
+    "tolerance": 1e-6
+  },
+  "resource_policy": {
+    "maximum_instances": 6,
+    "maximum_candidate_wall_time_seconds": 12.0,
+    "maximum_exact_wall_time_seconds": 180.0,
+    "maximum_campaign_solver_wall_time_seconds": 192.0,
+    "estimated_peak_memory_bytes": 2147483648,
+    "estimated_output_bytes": 52428800,
+    "external_cost_usd": 0,
+    "authorization": "BOUNDED_LOCAL_AUTONOMOUS"
+  },
+  "statistical_plan": {
+    "disposition": "S-NOT-APPLICABLE",
+    "reason": "This bounded cross-check audits solver correctness and objective gaps; it is not a population-level hypothesis test."
+  },
+  "exclusions_and_stopping": {
+    "allowed_exclusions": ["PARSER_INVALID", "CHECKSUM_INVALID", "EXECUTION_DEFECT", "VERIFIER_DEFECT"],
+    "forbidden_exclusions": ["POOR_OBJECTIVE", "TIMEOUT", "INFEASIBLE", "UNVERIFIED_INCUMBENT", "UNFAVORABLE_RESULT", "OPTIMALITY_NOT_PROVEN"],
+    "instance_policy": "Retain every selected derived instance and every candidate/exact outcome.",
+    "campaign_stop": "Stop only for invalid source identity, implementation or verifier defect, enumeration above the frozen ceiling, or uncontrolled resource growth; do not substitute instances."
+  },
+  "artifact_policy": {
+    "data_root_environment_variable": "ROUTEMIND_DATA_ROOT",
+    "result_relative_root": "experiments/r3/R3-315",
+    "commit_large_results": false,
+    "commit_manifest_checksums_and_summary": true
+  }
+}
