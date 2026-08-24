@@ -10,6 +10,13 @@ from typing import cast
 
 from .artifacts import ArtifactClass, ArtifactStore
 from .gate2 import run_gate2
+from .gate2b import (
+    finalize_gate2b,
+    run_gate2b_coarse,
+    run_gate2b_control_stage,
+    run_gate2b_fine,
+    verify_gate2b_preregistration,
+)
 from .identification import identify_layer
 from .negative_control import run_negative_control_diagnostic
 from .preregistration import Preregistration, canonical_json
@@ -262,6 +269,12 @@ def _parser() -> argparse.ArgumentParser:
             "verify-frozen-threshold",
             "run-gate2",
             "run-negative-control-diagnostic",
+            "verify-gate2b-preregistration",
+            "run-gate2b-calibration",
+            "run-gate2b-holdout",
+            "run-gate2b-coarse",
+            "run-gate2b-fine",
+            "finalize-gate2b",
         ),
     )
     return parser
@@ -280,15 +293,29 @@ def main() -> int:
             result = freeze_threshold()
         elif arguments.command == "verify-frozen-threshold":
             result = verify_frozen()
+        elif arguments.command == "verify-gate2b-preregistration":
+            result = verify_gate2b_preregistration(PACKAGE_ROOT)
         else:
             preregistration = _load_preregistration()
             store = ArtifactStore.from_environment()
             if arguments.command == "run-gate2":
                 result = run_gate2(PACKAGE_ROOT, preregistration, store)
-            else:
+            elif arguments.command == "run-negative-control-diagnostic":
                 result = run_negative_control_diagnostic(
                     PACKAGE_ROOT, preregistration, store
                 )
+            elif arguments.command == "run-gate2b-calibration":
+                result = run_gate2b_control_stage(
+                    PACKAGE_ROOT, store, stage="calibration"
+                )
+            elif arguments.command == "run-gate2b-holdout":
+                result = run_gate2b_control_stage(PACKAGE_ROOT, store, stage="holdout")
+            elif arguments.command == "run-gate2b-coarse":
+                result = run_gate2b_coarse(PACKAGE_ROOT, preregistration, store)
+            elif arguments.command == "run-gate2b-fine":
+                result = run_gate2b_fine(PACKAGE_ROOT, preregistration, store)
+            else:
+                result = finalize_gate2b(PACKAGE_ROOT, preregistration, store)
     except ResearchGateError as exc:
         print(
             canonical_json(

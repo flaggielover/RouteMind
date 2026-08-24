@@ -9,7 +9,7 @@ The approved design is
 
 ## Stage boundary
 
-The package exposes the frozen Step 1-4 commands plus one Gate 2 command:
+The package exposes frozen historical commands and the isolated Gate 2b stages:
 
 ```powershell
 python -m research.level4.spatial_lockin.run verify-preregistration
@@ -19,6 +19,12 @@ python -m research.level4.spatial_lockin.run freeze-threshold
 python -m research.level4.spatial_lockin.run verify-frozen-threshold
 python -m research.level4.spatial_lockin.run run-gate2
 python -m research.level4.spatial_lockin.run run-negative-control-diagnostic
+python -m research.level4.spatial_lockin.run verify-gate2b-preregistration
+python -m research.level4.spatial_lockin.run run-gate2b-calibration
+python -m research.level4.spatial_lockin.run run-gate2b-holdout
+python -m research.level4.spatial_lockin.run run-gate2b-coarse
+python -m research.level4.spatial_lockin.run run-gate2b-fine
+python -m research.level4.spatial_lockin.run finalize-gate2b
 ```
 
 Artifact-producing commands require `ROUTEMIND_DATA_ROOT`. Confirmatory and
@@ -29,6 +35,13 @@ artifact, then executes only the pre-registered Gate 2 sweep. It never executes
 Gate 3. `run-negative-control-diagnostic` verifies the separately frozen
 post-confirmatory protocol and immutable Gate 2 evidence, writes only to the
 diagnostic class, and cannot change Gate 2 or execute Gate 3.
+
+Gate 2b uses a separate exclusive-create confirmatory namespace. Its holdout
+command requires a frozen calibration PASS with the same implementation digest;
+coarse confirmation requires both independent synthetic stages to pass. Fine
+points are generated only by the frozen 16-subdivision rule. `finalize-gate2b`
+replays the fixed seeds and freezes the scientific verdict without executing
+Gate 3. A failed stage remains failed and cannot be overwritten or tuned.
 
 ## Independence boundary
 

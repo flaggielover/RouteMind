@@ -22,6 +22,12 @@ class StageBoundaryTests(unittest.TestCase):
         self.assertIn("freeze-threshold", choices)
         self.assertIn("run-gate2", choices)
         self.assertIn("run-negative-control-diagnostic", choices)
+        self.assertIn("verify-gate2b-preregistration", choices)
+        self.assertIn("run-gate2b-calibration", choices)
+        self.assertIn("run-gate2b-holdout", choices)
+        self.assertIn("run-gate2b-coarse", choices)
+        self.assertIn("run-gate2b-fine", choices)
+        self.assertIn("finalize-gate2b", choices)
         self.assertNotIn("run-gate3", choices)
 
 

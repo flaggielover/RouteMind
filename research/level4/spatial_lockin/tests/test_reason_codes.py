@@ -24,6 +24,28 @@ class ReasonCodeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "unregistered reason code"):
             fail("AD_HOC_RESULT_RESCUE")
 
+    def test_gate2b_reason_codes_are_registered_before_execution(self) -> None:
+        required = {
+            "GATE2B_FROZEN_INPUT_MISMATCH",
+            "GATE2B_ARTIFACT_EXISTS",
+            "GATE2B_CLASSIFIER_CALIBRATION_FAILED",
+            "GATE2B_NEGATIVE_CONTROL_FAILED",
+            "GATE2B_WEAK_CONTROL_FAILED",
+            "GATE2B_STRONG_CONTROL_FAILED",
+            "GATE2B_NO_TRANSITION",
+            "GATE2B_THRESHOLD_MISS",
+            "GATE2B_TRANSITION_TOO_WIDE",
+            "GATE2B_PATH_DEPENDENCE_FAILED",
+            "GATE2B_LAYER_R_FAILED",
+            "GATE2B_LAYER_M_FAILED",
+            "GATE2B_OPERATIONAL_MISMATCH",
+            "GATE2B_REPLAY_FAILED",
+            "GATE2B_CONFIRMATORY_CONTAMINATION",
+            "GATE2B_NONFINITE",
+            "GATE2B_INCONCLUSIVE",
+        }
+        self.assertTrue(required.issubset(REASON_CODES))
+
 
 if __name__ == "__main__":
     unittest.main()

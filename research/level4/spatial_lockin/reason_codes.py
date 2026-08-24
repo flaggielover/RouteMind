@@ -137,6 +137,89 @@ _DEFINITIONS = (
         "diagnostic",
         "A frozen Gate 2 trajectory did not replay exactly",
     ),
+    ReasonCode(
+        "GATE2B_FROZEN_INPUT_MISMATCH",
+        "gate2b",
+        "A frozen Gate 2b input or preregistration digest changed",
+    ),
+    ReasonCode(
+        "GATE2B_ARTIFACT_EXISTS",
+        "gate2b",
+        "An immutable Gate 2b artifact already exists",
+    ),
+    ReasonCode(
+        "GATE2B_CLASSIFIER_CALIBRATION_FAILED",
+        "gate2b",
+        "Independent classifier calibration or holdout failed",
+    ),
+    ReasonCode(
+        "GATE2B_NEGATIVE_CONTROL_FAILED",
+        "gate2b",
+        "The Gate 2b alpha-zero negative control failed",
+    ),
+    ReasonCode(
+        "GATE2B_WEAK_CONTROL_FAILED",
+        "gate2b",
+        "A Gate 2b weak-feedback control failed",
+    ),
+    ReasonCode(
+        "GATE2B_STRONG_CONTROL_FAILED",
+        "gate2b",
+        "A Gate 2b strong-feedback control failed",
+    ),
+    ReasonCode(
+        "GATE2B_NO_TRANSITION",
+        "gate2b",
+        "No ordered Gate 2b stochastic-equilibrium transition exists",
+    ),
+    ReasonCode(
+        "GATE2B_THRESHOLD_MISS",
+        "gate2b",
+        "The frozen threshold prediction exceeded the Gate 2b error bound",
+    ),
+    ReasonCode(
+        "GATE2B_TRANSITION_TOO_WIDE",
+        "gate2b",
+        "The Gate 2b transition exceeded the preregistered width bound",
+    ),
+    ReasonCode(
+        "GATE2B_PATH_DEPENDENCE_FAILED",
+        "gate2b",
+        "Gate 2b paired perturbations did not establish path dependence",
+    ),
+    ReasonCode(
+        "GATE2B_LAYER_R_FAILED", "gate2b", "The Gate 2b reduced-model layer failed"
+    ),
+    ReasonCode(
+        "GATE2B_LAYER_M_FAILED",
+        "gate2b",
+        "The Gate 2b mechanism-model layer failed",
+    ),
+    ReasonCode(
+        "GATE2B_OPERATIONAL_MISMATCH",
+        "gate2b",
+        "Layer M operational metrics did not correspond to latent lock-in",
+    ),
+    ReasonCode(
+        "GATE2B_REPLAY_FAILED",
+        "gate2b",
+        "A Gate 2b trajectory did not replay exactly",
+    ),
+    ReasonCode(
+        "GATE2B_CONFIRMATORY_CONTAMINATION",
+        "gate2b",
+        "The isolated Gate 2b confirmatory boundary was contaminated",
+    ),
+    ReasonCode(
+        "GATE2B_NONFINITE",
+        "gate2b",
+        "Gate 2b evidence contains a non-finite or malformed numeric value",
+    ),
+    ReasonCode(
+        "GATE2B_INCONCLUSIVE",
+        "gate2b",
+        "Gate 2b evidence is incomplete or statistically inconclusive",
+    ),
 )
 
 REASON_CODES: Final[dict[str, ReasonCode]] = {item.code: item for item in _DEFINITIONS}
