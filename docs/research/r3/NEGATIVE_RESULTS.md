@@ -182,3 +182,46 @@ and final claim disposition without rewriting earlier entries.
   `PROHIBITED_NO_CROSS_REGIME_EVIDENCE`. R3-325 was not rerun, tuned,
   reinterpreted, or optimized. This is
   `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
+- `NR-R3-027`: R3-312 retained all 30 frozen Gehring-Homberger first-replicate
+  instances under the five-second, one-thread policy. Outcomes were one
+  `FEASIBLE_INCUMBENT`, 28 `TIMEOUT_WITH_FEASIBLE`, and one
+  `TIMEOUT_NO_FEASIBLE`; all 29 incumbents were independently verified, but
+  every one used more vehicles than its source reference. The 200-customer
+  stratum was degraded at 5/6, and larger-scale support labels apply only to
+  the fixed policy/census. No optimality, superiority, unrestricted scale, or
+  population-trend claim is authorized. This is
+  `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
+- `NR-R3-028`: R3-325 remains frozen exactly as
+  `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`. Its material pilot completed all
+  64 pairs and 128 arm attempts, but six assignment-rate cells (normal, surge,
+  merchant-delay, travel-degradation, location-staleness, and compute-budget)
+  were `NON_ESTIMABLE_PAIRED_VARIANCE_OR_POWER` because paired differences had
+  zero variance. The pilot returned
+  `CONFIRMATORY_BLOCKED_NON_ESTIMABLE_PILOT_RETAINED`; no imputation, regime
+  removal, threshold change, confirmatory run, tuning, reinterpretation, or
+  optimization occurred.
+- `NR-R3-029`: R3-327 independently preserved the R3-325 report lineage, all
+  16 cell identities, 64/64 pairs, 128/128 arm attempts, and zero operational
+  failures, fallbacks, or timeouts. The same six assignment-rate cells remain
+  non-estimable, every confirmatory raw/adjusted p-value is null, and the Holm
+  family is `CONFIRMATORY_NOT_EXECUTED`. Engineering/reporting success does not
+  change the scientific result: `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`, with
+  no risk-superiority or assignment-noninferiority claim.
+- `NR-R3-030`: R3-355 remains `deferred_external` because R3-354 established
+  `OPE_NOT_IDENTIFIABLE_FROM_CURRENT_LOGS`. Logged propensities, exploration,
+  verified action overlap, sufficient state richness, and shared-resource
+  context are absent, so IPS and doubly robust estimators were not run.
+  Effective sample size, clipping sensitivity, weights, propensities, and
+  effects are not fabricated. The terminal boundary is
+  `E-DEFERRED / X-DEFERRED / S-DEFERRED / C-DEFERRED`, not an implementation
+  failure or an OPE result.
+- `NR-R3-031`: R3-356 retains both independent-reproduction attempts. Attempt
+  1 is immutable with SHA-256
+  `09897e3db418cb5a41aa8343f009c50fd7bf7ee7b187cc58981b313b0427d307`
+  and recorded an order-only R3-327 contradiction; the observed and expected
+  six-regime sets were identical, and the checker was repaired to project the
+  set in frozen protocol order without changing expectations. The recovery
+  reproduced R3-316, R3-327, R3-336, and R3-349 with zero contradictions, but
+  reproduction does not promote their claims. R3-327 remains
+  `S-FAIL / C-NO-CLAIM`, the Twin/RADS insufficiency boundaries remain, and
+  R3-325 was not rerun.

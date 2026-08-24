@@ -32,6 +32,16 @@ try {
         throw "Task graph validator self-tests failed"
     }
 
+    python scripts/negative_results_gate.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Negative-results append-only audit failed"
+    }
+
+    python scripts/negative_results_gate_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Negative-results gate self-tests failed"
+    }
+
     python scripts/security_gate.py
     if ($LASTEXITCODE -ne 0) {
         throw "Security and supply-chain hygiene gate failed"

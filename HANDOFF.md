@@ -8,9 +8,11 @@ Current Phase: Round 3 Scientific Research - Workstream E
 
 Current Task: R3-358 - Review and preserve negative scientific results
 
-Task Status: R3-356 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. Recovery `76468ca` passed all five jobs in Actions run `32781478836`, and the alternate checker reproduced R3-316, R3-327, R3-336, and R3-349 with zero contradictions while preserving all NO-CLAIM outcomes. R3-358 is active.
+Task Status: R3-358 implementation passes the full local gate. NR-R3-027 through 031 add missing R3-312, R3-325, R3-327, R3-355, and R3-356 coverage without changing entries 001-026. R3-356 closure commit `3064ebe` passed all five jobs in Actions run `32781997330`.
 
-Next: audit `docs/research/r3/NEGATIVE_RESULTS.md` against Round 3 task/evidence/result artifacts and close every append-only coverage gap. Preserve failed hypotheses, nulls, instability, sensitivity limits, benchmark failures, Twin failures, unsupported claims, and both R3-356 attempts; do not treat scientific failure as engineering failure.
+Next: commit/push the R3-358 implementation checkpoint and observe all five real CI jobs before closure. The gate must continue accepting monotonic appends while rejecting mutation, deletion, reordering, source drift, and task/category coverage loss.
+
+R3-358 audit manifest digest is `e36e3be33cb61138472cf94966ea31a2fb7432af142a5d50c011e6359fd6dcf5`, byte SHA is `396a3a921a28bdeb30f4429b97ce75a509b9193c47897a8ec7bf36c782d33e91`, and the immutable 31-entry prefix digest is `89fe0c2eb1cab8da5162c4769f4bcef41bc8b904dcc0f933a1bf069192032706`. Validation covers 24 tasks, six categories, seven exact source artifacts, and append/mutation/deletion behavior. Full local gate passed Java 81/81, Python 905/905 at 95.17%, and Web 92/92 plus build. R3-325 and R3-327 remain `S-FAIL/C-NO-CLAIM`; R3-355 remains deferred, not failed engineering.
 
 R3-356 evidence is `evidence/gates/R3-356/independent-reproduction.md`. Plan digest is `aaab4e70a7daa04d6850c886edb80ac652d47f0fad89e89e75b550530f874d93`; formal result digest is `9eea07d71c037199eca311e242308da1f517904f082099098dea409fd985c36e` and byte SHA is `feb374e75420ec6c9e100dde634c80f936c8bf10d19da182562c879154dc61e7`. Attempt 1 remains byte-for-byte with SHA-256 `09897e3db418cb5a41aa8343f009c50fd7bf7ee7b187cc58981b313b0427d307`. The order-only recovery changed no expectation, and R3-325 remains frozen at `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
 

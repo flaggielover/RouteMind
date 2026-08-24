@@ -14,11 +14,11 @@ Current Task: R3-358 - Review and preserve negative scientific results
 
 Last Completed: R3-356 - Independently reproduce major Round 3 results
 
-Current Gate: R3-356 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM after all four scoped results reproduced with zero contradictions through the alternate checker. The result preserves R3-327 S-FAIL/C-NO-CLAIM and all Twin/RADS insufficiency boundaries. R3-358 is active for append-only negative-results review.
+Current Gate: R3-358 implementation passes the full local gate. Entries NR-R3-027 through 031 add the missing R3-312, R3-325, R3-327, R3-355, and R3-356 outcomes without changing entries 001-026. The frozen prefix gate permits monotonic append but rejects deletion, mutation, reordering, source drift, and coverage loss; remote implementation CI is pending.
 
 CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168, R3-342 implementation SHA d82138b394e7ab0832acb85a6575931054eff48c in run 32758618433, R3-343 implementation SHA 44df8e2c1215230ca5a7ee24f13f87d708050bcc in run 32776065978, R3-344 implementation SHA 65c992fce1b73495c01b650996c167fe9c7ec86e in run 32759977254, R3-345 implementation SHA bdb6967 in run 32761030125, R3-348 implementation SHA 771e8a81c819c2006473fa6a0a55fef5bcfc7fe6 in run 32774570495, R3-349 implementation SHA 94f1a3e3000fa645a775f3ffca3de3157bf3df97 in run 32777694427, and R3-356 recovery SHA 76468caf2f5f50806b86b3b5da5a444b3605856a in run 32781478836; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for the R3-356 recovery checkpoint - Python 905/905 at 95.17% coverage, R3-356 directed tests 12/12, Java 81/81, Web 92/92 plus production build/browser smoke, Ruff, formatting, strict mypy, contracts, determinism, analytics, semantic metrics, repository controls, and resilience. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally for R3-358 - 31 frozen entries, 24 task-coverage identities, six negative-result categories, seven source-artifact hashes, three append/mutation/deletion tests, Java 81/81, Python 905/905 at 95.17%, Web 92/92 plus build, and all static/contract/research controls. Remote implementation CI is pending. R3-356 closure passed all five jobs in Actions run `32781997330`; R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
 Round 3 Scientific Tasks: 36 / 45 passed; R3-358 active; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,26 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Audit `docs/research/r3/NEGATIVE_RESULTS.md` append-only coverage against every Round 3 task result and evidence artifact for R3-358. Preserve failed hypotheses, nulls, instability, sensitivity limits, benchmark failures, Twin failures, unsupported claims, and both R3-356 attempts. R3-313 remains optional and non-blocking.
+Next Candidates: Commit and push the R3-358 append-only audit implementation checkpoint and observe all five real CI jobs before closure. Preserve all 31 frozen entries and do not treat R3-325/R3-327 S-FAIL or R3-355 deferred as engineering failures. R3-313 remains optional and non-blocking.
+
+### R3-358 append-only negative-results audit implementation - 2026-08-25
+- Entries NR-R3-027 through 031 add task-specific coverage for the retained
+  R3-312 unfavorable scale/vehicle results, frozen R3-325 and R3-327
+  `S-FAIL/C-NO-CLAIM`, R3-355 unidentifiable/deferred evaluation, and both
+  R3-356 reproduction attempts. Existing entries 001-026 are unchanged.
+- Audit manifest digest:
+  `e36e3be33cb61138472cf94966ea31a2fb7432af142a5d50c011e6359fd6dcf5`;
+  byte SHA:
+  `396a3a921a28bdeb30f4429b97ce75a509b9193c47897a8ec7bf36c782d33e91`.
+  The 31-entry canonical prefix digest is
+  `89fe0c2eb1cab8da5162c4769f4bcef41bc8b904dcc0f933a1bf069192032706`.
+- The standard-library gate validates sequential identifiers, the immutable
+  frozen prefix, 24 task identities, six categories, and seven exact source
+  artifacts. Three tests prove future append is accepted while frozen mutation
+  and deletion fail. `verify.ps1` now executes the gate and its self-tests.
+- Full local gate passes Java 81/81, Python 905/905 at 95.17%, Web 92/92 plus
+  build, and all repository controls. Remote CI is pending; R3-358 remains in
+  progress.
 
 ### R3-356 independent reproduction closure - 2026-08-25
 - The standard-library-only alternate checker reproduced R3-316 benchmark gap

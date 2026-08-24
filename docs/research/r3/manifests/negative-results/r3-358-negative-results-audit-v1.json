@@ -1,0 +1,79 @@
+{
+  "manifest_digest": "e36e3be33cb61138472cf94966ea31a2fb7432af142a5d50c011e6359fd6dcf5",
+  "schema_version": "routemind-negative-results-audit-v1",
+  "task_id": "R3-358",
+  "frozen_at_utc": "2026-08-25T22:00:00Z",
+  "ledger_path": "docs/research/r3/NEGATIVE_RESULTS.md",
+  "frozen_entry_count": 31,
+  "ledger_prefix_digest": "89fe0c2eb1cab8da5162c4769f4bcef41bc8b904dcc0f933a1bf069192032706",
+  "required_task_coverage": [
+    "R3-311",
+    "R3-312",
+    "R3-315",
+    "R3-316",
+    "R3-325",
+    "R3-327",
+    "R3-330",
+    "R3-331",
+    "R3-332",
+    "R3-334",
+    "R3-335",
+    "R3-336",
+    "R3-340",
+    "R3-341",
+    "R3-342",
+    "R3-344",
+    "R3-345",
+    "R3-348",
+    "R3-349",
+    "R3-351",
+    "R3-353",
+    "R3-354",
+    "R3-355",
+    "R3-356"
+  ],
+  "category_entries": {
+    "failed_hypotheses_and_statistical_gates": ["NR-R3-006", "NR-R3-007", "NR-R3-028", "NR-R3-029"],
+    "benchmark_failures_and_limits": ["NR-R3-007", "NR-R3-009", "NR-R3-027"],
+    "twin_failure_and_non_fidelity": ["NR-R3-010", "NR-R3-011", "NR-R3-012", "NR-R3-013", "NR-R3-014", "NR-R3-015"],
+    "instability_sensitivity_and_unsupported_rads": ["NR-R3-018", "NR-R3-020", "NR-R3-024", "NR-R3-025", "NR-R3-026"],
+    "unidentifiable_or_deferred_evaluation": ["NR-R3-023", "NR-R3-030"],
+    "retained_recovery_and_reproduction": ["NR-R3-031"]
+  },
+  "source_artifacts": [
+    {
+      "path": "evidence/gates/R3-312/gehring-homberger.md",
+      "sha256": "c610809bc38a059e7be7f4a524b10b04ab3651e0e07498c7a665c8f50cf83d33"
+    },
+    {
+      "path": "evidence/gates/R3-325/robustness-matrix.md",
+      "sha256": "8f8e62a7618b125090bbdcc56b85397372a38adde860fef27de7cf535fb13f83"
+    },
+    {
+      "path": "evidence/gates/R3-327/statistical-report.md",
+      "sha256": "36dfcda3ba2897e2c36b44f62397c9b55c730a6ddcc093ca9780b511043f3d6b"
+    },
+    {
+      "path": "evidence/gates/R3-354/ope-identifiability.md",
+      "sha256": "ada52ef2d25be2eceb073e861dfb1e89db279f5111677efecad54511ff165ced"
+    },
+    {
+      "path": "evidence/gates/R3-356/independent-reproduction.md",
+      "sha256": "da0124dc08897ef2746b79400124a9d1dbd2d4affd63e1102944266d810784b8"
+    },
+    {
+      "path": "docs/research/r3/results/reproduction/r3-356-independent-reproduction-attempt-1.json",
+      "sha256": "09897e3db418cb5a41aa8343f009c50fd7bf7ee7b187cc58981b313b0427d307"
+    },
+    {
+      "path": "docs/research/r3/results/reproduction/r3-356-independent-reproduction-v1.json",
+      "sha256": "feb374e75420ec6c9e100dde634c80f936c8bf10d19da182562c879154dc61e7"
+    }
+  ],
+  "policy": {
+    "existing_entries": "IMMUTABLE_AFTER_FREEZE",
+    "future_entries": "APPEND_WITH_MONOTONIC_IDENTIFIER",
+    "unfavorable_evidence": "MUST_NOT_BE_DELETED_OR_REWRITTEN",
+    "scientific_failure": "VALID_TERMINAL_EVIDENCE_NOT_ENGINEERING_FAILURE"
+  }
+}
