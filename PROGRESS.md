@@ -14,11 +14,11 @@ Current Task: R3-316 - Analyze best-known-solution and optimality gaps
 
 Last Completed: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
 
-Current Gate: R3-316 is E/X/S-IN-PROGRESS and C-DEFERRED. Its all-outcome, stratified hierarchical-gap analysis plan is frozen before analyzer implementation.
+Current Gate: R3-316 is E/X/S-IN-PROGRESS and C-DEFERRED. Its all-outcome analyzer is locally green; real-input execution waits for remote-green implementation CI.
 
-CI: PASS for R3-312 closure checkpoint 4f678fd in run 32707794770, implementation checkpoint eac087e in run 32706450863, and preregistration checkpoint ac33c10 in run 32703904849 across all five jobs. R3-315 closure checkpoint f9e9a49 in run 32702505551, implementation checkpoint 1bae044 in run 32701927556, and preregistration checkpoint 117b755 in run 32700423191 also passed all five jobs. Earlier R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for the R3-316 frozen manifest through descendant d86c41e in run 32708578105 across all five jobs; direct run 32708520338 was concurrency-cancelled and is not accepted as green evidence. R3-312 closure checkpoint 4f678fd in run 32707794770, implementation checkpoint eac087e in run 32706450863, and preregistration checkpoint ac33c10 in run 32703904849 also passed all five jobs. The R3-316 implementation is locally green and awaits its remote run. Earlier R3-315/R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS for R3-312 locally and remotely - Java 80/80, Python 431/431 at 95.50% coverage, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, all repository controls, artifact audit, and all five closure-CI jobs.
+Regression: PASS locally for the R3-316 implementation - Java 80/80, Python 493/493 at 95.70% coverage, the new module at 99%, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls. Remote implementation validation is pending.
 
 Round 3 Scientific Tasks: 7 / 45 passed; R3-316 in progress; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and remotely validate the frozen R3-316 analysis protocol, then implement and execute the all-outcome gap audit. R3-350 remains independently eligible.
+Next Candidates: Commit and remotely validate the R3-316 analyzer, then execute and audit the frozen real-input analysis only after that run is green. R3-350 remains independently eligible.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and
@@ -951,4 +951,20 @@ The task is now passed and RM-120 is the active implementation.
   cross-domain pooling, inferential claim, or superiority claim is allowed.
 - Upstream outcomes existed and had been inspected before this freeze, so it is
   explicitly a frozen secondary analysis plan rather than blinded preregistration.
-  Material analysis waits for remote-green manifest and implementation checkpoints.
+  Direct run `32708520338` was concurrency-cancelled; descendant `d86c41e`
+  retained the manifest unchanged and passed all five jobs in run `32708578105`.
+
+### R3-316 gap-analysis implementation - 2026-08-24
+- `benchmark_gap_analysis.py` strictly validates the frozen manifest and three
+  committed summaries, preserves a 42-record ledger, keeps 36 source-BKS records
+  separate from six derived exact records, and reports complete outcome/rate,
+  reference-status, omission, and Type-7 distribution summaries.
+- Six external R3-315 artifacts must match compact-summary SHA/bytes and sidecars;
+  exact proof, candidate/exact verification, vehicle equality, objective-bound
+  equality, and transformed gap are rechecked before inclusion.
+- Sixty-two synthetic directed tests cover path/digest/semantic corruption and
+  immutable output without executing frozen real inputs. The full local gate
+  passed Java 80/80, Python 493/493 at 95.70% total coverage (new module 99%),
+  Web 92/92 plus build, contracts, determinism, analytics, and controls.
+- Material R3-316 execution remains prohibited until the implementation commit
+  passes all remote CI jobs.

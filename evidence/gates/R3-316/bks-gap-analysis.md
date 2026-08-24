@@ -59,3 +59,41 @@ gap distributions. Missing values are never converted to zero or infinity.
 Material analysis is prohibited until this manifest is committed and remote CI
 is green, and then until the implementation checkpoint also passes remote CI.
 Current gates: `E-IN-PROGRESS / X-IN-PROGRESS / S-IN-PROGRESS / C-DEFERRED`.
+
+The direct manifest run `32708520338` was cancelled by workflow concurrency when
+the subsequent spatial-lock-in checkpoint was pushed. Descendant revision
+`d86c41e`, which contains the unchanged R3-316 manifest commit `9e0e1ee`, passed
+all five GitHub Actions jobs in run `32708578105`; this is the accepted remote
+manifest gate.
+
+## Implementation checkpoint
+
+- Added
+  `services/compute-api/src/routemind_compute/application/benchmark_gap_analysis.py`.
+  It validates the frozen protocol, repository-relative input paths and SHA-256
+  identities, upstream schema/task/manifest/count contracts, unique run identities,
+  outcome totals, hierarchical reference direction, and every omission reason.
+- The analyzer builds a 42-record all-outcome ledger and separate source-BKS and
+  derived-exact summaries. It reports complete R3-317 outcome/rate vectors,
+  reference-status counts, and Type-7 `n/minimum/median/p90/maximum` distributions
+  without zero/infinity imputation or cross-domain pooling.
+- R3-315 transformed gaps are not trusted from the compact summary alone. All six
+  external exact artifacts are resolved below `ROUTEMIND_DATA_ROOT`, checked
+  against both summary SHA/byte lineage and sidecars, then used to independently
+  recompute candidate-versus-exact transformed gaps and proof/verification guards.
+- Output is an immutable `gap-analysis.json` plus SHA-256 sidecar beneath a
+  distinct R3-316 campaign directory. It binds manifest, campaign, revision,
+  implementation CI run, three input digests, environment, ledger, audits,
+  descriptive results, and claim disposition.
+- Sixty-two directed synthetic tests cover manifest drift, digest/path escapes,
+  source and exact semantic mutations, outcome/accounting failures, Type-7
+  direction, external artifact corruption, immutable output, and CLI behavior.
+  They do not materially execute the frozen real inputs.
+- Full local validation passed repository controls, Java `80/80`, Python
+  `493/493` at `95.70%` total coverage, the new module at 99%, Web `92/92` plus
+  production build, 6 schemas / 18 contract fixtures, determinism, analytics,
+  and semantic-metric gates.
+
+No material R3-316 analysis has run. The implementation checkpoint is ready for
+commit and remote CI; real-input execution remains prohibited until that run is
+green.

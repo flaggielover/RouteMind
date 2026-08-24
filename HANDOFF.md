@@ -717,9 +717,17 @@ Continue autonomously with RM-230.
   and transformed exact gap use separate Type-7 distributions; all outcome rates
   retain failures and no-incumbent results.
 - The R3-316 freeze is explicitly post-inspection, not blinded preregistration.
-  Commit and remotely validate it, then implement the analyzer with synthetic
-  directed tests; do not materially analyze the frozen real inputs until the
-  implementation checkpoint is also remote green.
+  Direct run `32708520338` was concurrency-cancelled; descendant `d86c41e`
+  contains the unchanged freeze and passed all five jobs in run `32708578105`.
+- R3-316 implementation is locally complete in `benchmark_gap_analysis.py` with
+  62 synthetic directed tests. It validates all three frozen summaries and the
+  six external exact artifacts, preserves all 42 ledger records, separates
+  source-BKS and transformed-exact domains, recomputes Type-7 summaries, and
+  writes one immutable result plus sidecar.
+- Full local implementation gates pass: Java 80/80, Python 493/493 at 95.70%
+  total coverage (new module 99%), Web 92/92 plus build, 6 schemas / 18 fixtures,
+  determinism, analytics, semantic metrics, and controls. Commit/push the
+  implementation and require remote green before running the real inputs.
 - Concurrent state: `465488f` implements the separate spatial-lock-in
   negative-control diagnostic. Preserve subsequent `research/level4/spatial_lockin/`
   changes and do not claim them as Round 3 task work.
