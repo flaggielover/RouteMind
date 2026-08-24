@@ -1,0 +1,12 @@
+{
+  "schema_version": "routemind-ope-identifiability-v1",
+  "task_id": "R3-354",
+  "report_id": "r3-354-ope-identifiability-v1",
+  "source_corpus_manifest_digest": "d92c58cbf196e3f9ab7a157e575831f4c35a9508d3482a6f6ba90728c89e569b",
+  "required_fields": ["logged_propensity", "exploration_indicator", "action_overlap", "state_richness", "shared_resource_context"],
+  "source_status": "OPE_NOT_IDENTIFIABLE_FROM_CURRENT_LOGS",
+  "propensity_policy": "never_fabricate_retroactively",
+  "execution_policy": {"replay": false, "write_external_artifacts": false, "estimate_effect": false},
+  "claim_boundary": "OPE_AUDIT_DOES_NOT_ESTABLISH_OFF_POLICY_EFFECT",
+  "plan_digest": "bbce6870d64222128ab06015a5a8a0642cbc30b0f6677b5da2c9e4422b3e3609"
+}
