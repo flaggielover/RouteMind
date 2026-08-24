@@ -1,0 +1,48 @@
+{
+  "schema_version": "spatial-lockin-final-closure-v1",
+  "research_line": "spatial-lockin-threshold-prediction",
+  "status": "CLOSED_NO_GO",
+  "gate1": "PASS",
+  "gate2": "FAIL_UNCHANGED",
+  "negative_control_diagnostic": "PASS",
+  "gate2b": "FAIL",
+  "gate3_eligibility": "NO",
+  "gate3_executed": false,
+  "lean_eligibility": "NO",
+  "lean_artifacts_present": false,
+  "supported_claim": "Short-horizon local-response identification localized the center of a broad long-horizon stochastic regime-transition region in both layers.",
+  "unsupported_claim": "A sharp critical spatial lock-in threshold with preregistered narrow width.",
+  "layer_results": {
+    "R": {
+      "frozen_alpha": 2.60097908919399,
+      "observed_midpoint": 2.60097908919399,
+      "relative_prediction_error": 0.0,
+      "relative_transition_width": 0.1,
+      "identification_interval_intersects_bracket": true,
+      "overlap_role": "SUPPLEMENTARY_CORRESPONDENCE_DIAGNOSTIC_ONLY"
+    },
+    "M": {
+      "frozen_alpha": 3.29064597856242,
+      "observed_midpoint": 3.29064597856242,
+      "relative_prediction_error": 0.0,
+      "relative_transition_width": 0.1,
+      "identification_interval_intersects_bracket": true,
+      "overlap_role": "SUPPLEMENTARY_CORRESPONDENCE_DIAGNOSTIC_ONLY"
+    }
+  },
+  "reason_codes": [
+    "GATE2B_TRANSITION_TOO_WIDE",
+    "GATE2B_NO_TRANSITION",
+    "GATE2B_LAYER_R_FAILED",
+    "GATE2B_LAYER_M_FAILED"
+  ],
+  "integrity": {
+    "historical_report_sidecars_verified": 9,
+    "historical_hash_failures": 0,
+    "gate3_artifacts_present": false,
+    "lean_artifacts_present": false,
+    "diagnostic_promoted_to_confirmatory": false,
+    "bulk_artifacts_committed": false
+  },
+  "claim_limit": "No sharp threshold, theorem, novelty, external-validity, intervention, Gate 3, or Lean claim is authorized."
+}
