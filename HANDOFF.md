@@ -8,9 +8,11 @@ Current Phase: Round 3 Scientific Research - Workstream E
 
 Current Task: R3-359 - Assign final scientific claim statuses
 
-Task Status: R3-357 is closed `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM`; implementation `8caa7a2` passed all five jobs in Actions run `32787178651`, including remote Compose and browser smoke. R3-359 is active.
+Task Status: R3-359 final seven-row review is complete and validating with zero `C-PASS`, two `C-NO-NOVELTY`, five `C-NO-CLAIM`, and zero deferred. The matrix gate and five mutation tests pass locally; R3-357 closure commit `d728910` passed all five jobs in Actions run `32787502208`.
 
-Next: assign every Claim Matrix row one final `C-PASS`, `C-NO-NOVELTY`, `C-NO-CLAIM`, or `C-DEFERRED` status from the full outcome/prior-art/uncertainty/verification/reproduction record. Do not force a supported claim.
+Next: commit and push the R3-359 implementation, observe all five real Actions jobs, then close R3-359 and activate R3-360 final figures/tables. Keep the supported scientific claims section explicitly empty.
+
+R3-359 evidence is `docs/research/r3/CLAIM_MATRIX.md`; byte SHA-256 is `c6656ac6a1f4634c001cace78867c924b950eebef944380f8a26c556fac9d4cc`. `scripts/claim_matrix_gate.py` and five mutation tests enforce the seven identities, final dispositions, R3-357/R3-356 mappings, supported-claim equality, and frozen R3-325 status. No experiment or external artifact was rerun.
 
 R3-357 evidence is `docs/research/r3/PRIOR_ART_AUDIT.md`; byte SHA-256 is `5978c859247230566e77d9573c2b4d62cb3b960555e3d4e035d85c6660052f4c`. The Claim Matrix maps every proposed claim to a prior-art audit identity and completed reproduction status. No `C-PASS` or novelty claim was created. Actions run `32787178651` passed all five jobs. R3-325 remains frozen exactly as `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM` and was not rerun.
 

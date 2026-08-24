@@ -42,6 +42,16 @@ try {
         throw "Negative-results gate self-tests failed"
     }
 
+    python scripts/claim_matrix_gate.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Final claim matrix gate failed"
+    }
+
+    python scripts/claim_matrix_gate_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Final claim matrix gate self-tests failed"
+    }
+
     python scripts/security_gate.py
     if ($LASTEXITCODE -ne 0) {
         throw "Security and supply-chain hygiene gate failed"
