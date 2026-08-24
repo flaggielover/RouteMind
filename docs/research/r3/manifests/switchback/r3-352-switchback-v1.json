@@ -1,0 +1,48 @@
+{
+  "schema_version": "routemind-switchback-design-v1",
+  "task_id": "R3-352",
+  "design_id": "r3-352-simulation-switchback-v1",
+  "frozen_at_utc": "2026-08-24T15:00:00Z",
+  "phase": "simulation-only",
+  "scope": "shared-supply dispatch simulation; no live traffic or customer assignment",
+  "seed": 35220260824,
+  "zones": ["zone-a", "zone-b", "zone-c"],
+  "periods": [
+    {"period_id": "p00", "block_index": 0, "arm": "candidate", "duration_ticks": 30, "warmup_ticks": 5, "washout_ticks": 5, "zone_ids": ["zone-a", "zone-b", "zone-c"]},
+    {"period_id": "p01", "block_index": 1, "arm": "comparator", "duration_ticks": 30, "warmup_ticks": 5, "washout_ticks": 5, "zone_ids": ["zone-a", "zone-b", "zone-c"]},
+    {"period_id": "p02", "block_index": 2, "arm": "candidate", "duration_ticks": 30, "warmup_ticks": 5, "washout_ticks": 5, "zone_ids": ["zone-a", "zone-b", "zone-c"]},
+    {"period_id": "p03", "block_index": 3, "arm": "comparator", "duration_ticks": 30, "warmup_ticks": 5, "washout_ticks": 5, "zone_ids": ["zone-a", "zone-b", "zone-c"]},
+    {"period_id": "p04", "block_index": 4, "arm": "candidate", "duration_ticks": 30, "warmup_ticks": 5, "washout_ticks": 5, "zone_ids": ["zone-a", "zone-b", "zone-c"]},
+    {"period_id": "p05", "block_index": 5, "arm": "comparator", "duration_ticks": 30, "warmup_ticks": 5, "washout_ticks": 5, "zone_ids": ["zone-a", "zone-b", "zone-c"]}
+  ],
+  "assignment": {
+    "unit": "zone_time_block",
+    "method": "deterministic_seeded_block_sequence",
+    "seed_derivation": "SHA256(design_id|seed|zone_id|block_index), first 16 hex digits masked to 63 bits",
+    "per_order_randomization_allowed": false,
+    "balance_rule": "equal candidate/comparator blocks per zone; preserve common demand and courier streams"
+  },
+  "washout": {
+    "ticks": 5,
+    "rule": "exclude the first five ticks after each arm switch from primary summaries; retain them for carryover diagnostics",
+    "excluded_from_primary_window": true
+  },
+  "interference_risks": [
+    {"risk_id": "shared-supply", "mechanism": "courier availability is shared by all orders in a zone and period", "unit": "zone_time_block", "spillover": "assignment in one order changes supply for later orders", "mitigation": "keep the zone and common courier stream fixed within paired blocks", "diagnostic": "record supply trajectory digest and assignment queue by block"},
+    {"risk_id": "zone-spillover", "mechanism": "courier movement crosses zone boundaries during a block", "unit": "courier_zone_transition", "spillover": "an arm can alter neighboring-zone availability", "mitigation": "retain all zones in the same block and stratify summaries by origin/destination zone", "diagnostic": "count cross-zone transitions and report them before any comparison"},
+    {"risk_id": "carryover", "mechanism": "orders and courier state persist across an arm switch", "unit": "switch_boundary", "spillover": "the next arm inherits unfinished work from the previous arm", "mitigation": "warmup plus explicit washout; no switch-boundary ticks enter the primary window", "diagnostic": "report unfinished-order and courier-state digests at every boundary"}
+  ],
+  "metrics": {
+    "primary": ["assignment_rate_by_zone_time_block", "scenario_risk_index_by_zone_time_block"],
+    "secondary": ["queue_depth", "fallback_rate", "timeout_rate", "cross_zone_transition_count"],
+    "not_estimable_without_outcomes": "No effect, causal, or generalization statement is estimable from this design alone."
+  },
+  "analysis": {
+    "comparison_unit": "paired_zone_time_block_with_common_streams",
+    "cluster": "zone_and_switchback_sequence",
+    "descriptive_only": true,
+    "causal_claim_allowed": false
+  },
+  "claim_boundary": "SIMULATION_DESIGN_NOT_REAL_WORLD_CAUSAL_VALIDATION",
+  "design_digest": "4d3b69cf8f5bb3bea317885f4d849367aa9c8b530b35de4485820fefbe063785"
+}
