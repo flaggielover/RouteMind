@@ -20,6 +20,7 @@ class StageBoundaryTests(unittest.TestCase):
         self.assertNotIn("validate-threshold", choices)
         self.assertNotIn("validate-intervention", choices)
         self.assertIn("freeze-threshold", choices)
+        self.assertIn("run-gate2", choices)
 
 
 if __name__ == "__main__":

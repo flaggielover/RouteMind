@@ -93,6 +93,30 @@ _DEFINITIONS = (
         "architecture",
         "Layer M imports reduced internals",
     ),
+    ReasonCode("FROZEN_INPUT_MISMATCH", "gate2", "Frozen Gate 1 input does not match"),
+    ReasonCode(
+        "GATE2_ARTIFACT_EXISTS", "gate2", "Gate 2 confirmatory output already exists"
+    ),
+    ReasonCode(
+        "NO_SHARP_TRANSITION", "gate2", "No sharp long-horizon transition was found"
+    ),
+    ReasonCode(
+        "NEGATIVE_CONTROL_FAILED", "gate2", "A pre-registered negative control failed"
+    ),
+    ReasonCode(
+        "PATH_DEPENDENCE_FAILED", "gate2", "Path dependence or multistability failed"
+    ),
+    ReasonCode(
+        "SEED_ROBUSTNESS_FAILED", "gate2", "Seed aggregation did not support a regime"
+    ),
+    ReasonCode(
+        "PREDICTION_ERROR", "gate2", "Frozen threshold prediction exceeded tolerance"
+    ),
+    ReasonCode(
+        "OPERATIONAL_CORRESPONDENCE_FAILED",
+        "gate2",
+        "Layer M operational metrics did not track the latent regime",
+    ),
 )
 
 REASON_CODES: Final[dict[str, ReasonCode]] = {item.code: item for item in _DEFINITIONS}

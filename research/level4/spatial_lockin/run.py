@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import cast
 
 from .artifacts import ArtifactClass, ArtifactStore
+from .gate2 import run_gate2
 from .identification import identify_layer
 from .preregistration import Preregistration, canonical_json
 from .reason_codes import ResearchGateError
@@ -258,6 +259,7 @@ def _parser() -> argparse.ArgumentParser:
             "identify-diagnostic",
             "freeze-threshold",
             "verify-frozen-threshold",
+            "run-gate2",
         ),
     )
     return parser
@@ -275,7 +277,15 @@ def main() -> int:
         elif arguments.command == "freeze-threshold":
             result = freeze_threshold()
         else:
-            result = verify_frozen()
+            if arguments.command == "verify-frozen-threshold":
+                result = verify_frozen()
+            else:
+                preregistration = _load_preregistration()
+                result = run_gate2(
+                    PACKAGE_ROOT,
+                    preregistration,
+                    ArtifactStore.from_environment(),
+                )
     except ResearchGateError as exc:
         print(
             canonical_json(
