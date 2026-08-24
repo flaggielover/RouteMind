@@ -10,25 +10,25 @@ Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
 Repository Total: 126 / 158 tasks passed
 
-Current Task: R3-325 - Execute preregistered RouteBench robustness matrix
+Current Task: R3-327 - Generate statistical RouteBench reports
 
-Last Completed: R3-324 - Implement multiple-comparison control
+Last Completed: R3-325 - Execute preregistered RouteBench robustness matrix
 
-Current Gate: R3-325 implementation is locally validated as E-PASS, while X-PENDING / S-PENDING / C-DEFERRED remain. The synthetic full matrix retained NON_ESTIMABLE assignment outcomes and correctly blocked confirmatory design; no material pilot ran. The committed implementation must pass remote CI before material execution.
+Current Gate: R3-325 closed E-PASS / X-PASS / S-FAIL / C-NO-CLAIM. Its material pilot completed 64/64 pairs and 128 arms; six assignment-rate cells had zero paired variance and confirmatory execution was blocked fail-closed. R3-327 is now the highest-priority unblocked task.
 
-CI: PASS for the R3-324 implementation checkpoint c3e394b in run 32720233681 and R3-323 implementation checkpoint b18d171 in run 32718029279 across all five jobs.
+CI: PASS for the R3-325 implementation checkpoint SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984 across all five jobs; the earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-324 - Java 81/81, Python 657/657 at 95.88% coverage, the multiplicity module at 100% statement/branch coverage with 22 directed tests, statistical integration 143/143, Web 92/92 plus production build/browser smoke, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
+Regression: PASS locally and remotely for R3-325 - Java 81/81, Python 755/755 at 96.17% coverage, R3-325 modules covered at analysis 100%, artifacts 96%, campaign 98%, local executor 100%, runner 100%, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls.
 
-Round 3 Scientific Tasks: 13 / 45 passed; R3-325 in progress; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 14 / 45 passed; R3-327 active; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-IN-PROGRESS / X-PENDING / S-PENDING / C-DEFERRED
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PENDING / X-PENDING / S-PENDING / C-DEFERRED
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and push the R3-325 runner/evidence, observe the real implementation checkpoint Actions run, then execute the bounded material pilot only after remote green. R3-350 remains independently eligible.
+Next Candidates: Generate the R3-327 report from the retained pilot ledger, including all 16 family cells, uncertainty, power/planning dispositions, corrected-test boundary, runtime/failure/fallback diagnostics, and explicit S-FAIL/C-NO-CLAIM wording. R3-350 remains independently eligible.
 
 ### R3-325 implementation checkpoint - 2026-08-24
 - The manifest-bound runner now freezes all eight R3-320 regimes, 64 pilot pairs,
@@ -45,9 +45,26 @@ Next Candidates: Commit and push the R3-325 runner/evidence, observe the real im
 - Ruff, strict mypy, lock check, focused tests, compute check, and full gate pass.
   Full gate totals are Java 81/81, Python 755/755 at 96.17%, and Web 92/92 plus
   production build. Evidence: `evidence/gates/R3-325/robustness-matrix.md`.
-- Current disposition is `E-PASS / X-PENDING / S-PENDING / C-DEFERRED`; next
-  action is the explicit implementation commit/push and real GitHub Actions
-  observation before material pilot execution.
+- Implementation checkpoint disposition was `E-PASS / X-PENDING / S-PENDING /
+  C-DEFERRED`; after remote authorization and material execution, R3-325 now
+  closes `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM` as recorded below.
+
+### R3-325 material pilot - 2026-08-24
+- Remote authorization used implementation SHA
+  `ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f` and successful Actions run
+  `32725900984`. The pilot wrote to F:\\Projects\\RouteMind-Data and completed
+  all 64 frozen pairs / 128 arm attempts.
+- Pilot plan digest is `8880268766523069ad3db523a5babf2170eed47a34489d2850c89a46c76929be`;
+  ledger digest is `d8c00899785cc9c9cfd7bd7eac1a25513d8131a1c992b60e106ba12709bc5d76`;
+  analysis digest is `5c1c0963b3cb9d8809dd7d02355ef6f401ddd8c69b55dc1d6dc74c17a898a10c`.
+- Ten of 16 analysis cells were planned. Six assignment-rate cells retained
+  `NON_ESTIMABLE_PAIRED_VARIANCE_OR_POWER` because paired differences had zero
+  variance. The CLI returned expected exit 2 and did not run confirmatory arms;
+  no imputation or claim promotion occurred.
+- All 68 non-sidecar files have matching SHA-256 sidecars; the 1,979,119-byte
+  artifact envelope is under the frozen 512 MiB limit. R3-325 closes
+  `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`. Evidence:
+  `evidence/gates/R3-325/robustness-matrix.md`.
 
 ### R3-324 multiple-comparison implementation - 2026-08-24
 - The frozen protocol now exposes the exact `holm_bonferroni_familywise` method

@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream B
 
-Current Task: R3-325 - Execute preregistered RouteBench robustness matrix
+Current Task: R3-327 - Generate statistical RouteBench reports
 
-Task Status: R3-324 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after implementation revision c3e394b passed all five jobs in Actions run 32720233681. R3-325 implementation is locally E-PASS, but material pilot execution remains prohibited until its committed runner checkpoint is remote green.
+Task Status: R3-325 closed E-PASS/X-PASS/S-FAIL/C-NO-CLAIM. Implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f passed all five jobs in Actions run 32725900984. The authorized material pilot completed 64/64 pairs and 128 arm attempts, retained six non-estimable assignment cells, and correctly blocked confirmatory execution. R3-327 is now active.
 
 R3-324 resume capsule: the exact frozen 16-test Holm step-down family retains
 protocol/regime/metric/hypothesis identity, raw p-values, stable family ranks,
@@ -24,13 +24,13 @@ determinism gates. During validation, a real Java same-instant transition flake
 was diagnosed and repaired with monotonic aggregate/outbox event time; the fixed
 clock regression and originally failing lease test pass. Implementation revision
 `c3e394b` passed all five jobs in Actions run `32720233681`; R3-324 is closed.
-Next: commit and push the manifest-bound R3-325 runner and evidence, require a
-remote-green implementation checkpoint, then run the authorized material pilot.
-The local synthetic full matrix covered 64/64 pairs and 128 attempts; assignment
-zero variance retained `NON_ESTIMABLE` outcomes and blocked confirmatory design
-without imputation. No observed pilot, confirmatory campaign, statistical
-effect, or strategy claim exists. Evidence is in
-`evidence/gates/R3-325/robustness-matrix.md`.
+Next: generate the R3-327 statistical report from the retained external pilot
+ledger and analysis. Preserve all 16 family identities, seeds and stream
+digests, uncertainty and effect-size fields where estimable, corrected-test
+boundaries, runtime/failure/fallback diagnostics, and explicit S-FAIL/C-NO-CLAIM
+dispositions. The pilot produced no strategy claim. Evidence is in
+`evidence/gates/R3-325/robustness-matrix.md` and the external F-drive campaign
+directory.
 
 R3-323 resume capsule: exact SciPy 1.18.0 one-sided noncentral paired-t planning
 records the content-addressed variance source, frozen MDE/noninferiority distance,

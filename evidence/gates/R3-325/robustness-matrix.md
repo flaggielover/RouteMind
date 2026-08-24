@@ -2,7 +2,9 @@
 
 Date: 2026-08-24 (Asia/Shanghai)
 
-Base revision for this implementation checkpoint: `a6e85f5e0a5cb035a4c44b9d2ef5387ac9cbeac7`
+Implementation authorization revision: `ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f`
+
+Implementation authorization CI run: `32725900984` (completed, success)
 
 ## Scope and execution boundary
 
@@ -76,10 +78,38 @@ converted into a confirmatory design by imputation or by changing the matrix.
   Web 34 files / 92 tests plus production build, contracts, lock/security,
   determinism, analytics, semantic metrics, and repository controls.
 
+## Material pilot execution
+
+After the authorized implementation revision was remotely green, the frozen
+pilot ran once at
+`F:\Projects\RouteMind-Data\experiments\r3\R3-325\r3-325-pilot-20260824-ce8dafb`.
+The command returned exit code 2 exactly because confirmatory execution is
+blocked when any frozen metric is non-estimable; the pilot itself completed.
+
+- Protocol SHA-256: `a6dae9d55641ff7966ef4a50cc00a63da3e936620c3c48f23cd2c2ce039375b5`.
+- Plan digest: `8880268766523069ad3db523a5babf2170eed47a34489d2850c89a46c76929be`.
+- 8 regimes x 8 pairs = 64/64 complete pairs; 128 retained arm attempts.
+- Pilot ledger digest: `d8c00899785cc9c9cfd7bd7eac1a25513d8131a1c992b60e106ba12709bc5d76`.
+- Pilot analysis digest: `5c1c0963b3cb9d8809dd7d02355ef6f401ddd8c69b55dc1d6dc74c17a898a10c`.
+- Analysis disposition: `CONFIRMATORY_BLOCKED_NON_ESTIMABLE_PILOT_RETAINED`.
+  Ten of the 16 family cells were planned; six assignment-rate cells (normal,
+  surge, merchant-delay, travel-degradation, location-staleness, and
+  compute-budget) retained `NON_ESTIMABLE_PAIRED_VARIANCE_OR_POWER` because
+  paired differences had zero variance. No imputation, scenario removal, or
+  confirmatory run occurred.
+- 68 non-sidecar files were written, totaling 1,974,699 bytes; all 68 SHA-256
+  sidecars matched. The runner's reported artifact envelope was 1,979,119
+  bytes including sidecars and remained below the 512 MiB limit.
+
+The pilot is observed execution evidence, but it is not a positive strategy
+claim. The correct statistical disposition is `S-FAIL` for the six unsupported
+cells and `C-NO-CLAIM` for the campaign as a whole. Risk outcomes and all
+retained pair/stream/failure lineage remain available for a later report.
+
 ## Checkpoint disposition
 
-This file records an implementation checkpoint only. Current disposition is
-`E-PASS / X-PENDING / S-PENDING / C-DEFERRED`: material pilot execution is
-authorized only after this implementation is committed, pushed, and its real
-GitHub Actions run is completed successfully. Synthetic output is retained as
-engineering evidence and is not an observed RouteBench claim.
+R3-325 disposition is `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`. Engineering
+execution and artifact retention passed; the preregistered statistical gate
+correctly retained six non-estimable assignment cells and refused to promote a
+confirmatory design. Synthetic output remains engineering evidence and is not
+mixed with the observed pilot ledger.
