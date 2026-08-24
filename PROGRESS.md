@@ -14,11 +14,11 @@ Current Task: R3-349 - Execute RADS robustness study
 
 Last Completed: R3-343 - Map empirical switching stability regions
 
-Current Gate: R3-343 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM. Current artifacts have no tick-level state trajectories, so the empirical map has `NO_ELIGIBLE_CELLS` and no uncertainty estimate; nothing is called theoretical stability. R3-349 is now active and is the last dependency blocking R3-356.
+Current Gate: R3-349 implementation is locally validated. The frozen eight-axis support audit preserves seven source regime axes, explicitly marks location noise unsupported, records no RADS-H/Safe-RADS outcomes, and enforces 30 pairs per axis level; the retained R3-325 pilot has only eight. Outcome is `INSUFFICIENT_DATA`, and broad robustness claims are prohibited. Remote implementation CI is pending.
 
 CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168, R3-342 implementation SHA d82138b394e7ab0832acb85a6575931054eff48c in run 32758618433, R3-343 implementation SHA 44df8e2c1215230ca5a7ee24f13f87d708050bcc in run 32776065978, R3-344 implementation SHA 65c992fce1b73495c01b650996c167fe9c7ec86e in run 32759977254, R3-345 implementation SHA bdb6967 in run 32761030125, and R3-348 implementation SHA 771e8a81c819c2006473fa6a0a55fef5bcfc7fe6 in run 32774570495; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for the R3-343 implementation checkpoint - Python 887/887 at 95.26% coverage, R3-343 directed tests 6/6, Java 81/81, Web 92/92 plus production build/browser smoke, Ruff, formatting, strict mypy, contracts, determinism, analytics, semantic metrics, repository controls, and resilience. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally for the R3-349 implementation checkpoint - Python 893/893 at 95.08% coverage, R3-349 directed tests 6/6, Java 81/81, Web 92/92 plus production build/browser smoke, Ruff, formatting, strict mypy, contracts, determinism, analytics, semantic metrics, and repository controls. Remote five-job CI is pending. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
 Round 3 Scientific Tasks: 34 / 45 passed; R3-349 active; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,22 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Execute the fail-closed R3-349 cross-regime robustness support audit over seeds, demand, supply, merchant delay, traffic, location noise/staleness, and compute constraints. Unsupported regimes remain explicit. R3-313 remains optional and non-blocking.
+Next Candidates: Push the validated R3-349 checkpoint, observe all real GitHub Actions jobs, close the evidence as `C-NO-CLAIM`, then activate critical R3-356. R3-313 remains optional and non-blocking.
+
+### R3-349 RADS robustness support audit - 2026-08-25
+- The frozen plan covers seeds, demand, supply, merchant delay, traffic,
+  location noise, location staleness, and compute constraints. A broad claim
+  requires support for every axis and successful preregistered cross-regime
+  tests; one favorable scenario is never sufficient.
+- R3-325 retains paired source regimes for seven axes, but no RADS-H or
+  Safe-RADS strategy identity/outcomes. Location noise has no frozen regime,
+  and the eight pilot pairs per existing regime are below the frozen minimum
+  of 30. The audit is therefore `INSUFFICIENT_DATA`, with every metric
+  `NOT_REPORTED_NO_CROSS_REGIME_RADS_OUTCOMES` and broad claims prohibited.
+- Plan digest: `379f5087f3114f50cd9bb8cefff62af0d9a35e0ea3e1ba12544b9fafc52527a2`;
+  byte SHA: `e58abf5ac7498a3564c3a9dc7d001ae34da2d79ccde6a54d41a2c4fc091d7f5b`.
+  Local full gate passed Java 81/81, Python 893/893 at 95.08%, and Web 92/92
+  plus build. Remote implementation CI is pending.
 
 ### R3-330 Digital Twin dataset split contract - 2026-08-24
 - The frozen contract uses temporal primary and scenario secondary split axes,

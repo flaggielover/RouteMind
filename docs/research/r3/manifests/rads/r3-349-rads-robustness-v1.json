@@ -1,0 +1,55 @@
+{
+  "plan_digest": "379f5087f3114f50cd9bb8cefff62af0d9a35e0ea3e1ba12544b9fafc52527a2",
+  "schema_version": "routemind-rads-robustness-v1",
+  "task_id": "R3-349",
+  "study_id": "r3-349-rads-robustness-v1",
+  "frozen_at_utc": "2026-08-25T23:30:00Z",
+  "question": "Do preregistered RADS outcomes remain supported across seeds and the frozen demand, supply, merchant, traffic, location, and compute stress axes?",
+  "robustness_axes": [
+    {"axis": "seeds", "source_regimes": ["pilot_replicates_0_through_7", "four_common_random_streams"], "support_field": "seed_stream_identity"},
+    {"axis": "demand", "source_regimes": ["normal", "surge"], "support_field": "demand_regime"},
+    {"axis": "supply", "source_regimes": ["normal", "shortage"], "support_field": "supply_regime"},
+    {"axis": "merchant_delay", "source_regimes": ["normal", "merchant-delay"], "support_field": "merchant_delay_regime"},
+    {"axis": "traffic", "source_regimes": ["normal", "travel-degradation"], "support_field": "traffic_regime"},
+    {"axis": "location_noise", "source_regimes": ["UNSUPPORTED_NO_FROZEN_REGIME"], "support_field": "location_noise_regime"},
+    {"axis": "location_staleness", "source_regimes": ["normal", "location-staleness"], "support_field": "location_staleness_regime"},
+    {"axis": "compute_constraints", "source_regimes": ["normal", "compute-budget", "queue-pressure"], "support_field": "compute_constraint_regime"}
+  ],
+  "required_metrics": ["assignment_rate", "route_cost", "service_metric", "switching_rate", "constraint_violation", "fallback_rate", "dispatch_latency"],
+  "analysis_plan": {
+    "unit": "paired_seed_regime_stream",
+    "estimator": "paired_difference_by_robustness_axis",
+    "confidence_level": 0.95,
+    "minimum_pairs_per_axis_level": 30,
+    "continuous_interval": "PAIRED_BOOTSTRAP_PERCENTILE",
+    "bootstrap_resamples": 2000,
+    "multiplicity": "HOLM_ACROSS_AXIS_METRIC_FAMILY",
+    "broad_claim_rule": "ALL_AXES_SUPPORTED_AND_ALL_PREREGISTERED_CROSS_REGIME_TESTS_PASS",
+    "single_scenario_rule": "NEVER_SUFFICIENT_FOR_BROAD_CLAIM",
+    "missing_support_outcome": "INSUFFICIENT_DATA"
+  },
+  "support_requirements": {
+    "required_fields": ["seed_stream_identity", "demand_regime", "supply_regime", "merchant_delay_regime", "traffic_regime", "location_noise_regime", "location_staleness_regime", "compute_constraint_regime", "paired_stream_identity", "rads_strategy_identity", "rads_outcomes"],
+    "source_status": "INSUFFICIENT_DATA",
+    "synthetic_substitution": false,
+    "reason": "R3-325 preserves paired source regimes but not RADS-H or Safe-RADS outcomes, has only eight pilot pairs per regime, and has no location-noise regime"
+  },
+  "source_lineage": {
+    "statistical_protocol": "a6dae9d55641ff7966ef4a50cc00a63da3e936620c3c48f23cd2c2ce039375b5",
+    "pilot_plan": "8880268766523069ad3db523a5babf2170eed47a34489d2850c89a46c76929be",
+    "pilot_ledger": "d8c00899785cc9c9cfd7bd7eac1a25513d8131a1c992b60e106ba12709bc5d76",
+    "pilot_analysis": "5c1c0963b3cb9d8809dd7d02355ef6f401ddd8c69b55dc1d6dc74c17a898a10c",
+    "stability_map": "c6d7d4a5ac088570731e80a189c12cd79792256ac3669bdeed5f9049d6b4ee14",
+    "ablation_plan": "c5644b75580db5d95f33a28ea6cd367906a235aac777f46890f862cdf952d2e7"
+  },
+  "execution_policy": {
+    "material_run_authorized": false,
+    "r3_325_rerun": false,
+    "write_external_artifacts": false,
+    "select_favorable_scenario": false,
+    "synthetic_fill": false,
+    "manifest_changes": "NEW_VERSION_REQUIRED",
+    "resource_envelope": "read-only cross-regime support audit; zero external writes"
+  },
+  "claim_boundary": "RADS_ROBUSTNESS_AUDIT_DOES_NOT_ESTABLISH_CROSS_REGIME_ROBUSTNESS"
+}

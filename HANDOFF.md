@@ -8,9 +8,11 @@ Current Phase: Round 3 Scientific Research - Workstream D
 
 Current Task: R3-349 - Execute RADS robustness study
 
-Task Status: R3-343 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. Its empirical-only map audit returned `INSUFFICIENT_DATA`, `NO_ELIGIBLE_CELLS`, and no interval; implementation `44df8e2` passed all five jobs in Actions run `32776065978`. R3-349 is now active and is the final dependency blocking R3-356.
+Task Status: R3-349 implementation is locally validated. Its eight-axis audit returns `INSUFFICIENT_DATA`: seven axes retain source regimes but no RADS-H/Safe-RADS outcomes, location noise is unsupported, and eight pilot pairs per regime are below the frozen minimum of 30. Broad robustness claims are prohibited. Remote implementation CI is pending.
 
-Next: implement and validate the R3-349 cross-regime RADS robustness support audit. Cover or explicitly mark unsupported seeds, demand, supply, merchant delay, traffic, location noise/staleness, and compute constraints; one favorable scenario cannot support a broad claim.
+Next: commit and push the validated R3-349 implementation, observe all five real GitHub Actions jobs, write closure evidence, then activate critical R3-356 independent reproduction.
+
+R3-349 plan digest is `379f5087f3114f50cd9bb8cefff62af0d9a35e0ea3e1ba12544b9fafc52527a2`; byte SHA is `e58abf5ac7498a3564c3a9dc7d001ae34da2d79ccde6a54d41a2c4fc091d7f5b`. Local gates passed Java 81/81, Python 893/893 at 95.08%, six directed tests, and Web 92/92 plus build. R3-325 remains frozen and was not rerun.
 
 R3-336 evidence is `evidence/gates/R3-336/twin-non-fidelity.md`; plan digest is `ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94` and byte SHA is `87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571`.
 
