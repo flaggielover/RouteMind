@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream A
 
-Current Task: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
+Current Task: R3-316 - Analyze best-known-solution and optimality gaps
 
-Task Status: R3-315 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM after all six frozen derived instances were solved exactly and retained. R3-312's 30-instance scale/timeout protocol is frozen and its implementation checkpoint is locally green; remote validation and material execution remain pending.
+Task Status: R3-312 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM after all 30 frozen Homberger instances were retained, 29 yielded verified complete incumbents, and the external artifact audit passed. R3-316 is active and must analyze all R3-311/R3-312/R3-315 outcomes without removing failures or unfavorable results.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -670,10 +670,10 @@ Continue autonomously with RM-230.
 
 ## Current Research Resume Capsule
 - Workstream: A - External Validity and Solver Science.
-- Current task: R3-312 Gehring-Homberger scale/timeout evaluation.
+- Current task: R3-316 best-known-solution and optimality-gap analysis.
 - Engineering Gate: E-IN-PROGRESS.
 - Experiment Gate: X-IN-PROGRESS.
-- Statistical Gate: S-NOT-APPLICABLE.
+- Statistical Gate: S-IN-PROGRESS.
 - Claim Gate: C-DEFERRED.
 - R3-311 evidence: `evidence/gates/R3-311/solomon-vrptw.md`; compact result
   `docs/research/r3/results/solomon/solomon-stratified-six-results-v1.json`.
@@ -695,18 +695,20 @@ Continue autonomously with RM-230.
   data root, and questioned/marked SINTEF references cannot receive scalar gaps.
   Manifest SHA-256 is
   `6c35a47e03d53a71f32240953fe1a088412637b893cb6d5a25a924a7bef9a2d2`.
-- R3-312 implementation is locally complete: protocol validation, R3-317
-  classification, R3-314 verification, reference-quality guards, immutable
-  artifacts, and descriptive scale summaries were exercised only with synthetic
-  fixtures before the remote implementation gate. The checkpoint has
-  60 directed tests and the full local gate pass (Java 80/80, Python 431/431 at
-  95.50%, Web 92/92 plus build, contracts, and controls). Preregistration CI
-  `32703904849` is green; implementation CI is the next gate.
-- No material Homberger instance has run. After remote implementation CI is
-  green, execute all 30 selected instances sequentially in isolated processes,
-  retain every outcome, summarize by scale, audit artifact digests, and only
-  then close R3-312.
-- Concurrent state: `741c8ef` closed the separate spatial-lock-in Gate 2 work.
-  Preserve subsequent `research/level4/spatial_lockin/` changes and do not claim
-  them as R3-311 work.
+- R3-312 implementation revision `eac087e` passed all five jobs in Actions run
+  `32706450863`. Campaign `r3-312-20260824T083216Z-eac087e32790` then retained
+  all 30 results: 29 verified complete incumbents and one no-incumbent timeout.
+  The 200 scale was 5/6 and larger scales were each 6/6 under the frozen policy.
+- Every R3-312 incumbent used more vehicles than its retained reference; there
+  were no same-vehicle scalar distance gaps. External audit verified 31 JSON
+  files plus 31 sidecars with zero errors. Compact result is
+  `docs/research/r3/results/gehring-homberger/scale-first-replicates-results-v1.json`
+  with SHA-256 `45ad7967cac4985d869663b6f5208e03c26e18995d33b6903535d8b627460daf`.
+- R3-312 is `E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM`. R3-316 must freeze an
+  all-outcome analysis protocol before computing median, p90, best, worst,
+  timeout, infeasible, and reference-comparability results across R3-311,
+  R3-312, and the scoped transformed-model R3-315 evidence.
+- Concurrent state: `465488f` implements the separate spatial-lock-in
+  negative-control diagnostic. Preserve subsequent `research/level4/spatial_lockin/`
+  changes and do not claim them as Round 3 task work.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.

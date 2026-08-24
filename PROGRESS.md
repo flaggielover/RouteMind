@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 119 / 158 tasks passed
+Repository Total: 120 / 158 tasks passed
 
-Current Task: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
+Current Task: R3-316 - Analyze best-known-solution and optimality gaps
 
-Last Completed: R3-315 - Cross-check tractable instances with an exact reference solver
+Last Completed: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
 
-Current Gate: R3-312 is E/X-IN-PROGRESS, S-NOT-APPLICABLE, and C-DEFERRED. Its 30-instance five-scale fixed-census protocol is frozen, and the implementation checkpoint is locally green before material execution.
+Current Gate: R3-316 is E/X/S-IN-PROGRESS and C-DEFERRED. R3-312 closed after the frozen 30-instance campaign retained every result and passed artifact audit.
 
-CI: PASS for R3-312 preregistration checkpoint ac33c10 in run 32703904849 across all five jobs; R3-315 closure checkpoint f9e9a49 in run 32702505551, implementation checkpoint 1bae044 in run 32701927556, and preregistration checkpoint 117b755 in run 32700423191 also passed all five jobs. The R3-312 implementation is locally green and awaits remote validation. Earlier R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-312 implementation checkpoint eac087e in run 32706450863 and preregistration checkpoint ac33c10 in run 32703904849 across all five jobs. R3-315 closure checkpoint f9e9a49 in run 32702505551, implementation checkpoint 1bae044 in run 32701927556, and preregistration checkpoint 117b755 in run 32700423191 also passed all five jobs. R3-312 closure metadata awaits its remote run. Earlier R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS locally for the R3-312 implementation - Java 80/80, Python 431/431 at 95.50% coverage, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, and all repository controls. Remote implementation validation is pending.
+Regression: PASS for the R3-312 implementation - Java 80/80, Python 431/431 at 95.50% coverage, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, all repository controls, and all five remote jobs. Closure controls and artifact audit pass locally.
 
-Round 3 Scientific Tasks: 6 / 45 passed; R3-312 in progress; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 7 / 45 passed; R3-316 in progress; R3-355 deferred and non-blocking.
 
-Research Gate: R3-312 E-IN-PROGRESS / X-IN-PROGRESS / S-NOT-APPLICABLE / C-DEFERRED
+Research Gate: R3-316 E-IN-PROGRESS / X-IN-PROGRESS / S-IN-PROGRESS / C-DEFERRED
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and push the locally green R3-312 implementation, observe remote CI, then execute the frozen 30-instance campaign only after the implementation run is green. R3-350 remains independently eligible.
+Next Candidates: Freeze the R3-316 analysis protocol against the committed R3-311, R3-312, and R3-315 result sets, then implement and execute the all-outcome gap audit. R3-350 remains independently eligible.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and
@@ -920,5 +920,20 @@ The task is now passed and RM-120 is the active implementation.
   campaign, revision, schema, and selected identity. Timeout, infeasible,
   resource-limit, verification, and unfavorable results are retained.
 - Sixty directed tests and the full local gate pass: Java 80/80, Python 431/431
-  at 95.50%, Web 92/92 plus build, contracts, and controls. No material
-  instance has run; remote implementation CI is the next evidence gate.
+  at 95.50%, Web 92/92 plus build, contracts, and controls. Implementation
+  revision `eac087e` then passed all five jobs in Actions run `32706450863`.
+
+### R3-312 scale/timeout closure - 2026-08-24
+- Campaign `r3-312-20260824T083216Z-eac087e32790` executed and retained all 30
+  fixed instances: 29 independently verified complete incumbents and one
+  no-incumbent timeout. Outcomes were one `FEASIBLE_INCUMBENT`, 28
+  `TIMEOUT_WITH_FEASIBLE`, and one `TIMEOUT_NO_FEASIBLE`.
+- The 200-customer scale was degraded at 5/6; 400/600/800/1000 were each 6/6
+  under the frozen policy. Every incumbent used more vehicles than its retained
+  reference, so the high incumbent-availability rate is not a quality result.
+- External audit verified 31 JSON files and 31 sidecars with zero errors. Summary
+  SHA-256 is `ef8b6355...79c8`, bundle SHA-256 is `ec1a70ed...9257`, and compact
+  committed result SHA-256 is `45ad7967...0daf`.
+- R3-312 closes `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`; no
+  optimality, superiority, unrestricted solver-capability, or population trend
+  claim is authorized. R3-316 is active.

@@ -48,6 +48,40 @@ Current gates: `E-IN-PROGRESS / X-IN-PROGRESS / S-NOT-APPLICABLE / C-DEFERRED`.
   available gates. The Homberger module itself is at 100% statement/branch
   coverage.
 
-No material Homberger instance has been executed. The implementation checkpoint
-is ready for commit and remote CI observation; material execution remains gated
-until that remote run is green.
+Implementation revision `eac087e3279000802ce6eae51c3264fd0d5c2f31` passed all
+five GitHub Actions jobs in run `32706450863`, satisfying the remote gate before
+material execution.
+
+## Material execution and closure
+
+- Campaign `r3-312-20260824T083216Z-eac087e32790` executed all 30 frozen
+  identities sequentially in separate processes under the five-second,
+  one-thread policy. All 30 were retained; no substitution or exclusion occurred.
+- Outcomes were one `FEASIBLE_INCUMBENT`, 28 `TIMEOUT_WITH_FEASIBLE`, and one
+  `TIMEOUT_NO_FEASIBLE`. All 29 incumbents passed independent complete-solution
+  verification; no verification issue was observed.
+- The 200-customer stratum was `DEGRADED_UNDER_FROZEN_POLICY` at 5/6 verified
+  complete. The 400, 600, 800, and 1000 strata were each 6/6 and therefore
+  `SUPPORTED_UNDER_FROZEN_POLICY`. These labels describe only the fixed policy
+  and fixed first-replicate census.
+- Incumbent quality was unfavorable. Every retained incumbent used more vehicles
+  than its source reference, including the six references whose quality status
+  separately prohibits scalar comparison. Mean vehicle excess by size was 1.2,
+  12.833333, 25.333333, 39.666667, and 63.0; mean vehicle ratio was 1.148889,
+  2.071675, 2.391974, 2.586111, and 3.002018. No same-vehicle scalar distance gap
+  existed.
+- External audit found 31 JSON artifacts and 31 SHA-256 sidecars, 62 files and
+  4,383,423 bytes, with zero identity, digest, lineage, outcome, verification, or
+  reference-guard errors. Campaign summary SHA-256 is
+  `ef8b6355de608f0e4b664778b43982a715982151bff224b6cc08f9aa8dd579c8`;
+  the canonical 31-JSON bundle SHA-256 is
+  `ec1a70ed886f93ac7737ef3bbdc2e6824d0c1794ff0d44c2ba44067ea0cfd257`.
+- The committed compact result is
+  `docs/research/r3/results/gehring-homberger/scale-first-replicates-results-v1.json`
+  with SHA-256
+  `45ad7967cac4985d869663b6f5208e03c26e18995d33b6903535d8b627460daf`.
+
+R3-312 closes `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`. The evidence
+does not authorize optimality, superiority, unrestricted solver-capability, or
+population scale-trend claims. The apparent monotone descriptive vehicle-ratio
+pattern is not a statistical trend result.
