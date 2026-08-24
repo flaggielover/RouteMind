@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "protocol_id": "negative-control-diagnostic-v1",
+  "artifact_class": "diagnostic",
+  "diagnostic_verdict": "PASS",
+  "original_gate2": "FAIL",
+  "original_gate2_unchanged": true,
+  "primary_root_cause": "STABLE_STOCHASTIC_EQUILIBRIUM_CLASSIFIER_MISMATCH",
+  "layer_root_causes": {
+    "R": "STABLE_STOCHASTIC_EQUILIBRIUM_CLASSIFIER_MISMATCH",
+    "M": "STABLE_STOCHASTIC_EQUILIBRIUM_CLASSIFIER_MISMATCH"
+  },
+  "gate2b_eligibility": "CONDITIONAL",
+  "gate3_eligibility": "NO",
+  "implementation_checkpoint": "465488f02de487d5ac5c46199ec4be36b85bafeb",
+  "execution_commit": "4f678fd79b91d8911aa265f779330e89c03725d1",
+  "frozen_preregistration_sha256": "0db5478439e28aa979b5eb845d2ad65abc49e2add096c4f94797cbb9f5c9bfc9",
+  "external_summary": {
+    "relative_path": "negative_control/negative_control_diagnostic.json",
+    "sha256": "a53abf8eb323c4088b10dc4c106fcee719ce64ffa410bb6111290db8d675e3c3",
+    "content_digest": "f60889a10e9eb2aaf7adf3137daa8c79f4ff9cc92a064a48929ef09cb3db9c3b"
+  },
+  "classifier_decomposition": {
+    "R": {
+      "finite_pass": 64,
+      "magnitude_pass": 64,
+      "slope_pass": 30,
+      "window_pass": 30,
+      "all_pass": 28,
+      "slope_rejection_rate": 0.53125,
+      "window_rejection_rate": 0.53125,
+      "all_clause_rejection_rate": 0.5625
+    },
+    "M": {
+      "finite_pass": 64,
+      "magnitude_pass": 64,
+      "slope_pass": 30,
+      "window_pass": 31,
+      "all_pass": 28,
+      "slope_rejection_rate": 0.53125,
+      "window_rejection_rate": 0.515625,
+      "all_clause_rejection_rate": 0.5625
+    }
+  },
+  "archived_label_disclosure": "Gate 2 raw records retain the default UNCLASSIFIED label; frozen-clause recomputation yields 28/64 RESTORED in each layer, still below the frozen 80% robust-control requirement.",
+  "observed_long_run_imbalance": {
+    "R": 0.000038161610951520246,
+    "M": 0.000038549587592397766,
+    "epsilon_sym": 0.02
+  },
+  "analytical_stability": {
+    "R": {
+      "spectral_radius": 0.6342743245001126,
+      "stationary_covariance_relative_error": 0.003914439351985946,
+      "deterministic_reference_pass": true
+    },
+    "M": {
+      "spectral_radius": 0.6352959880556186,
+      "stationary_covariance_relative_error": 0.002126290791964322,
+      "deterministic_reference_pass": true
+    }
+  },
+  "horizon_8x_to_1x_ratios": {
+    "R": {
+      "mean_imbalance": 0.9991784197442737,
+      "variance": 0.9926228525410145
+    },
+    "M": {
+      "mean_imbalance": 0.999631197505133,
+      "variance": 0.9941292561784489
+    }
+  },
+  "synthetic_controls": {
+    "stable_reference_false_negative_rate": 0.515625,
+    "stable_reference_false_negative_wilson95": [
+      0.4546288138005892,
+      0.5761591906861023
+    ],
+    "locked_reference_sensitivity": 1.0,
+    "candidate_stochastic_criterion_stable_sensitivity": 1.0,
+    "candidate_stochastic_criterion_locked_specificity": 1.0,
+    "candidate_wilson_lower_bound": 0.9852161435741286
+  },
+  "diagnostic_checks": {
+    "noise_audit_R": true,
+    "noise_audit_M": true,
+    "required_replay_R": true,
+    "required_replay_M": true,
+    "all_64_replay_R": true,
+    "all_64_replay_M": true,
+    "classifier_self_check": true,
+    "implementation_defect_found": false,
+    "integrity_sidecars_checked": 8,
+    "integrity_failures": 0
+  },
+  "claim_limit": "Diagnostic PASS identifies a reproducible root cause only. Gate 2 remains FAIL, Gate 3 remains prohibited, and no scientific novelty or external-validity claim is made."
+}
