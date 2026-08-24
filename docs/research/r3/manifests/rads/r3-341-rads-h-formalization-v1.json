@@ -1,0 +1,52 @@
+{
+  "baseline_digest": "4b846bc8b971df269c1c6439b325ab61b7803a83812ced39b352f519acb929c5",
+  "baseline_reference": "RADS-BASELINE-v1",
+  "claim_boundary": "RADS_H_FORMALIZATION_DOES_NOT_ESTABLISH_EMPIRICAL_STABILITY_OR_PERFORMANCE",
+  "cooldown_comparison": {
+    "cooldown_only": "minimum dwell without pressure threshold or persistence",
+    "rads_h": "threshold band plus consecutive pressure persistence and switching cost",
+    "separation": "cooldown is a comparator, not RADS-H"
+  },
+  "frozen_at_utc": "2026-08-25T17:30:00Z",
+  "limitations": [
+    "Formal state semantics do not establish empirical switching stability.",
+    "No RADS-H material experiment or service/cost effect estimate is executed by this task.",
+    "Objective scores and risk signals retain the RADS-BASELINE-v1 provenance boundary.",
+    "The policy proposes a switch and never owns durable business state or Java validation.",
+    "A later parameter change requires a new mechanism version and manifest digest."
+  ],
+  "mechanism_id": "RADS-H-v1",
+  "parameters": {
+    "enter_threshold": 0.05,
+    "exit_threshold": 0.02,
+    "minimum_dwell_ticks": 3,
+    "persistence_ticks": 2,
+    "switching_cost": 0.01
+  },
+  "question": "What exact hysteresis state transition will be compared with RADS-BASELINE-v1 and a simple cooldown?",
+  "regime": {
+    "change_behavior": "reset pressure and dwell, hold, then collect fresh pressure",
+    "identity_field": "regime_id",
+    "required": true
+  },
+  "source_artifacts": [
+    {"path": "services/compute-api/src/routemind_compute/application/rads.py", "sha256": "d72caf93a53c9bc10ebdc4e0ebeecad13381c7cae4bb09531715bf385d29f22a"},
+    {"path": "services/compute-api/src/routemind_compute/application/rads_baseline.py", "sha256": "fa5e60027d42f9d9d9493714db825ade8ac7e716c09752f5ba80fed1d1f9e870"},
+    {"path": "services/compute-api/src/routemind_compute/application/rads_h.py", "sha256": "7feb4122e1d2a5ff5041fe020cb56e8530aacd7834944cb67a5ace1dc3aa9df1"}
+  ],
+  "state": {
+    "fields": ["active_strategy", "regime_id", "pressure_ticks", "dwell_ticks", "switch_count"],
+    "pressure_definition": "consecutive ticks with relative advantage at or above enter_threshold",
+    "reset_rules": ["regime change", "below enter threshold", "outside exit band", "switch"],
+    "state_owner": "Python compute proposal boundary"
+  },
+  "task_id": "R3-341",
+  "transition": {
+    "advantage_formula": "(current_score-candidate_score)/max(abs(current_score),1e-12)",
+    "enter": "advantage >= enter_threshold and persistence_ticks reached after minimum dwell",
+    "exit": "advantage < -exit_threshold resets pressure and holds",
+    "switch_action": "emit switch proposal, apply switching_cost, reset pressure and dwell",
+    "hold_action": "retain active strategy and emit explicit reason"
+  },
+  "schema_version": "routemind-rads-h-formalization-v1"
+}
