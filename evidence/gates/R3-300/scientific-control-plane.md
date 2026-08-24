@@ -2,7 +2,7 @@
 
 Date: 2026-08-24 (Asia/Shanghai)
 Baseline: `ed947eb`
-Status: local validation complete; remote CI pending
+Status: passed
 
 ## Scope
 
@@ -44,14 +44,14 @@ S-NOT-APPLICABLE / C-NOT-APPLICABLE
 PASS: RouteMind fast repository gate
 ```
 
-`git diff --check` passes after mechanical trailing-whitespace cleanup. The full
-repository verification command and the real GitHub Actions run are recorded in
-the validating and closure checkpoints respectively.
+`git diff --check` and `./scripts/verify.ps1` passed. Validation checkpoint
+`59eb53b` was pushed to `origin/main`; GitHub Actions run `32692144152` passed
+Control plane and Compose, Java business runtime, Python compute and contracts,
+bounded degradation and resilience, and role-aware web application jobs.
 
 ## Scientific disposition
 
-- Engineering: `E-IN-PROGRESS` until the pushed checkpoint passes GitHub Actions.
+- Engineering: `E-PASS` from local gates and GitHub Actions run `32692144152`.
 - Experiment: `X-NOT-REQUIRED`; no material experiment belongs to this task.
 - Statistics: `S-NOT-APPLICABLE`; no inferential result belongs to this task.
 - Claim: `C-NOT-APPLICABLE`; this control-plane task supports no scientific claim.
-

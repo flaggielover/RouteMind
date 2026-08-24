@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 113 / 113 tasks passed
+Repository Total: 114 / 158 tasks passed
 
-Current Task: R3-300 - Establish Round 3 scientific research contract and claim control plane
+Current Task: R3-310 - Build public benchmark adapter framework
 
-Last Completed: RM-236 - Close Enhancement Pass and prepare Round 3 research graph
+Last Completed: R3-300 - Establish Round 3 scientific research contract and claim control plane
 
-Current Gate: R3-300 is validating the authoritative scientific graph, four-dimensional E/X/S/C state model, Research Contract, Claim Matrix, and negative-result ledger. No experiment or scientific claim has passed.
+Current Gate: R3-310 is implementing immutable public-source, license, checksum, parser, canonical-instance, reference-value, and transformation provenance contracts over `ROUTEMIND_DATA_ROOT`. No benchmark result or scientific claim has passed.
 
-CI: PASS through final documentation synchronization checkpoint 4950611 in run 32664121577; RM-236 closure checkpoint 98febed in run 32663948087; RM-235 checkpoint bc00832 in run 32662822033; RM-229 checkpoint 5600487 in run 32662337844; RM-231 checkpoint fb9bd77 in run 32662606286; RM-234 checkpoint 9fe015d in run 32661326399; all passed all five jobs. RM-233 run 32659704665, RM-227 run 32659202824, RM-226 run 32658324255, RM-225 run 32657006258, and earlier enhancement runs also passed all five jobs. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-300 checkpoint 59eb53b in run 32692144152 across all five jobs. Earlier Enhancement closure and regression runs remain recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
 Regression: PASS locally and remotely - Java 80/80, Python 208 / 95.29%, Web 66 unit/build plus 34 browser passes with 2 existing skips, 6 schemas / 18 contract fixtures, repository controls, and Actions run 32656271920. Local Docker engine remained unresponsive, while remote Compose validation passed.
 
-Round 3 Scientific Tasks: 45 tracked; R3-300 validating; R3-355 deferred and non-blocking; all material experiment/statistical/claim gates remain open.
+Round 3 Scientific Tasks: 1 / 45 passed; R3-310 in progress; R3-355 deferred and non-blocking; all material experiment/statistical/claim gates remain open.
 
-Research Gate: E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-310 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Finish R3-300 local/CI validation, then activate R3-310 public benchmark adapter framework. Do not execute material experiments before source/license/checksum and manifest controls exist.
+Next Candidates: Finish R3-310 public benchmark adapter framework, then activate R3-314 independent public-instance verification. Do not execute material experiments before source/license/checksum and manifest controls exist.
 
 ### RM-230 closure and RM-234 activation - 2026-08-24
 
@@ -775,3 +775,4 @@ The task is now passed and RM-120 is the active implementation.
 - Research Contract, Claim Matrix, Negative Results, graph audit, and revised
   scientific graph are present. Local validation and remote CI are the remaining
   R3-300 engineering gates before R3-310 starts.
+- R3-300 passed locally and in GitHub Actions run `32692144152`; R3-310 is active.

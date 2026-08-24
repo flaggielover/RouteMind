@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream A
 
-Current Task: R3-300 - Establish Round 3 scientific research contract and claim control plane
+Current Task: R3-310 - Build public benchmark adapter framework
 
-Task Status: Enhancement is closed and R3-300 is validating. The prior prepared graph was reclassified into a 45-task scientific graph with independent E/X/S/C states. Research Contract, Claim Matrix, graph audit, and Negative Results exist locally; no Round 3 experiment, statistical support, or scientific claim has passed. R3-310 is dependency-blocked until R3-300 engineering validation and CI complete.
+Task Status: R3-300 passed locally and in GitHub Actions run 32692144152. The prior prepared graph is now a 45-task scientific graph with independent E/X/S/C states. R3-310 is active and building the public benchmark provenance/parser boundary; no Round 3 experiment, statistical support, or scientific claim has passed.
 
 Completed: Repository reconnaissance found an empty greenfield root and an existing
 external data boundary. RM-000 established the authoritative control plane, task
@@ -670,14 +670,13 @@ Continue autonomously with RM-230.
 
 ## Current Research Resume Capsule
 - Workstream: A - External Validity and Solver Science.
-- Current task: R3-300 scientific research contract and claim control plane.
+- Current task: R3-310 public benchmark adapter framework.
 - Engineering Gate: E-IN-PROGRESS.
 - Experiment Gate: X-NOT-REQUIRED.
 - Statistical Gate: S-NOT-APPLICABLE.
 - Claim Gate: C-NOT-APPLICABLE.
-- Evidence: `docs/research/r3/ROUND_3_GRAPH_AUDIT.md`,
-  `RESEARCH_CONTRACT.md`, `CLAIM_MATRIX.md`, and `NEGATIVE_RESULTS.md`.
-- CI: latest pre-Round-3 main run `32664304602` is green; R3-300 checkpoint not
-  pushed yet.
-- Next: validate, commit, push, observe CI, then activate R3-310.
+- Evidence: R3-300 `evidence/gates/R3-300/scientific-control-plane.md`; R3-310
+  implementation and evidence are in progress.
+- CI: R3-300 checkpoint `59eb53b`, run `32692144152`, all five jobs green.
+- Next: implement and validate R3-310, push, observe CI, then activate R3-314.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.

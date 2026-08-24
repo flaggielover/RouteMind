@@ -1478,10 +1478,10 @@
       "phase": "R3-A",
       "priority": "critical",
       "depends_on": ["RM-236"],
-      "status": "validating",
+      "status": "passed",
       "classification": "RESEARCH_INFRASTRUCTURE",
       "workstream": "A - External Validity and Solver Science",
-      "engineering_status": "E-IN-PROGRESS",
+      "engineering_status": "E-PASS",
       "experiment_status": "X-NOT-REQUIRED",
       "statistical_status": "S-NOT-APPLICABLE",
       "claim_status": "C-NOT-APPLICABLE",
@@ -1489,10 +1489,10 @@
       "gates": ["L1-research-control", "L6-claim-discipline", "architecture-review"],
       "evidence": ["docs/research/r3/ROUND_3_GRAPH_AUDIT.md", "docs/research/r3/RESEARCH_CONTRACT.md", "docs/research/r3/CLAIM_MATRIX.md", "docs/research/r3/NEGATIVE_RESULTS.md", "evidence/gates/R3-300/scientific-control-plane.md"],
       "blocked_by": [],
-      "notes": "Local scientific control-plane implementation is validating. CI green establishes engineering integrity only."
+      "notes": "Local validation and GitHub Actions run 32692144152 passed. This establishes engineering integrity only."
     },
     {
-      "id": "R3-310", "title": "Build public benchmark adapter framework", "phase": "R3-A", "priority": "critical", "depends_on": ["R3-300"], "status": "pending", "classification": "RESEARCH_INFRASTRUCTURE", "workstream": "A - External Validity and Solver Science", "engineering_status": "E-PENDING", "experiment_status": "X-NOT-REQUIRED", "statistical_status": "S-NOT-APPLICABLE", "claim_status": "C-NOT-APPLICABLE", "acceptance": ["Immutable source, checksum, license, parser, canonical instance, reference-value, and transformation provenance contracts exist", "Large benchmark data resolves only through ROUTEMIND_DATA_ROOT", "Tiny fixtures and parser failure cases pass"], "gates": ["L1-benchmark-contract", "L2-parser", "L6-lineage"], "evidence": ["evidence/gates/R3-310/public-benchmark-adapter.md"], "blocked_by": [], "notes": "First eligible research-infrastructure task after R3-300 passes."
+      "id": "R3-310", "title": "Build public benchmark adapter framework", "phase": "R3-A", "priority": "critical", "depends_on": ["R3-300"], "status": "in_progress", "classification": "RESEARCH_INFRASTRUCTURE", "workstream": "A - External Validity and Solver Science", "engineering_status": "E-IN-PROGRESS", "experiment_status": "X-NOT-REQUIRED", "statistical_status": "S-NOT-APPLICABLE", "claim_status": "C-NOT-APPLICABLE", "acceptance": ["Immutable source, checksum, license, parser, canonical instance, reference-value, and transformation provenance contracts exist", "Large benchmark data resolves only through ROUTEMIND_DATA_ROOT", "Tiny fixtures and parser failure cases pass"], "gates": ["L1-benchmark-contract", "L2-parser", "L6-lineage"], "evidence": ["evidence/gates/R3-310/public-benchmark-adapter.md"], "blocked_by": [], "notes": "Active after R3-300 engineering validation and GitHub Actions run 32692144152 passed."
     },
     {
       "id": "R3-311", "title": "Evaluate Solomon VRPTW benchmark family", "phase": "R3-A", "priority": "critical", "depends_on": ["R3-310", "R3-314", "R3-317"], "status": "pending", "classification": "CORE_RESEARCH", "workstream": "A - External Validity and Solver Science", "engineering_status": "E-PENDING", "experiment_status": "X-PENDING", "statistical_status": "S-PENDING", "claim_status": "C-DEFERRED", "acceptance": ["A preregistered non-cherry-picked Solomon subset is parsed and executed", "Every output is independently verified", "Feasibility, runtime, routes, objective, and reference gaps are reported without semantic rewriting"], "gates": ["L6-public-benchmark", "L6-independent-verification", "L6-gap-report"], "evidence": ["evidence/gates/R3-311/solomon-vrptw.md"], "blocked_by": [], "notes": "External validity is scoped to compatible or explicitly transformed instances."
