@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 137 / 158 tasks passed
+Repository Total: 138 / 158 tasks passed
 
-Current Task: R3-340 - Freeze RADS-BASELINE-v1
+Current Task: R3-341 - Formalize RADS-H hysteresis mechanism
 
-Last Completed: R3-336 - Publish Twin failure and non-fidelity report
+Last Completed: R3-340 - Freeze RADS-BASELINE-v1
 
-Current Gate: R3-336 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM. Its read-only report retains NOT_EVALUATED_NO_DATA thresholds, NOT_ANALYZED_NO_DATA regimes, NOT_RUN_NO_DATA sensitivity, INSUFFICIENT_DATA limits, and C-NO-CLAIM. No Twin-validity, causal, external-validity, stability, or simulation-transfer claim is permitted. R3-340 is now the highest-priority unblocked critical task.
+Current Gate: R3-340 closed E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. `RADS-BASELINE-v1` content-addresses state, nearest/weighted-greedy controls, full objective (distance/risk weights 1.0/1.0, multiplier 1.0), risk bounds, selector tie-break, fail-closed fallbacks, deterministic hashing, and limitations. The bounded fixture is reproducible only; no performance, safety, stability, or superiority claim is permitted. R3-341 is now the highest-priority eligible critical task.
 
-CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, and R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
+CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, and R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-336 - Java 81/81, Python 831/831 at 95.68% coverage, Twin non-fidelity report tests 5/5 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally and remotely for R3-340 - Java 81/81, Python 837/837 at 95.77% coverage, R3-340 RADS baseline tests 6/6 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 24 / 45 passed; R3-340 active next; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 25 / 45 passed; R3-341 active next; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Freeze R3-340 RADS-BASELINE-v1 from the existing deterministic RADS contracts, preserving objective/risk/selector/threshold/fallback semantics. R3-353 and R3-351 are also unblocked after their prerequisites; R3-313 remains optional and non-blocking.
+Next Candidates: Formalize R3-341 RADS-H hysteresis semantics from the frozen baseline, keeping switch state, threshold, band, persistence, cost, and regime explicit. R3-344 Safe-RADS semantics, R3-353 interference analysis, and R3-351 shadow disagreements are also eligible; R3-313 remains optional and non-blocking.
 
 ### R3-330 Digital Twin dataset split contract - 2026-08-24
 - The frozen contract uses temporal primary and scenario secondary split axes,
@@ -135,6 +135,24 @@ Next Candidates: Freeze R3-340 RADS-BASELINE-v1 from the existing deterministic 
   commit `2d06001` passed all five jobs in Actions run `32752905068`; evidence:
   `evidence/gates/R3-336/twin-non-fidelity.md`. R3-325 remains frozen at
   `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
+
+### R3-340 RADS-BASELINE-v1 freeze - 2026-08-25
+- The content-addressed freeze records RADS state fields and ordering,
+  nearest/weighted-greedy controls, the `full` objective with distance/risk
+  weights `1.0/1.0`, risk multiplier `1.0`, bounded risk signals, selector
+  tie-break, explicit unassigned behavior, fail-closed fallbacks, canonical
+  SHA-256 determinism, and limitations. Baseline digest:
+  `a907a0a722e8782aa76277637fa92205cc10046e5aca85b2de81e555623016c3`; byte
+  SHA: `c477a1ae2b00fcd53251be26db4229c56b7e2e91d79b49f9303aba29b6014a02`.
+- A bounded two-courier execution reproduced both registered controls selecting
+  `near-risky`, RADS `full` selecting `far-safe`, and output digest
+  `3c70ebcabdd1870aaa2119585b7a9436a3a33075d9a35a5a2175b446279d646d`.
+  This is contract reproducibility only; no performance, safety, stability,
+  fairness, scale, or causal claim is authorized.
+- Six directed tests pass with 100% module statement/branch coverage; the full
+  gate passes 837/837 Python tests at 95.77% total coverage. Implementation
+  commit `dd671f6` passed all five jobs in Actions run `32754734242`; evidence:
+  `evidence/gates/R3-340/rads-baseline-freeze.md`.
 
 ### R3-352 simulation switchback design - 2026-08-24
 - The frozen design manifest uses six 30-tick zone-time blocks over three zones,

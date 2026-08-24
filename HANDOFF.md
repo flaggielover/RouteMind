@@ -6,13 +6,15 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream C
 
-Current Task: R3-340 - Freeze RADS-BASELINE-v1
+Current Task: R3-341 - Formalize RADS-H hysteresis mechanism
 
-Task Status: R3-336 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. Implementation commit `2d06001` passed all five jobs in GitHub Actions run `32752905068`; the read-only report retains every no-data threshold, unsupported regime, sensitivity boundary, and claim prohibition from R3-330 through R3-335. No Twin-validity, causal, simulation-transfer, external-validity, or stability claim was produced. R3-325 remains frozen exactly at E-PASS/X-PASS/S-FAIL/C-NO-CLAIM. R3-340 is now the highest-priority eligible critical task.
+Task Status: R3-340 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE. Implementation commit `dd671f6` passed all five jobs in GitHub Actions run `32754734242`; `RADS-BASELINE-v1` content-addresses state, controls, objective/risk weights, selector, thresholds, fallbacks, determinism, source artifacts, and limitations. The bounded fixture is reproducible only and produces no performance, safety, stability, or superiority claim. R3-325 remains frozen exactly at E-PASS/X-PASS/S-FAIL/C-NO-CLAIM. R3-341 is now the highest-priority eligible critical task.
 
-Next: freeze `RADS-BASELINE-v1` for R3-340 from the existing deterministic RADS contracts. Content-address state, strategies, objective, risk, selector, thresholds, weights, fallbacks, determinism, and limitations; require a version bump for any later baseline change. Then continue to R3-341/R3-344 and other eligible Round 3 tasks without weakening the scientific boundaries.
+Next: formalize `RADS-H` hysteresis semantics for R3-341 from the frozen baseline. Keep switch state, threshold, band, persistence, switching cost, and regime explicit; a simple cooldown remains a separate baseline. Then continue to R3-342/R3-344 and other eligible Round 3 tasks without weakening the scientific boundaries.
 
 R3-336 evidence is `evidence/gates/R3-336/twin-non-fidelity.md`; plan digest is `ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94` and byte SHA is `87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571`.
+
+R3-340 evidence is `evidence/gates/R3-340/rads-baseline-freeze.md`; baseline digest is `a907a0a722e8782aa76277637fa92205cc10046e5aca85b2de81e555623016c3` and byte SHA is `c477a1ae2b00fcd53251be26db4229c56b7e2e91d79b49f9303aba29b6014a02`.
 
 R3-335 evidence is `evidence/gates/R3-335/what-if-validity.md`; plan digest is `81c52721886c646d2ff468f500c334566e3ed7f4f66bf0f63a9c4478f4b42023` and byte SHA is `20640a2cd366fd992dec681c3dc4139b4b352cb9609bf71ba0542a9bceb9a57d`.
 

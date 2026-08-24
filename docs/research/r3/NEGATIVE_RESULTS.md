@@ -97,3 +97,9 @@ and final claim disposition without rewriting earlier entries.
   causal, external-validity, stability, or simulation-transfer claim is
   permitted. This is valid scientific negative evidence, not an implementation
   failure.
+- `NR-R3-016`: R3-340 froze `RADS-BASELINE-v1` and reproduced one bounded
+  two-courier fixture, but the freeze contains no performance, safety,
+  stability, fairness, scale, or causal evidence. The controls, full objective,
+  risk bounds, selector, fallbacks, and digest rules are content-addressed;
+  baseline reproducibility is an engineering/research-infrastructure result,
+  not a RADS-H or Safe-RADS claim.
