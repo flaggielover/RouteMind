@@ -82,3 +82,10 @@ and final claim disposition without rewriting earlier entries.
   estimate, unsupported-regime imputation, synthetic replay, or solved
   auto-calibration wording was introduced. This is `E-PASS / X-PASS /
   S-NOT-APPLICABLE / C-NO-CLAIM`.
+- `NR-R3-014`: R3-335 froze separate boundaries for counterfactual replay,
+  simulation comparison, and causal inference. With R3-332
+  `INSUFFICIENT_DATA`, all three modes are `BOUNDARY_ONLY`, allowed scope is
+  empty, and the status is `NO_VALIDITY_CLAIM`. No replay effect, simulation
+  transfer, causal estimate, external-validity wording, or Twin-validity claim
+  was promoted. This is `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
+  C-NO-CLAIM`.

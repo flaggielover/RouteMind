@@ -6,13 +6,13 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream C
 
-Current Task: R3-335 - Formalize What-if validity boundaries
+Current Task: R3-336 - Publish Twin failure and non-fidelity report
 
-Task Status: R3-334 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. Commit `46b179c` passed all five jobs in GitHub Actions run `32749546141`; the drift report froze four regime axes and separate parameter/fidelity paths, all returning NOT_ANALYZED_NO_DATA because both authorized splits contain zero records. No drift estimate, stability claim, synthetic replay, or solved auto-calibration wording was produced. R3-335 is now the highest-priority eligible high task.
+Task Status: R3-335 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NO-CLAIM. Commit `4fb44c1` passed all five jobs in GitHub Actions run `32750946090`; the boundary assessor separates counterfactual replay, simulation comparison, and causal inference, and R3-332 INSUFFICIENT_DATA yields NO_VALIDITY_CLAIM with all modes BOUNDARY_ONLY. No causal, simulation-transfer, external-validity, or Twin-validity claim was produced. R3-336 is now the highest-priority eligible critical task.
 
-Next: implement and execute R3-335 What-if validity boundaries using the frozen R3-332 INSUFFICIENT_DATA result. Separate counterfactual replay, simulation comparison, and causal inference; scope any validity wording to observed held-out evidence, which is currently absent; record evidence, then continue to R3-336.
+Next: publish the R3-336 Twin failure and non-fidelity report from the frozen R3-330 through R3-335 evidence. Retain every unsupported regime, no-data outcome, prohibited claim, and boundary digest; do not collapse valid scientific negative evidence into an implementation failure; then continue to R3-337.
 
-R3-334 evidence is `evidence/gates/R3-334/calibration-drift.md`; plan digest is `587d71667062561ee98c4fe17434178dead070df30b4f1b7e33538d3bb7c3478` and byte SHA is `c9c85367985a04a7cd965448a23781f097eea58e7fc2905c7063d302ffc6aa14`.
+R3-335 evidence is `evidence/gates/R3-335/what-if-validity.md`; plan digest is `81c52721886c646d2ff468f500c334566e3ed7f4f66bf0f63a9c4478f4b42023` and byte SHA is `20640a2cd366fd992dec681c3dc4139b4b352cb9609bf71ba0542a9bceb9a57d`.
 
 R3-333 evidence is `evidence/gates/R3-333/fidelity-protocol.md`; protocol digest is `de453fdf1181b2e5a52839eb9f1b7536db3f5f5fb1177f4b5351269cfa3c1825` and byte SHA is `a3007f1ca9892fd0b7746797e53dec9ab5aecc5e243d188b16f12564df2ea8ff`.
 
