@@ -1,0 +1,170 @@
+{
+  "schema_version": "routemind-benchmark-gap-analysis-manifest-v1",
+  "manifest_id": "r3-316-bks-gap-analysis-v1",
+  "task_id": "R3-316",
+  "frozen_at_utc": "2026-08-24T08:48:27Z",
+  "frozen_against_revision": "4f678fd79b91d8911aa265f779330e89c03725d1",
+  "material_execution_started": false,
+  "research_question": "RQ-A2: What objective gaps, route counts, timeouts, infeasible results, and resource failures occur against cited best-known or proven reference values?",
+  "inspection_disclosure": {
+    "upstream_results_existed_before_freeze": true,
+    "upstream_results_were_inspected_before_freeze": true,
+    "designation": "FROZEN_SECONDARY_DESCRIPTIVE_ANALYSIS_PLAN",
+    "limitation": "This is not a blinded or data-generation-time preregistration. RQ-A2 and its no-positive-threshold boundary were frozen earlier in the Round 3 research contract; this manifest freezes deterministic aggregation before the R3-316 analyzer is implemented or materially executed."
+  },
+  "inputs": [
+    {
+      "task_id": "R3-311",
+      "path": "docs/research/r3/results/solomon/solomon-stratified-six-results-v1.json",
+      "sha256": "5d420f2beee4ea936cff0016b2221ad3ba190e38822af75ab86e7b161d645421",
+      "schema_version": "routemind-solomon-committed-summary-v1",
+      "manifest_id": "r3-311-solomon-stratified-six-v1",
+      "selected": 6,
+      "retained": 6,
+      "analysis_domain": "SOURCE_DOUBLE_BKS"
+    },
+    {
+      "task_id": "R3-312",
+      "path": "docs/research/r3/results/gehring-homberger/scale-first-replicates-results-v1.json",
+      "sha256": "45ad7967cac4985d869663b6f5208e03c26e18995d33b6903535d8b627460daf",
+      "schema_version": "routemind-homberger-committed-summary-v1",
+      "manifest_id": "r3-312-gh-scale-first-replicates-v1",
+      "selected": 30,
+      "retained": 30,
+      "analysis_domain": "SOURCE_DOUBLE_BKS"
+    },
+    {
+      "task_id": "R3-315",
+      "path": "docs/research/r3/results/exact-cross-check/solomon-prefix-eight-exact-results-v1.json",
+      "sha256": "61f9207c4b9788aaf320ded2953420347b419bb54370bc470e00aaeae6939c3f",
+      "schema_version": "routemind-exact-cross-check-committed-summary-v1",
+      "manifest_id": "r3-315-solomon-prefix-eight-exact-v1",
+      "selected": 6,
+      "retained": 6,
+      "analysis_domain": "DERIVED_CONSERVATIVE_INTEGER_OPTIMUM"
+    }
+  ],
+  "analysis_universes": {
+    "source_double_bks": {
+      "task_ids": ["R3-311", "R3-312"],
+      "expected_records": 36,
+      "purpose": "Reference direction, conditional source-distance gaps, and R3-317 outcome rates."
+    },
+    "derived_conservative_integer_optimum": {
+      "task_ids": ["R3-315"],
+      "expected_records": 6,
+      "purpose": "Exact transformed-model candidate gaps only. These values must never be pooled with source-double BKS gaps."
+    },
+    "all_outcome_ledger": {
+      "task_ids": ["R3-311", "R3-312", "R3-315"],
+      "expected_records": 42,
+      "purpose": "Prove that every upstream record is retained and assigned to exactly one analysis domain."
+    }
+  },
+  "objective_semantics": {
+    "source": "HIERARCHICAL_VEHICLES_THEN_DISTANCE",
+    "vehicle_gap_percent": "100 * (candidate_vehicle_count - reference_vehicle_count) / reference_vehicle_count",
+    "same_vehicle_distance_gap_percent": "100 * (candidate_distance_2dp - reference_distance) / reference_distance, only when vehicle counts match and the reference is approved for scalar comparison",
+    "transformed_exact_gap_percent": "100 * (candidate_transformed_distance - exact_transformed_distance) / exact_transformed_distance, only after equal vehicle count and proven exact status",
+    "direction": "Negative is better, zero is equal, and positive is worse for every numeric gap distribution.",
+    "best_and_worst": "Best is the minimum and worst is the maximum numeric gap.",
+    "forbidden_scalarization": "Vehicle count and distance must not be combined with a big-M, weighted sum, penalty, infinity imputation, or cross-domain scalar."
+  },
+  "reference_eligibility": {
+    "COMPARABLE_SAME_VEHICLE_COUNT": {
+      "vehicle_gap_allowed": true,
+      "distance_gap_allowed": true
+    },
+    "VEHICLE_COUNT_WORSE": {
+      "vehicle_gap_allowed": true,
+      "distance_gap_allowed": false
+    },
+    "VEHICLE_COUNT_BETTER": {
+      "vehicle_gap_allowed": true,
+      "distance_gap_allowed": false
+    },
+    "REFERENCE_QUALITY_REVIEW": {
+      "vehicle_gap_allowed": false,
+      "distance_gap_allowed": false,
+      "reason": "Questioned or marked reference values remain visible but cannot enter a numeric gap distribution."
+    },
+    "REFERENCE_GAP_NOT_APPLICABLE": {
+      "vehicle_gap_allowed": false,
+      "distance_gap_allowed": false,
+      "reason": "No accepted incumbent or no admissible comparison exists."
+    }
+  },
+  "descriptive_statistics": {
+    "fields": ["n", "minimum", "median", "p90", "maximum"],
+    "percentile_method": "Hyndman-Fan Type 7 linear interpolation at position (n - 1) * q, with q = 0.90.",
+    "empty_distribution": {"n": 0, "minimum": null, "median": null, "p90": null, "maximum": null},
+    "distributions": [
+      "source_double_bks.vehicle_gap_percent",
+      "source_double_bks.same_vehicle_distance_gap_percent",
+      "derived_conservative_integer_optimum.transformed_exact_gap_percent"
+    ],
+    "inference": "No p-value, confidence interval, population trend, equivalence, non-inferiority, superiority, or cross-domain pooled statistic is authorized."
+  },
+  "outcome_accounting": {
+    "source_denominators": ["R3-311", "R3-312", "SOURCE_DOUBLE_BKS_COMBINED"],
+    "r3_317_outcomes": [
+      "OPTIMAL",
+      "FEASIBLE_INCUMBENT",
+      "INFEASIBLE_PROVEN",
+      "TIMEOUT_WITH_FEASIBLE",
+      "TIMEOUT_NO_FEASIBLE",
+      "RESOURCE_LIMIT_WITH_FEASIBLE",
+      "RESOURCE_LIMIT_NO_FEASIBLE",
+      "FAILED"
+    ],
+    "rates": [
+      "verified_complete_rate",
+      "any_timeout_rate",
+      "timeout_with_feasible_rate",
+      "timeout_no_feasible_rate",
+      "infeasible_proven_rate",
+      "resource_limit_rate",
+      "failed_rate"
+    ],
+    "exact_domain_accounting": "Report exact status and candidate status counts separately; R3-315 has no R3-317 outcome denominator and must not be inserted into source timeout rates."
+  },
+  "audit_invariants": [
+    "Every input path is repository-relative, resolves below the repository root, and matches its frozen SHA-256.",
+    "Schema, task, manifest, selected, retained, and run counts match the frozen input contract.",
+    "Run identities are unique within each task and every one of the 42 records appears exactly once in the all-outcome ledger.",
+    "No run is excluded because of timeout, infeasibility, missing incumbent, poor objective, reference quality, or unfavorable direction.",
+    "Numeric source gaps are absent for REFERENCE_QUALITY_REVIEW and REFERENCE_GAP_NOT_APPLICABLE records.",
+    "Existing source distance gaps and exact transformed gaps are independently recomputed within 1e-9 absolute tolerance.",
+    "Source-double and derived conservative integer distributions remain separate."
+  ],
+  "gate_rule": {
+    "engineering": "E-PASS requires directed analyzer tests, full local gates, and a green implementation CI run.",
+    "experiment": "X-PASS requires material execution against all three frozen input digests plus an immutable result and digest audit.",
+    "statistics": "S-PASS requires all 42 records accounted, every denominator and Type-7 statistic reproduced, all omission reasons reported, and every domain/reference guard satisfied. It does not imply inferential support.",
+    "claim": "C-NO-CLAIM is required because RQ-A2 has no positive quality hypothesis and the observed upstream outcomes cannot establish optimality, superiority, external validity, or population behavior."
+  },
+  "execution_policy": {
+    "randomness": "NONE",
+    "threads": 1,
+    "expected_wall_seconds": 5,
+    "peak_memory_mib": 256,
+    "estimated_output_bytes": 1048576,
+    "external_cost_usd": 0,
+    "authorization": "BOUNDED_LOCAL_AUTONOMOUS",
+    "material_gate": "Commit this manifest and obtain green remote CI; then implement and obtain green remote CI before material analysis execution."
+  },
+  "artifact_policy": {
+    "data_root_environment_variable": "ROUTEMIND_DATA_ROOT",
+    "external_result_relative_root": "experiments/r3/R3-316",
+    "commit_large_results": false,
+    "commit_manifest_checksums_and_compact_summary": true,
+    "compact_result_path": "docs/research/r3/results/gap-analysis/bks-gap-analysis-results-v1.json"
+  },
+  "supported_wording": "R3-316 may report deterministic descriptive gap and outcome summaries for the frozen retained inputs, with separate source-BKS and derived-exact domains and explicit omission reasons.",
+  "prohibited_wording": [
+    "RouteMind is optimal or superior on Solomon or Gehring-Homberger.",
+    "A pooled scalar gap combines vehicle count, distance, source models, and transformed models.",
+    "Missing incumbents or questioned references were excluded from the benchmark denominator.",
+    "The fixed descriptive distributions establish a population trend or unrestricted solver capability."
+  ]
+}

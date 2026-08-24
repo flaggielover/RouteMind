@@ -704,10 +704,22 @@ Continue autonomously with RM-230.
   files plus 31 sidecars with zero errors. Compact result is
   `docs/research/r3/results/gehring-homberger/scale-first-replicates-results-v1.json`
   with SHA-256 `45ad7967cac4985d869663b6f5208e03c26e18995d33b6903535d8b627460daf`.
-- R3-312 is `E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM`. R3-316 must freeze an
-  all-outcome analysis protocol before computing median, p90, best, worst,
-  timeout, infeasible, and reference-comparability results across R3-311,
-  R3-312, and the scoped transformed-model R3-315 evidence.
+- R3-312 is `E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM`. R3-316 now owns the
+  frozen all-outcome protocol for median, p90, best, worst, timeout, infeasible,
+  and reference-comparability results across R3-311, R3-312, and the scoped
+  transformed-model R3-315 evidence.
+- R3-312 closure revision `4f678fd` passed all five jobs in Actions run
+  `32707794770`.
+- R3-316 manifest `r3-316-bks-gap-analysis-v1` is frozen with SHA-256
+  `6c6332896dff30e878f77a161e576b88b42422cc2e2a617c1fa4f43f9ca6f77b`.
+  It binds all 42 upstream records and keeps 36 source-BKS results separate from
+  six derived exact results. Vehicle gap, conditional same-vehicle distance gap,
+  and transformed exact gap use separate Type-7 distributions; all outcome rates
+  retain failures and no-incumbent results.
+- The R3-316 freeze is explicitly post-inspection, not blinded preregistration.
+  Commit and remotely validate it, then implement the analyzer with synthetic
+  directed tests; do not materially analyze the frozen real inputs until the
+  implementation checkpoint is also remote green.
 - Concurrent state: `465488f` implements the separate spatial-lock-in
   negative-control diagnostic. Preserve subsequent `research/level4/spatial_lockin/`
   changes and do not claim them as Round 3 task work.

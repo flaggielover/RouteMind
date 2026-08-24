@@ -14,11 +14,11 @@ Current Task: R3-316 - Analyze best-known-solution and optimality gaps
 
 Last Completed: R3-312 - Evaluate Gehring-Homberger scale and timeout behavior
 
-Current Gate: R3-316 is E/X/S-IN-PROGRESS and C-DEFERRED. R3-312 closed after the frozen 30-instance campaign retained every result and passed artifact audit.
+Current Gate: R3-316 is E/X/S-IN-PROGRESS and C-DEFERRED. Its all-outcome, stratified hierarchical-gap analysis plan is frozen before analyzer implementation.
 
-CI: PASS for R3-312 implementation checkpoint eac087e in run 32706450863 and preregistration checkpoint ac33c10 in run 32703904849 across all five jobs. R3-315 closure checkpoint f9e9a49 in run 32702505551, implementation checkpoint 1bae044 in run 32701927556, and preregistration checkpoint 117b755 in run 32700423191 also passed all five jobs. R3-312 closure metadata awaits its remote run. Earlier R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for R3-312 closure checkpoint 4f678fd in run 32707794770, implementation checkpoint eac087e in run 32706450863, and preregistration checkpoint ac33c10 in run 32703904849 across all five jobs. R3-315 closure checkpoint f9e9a49 in run 32702505551, implementation checkpoint 1bae044 in run 32701927556, and preregistration checkpoint 117b755 in run 32700423191 also passed all five jobs. Earlier R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
 
-Regression: PASS for the R3-312 implementation - Java 80/80, Python 431/431 at 95.50% coverage, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, all repository controls, and all five remote jobs. Closure controls and artifact audit pass locally.
+Regression: PASS for R3-312 locally and remotely - Java 80/80, Python 431/431 at 95.50% coverage, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, all repository controls, artifact audit, and all five closure-CI jobs.
 
 Round 3 Scientific Tasks: 7 / 45 passed; R3-316 in progress; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,7 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Freeze the R3-316 analysis protocol against the committed R3-311, R3-312, and R3-315 result sets, then implement and execute the all-outcome gap audit. R3-350 remains independently eligible.
+Next Candidates: Commit and remotely validate the frozen R3-316 analysis protocol, then implement and execute the all-outcome gap audit. R3-350 remains independently eligible.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and
@@ -936,4 +936,19 @@ The task is now passed and RM-120 is the active implementation.
   committed result SHA-256 is `45ad7967...0daf`.
 - R3-312 closes `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`; no
   optimality, superiority, unrestricted solver-capability, or population trend
-  claim is authorized. R3-316 is active.
+  claim is authorized. Closure revision `4f678fd` passed all five jobs in Actions
+  run `32707794770`. R3-316 is active.
+
+### R3-316 gap-analysis freeze - 2026-08-24
+- Frozen manifest `r3-316-bks-gap-analysis-v1` binds exact SHA-256 identities for
+  the 6 R3-311, 30 R3-312, and 6 R3-315 retained results. Its SHA-256 is
+  `6c6332896dff30e878f77a161e576b88b42422cc2e2a617c1fa4f43f9ca6f77b`.
+- The plan separates 36 source-double/BKS records from six derived conservative
+  integer optima. Approved vehicle gaps, same-vehicle conditional distance gaps,
+  and transformed exact gaps are three separate Type-7 descriptive distributions.
+- Every timeout, missing incumbent, questioned reference, and unfavorable result
+  remains in the 42-record ledger. No big-M scalarization, zero/infinity imputation,
+  cross-domain pooling, inferential claim, or superiority claim is allowed.
+- Upstream outcomes existed and had been inspected before this freeze, so it is
+  explicitly a frozen secondary analysis plan rather than blinded preregistration.
+  Material analysis waits for remote-green manifest and implementation checkpoints.
