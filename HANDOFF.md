@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream D
 
-Current Task: R3-344 - Formalize Safe-RADS constraint semantics
+Current Task: R3-345 - Execute Safe-RADS risk experiments
 
-Task Status: R3-342 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. The frozen five-arm RADS-H experiment plan was audited read-only against immutable R3-325 pair artifacts; all six tick-level support fields are absent, so the result is INSUFFICIENT_DATA and every metric is NOT_REPORTED_NO_SWITCH_LOGS. Implementation commit `d82138b` passed all five jobs in GitHub Actions run `32758618433`. R3-325 remains frozen exactly at E-PASS/X-PASS/S-FAIL/C-NO-CLAIM and was not rerun, tuned, reinterpreted, or replaced by synthetic replay. R3-344 is now the highest-priority eligible critical task.
+Task Status: R3-344 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-DEFERRED. Safe-RADS-v1 freezes hard/chance/risk/penalty distinctions, `late_service_probability <= 0.05`, one-sided Wilson 95% upper bound with minimum 100 calibrated observations, route-cost bound +0.03, rejection on uncertainty failure, and Java hard-constraint verification. Implementation commit `65c992f` passed all five jobs in GitHub Actions run `32759977254`; no empirical safety or efficiency claim is made. R3-345 is now the highest-priority eligible critical task. R3-325 remains frozen exactly at E-PASS/X-PASS/S-FAIL/C-NO-CLAIM.
 
-Next: formalize Safe-RADS hard, chance, risk, and penalty constraint semantics in R3-344, then continue the dependency-ordered graph. Preserve no-data outcomes and do not weaken the R3-325 freeze or claim theoretical stability, safety, or generic superiority.
+Next: audit R3-345 Safe-RADS support against the available frozen artifacts. Preserve no-data outcomes, do not execute an unauthorized material campaign, and do not weaken the R3-325 freeze or claim safety, calibration, efficiency, or generic superiority.
 
 R3-336 evidence is `evidence/gates/R3-336/twin-non-fidelity.md`; plan digest is `ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94` and byte SHA is `87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571`.
 
@@ -19,6 +19,8 @@ R3-340 evidence is `evidence/gates/R3-340/rads-baseline-freeze.md`; baseline dig
 R3-341 evidence is `evidence/gates/R3-341/rads-h-formalization.md`; plan digest is `4b846bc8b971df269c1c6439b325ab61b7803a83812ced39b352f519acb929c5` and byte SHA is `091a196bfbcaae57077cd862b87a30d7793300bae219f0b6c32e95cff6060e94`.
 
 R3-342 evidence is `evidence/gates/R3-342/hysteresis-experiments.md`; plan digest is `725bce8111db8652c6b52ef1c71e63429594aa4a329e0372e524471ea41ac967` and byte SHA is `62eab0fca0a28a758ae6299a83c900752044f3c155f84245e09dadc6e7ac921d`. The read-only support audit returned `INSUFFICIENT_DATA` because all six required tick-level fields are absent from frozen R3-325 pair artifacts; all metrics are `NOT_REPORTED_NO_SWITCH_LOGS`.
+
+R3-344 evidence is `evidence/gates/R3-344/safe-rads-formalization.md`; plan digest is `82fed4dc95bec7ccbfa10ead770d63e2de6f47bb081d0b5d05672382462f6644` and byte SHA is `a3570615177b19fa59688b23a0e85f76957c6090b75f1fd6d165f3506b171163`. This is a formal preregistration boundary only; no safety, calibration, efficiency, or superiority claim is authorized.
 
 R3-335 evidence is `evidence/gates/R3-335/what-if-validity.md`; plan digest is `81c52721886c646d2ff468f500c334566e3ed7f4f66bf0f63a9c4478f4b42023` and byte SHA is `20640a2cd366fd992dec681c3dc4139b4b352cb9609bf71ba0542a9bceb9a57d`.
 

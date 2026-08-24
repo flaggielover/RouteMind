@@ -119,3 +119,11 @@ and final claim disposition without rewriting earlier entries.
   campaign or switching/service/cost/stability claim is made. This is
   `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`, valid negative scientific
   evidence rather than an implementation failure.
+- `NR-R3-019`: R3-344 formalized Safe-RADS hard, chance, risk, and penalty
+  semantics, freezing `late_service_probability <= 0.05`, a one-sided Wilson
+  95% upper bound with at least 100 calibrated observations, and a separate
+  route-cost bound of `+0.03`. Penalty-only variants cannot claim safety, and
+  Java must verify hard constraints before durable commit. This is a formal
+  preregistration boundary only: no observed safety, service, calibration,
+  efficiency, or superiority evidence exists. The disposition is
+  `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED`.
