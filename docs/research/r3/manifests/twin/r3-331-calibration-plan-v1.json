@@ -1,0 +1,85 @@
+{
+  "schema_version": "routemind-twin-calibration-v1",
+  "task_id": "R3-331",
+  "plan_id": "r3-331-bounded-twin-calibration-v1",
+  "frozen_at_utc": "2026-08-24T15:55:00Z",
+  "question": "Can the calibrated Twin parameters be fit on the immutable calibration split under a bounded, reproducible objective without reading held-out data?",
+  "targets": [
+    {
+      "target_id": "assignment_rate",
+      "source_variable": "verified_assignment_indicator",
+      "parameter_names": ["assignment_bias", "risk_scale"]
+    },
+    {
+      "target_id": "scenario_risk_index",
+      "source_variable": "scenario_risk_index",
+      "parameter_names": ["risk_scale", "assignment_bias"]
+    },
+    {
+      "target_id": "dispatch_latency_seconds",
+      "source_variable": "dispatch_latency_seconds",
+      "parameter_names": ["latency_bias_seconds", "risk_scale"]
+    },
+    {
+      "target_id": "fallback_rate",
+      "source_variable": "fallback_used_indicator",
+      "parameter_names": ["fallback_bias", "risk_scale"]
+    }
+  ],
+  "objective": {
+    "name": "weighted_mean_absolute_error_on_calibration_split",
+    "metric_ids": [
+      "assignment_rate",
+      "scenario_risk_index",
+      "dispatch_latency_seconds",
+      "fallback_rate"
+    ],
+    "loss": "mean_absolute_error",
+    "lower_is_better": true
+  },
+  "parameter_bounds": {
+    "assignment_bias": [-0.2, 0.2],
+    "risk_scale": [0.5, 2.0],
+    "latency_bias_seconds": [-120.0, 120.0],
+    "fallback_bias": [-0.1, 0.1]
+  },
+  "search": {
+    "method": "bounded_coordinate_descent",
+    "seed": 331,
+    "max_iterations": 50,
+    "tolerance": 0.0001,
+    "max_no_improvement": 5
+  },
+  "initialization": {
+    "method": "frozen_baseline_parameters",
+    "parameters": {
+      "assignment_bias": 0.0,
+      "risk_scale": 1.0,
+      "latency_bias_seconds": 0.0,
+      "fallback_bias": 0.0
+    }
+  },
+  "regularization": {
+    "method": "l2",
+    "lambda": 0.01
+  },
+  "data_policy": {
+    "calibration_split_id": "r3-330-calibration-observed-v1",
+    "held_out_split_id": "r3-330-held-out-observed-v1",
+    "fit_may_read_held_out": false,
+    "calibration_data_required": true
+  },
+  "artifact_policy": {
+    "checksum_algorithm": "sha256",
+    "before_parameters_required": true,
+    "after_parameters_required": true,
+    "artifact_required": true
+  },
+  "missing_data_policy": {
+    "status": "INSUFFICIENT_DATA",
+    "reason": "Do not fit or synthesize parameters when the authorized calibration split has no observed records.",
+    "no_fit_performed": true
+  },
+  "claim_boundary": "CALIBRATION_FIT_DOES_NOT_ESTABLISH_TWIN_VALIDITY",
+  "plan_digest": "86f17d2edb74a25a806348461917c9943fa9cb765579c01becccb82def02937f"
+}
