@@ -1,0 +1,12 @@
+{
+  "schema_version": "routemind-shadow-disagreements-v1",
+  "task_id": "R3-351",
+  "report_id": "r3-351-shadow-disagreements-v1",
+  "source_corpus_manifest_digest": "d92c58cbf196e3f9ab7a157e575831f4c35a9508d3482a6f6ba90728c89e569b",
+  "required_fields": ["alternate_strategy_outcome", "regime", "geography", "delay", "scarcity", "risk", "compute"],
+  "categories": ["regime", "geography", "delay", "scarcity", "risk", "compute"],
+  "source_status": "INSUFFICIENT_DATA",
+  "execution_policy": {"replay": false, "write_external_artifacts": false, "candidate_authority": false},
+  "claim_boundary": "SHADOW_DISAGREEMENT_DOES_NOT_ESTABLISH_CANDIDATE_SUPERIORITY",
+  "plan_digest": "f2dfc31a57db3dcd7c3ad2c4f432b41efcbdd7c252274904550a818508734022"
+}
