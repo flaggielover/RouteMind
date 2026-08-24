@@ -1,10 +1,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from math import isfinite
-from typing import Any, Protocol
+from math import hypot, isfinite
+from typing import Any, Protocol, TypeGuard
 
 from routemind_compute.application.nearest import great_circle_distance_kilometres
+from routemind_compute.application.public_benchmarks import (
+    CanonicalVrptwInstance,
+    CanonicalVrptwNode,
+    PublicVrptwRoute,
+    PublicVrptwSolution,
+)
 from routemind_compute.application.vrptw import VrpProblem, VrpRoutePlan
 from routemind_compute.domain.dispatch import CourierCandidate, DispatchDecision, DispatchProblem
 
@@ -39,6 +45,16 @@ class VerificationReport:
         return cls(not issues, tuple(issues), checks)
 
 
+@dataclass(frozen=True, slots=True)
+class PublicVrptwVerificationReport:
+    valid: bool
+    issues: tuple[VerificationIssue, ...]
+    checks: tuple[str, ...]
+    recomputed_vehicle_count: int
+    recomputed_total_distance: float
+    complete: bool
+
+
 class SolverOutputInvalidError(ValueError):
     """Raised when a strategy result fails the independent verification boundary."""
 
@@ -56,7 +72,7 @@ class SolverOutputInvalidError(ValueError):
         }
 
 
-def _finite(value: object) -> bool:
+def _finite(value: object) -> TypeGuard[int | float]:
     return isinstance(value, (int, float)) and not isinstance(value, bool) and isfinite(value)
 
 
@@ -427,3 +443,324 @@ def verify_vrptw_plan(
             VerificationIssue("objective_mismatch", "plan objective differs from recomputed travel")
         )
     return VerificationReport.from_issues(issues, checks)
+
+
+def verify_public_vrptw_solution(
+    instance: CanonicalVrptwInstance,
+    solution: PublicVrptwSolution,
+    *,
+    require_complete: bool = True,
+    tolerance: float = 1e-6,
+) -> PublicVrptwVerificationReport:
+    """Recompute a public VRPTW result without calling or trusting the solver."""
+    checks = (
+        "instance_identity",
+        "depot_start_end",
+        "route_continuity",
+        "vehicle_identity_and_count",
+        "node_membership_and_uniqueness",
+        "service_timing",
+        "capacity",
+        "time_windows",
+        "unassigned_policy",
+        "objective_recomputation",
+        "feasibility_claim",
+        "precedence_not_applicable_to_canonical_vrptw_v1",
+    )
+    issues: list[VerificationIssue] = []
+    if not isfinite(tolerance) or tolerance <= 0:
+        raise ValueError("verification tolerance must be finite and positive")
+    if solution.instance_id != instance.instance_id:
+        issues.append(
+            VerificationIssue(
+                "instance_mismatch", "solution instance does not match canonical input"
+            )
+        )
+    if solution.objective_semantics != instance.objective_semantics:
+        issues.append(
+            VerificationIssue(
+                "objective_semantics_mismatch",
+                "solution objective semantics do not match canonical input",
+            )
+        )
+
+    node_by_id = {instance.depot.node_id: instance.depot}
+    node_by_id.update({item.node_id: item for item in instance.customers})
+    customer_ids = {item.node_id for item in instance.customers}
+    routed: list[int] = []
+    vehicle_ids: list[str] = []
+    total_distance = 0.0
+    for route in solution.routes:
+        vehicle_ids.append(route.vehicle_id)
+        route_distance = _verify_public_route(
+            instance, route, node_by_id, routed, issues, tolerance
+        )
+        total_distance += route_distance
+    if any(not vehicle_id.strip() for vehicle_id in vehicle_ids):
+        issues.append(
+            VerificationIssue("vehicle_id_blank", "vehicle identifiers must not be blank")
+        )
+    if len(vehicle_ids) != len(set(vehicle_ids)):
+        issues.append(
+            VerificationIssue("vehicle_duplicate", "a vehicle has more than one public route")
+        )
+    vehicle_count = len(solution.routes)
+    if vehicle_count > instance.max_vehicles:
+        issues.append(
+            VerificationIssue(
+                "vehicle_limit_exceeded", "solution uses more than the maximum vehicle count"
+            )
+        )
+    if (
+        not isinstance(solution.claimed_vehicle_count, int)
+        or isinstance(solution.claimed_vehicle_count, bool)
+        or solution.claimed_vehicle_count != vehicle_count
+    ):
+        issues.append(
+            VerificationIssue(
+                "vehicle_count_mismatch", "claimed vehicle count differs from route count"
+            )
+        )
+
+    unassigned = list(solution.unassigned_node_ids)
+    if len(unassigned) != len(set(unassigned)):
+        issues.append(
+            VerificationIssue("unassigned_duplicate", "unassigned customer appears more than once")
+        )
+    if any(node_id not in customer_ids for node_id in unassigned):
+        issues.append(
+            VerificationIssue(
+                "unassigned_unknown", "unassigned list contains an unknown or depot node"
+            )
+        )
+    if set(routed).intersection(unassigned):
+        issues.append(
+            VerificationIssue("assignment_overlap", "a customer is both routed and unassigned")
+        )
+    covered = set(routed).union(unassigned)
+    complete = covered == customer_ids and not unassigned
+    if covered != customer_ids:
+        issues.append(
+            VerificationIssue(
+                "customer_coverage_incomplete",
+                "every customer must be routed or explicitly unassigned",
+            )
+        )
+    if require_complete and unassigned:
+        issues.append(
+            VerificationIssue(
+                "unassigned_not_allowed", "verification policy requires a complete solution"
+            )
+        )
+    if (
+        not _finite(solution.claimed_total_distance)
+        or abs(solution.claimed_total_distance - total_distance) > tolerance
+    ):
+        issues.append(
+            VerificationIssue(
+                "total_distance_mismatch",
+                "claimed total distance differs from independent recomputation",
+            )
+        )
+
+    semantic_issues = bool(issues)
+    if not isinstance(solution.claimed_feasible, bool):
+        issues.append(
+            VerificationIssue("feasibility_claim_invalid", "claimed_feasible must be boolean")
+        )
+    elif solution.claimed_feasible == semantic_issues:
+        issues.append(
+            VerificationIssue(
+                "feasibility_claim_mismatch",
+                "solver feasibility claim differs from independent verification",
+            )
+        )
+    return PublicVrptwVerificationReport(
+        valid=not issues,
+        issues=tuple(issues),
+        checks=checks,
+        recomputed_vehicle_count=vehicle_count,
+        recomputed_total_distance=total_distance,
+        complete=complete,
+    )
+
+
+def _verify_public_route(
+    instance: CanonicalVrptwInstance,
+    route: PublicVrptwRoute,
+    node_by_id: dict[int, CanonicalVrptwNode],
+    routed: list[int],
+    issues: list[VerificationIssue],
+    tolerance: float,
+) -> float:
+    subject = route.vehicle_id
+    if len(route.visits) < 2:
+        issues.append(
+            VerificationIssue(
+                "route_shape_invalid", "route must include start and end depot visits", subject
+            )
+        )
+        return 0.0
+    if route.visits[0].node_id != instance.depot.node_id:
+        issues.append(
+            VerificationIssue("route_start_not_depot", "route must start at depot", subject)
+        )
+    if route.visits[-1].node_id != instance.depot.node_id:
+        issues.append(
+            VerificationIssue("route_end_not_depot", "route must return to depot", subject)
+        )
+    if any(visit.node_id == instance.depot.node_id for visit in route.visits[1:-1]):
+        issues.append(
+            VerificationIssue("interior_depot", "depot cannot appear inside a route", subject)
+        )
+
+    route_distance = 0.0
+    route_load = 0.0
+    previous: CanonicalVrptwNode | None = None
+    previous_departure: float | None = None
+    for index, visit in enumerate(route.visits):
+        node = node_by_id.get(visit.node_id)
+        if node is None:
+            issues.append(
+                VerificationIssue(
+                    "route_node_unknown",
+                    "route contains a node outside the instance",
+                    str(visit.node_id),
+                )
+            )
+            previous = None
+            previous_departure = None
+            continue
+        _verify_public_visit_timing(
+            node,
+            visit.arrival_time,
+            visit.service_start_time,
+            visit.departure_time,
+            previous,
+            previous_departure,
+            issues,
+            tolerance,
+        )
+        if previous is not None:
+            route_distance += hypot(
+                node.point.x - previous.point.x, node.point.y - previous.point.y
+            )
+        if index not in {0, len(route.visits) - 1} and node.node_id != instance.depot.node_id:
+            if node.node_id in routed:
+                issues.append(
+                    VerificationIssue(
+                        "customer_duplicate", "customer appears more than once", str(node.node_id)
+                    )
+                )
+            routed.append(node.node_id)
+            route_load += node.demand
+        previous = node
+        previous_departure = float(visit.departure_time) if _finite(visit.departure_time) else None
+    if route_load > instance.vehicle_capacity + tolerance:
+        issues.append(
+            VerificationIssue(
+                "capacity_violation", "route demand exceeds vehicle capacity", subject
+            )
+        )
+    if (
+        not _finite(route.claimed_distance)
+        or abs(route.claimed_distance - route_distance) > tolerance
+    ):
+        issues.append(
+            VerificationIssue(
+                "route_distance_mismatch",
+                "claimed route distance differs from independent recomputation",
+                subject,
+            )
+        )
+    return route_distance
+
+
+def _verify_public_visit_timing(
+    node: CanonicalVrptwNode,
+    arrival: object,
+    service_start: object,
+    departure: object,
+    previous: CanonicalVrptwNode | None,
+    previous_departure: float | None,
+    issues: list[VerificationIssue],
+    tolerance: float,
+) -> None:
+    subject = str(node.node_id)
+    if (
+        not _finite(arrival)
+        or arrival < 0
+        or not _finite(service_start)
+        or service_start < 0
+        or not _finite(departure)
+        or departure < 0
+    ):
+        issues.append(
+            VerificationIssue(
+                "timing_invalid", "visit timing must be finite and non-negative", subject
+            )
+        )
+        return
+    reported_arrival = float(arrival)
+    reported_service = float(service_start)
+    reported_departure = float(departure)
+    if previous is None:
+        expected_arrival = node.ready_time
+        if abs(reported_arrival - expected_arrival) > tolerance:
+            issues.append(
+                VerificationIssue(
+                    "arrival_mismatch", "reported timing differs from recomputation", subject
+                )
+            )
+        if reported_service + tolerance < max(reported_arrival, node.ready_time):
+            issues.append(
+                VerificationIssue(
+                    "service_start_mismatch",
+                    "service starts before arrival or ready time",
+                    subject,
+                )
+            )
+        expected_departure = reported_service + node.service_time
+        if abs(reported_departure - expected_departure) > tolerance:
+            issues.append(
+                VerificationIssue(
+                    "departure_mismatch", "reported timing differs from recomputation", subject
+                )
+            )
+    elif previous_departure is None:
+        issues.append(
+            VerificationIssue(
+                "route_continuity_invalid", "previous departure is unavailable", subject
+            )
+        )
+        return
+    else:
+        expected_arrival = previous_departure + hypot(
+            node.point.x - previous.point.x, node.point.y - previous.point.y
+        )
+        earliest_service = max(reported_arrival, node.ready_time)
+        if abs(reported_arrival - expected_arrival) > tolerance:
+            issues.append(
+                VerificationIssue(
+                    "arrival_mismatch", "reported timing differs from recomputation", subject
+                )
+            )
+        if reported_service + tolerance < earliest_service:
+            issues.append(
+                VerificationIssue(
+                    "service_start_mismatch",
+                    "service starts before arrival or ready time",
+                    subject,
+                )
+            )
+        expected_departure = reported_service + node.service_time
+        if abs(reported_departure - expected_departure) > tolerance:
+            issues.append(
+                VerificationIssue(
+                    "departure_mismatch", "reported timing differs from recomputation", subject
+                )
+            )
+    if reported_service > node.due_time + tolerance:
+        issues.append(
+            VerificationIssue("time_window_violation", "service starts after due time", subject)
+        )

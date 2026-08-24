@@ -338,6 +338,38 @@ class ParsedPublicBenchmark:
         )
 
 
+@dataclass(frozen=True, slots=True)
+class PublicVrptwVisit:
+    """Untrusted solver-reported visit; verification owns all semantic checks."""
+
+    node_id: int
+    arrival_time: float
+    service_start_time: float
+    departure_time: float
+
+
+@dataclass(frozen=True, slots=True)
+class PublicVrptwRoute:
+    """Untrusted route including explicit start and end depot visits."""
+
+    vehicle_id: str
+    visits: tuple[PublicVrptwVisit, ...]
+    claimed_distance: float
+
+
+@dataclass(frozen=True, slots=True)
+class PublicVrptwSolution:
+    """Untrusted public-instance result supplied to the independent verifier."""
+
+    instance_id: str
+    routes: tuple[PublicVrptwRoute, ...]
+    unassigned_node_ids: tuple[int, ...]
+    claimed_vehicle_count: int
+    claimed_total_distance: float
+    claimed_feasible: bool
+    objective_semantics: str
+
+
 class SolomonVrptwParser:
     parser_id = "solomon-vrptw-text"
     version = "1.0.0"
