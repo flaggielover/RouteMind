@@ -7,6 +7,7 @@ import re
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from hashlib import sha256
+from math import isfinite
 from pathlib import Path
 from typing import cast
 
@@ -47,7 +48,13 @@ class StatisticalRouteBenchProtocol:
     common_streams: tuple[str, ...]
     pilot_replicates_per_regime: int
     confirmatory_replicate_start: int
+    minimum_detectable_risk_difference: float
+    assignment_noninferiority_margin: float
+    familywise_alpha: float
+    target_power: float
+    minimum_confirmatory_pairs_per_regime: int
     maximum_confirmatory_pairs_per_regime: int
+    round_up_to_pairs: int
     number_of_confirmatory_tests: int
 
 
@@ -129,7 +136,15 @@ def load_statistical_routebench_protocol(path: Path) -> StatisticalRouteBenchPro
         common_streams=streams,
         pilot_replicates_per_regime=_integer(randomization, "pilot_replicates_per_regime"),
         confirmatory_replicate_start=_integer(randomization, "confirmatory_replicate_start"),
+        minimum_detectable_risk_difference=_number(power, "minimum_detectable_risk_difference"),
+        assignment_noninferiority_margin=_number(power, "assignment_noninferiority_margin"),
+        familywise_alpha=_number(power, "familywise_alpha"),
+        target_power=_number(power, "target_power"),
+        minimum_confirmatory_pairs_per_regime=_integer(
+            power, "minimum_confirmatory_pairs_per_regime"
+        ),
         maximum_confirmatory_pairs_per_regime=maximum_pairs,
+        round_up_to_pairs=_integer(power, "round_up_to_pairs"),
         number_of_confirmatory_tests=tests,
     )
 
@@ -363,6 +378,13 @@ def _integer(value: Mapping[str, object], key: str) -> int:
     if not isinstance(item, int) or isinstance(item, bool):
         raise StatisticalRouteBenchProtocolError(f"{key} must be an integer")
     return item
+
+
+def _number(value: Mapping[str, object], key: str) -> float:
+    item = value.get(key)
+    if not isinstance(item, (int, float)) or isinstance(item, bool) or not isfinite(float(item)):
+        raise StatisticalRouteBenchProtocolError(f"{key} must be a finite number")
+    return float(item)
 
 
 def _positive_integer(value: Mapping[str, object], key: str) -> int:

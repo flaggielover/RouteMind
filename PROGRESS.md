@@ -14,11 +14,11 @@ Current Task: R3-323 - Implement prospective power analysis
 
 Last Completed: R3-322 - Implement paired estimation and uncertainty
 
-Current Gate: R3-323 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. It must freeze and validate prospective paired-t power accounting without treating synthetic fixtures as pilot observations.
+Current Gate: R3-323 is locally validated and remains E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE pending real GitHub Actions. Synthetic fixtures remain explicitly distinct from observed pilot variance.
 
 CI: PASS for the R3-322 implementation checkpoint 349a27e in run 32715625853 and R3-321 closure checkpoint d848593 in run 32714698835 across all five jobs.
 
-Regression: PASS locally and remotely for R3-322 - Java 80/80, Python 594/594 at 95.76% coverage, the paired-estimation module at 95.71% with 29 directed tests, Web 92/92 plus production build/browser smoke, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
+Regression: PASS locally for R3-323 - Java 80/80, Python 635/635 at 95.83% coverage, the power module at 100% with 41 directed tests, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls. Remote validation is pending.
 
 Round 3 Scientific Tasks: 11 / 45 passed; R3-323 in progress; R3-355 deferred and non-blocking.
 
@@ -28,7 +28,29 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Implement and remotely validate R3-323 prospective power analysis, then activate R3-324 multiplicity control. R3-350 remains independently eligible.
+Next Candidates: Commit, push, and remotely validate R3-323 prospective power analysis, then activate R3-324 multiplicity control. R3-350 remains independently eligible.
+
+### R3-323 prospective power implementation - 2026-08-24
+- Exact `scipy==1.18.0` one-sided noncentral paired-t planning consumes a
+  content-addressed variance input and records protocol/regime/metric identity,
+  pair count, variance/source, null and alternative boundaries, MDE distance,
+  standardized effect, family/local alpha, target, counts, achieved powers,
+  disposition, runtime version, and stable digest.
+- Family alpha 0.05 is conservatively divided across the 16 frozen Holm tests.
+  Required counts are searched exactly, rounded up to multiples of four, and
+  bounded at 20-200 without changing MDE/alpha/power. Counts above the cap retain
+  their unconstrained requirement and emit `UNDERPOWERED_AT_CAP`.
+- Synthetic variance `0.0016` yields raw 55, rounded/planned 56, and power
+  0.8104064287044574. Variance `0.01` requires 324 but plans 200 at power
+  0.5269065070498476 and remains labeled underpowered. A future observed
+  `r3_325_pilot` must contain exactly all eight frozen pilot pairs.
+- 41 directed tests pass with 100% module branch coverage; protocol/power/
+  estimation integration is 120/120. Ruff and strict mypy pass, and
+  `routebench-power` is registered `DETERMINISM_CRITICAL`.
+- The full local gate passes Java 80/80, Python 635/635 at 95.83%, Web 92/92 plus
+  build, contracts, lock/security checks, determinism, analytics, semantic
+  metrics, and controls. Remote CI remains pending; no observed pilot or
+  confirmatory campaign ran.
 
 ### R3-322 paired estimation implementation - 2026-08-24
 - Every sample retains its R3-321 CRN plan and must share protocol, phase, and

@@ -17,6 +17,7 @@ dependencies = [
     "ortools==9.15.6755",
     "pydantic==2.13.4",
     "prometheus-client==0.24.1",
+    "scipy==1.18.0",
     "uvicorn==0.52.4",
 ]
 
@@ -31,6 +32,7 @@ dev = [
     "pytest==9.1.1",
     "pytest-cov==7.1.0",
     "ruff==0.16.4",
+    "scipy-stubs==1.18.0.1",
     "types-jsonschema==4.26.0.20260518",
 ]
 
