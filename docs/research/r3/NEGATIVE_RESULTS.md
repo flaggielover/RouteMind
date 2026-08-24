@@ -127,3 +127,11 @@ and final claim disposition without rewriting earlier entries.
   preregistration boundary only: no observed safety, service, calibration,
   efficiency, or superiority evidence exists. The disposition is
   `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED`.
+- `NR-R3-020`: R3-345 froze the Safe-RADS four-arm experiment contract and
+  audited frozen R3-325 artifacts. No violation events, feasibility outcomes,
+  route-cost/lateness observations, calibration records, or tightness
+  sensitivity runs exist. The report is `INSUFFICIENT_DATA` and all seven
+  metrics are `NOT_REPORTED_NO_SAFE_OUTCOMES`. R3-325 was not rerun, tuned,
+  reinterpreted, or replaced by synthetic replay; no safety, calibration,
+  feasibility, or efficiency claim is made. This is
+  `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`, valid negative evidence.

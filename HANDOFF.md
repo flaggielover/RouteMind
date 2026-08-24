@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream D
 
-Current Task: R3-345 - Execute Safe-RADS risk experiments
+Current Task: R3-351 - Mine shadow strategy disagreements
 
-Task Status: R3-344 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-DEFERRED. Safe-RADS-v1 freezes hard/chance/risk/penalty distinctions, `late_service_probability <= 0.05`, one-sided Wilson 95% upper bound with minimum 100 calibrated observations, route-cost bound +0.03, rejection on uncertainty failure, and Java hard-constraint verification. Implementation commit `65c992f` passed all five jobs in GitHub Actions run `32759977254`; no empirical safety or efficiency claim is made. R3-345 is now the highest-priority eligible critical task. R3-325 remains frozen exactly at E-PASS/X-PASS/S-FAIL/C-NO-CLAIM.
+Task Status: R3-345 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. The Safe-RADS four-arm support audit found no violation, feasibility, cost, lateness, calibration, fallback, or tightness records in frozen R3-325 artifacts; all metrics are NOT_REPORTED_NO_SAFE_OUTCOMES. Implementation commit `bdb6967` passed all five jobs in GitHub Actions run `32761030125`. R3-325 remains frozen exactly at E-PASS/X-PASS/S-FAIL/C-NO-CLAIM and was not rerun, tuned, reinterpreted, or replaced by synthetic replay. R3-351 is now the highest-priority eligible task.
 
-Next: audit R3-345 Safe-RADS support against the available frozen artifacts. Preserve no-data outcomes, do not execute an unauthorized material campaign, and do not weaken the R3-325 freeze or claim safety, calibration, efficiency, or generic superiority.
+Next: mine shadow strategy disagreements in R3-351 from privacy-bounded Decision Corpus evidence. Categorize disagreement without treating it as candidate superiority; preserve no-data outcomes and the R3-325 freeze.
 
 R3-336 evidence is `evidence/gates/R3-336/twin-non-fidelity.md`; plan digest is `ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94` and byte SHA is `87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571`.
 
@@ -21,6 +21,8 @@ R3-341 evidence is `evidence/gates/R3-341/rads-h-formalization.md`; plan digest 
 R3-342 evidence is `evidence/gates/R3-342/hysteresis-experiments.md`; plan digest is `725bce8111db8652c6b52ef1c71e63429594aa4a329e0372e524471ea41ac967` and byte SHA is `62eab0fca0a28a758ae6299a83c900752044f3c155f84245e09dadc6e7ac921d`. The read-only support audit returned `INSUFFICIENT_DATA` because all six required tick-level fields are absent from frozen R3-325 pair artifacts; all metrics are `NOT_REPORTED_NO_SWITCH_LOGS`.
 
 R3-344 evidence is `evidence/gates/R3-344/safe-rads-formalization.md`; plan digest is `82fed4dc95bec7ccbfa10ead770d63e2de6f47bb081d0b5d05672382462f6644` and byte SHA is `a3570615177b19fa59688b23a0e85f76957c6090b75f1fd6d165f3506b171163`. This is a formal preregistration boundary only; no safety, calibration, efficiency, or superiority claim is authorized.
+
+R3-345 evidence is `evidence/gates/R3-345/safe-rads-experiments.md`; plan digest is `182a3e6217f2c8e918049a4d55b78e340c8882a58e5dad106a7f738c3433783c` and byte SHA is `74d83b8fc695e623d6b1a89466f3836bcf6dec618745080920df8080dbb68288`. The support audit returned `INSUFFICIENT_DATA`; all seven metrics are `NOT_REPORTED_NO_SAFE_OUTCOMES`.
 
 R3-335 evidence is `evidence/gates/R3-335/what-if-validity.md`; plan digest is `81c52721886c646d2ff468f500c334566e3ed7f4f66bf0f63a9c4478f4b42023` and byte SHA is `20640a2cd366fd992dec681c3dc4139b4b352cb9609bf71ba0542a9bceb9a57d`.
 
