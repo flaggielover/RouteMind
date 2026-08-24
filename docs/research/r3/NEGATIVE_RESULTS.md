@@ -53,3 +53,11 @@ unsupported claims remain here even when engineering gates are green.
 Material R3-311, R3-315, and R3-316 outcomes are recorded above. Future entries retain
 manifest IDs, code commits, datasets, seeds, statistical outcomes, sensitivity,
 and final claim disposition without rewriting earlier entries.
+
+- `NR-R3-010`: R3-330 froze a temporal/scenario calibration-versus-held-out
+  contract with disjoint identities and five fail-closed leakage checks, but no
+  authorized observed dispatch outcomes are available locally. Both splits remain
+  `UNAVAILABLE_NO_OBSERVED_DATA`, all checks are `NOT_RUN_NO_DATA`, and the
+  explicit outcome is `INSUFFICIENT_DATA`. Synthetic Twin replay is not used as
+  held-out evidence; no fidelity, calibration, or external-validity claim is
+  permitted.

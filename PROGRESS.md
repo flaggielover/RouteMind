@@ -8,27 +8,41 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 130 / 158 tasks passed
+Repository Total: 131 / 158 tasks passed
 
-Current Task: R3-330 - Define Digital Twin calibration dataset and split contract
+Current Task: R3-333 - Define preregistered Twin fidelity metrics and thresholds
 
-Last Completed: R3-352 - Design simulation switchback experiments
+Last Completed: R3-330 - Define Digital Twin calibration dataset and split contract
 
-Current Gate: R3-352 closed E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED. The frozen simulation-only switchback design uses zone-time-block assignment, alternating arms, warmup/washout, and explicit shared-supply, spillover, and carryover diagnostics; no simulation or causal result was produced. R3-330 is now the highest-priority unblocked critical task.
+Current Gate: R3-330 closed E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. Its temporal/scenario split contract freezes disjoint calibration and held-out identities, five leakage checks, and an explicit INSUFFICIENT_DATA outcome; no observed data, calibration, held-out validation, or Twin fidelity claim was produced. R3-333 is now the highest-priority unblocked critical task.
 
-CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, and R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
+CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, and R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-352 - Java 81/81, Python 774/774 at 95.16% coverage, switchback design tests 7/7, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally and remotely for R3-330 - Java 81/81, Python 786/786 at 95.24% coverage, Twin split contract tests 12/12 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 17 / 45 passed; R3-330 active next; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 18 / 45 passed; R3-333 active next; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Define the Digital Twin calibration/held-out dataset split for R3-330 with disjoint identities, leakage checks, and an explicit insufficient-data outcome. R3-353, R3-351, and R3-313 remain unblocked at lower priority or optional scope.
+Next Candidates: Freeze variable-appropriate Digital Twin fidelity metrics, absolute thresholds, improvement tests, and INSUFFICIENT_DATA behavior for R3-333. R3-331 remains dependent on R3-333; R3-353, R3-351, and R3-313 remain lower-priority or optional.
+
+### R3-330 Digital Twin dataset split contract - 2026-08-24
+- The frozen contract uses temporal primary and scenario secondary split axes,
+  distinct calibration/held-out identities, aggregate geography partition keys,
+  and five fail-closed leakage checks (event identity, temporal, scenario,
+  geographic, source manifest). Calibration is prohibited from reading held-out
+  data, and validation requires observed outcomes.
+- No authorized immutable observed dispatch outcome corpus exists locally. Both
+  split artifacts remain `UNAVAILABLE_NO_OBSERVED_DATA` with zero records;
+  every leakage check is `NOT_RUN_NO_DATA`, and the explicit outcome is
+  `INSUFFICIENT_DATA`. Synthetic Twin replay is not substituted for observations.
+  Contract digest: `fb3f3162ac073815cba838f3fde5a3b8ac94604e21dc4f9049bdf3785d108eaa`.
+- Commit `825384d` passed all five jobs in Actions run `32742587929`. Evidence:
+  `evidence/gates/R3-330/twin-dataset-contract.md`.
 
 ### R3-352 simulation switchback design - 2026-08-24
 - The frozen design manifest uses six 30-tick zone-time blocks over three zones,

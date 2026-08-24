@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream B
 
-Current Task: R3-330 - Define Digital Twin calibration dataset and split contract
+Current Task: R3-333 - Define preregistered Twin fidelity metrics and thresholds
 
-Task Status: R3-352 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-DEFERRED. Commit `c36881e` passed all five jobs in GitHub Actions run `32740971993`; the frozen simulation-only manifest has six alternating zone-time blocks, explicit washout and interference diagnostics, and no causal result. R3-330 is now the highest-priority eligible critical task; R3-353 and R3-351 are also unblocked, while R3-313 remains optional.
+Task Status: R3-330 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE. Commit `825384d` passed all five jobs in GitHub Actions run `32742587929`; the frozen split contract has disjoint calibration/held-out identities and five leakage checks, but no authorized observed data is available. Outcome is INSUFFICIENT_DATA and no Twin fidelity claim is allowed. R3-333 is now the highest-priority eligible critical task.
 
 R3-324 resume capsule: the exact frozen 16-test Holm step-down family retains
 protocol/regime/metric/hypothesis identity, raw p-values, stable family ranks,
@@ -24,11 +24,11 @@ determinism gates. During validation, a real Java same-instant transition flake
 was diagnosed and repaired with monotonic aggregate/outbox event time; the fixed
 clock regression and originally failing lease test pass. Implementation revision
 `c3e394b` passed all five jobs in Actions run `32720233681`; R3-324 is closed.
-Next: define R3-330's Digital Twin calibration and held-out split contract with
-disjoint identities, temporal/scenario/geographic leakage checks, and an
-explicit insufficient-data outcome. R3-352 evidence is
-`evidence/gates/R3-352/switchback-design.md`; its design digest is
-`4d3b69cf8f5bb3bea317885f4d849367aa9c8b530b35de4485820fefbe063785`.
+Next: define R3-333's variable-appropriate Twin fidelity metrics, absolute
+thresholds, improvement tests, and fail-closed INSUFFICIENT_DATA behavior;
+R3-331 remains dependent on this protocol. R3-330 evidence is
+`evidence/gates/R3-330/twin-dataset-contract.md`; its contract digest is
+`fb3f3162ac073815cba838f3fde5a3b8ac94604e21dc4f9049bdf3785d108eaa`.
 The R3-327 report implementation `ed01044` passed all five jobs in Actions run
 `32737520239`; its report digest remains
 `0c7e29af8c89ed9ca7cb094525745f488c4b4d69e73ab6a4a7f47dd4e5ae9eac`.
