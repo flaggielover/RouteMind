@@ -16,6 +16,9 @@ class ReasonCodeTests(unittest.TestCase):
             fail("RANK_DEFICIENT", "fixture")
         self.assertEqual(context.exception.reason.code, "RANK_DEFICIENT")
         self.assertEqual(context.exception.detail, "fixture")
+        self.assertIn("DIAGNOSTIC_INPUT_MISMATCH", REASON_CODES)
+        self.assertIn("DIAGNOSTIC_ARTIFACT_EXISTS", REASON_CODES)
+        self.assertIn("REPLAY_FAILURE", REASON_CODES)
 
     def test_unregistered_reason_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "unregistered reason code"):

@@ -18,6 +18,7 @@ python -m research.level4.spatial_lockin.run identify-confirmatory
 python -m research.level4.spatial_lockin.run freeze-threshold
 python -m research.level4.spatial_lockin.run verify-frozen-threshold
 python -m research.level4.spatial_lockin.run run-gate2
+python -m research.level4.spatial_lockin.run run-negative-control-diagnostic
 ```
 
 Artifact-producing commands require `ROUTEMIND_DATA_ROOT`. Confirmatory and
@@ -25,7 +26,9 @@ diagnostic artifacts are rooted separately and use exclusive creation plus
 SHA-256 sidecars. `freeze-threshold` reads only the confirmatory short-horizon
 summary. `run-gate2` first verifies the immutable Gate 1 report and threshold
 artifact, then executes only the pre-registered Gate 2 sweep. It never executes
-Gate 3.
+Gate 3. `run-negative-control-diagnostic` verifies the separately frozen
+post-confirmatory protocol and immutable Gate 2 evidence, writes only to the
+diagnostic class, and cannot change Gate 2 or execute Gate 3.
 
 ## Independence boundary
 

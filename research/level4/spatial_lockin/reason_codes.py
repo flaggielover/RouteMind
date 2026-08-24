@@ -117,6 +117,26 @@ _DEFINITIONS = (
         "gate2",
         "Layer M operational metrics did not track the latent regime",
     ),
+    ReasonCode(
+        "DIAGNOSTIC_INPUT_MISMATCH",
+        "diagnostic",
+        "A frozen negative-control diagnostic input changed or is malformed",
+    ),
+    ReasonCode(
+        "DIAGNOSTIC_ARTIFACT_EXISTS",
+        "diagnostic",
+        "Negative-control diagnostic output already exists",
+    ),
+    ReasonCode(
+        "DIAGNOSTIC_NONFINITE",
+        "diagnostic",
+        "Negative-control diagnostic evidence contains a non-finite value",
+    ),
+    ReasonCode(
+        "REPLAY_FAILURE",
+        "diagnostic",
+        "A frozen Gate 2 trajectory did not replay exactly",
+    ),
 )
 
 REASON_CODES: Final[dict[str, ReasonCode]] = {item.code: item for item in _DEFINITIONS}

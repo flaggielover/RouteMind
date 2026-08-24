@@ -11,6 +11,7 @@ from typing import cast
 from .artifacts import ArtifactClass, ArtifactStore
 from .gate2 import run_gate2
 from .identification import identify_layer
+from .negative_control import run_negative_control_diagnostic
 from .preregistration import Preregistration, canonical_json
 from .reason_codes import ResearchGateError
 from .records import Trajectory
@@ -260,6 +261,7 @@ def _parser() -> argparse.ArgumentParser:
             "freeze-threshold",
             "verify-frozen-threshold",
             "run-gate2",
+            "run-negative-control-diagnostic",
         ),
     )
     return parser
@@ -276,15 +278,16 @@ def main() -> int:
             result = identify(diagnostic=True)
         elif arguments.command == "freeze-threshold":
             result = freeze_threshold()
+        elif arguments.command == "verify-frozen-threshold":
+            result = verify_frozen()
         else:
-            if arguments.command == "verify-frozen-threshold":
-                result = verify_frozen()
+            preregistration = _load_preregistration()
+            store = ArtifactStore.from_environment()
+            if arguments.command == "run-gate2":
+                result = run_gate2(PACKAGE_ROOT, preregistration, store)
             else:
-                preregistration = _load_preregistration()
-                result = run_gate2(
-                    PACKAGE_ROOT,
-                    preregistration,
-                    ArtifactStore.from_environment(),
+                result = run_negative_control_diagnostic(
+                    PACKAGE_ROOT, preregistration, store
                 )
     except ResearchGateError as exc:
         print(
