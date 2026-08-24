@@ -1,0 +1,32 @@
+{
+  "schema_version": "routemind-twin-what-if-validity-v1",
+  "task_id": "R3-335",
+  "boundary_id": "r3-335-what-if-validity-v1",
+  "frozen_at_utc": "2026-08-25T01:00:00Z",
+  "question": "Which interpretations remain valid for counterfactual replay, simulation comparison, and causal inference given the held-out evidence?",
+  "source_validation_plan_digest": "348150cc5bd4bd6dea1261a81e13e7240606bb24cbc1898504ec34d4c8d9cfee",
+  "mode_policies": [
+    {
+      "mode_id": "counterfactual_replay",
+      "allowed_interpretation": "Descriptive replay under a specified model and fixed assumptions only.",
+      "prohibited_claims": ["causal_effect", "external_validity", "source_optimality"]
+    },
+    {
+      "mode_id": "simulation_comparison",
+      "allowed_interpretation": "Scenario-relative engineering comparison with simulator assumptions retained.",
+      "prohibited_claims": ["real_world_effect", "external_validity", "causal_effect"]
+    },
+    {
+      "mode_id": "causal_inference",
+      "allowed_interpretation": "Requires an identified treatment, outcome, assumptions, and eligible observed data.",
+      "prohibited_claims": ["causal_effect_without_identification", "external_validity", "Twin_validity"]
+    }
+  ],
+  "scope_policy": {
+    "when_insufficient_data": "NO_VALIDITY_CLAIM",
+    "when_supported": "SCOPE_ONLY",
+    "external_validity": "PROHIBITED"
+  },
+  "claim_boundary": "WHAT_IF_BOUNDARIES_DO_NOT_ESTABLISH_CAUSAL_OR_EXTERNAL_VALIDITY",
+  "plan_digest": "81c52721886c646d2ff468f500c334566e3ed7f4f66bf0f63a9c4478f4b42023"
+}
