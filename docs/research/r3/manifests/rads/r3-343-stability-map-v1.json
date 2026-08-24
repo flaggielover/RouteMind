@@ -1,0 +1,49 @@
+{
+  "plan_digest": "c6d7d4a5ac088570731e80a189c12cd79792256ac3669bdeed5f9049d6b4ee14",
+  "schema_version": "routemind-rads-stability-map-v1",
+  "task_id": "R3-343",
+  "map_id": "r3-343-empirical-stability-map-v1",
+  "frozen_at_utc": "2026-08-25T23:00:00Z",
+  "question": "Across which observed RADS-H state regions are selections, switching, performance, and instability empirically supported?",
+  "state_axes": [
+    {"axis": "relative_advantage", "representation": "below_exit, exit_band, below_enter, enter_pressure", "support_field": "tick_state_observations"},
+    {"axis": "dwell_ticks", "representation": "0, 1, 2, 3_or_more", "support_field": "tick_state_observations"},
+    {"axis": "pressure_ticks", "representation": "0, 1, 2_or_more", "support_field": "tick_state_observations"},
+    {"axis": "regime_id", "representation": "observed_categorical", "support_field": "regime_identity"},
+    {"axis": "strategy_pair", "representation": "observed_active_to_candidate", "support_field": "strategy_selections"}
+  ],
+  "map_metrics": ["selection_rate", "switching_rate", "service_metric", "route_cost", "instability_rate"],
+  "coverage_policy": {
+    "minimum_cell_observations": 30,
+    "unobserved_cell_label": "UNSUPPORTED_NO_OBSERVATIONS",
+    "underpowered_cell_label": "INSUFFICIENT_CELL_SUPPORT",
+    "coverage_report": "REQUIRED_OBSERVED_AND_ELIGIBLE_CELL_COUNTS"
+  },
+  "uncertainty_policy": {
+    "confidence_level": 0.95,
+    "proportion_interval": "WILSON",
+    "continuous_interval": "PAIRED_BOOTSTRAP_PERCENTILE",
+    "bootstrap_resamples": 2000,
+    "unit": "paired_seed_regime_stream"
+  },
+  "support_requirements": {
+    "required_fields": ["tick_state_observations", "strategy_selections", "switch_events", "service_outcomes", "route_cost_outcomes", "instability_observations", "regime_identity", "pairing_unit"],
+    "source_status": "INSUFFICIENT_DATA",
+    "synthetic_substitution": false,
+    "reason": "R3-325 artifacts contain aggregate paired arm summaries but no tick-level RADS-H state trajectories"
+  },
+  "source_lineage": {
+    "hysteresis_plan": "4b846bc8b971df269c1c6439b325ab61b7803a83812ced39b352f519acb929c5",
+    "hysteresis_experiment": "725bce8111db8652c6b52ef1c71e63429594aa4a329e0372e524471ea41ac967",
+    "pilot_plan": "8880268766523069ad3db523a5babf2170eed47a34489d2850c89a46c76929be",
+    "pilot_ledger": "d8c00899785cc9c9cfd7bd7eac1a25513d8131a1c992b60e106ba12709bc5d76"
+  },
+  "execution_policy": {
+    "material_run_authorized": false,
+    "r3_325_rerun": false,
+    "write_external_artifacts": false,
+    "theoretical_stability_claim": false,
+    "resource_envelope": "read-only stability-map support audit; zero external writes"
+  },
+  "claim_boundary": "EMPIRICAL_STABILITY_MAP_DOES_NOT_ESTABLISH_THEORETICAL_STABILITY"
+}

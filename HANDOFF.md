@@ -8,7 +8,7 @@ Current Phase: Round 3 Scientific Research - Workstream D
 
 Current Task: R3-343 - Map empirical switching stability regions
 
-Task Status: R3-348 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. The six-dimension plan and fail-closed audit returned `INSUFFICIENT_DATA`; five applicable dimensions lack component logs and counterfactual feature is explicitly not applicable. Implementation `771e8a8` passed all five jobs in Actions run `32774570495`. R3-343 is active; R3-356 remains blocked until R3-349 passes.
+Task Status: R3-343 is active at E-IN-PROGRESS/X-IN-PROGRESS/S-IN-PROGRESS/C-DEFERRED. Its empirical-only map plan and fail-closed support audit pass Python 887/887 at 95.26% coverage plus six directed tests, Ruff, formatting, mypy, and compute gates locally. Remote five-job CI is pending. R3-348 is closed, and R3-356 remains blocked until R3-349 passes.
 
 Next: implement and validate the R3-343 empirical switching stability-region support audit. Map coverage and uncertainty explicitly, and never relabel an empirical map as theoretical stability.
 
