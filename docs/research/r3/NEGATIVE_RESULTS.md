@@ -39,7 +39,17 @@ unsupported claims remain here even when engineering gates are green.
   does not establish broad quality, superiority, or external validity. The task
   therefore closes `S-NOT-APPLICABLE / C-NO-CLAIM` despite its engineering and
   experiment gates passing.
+- `NR-R3-009`: R3-316 retained all 42 frozen R3-311/R3-312/R3-315 records.
+  Thirty-five of 36 source benchmark runs timed out; three timed out without a
+  feasible incumbent. Among the 27 source results eligible for a vehicle gap,
+  the median was `31.6667%`, Type-7 p90 `349.4545%`, and maximum `484.2105%`
+  worse than the retained reference vehicle count. Six questioned references
+  and three no-incumbent results were retained without numeric imputation. The
+  six zero gaps belong only to separate eight-customer conservative integer
+  models. R3-316 is descriptive `S-PASS/C-NO-CLAIM`, not evidence of source
+  optimality, quality, superiority, unrestricted capability, or population
+  behavior.
 
-Material R3-311 and R3-315 outcomes are recorded above. Future entries retain
+Material R3-311, R3-315, and R3-316 outcomes are recorded above. Future entries retain
 manifest IDs, code commits, datasets, seeds, statistical outcomes, sensitivity,
 and final claim disposition without rewriting earlier entries.

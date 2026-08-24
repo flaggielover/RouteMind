@@ -14,9 +14,9 @@ Current Task: R3-320 - Pre-register the Statistical RouteBench protocol
 
 Last Completed: R3-316 - Analyze best-known-solution and optimality gaps
 
-Current Gate: R3-320 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. R3-316 is locally closed and its closure checkpoint awaits remote CI.
+Current Gate: R3-320 is E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE. Its machine-verifiable protocol is frozen locally before any R3-B campaign data.
 
-CI: PASS for the R3-316 implementation checkpoint 9f68e99 in run 32710816931 across all five jobs. The frozen manifest was accepted through descendant d86c41e in run 32708578105; direct run 32708520338 was concurrency-cancelled and is not accepted as green evidence. The R3-316 closure checkpoint is pending. Earlier R3-312/R3-315/R3-311/R3-317/R3-314/R3-310 evidence remains recorded below. Historical control-state run 32629250028 failed before the RM-207 state fix and is not accepted evidence.
+CI: PASS for the R3-316 closure checkpoint c0967c1 in run 32711507127 and implementation checkpoint 9f68e99 in run 32710816931 across all five jobs. The frozen manifest was accepted through descendant d86c41e in run 32708578105; direct run 32708520338 was concurrency-cancelled and is not accepted as green evidence. R3-320 freeze CI is pending. Earlier R3-312/R3-315/R3-311/R3-317/R3-314/R3-310 evidence remains recorded below.
 
 Regression: PASS locally and remotely for the R3-316 implementation - Java 80/80, Python 493/493 at 95.70% coverage, the new module at 99%, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
 
@@ -28,7 +28,29 @@ Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and remotely validate the R3-316 closure, then freeze the R3-320 Statistical RouteBench protocol before any R3-B campaign data. R3-350 remains independently eligible.
+Next Candidates: Validate and remotely accept the frozen R3-320 protocol, then activate R3-321 common-random-number stream ownership. R3-350 remains independently eligible.
+
+### R3-320 Statistical RouteBench protocol freeze - 2026-08-24
+- Protocol `r3-320-statistical-routebench-v1` prospectively fixes
+  `risk-aware@1.0.0` versus `weighted-greedy@1.0.0`, with committed default
+  parameters and no pilot or confirmatory campaign data inspected.
+- Paired primary outcomes are independently recomputed scenario risk and
+  assignment rate. Risk uses selected service/overtime attributes and assigns
+  unassigned, timeout, or failed requests the worst value 1.0; strategy scores
+  are prohibited as metric inputs. Assignment non-inferiority remains `-0.02`.
+- Eight numeric stress regimes, four common streams, disjoint pilot/confirmatory
+  seed ranges, prospective 20-200 pair bounds, 16-test Holm control, mandatory
+  safety diagnostics, exclusions, stopping, lineage, and zero external cost are
+  frozen in a strict JSON manifest.
+- The 9,737-byte manifest SHA-256 is
+  `a6dae9d55641ff7966ef4a50cc00a63da3e936620c3c48f23cd2c2ce039375b5`.
+  Its strict loader rejects semantic drift and any unmatched byte identity.
+- Local full gates passed Java 80/80, Python 544/544 at 95.76% total coverage,
+  the protocol module at 97.46% with 51 directed tests, Web 92/92 plus build,
+  6 schemas / 18 fixtures, determinism, analytics, and semantic metrics.
+- Material R3-325 execution is prohibited until R3-321/322/323/324 pass and the
+  R3-325 implementation checkpoint is remote green. R3-320 remains in progress
+  until its loader/tests and frozen manifest pass remote CI.
 
 ### R3-317 solver outcome contract validation - 2026-08-24
 - Termination, proof, incumbent, independent verification, configured limits, and

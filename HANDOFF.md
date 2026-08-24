@@ -733,8 +733,24 @@ Continue autonomously with RM-230.
   Compact result is
   `docs/research/r3/results/gap-analysis/bks-gap-analysis-results-v1.json`.
 - R3-316 is `E-PASS/X-PASS/S-PASS/C-NO-CLAIM`; no source optimality,
-  superiority, or population claim is authorized. Commit/push its closure and
-  require remote green while continuing R3-320 protocol work.
+  superiority, or population claim is authorized.
+- R3-316 closure revision `c0967c1` passed all five jobs in Actions run
+  `32711507127`.
+- R3-320 protocol `r3-320-statistical-routebench-v1` is locally frozen against
+  that closure before any R3-B campaign data. It binds `risk-aware@1.0.0` versus
+  `weighted-greedy@1.0.0`, an independent per-request risk formula, assignment
+  margin `-0.02`, eight numeric stress regimes, four CRN streams, disjoint pilot
+  and confirmatory seeds, prospective power bounds, a 16-test Holm family,
+  mandatory safety diagnostics, exclusions/stopping, lineage, and zero cost.
+- Strict loader and directed mutation tests must pass locally and remotely.
+  Material R3-325 data remain prohibited until R3-321/322/323/324 and the R3-325
+  implementation checkpoint pass. After remote R3-320 validation, close it and
+  activate R3-321 immediately.
+- R3-320 manifest is 9,737 bytes with SHA-256
+  `a6dae9d55641ff7966ef4a50cc00a63da3e936620c3c48f23cd2c2ce039375b5`.
+  Local full gates pass: Java 80/80, Python 544/544 at 95.76% (protocol loader
+  97.46% across 51 directed tests), Web 92/92 plus build, 6 schemas / 18
+  fixtures, determinism, analytics, semantic metrics, Ruff, and mypy.
 - Concurrent state: `465488f` implements the separate spatial-lock-in
   negative-control diagnostic. Preserve subsequent `research/level4/spatial_lockin/`
   changes and do not claim them as Round 3 task work.

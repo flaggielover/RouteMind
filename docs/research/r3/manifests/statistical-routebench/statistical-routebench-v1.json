@@ -1,0 +1,158 @@
+{
+  "schema_version": "routemind-statistical-routebench-protocol-v1",
+  "task_id": "R3-320",
+  "protocol_id": "r3-320-statistical-routebench-v1",
+  "frozen_at_utc": "2026-08-24T09:30:00Z",
+  "frozen_against_revision": "c0967c1208be2249e672dc5ca9b8a32a687d4110",
+  "prerequisite_ci_run": 32711507127,
+  "research": {
+    "question_id": "RQ-B1",
+    "hypothesis_id": "H1-B1",
+    "question": "Does risk-aware reduce paired scenario risk relative to weighted-greedy without material assignment loss under the frozen stress matrix?",
+    "null": "The mean paired risk difference is non-negative or the assignment-rate difference is below -0.02.",
+    "alternative": "In every regime, the unadjusted 95% upper bound for paired risk difference is below zero, the unadjusted 95% lower bound for assignment-rate difference is at least -0.02, and both directional tests pass Holm correction."
+  },
+  "arms": {
+    "candidate": {
+      "strategy": "risk-aware",
+      "version": "1.0.0",
+      "parameters": {
+        "distance": 1.0,
+        "readiness": 0.5,
+        "overtime": 2.0,
+        "service_risk": 2.0,
+        "balance": 0.5
+      }
+    },
+    "comparator": {
+      "strategy": "weighted-greedy",
+      "version": "1.0.0",
+      "parameters": {
+        "distance_weight": 1.0
+      }
+    }
+  },
+  "primary_estimands": {
+    "scenario_risk_index": {
+      "paired_difference": "candidate_minus_comparator",
+      "direction": "lower_is_better",
+      "range": [0.0, 1.0],
+      "unit": "mean_over_every_preregistered_request",
+      "assigned_request_formula": "0.5 * selected_service_risk + 0.5 * selected_overtime_risk",
+      "unassigned_timeout_or_strategy_failure_value": 1.0,
+      "independence_rule": "The metric is recomputed from immutable scenario candidate attributes and outcomes; strategy scores and rationales are never metric inputs."
+    },
+    "assignment_rate": {
+      "paired_difference": "candidate_minus_comparator",
+      "direction": "higher_is_better",
+      "numerator": "requests_with_a_verified_assignment",
+      "denominator": "every_preregistered_request",
+      "noninferiority_margin": -0.02
+    }
+  },
+  "scenario_design": {
+    "generator_version": "r3-b-stress-generator-v1",
+    "ticks_per_hour": 60,
+    "horizon_ticks": 360,
+    "base": {
+      "demand_rate_per_hour": 12.0,
+      "demand_burst_size": 1,
+      "courier_count": 12,
+      "merchant_delay_ticks": 0,
+      "traffic_multiplier": 1.0,
+      "location_staleness_seconds": 0,
+      "decision_budget_millis": 50.0,
+      "merchant_queue_capacity": 64
+    },
+    "regimes": [
+      {"regime_id": "normal", "demand_multiplier": 1.0, "demand_burst_size": 1, "supply_multiplier": 1.0, "merchant_delay_ticks": 0, "traffic_multiplier": 1.0, "location_staleness_seconds": 0, "decision_budget_millis": 50.0, "merchant_queue_capacity": 64},
+      {"regime_id": "surge", "demand_multiplier": 2.0, "demand_burst_size": 2, "supply_multiplier": 1.0, "merchant_delay_ticks": 0, "traffic_multiplier": 1.0, "location_staleness_seconds": 0, "decision_budget_millis": 50.0, "merchant_queue_capacity": 64},
+      {"regime_id": "shortage", "demand_multiplier": 1.0, "demand_burst_size": 1, "supply_multiplier": 0.5, "merchant_delay_ticks": 0, "traffic_multiplier": 1.0, "location_staleness_seconds": 0, "decision_budget_millis": 50.0, "merchant_queue_capacity": 64},
+      {"regime_id": "merchant-delay", "demand_multiplier": 1.0, "demand_burst_size": 1, "supply_multiplier": 1.0, "merchant_delay_ticks": 5, "traffic_multiplier": 1.0, "location_staleness_seconds": 0, "decision_budget_millis": 50.0, "merchant_queue_capacity": 64},
+      {"regime_id": "travel-degradation", "demand_multiplier": 1.0, "demand_burst_size": 1, "supply_multiplier": 1.0, "merchant_delay_ticks": 0, "traffic_multiplier": 1.75, "location_staleness_seconds": 0, "decision_budget_millis": 50.0, "merchant_queue_capacity": 64},
+      {"regime_id": "location-staleness", "demand_multiplier": 1.0, "demand_burst_size": 1, "supply_multiplier": 1.0, "merchant_delay_ticks": 0, "traffic_multiplier": 1.0, "location_staleness_seconds": 300, "decision_budget_millis": 50.0, "merchant_queue_capacity": 64},
+      {"regime_id": "compute-budget", "demand_multiplier": 1.0, "demand_burst_size": 1, "supply_multiplier": 1.0, "merchant_delay_ticks": 0, "traffic_multiplier": 1.0, "location_staleness_seconds": 0, "decision_budget_millis": 5.0, "merchant_queue_capacity": 64},
+      {"regime_id": "queue-pressure", "demand_multiplier": 1.5, "demand_burst_size": 4, "supply_multiplier": 1.0, "merchant_delay_ticks": 2, "traffic_multiplier": 1.0, "location_staleness_seconds": 0, "decision_budget_millis": 50.0, "merchant_queue_capacity": 4}
+    ]
+  },
+  "randomization": {
+    "pairing_unit": "regime_id_plus_replicate",
+    "common_streams": ["demand", "merchant", "courier", "traffic"],
+    "stream_ownership_task": "R3-321",
+    "seed_derivation": "SHA256(protocol_id|phase|regime_id|replicate|stream_name), first 16 hex digits masked to 63 bits",
+    "arm_order": "alternate_by_replicate_parity",
+    "pilot_replicates_per_regime": 8,
+    "pilot_replicate_range": [0, 7],
+    "confirmatory_replicate_start": 1000,
+    "pilot_seeds_must_not_enter_confirmatory_analysis": true
+  },
+  "prospective_power": {
+    "task": "R3-323",
+    "pilot_only_for_variance": true,
+    "minimum_detectable_risk_difference": -0.02,
+    "assignment_noninferiority_margin": -0.02,
+    "familywise_alpha": 0.05,
+    "target_power": 0.8,
+    "minimum_confirmatory_pairs_per_regime": 20,
+    "maximum_confirmatory_pairs_per_regime": 200,
+    "round_up_to_pairs": 4,
+    "underpowered_rule": "If the required count exceeds 200 pairs per regime, label the campaign underpowered; do not weaken the effect or alpha gate."
+  },
+  "inference": {
+    "analysis_unit": "paired_regime_seed_difference",
+    "primary_location": "arithmetic_mean",
+    "interval": "two-sided_student_t_95_percent_on_paired_differences",
+    "directional_tests": "one-sided_paired_t",
+    "effect_size": "paired_cohens_dz",
+    "multiplicity": "holm_bonferroni_familywise",
+    "multiplicity_family": "eight_risk_superiority_and_eight_assignment_noninferiority_tests",
+    "number_of_confirmatory_tests": 16,
+    "overall_support_rule": "Every regime must pass both its Holm-adjusted risk-superiority and assignment-noninferiority gates; otherwise H1-B1 is not supported overall.",
+    "sensitivity": ["paired_median", "ten_percent_winsorized_paired_mean", "leave_one_pair_out"],
+    "sensitivity_cannot_replace_primary": true
+  },
+  "mandatory_safety_diagnostics": {
+    "metrics": ["runtime_millis", "strategy_failure_rate", "fallback_rate", "timeout_rate"],
+    "reporting": "Report per arm, paired difference where defined, interval, every event identity, and worst regime.",
+    "concealment_rule": "A favorable efficacy result cannot hide a runtime, failure, fallback, or timeout regression."
+  },
+  "outcome_handling": {
+    "legitimate_outcomes_never_excluded": ["bad_seed_result", "unassigned", "timeout", "strategy_failure", "fallback", "null_effect", "unfavorable_effect"],
+    "allowed_pair_exclusions": ["checksum_invalid_before_execution", "parser_invalid_before_execution", "license_disallowed", "confirmed_harness_defect_affecting_both_arms"],
+    "strategy_failure_scoring": {"scenario_risk_index": 1.0, "assignment_rate": 0.0},
+    "retry_rule": "A confirmed infrastructure or harness defect may be retried once with the same immutable pair identity; both attempts remain in the ledger.",
+    "missing_pair_rule": "Do not impute or borrow another seed. Retain the pair as incomplete, report it, and fail the confirmatory gate until a prespecified valid retry resolves it.",
+    "exclusion_approval": "reason_code_plus_evidence_digest_required_before_outcome_inspection"
+  },
+  "stopping": {
+    "desired_result_stopping_allowed": false,
+    "interim_efficacy_looks": 0,
+    "pilot_stop": "exactly_eight_complete_pairs_per_regime_or_external_blocker",
+    "confirmatory_stop": "prospective_R3-323_pair_count_reached_for_every_regime",
+    "early_stop_reasons": ["resource_envelope_exceeded", "input_or_checksum_invalid", "verifier_failure", "implementation_defect", "external_authorization_required"],
+    "stopped_campaign_disposition": "retain_all_outputs_and_label_incomplete_or_underpowered"
+  },
+  "resource_envelope": {
+    "execution": "local_only",
+    "threads_per_arm": 1,
+    "arm_wall_timeout_seconds": 30,
+    "pilot_arm_runs": 128,
+    "maximum_confirmatory_arm_runs": 3200,
+    "expected_peak_memory_mebibytes": 1024,
+    "maximum_external_artifact_mebibytes": 512,
+    "external_cost_usd": 0.0,
+    "material_execution_task": "R3-325"
+  },
+  "lineage": {
+    "required": ["protocol_sha256", "code_revision", "implementation_ci_run", "scenario_generator_version", "strategy_versions", "parameter_digests", "regime_id", "phase", "replicate", "stream_digests", "environment", "hardware", "timestamps", "result_sha256"],
+    "large_artifact_boundary": "ROUTEMIND_DATA_ROOT/experiments/r3/R3-325",
+    "campaign_execution_prohibited_until": ["R3-321 passed", "R3-322 passed", "R3-323 passed", "R3-324 passed", "R3-325 implementation checkpoint remote green"]
+  },
+  "supported_wording": "This protocol prospectively fixes the R3-B paired comparison, stress regimes, outcomes, seed rule, statistical gates, exclusions, stopping, and resource ceiling before pilot or confirmatory campaign data.",
+  "prohibited_wording": [
+    "The preregistration itself establishes strategy superiority.",
+    "A strategy score is an independently measured risk outcome.",
+    "Pilot seeds may be reused as confirmatory evidence.",
+    "A favorable aggregate may conceal a failed regime, timeout, fallback, or assignment loss."
+  ]
+}
