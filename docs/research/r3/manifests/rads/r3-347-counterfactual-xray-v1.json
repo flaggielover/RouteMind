@@ -1,0 +1,80 @@
+{
+  "plan_digest": "4c76ce8200f00adeeb2690051d7615fa47d710523b78d631e849385b135047ce",
+  "schema_version": "routemind-counterfactual-xray-v1",
+  "task_id": "R3-347",
+  "study_id": "r3-347-counterfactual-decision-xray-v1",
+  "frozen_at_utc": "2026-08-25T23:00:00Z",
+  "question": "Under which bounded input perturbations does the captured model or system decision change, and what objective and risk deltas follow under the same replay assumptions?",
+  "perturbation_dimensions": [
+    "demand_signal",
+    "supply_signal",
+    "merchant_delay",
+    "travel_time",
+    "location_staleness",
+    "compute_budget"
+  ],
+  "required_outputs": [
+    "original_decision",
+    "perturbation",
+    "counterfactual_decision",
+    "objective_delta",
+    "risk_delta",
+    "minimality_verification",
+    "lineage"
+  ],
+  "provenance_policy": {
+    "required_identities": [
+      "source_decision_digest",
+      "source_state_digest",
+      "strategy_id",
+      "strategy_version",
+      "reference_data_digest",
+      "replay_digest"
+    ],
+    "same_model_and_reference_data": true
+  },
+  "delta_policy": {
+    "objective": "COUNTERFACTUAL_MINUS_ORIGINAL_SAME_OBJECTIVE_AND_UNITS",
+    "risk": "COUNTERFACTUAL_MINUS_ORIGINAL_SAME_RISK_AND_UNITS",
+    "invented_composite_score": false
+  },
+  "minimality_policy": {
+    "required_when_computed": true,
+    "search_order": "L0_THEN_L1_LEXICOGRAPHIC",
+    "bounded_domain_only": true,
+    "unverified_label": "NOT_VERIFIED_NO_EXECUTABLE_REPLAY"
+  },
+  "support_requirements": {
+    "required_fields": [
+      "original_decision_summary",
+      "captured_feature_state",
+      "executable_policy_bundle",
+      "perturbation_values",
+      "counterfactual_decision_output",
+      "objective_before_after",
+      "risk_before_after",
+      "replay_identity",
+      "minimality_evidence"
+    ],
+    "source_status": "INSUFFICIENT_DATA",
+    "synthetic_substitution": false,
+    "reason": "R3-350 retains summaries and state digests but no captured feature state, executable policy bundle, perturbation replay, counterfactual output, deltas, or minimality evidence"
+  },
+  "source_lineage": {
+    "decision_corpus_manifest": "d92c58cbf196e3f9ab7a157e575831f4c35a9508d3482a6f6ba90728c89e569b",
+    "decision_corpus_records": "a9fbc9d01cf8bddff917e3b067342b091877bc24cbabbf9e776cc8e74e06799f",
+    "policy_boundary_plan": "02304c1910463a30a481070382d76bb55c01c76be1bd6b7bcbeba972b14da5dd",
+    "what_if_validity_plan": "81c52721886c646d2ff468f500c334566e3ed7f4f66bf0f63a9c4478f4b42023"
+  },
+  "execution_policy": {
+    "material_run_authorized": false,
+    "r3_325_rerun": false,
+    "write_external_artifacts": false,
+    "synthetic_fill": false,
+    "causal_inference_claim": false,
+    "production_effect_claim": false,
+    "manifest_changes": "NEW_VERSION_REQUIRED",
+    "resource_envelope": "read-only counterfactual replay support audit; zero external writes"
+  },
+  "claim_boundary": "MODEL_SYSTEM_COUNTERFACTUAL_REPLAY_NOT_CAUSAL_INFERENCE"
+}

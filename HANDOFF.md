@@ -8,9 +8,11 @@ Current Phase: Round 3 Scientific Research - Workstream D
 
 Current Task: R3-347 - Run counterfactual Decision X-Ray experiments
 
-Task Status: R3-346 closed `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM` after implementation `43e3549` passed all five jobs in Actions run `32784278395`; the formal read-only audit returned `INSUFFICIENT_DATA`. R3-347 is active.
+Task Status: R3-347 frozen replay protocol and fail-closed support auditor pass the full local gate: Java 81/81, Python 920/920 at 95.11%, and Web 92/92 plus build. R3-346 closure `9082f16` passed all five jobs in Actions run `32784679499`.
 
-Next: audit R3-347 support from the frozen R3-350 corpus and RM-226 Decision X-Ray implementation. Require original/new decision linkage, perturbation provenance, objective/risk deltas, and minimality verification; label any output model/system replay and make no causal claim.
+Next: commit/push the R3-347 implementation and observe all five real CI jobs, then run the formal read-only source audit. Require original/new decision linkage, perturbation provenance, same-metric objective/risk deltas, and minimality verification; make no causal claim.
+
+R3-347 plan digest is `4c76ce8200f00adeeb2690051d7615fa47d710523b78d631e849385b135047ce` and byte SHA is `d7306891950446216d4188a672a0ebfd6d5154b76555d65208b4d12f2a261f90`. Nine support fields distinguish summary-only X-Ray inspection from executable perturbation replay. Eight directed tests reach 100% module statement/branch coverage. Material replay, external writes, synthetic filling, causal inference, production effects, and R3-325 reruns are not authorized.
 
 R3-346 evidence is `evidence/gates/R3-346/policy-boundaries.md`. Plan digest is `02304c1910463a30a481070382d76bb55c01c76be1bd6b7bcbeba972b14da5dd`, byte SHA is `daa5e1a3ca7bf423eb1c1fa99ed50d1a25a35683a84751f926c056de234a7e8d`, and formal audit digest is `dd5787f22a328cc6afb532624def46eea7866326b595903fc16884287ef35ed6`. One `shadow` class has two records, eligible stability cells are zero, six support fields are absent, and no boundary/uncertainty/sensitivity output was estimated. R3-325 remains frozen and was not rerun.
 
