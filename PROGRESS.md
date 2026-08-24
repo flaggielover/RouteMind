@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 133 / 158 tasks passed
+Repository Total: 134 / 158 tasks passed
 
-Current Task: R3-332 - Execute held-out Digital Twin validation
+Current Task: R3-334 - Measure Twin calibration drift
 
-Last Completed: R3-331 - Implement and execute bounded Twin calibration
+Last Completed: R3-332 - Execute held-out Digital Twin validation
 
-Current Gate: R3-331 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM. Its manifest-bound runner validated R3-330/R3-333 lineage and returned INSUFFICIENT_DATA because both observed splits contain zero records; no fit, parameter artifact, held-out read, synthetic replay, or Twin-validity claim was produced. R3-332 is now the highest-priority unblocked critical task.
+Current Gate: R3-332 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM. Its one-shot held-out gate validated R3-331/R3-330/R3-333 lineage and returned INSUFFICIENT_DATA with all four metrics NOT_REPORTED_NO_DATA because the authorized held-out split contains zero records; no estimate, uncertainty interval, retuning, synthetic replay, or Twin-validity claim was produced. R3-334 is now the highest-priority unblocked high task.
 
-CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, and R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
+CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, and R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-331 - Java 81/81, Python 807/807 at 95.42% coverage, Twin calibration tests 9/9 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally and remotely for R3-332 - Java 81/81, Python 814/814 at 95.50% coverage, Twin held-out validation tests 7/7 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 20 / 45 passed; R3-332 active next; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 21 / 45 passed; R3-334 active next; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Execute the R3-332 held-out validation gate against the frozen R3-330 split contract and R3-333 protocol. With no authorized held-out records, validation must return INSUFFICIENT_DATA without retuning, metric fabrication, or synthetic substitution. R3-334/R3-335 remain dependent on validation; R3-353, R3-351, and R3-313 remain lower-priority or optional.
+Next Candidates: Measure R3-334 calibration drift across supported time, zone, demand, and traffic regimes without inventing unsupported regimes. The held-out result is INSUFFICIENT_DATA, so drift metrics must remain explicit no-data outcomes. R3-335 follows as a parallel high task; R3-353, R3-351, and R3-313 remain lower-priority or optional.
 
 ### R3-330 Digital Twin dataset split contract - 2026-08-24
 - The frozen contract uses temporal primary and scenario secondary split axes,
@@ -76,6 +76,20 @@ Next Candidates: Execute the R3-332 held-out validation gate against the frozen 
 - Commit `e5dce05` passed all five jobs in Actions run `32746310588`; evidence:
   `evidence/gates/R3-331/twin-calibration.md`. This is valid data-boundary
   evidence, not a Twin-fidelity claim.
+
+### R3-332 held-out Twin validation - 2026-08-24
+- The validation plan is lineage-bound to R3-331/R3-330/R3-333, freezes the
+  four metric identities, paired-bootstrap percentile 95% uncertainty, minimum
+  100 pairs, read-only held-out use, no retuning, and the four allowed outcome
+  states. Plan digest:
+  `348150cc5bd4bd6dea1261a81e13e7240606bb24cbc1898504ec34d4c8d9cfee`; byte
+  SHA: `3f27f1a35f074ace24a215abd9c70875d2c67267ca70266737ba6f32455eb14c`.
+- The authorized held-out split has zero records. The real gate returned
+  `INSUFFICIENT_DATA`; all four metrics are `NOT_REPORTED_NO_DATA` with no
+  estimate or uncertainty interval, and no retuning or synthetic replay ran.
+- Commit `311d7a0` passed all five jobs in Actions run `32748083203`; evidence:
+  `evidence/gates/R3-332/held-out-validation.md`. No Twin or external-validity
+  claim was produced.
 
 ### R3-352 simulation switchback design - 2026-08-24
 - The frozen design manifest uses six 30-tick zone-time blocks over three zones,

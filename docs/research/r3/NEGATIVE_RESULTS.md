@@ -68,3 +68,10 @@ and final claim disposition without rewriting earlier entries.
   optimization, parameter-before/after artifact, checksum, held-out read, or
   synthetic replay occurred. This is `E-PASS / X-PASS / S-NOT-APPLICABLE /
   C-NO-CLAIM`; it is valid data-boundary evidence, not a Twin-fidelity result.
+- `NR-R3-012`: R3-332 loaded the frozen R3-331 calibration outcome, R3-330
+  split contract, and R3-333 protocol, then performed the one-shot held-out
+  support gate. The authorized held-out split contains zero records, so all
+  four metrics are `NOT_REPORTED_NO_DATA` with no estimate or uncertainty
+  interval. No retuning, synthetic replay, external-validity claim, or missing
+  value imputation occurred. This is `E-PASS / X-PASS / S-NOT-APPLICABLE /
+  C-NO-CLAIM`; the no-data outcome is valid scientific boundary evidence.
