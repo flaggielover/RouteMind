@@ -63,7 +63,10 @@ transition time by one nanosecond when the application clock has not advanced.
 The outbox event now uses the saved aggregate time. The fixed-clock regression,
 the originally failing lease test, and the complete 81-test Java suite pass.
 
-Current disposition: `E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
-C-NOT-APPLICABLE` pending implementation commit and remote GitHub Actions. No
-pilot, confirmatory campaign, observed p-value, statistical effect, or strategy
-claim was produced.
+Implementation revision `c3e394b` passed all five GitHub Actions jobs in run
+`32720233681`, including frozen Python/contracts, Java, resilience, and browser
+smoke.
+
+Final disposition: `E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE /
+C-NOT-APPLICABLE`. No pilot, confirmatory campaign, observed p-value,
+statistical effect, or strategy claim was produced.

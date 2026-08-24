@@ -6,9 +6,9 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream B
 
-Current Task: R3-324 - Implement multiple-comparison control
+Current Task: R3-325 - Execute preregistered RouteBench robustness matrix
 
-Task Status: R3-324 implementation is locally green and remains E-IN-PROGRESS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE pending its commit and remote GitHub Actions checkpoint.
+Task Status: R3-324 closed E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE after implementation revision c3e394b passed all five jobs in Actions run 32720233681. R3-325 is active, but material pilot execution is prohibited until its runner implementation checkpoint is remote green.
 
 R3-324 resume capsule: the exact frozen 16-test Holm step-down family retains
 protocol/regime/metric/hypothesis identity, raw p-values, stable family ranks,
@@ -22,11 +22,13 @@ coverage; statistical integration is 143/143. The full local gate passes Java
 81/81, Python 657/657 at 95.88%, Web 92/92 plus build, contracts, controls, and
 determinism gates. During validation, a real Java same-instant transition flake
 was diagnosed and repaired with monotonic aggregate/outbox event time; the fixed
-clock regression and originally failing lease test pass. Next: commit, push, and
-observe all five Actions jobs. Only after remote green may R3-324 close and
-R3-325 implementation begin; material pilot execution remains prohibited until
-the R3-325 implementation checkpoint itself is remote green. No observed pilot,
-confirmatory campaign, statistical effect, or strategy claim exists.
+clock regression and originally failing lease test pass. Implementation revision
+`c3e394b` passed all five jobs in Actions run `32720233681`; R3-324 is closed.
+Next: implement and synthetically validate the manifest-bound R3-325 runner,
+resource estimate, complete seed/failure retention, and artifact lineage, then
+commit, push, and require a remote-green implementation checkpoint before any
+material pilot. No observed pilot, confirmatory campaign, statistical effect, or
+strategy claim exists.
 
 R3-323 resume capsule: exact SciPy 1.18.0 one-sided noncentral paired-t planning
 records the content-addressed variance source, frozen MDE/noninferiority distance,

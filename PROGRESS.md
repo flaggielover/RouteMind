@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 125 / 158 tasks passed
+Repository Total: 126 / 158 tasks passed
 
-Current Task: R3-324 - Implement multiple-comparison control
+Current Task: R3-325 - Execute preregistered RouteBench robustness matrix
 
-Last Completed: R3-323 - Implement prospective power analysis
+Last Completed: R3-324 - Implement multiple-comparison control
 
-Current Gate: R3-324 is locally validated and remains E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE until its implementation checkpoint passes remote CI.
+Current Gate: R3-325 is E-IN-PROGRESS / X-PENDING / S-PENDING / C-DEFERRED. Its runner implementation must pass remote CI before any material pilot execution.
 
-CI: PASS for the R3-323 implementation checkpoint b18d171 in run 32718029279 and R3-322 implementation checkpoint 349a27e in run 32715625853 across all five jobs.
+CI: PASS for the R3-324 implementation checkpoint c3e394b in run 32720233681 and R3-323 implementation checkpoint b18d171 in run 32718029279 across all five jobs.
 
-Regression: PASS locally for R3-324 - Java 81/81, Python 657/657 at 95.88% coverage, the multiplicity module at 100% statement/branch coverage with 22 directed tests, statistical integration 143/143, Web 92/92 plus production build, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls. Remote R3-324 validation is pending.
+Regression: PASS locally and remotely for R3-324 - Java 81/81, Python 657/657 at 95.88% coverage, the multiplicity module at 100% statement/branch coverage with 22 directed tests, statistical integration 143/143, Web 92/92 plus production build/browser smoke, 6 schemas / 18 contract fixtures, determinism, analytics, semantic metrics, and repository controls.
 
-Round 3 Scientific Tasks: 12 / 45 passed; R3-324 in progress; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 13 / 45 passed; R3-325 in progress; R3-355 deferred and non-blocking.
 
-Research Gate: R3-324 E-IN-PROGRESS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE
+Research Gate: R3-325 E-IN-PROGRESS / X-PENDING / S-PENDING / C-DEFERRED
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Commit and remotely validate R3-324 multiplicity control, then implement R3-325 behind a remote-green checkpoint before any pilot or confirmatory execution. R3-350 remains independently eligible.
+Next Candidates: Implement and synthetically validate the R3-325 runner, resource estimate, seed/failure retention, and lineage; push a remote-green implementation checkpoint before executing its bounded pilot. R3-350 remains independently eligible.
 
 ### R3-324 multiple-comparison implementation - 2026-08-24
 - The frozen protocol now exposes the exact `holm_bonferroni_familywise` method
@@ -46,8 +46,11 @@ Next Candidates: Commit and remotely validate R3-324 multiplicity control, then 
   at 95.88%, Web 92/92 plus build, contracts, controls, and deterministic gates.
 - The gate exposed and repaired an existing Java same-instant order-transition
   flake. Fixed-clock regression and the formerly failing lease integration test
-  pass; aggregate and outbox event times now remain monotonic. Remote validation
-  is pending. No observed pilot or confirmatory campaign ran.
+  pass; aggregate and outbox event times now remain monotonic. Implementation
+  `c3e394b` passed all five jobs in Actions run `32720233681`. R3-324 closes
+  E-PASS/X-NOT-REQUIRED/S-NOT-APPLICABLE/C-NOT-APPLICABLE. No observed pilot or
+  confirmatory campaign ran; R3-325 is active behind its implementation-first
+  remote-green checkpoint.
 
 ### R3-323 prospective power implementation - 2026-08-24
 - Exact `scipy==1.18.0` one-sided noncentral paired-t planning consumes a
