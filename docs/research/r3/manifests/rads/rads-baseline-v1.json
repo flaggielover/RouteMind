@@ -1,0 +1,85 @@
+{
+  "baseline_digest": "a907a0a722e8782aa76277637fa92205cc10046e5aca85b2de81e555623016c3",
+  "baseline_id": "RADS-BASELINE-v1",
+  "claim_boundary": "RADS_BASELINE_FREEZE_DOES_NOT_ESTABLISH_PERFORMANCE_OR_SAFETY",
+  "determinism": {
+    "canonical_json": "sorted keys, compact separators, UTF-8",
+    "digest_algorithm": "SHA-256",
+    "ordering": ["candidate courier_id", "baseline name", "variant order full"],
+    "wall_clock_in_digest": false
+  },
+  "fallbacks": {
+    "invalid_input": "reject",
+    "no_eligible": "explicit unassigned",
+    "registry_failure": "raise",
+    "silent_substitution": false
+  },
+  "frozen_at_utc": "2026-08-25T17:00:00Z",
+  "limitations": [
+    "Research/application boundary only; Java durable business state remains authoritative.",
+    "Not authorized as a hard real-time dispatch correctness owner.",
+    "Risk signals are experiment inputs and are not live calibration or production truth.",
+    "Reduced local fixtures do not establish uplift, safety, fairness, scale, or causal validity.",
+    "Any baseline change requires a new version and a new content-addressed manifest."
+  ],
+  "objective": {
+    "distance_weight": 1.0,
+    "formula": "distance_weight*distance_km + risk_weight*failure_probability*impact_minutes*risk_multiplier",
+    "risk_multiplier": 1.0,
+    "risk_weight": 1.0,
+    "units": "distance_km_plus_expected_risk_minutes",
+    "variant": "full"
+  },
+  "risk": {
+    "failure_probability": {"inclusive": true, "maximum": 1.0, "minimum": 0.0},
+    "impact_minutes": {"inclusive": true, "minimum": 0.0},
+    "signal_fields": ["failure_probability", "impact_minutes"],
+    "source": "bounded experiment input; never durable business truth"
+  },
+  "scope": {
+    "durable_truth": "NONE",
+    "hard_realtime": "NOT_AUTHORIZED",
+    "owner": "Python compute research/application boundary",
+    "purpose": "deterministic RADS baseline freeze before hysteresis and Safe-RADS variants"
+  },
+  "selector": {
+    "empty_candidates": "explicit unassigned selection",
+    "rank_key": ["objective_total", "courier_id"],
+    "tie_break": "lexicographic courier_id"
+  },
+  "source_artifacts": [
+    {"path": "services/compute-api/src/routemind_compute/application/baselines.py", "sha256": "56b8e36dd92fbb0a9a217a3de0ce8609dff2f65863008214715821f67985796d"},
+    {"path": "services/compute-api/src/routemind_compute/application/nearest.py", "sha256": "d516a5c04b4387500e54031c3ca5fd1d147cf285e1ce1c861f6112385e3d049b"},
+    {"path": "services/compute-api/src/routemind_compute/application/rads.py", "sha256": "d72caf93a53c9bc10ebdc4e0ebeecad13381c7cae4bb09531715bf385d29f22a"},
+    {"path": "services/compute-api/src/routemind_compute/application/registry.py", "sha256": "0f57808ea2764b60e9582b4697318a1231ec97db673e04ae18854c3ea2035190"},
+    {"path": "services/compute-api/src/routemind_compute/application/risk_aware.py", "sha256": "0ca88b0b148bcaea25c4c50c42b017c8dcb8d09ccbab9d45401ea4617e5b77bb"}
+  ],
+  "state": {
+    "candidate_fields": ["courier_id", "distance_km", "failure_probability", "impact_minutes"],
+    "digest": "SHA-256(canonical_state_payload)",
+    "encoder": "RadsStateEncoder",
+    "fields": ["request_id", "risk_multiplier", "candidates"],
+    "ordering": "candidate records sorted by courier_id; risk input order is irrelevant"
+  },
+  "strategies": {
+    "baseline_order": ["nearest", "weighted-greedy"],
+    "comparator": {"maturity": "BASELINE", "name": "weighted-greedy", "version": "1.0.0"},
+    "control": {"maturity": "BASELINE", "name": "nearest", "version": "1.0.0"},
+    "rads": {"maturity": "RESEARCH", "name": "rads", "version": "RADS-BASELINE-v1"},
+    "registry_policy": "registered strategies are solved through StrategyRegistry and independently verified",
+    "variants": ["full"]
+  },
+  "task_id": "R3-340",
+  "thresholds": {
+    "max_metadata_items": 32,
+    "max_text_length": 256,
+    "risk_multiplier": "finite and > 0",
+    "risk_profile": "exact candidate courier set"
+  },
+  "weights": {
+    "policy": "finite non-negative weights; at least one objective weight is positive",
+    "rads_objective": {"distance": 1.0, "risk": 1.0},
+    "risk_aware_strategy": {"balance": 0.5, "distance": 1.0, "overtime": 2.0, "readiness": 0.5, "service_risk": 2.0}
+  },
+  "schema_version": "routemind-rads-baseline-v1"
+}
