@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream D
 
-Current Task: R3-354 - Assess off-policy evaluation identifiability
+Current Task: R3-356 - Independently reproduce major Round 3 results
 
-Task Status: R3-353 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. The frozen R3-352 switchback design has no simulation assignments or outcomes for shared-supply, zone-spillover, carryover, or treatment/outcome fields; the audit is INSUFFICIENT_DATA. Implementation commit `1a7058f` passed all five jobs in GitHub Actions run `32762618935`. No A/B, causal, spillover, or production inference is made. R3-354 is now the highest-priority eligible task.
+Task Status: R3-354 closed E-PASS/X-PASS/S-NOT-APPLICABLE/C-NO-CLAIM. The OPE audit found no propensity, exploration, verified overlap, sufficient state richness, or shared-resource context; result is OPE_NOT_IDENTIFIABLE_FROM_CURRENT_LOGS. Implementation commit `68c3362` passed all five jobs in GitHub Actions run `32763546307`. Propensities and effects were not fabricated. R3-356 is now the highest-priority eligible critical task.
 
-Next: assess off-policy evaluation identifiability in R3-354 from the privacy-bounded Decision Corpus. Preserve `OPE_NOT_IDENTIFIABLE_FROM_CURRENT_LOGS` when support is absent and never fabricate propensities.
+Next: prepare R3-356 independent reproduction with an alternate checker or manifest path. Preserve contradictions and distinguish same-stack replay from independent reproduction.
 
 R3-336 evidence is `evidence/gates/R3-336/twin-non-fidelity.md`; plan digest is `ed63c2a2c7a8020076411f285ff3c7fccd3b12e7800de70c4ad5b4a9a674dd94` and byte SHA is `87359292944b701cedfa11546cbca2553c259645d83d6bb2b4e6857b9d58e571`.
 
@@ -27,6 +27,8 @@ R3-345 evidence is `evidence/gates/R3-345/safe-rads-experiments.md`; plan digest
 R3-351 evidence is `evidence/gates/R3-351/shadow-disagreements.md`; plan digest is `f2dfc31a57db3dcd7c3ad2c4f432b41efcbdd7c252274904550a818508734022` and byte SHA is `00a79ee8571465197f43f6c47c43b7a328f11724cca2cf482253cfdfbdb847dc`. The two-record corpus lacks alternate outcomes and disagreement strata; result is `INSUFFICIENT_DATA`, not superiority evidence.
 
 R3-353 evidence is `evidence/gates/R3-353/interference.md`; plan digest is `4a1b3477a7da89e42ded5d58e38b086bf459863cd2e320bf038f383b2438de8c` and byte SHA is `7500c777993eee907e2642e30a70eefc938778bb9bee8de12dc3496e102db8e5`. The frozen design has no simulation outcomes; result is `INSUFFICIENT_DATA`, simulation-scoped only.
+
+R3-354 evidence is `evidence/gates/R3-354/ope-identifiability.md`; plan digest is `bbce6870d64222128ab06015a5a8a0642cbc30b0f6677b5da2c9e4422b3e3609` and byte SHA is `a7f254babad7382d4d6f1db66d2a82606a4f9e3fdc53109f69445c0b3fabda5d`. Result is `OPE_NOT_IDENTIFIABLE_FROM_CURRENT_LOGS`; no propensity or OPE effect claim is permitted.
 
 R3-335 evidence is `evidence/gates/R3-335/what-if-validity.md`; plan digest is `81c52721886c646d2ff468f500c334566e3ed7f4f66bf0f63a9c4478f4b42023` and byte SHA is `20640a2cd366fd992dec681c3dc4139b4b352cb9609bf71ba0542a9bceb9a57d`.
 

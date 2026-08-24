@@ -146,3 +146,10 @@ and final claim disposition without rewriting earlier entries.
   fields have no simulation records. The status is `INSUFFICIENT_DATA`; no A/B,
   causal, spillover, or production inference is made. This is
   `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
+- `NR-R3-023`: R3-354 audited off-policy evaluation identifiability on the
+  privacy-bounded Decision Corpus. Logged propensities, exploration indicators,
+  verified action overlap, sufficient state richness, and shared-resource
+  context are absent. The required result is
+  `OPE_NOT_IDENTIFIABLE_FROM_CURRENT_LOGS`; propensities are never fabricated
+  retroactively and no IPS, doubly robust, causal, or superiority claim is
+  made. This is `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`.
