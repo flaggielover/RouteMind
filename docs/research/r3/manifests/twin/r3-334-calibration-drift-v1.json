@@ -1,0 +1,34 @@
+{
+  "schema_version": "routemind-twin-drift-report-v1",
+  "task_id": "R3-334",
+  "drift_id": "r3-334-calibration-drift-v1",
+  "frozen_at_utc": "2026-08-25T00:15:00Z",
+  "question": "Does Twin calibration or fidelity degrade across supported time, zone, demand, and traffic regimes?",
+  "source_validation_plan_digest": "348150cc5bd4bd6dea1261a81e13e7240606bb24cbc1898504ec34d4c8d9cfee",
+  "split_contract_digest": "fb3f3162ac073815cba838f3fde5a3b8ac94604e21dc4f9049bdf3785d108eaa",
+  "regime_axes": ["time", "zone", "demand", "traffic"],
+  "parameter_drift_policy": {
+    "metrics": ["parameter_l1_delta", "parameter_relative_delta"],
+    "require_before_after_checksums": true,
+    "missing_status": "NOT_ANALYZED_NO_DATA"
+  },
+  "fidelity_degradation_policy": {
+    "metrics": [
+      "assignment_rate",
+      "scenario_risk_index",
+      "dispatch_latency_seconds",
+      "fallback_rate"
+    ],
+    "baseline": "R3-333_FROZEN_PROTOCOL",
+    "missing_status": "NOT_ANALYZED_NO_DATA"
+  },
+  "data_policy": {
+    "calibration_split_id": "r3-330-calibration-observed-v1",
+    "held_out_split_id": "r3-330-held-out-observed-v1",
+    "no_synthetic_data": true,
+    "recalibration_is_solution": false,
+    "reason": "No authorized observed calibration or held-out records exist; unsupported regimes remain explicit and no drift estimate is imputed."
+  },
+  "claim_boundary": "DRIFT_REPORT_DOES_NOT_ESTABLISH_STABILITY_OR_EXTERNAL_VALIDITY",
+  "plan_digest": "587d71667062561ee98c4fe17434178dead070df30b4f1b7e33538d3bb7c3478"
+}
