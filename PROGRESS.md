@@ -1,6 +1,6 @@
 # RouteMind Progress
 
-Current Phase: Round 3 Scientific Research - Workstream C
+Current Phase: Round 3 Scientific Research - Workstream D
 
 Round 2 Progress: 48 / 48 tasks passed
 
@@ -8,27 +8,27 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Repository Total: 139 / 158 tasks passed
+Repository Total: 140 / 158 tasks passed
 
-Current Task: R3-342 - Execute RADS-H hysteresis experiments
+Current Task: R3-344 - Formalize Safe-RADS constraint semantics
 
-Last Completed: R3-341 - Formalize RADS-H hysteresis mechanism
+Last Completed: R3-342 - Execute RADS-H hysteresis experiments
 
-Current Gate: R3-341 closed E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED. RADS-H formally freezes enter/exit thresholds `0.05/0.02`, persistence `2`, minimum dwell `3`, switching cost `0.01`, explicit regime reset, and cooldown separation. It emits bounded switch/hold proposals only; no empirical stability, switching reduction, service, cost, safety, or performance claim is permitted. R3-342 is now the highest-priority eligible critical task.
+Current Gate: R3-342 closed E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM. The frozen five-arm RADS-H experiment contract was audited read-only against R3-325; all six required tick-level switching/dwell/service/latency/recovery support fields are absent, so the report is `INSUFFICIENT_DATA` and all seven metrics are `NOT_REPORTED_NO_SWITCH_LOGS`. R3-325 remains exactly frozen and was not rerun, tuned, reinterpreted, or replaced by synthetic replay. R3-344 is now the highest-priority eligible critical task.
 
-CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, and R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
+CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168, and R3-342 implementation SHA d82138b394e7ab0832acb85a6575931054eff48c in run 32758618433; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
-Regression: PASS locally and remotely for R3-341 - Java 81/81, Python 846/846 at 95.86% coverage, R3-341 mechanism/plan tests 9/9 with 100% module statement/branch coverage, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
+Regression: PASS locally and remotely for R3-342 - Java 81/81, Python 854/854 at 95.77% coverage, R3-342 support-audit tests 8/8, Web 92/92 plus production build/browser smoke, contracts, determinism, analytics, semantic metrics, and repository controls. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM.
 
-Round 3 Scientific Tasks: 26 / 45 passed; R3-342 active next; R3-355 deferred and non-blocking.
+Round 3 Scientific Tasks: 27 / 45 passed; R3-344 active next; R3-355 deferred and non-blocking.
 
-Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED
+Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM
 
 Blocked: NONE
 
 Human Action Required: NO
 
-Next Candidates: Execute the preregistered R3-342 RADS-H comparisons using the frozen baseline, hysteresis, cooldown, and R3-325 material streams; retain null/harmful outcomes and apply the frozen statistical/multiplicity gates. R3-344 Safe-RADS semantics and R3-353/R3-351 remain eligible; R3-313 remains optional and non-blocking.
+Next Candidates: Formalize Safe-RADS constraint semantics in R3-344, then audit R3-345 support without weakening the frozen R3-325 boundary. R3-351 and R3-353 remain eligible; R3-313 remains optional and non-blocking.
 
 ### R3-330 Digital Twin dataset split contract - 2026-08-24
 - The frozen contract uses temporal primary and scenario secondary split axes,
@@ -169,6 +169,27 @@ Next Candidates: Execute the preregistered R3-342 RADS-H comparisons using the f
   coverage. Implementation commit `d33662a` passed all five jobs in Actions run
   `32756793168`; evidence: `evidence/gates/R3-341/rads-h-formalization.md`.
   No empirical stability or performance claim was produced.
+
+### R3-342 RADS-H hysteresis experiment support audit - 2026-08-25
+- The frozen five-arm plan compares no-hysteresis, fixed, RADS baseline,
+  cooldown, and RADS-H with switching, dwell, service, route-cost, latency,
+  instability, and recovery metrics. Its canonical digest is
+  `725bce8111db8652c6b52ef1c71e63429594aa4a329e0372e524471ea41ac967` and
+  byte SHA is `62eab0fca0a28a758ae6299a83c900752044f3c155f84245e09dadc6e7ac921d`.
+- A read-only audit of frozen R3-325 pair artifacts found none of the six
+  required tick-level support fields: strategy sequence, switch events, dwell
+  observations, service outcomes, latency observations, and recovery windows.
+  The report is `INSUFFICIENT_DATA`; all seven metrics are
+  `NOT_REPORTED_NO_SWITCH_LOGS`. R3-325 remains exactly
+  `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`; it was not rerun, tuned,
+  reinterpreted, or replaced by synthetic replay.
+- Eight targeted support-audit tests and the full gate pass 854/854 Python
+  tests at 95.77% total coverage. Implementation checkpoint `d82138b` passed
+  all five jobs in GitHub Actions run `32758618433`; evidence is recorded at
+  `evidence/gates/R3-342/hysteresis-experiments.md`.
+- R3-342 closes `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`; no
+  switching, service, cost, latency, stability, recovery, non-inferiority, or
+  superiority claim is made.
 
 ### R3-352 simulation switchback design - 2026-08-24
 - The frozen design manifest uses six 30-tick zone-time blocks over three zones,

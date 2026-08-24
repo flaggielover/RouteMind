@@ -109,3 +109,13 @@ and final claim disposition without rewriting earlier entries.
   therefore provides no empirical stability, switching-reduction, service,
   cost, safety, or superiority evidence. A minimum-dwell cooldown remains a
   separate comparator; it is not relabeled as hysteresis.
+- `NR-R3-018`: R3-342 froze the five-arm RADS-H experiment contract and ran a
+  read-only support audit against the immutable R3-325 pair artifacts. The
+  artifacts retain arm summaries but no tick-level strategy sequence, switch
+  events, dwell observations, service outcomes, latency observations, or
+  recovery windows. The report therefore returns `INSUFFICIENT_DATA` and marks
+  all seven preregistered metrics `NOT_REPORTED_NO_SWITCH_LOGS`. R3-325 was not
+  rerun, tuned, reinterpreted, or replaced by synthetic replay; no material
+  campaign or switching/service/cost/stability claim is made. This is
+  `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM`, valid negative scientific
+  evidence rather than an implementation failure.
