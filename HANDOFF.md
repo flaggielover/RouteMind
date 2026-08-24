@@ -6,13 +6,13 @@ Current Branch: main
 
 Current Phase: Round 3 Scientific Research - Workstream D
 
-Current Task: R3-346 - Learn interpretable policy boundaries
+Current Task: R3-347 - Run counterfactual Decision X-Ray experiments
 
-Task Status: R3-346 frozen protocol and fail-closed support auditor pass the full local gate: Java 81/81, Python 912/912 at 95.04%, and Web 92/92 plus build. R3-358 closure `5ce79b3` passed all five jobs in Actions run `32783455622`.
+Task Status: R3-346 closed `E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM` after implementation `43e3549` passed all five jobs in Actions run `32784278395`; the formal read-only audit returned `INSUFFICIENT_DATA`. R3-347 is active.
 
-Next: commit/push R3-346 implementation and observe all five real CI jobs, then run the read-only current-source audit. If decision regions, uncertainty, and sensitivity cannot be supported, retain `INSUFFICIENT_DATA/C-NO-CLAIM`; predictive accuracy alone is not an acceptable boundary claim.
+Next: audit R3-347 support from the frozen R3-350 corpus and RM-226 Decision X-Ray implementation. Require original/new decision linkage, perturbation provenance, objective/risk deltas, and minimality verification; label any output model/system replay and make no causal claim.
 
-R3-346 plan digest is `02304c1910463a30a481070382d76bb55c01c76be1bd6b7bcbeba972b14da5dd` and byte SHA is `daa5e1a3ca7bf423eb1c1fa99ed50d1a25a35683a84751f926c056de234a7e8d`. Support requires seven fields, two strategies with at least 30 records each, and two eligible stability cells. Seven directed tests cover missing, underpowered, ready, malformed, and protocol-drift paths. The first full Python run found 94.97% total coverage; added failure-path tests restored the unchanged 95% gate to 95.04%. No external write or R3-325 rerun is authorized.
+R3-346 evidence is `evidence/gates/R3-346/policy-boundaries.md`. Plan digest is `02304c1910463a30a481070382d76bb55c01c76be1bd6b7bcbeba972b14da5dd`, byte SHA is `daa5e1a3ca7bf423eb1c1fa99ed50d1a25a35683a84751f926c056de234a7e8d`, and formal audit digest is `dd5787f22a328cc6afb532624def46eea7866326b595903fc16884287ef35ed6`. One `shadow` class has two records, eligible stability cells are zero, six support fields are absent, and no boundary/uncertainty/sensitivity output was estimated. R3-325 remains frozen and was not rerun.
 
 R3-358 evidence is `evidence/gates/R3-358/negative-results.md`. Audit manifest digest is `e36e3be33cb61138472cf94966ea31a2fb7432af142a5d50c011e6359fd6dcf5`, byte SHA is `396a3a921a28bdeb30f4429b97ce75a509b9193c47897a8ec7bf36c782d33e91`, and the immutable 31-entry prefix digest is `89fe0c2eb1cab8da5162c4769f4bcef41bc8b904dcc0f933a1bf069192032706`. Validation covers 24 tasks, six categories, seven exact source artifacts, and append/mutation/deletion behavior. R3-325 and R3-327 remain `S-FAIL/C-NO-CLAIM`; R3-355 remains deferred, not failed engineering.
 
