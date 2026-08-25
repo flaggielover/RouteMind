@@ -33,9 +33,11 @@ state. Agent tools remain read-oriented and separately permission-bounded.
 
 ## Validation boundary
 
-The first implementation will provide a framework-independent Java policy
-contract and unit tests for valid/expired/unknown-issuer principals, role and
-scope checks, deny-by-default behavior, stale/repeated command context, and
-audit-safe reason codes. Real OIDC/JWKS identity-provider verification,
-rotation, key revocation, rate limiting, edge WAF, and production secret
-management remain external deployment gates.
+The framework-independent Java policy contract covers valid, expired, and
+unknown-issuer principals, role/scope checks, deny-by-default behavior,
+stale/repeated command context, and audit-safe reason codes. R4-402 adds a
+locally executable OIDC/JWKS resource-server boundary and maps verified claims
+back into that domain principal. A live identity-provider deployment, provider
+revocation and emergency rotation drills, rate limiting, edge WAF, and
+production secret management remain external deployment gates. The complete
+boundary and threat analysis is in `docs/security/R4_OIDC_THREAT_MODEL.md`.

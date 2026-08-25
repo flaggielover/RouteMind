@@ -67,6 +67,14 @@ logging:
     level: "%5p [trace_id=%X{trace_id:-none} request_id=%X{request_id:-none}]"
 
 routemind:
+  security:
+    oidc:
+      enabled: ${ROUTEMIND_OIDC_ENABLED:false}
+      issuer: ${ROUTEMIND_OIDC_ISSUER:}
+      audience: ${ROUTEMIND_OIDC_AUDIENCE:}
+      jwk-set-uri: ${ROUTEMIND_OIDC_JWK_SET_URI:}
+      roles-claim: ${ROUTEMIND_OIDC_ROLES_CLAIM:roles}
+      allow-insecure-loopback: ${ROUTEMIND_OIDC_ALLOW_INSECURE_LOOPBACK:false}
   reconciliation:
     scheduler:
       enabled: ${ROUTEMIND_RECONCILIATION_ENABLED:true}
