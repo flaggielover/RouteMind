@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import unittest
+from typing import Any
 
 from round4_graph_gate import (
     ACTIVE_GRAPH_PATH,
@@ -13,28 +14,46 @@ from round4_graph_gate import (
 
 
 class Round4GraphGateTests(unittest.TestCase):
+    graph: dict[str, Any]
+    active_graph: dict[str, Any]
+
     @classmethod
     def setUpClass(cls) -> None:
         cls.graph = _load(GRAPH_PATH)
         cls.active_graph = _load(ACTIVE_GRAPH_PATH)
 
-    def test_live_prepared_graph_passes(self) -> None:
+    def test_live_active_graph_passes(self) -> None:
         result = validate_graph(self.graph, self.active_graph)
 
-        self.assertEqual(result["state"], "PREPARED_NOT_STARTED")
+        self.assertEqual(result["state"], "ACTIVE")
         self.assertEqual(result["task_count"], 38)
         self.assertEqual(result["workstream_count"], 6)
         self.assertEqual(result["external_gate_count"], 15)
         self.assertEqual(result["human_approval_count"], 12)
         self.assertEqual(result["conditional_task_count"], 3)
+        self.assertEqual(result["closure_classification_count"], 11)
         self.assertEqual(result["preservation_lane_count"], 11)
 
-    def test_started_task_is_rejected(self) -> None:
+    def test_prepared_graph_rejects_started_task(self) -> None:
         mutated = copy.deepcopy(self.graph)
+        mutated["state"] = "PREPARED_NOT_STARTED"
+        for task in mutated["tasks"]:
+            task["status"] = "pending"
         mutated["tasks"][0]["status"] = "in_progress"
+        inactive = copy.deepcopy(self.active_graph)
+        inactive["tasks"] = [
+            task for task in inactive["tasks"] if not task["id"].startswith("R4-")
+        ]
 
         with self.assertRaisesRegex(Round4GraphError, "prepared task was started"):
-            validate_graph(mutated, self.active_graph)
+            validate_graph(mutated, inactive)
+
+    def test_missing_active_task_is_rejected(self) -> None:
+        mutated = copy.deepcopy(self.active_graph)
+        mutated["tasks"] = [task for task in mutated["tasks"] if task["id"] != "R4-499"]
+
+        with self.assertRaisesRegex(Round4GraphError, "task inventory is incomplete"):
+            validate_graph(self.graph, mutated)
 
     def test_forward_dependency_is_rejected(self) -> None:
         mutated = copy.deepcopy(self.graph)
@@ -54,15 +73,22 @@ class Round4GraphGateTests(unittest.TestCase):
         mutated = copy.deepcopy(self.graph)
         target = next(task for task in mutated["tasks"] if task["id"] == "R4-436")
         target["human_approval"] = False
+        active = copy.deepcopy(self.active_graph)
+        active_target = next(task for task in active["tasks"] if task["id"] == "R4-436")
+        active_target["human_approval"] = False
 
-        with self.assertRaisesRegex(Round4GraphError, "human-approval gate inventory drifted"):
-            validate_graph(mutated, self.active_graph)
+        with self.assertRaisesRegex(
+            Round4GraphError, "human-approval gate inventory drifted"
+        ):
+            validate_graph(mutated, active)
 
     def test_missing_reclassified_lane_is_rejected(self) -> None:
         mutated = copy.deepcopy(self.graph)
         del mutated["preserved_round3_reclassifications"]["provider_backed_travel"]
 
-        with self.assertRaisesRegex(Round4GraphError, "reclassification inventory drifted"):
+        with self.assertRaisesRegex(
+            Round4GraphError, "reclassification inventory drifted"
+        ):
             validate_graph(mutated, self.active_graph)
 
     def test_conditional_activation_boundary_is_rejected(self) -> None:
@@ -70,7 +96,18 @@ class Round4GraphGateTests(unittest.TestCase):
         target = next(task for task in mutated["tasks"] if task["id"] == "R4-440")
         del target["activation_condition"]
 
-        with self.assertRaisesRegex(Round4GraphError, "conditional activation boundary drifted"):
+        with self.assertRaisesRegex(
+            Round4GraphError, "conditional activation boundary drifted"
+        ):
+            validate_graph(mutated, self.active_graph)
+
+    def test_closure_classification_coverage_is_rejected(self) -> None:
+        mutated = copy.deepcopy(self.graph)
+        mutated["closure_classifications"]["CORE_CLOSURE"].remove("R4-499")
+
+        with self.assertRaisesRegex(
+            Round4GraphError, "closure classifications drifted"
+        ):
             validate_graph(mutated, self.active_graph)
 
 

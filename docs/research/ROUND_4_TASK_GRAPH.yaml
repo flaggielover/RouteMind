@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "graph": "RouteMind Round 4 Production and Thesis",
-  "state": "PREPARED_NOT_STARTED",
+  "state": "ACTIVE",
   "prepared_at_utc": "2026-08-25T07:50:00Z",
-  "authority": "This is a prepared dependency graph. Tasks become executable only after a future control-plane promotion into TASK_GRAPH.yaml; preparation does not start Round 4.",
+  "authority": "TASK_GRAPH.yaml contains the executable task records; this file preserves the audited Round 4 dependency, gate, classification, and Round 3 lineage contract.",
   "source_round": {
     "closure_task": "R3-365",
     "claim_matrix_sha256": "c6656ac6a1f4634c001cace78867c924b950eebef944380f8a26c556fac9d4cc",
@@ -34,6 +34,19 @@
     {"id": "A", "title": "Bounded Agent Evaluation", "tasks": ["R4-450", "R4-451", "R4-452", "R4-453"]},
     {"id": "S", "title": "External Reproduction and Thesis Synthesis", "tasks": ["R4-460", "R4-461", "R4-462", "R4-499"]}
   ],
+  "closure_classifications": {
+    "CORE_CLOSURE": ["R4-400", "R4-409", "R4-430", "R4-499"],
+    "PRODUCTION": ["R4-401"],
+    "SECURITY": ["R4-402", "R4-403", "R4-404", "R4-450", "R4-451"],
+    "RELIABILITY": ["R4-405", "R4-406", "R4-408"],
+    "PERFORMANCE": ["R4-407"],
+    "DATA_GOVERNANCE": ["R4-420", "R4-438"],
+    "FINAL_BENCHMARK": ["R4-434", "R4-435", "R4-439", "R4-452"],
+    "PRODUCT_DEMO": ["R4-421", "R4-423", "R4-424"],
+    "THESIS_DEFENSE": ["R4-461", "R4-462"],
+    "DEFERRED_EXTERNAL": ["R4-410", "R4-411", "R4-412", "R4-413", "R4-422", "R4-431", "R4-432", "R4-433", "R4-436", "R4-460"],
+    "OPTIONAL_STRETCH": ["R4-437", "R4-440", "R4-453"]
+  },
   "preserved_round3_reclassifications": {
     "production_readiness": ["R4-400", "R4-401", "R4-407", "R4-408", "R4-409"],
     "provider_backed_travel": ["R4-410", "R4-411", "R4-412", "R4-413"],
@@ -50,7 +63,7 @@
   "critical_spine": ["R4-400", "R4-401", "R4-402", "R4-403", "R4-405", "R4-406", "R4-407", "R4-408", "R4-409", "R4-430", "R4-431", "R4-432", "R4-433", "R4-434", "R4-435", "R4-436", "R4-460", "R4-461", "R4-462", "R4-499"],
   "tasks": [
     {
-      "id": "R4-400", "title": "Promote the Round 4 control plane and production/thesis contract", "workstream": "P", "priority": "critical", "classification": "CONTROL_PLANE", "depends_on": [], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-400", "title": "Promote the Round 4 control plane and production/thesis contract", "workstream": "P", "priority": "critical", "classification": "CONTROL_PLANE", "depends_on": [], "status": "in_progress", "external_gate": false, "human_approval": false,
       "acceptance": ["Prepared tasks are audited and promoted into the executable graph without changing their dependency intent", "Production, scientific, external, and human-approval gates remain distinct", "Round 3 frozen outcomes remain immutable inputs rather than targets for optimization"],
       "evidence": ["evidence/gates/R4-400/control-plane.md"], "round3_lineage": ["R3-300", "R3-365"]
     },

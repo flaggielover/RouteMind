@@ -121,3 +121,16 @@ Each task records independent engineering, experiment, statistical, and claim
 status. Production identity/tenancy, preferences/notifications, full operations
 telemetry, deployment readiness, and broad agent productization are preserved for
 Round 4 or a non-blocking parallel lane.
+
+## Round 4 Final Closure
+
+Round 4 promotes R4-400 through R4-499 as the final production-conscious and
+thesis/defense closure program. It covers deployment and SLO assumptions,
+identity and tenant isolation, security and supply chain, recovery and chaos,
+external travel validation, tenant-aware product workflows, bounded experiment
+orchestration, future-evidence instrumentation, analytical-agent safety, external
+reproduction, thesis synthesis, demo readiness, and final evidence reconciliation.
+
+External, paid, production-data, human-approval, and conditional tasks retain
+their independent gates. Round 4 engineering does not change Round 3's frozen
+negative results or create scientific novelty from implementation maturity.
