@@ -4,7 +4,9 @@ Date: 2026-08-25 (Asia/Shanghai)
 
 Entry revision: `3803da3d3d06cef26414ecc1aae07be61c34cbe8`
 
-Status: in progress - `CI_PENDING`
+Implementation revision: `534b9efc8a1ae303bcc26f11207adf47d61efbe6`
+
+Status: passed - `CI_VALIDATED`
 
 ## Durable boundary
 
@@ -76,9 +78,12 @@ restore is required because namespace collapse is unsafe.
 
 ## Evidence boundary
 
-This checkpoint proves the local Java/H2-compatible isolation design and
-executable migration/rollback rehearsal. It does not claim a live external IdP,
-production PostgreSQL migration, deployed tenant fleet, vendor WAF, or
-production traffic result. R4-403 remains open until the implementation commit
-passes all five real GitHub Actions jobs, including clean Linux Compose and
-contract validation. R3-325 was not rerun, tuned, reinterpreted, or changed.
+This checkpoint proves the Java/H2-compatible isolation design and executable
+migration/rollback rehearsal. Implementation
+`534b9efc8a1ae303bcc26f11207adf47d61efbe6` passed all five real GitHub Actions
+jobs in run `32814670130`, including clean Linux Compose, Java, Python/contracts,
+Web browser smoke, and bounded resilience validation.
+
+It does not claim a live external IdP, production PostgreSQL migration, deployed
+tenant fleet, vendor WAF, or production traffic result. R3-325 was not rerun,
+tuned, reinterpreted, or changed.
