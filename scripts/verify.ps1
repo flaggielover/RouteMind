@@ -122,6 +122,11 @@ try {
         throw "Recovery contract self-tests failed"
     }
 
+    python scripts/disaster_recovery_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Disaster recovery evidence self-tests failed"
+    }
+
     python scripts/release_contract_test.py
     if ($LASTEXITCODE -ne 0) {
         throw "Release contract self-tests failed"

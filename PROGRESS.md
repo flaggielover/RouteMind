@@ -16,11 +16,11 @@ Current Task: R4-406 - Prove backup, restore, disaster recovery, and data reconc
 
 Last Completed: R4-401 - Select a deployment target and freeze SLO and failure-domain assumptions
 
-Current Gate: R4-401 is `LOCAL_VALIDATED / CI_VALIDATED` after all five jobs passed for implementation `30d5961` in Actions run `32843310725`. R4-406 is `IN_PROGRESS`; local recovery/reconciliation preparation is authorized, while the required Vultr Tokyo RPO/RTO proof remains external evidence and cannot be inferred from Compose.
+Current Gate: R4-406 is `IMPLEMENTED / SERVICE_DRILL_PENDING / TARGET_PENDING`. The fail-closed contract, five mutation-test groups, isolated PostgreSQL/RabbitMQ/Redis recovery drill, Outbox replay, Redis rebuild, reconciliation, tenant/audit continuity, rollback, CI artifact, and runbook are implemented. The local Docker daemon was unresponsive, so no local service-backed pass is claimed; the implementation CI must execute it. Vultr Tokyo RPO/RTO proof remains external.
 
-CI: PASS for R4-401 implementation SHA 30d59615b4d3bbdab68200e3f0e7097c0ebaabfb in run 32843310725; all five jobs passed. R4-423 run 32839582664, R4-450 run 32827906691, R4-421 run 32826218396, and R4-420 run 32820839648 also passed all five jobs. Earlier R4-404 runs 32818303442 and 32818849130 remain preserved as failed diagnostic evidence.
+CI: PASS for R4-401 closure SHA fdc45cb3db879e0aadefce00bba22714a7d66c9b in run 32843874880; all five jobs passed. R4-401 implementation run 32843310725, R4-423 run 32839582664, R4-450 run 32827906691, R4-421 run 32826218396, and R4-420 run 32820839648 also passed all five jobs. R4-406 implementation CI is pending.
 
-Regression: PASS locally for the R4-401 contract validator and 11 mutation tests, 110/110 Java tests, 920/920 Python tests at 95.11%, 36 Web files / 104 tests, 34 Playwright scenarios with two expected project-specific skips, focused resilience (15 Java / 2 Python), formatting, lint, typecheck, production build, Round 4 graph, negative-results, final-claim, security, supply-chain, product, agent, recovery, release, staged-release, and Compose gates. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
+Regression: PASS locally for R4-406 syntax, five fail-closed mutation-test groups, full gate (110/110 Java, 920/920 Python at 95.11%, 104/104 Web, production build), serial focused resilience (15 Java / 2 Python), task graph, Round 4 mirror, R4-401 deployment contract, security, supply-chain, product, agent, recovery, release, staged-release, and Compose configuration. An earlier concurrent resilience invocation raced Maven `clean`; the serial rerun passed without code or assertion changes. The previous R4-401 browser gate remains 34 Playwright scenarios with two expected skips. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
 Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly deferred/reclassified; no required task remains open.
 
@@ -35,7 +35,7 @@ Next Candidates: R4-406 is active as the highest-priority dependency-ready task.
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
 - Current task: R4-406 backup, restore, DR, and reconciliation.
 - Workstream: P - Production Safety and Deployment.
-- Status: R4-401 closed `LOCAL_VALIDATED / CI_VALIDATED`; R4-406 activated for local recovery preparation. No Vultr infrastructure has been created.
+- Status: R4-401 closure CI is green; R4-406 is `IMPLEMENTED / SERVICE_DRILL_PENDING / TARGET_PENDING`. No Vultr infrastructure has been created.
 - Completed gate: opaque tenant/role/actor/route quotas, bounded degradation,
   local WAF-equivalent policy, secret automation, 527-component SBOM, and
   explicitly unsigned provenance all have executable evidence.
@@ -69,13 +69,19 @@ Next Candidates: R4-406 is active as the highest-priority dependency-ready task.
   resilience 15 Java / 2 Python, all controls, and Compose configuration pass.
 - CI: R4-401 implementation `30d5961` passed all five jobs in Actions run
   `32843310725`.
+- Closure CI: `fdc45cb` passed all five jobs in run `32843874880`.
+- R4-406 implementation: fail-closed local/target report classes, five mutation
+  groups, isolated three-service source-destroy/restore, Outbox replay, Redis
+  rebuild, reconciliation, tenant/audit digest continuity, rollback, and a
+  retained CI JSON artifact are implemented. The local Docker daemon was
+  unresponsive, so the service-backed result is correctly pending CI.
 - Evidence: `evidence/gates/R4-420/product-contract.md` and
   `docs/product/R4_PRODUCT_SEMANTICS.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as
   complete or authorized by graph promotion.
-- Next: implement and validate the local R4-406 recovery package, restore,
-  reconciliation, isolation, audit, and rollback surfaces. Target RPO/RTO proof
-  remains gated on real Vultr Tokyo evidence.
+- Next: push R4-406, observe the isolated GitHub Actions recovery drill, fix any
+  failure, retain its report digest, then mark the task external-blocked and
+  activate R4-405. Target RPO/RTO proof remains gated on Vultr Tokyo evidence.
 - Human action required: NONE while local R4-406 work remains; credentials and
   resource/spend approval are required before the real target drill.
 

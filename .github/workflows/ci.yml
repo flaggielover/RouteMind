@@ -105,3 +105,12 @@ jobs:
       - name: Run focused failure injection gate
         shell: pwsh
         run: ./scripts/resilience.ps1
+      - name: Run isolated backup and restore drill
+        run: python scripts/disaster_recovery_drill.py
+      - name: Retain recovery drill evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: r4-406-local-recovery-${{ github.sha }}
+          path: evidence/tests/tmp/R4-406/local-drill.json
+          if-no-files-found: error
+          retention-days: 30
