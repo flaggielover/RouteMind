@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.routemind.business.application.reconciliation.ReconciliationReport;
 import com.routemind.business.application.reconciliation.ReconciliationReportRepository;
+import com.routemind.business.application.security.TenantContext;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -20,10 +21,12 @@ public class JdbcReconciliationReportRepository implements ReconciliationReportR
 
 	private final JdbcTemplate jdbc;
 	private final ObjectMapper mapper;
+	private final TenantContext tenants;
 
-	public JdbcReconciliationReportRepository(JdbcTemplate jdbc, ObjectMapper mapper) {
+	public JdbcReconciliationReportRepository(JdbcTemplate jdbc, ObjectMapper mapper, TenantContext tenants) {
 		this.jdbc = jdbc;
 		this.mapper = mapper;
+		this.tenants = tenants;
 	}
 
 	@Override
@@ -32,17 +35,18 @@ public class JdbcReconciliationReportRepository implements ReconciliationReportR
 		String json = serialize(report);
 		jdbc.update("""
 				insert into routemind.reconciliation_runs
-				(run_id, checked_at, status, repair_mode, violation_count, unavailable_count, report_digest, report_json)
-				values (?, ?, ?, ?, ?, ?, ?, ?)
+				(tenant_id, run_id, checked_at, status, repair_mode, violation_count, unavailable_count, report_digest, report_json)
+				values (?, ?, ?, ?, ?, ?, ?, ?, ?)
 				""", statement -> {
-			statement.setObject(1, report.runId());
-			statement.setTimestamp(2, Timestamp.from(report.checkedAt()));
-			statement.setString(3, report.status().name());
-			statement.setString(4, report.repairMode());
-			statement.setInt(5, report.violationCount());
-			statement.setInt(6, report.unavailableCount());
-			statement.setString(7, digest(json));
-			statement.setString(8, json);
+			statement.setObject(1, tenants.current().value());
+			statement.setObject(2, report.runId());
+			statement.setTimestamp(3, Timestamp.from(report.checkedAt()));
+			statement.setString(4, report.status().name());
+			statement.setString(5, report.repairMode());
+			statement.setInt(6, report.violationCount());
+			statement.setInt(7, report.unavailableCount());
+			statement.setString(8, digest(json));
+			statement.setString(9, json);
 		});
 	}
 
@@ -51,8 +55,8 @@ public class JdbcReconciliationReportRepository implements ReconciliationReportR
 	public Optional<ReconciliationReport> findLatest() {
 		List<String> reports = jdbc.queryForList("""
 				select report_json from routemind.reconciliation_runs
-				order by checked_at desc, run_id desc limit 1
-				""", String.class);
+				where tenant_id = ? order by checked_at desc, run_id desc limit 1
+				""", String.class, tenants.current().value());
 		return reports.stream().findFirst().map(this::deserialize);
 	}
 

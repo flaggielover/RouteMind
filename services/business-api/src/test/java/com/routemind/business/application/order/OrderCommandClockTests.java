@@ -33,7 +33,8 @@ class OrderCommandClockTests {
 		when(orders.save(any(Order.class))).thenAnswer(invocation -> invocation.getArgument(0));
 		when(idempotency.findByKey("fixed-clock-confirm")).thenReturn(Optional.empty());
 		OrderCommandService commands = new OrderCommandService(orders, outbox, idempotency, assignments,
-				Clock.fixed(now, ZoneOffset.UTC));
+				Clock.fixed(now, ZoneOffset.UTC),
+				new com.routemind.business.application.security.TenantContext());
 
 		OrderCommandResult result = commands.transitionCommand(initial.id(), OrderStatus.CONFIRMED, "customer", 0,
 				UUID.randomUUID(), null, "0123456789abcdef0123456789abcdef", "fixed-clock-confirm");

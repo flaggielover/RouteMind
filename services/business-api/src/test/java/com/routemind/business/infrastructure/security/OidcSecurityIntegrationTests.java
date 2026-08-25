@@ -46,6 +46,7 @@ class OidcSecurityIntegrationTests {
 				.claim("jti", "token-1")
 				.claim("roles", List.of("operator"))
 				.claim("scope", "system:read")
+				.claim("tenant_id", "10000000-0000-0000-0000-000000000001")
 				.issuedAt(Instant.now().minusSeconds(30))
 				.expiresAt(Instant.now().plusSeconds(300)))))
 				.andExpect(status().isOk());
@@ -54,11 +55,16 @@ class OidcSecurityIntegrationTests {
 
 	@Test
 	void actorHeaderMustMatchAVerifiedTokenRole() throws Exception {
-		var operator = jwt().authorities(new SimpleGrantedAuthority("ROLE_OPERATOR"));
+		var operator = jwt().jwt(token -> token
+				.claim("tenant_id", "10000000-0000-0000-0000-000000000001"))
+				.authorities(new SimpleGrantedAuthority("ROLE_OPERATOR"));
 
 		mockMvc.perform(get("/api/v1/system").header("X-Actor", "operator").with(operator))
 				.andExpect(status().isOk());
 		mockMvc.perform(get("/api/v1/system").header("X-Actor", "customer").with(operator))
+				.andExpect(status().isForbidden());
+		mockMvc.perform(get("/api/v1/system")
+				.header("X-Tenant-Id", "20000000-0000-0000-0000-000000000002").with(operator))
 				.andExpect(status().isForbidden());
 	}
 }

@@ -2,6 +2,7 @@ package com.routemind.business.infrastructure.persistence.order;
 
 import com.routemind.business.domain.order.OrderStatus;
 import com.routemind.business.domain.order.OrderTransition;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,10 +15,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "order_transitions", schema = "routemind")
-class OrderTransitionEntity {
+class OrderTransitionEntity extends TenantScopedEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +49,8 @@ class OrderTransitionEntity {
 	protected OrderTransitionEntity() {
 	}
 
-	private OrderTransitionEntity(OrderEntity order, OrderTransition transition) {
+	private OrderTransitionEntity(OrderEntity order, OrderTransition transition, UUID tenantId) {
+		assignTenant(tenantId);
 		this.order = order;
 		apply(transition);
 	}
@@ -60,8 +63,8 @@ class OrderTransitionEntity {
 		occurredAt = transition.occurredAt();
 	}
 
-	static OrderTransitionEntity from(OrderEntity order, OrderTransition transition) {
-		return new OrderTransitionEntity(order, transition);
+	static OrderTransitionEntity from(OrderEntity order, OrderTransition transition, UUID tenantId) {
+		return new OrderTransitionEntity(order, transition, tenantId);
 	}
 
 	OrderTransition toDomain() {

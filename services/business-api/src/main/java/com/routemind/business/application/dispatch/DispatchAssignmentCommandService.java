@@ -3,6 +3,7 @@ package com.routemind.business.application.dispatch;
 import com.routemind.business.application.order.OrderCommandResult;
 import com.routemind.business.application.order.OrderCommandService;
 import com.routemind.business.application.outbox.OutboxRepository;
+import com.routemind.business.application.security.TenantContext;
 import com.routemind.business.domain.dispatch.DispatchAssignmentAudit;
 import com.routemind.business.domain.dispatch.DispatchAssignmentCommand;
 import com.routemind.business.domain.dispatch.DispatchAssignmentLease;
@@ -30,15 +31,18 @@ public class DispatchAssignmentCommandService {
     private final DispatchDecisionLedgerService ledger;
     private final OutboxRepository outbox;
     private final Clock clock;
+    private final TenantContext tenants;
 
     public DispatchAssignmentCommandService(OrderCommandService orders, DispatchAssignmentAuditRepository audits,
-            DispatchAssignmentLeaseService leases, DispatchDecisionLedgerService ledger, OutboxRepository outbox, Clock clock) {
+            DispatchAssignmentLeaseService leases, DispatchDecisionLedgerService ledger, OutboxRepository outbox,
+            Clock clock, TenantContext tenants) {
         this.orders = orders;
         this.audits = audits;
         this.leases = leases;
         this.ledger = ledger;
         this.outbox = outbox;
         this.clock = clock;
+        this.tenants = tenants;
     }
 
     @Transactional
@@ -91,7 +95,8 @@ public class DispatchAssignmentCommandService {
         payload.put("fallbackUsed", command.fallbackUsed());
         if (command.fallbackReason() != null && !command.fallbackReason().isBlank()) payload.put("fallbackReason", command.fallbackReason());
         outbox.save(OutboxMessage.pending(new EventEnvelope("1.0", UUID.randomUUID(),
-                "dispatch.assignment.applied", clock.instant(), "business-api", orderId.value(), transition.version(),
+                "dispatch.assignment.applied", clock.instant(), "business-api", tenants.current().value(),
+                orderId.value(), transition.version(),
                 correlationId, null, traceId, payload)));
         return new DispatchAssignmentResult(orderId.value(), command.courierId(), transition.status(),
                 transition.version(), transition.replayed(), audit);

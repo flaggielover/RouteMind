@@ -1,6 +1,9 @@
 package com.routemind.business.infrastructure.persistence.dispatch;
 
 import com.routemind.business.domain.dispatch.DispatchAssignmentAudit;
+import com.routemind.business.application.security.TenantIsolationException;
+import com.routemind.business.infrastructure.persistence.TenantKey;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,11 +13,14 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "dispatch_assignment_audits", schema = "routemind")
-class DispatchAssignmentAuditEntity {
+class DispatchAssignmentAuditEntity extends TenantScopedEntity {
 
     @Id
     @Column(name = "idempotency_key", length = 128)
     private String idempotencyKey;
+
+    @Column(name = "logical_key", nullable = false, length = 128)
+    private String logicalKey;
 
     @Column(name = "request_hash", nullable = false, length = 64)
     private String requestHash;
@@ -67,14 +73,18 @@ class DispatchAssignmentAuditEntity {
     protected DispatchAssignmentAuditEntity() {
     }
 
-    static DispatchAssignmentAuditEntity from(DispatchAssignmentAudit audit) {
+    static DispatchAssignmentAuditEntity from(DispatchAssignmentAudit audit, UUID tenantId) {
         DispatchAssignmentAuditEntity entity = new DispatchAssignmentAuditEntity();
+        entity.assignTenant(tenantId);
+        entity.idempotencyKey = TenantKey.encode(tenantId, audit.idempotencyKey());
+        entity.logicalKey = audit.idempotencyKey();
         entity.apply(audit);
         return entity;
     }
 
     void apply(DispatchAssignmentAudit audit) {
-        idempotencyKey = audit.idempotencyKey();
+        if (logicalKey != null && !logicalKey.equals(audit.idempotencyKey())) throw new TenantIsolationException();
+        logicalKey = audit.idempotencyKey();
         requestHash = audit.requestHash();
         requestId = audit.requestId();
         orderId = audit.orderId();
@@ -94,7 +104,7 @@ class DispatchAssignmentAuditEntity {
     }
 
     DispatchAssignmentAudit toDomain() {
-        return new DispatchAssignmentAudit(idempotencyKey, requestHash, requestId, orderId, courierId,
+        return new DispatchAssignmentAudit(logicalKey, requestHash, requestId, orderId, courierId,
                 contractVersion, strategy, strategyVersion, inputDigest, outputDigest, traceId, fallbackUsed,
                 fallbackReason, appliedOrderVersion, leaseId, leaseGeneration, createdAt);
     }

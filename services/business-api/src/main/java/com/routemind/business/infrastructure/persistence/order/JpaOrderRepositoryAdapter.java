@@ -1,6 +1,8 @@
 package com.routemind.business.infrastructure.persistence.order;
 
 import com.routemind.business.application.order.OrderRepository;
+import com.routemind.business.application.security.TenantContext;
+import com.routemind.business.application.security.TenantIsolationException;
 import com.routemind.business.domain.order.Order;
 import com.routemind.business.domain.order.OrderId;
 import java.util.List;
@@ -12,17 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class JpaOrderRepositoryAdapter implements OrderRepository {
 
 	private final SpringDataOrderRepository repository;
+	private final TenantContext tenants;
 
-	public JpaOrderRepositoryAdapter(SpringDataOrderRepository repository) {
+	public JpaOrderRepositoryAdapter(SpringDataOrderRepository repository, TenantContext tenants) {
 		this.repository = repository;
+		this.tenants = tenants;
 	}
 
 	@Override
 	@Transactional
 	public Order save(Order order) {
-		OrderEntity entity = repository.findById(order.id().value()).orElse(null);
+		var tenantId = tenants.current().value();
+		OrderEntity entity = repository.findByIdAndTenantId(order.id().value(), tenantId).orElse(null);
 		if (entity == null) {
-			entity = OrderEntity.from(order);
+			if (repository.existsById(order.id().value())) throw new TenantIsolationException();
+			entity = OrderEntity.from(order, tenantId);
 		} else {
 			entity.apply(order);
 		}
@@ -32,12 +38,12 @@ public class JpaOrderRepositoryAdapter implements OrderRepository {
 	@Override
 	@Transactional(readOnly = true)
 	public Optional<Order> findById(OrderId id) {
-		return repository.findById(id.value()).map(OrderEntity::toDomain);
+		return repository.findByIdAndTenantId(id.value(), tenants.current().value()).map(OrderEntity::toDomain);
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public List<Order> findAll() {
-		return repository.findAll().stream().map(OrderEntity::toDomain).toList();
+		return repository.findAllByTenantId(tenants.current().value()).stream().map(OrderEntity::toDomain).toList();
 	}
 }

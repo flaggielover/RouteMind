@@ -1,6 +1,7 @@
 package com.routemind.business.infrastructure.security;
 
 import com.routemind.business.domain.security.AuthenticatedPrincipal;
+import com.routemind.business.domain.security.TenantId;
 import java.util.Set;
 import org.springframework.security.oauth2.jwt.Jwt;
 
@@ -17,6 +18,7 @@ public final class OidcPrincipalMapper {
 		Set<String> scopes = OidcAuthorityConverter.claimValues(token.getClaims().get("scope"));
 		return new AuthenticatedPrincipal(token.getSubject(), token.getIssuer().toString(), token.getId(),
 				token.getIssuedAt(), token.getNotBefore() == null ? token.getIssuedAt() : token.getNotBefore(),
-				token.getExpiresAt(), properties.audience(), roles, scopes, true);
+				token.getExpiresAt(), properties.audience(), roles, scopes,
+				TenantId.parse(token.getClaimAsString(properties.tenantClaim())), true);
 	}
 }

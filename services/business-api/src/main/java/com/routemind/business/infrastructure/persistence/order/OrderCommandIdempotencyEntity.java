@@ -1,6 +1,9 @@
 package com.routemind.business.infrastructure.persistence.order;
 
 import com.routemind.business.application.order.OrderCommandIdempotency;
+import com.routemind.business.application.security.TenantIsolationException;
+import com.routemind.business.infrastructure.persistence.TenantKey;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,11 +13,14 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "order_command_idempotency", schema = "routemind")
-class OrderCommandIdempotencyEntity {
+class OrderCommandIdempotencyEntity extends TenantScopedEntity {
 
 	@Id
 	@Column(name = "idempotency_key", length = 128)
 	private String key;
+
+	@Column(name = "logical_key", nullable = false, length = 128)
+	private String logicalKey;
 
 	@Column(name = "request_hash", nullable = false, length = 64)
 	private String requestHash;
@@ -37,16 +43,20 @@ class OrderCommandIdempotencyEntity {
 	protected OrderCommandIdempotencyEntity() {
 	}
 
-	private OrderCommandIdempotencyEntity(OrderCommandIdempotency record) {
+	private OrderCommandIdempotencyEntity(OrderCommandIdempotency record, UUID tenantId) {
+		assignTenant(tenantId);
+		key = TenantKey.encode(tenantId, record.key());
+		logicalKey = record.key();
 		apply(record);
 	}
 
-	static OrderCommandIdempotencyEntity from(OrderCommandIdempotency record) {
-		return new OrderCommandIdempotencyEntity(record);
+	static OrderCommandIdempotencyEntity from(OrderCommandIdempotency record, UUID tenantId) {
+		return new OrderCommandIdempotencyEntity(record, tenantId);
 	}
 
 	void apply(OrderCommandIdempotency record) {
-		key = record.key();
+		if (logicalKey != null && !logicalKey.equals(record.key())) throw new TenantIsolationException();
+		logicalKey = record.key();
 		requestHash = record.requestHash();
 		operation = record.operation();
 		orderId = record.orderId();
@@ -56,7 +66,7 @@ class OrderCommandIdempotencyEntity {
 	}
 
 	OrderCommandIdempotency toDomain() {
-		return new OrderCommandIdempotency(key, requestHash, operation, orderId, responseStatus, responseVersion,
+		return new OrderCommandIdempotency(logicalKey, requestHash, operation, orderId, responseStatus, responseVersion,
 				createdAt);
 	}
 }

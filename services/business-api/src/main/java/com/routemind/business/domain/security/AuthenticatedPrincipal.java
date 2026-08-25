@@ -13,6 +13,7 @@ public record AuthenticatedPrincipal(
 		String audience,
 		Set<String> roles,
 		Set<String> scopes,
+		TenantId tenantId,
 		boolean active) {
 
 	public AuthenticatedPrincipal {
@@ -20,6 +21,9 @@ public record AuthenticatedPrincipal(
 		issuer = text(issuer, "issuer");
 		tokenId = text(tokenId, "tokenId");
 		audience = text(audience, "audience");
+		if (tenantId == null) {
+			throw new NullPointerException("tenantId must not be null");
+		}
 		if (issuedAt == null || notBefore == null || expiresAt == null) {
 			throw new NullPointerException("principal timestamps must not be null");
 		}
@@ -31,6 +35,13 @@ public record AuthenticatedPrincipal(
 		}
 		roles = normalizedSet(roles, "roles");
 		scopes = normalizedSet(scopes, "scopes");
+	}
+
+	public AuthenticatedPrincipal(String subject, String issuer, String tokenId, Instant issuedAt,
+			Instant notBefore, Instant expiresAt, String audience, Set<String> roles, Set<String> scopes,
+			boolean active) {
+		this(subject, issuer, tokenId, issuedAt, notBefore, expiresAt, audience, roles, scopes,
+				TenantId.LEGACY, active);
 	}
 
 	public PrincipalValidation validateAt(Instant now, String expectedIssuer, String expectedAudience) {

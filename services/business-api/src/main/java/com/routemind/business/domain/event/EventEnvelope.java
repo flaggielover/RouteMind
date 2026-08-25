@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 public record EventEnvelope(String specVersion, UUID eventId, String eventType, Instant occurredAt,
-		String producer, UUID aggregateId, long aggregateVersion, UUID correlationId,
+		String producer, UUID tenantId, UUID aggregateId, long aggregateVersion, UUID correlationId,
 		UUID causationId, String traceId, Map<String, Object> payload) {
 
 	private static final Pattern EVENT_TYPE = Pattern.compile("^[a-z][a-z0-9]*(\\.[a-z][a-z0-9]*)+$");
@@ -25,6 +25,12 @@ public record EventEnvelope(String specVersion, UUID eventId, String eventType, 
 		if (producer == null || producer.isBlank()) {
 			throw new IllegalArgumentException("producer must not be blank");
 		}
+		tenantId = tenantId == null
+				? com.routemind.business.domain.security.TenantId.LEGACY.value()
+				: tenantId;
+		if (tenantId.equals(new UUID(0, 0))) {
+			throw new IllegalArgumentException("tenantId must not be the nil UUID");
+		}
 		Objects.requireNonNull(aggregateId, "aggregateId");
 		if (aggregateVersion < 1) {
 			throw new IllegalArgumentException("aggregateVersion must be positive");
@@ -34,5 +40,13 @@ public record EventEnvelope(String specVersion, UUID eventId, String eventType, 
 			throw new IllegalArgumentException("traceId must be 32 lowercase hex characters");
 		}
 		payload = Map.copyOf(Objects.requireNonNull(payload, "payload"));
+	}
+
+	public EventEnvelope(String specVersion, UUID eventId, String eventType, Instant occurredAt,
+			String producer, UUID aggregateId, long aggregateVersion, UUID correlationId,
+			UUID causationId, String traceId, Map<String, Object> payload) {
+		this(specVersion, eventId, eventType, occurredAt, producer,
+				com.routemind.business.domain.security.TenantId.LEGACY.value(), aggregateId, aggregateVersion,
+				correlationId, causationId, traceId, payload);
 	}
 }

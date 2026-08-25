@@ -2,6 +2,7 @@ package com.routemind.business.infrastructure.projection.redis;
 
 import com.routemind.business.application.courier.CourierGeoProjection;
 import com.routemind.business.application.courier.CourierProjectionInspection;
+import com.routemind.business.application.security.TenantContext;
 import com.routemind.business.domain.courier.CourierLocation;
 import com.routemind.business.domain.courier.NearbyCourier;
 import java.util.List;
@@ -19,16 +20,17 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 public class RedisCourierGeoProjection implements CourierGeoProjection {
 
-	private static final String KEY = "routemind:couriers:geo";
 	private final StringRedisTemplate redis;
+	private final TenantContext tenants;
 
-	public RedisCourierGeoProjection(StringRedisTemplate redis) {
+	public RedisCourierGeoProjection(StringRedisTemplate redis, TenantContext tenants) {
 		this.redis = redis;
+		this.tenants = tenants;
 	}
 
 	@Override
 	public void upsert(CourierLocation location) {
-		redis.opsForGeo().add(KEY, new Point(location.point().longitude(), location.point().latitude()),
+		redis.opsForGeo().add(key(), new Point(location.point().longitude(), location.point().latitude()),
 				location.courierId().toString());
 	}
 
@@ -37,7 +39,7 @@ public class RedisCourierGeoProjection implements CourierGeoProjection {
 		if (radiusKilometers <= 0) {
 			throw new IllegalArgumentException("radiusKilometers must be positive");
 		}
-		GeoResults<RedisGeoCommands.GeoLocation<String>> results = redis.opsForGeo().search(KEY,
+		GeoResults<RedisGeoCommands.GeoLocation<String>> results = redis.opsForGeo().search(key(),
 				GeoReference.fromCoordinate(new Point(longitude, latitude)),
 				new Distance(radiusKilometers, Metrics.KILOMETERS));
 		return results.getContent().stream().map(this::toNearby)
@@ -46,22 +48,27 @@ public class RedisCourierGeoProjection implements CourierGeoProjection {
 
 	@Override
 	public void rebuild(List<CourierLocation> locations) {
-		redis.delete(KEY);
+		redis.delete(key());
 		locations.forEach(this::upsert);
 	}
 
 	@Override
 	public CourierProjectionInspection inspect() {
 		try {
-			Set<String> members = redis.opsForZSet().range(KEY, 0, -1);
+			String projectionKey = key();
+			Set<String> members = redis.opsForZSet().range(projectionKey, 0, -1);
 			Set<UUID> courierIds = members == null ? Set.of()
 					: members.stream().map(UUID::fromString).collect(java.util.stream.Collectors.toUnmodifiableSet());
 			return new CourierProjectionInspection(CourierProjectionInspection.Status.AVAILABLE, courierIds,
-					Map.of("projection_key", KEY, "member_count", Integer.toString(courierIds.size())));
+					Map.of("projection_key", projectionKey, "member_count", Integer.toString(courierIds.size())));
 		}
 		catch (RuntimeException failure) {
 			return CourierProjectionInspection.unavailable("redis_projection_read_failed");
 		}
+	}
+
+	private String key() {
+		return "routemind:tenant:" + tenants.current().value() + ":couriers:geo";
 	}
 
 	private NearbyCourier toNearby(GeoResult<RedisGeoCommands.GeoLocation<String>> result) {

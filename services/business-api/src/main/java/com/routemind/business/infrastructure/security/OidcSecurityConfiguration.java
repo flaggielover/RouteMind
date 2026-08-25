@@ -27,7 +27,7 @@ public class OidcSecurityConfiguration {
 		decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(
 				JwtValidators.createDefaultWithIssuer(properties.issuer().toString()),
 				new OidcAudienceValidator(properties.audience()),
-				new OidcRequiredClaimsValidator(properties.rolesClaim())));
+				new OidcRequiredClaimsValidator(properties.rolesClaim(), properties.tenantClaim())));
 		return decoder;
 	}
 
@@ -38,7 +38,8 @@ public class OidcSecurityConfiguration {
 
 	@Bean
 	SecurityFilterChain oidcSecurityFilterChain(HttpSecurity http, JwtDecoder decoder,
-			OidcSecurityProperties properties) throws Exception {
+			OidcSecurityProperties properties,
+			com.routemind.business.application.security.TenantContext tenants) throws Exception {
 		JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
 		authenticationConverter.setJwtGrantedAuthoritiesConverter(new OidcAuthorityConverter(properties.rolesClaim()));
 		http.csrf(csrf -> csrf.disable())
@@ -46,7 +47,9 @@ public class OidcSecurityConfiguration {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.requestCache(cache -> cache.disable())
 				.logout(logout -> logout.disable())
-				.addFilterAfter(new OidcActorBindingFilter(), BearerTokenAuthenticationFilter.class)
+				.addFilterAfter(TenantContextFilter.oidc(tenants, properties.tenantClaim()),
+						BearerTokenAuthenticationFilter.class)
+				.addFilterAfter(new OidcActorBindingFilter(), TenantContextFilter.class)
 				.authorizeHttpRequests(authorize -> authorize
 						.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
 						.requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()

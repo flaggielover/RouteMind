@@ -11,10 +11,12 @@ public record OidcSecurityProperties(
 		String audience,
 		URI jwkSetUri,
 		String rolesClaim,
+		String tenantClaim,
 		boolean allowInsecureLoopback) {
 
 	public OidcSecurityProperties {
 		rolesClaim = rolesClaim == null || rolesClaim.isBlank() ? "roles" : safeText(rolesClaim, "rolesClaim");
+		tenantClaim = tenantClaim == null || tenantClaim.isBlank() ? "tenant_id" : safeText(tenantClaim, "tenantClaim");
 		if (enabled) {
 			if (issuer == null || jwkSetUri == null) {
 				throw new IllegalArgumentException("OIDC issuer and JWK Set URI are required when OIDC is enabled");

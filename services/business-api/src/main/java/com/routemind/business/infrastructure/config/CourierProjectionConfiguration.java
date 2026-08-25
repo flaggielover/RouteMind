@@ -3,6 +3,7 @@ package com.routemind.business.infrastructure.config;
 import com.routemind.business.application.courier.CourierGeoProjection;
 import com.routemind.business.application.courier.CourierLocationService;
 import com.routemind.business.application.courier.CourierLocationStore;
+import com.routemind.business.application.security.TenantContext;
 import com.routemind.business.infrastructure.projection.redis.RedisCourierGeoProjection;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -15,8 +16,8 @@ public class CourierProjectionConfiguration {
 
 	@Bean
 	@ConditionalOnProperty(name = "routemind.redis.projection.enabled", havingValue = "true")
-	CourierGeoProjection courierGeoProjection(StringRedisTemplate redis) {
-		return new RedisCourierGeoProjection(redis);
+	CourierGeoProjection courierGeoProjection(StringRedisTemplate redis, TenantContext tenants) {
+		return new RedisCourierGeoProjection(redis, tenants);
 	}
 
 	@Bean

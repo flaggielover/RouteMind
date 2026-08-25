@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.routemind.business.application.realtime.EventStreamEntry;
 import com.routemind.business.application.realtime.EventStreamPage;
 import com.routemind.business.application.realtime.EventStreamRepository;
+import com.routemind.business.application.security.TenantContext;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
@@ -15,10 +16,13 @@ public class OutboxEventStreamRepositoryAdapter implements EventStreamRepository
 
 	private final SpringDataOutboxRepository repository;
 	private final ObjectMapper mapper;
+	private final TenantContext tenants;
 
-	public OutboxEventStreamRepositoryAdapter(SpringDataOutboxRepository repository, ObjectMapper mapper) {
+	public OutboxEventStreamRepositoryAdapter(SpringDataOutboxRepository repository, ObjectMapper mapper,
+			TenantContext tenants) {
 		this.repository = repository;
 		this.mapper = mapper;
+		this.tenants = tenants;
 	}
 
 	@Override
@@ -27,9 +31,10 @@ public class OutboxEventStreamRepositoryAdapter implements EventStreamRepository
 		if (limit < 1 || limit > 256) {
 			throw new IllegalArgumentException("event stream repository limit must be between 1 and 256");
 		}
-		long total = repository.count();
+		var tenantId = tenants.current().value();
+		long total = repository.countByTenantId(tenantId);
 		List<OutboxEntity> entities = repository
-				.findByOrderByCreatedAtDescEventIdDesc(PageRequest.of(0, limit));
+				.findByTenantIdOrderByCreatedAtDescEventIdDesc(tenantId, PageRequest.of(0, limit));
 		Collections.reverse(entities);
 		long oldest = entities.isEmpty() ? 0 : Math.max(1, total - entities.size() + 1);
 		List<EventStreamEntry> entries = java.util.stream.IntStream.range(0, entities.size())

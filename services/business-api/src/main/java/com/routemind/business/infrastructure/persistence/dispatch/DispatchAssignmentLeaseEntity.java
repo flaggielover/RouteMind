@@ -3,6 +3,7 @@ package com.routemind.business.infrastructure.persistence.dispatch;
 import com.routemind.business.application.dispatch.DispatchAssignmentLeaseConflictException;
 import com.routemind.business.domain.dispatch.DispatchAssignmentLease;
 import com.routemind.business.domain.dispatch.DispatchAssignmentLeaseState;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "dispatch_assignment_leases", schema = "routemind")
-class DispatchAssignmentLeaseEntity {
+class DispatchAssignmentLeaseEntity extends TenantScopedEntity {
 
     @Id
     @Column(name = "courier_id")
@@ -54,8 +55,9 @@ class DispatchAssignmentLeaseEntity {
     }
 
     static DispatchAssignmentLeaseEntity create(UUID orderId, UUID courierId, String decisionId,
-            long generation, UUID leaseId, Instant createdAt, Instant expiresAt) {
+            long generation, UUID leaseId, Instant createdAt, Instant expiresAt, UUID tenantId) {
         DispatchAssignmentLeaseEntity entity = new DispatchAssignmentLeaseEntity();
+        entity.assignTenant(tenantId);
         entity.courierId = courierId;
         entity.leaseId = leaseId;
         entity.orderId = orderId;

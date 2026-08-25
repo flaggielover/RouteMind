@@ -15,6 +15,7 @@ class OidcSecurityPropertiesTests {
 
 		assertThat(properties.audience()).isEqualTo("routemind-business-api");
 		assertThat(properties.rolesClaim()).isEqualTo("roles");
+		assertThat(properties.tenantClaim()).isEqualTo("tenant_id");
 	}
 
 	@Test
@@ -35,6 +36,6 @@ class OidcSecurityPropertiesTests {
 
 	private static OidcSecurityProperties enabled(String issuer, String jwks, boolean allowLoopback) {
 		return new OidcSecurityProperties(true, URI.create(issuer), "routemind-business-api", URI.create(jwks),
-				"roles", allowLoopback);
+				"roles", "tenant_id", allowLoopback);
 	}
 }

@@ -2,6 +2,7 @@ package com.routemind.business.infrastructure.persistence.courier;
 
 import com.routemind.business.domain.courier.CourierShift;
 import com.routemind.business.domain.courier.CourierShiftStatus;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "courier_shifts", schema = "routemind")
-class CourierShiftEntity {
+class CourierShiftEntity extends TenantScopedEntity {
 
 	@Id
 	@Column(name = "courier_id")
@@ -34,8 +35,9 @@ class CourierShiftEntity {
 	protected CourierShiftEntity() {
 	}
 
-	static CourierShiftEntity from(CourierShift shift) {
+	static CourierShiftEntity from(CourierShift shift, UUID tenantId) {
 		CourierShiftEntity entity = new CourierShiftEntity();
+		entity.assignTenant(tenantId);
 		entity.apply(shift);
 		return entity;
 	}

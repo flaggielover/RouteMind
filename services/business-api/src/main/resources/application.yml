@@ -74,6 +74,7 @@ routemind:
       audience: ${ROUTEMIND_OIDC_AUDIENCE:}
       jwk-set-uri: ${ROUTEMIND_OIDC_JWK_SET_URI:}
       roles-claim: ${ROUTEMIND_OIDC_ROLES_CLAIM:roles}
+      tenant-claim: ${ROUTEMIND_OIDC_TENANT_CLAIM:tenant_id}
       allow-insecure-loopback: ${ROUTEMIND_OIDC_ALLOW_INSECURE_LOOPBACK:false}
   reconciliation:
     scheduler:

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.routemind.business.application.outbox.EventPublisher;
 import com.routemind.business.domain.event.EventEnvelope;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
@@ -25,19 +23,7 @@ public class RabbitOutboxPublisher implements EventPublisher {
 	public void publish(EventEnvelope event) {
 		final String payload;
 		try {
-			Map<String, Object> message = new LinkedHashMap<>();
-			message.put("specVersion", event.specVersion());
-			message.put("eventId", event.eventId().toString());
-			message.put("eventType", event.eventType());
-			message.put("occurredAt", event.occurredAt().toString());
-			message.put("producer", event.producer());
-			message.put("aggregateId", event.aggregateId().toString());
-			message.put("aggregateVersion", event.aggregateVersion());
-			message.put("correlationId", event.correlationId().toString());
-			message.put("causationId", event.causationId() == null ? null : event.causationId().toString());
-			message.put("traceId", event.traceId());
-			message.put("payload", event.payload());
-			payload = mapper.writeValueAsString(message);
+			payload = mapper.writeValueAsString(event);
 		}
 		catch (JsonProcessingException exception) {
 			throw new IllegalArgumentException("event payload cannot be serialized", exception);
@@ -56,6 +42,7 @@ public class RabbitOutboxPublisher implements EventPublisher {
 		message.getMessageProperties().setHeader("X-Correlation-Id", event.correlationId().toString());
 		message.getMessageProperties().setHeader("X-Event-Id", event.eventId().toString());
 		message.getMessageProperties().setHeader("X-Aggregate-Id", event.aggregateId().toString());
+		message.getMessageProperties().setHeader("X-Tenant-Id", event.tenantId().toString());
 		return message;
 	}
 }

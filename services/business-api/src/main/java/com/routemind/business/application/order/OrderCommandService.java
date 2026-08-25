@@ -1,6 +1,7 @@
 package com.routemind.business.application.order;
 
 import com.routemind.business.application.outbox.OutboxRepository;
+import com.routemind.business.application.security.TenantContext;
 import com.routemind.business.domain.event.EventEnvelope;
 import com.routemind.business.domain.order.Order;
 import com.routemind.business.domain.order.OrderId;
@@ -25,15 +26,17 @@ public class OrderCommandService {
 	private final OrderCommandIdempotencyRepository idempotency;
 	private final FulfillmentAssignmentCoordinator assignments;
 	private final Clock clock;
+	private final TenantContext tenants;
 
 	public OrderCommandService(OrderRepository orders, OutboxRepository outbox,
 			OrderCommandIdempotencyRepository idempotency,
-			FulfillmentAssignmentCoordinator assignments, Clock clock) {
+			FulfillmentAssignmentCoordinator assignments, Clock clock, TenantContext tenants) {
 		this.orders = orders;
 		this.outbox = outbox;
 		this.idempotency = idempotency;
 		this.assignments = assignments;
 		this.clock = clock;
+		this.tenants = tenants;
 	}
 
 	@Transactional
@@ -112,7 +115,7 @@ public class OrderCommandService {
 	private void publish(Order saved, UUID correlationId, UUID causationId, String traceId, String eventType,
 			String actor, long aggregateVersion) {
 		EventEnvelope event = new EventEnvelope("1.0", UUID.randomUUID(), eventType, saved.updatedAt(), "business-api",
-				saved.id().value(), aggregateVersion, correlationId, causationId, traceId,
+				tenants.current().value(), saved.id().value(), aggregateVersion, correlationId, causationId, traceId,
 				Map.of("orderId", saved.id().value().toString(), "status", saved.status().name(), "actor", actor));
 		outbox.save(OutboxMessage.pending(event));
 	}

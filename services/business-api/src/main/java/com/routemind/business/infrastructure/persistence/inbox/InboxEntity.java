@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.routemind.business.domain.event.EventEnvelope;
 import com.routemind.business.domain.inbox.InboxMessage;
 import com.routemind.business.domain.inbox.InboxStatus;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,7 +18,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "inbox_messages", schema = "routemind")
-class InboxEntity {
+class InboxEntity extends TenantScopedEntity {
 
 	@Id
 	@Column(name = "event_id")
@@ -43,11 +44,13 @@ class InboxEntity {
 
 	static InboxEntity from(InboxMessage message, ObjectMapper mapper) {
 		InboxEntity entity = new InboxEntity();
+		entity.assignTenant(message.event().tenantId());
 		entity.apply(message, mapper);
 		return entity;
 	}
 
 	void apply(InboxMessage message, ObjectMapper mapper) {
+		assignTenant(message.event().tenantId());
 		eventId = message.eventId();
 		eventType = message.event().eventType();
 		occurredAt = message.event().occurredAt();
@@ -74,7 +77,7 @@ class InboxEntity {
 		try {
 			var payload = mapper.readValue(payloadJson, new TypeReference<java.util.Map<String, Object>>() { });
 			EventEnvelope event = new EventEnvelope("1.0", eventId, eventType, occurredAt, producer,
-					aggregateId, aggregateVersion, correlationId, causationId, traceId, payload);
+					tenantId(), aggregateId, aggregateVersion, correlationId, causationId, traceId, payload);
 			return new InboxMessage(eventId, event, status, attempts, nextAttemptAt, receivedAt,
 					processedAt, lastError);
 		} catch (JsonProcessingException exception) {

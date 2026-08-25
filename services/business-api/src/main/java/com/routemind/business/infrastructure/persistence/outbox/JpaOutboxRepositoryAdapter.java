@@ -2,6 +2,8 @@ package com.routemind.business.infrastructure.persistence.outbox;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.routemind.business.application.outbox.OutboxRepository;
+import com.routemind.business.application.security.TenantContext;
+import com.routemind.business.application.security.TenantIsolationException;
 import com.routemind.business.domain.outbox.OutboxMessage;
 import com.routemind.business.domain.outbox.OutboxStatus;
 import java.time.Instant;
@@ -17,17 +19,28 @@ public class JpaOutboxRepositoryAdapter implements OutboxRepository {
 
 	private final SpringDataOutboxRepository repository;
 	private final ObjectMapper mapper;
+	private final TenantContext tenants;
 
-	public JpaOutboxRepositoryAdapter(SpringDataOutboxRepository repository, ObjectMapper mapper) {
+	public JpaOutboxRepositoryAdapter(SpringDataOutboxRepository repository, ObjectMapper mapper,
+			TenantContext tenants) {
 		this.repository = repository;
 		this.mapper = mapper;
+		this.tenants = tenants;
 	}
 
 	@Override
 	@Transactional
 	public OutboxMessage save(OutboxMessage message) {
-		OutboxEntity entity = repository.findById(message.id()).orElseGet(() ->
-				OutboxEntity.from(message, mapper));
+		UUID tenantId = message.event().tenantId();
+		if (!tenants.current().value().equals(tenantId)) {
+			throw new TenantIsolationException();
+		}
+		OutboxEntity entity = repository.findByEventIdAndTenantId(message.id(), tenantId).orElseGet(() -> {
+			if (repository.existsById(message.id())) {
+				throw new TenantIsolationException();
+			}
+			return OutboxEntity.from(message, mapper);
+		});
 		entity.apply(message, mapper);
 		return repository.saveAndFlush(entity).toDomain(mapper);
 	}
@@ -50,6 +63,7 @@ public class JpaOutboxRepositoryAdapter implements OutboxRepository {
 	@Override
 	@Transactional(readOnly = true)
 	public Optional<OutboxMessage> findById(UUID id) {
-		return repository.findById(id).map(entity -> entity.toDomain(mapper));
+		return repository.findByEventIdAndTenantId(id, tenants.current().value())
+				.map(entity -> entity.toDomain(mapper));
 	}
 }

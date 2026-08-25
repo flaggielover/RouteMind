@@ -5,6 +5,7 @@ import com.routemind.business.domain.courier.CourierShiftStatus;
 import com.routemind.business.domain.event.EventEnvelope;
 import com.routemind.business.domain.outbox.OutboxMessage;
 import com.routemind.business.application.outbox.OutboxRepository;
+import com.routemind.business.application.security.TenantContext;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -22,13 +23,16 @@ public class CourierShiftCommandService {
 	private final CourierCommandIdempotencyRepository idempotency;
 	private final OutboxRepository outbox;
 	private final Clock clock;
+	private final TenantContext tenants;
 
 	public CourierShiftCommandService(CourierShiftRepository shifts,
-			CourierCommandIdempotencyRepository idempotency, OutboxRepository outbox, Clock clock) {
+			CourierCommandIdempotencyRepository idempotency, OutboxRepository outbox, Clock clock,
+			TenantContext tenants) {
 		this.shifts = shifts;
 		this.idempotency = idempotency;
 		this.outbox = outbox;
 		this.clock = clock;
+		this.tenants = tenants;
 	}
 
 	@Transactional
@@ -62,7 +66,7 @@ public class CourierShiftCommandService {
 
 	private void publish(CourierShift shift, UUID correlationId, String traceId) {
 		EventEnvelope event = new EventEnvelope("1.0", UUID.randomUUID(), "courier.shift.changed", clock.instant(),
-				"business-api", shift.courierId(), shift.version(), correlationId, null, traceId,
+				"business-api", tenants.current().value(), shift.courierId(), shift.version(), correlationId, null, traceId,
 				Map.of("courierId", shift.courierId().toString(), "status", shift.status().name(),
 						"version", Long.toString(shift.version())));
 		outbox.save(OutboxMessage.pending(event));

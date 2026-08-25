@@ -9,6 +9,7 @@ import com.routemind.business.domain.party.PartyId;
 import com.routemind.business.domain.party.PartyIdentity;
 import com.routemind.business.domain.party.PartyStatus;
 import com.routemind.business.domain.party.PartyType;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,7 +22,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "parties", schema = "routemind")
-class PartyEntity {
+class PartyEntity extends TenantScopedEntity {
 
 	@Id
 	private UUID id;
@@ -53,13 +54,14 @@ class PartyEntity {
 	protected PartyEntity() {
 	}
 
-	private PartyEntity(Party party) {
+	private PartyEntity(Party party, UUID tenantId) {
+		assignTenant(tenantId);
 		this.id = party.id().value();
 		apply(party);
 	}
 
-	static PartyEntity from(Party party) {
-		return new PartyEntity(party);
+	static PartyEntity from(Party party, UUID tenantId) {
+		return new PartyEntity(party, tenantId);
 	}
 
 	void apply(Party party) {

@@ -2,6 +2,8 @@ package com.routemind.business.infrastructure.persistence.dispatch;
 
 import com.routemind.business.application.dispatch.DispatchAssignmentLeaseConflictException;
 import com.routemind.business.application.dispatch.DispatchAssignmentLeaseRepository;
+import com.routemind.business.application.security.TenantContext;
+import com.routemind.business.application.security.TenantIsolationException;
 import com.routemind.business.domain.dispatch.DispatchAssignmentLease;
 import com.routemind.business.domain.dispatch.DispatchAssignmentLeaseState;
 import java.time.Duration;
@@ -16,21 +18,25 @@ public class JpaDispatchAssignmentLeaseRepository implements DispatchAssignmentL
 
     private final SpringDataDispatchAssignmentLeaseRepository leases;
     private final SpringDataDispatchAssignmentLeaseEventRepository events;
+    private final TenantContext tenants;
 
     public JpaDispatchAssignmentLeaseRepository(SpringDataDispatchAssignmentLeaseRepository leases,
-            SpringDataDispatchAssignmentLeaseEventRepository events) {
+            SpringDataDispatchAssignmentLeaseEventRepository events, TenantContext tenants) {
         this.leases = leases;
         this.events = events;
+        this.tenants = tenants;
     }
 
     @Override
     @Transactional
     public DispatchAssignmentLease reserve(UUID orderId, UUID courierId, String decisionId, Instant now, Duration ttl) {
         Instant expiresAt = now.plus(ttl);
-        DispatchAssignmentLeaseEntity existing = leases.findByCourierIdForUpdate(courierId).orElse(null);
+        var tenantId = tenants.current().value();
+        DispatchAssignmentLeaseEntity existing = leases.findByCourierIdForUpdate(courierId, tenantId).orElse(null);
         if (existing == null) {
+            if (leases.existsById(courierId)) throw new TenantIsolationException();
             DispatchAssignmentLeaseEntity created = DispatchAssignmentLeaseEntity.create(orderId, courierId, decisionId,
-                    1, UUID.randomUUID(), now, expiresAt);
+                    1, UUID.randomUUID(), now, expiresAt, tenantId);
             leases.saveAndFlush(created);
             events.save(DispatchAssignmentLeaseEventEntity.of(created, null, "reserve", now));
             return created.toDomain();
@@ -98,12 +104,13 @@ public class JpaDispatchAssignmentLeaseRepository implements DispatchAssignmentL
     @Override
     @Transactional
     public List<DispatchAssignmentLease> findCommittedByOrderId(UUID orderId) {
-        return leases.findByOrderIdAndStateForUpdate(orderId, DispatchAssignmentLeaseState.COMMITTED)
+        return leases.findByOrderIdAndStateForUpdate(orderId, DispatchAssignmentLeaseState.COMMITTED,
+                        tenants.current().value())
                 .stream().map(DispatchAssignmentLeaseEntity::toDomain).toList();
     }
 
     private DispatchAssignmentLeaseEntity findForUpdate(UUID leaseId) {
-        return leases.findByLeaseId(leaseId).orElseThrow(() ->
+        return leases.findByLeaseIdAndTenantId(leaseId, tenants.current().value()).orElseThrow(() ->
                 new DispatchAssignmentLeaseConflictException("lease_not_found"));
     }
 

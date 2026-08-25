@@ -4,7 +4,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 interface SpringDataCourierLocationHistoryRepository extends JpaRepository<CourierLocationHistoryEntity, Long> {
-	boolean existsByCourierIdAndSequence(UUID courierId, long sequence);
+	boolean existsByCourierIdAndSequenceAndTenantId(UUID courierId, long sequence, UUID tenantId);
 
-	long deleteByCourierIdAndSequenceLessThan(UUID courierId, long sequence);
+	long deleteByCourierIdAndSequenceLessThanAndTenantId(UUID courierId, long sequence, UUID tenantId);
 }

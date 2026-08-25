@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration(proxyBeanMethods = false)
@@ -12,11 +13,13 @@ import org.springframework.security.web.SecurityFilterChain;
 public class LocalSecurityConfiguration {
 
 	@Bean
-	SecurityFilterChain localCompatibilitySecurityFilterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain localCompatibilitySecurityFilterChain(HttpSecurity http,
+			com.routemind.business.application.security.TenantContext tenants) throws Exception {
 		http.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.requestCache(cache -> cache.disable())
 				.logout(logout -> logout.disable())
+				.addFilterBefore(TenantContextFilter.local(tenants), AnonymousAuthenticationFilter.class)
 				.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 		return http.build();
 	}

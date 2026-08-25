@@ -2,6 +2,7 @@ package com.routemind.business.infrastructure.persistence.courier;
 
 import com.routemind.business.domain.courier.CourierLocation;
 import com.routemind.business.domain.courier.GeoPoint;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "courier_location_history", schema = "routemind")
-class CourierLocationHistoryEntity {
+class CourierLocationHistoryEntity extends TenantScopedEntity {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 	@Column(name = "courier_id", nullable = false) private UUID courierId;
 	@Column(name = "location_sequence", nullable = false) private long sequence;
@@ -25,8 +26,9 @@ class CourierLocationHistoryEntity {
 
 	protected CourierLocationHistoryEntity() { }
 
-	static CourierLocationHistoryEntity from(CourierLocation location) {
+	static CourierLocationHistoryEntity from(CourierLocation location, UUID tenantId) {
 		CourierLocationHistoryEntity entity = new CourierLocationHistoryEntity();
+		entity.assignTenant(tenantId);
 		entity.courierId = location.courierId();
 		entity.sequence = location.sequence();
 		entity.latitude = location.point().latitude();

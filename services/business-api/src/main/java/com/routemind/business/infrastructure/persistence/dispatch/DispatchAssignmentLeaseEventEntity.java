@@ -1,6 +1,7 @@
 package com.routemind.business.infrastructure.persistence.dispatch;
 
 import com.routemind.business.domain.dispatch.DispatchAssignmentLeaseState;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -14,7 +15,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "dispatch_assignment_lease_events", schema = "routemind")
-class DispatchAssignmentLeaseEventEntity {
+class DispatchAssignmentLeaseEventEntity extends TenantScopedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,6 +56,7 @@ class DispatchAssignmentLeaseEventEntity {
     static DispatchAssignmentLeaseEventEntity of(DispatchAssignmentLeaseEntity lease,
             DispatchAssignmentLeaseState fromState, String reason, Instant occurredAt) {
         DispatchAssignmentLeaseEventEntity event = new DispatchAssignmentLeaseEventEntity();
+        event.assignTenant(lease.tenantId());
         event.leaseId = lease.leaseId();
         event.courierId = lease.courierId();
         event.orderId = lease.orderId();

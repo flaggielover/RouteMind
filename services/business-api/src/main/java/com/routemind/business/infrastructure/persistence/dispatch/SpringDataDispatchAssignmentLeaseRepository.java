@@ -12,14 +12,14 @@ import jakarta.persistence.LockModeType;
 interface SpringDataDispatchAssignmentLeaseRepository extends JpaRepository<DispatchAssignmentLeaseEntity, UUID> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select lease from DispatchAssignmentLeaseEntity lease where lease.courierId = :courierId")
-    Optional<DispatchAssignmentLeaseEntity> findByCourierIdForUpdate(UUID courierId);
+    @Query("select lease from DispatchAssignmentLeaseEntity lease where lease.courierId = :courierId and lease.tenantId = :tenantId")
+    Optional<DispatchAssignmentLeaseEntity> findByCourierIdForUpdate(UUID courierId, UUID tenantId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    Optional<DispatchAssignmentLeaseEntity> findByLeaseId(UUID leaseId);
+    Optional<DispatchAssignmentLeaseEntity> findByLeaseIdAndTenantId(UUID leaseId, UUID tenantId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    @Query("select lease from DispatchAssignmentLeaseEntity lease where lease.orderId = :orderId and lease.state = :state")
+    @Query("select lease from DispatchAssignmentLeaseEntity lease where lease.orderId = :orderId and lease.state = :state and lease.tenantId = :tenantId")
     List<DispatchAssignmentLeaseEntity> findByOrderIdAndStateForUpdate(UUID orderId,
-            DispatchAssignmentLeaseState state);
+            DispatchAssignmentLeaseState state, UUID tenantId);
 }

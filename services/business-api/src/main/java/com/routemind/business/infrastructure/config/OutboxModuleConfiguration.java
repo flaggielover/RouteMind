@@ -1,15 +1,16 @@
 package com.routemind.business.infrastructure.config;
 
 import com.routemind.business.application.outbox.EventPublisher;
+import com.routemind.business.application.outbox.OutboxRepository;
 import com.routemind.business.application.outbox.OutboxRelay;
+import com.routemind.business.application.security.TenantContext;
 import java.time.Clock;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import com.routemind.business.application.outbox.OutboxRepository;
 
 @Configuration(proxyBeanMethods = false)
 @EnableScheduling
@@ -17,8 +18,9 @@ public class OutboxModuleConfiguration {
 
 	@Bean
 	@ConditionalOnProperty(name = "routemind.rabbit.publisher.enabled", havingValue = "true")
-	OutboxRelay outboxRelay(OutboxRepository repository, EventPublisher publisher, Clock clock) {
-		return new OutboxRelay(repository, publisher, clock);
+	OutboxRelay outboxRelay(OutboxRepository repository, EventPublisher publisher, Clock clock,
+			TenantContext tenants) {
+		return new OutboxRelay(repository, publisher, clock, tenants);
 	}
 
 	@Bean

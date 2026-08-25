@@ -2,6 +2,7 @@ package com.routemind.business.infrastructure.persistence.courier;
 
 import com.routemind.business.domain.courier.CourierLocation;
 import com.routemind.business.domain.courier.GeoPoint;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -11,7 +12,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "courier_locations", schema = "routemind")
-class CourierLocationEntity {
+class CourierLocationEntity extends TenantScopedEntity {
 	@Id private UUID courierId;
 	@Column(nullable = false) private double latitude;
 	@Column(nullable = false) private double longitude;
@@ -23,8 +24,9 @@ class CourierLocationEntity {
 	protected CourierLocationEntity() {
 	}
 
-	static CourierLocationEntity from(CourierLocation location) {
+	static CourierLocationEntity from(CourierLocation location, UUID tenantId) {
 		CourierLocationEntity entity = new CourierLocationEntity();
+		entity.assignTenant(tenantId);
 		entity.apply(location);
 		return entity;
 	}

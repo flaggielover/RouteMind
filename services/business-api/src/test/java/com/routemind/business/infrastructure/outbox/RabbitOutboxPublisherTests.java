@@ -17,9 +17,10 @@ class RabbitOutboxPublisherTests {
 		UUID eventId = UUID.randomUUID();
 		UUID orderId = UUID.randomUUID();
 		UUID correlationId = UUID.randomUUID();
+		UUID tenantId = UUID.randomUUID();
 		String traceId = "0123456789abcdef0123456789abcdef";
 		EventEnvelope event = new EventEnvelope("1.0", eventId, "order.assigned", Instant.EPOCH,
-				"business-api", orderId, 2, correlationId, null, traceId, Map.of());
+				"business-api", tenantId, orderId, 2, correlationId, null, traceId, Map.of());
 
 		Message message = RabbitOutboxPublisher.addEnvelopeHeaders(MessageBuilder.withBody(new byte[0]).build(), event);
 
@@ -29,5 +30,7 @@ class RabbitOutboxPublisherTests {
 		assertThat((Object) message.getMessageProperties().getHeader("X-Event-Id")).isEqualTo(eventId.toString());
 		assertThat((Object) message.getMessageProperties().getHeader("X-Aggregate-Id"))
 				.isEqualTo(orderId.toString());
+		assertThat((Object) message.getMessageProperties().getHeader("X-Tenant-Id"))
+				.isEqualTo(tenantId.toString());
 	}
 }

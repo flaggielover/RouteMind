@@ -2,8 +2,10 @@ package com.routemind.business.application.outbox;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.routemind.business.application.security.TenantContext;
 import com.routemind.business.domain.event.EventEnvelope;
 import com.routemind.business.domain.outbox.OutboxMessage;
+import com.routemind.business.domain.security.TenantId;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -17,10 +19,13 @@ class OutboxRelayTests {
 	@Test
 	void retriesFailureAndPublishesAfterConfirmation() {
 		Instant now = Instant.parse("2026-01-01T00:00:00Z");
-		var message = OutboxMessage.pending(event(now));
+		TenantId tenant = new TenantId(UUID.randomUUID());
+		TenantContext tenants = new TenantContext();
+		var message = OutboxMessage.pending(event(now, tenant));
 		var stored = new ArrayList<>(java.util.List.of(message));
 		var publisherCalls = new ArrayList<UUID>();
 		EventPublisher publisher = event -> {
+			assertThat(tenants.current()).isEqualTo(tenant);
 			publisherCalls.add(event.eventId());
 			if (publisherCalls.size() == 1) {
 				throw new IllegalStateException("down");
@@ -40,18 +45,20 @@ class OutboxRelayTests {
 			}
 			@Override public java.util.Optional<OutboxMessage> findById(UUID id) { return java.util.Optional.of(stored.get(0)); }
 		};
-		var relay = new OutboxRelay(repository, publisher, Clock.fixed(now, ZoneOffset.UTC));
+		var relay = new OutboxRelay(repository, publisher, Clock.fixed(now, ZoneOffset.UTC), tenants);
 
 		assertThat(relay.publishDue(1)).isZero();
 		assertThat(stored.get(0).attempts()).isOne();
 		var retryRelay = new OutboxRelay(repository, publisher,
-				Clock.fixed(now.plusSeconds(2), ZoneOffset.UTC));
+				Clock.fixed(now.plusSeconds(2), ZoneOffset.UTC), tenants);
 		assertThat(retryRelay.publishDue(1)).isOne();
 		assertThat(stored.get(0).status()).isEqualTo(com.routemind.business.domain.outbox.OutboxStatus.PUBLISHED);
+		assertThat(tenants.current()).isEqualTo(TenantId.LEGACY);
 	}
 
-	private static EventEnvelope event(Instant now) {
+	private static EventEnvelope event(Instant now, TenantId tenant) {
 		return new EventEnvelope("1.0", UUID.randomUUID(), "order.status.changed", now, "business-api",
-				UUID.randomUUID(), 1, UUID.randomUUID(), null, "0123456789abcdef0123456789abcdef", Map.of());
+				tenant.value(), UUID.randomUUID(), 1, UUID.randomUUID(), null,
+				"0123456789abcdef0123456789abcdef", Map.of());
 	}
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.routemind.business.domain.event.EventEnvelope;
 import com.routemind.business.domain.outbox.OutboxMessage;
 import com.routemind.business.domain.outbox.OutboxStatus;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,7 +18,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "outbox_messages", schema = "routemind")
-class OutboxEntity {
+class OutboxEntity extends TenantScopedEntity {
 
 	@Id
 	@Column(name = "event_id")
@@ -73,6 +74,7 @@ class OutboxEntity {
 	}
 
 	private OutboxEntity(OutboxMessage message, ObjectMapper mapper) {
+		assignTenant(message.event().tenantId());
 		apply(message, mapper);
 	}
 
@@ -81,6 +83,7 @@ class OutboxEntity {
 	}
 
 	void apply(OutboxMessage message, ObjectMapper mapper) {
+		assignTenant(message.event().tenantId());
 		eventId = message.id();
 		eventType = message.event().eventType();
 		occurredAt = message.event().occurredAt();
@@ -108,7 +111,7 @@ class OutboxEntity {
 			var payload = mapper.readValue(payloadJson, new TypeReference<java.util.Map<String, Object>>() {
 			});
 			EventEnvelope event = new EventEnvelope("1.0", eventId, eventType, occurredAt, producer,
-					aggregateId, aggregateVersion, correlationId, causationId, traceId, payload);
+					tenantId(), aggregateId, aggregateVersion, correlationId, causationId, traceId, payload);
 			return new OutboxMessage(eventId, event, status, attempts, nextAttemptAt, createdAt,
 					publishedAt, lastError);
 		} catch (JsonProcessingException exception) {

@@ -1,6 +1,7 @@
 package com.routemind.business.application.courier;
 
 import com.routemind.business.application.outbox.OutboxRepository;
+import com.routemind.business.application.security.TenantContext;
 import com.routemind.business.domain.courier.CourierLocation;
 import com.routemind.business.domain.event.EventEnvelope;
 import com.routemind.business.domain.outbox.OutboxMessage;
@@ -22,13 +23,16 @@ public class CourierLocationCommandService {
 	private final CourierCommandIdempotencyRepository idempotency;
 	private final OutboxRepository outbox;
 	private final Clock clock;
+	private final TenantContext tenants;
 
 	public CourierLocationCommandService(CourierLocationService locations,
-			CourierCommandIdempotencyRepository idempotency, OutboxRepository outbox, Clock clock) {
+			CourierCommandIdempotencyRepository idempotency, OutboxRepository outbox, Clock clock,
+			TenantContext tenants) {
 		this.locations = locations;
 		this.idempotency = idempotency;
 		this.outbox = outbox;
 		this.clock = clock;
+		this.tenants = tenants;
 	}
 
 	@Transactional
@@ -71,7 +75,7 @@ public class CourierLocationCommandService {
 	private void publish(CourierLocation location, ProjectionWriteStatus projectionStatus, UUID correlationId,
 			String traceId) {
 		EventEnvelope event = new EventEnvelope("1.0", UUID.randomUUID(), "courier.location.updated", location.ingestedAt(),
-				"business-api", location.courierId(), location.sequence(), correlationId, null, traceId,
+				"business-api", tenants.current().value(), location.courierId(), location.sequence(), correlationId, null, traceId,
 				Map.of("courierId", location.courierId().toString(), "latitude", Double.toString(location.point().latitude()),
 						"longitude", Double.toString(location.point().longitude()), "observedAt", location.observedAt().toString(),
 						"ingestedAt", location.ingestedAt().toString(), "sequence", location.sequence(),

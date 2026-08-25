@@ -46,6 +46,7 @@ class DispatchAssignmentLeaseEntityTests {
 
     private static DispatchAssignmentLeaseEntity lease() {
         return DispatchAssignmentLeaseEntity.create(UUID.randomUUID(), UUID.randomUUID(), "decision-1", 1,
-                UUID.randomUUID(), CREATED_AT, CREATED_AT.plusSeconds(30));
+                UUID.randomUUID(), CREATED_AT, CREATED_AT.plusSeconds(30),
+                com.routemind.business.domain.security.TenantId.LEGACY.value());
     }
 }

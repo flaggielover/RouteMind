@@ -4,6 +4,7 @@ import com.routemind.business.domain.order.Order;
 import com.routemind.business.domain.order.OrderId;
 import com.routemind.business.domain.order.OrderStatus;
 import com.routemind.business.domain.order.OrderTransition;
+import com.routemind.business.infrastructure.persistence.TenantScopedEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +23,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "orders", schema = "routemind")
-class OrderEntity {
+class OrderEntity extends TenantScopedEntity {
 
 	@Id
 	private UUID id;
@@ -48,13 +49,14 @@ class OrderEntity {
 	protected OrderEntity() {
 	}
 
-	private OrderEntity(Order order) {
+	private OrderEntity(Order order, UUID tenantId) {
+		assignTenant(tenantId);
 		id = order.id().value();
 		apply(order);
 	}
 
-	static OrderEntity from(Order order) {
-		return new OrderEntity(order);
+	static OrderEntity from(Order order, UUID tenantId) {
+		return new OrderEntity(order, tenantId);
 	}
 
 	void apply(Order order) {
@@ -71,7 +73,7 @@ class OrderEntity {
 			transitions.get(index).apply(transition);
 		}
 		else {
-			transitions.add(OrderTransitionEntity.from(this, transition));
+			transitions.add(OrderTransitionEntity.from(this, transition, tenantId()));
 		}
 	}
 	while (transitions.size() > order.transitions().size()) {
