@@ -9,20 +9,14 @@ import {
   type PreferenceState,
 } from "../data/preferences";
 import type { DataAvailability, DataSourceMode, Role } from "../domain/model";
+import { actorForRole, type TenantSession } from "../data/session";
 
 interface PreferencesPanelProps {
   role: Role;
   source: DataSourceMode;
   availability: DataAvailability;
+  session: TenantSession | null;
 }
-
-const actorByRole: Record<Role, string> = {
-  operations: "operator",
-  strategy: "analyst",
-  customer: "customer",
-  merchant: "merchant",
-  courier: "courier",
-};
 
 const labels: Record<PreferenceNamespace, string> = {
   accessibility: "Accessibility",
@@ -31,15 +25,15 @@ const labels: Record<PreferenceNamespace, string> = {
   quiet_hours: "Quiet hours",
 };
 
-export function PreferencesPanel({ role, source, availability }: PreferencesPanelProps) {
+export function PreferencesPanel({ role, source, availability, session }: PreferencesPanelProps) {
   const [open, setOpen] = useState(false);
   const [namespace, setNamespace] = useState<PreferenceNamespace>("accessibility");
   const [state, setState] = useState<PreferenceState>(() =>
     createPreferenceState("accessibility", source === "live" ? "live" : "other"),
   );
   const [requestSequence, setRequestSequence] = useState(0);
-  const actor = actorByRole[role];
-  const readOnly = source !== "live" || availability !== "ready";
+  const actor = session?.roles.includes(role) ? actorForRole(session, role) : role;
+  const readOnly = source !== "live" || availability !== "ready" || !session;
 
   const refresh = async (target = namespace) => {
     setState((current) => ({
@@ -51,7 +45,15 @@ export function PreferencesPanel({ role, source, availability }: PreferencesPane
       setState(createPreferenceState(target, "other"));
       return;
     }
-    setState((await loadPreference(target, actor)).state);
+    if (!session || !session.roles.includes(role)) {
+      setState({
+        ...createPreferenceState(target),
+        status: "unavailable",
+        detail: "Verified identity is required for durable preferences",
+      });
+      return;
+    }
+    setState((await loadPreference(target, session, role)).state);
   };
 
   useEffect(() => {
@@ -66,7 +68,7 @@ export function PreferencesPanel({ role, source, availability }: PreferencesPane
       );
     window.addEventListener("focus", markStale);
     return () => window.removeEventListener("focus", markStale);
-  }, [open, namespace, source, actor]);
+  }, [open, namespace, source, actor, role, session]);
 
   const update = (field: string, value: string | boolean | number) =>
     setState((current) => ({
@@ -88,7 +90,10 @@ export function PreferencesPanel({ role, source, availability }: PreferencesPane
   const save = async () => {
     if (!canSave) return;
     setState((current) => ({ ...current, status: "loading", detail: "Saving durable preference" }));
-    setState((await savePreference({ ...state, status: "ready" }, actor, idempotencyKey)).state);
+    if (!session) return;
+    setState(
+      (await savePreference({ ...state, status: "ready" }, session, role, idempotencyKey)).state,
+    );
     setRequestSequence((sequence) => sequence + 1);
   };
 

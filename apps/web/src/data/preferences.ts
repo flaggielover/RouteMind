@@ -1,3 +1,6 @@
+import type { Role } from "../domain/model";
+import { authorizedHeaders, type TenantSession } from "./session";
+
 export const preferenceNamespaces = [
   "accessibility",
   "locale",
@@ -114,14 +117,15 @@ function parseSnapshot(namespace: PreferenceNamespace, body: unknown): Preferenc
 
 export async function loadPreference(
   namespace: PreferenceNamespace,
-  actor: string,
+  session: TenantSession,
+  role: Role,
   fetchImpl: typeof fetch = fetch,
 ): Promise<PreferenceResult> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const response = await fetchImpl(`${businessApi}/api/v1/preferences/${namespace}`, {
-      headers: { Accept: "application/json", "X-Actor": actor },
+      headers: { Accept: "application/json", ...authorizedHeaders(session, role) },
       signal: controller.signal,
     });
     const body = (await response.json().catch(() => ({}))) as { traceId?: unknown };
@@ -166,7 +170,8 @@ export async function loadPreference(
 
 export async function savePreference(
   state: PreferenceState,
-  actor: string,
+  session: TenantSession,
+  role: Role,
   idempotencyKey: string,
   fetchImpl: typeof fetch = fetch,
 ): Promise<PreferenceResult> {
@@ -180,8 +185,8 @@ export async function savePreference(
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          "X-Actor": actor,
           "Idempotency-Key": idempotencyKey,
+          ...authorizedHeaders(session, role),
         },
         body: JSON.stringify({ expectedVersion: state.snapshot.version, values: state.draft }),
         signal: controller.signal,

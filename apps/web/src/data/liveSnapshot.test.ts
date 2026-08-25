@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { loadLiveSnapshot, replayDataSource } from "./liveSnapshot";
+import type { TenantSession } from "./session";
+
+const session: TenantSession = {
+  tenantId: "10000000-0000-4000-8000-000000000001",
+  subject: "operator-1",
+  roles: ["operations"],
+  accessToken: "access-token",
+  expiresAt: "2099-08-25T10:00:00Z",
+};
 
 function response(body: unknown, ok = true): Response {
   return new Response(JSON.stringify(body), {
@@ -10,7 +19,9 @@ function response(body: unknown, ok = true): Response {
 
 describe("live product data boundary", () => {
   it("composes Java durable state and Python dispatch as live data", async () => {
-    const snapshot = await loadLiveSnapshot(async (input) => {
+    const requests: RequestInit[] = [];
+    const snapshot = await loadLiveSnapshot(session, async (input, init) => {
+      requests.push(init ?? {});
       const url = String(input);
       if (url.includes("operations")) {
         return response({
@@ -46,14 +57,22 @@ describe("live product data boundary", () => {
     });
 
     expect(snapshot.source).toBe("live");
+    expect(snapshot.identityScope).toBe(
+      "10000000-0000-4000-8000-000000000001:operator-1:operations",
+    );
     expect(snapshot.availability).toBe("ready");
     expect(snapshot.merchants[0]?.name).toBe("Local Merchant");
     expect(snapshot.dispatch.selectedCourier).toBe("courier-1");
     expect(snapshot.couriers[0]).toMatchObject({ sequence: 7, online: true, stale: false });
+    expect(new Headers(requests[0].headers).get("Authorization")).toBe("Bearer access-token");
+    expect(new Headers(requests[0].headers).get("X-Actor")).toBe("operator");
+    expect(new Headers(requests[1].headers).get("Authorization")).toBe("Bearer access-token");
   });
 
   it("keeps service failure explicit instead of falling back to demo", async () => {
-    const snapshot = await loadLiveSnapshot(async () => response({ error: "unavailable" }, false));
+    const snapshot = await loadLiveSnapshot(session, async () =>
+      response({ error: "unavailable" }, false),
+    );
 
     expect(snapshot.source).toBe("live");
     expect(snapshot.availability).toBe("unavailable");

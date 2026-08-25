@@ -204,6 +204,7 @@ export interface WhatIfComparison {
 
 export interface OperationsSnapshot {
   source: DataSourceMode;
+  identityScope?: string;
   clockDomain: ClockDomain;
   availability: DataAvailability;
   sourceDetail: string;

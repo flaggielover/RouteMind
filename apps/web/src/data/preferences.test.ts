@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { createPreferenceState, loadPreference, savePreference } from "./preferences";
+import type { TenantSession } from "./session";
+
+const session: TenantSession = {
+  tenantId: "10000000-0000-4000-8000-000000000001",
+  subject: "customer-1",
+  roles: ["customer"],
+  accessToken: "access-token",
+  expiresAt: "2099-08-25T10:00:00Z",
+};
 
 function response(body: unknown, status: number, traceId = "trace-preference-1"): Response {
   return new Response(JSON.stringify(body), {
@@ -17,7 +26,7 @@ describe("durable preference boundary", () => {
 
   it("loads a persisted snapshot and sends only the selected actor scope", async () => {
     let request: RequestInit | undefined;
-    const result = await loadPreference("locale", "customer", async (_url, init) => {
+    const result = await loadPreference("locale", session, "customer", async (_url, init) => {
       request = init;
       return response(
         {
@@ -33,6 +42,7 @@ describe("durable preference boundary", () => {
     expect(result.ok).toBe(true);
     expect(result.state.snapshot.version).toBe(2);
     expect(new Headers(request?.headers).get("X-Actor")).toBe("customer");
+    expect(new Headers(request?.headers).get("Authorization")).toBe("Bearer access-token");
   });
 
   it("keeps a draft on conflict and classifies service failure as rollback", async () => {
@@ -41,15 +51,25 @@ describe("durable preference boundary", () => {
       status: "ready" as const,
       draft: { ...createPreferenceState("notifications").draft, email: true },
     };
-    const conflict = await savePreference(state, "customer", "preference-key-1", async () =>
-      response({ code: "preference_version_conflict" }, 409),
+    const conflict = await savePreference(
+      state,
+      session,
+      "customer",
+      "preference-key-1",
+      async () => response({ code: "preference_version_conflict" }, 409),
     );
     expect(conflict.ok).toBe(false);
     expect(conflict.state.status).toBe("conflict");
     expect(conflict.state.draft.email).toBe(true);
-    const rollback = await savePreference(state, "customer", "preference-key-2", async () => {
-      throw new Error("offline");
-    });
+    const rollback = await savePreference(
+      state,
+      session,
+      "customer",
+      "preference-key-2",
+      async () => {
+        throw new Error("offline");
+      },
+    );
     expect(rollback.state.status).toBe("rollback");
     expect(rollback.state.detail).toContain("draft retained");
   });

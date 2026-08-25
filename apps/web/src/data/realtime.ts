@@ -1,4 +1,5 @@
 import type { DataAvailability, OperationsSnapshot, OrderStatus } from "../domain/model";
+import { authorizedHeaders, type TenantSession } from "./session";
 
 export const realtimeEventTypes = [
   "order.created",
@@ -20,6 +21,7 @@ export interface RealtimeEnvelope {
   eventType: RealtimeEventType;
   occurredAt: string;
   producer: string;
+  tenantId: string;
   aggregateId: string;
   aggregateVersion: number;
   correlationId: string;
@@ -52,7 +54,8 @@ export interface RealtimeCursorState {
   staleReason: string | null;
 }
 
-export type RealtimeRejectReason = "duplicate" | "out_of_order" | "stale" | "cursor_gap";
+export type RealtimeRejectReason =
+  "duplicate" | "out_of_order" | "stale" | "cursor_gap" | "tenant_mismatch";
 
 export interface RealtimeAcceptResult {
   accepted: boolean;
@@ -91,7 +94,11 @@ export function parseRealtimeItem(data: string): RealtimeItem {
   if (!isCanonicalCursor(parsed.cursor) || !isRecord(parsed.event)) {
     throw new Error("event stream item has an invalid cursor or event");
   }
-  if (typeof parsed.event.eventId !== "string" || typeof parsed.event.eventType !== "string") {
+  if (
+    typeof parsed.event.eventId !== "string" ||
+    typeof parsed.event.eventType !== "string" ||
+    typeof parsed.event.tenantId !== "string"
+  ) {
     throw new Error("event stream item has an invalid event identity");
   }
   if (!realtimeEventTypes.includes(parsed.event.eventType as RealtimeEventType)) {
@@ -112,7 +119,15 @@ export function parseRealtimeItem(data: string): RealtimeItem {
 export function acceptRealtimeItem(
   state: RealtimeCursorState,
   item: RealtimeItem,
+  expectedTenantId?: string,
 ): RealtimeAcceptResult {
+  if (expectedTenantId && item.event.tenantId.toLowerCase() !== expectedTenantId.toLowerCase()) {
+    return {
+      accepted: false,
+      reason: "tenant_mismatch",
+      state: { ...state, staleReason: "realtime event tenant mismatch" },
+    };
+  }
   if (item.stale) {
     return {
       accepted: false,
@@ -140,8 +155,12 @@ export function acceptRealtimeItem(
 export function applyRealtimeItem(
   snapshot: OperationsSnapshot,
   item: RealtimeItem,
+  expectedTenantId?: string,
 ): OperationsSnapshot {
-  if (item.stale) {
+  if (
+    item.stale ||
+    (expectedTenantId && item.event.tenantId.toLowerCase() !== expectedTenantId.toLowerCase())
+  ) {
     return snapshot;
   }
   if (item.event.eventType === "courier.location.updated") {
@@ -261,6 +280,7 @@ export interface EventSourceLike {
 
 export interface RealtimeStreamOptions {
   endpoint: string;
+  expectedTenantId?: string;
   initialCursor?: string;
   onEvent: (item: RealtimeItem) => void;
   onStateChange: (state: RealtimeConnectionState) => void;
@@ -319,10 +339,14 @@ export function createRealtimeStream(options: RealtimeStreamOptions): RealtimeSt
   const handleData = (data: string) => {
     try {
       const item = parseRealtimeItem(data);
-      const result = acceptRealtimeItem(cursorState, item);
+      const result = acceptRealtimeItem(cursorState, item, options.expectedTenantId);
       cursorState = result.state;
       if (!result.accepted) {
-        if (result.reason === "stale" || result.reason === "cursor_gap") {
+        if (
+          result.reason === "stale" ||
+          result.reason === "cursor_gap" ||
+          result.reason === "tenant_mismatch"
+        ) {
           closeSource();
           publish("stale", cursorState.staleReason ?? "Stream cursor is stale");
         }
@@ -371,6 +395,149 @@ export function createRealtimeStream(options: RealtimeStreamOptions): RealtimeSt
       if (retryTimer !== null) cancel(retryTimer);
       retryTimer = null;
       closeSource();
+    },
+  };
+}
+
+export interface AuthenticatedRealtimeStreamOptions {
+  endpoint: string;
+  session: TenantSession;
+  initialCursor?: string;
+  onEvent: (item: RealtimeItem) => void;
+  onStateChange: (state: RealtimeConnectionState) => void;
+  fetchImpl?: typeof fetch;
+  setTimeout?: (handler: () => void, timeout: number) => unknown;
+  clearTimeout?: (handle: unknown) => void;
+}
+
+export function createAuthenticatedRealtimeStream(
+  options: AuthenticatedRealtimeStreamOptions,
+): RealtimeStream {
+  const fetchImpl = options.fetchImpl ?? fetch;
+  const schedule =
+    options.setTimeout ?? ((handler, timeout) => window.setTimeout(handler, timeout));
+  const cancel = options.clearTimeout ?? ((handle) => window.clearTimeout(handle as number));
+  let cursorState = createRealtimeCursorState(options.initialCursor ?? "0");
+  let abort: AbortController | null = null;
+  let retryTimer: unknown = null;
+  let retryAttempt = 0;
+  let stopped = false;
+  let appliedEvents = 0;
+  let recentEvents: RealtimeItem[] = [];
+
+  const publish = (status: RealtimeStatus, detail: string) => {
+    options.onStateChange({
+      status,
+      cursor: cursorState.cursor,
+      detail,
+      appliedEvents,
+      staleReason: cursorState.staleReason,
+      recentEvents,
+    });
+  };
+
+  const handleData = (data: string): boolean => {
+    try {
+      const item = parseRealtimeItem(data);
+      const result = acceptRealtimeItem(cursorState, item, options.session.tenantId);
+      cursorState = result.state;
+      if (!result.accepted) {
+        if (result.reason === "tenant_mismatch" || result.reason === "stale") {
+          publish("stale", cursorState.staleReason ?? "Realtime stream rejected");
+          return false;
+        }
+        if (result.reason === "cursor_gap") {
+          publish("stale", cursorState.staleReason ?? "Stream cursor is stale");
+          return false;
+        }
+        return true;
+      }
+      appliedEvents += 1;
+      recentEvents = [item, ...recentEvents].slice(0, 20);
+      options.onEvent(item);
+      publish("connected", item.replay ? "Replayed event received" : "Live event received");
+      return true;
+    } catch (error) {
+      publish(
+        "degraded",
+        `Realtime event rejected: ${error instanceof Error ? error.message : "invalid event"}`,
+      );
+      return true;
+    }
+  };
+
+  const parseFrames = (buffer: string): { remainder: string; accepted: boolean } => {
+    const frames = buffer.replaceAll("\r\n", "\n").split("\n\n");
+    const remainder = frames.pop() ?? "";
+    for (const frame of frames) {
+      const data = frame
+        .split("\n")
+        .filter((line) => line.startsWith("data:"))
+        .map((line) => line.slice(5).trimStart())
+        .join("\n");
+      if (data && !handleData(data)) return { remainder: "", accepted: false };
+    }
+    return { remainder, accepted: true };
+  };
+
+  const scheduleReconnect = () => {
+    if (stopped || cursorState.staleReason) return;
+    const delay = Math.min(initialBackoffMs * 2 ** retryAttempt, maxBackoffMs);
+    retryAttempt += 1;
+    publish("reconnecting", `Reconnecting in ${delay} ms`);
+    retryTimer = schedule(() => void connect(), delay);
+  };
+
+  async function connect() {
+    if (stopped) return;
+    retryTimer = null;
+    abort = new AbortController();
+    publish(retryAttempt === 0 ? "connecting" : "reconnecting", "Connecting to live event stream");
+    const separator = options.endpoint.includes("?") ? "&" : "?";
+    const url = `${options.endpoint}${separator}after=${encodeURIComponent(cursorState.cursor)}`;
+    try {
+      const response = await fetchImpl(url, {
+        headers: {
+          Accept: "text/event-stream",
+          ...authorizedHeaders(options.session, options.session.roles[0]),
+        },
+        signal: abort.signal,
+      });
+      if (!response.ok || !response.body) throw new Error(`HTTP ${response.status}`);
+      retryAttempt = 0;
+      publish("connected", "Authenticated live event stream connected");
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      while (!stopped) {
+        const { value, done } = await reader.read();
+        buffer += decoder.decode(value, { stream: !done });
+        const parsed = parseFrames(done ? `${buffer}\n\n` : buffer);
+        buffer = parsed.remainder;
+        if (!parsed.accepted || done) break;
+      }
+      if (!stopped && !cursorState.staleReason) scheduleReconnect();
+    } catch (error) {
+      if (stopped || (error instanceof DOMException && error.name === "AbortError")) return;
+      publish(
+        "degraded",
+        `Authenticated realtime unavailable: ${error instanceof Error ? error.message : "network error"}`,
+      );
+      scheduleReconnect();
+    }
+  }
+
+  return {
+    start: () => {
+      stopped = false;
+      void connect();
+    },
+    stop: () => {
+      stopped = true;
+      abort?.abort();
+      abort = null;
+      if (retryTimer !== null) cancel(retryTimer);
+      retryTimer = null;
     },
   };
 }

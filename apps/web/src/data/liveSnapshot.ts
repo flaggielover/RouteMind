@@ -7,6 +7,7 @@ import type {
   OrderEvent,
   OrderStatus,
 } from "../domain/model";
+import { authorizedHeaders, sessionScope, type TenantSession } from "./session";
 export { replayDataSource } from "./replay";
 
 interface LiveOrder {
@@ -167,12 +168,15 @@ async function fetchJson<T>(
 }
 
 export async function loadLiveSnapshot(
+  session: TenantSession,
   fetchImpl: typeof fetch = fetch,
 ): Promise<OperationsSnapshot> {
   try {
+    const primaryRole = session.roles[0];
+    if (!primaryRole) throw new Error("Verified session has no authorized surface");
     const operations = await fetchJson<LiveOperationsResponse>(
       `${businessApi}/api/v1/operations/snapshot`,
-      { headers: { Accept: "application/json" } },
+      { headers: { Accept: "application/json", ...authorizedHeaders(session, primaryRole) } },
       fetchImpl,
     );
     const candidates = operations.courierLocations.map((location) => ({
@@ -183,7 +187,11 @@ export async function loadLiveSnapshot(
       `${computeApi}/api/v1/dispatch/snapshot`,
       {
         method: "POST",
-        headers: { Accept: "application/json", "Content-Type": "application/json" },
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          ...authorizedHeaders(session),
+        },
         body: JSON.stringify({
           request_id: "operations-live-snapshot",
           strategy: "weighted-greedy",
@@ -205,6 +213,7 @@ export async function loadLiveSnapshot(
     const orders = operations.orders.map((order) => toOrder(order, operations.parties));
     return {
       source: "live",
+      identityScope: sessionScope(session),
       clockDomain: "WALL",
       availability: staleCourier ? "degraded" : "ready",
       sourceDetail: staleCourier
@@ -233,7 +242,11 @@ export async function loadLiveSnapshot(
     };
   } catch (error) {
     const detail = error instanceof Error ? error.message : "Live data unavailable";
-    return { ...emptySnapshot("live", detail), sourceDetail: `Live unavailable: ${detail}` };
+    return {
+      ...emptySnapshot("live", detail),
+      identityScope: sessionScope(session),
+      sourceDetail: `Live unavailable: ${detail}`,
+    };
   }
 }
 
@@ -242,5 +255,4 @@ export const liveDataSource: OperationsDataSource = {
     ...emptySnapshot("live", "Loading Java durable snapshot and Python dispatch"),
     availability: "loading",
   }),
-  loadSnapshot: () => loadLiveSnapshot(),
 };

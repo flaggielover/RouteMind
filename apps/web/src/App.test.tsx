@@ -1,9 +1,11 @@
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import App from "./App";
+import { BrowserRouter } from "react-router-dom";
+import App, { AppRoutes } from "./App";
 import { demoDataSource } from "./data/demoSnapshot";
 import type { ServiceHealth } from "./domain/model";
+import type { TenantSession } from "./data/session";
 
 const healthyServices: ServiceHealth[] = [
   {
@@ -23,6 +25,14 @@ const healthyServices: ServiceHealth[] = [
     detail: "Healthy response",
   },
 ];
+
+const customerSession: TenantSession = {
+  tenantId: "10000000-0000-4000-8000-000000000001",
+  subject: "customer-42",
+  roles: ["customer"],
+  accessToken: "access-token",
+  expiresAt: "2099-08-25T10:00:00Z",
+};
 
 function renderApp() {
   return render(
@@ -60,6 +70,127 @@ describe("role-aware application", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("navigation", { name: "RouteMind navigation" })).toBeInTheDocument();
     expect(screen.getByText("weighted-greedy", { selector: "strong" })).toBeInTheDocument();
+  });
+
+  it("fails closed when a deep link is outside the verified session roles", () => {
+    window.history.replaceState({}, "", "/merchant");
+    render(
+      <BrowserRouter>
+        <AppRoutes
+          snapshot={demoDataSource.getSnapshot()}
+          realtime={{
+            status: "disabled",
+            cursor: "0",
+            detail: "test",
+            appliedEvents: 0,
+            staleReason: null,
+            recentEvents: [],
+          }}
+          health={healthyServices}
+          session={customerSession}
+          allowedRoles={customerSession.roles}
+        />
+      </BrowserRouter>,
+    );
+
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "not authorized for the merchant workspace",
+    );
+    expect(screen.queryByRole("heading", { name: "Prep with the handoff in view." })).toBeNull();
+  });
+
+  it("clears cached role data before accepting a changed tenant session", async () => {
+    window.history.replaceState({}, "", "/customer");
+    const merchantSession: TenantSession = {
+      ...customerSession,
+      tenantId: "20000000-0000-4000-8000-000000000002",
+      subject: "merchant-7",
+      roles: ["merchant"],
+      accessToken: "merchant-token",
+    };
+    let releaseMerchant!: () => void;
+    const merchantPending = new Promise<void>((resolve) => {
+      releaseMerchant = resolve;
+    });
+    const sessionProvider = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        session: customerSession,
+        detail: "Verified tenant session is active",
+      })
+      .mockImplementationOnce(async () => {
+        await merchantPending;
+        return {
+          ok: true,
+          session: merchantSession,
+          detail: "Verified tenant session is active",
+        };
+      });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+        const url = String(input);
+        if (url.includes("/api/v1/operations/snapshot")) {
+          return new Response(
+            JSON.stringify({
+              source: "live",
+              generatedAt: "2026-08-25T10:00:00Z",
+              orders: [],
+              parties: [],
+              courierLocations: [],
+            }),
+            { status: 200 },
+          );
+        }
+        if (url.includes("/api/v1/dispatch/snapshot")) {
+          return new Response(
+            JSON.stringify({
+              source: "live",
+              strategy: "weighted-greedy",
+              strategy_version: "1.0.0",
+              selected_courier: null,
+              score: null,
+              rationale: ["No candidates"],
+              latency_millis: 1,
+              trace_id: "trace-session-change",
+            }),
+            { status: 200 },
+          );
+        }
+        if (url.includes("/api/v1/events/stream")) {
+          return await new Promise<Response>((_resolve, reject) => {
+            init?.signal?.addEventListener("abort", () =>
+              reject(new DOMException("aborted", "AbortError")),
+            );
+          });
+        }
+        throw new Error(`Unexpected request: ${url}`);
+      }),
+    );
+    render(
+      <App
+        healthProbe={vi.fn().mockResolvedValue(healthyServices)}
+        sessionProvider={sessionProvider}
+      />,
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: "Your delivery, clearly explained." }),
+    ).toBeInTheDocument();
+    act(() => window.dispatchEvent(new Event("routemind:session-changed")));
+    await waitFor(() =>
+      expect(
+        screen.queryByRole("heading", { name: "Your delivery, clearly explained." }),
+      ).toBeNull(),
+    );
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "not authorized for the customer workspace",
+    );
+
+    releaseMerchant();
+    expect(await screen.findByRole("link", { name: /Merchant/ })).toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: /Customer/ })).toBeNull();
   });
 
   it("opens the mobile workspace drawer and closes it on escape or navigation", async () => {
@@ -203,7 +334,7 @@ describe("role-aware application", () => {
     expect(screen.getByText(/Digest verified/)).toBeInTheDocument();
   });
 
-  it("disables role writes and explains degraded live state", async () => {
+  it("disables role writes when a supplied live fixture has no verified identity", async () => {
     const user = userEvent.setup();
     const degradedSource = {
       getSnapshot: () => ({
@@ -217,6 +348,40 @@ describe("role-aware application", () => {
       <App dataSource={degradedSource} healthProbe={vi.fn().mockResolvedValue(healthyServices)} />,
     );
     await user.click(screen.getByRole("link", { name: /Customer/ }));
+
+    expect(screen.getByRole("button", { name: "Create order" })).toBeDisabled();
+    expect(
+      screen.getByText("A verified customer identity is required for commands."),
+    ).toBeInTheDocument();
+  });
+
+  it("keeps the authenticated degraded state explicit and write disabled", () => {
+    window.history.replaceState({}, "", "/customer");
+    const degradedSnapshot = {
+      ...demoDataSource.getSnapshot(),
+      source: "live" as const,
+      identityScope: `${customerSession.tenantId}:${customerSession.subject}:customer`,
+      availability: "degraded" as const,
+      sourceDetail: "Live data is degraded; courier location is stale",
+    };
+    render(
+      <BrowserRouter>
+        <AppRoutes
+          snapshot={degradedSnapshot}
+          realtime={{
+            status: "degraded",
+            cursor: "0",
+            detail: "stream unavailable",
+            appliedEvents: 0,
+            staleReason: "stream unavailable",
+            recentEvents: [],
+          }}
+          health={healthyServices}
+          session={customerSession}
+          allowedRoles={customerSession.roles}
+        />
+      </BrowserRouter>,
+    );
 
     expect(screen.getByRole("button", { name: "Create order" })).toBeDisabled();
     expect(

@@ -27,6 +27,7 @@ function liveItem(): RealtimeItem {
       eventType: "order.status.changed",
       occurredAt: "2026-08-22T10:00:00Z",
       producer: "business-api",
+      tenantId: "10000000-0000-4000-8000-000000000001",
       aggregateId: "order-2041",
       aggregateVersion: 8,
       correlationId: "correlation-1",

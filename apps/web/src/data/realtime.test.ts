@@ -4,12 +4,22 @@ import {
   acceptRealtimeItem,
   applyRealtimeItem,
   createRealtimeCursorState,
+  createAuthenticatedRealtimeStream,
   createRealtimeStream,
   parseRealtimeItem,
   type EventSourceLike,
   type RealtimeConnectionState,
   type RealtimeItem,
 } from "./realtime";
+import type { TenantSession } from "./session";
+
+const session: TenantSession = {
+  tenantId: "10000000-0000-4000-8000-000000000001",
+  subject: "operator-1",
+  roles: ["operations"],
+  accessToken: "access-token",
+  expiresAt: "2099-08-25T10:00:00Z",
+};
 
 function item(cursor: string, eventId = `event-${cursor}`, status = "CONFIRMED"): RealtimeItem {
   return {
@@ -24,6 +34,7 @@ function item(cursor: string, eventId = `event-${cursor}`, status = "CONFIRMED")
       eventType: "order.status.changed",
       occurredAt: "2026-08-22T10:00:00Z",
       producer: "business-api",
+      tenantId: "10000000-0000-4000-8000-000000000001",
       aggregateId: "order-2042",
       aggregateVersion: Number(cursor),
       correlationId: "correlation-1",
@@ -85,6 +96,28 @@ describe("browser realtime cursor and reconnect boundary", () => {
     expect(() =>
       parseRealtimeItem(JSON.stringify({ schemaVersion: "v1", cursor: "004" })),
     ).toThrow();
+  });
+
+  it("rejects cross-tenant events before cursor or projection state changes", () => {
+    const crossTenant = {
+      ...item("1"),
+      event: {
+        ...item("1").event,
+        tenantId: "20000000-0000-4000-8000-000000000002",
+      },
+    };
+    const result = acceptRealtimeItem(
+      createRealtimeCursorState(),
+      crossTenant,
+      "10000000-0000-4000-8000-000000000001",
+    );
+    expect(result.accepted).toBe(false);
+    expect(result.reason).toBe("tenant_mismatch");
+    expect(result.state.cursor).toBe("0");
+    const snapshot = demoDataSource.getSnapshot();
+    expect(applyRealtimeItem(snapshot, crossTenant, "10000000-0000-4000-8000-000000000001")).toBe(
+      snapshot,
+    );
   });
 
   it("updates only forward order lifecycle states", () => {
@@ -232,5 +265,41 @@ describe("browser realtime cursor and reconnect boundary", () => {
     expect(urls[1]).toContain("after=1");
     stream.stop();
     expect(sources[1].closed).toBe(true);
+  });
+
+  it("uses bearer authentication for SSE without exposing the token in the URL", async () => {
+    const states: RealtimeConnectionState[] = [];
+    const received: RealtimeItem[] = [];
+    const scheduled: Array<() => void> = [];
+    const urls: string[] = [];
+    const fetchImpl = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
+      urls.push(String(input));
+      expect(new Headers(init?.headers).get("Authorization")).toBe("Bearer access-token");
+      expect(new Headers(init?.headers).get("X-Actor")).toBe("operator");
+      return new Response(`event: order.status.changed\ndata: ${JSON.stringify(item("1"))}\n\n`, {
+        status: 200,
+        headers: { "Content-Type": "text/event-stream" },
+      });
+    });
+    const stream = createAuthenticatedRealtimeStream({
+      endpoint: "https://business.test/api/v1/events/stream",
+      session,
+      fetchImpl,
+      setTimeout: (handler) => {
+        scheduled.push(handler);
+        return handler;
+      },
+      clearTimeout: () => undefined,
+      onEvent: (event) => received.push(event),
+      onStateChange: (state) => states.push(state),
+    });
+
+    stream.start();
+    await vi.waitFor(() => expect(received).toHaveLength(1));
+    stream.stop();
+    expect(urls[0]).toContain("after=0");
+    expect(urls[0]).not.toContain("access-token");
+    expect(states.some((state) => state.status === "connected")).toBe(true);
+    expect(scheduled).toHaveLength(1);
   });
 });

@@ -7,6 +7,27 @@ import {
   transitionCourierShift,
   transitionMerchantOrder,
 } from "./orderCommands";
+import type { TenantSession } from "./session";
+
+const customerSession: TenantSession = {
+  tenantId: "10000000-0000-4000-8000-000000000001",
+  subject: "customer-1",
+  roles: ["customer"],
+  accessToken: "customer-token",
+  expiresAt: "2099-08-25T10:00:00Z",
+};
+const merchantSession: TenantSession = {
+  ...customerSession,
+  subject: "merchant-1",
+  roles: ["merchant"],
+  accessToken: "merchant-token",
+};
+const courierSession: TenantSession = {
+  ...customerSession,
+  subject: "courier-1",
+  roles: ["courier"],
+  accessToken: "courier-token",
+};
 
 function response(body: unknown, status: number, traceId = "trace-command-1"): Response {
   return new Response(JSON.stringify(body), {
@@ -19,6 +40,7 @@ describe("customer order command boundary", () => {
   it("sends the Java customer command with an idempotency key and exposes trace metadata", async () => {
     let request: RequestInit | undefined;
     const result = await createCustomerOrder({
+      session: customerSession,
       idempotencyKey: "customer-create-fixed",
       correlationId: "correlation-fixed",
       fetchImpl: async (_url, init) => {
@@ -41,12 +63,14 @@ describe("customer order command boundary", () => {
     });
     expect(request?.method).toBe("POST");
     expect(new Headers(request?.headers).get("X-Actor")).toBe("customer");
+    expect(new Headers(request?.headers).get("Authorization")).toBe("Bearer customer-token");
     expect(new Headers(request?.headers).get("Idempotency-Key")).toBe("customer-create-fixed");
     expect(new Headers(request?.headers).get("X-Correlation-Id")).toBe("correlation-fixed");
   });
 
   it("keeps validation and conflict responses explicit and retryable only when safe", async () => {
     const result = await createCustomerOrder({
+      session: customerSession,
       idempotencyKey: "customer-create-conflict",
       fetchImpl: async () =>
         response(
@@ -74,6 +98,7 @@ describe("customer order command boundary", () => {
   it("sends merchant lifecycle transitions with the expected version", async () => {
     let request: RequestInit | undefined;
     const result = await transitionMerchantOrder({
+      session: merchantSession,
       orderId: "order-1",
       target: "READY_FOR_PICKUP",
       expectedVersion: 2,
@@ -101,6 +126,7 @@ describe("customer order command boundary", () => {
         : response({ courierId: "courier-1", status: "ONLINE", version: 1, replayed: false }, 200);
     };
     const order = await transitionCourierOrder({
+      session: courierSession,
       orderId: "order-1",
       target: "ACCEPTED",
       expectedVersion: 2,
@@ -108,6 +134,7 @@ describe("customer order command boundary", () => {
       idempotencyKey: "courier-accept-fixed",
     });
     const shift = await transitionCourierShift({
+      session: courierSession,
       courierId: "courier-1",
       target: "ONLINE",
       expectedVersion: 0,
@@ -115,6 +142,7 @@ describe("customer order command boundary", () => {
       idempotencyKey: "courier-online-fixed",
     });
     const location = await recordCourierLocation({
+      session: courierSession,
       courierId: "courier-1",
       latitude: 31.2,
       longitude: 121.5,
@@ -144,6 +172,7 @@ describe("customer order command boundary", () => {
 
   it("classifies timeout and unavailable failures without losing the retry key", async () => {
     const timeout = await createCustomerOrder({
+      session: customerSession,
       idempotencyKey: "customer-timeout-fixed",
       fetchImpl: async () => {
         const error = new DOMException("timed out", "AbortError");
@@ -151,6 +180,7 @@ describe("customer order command boundary", () => {
       },
     });
     const unavailable = await transitionMerchantOrder({
+      session: merchantSession,
       orderId: "order-1",
       target: "PREPARING",
       expectedVersion: 1,

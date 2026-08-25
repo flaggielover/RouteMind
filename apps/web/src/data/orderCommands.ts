@@ -1,3 +1,5 @@
+import { authorizedHeaders, type TenantSession } from "./session";
+
 export interface CustomerOrderCommandSuccess {
   kind: "success";
   orderId: string;
@@ -113,7 +115,12 @@ function isCourierSuccess(
 
 async function runCourierCommand(
   path: string,
-  options: { idempotencyKey: string; body: unknown; fetchImpl?: typeof fetch },
+  options: {
+    idempotencyKey: string;
+    body: unknown;
+    session: TenantSession;
+    fetchImpl?: typeof fetch;
+  },
 ): Promise<CourierCommandResult> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const controller = new AbortController();
@@ -125,7 +132,7 @@ async function runCourierCommand(
         Accept: "application/json",
         "Content-Type": "application/json",
         "Idempotency-Key": options.idempotencyKey,
-        "X-Actor": "courier",
+        ...authorizedHeaders(options.session, "courier"),
       },
       body: JSON.stringify(options.body),
       signal: controller.signal,
@@ -157,13 +164,12 @@ async function runCourierCommand(
   }
 }
 
-export async function createCustomerOrder(
-  options: {
-    fetchImpl?: typeof fetch;
-    idempotencyKey?: string;
-    correlationId?: string;
-  } = {},
-): Promise<CustomerOrderCommandResult> {
+export async function createCustomerOrder(options: {
+  session: TenantSession;
+  fetchImpl?: typeof fetch;
+  idempotencyKey?: string;
+  correlationId?: string;
+}): Promise<CustomerOrderCommandResult> {
   const fetchImpl = options.fetchImpl ?? fetch;
   const idempotencyKey = options.idempotencyKey ?? createIdempotencyKey();
   const controller = new AbortController();
@@ -175,7 +181,7 @@ export async function createCustomerOrder(
         Accept: "application/json",
         "Content-Type": "application/json",
         "Idempotency-Key": idempotencyKey,
-        "X-Actor": "customer",
+        ...authorizedHeaders(options.session, "customer"),
         ...(options.correlationId ? { "X-Correlation-Id": options.correlationId } : {}),
       },
       body: JSON.stringify({}),
@@ -208,6 +214,7 @@ export async function createCustomerOrder(
 }
 
 export async function transitionMerchantOrder(options: {
+  session: TenantSession;
   orderId: string;
   target: "CONFIRMED" | "PREPARING" | "READY_FOR_PICKUP";
   expectedVersion: number;
@@ -229,7 +236,7 @@ export async function transitionMerchantOrder(options: {
           Accept: "application/json",
           "Content-Type": "application/json",
           "Idempotency-Key": idempotencyKey,
-          "X-Actor": "merchant",
+          ...authorizedHeaders(options.session, "merchant"),
         },
         body: JSON.stringify({ target: options.target, expectedVersion: options.expectedVersion }),
         signal: controller.signal,
@@ -262,6 +269,7 @@ export async function transitionMerchantOrder(options: {
 }
 
 export async function transitionCourierOrder(options: {
+  session: TenantSession;
   orderId: string;
   target: "ACCEPTED" | "ARRIVED" | "PICKED_UP" | "DELIVERED";
   expectedVersion: number;
@@ -276,6 +284,7 @@ export async function transitionCourierOrder(options: {
     options.target,
     options.expectedVersion,
     idempotencyKey,
+    options.session,
     options.fetchImpl,
   );
 }
@@ -285,6 +294,7 @@ async function transitionOrderAsCourier(
   target: "ACCEPTED" | "ARRIVED" | "PICKED_UP" | "DELIVERED",
   expectedVersion: number,
   idempotencyKey: string,
+  session: TenantSession,
   fetchImpl?: typeof fetch,
 ): Promise<CustomerOrderCommandResult> {
   const fetcher = fetchImpl ?? fetch;
@@ -297,7 +307,7 @@ async function transitionOrderAsCourier(
         Accept: "application/json",
         "Content-Type": "application/json",
         "Idempotency-Key": idempotencyKey,
-        "X-Actor": "courier",
+        ...authorizedHeaders(session, "courier"),
       },
       body: JSON.stringify({ target, expectedVersion }),
       signal: controller.signal,
@@ -329,6 +339,7 @@ async function transitionOrderAsCourier(
 }
 
 export async function transitionCourierShift(options: {
+  session: TenantSession;
   courierId: string;
   target: "ONLINE" | "OFFLINE";
   expectedVersion: number;
@@ -340,12 +351,14 @@ export async function transitionCourierShift(options: {
     `courier-shift-${options.target.toLowerCase()}-${options.courierId}-${options.expectedVersion}`;
   return runCourierCommand(`/api/v1/couriers/${options.courierId}/shift`, {
     idempotencyKey,
+    session: options.session,
     body: { target: options.target, expectedVersion: options.expectedVersion },
     fetchImpl: options.fetchImpl,
   });
 }
 
 export async function recordCourierLocation(options: {
+  session: TenantSession;
   courierId: string;
   latitude: number;
   longitude: number;
@@ -362,6 +375,7 @@ export async function recordCourierLocation(options: {
     options.idempotencyKey ?? `courier-location-${options.courierId}-${observedAt}`;
   return runCourierCommand(`/api/v1/couriers/${options.courierId}/location`, {
     idempotencyKey,
+    session: options.session,
     body: {
       latitude: options.latitude,
       longitude: options.longitude,

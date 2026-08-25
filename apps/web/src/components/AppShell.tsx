@@ -13,6 +13,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { DataAvailability, DataSourceMode, Role, ServiceHealth } from "../domain/model";
 import type { RealtimeConnectionState } from "../data/realtime";
+import type { TenantSession } from "../data/session";
 import { StatusPill } from "./StatusPill";
 import { PreferencesPanel } from "./PreferencesPanel";
 
@@ -32,6 +33,9 @@ interface AppShellProps {
   realtime: RealtimeConnectionState;
   onSourceChange: (source: DataSourceMode) => void;
   onRefreshHealth: () => void;
+  session: TenantSession | null;
+  sessionDetail: string;
+  allowedRoles: readonly Role[];
   children: ReactNode;
 }
 
@@ -43,6 +47,9 @@ export function AppShell({
   realtime,
   onSourceChange,
   onRefreshHealth,
+  session,
+  sessionDetail,
+  allowedRoles,
   children,
 }: AppShellProps) {
   const location = useLocation();
@@ -115,18 +122,20 @@ export function AppShell({
           id="role-navigation"
           aria-label="RouteMind navigation"
         >
-          {navigation.map(({ role, label, icon: Icon }) => (
-            <NavLink
-              className={({ isActive }) => `role-link ${isActive ? "active" : ""}`}
-              to={`/${role}`}
-              key={role}
-              onClick={() => setMobileNavOpen(false)}
-            >
-              <Icon size={17} aria-hidden="true" />
-              <span>{label}</span>
-              <ChevronRight className="nav-chevron" size={15} aria-hidden="true" />
-            </NavLink>
-          ))}
+          {navigation
+            .filter(({ role }) => allowedRoles.includes(role))
+            .map(({ role, label, icon: Icon }) => (
+              <NavLink
+                className={({ isActive }) => `role-link ${isActive ? "active" : ""}`}
+                to={`/${role}`}
+                key={role}
+                onClick={() => setMobileNavOpen(false)}
+              >
+                <Icon size={17} aria-hidden="true" />
+                <span>{label}</span>
+                <ChevronRight className="nav-chevron" size={15} aria-hidden="true" />
+              </NavLink>
+            ))}
         </nav>
         <div className="sidebar-footer">
           <div className="sidebar-section-label">Environment</div>
@@ -142,6 +151,22 @@ export function AppShell({
             <h1>Delivery control center</h1>
           </div>
           <div className="topbar-actions">
+            <div className="identity-status" role="status" title={sessionDetail}>
+              <span>
+                {session
+                  ? session.subject
+                  : source === "live"
+                    ? "Identity unavailable"
+                    : "Isolated source"}
+              </span>
+              <small>
+                {session
+                  ? `Tenant ${session.tenantId.slice(0, 8)}`
+                  : source === "live"
+                    ? "Fail closed"
+                    : "No production identity"}
+              </small>
+            </div>
             <div className="source-status" title={sourceDetail}>
               <span className={`source-dot source-${source}`} />
               <span>
@@ -193,6 +218,7 @@ export function AppShell({
               }
               source={source}
               availability={availability}
+              session={session}
             />
             <div className="health-summary" role="status" aria-label="Service health summary">
               {health.map((item) => (

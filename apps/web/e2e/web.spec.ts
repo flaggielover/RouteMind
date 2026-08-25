@@ -9,6 +9,30 @@ const roles = [
   ["courier", "A focused shift, one next action."],
 ] as const;
 
+const liveTenantId = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+const liveAccessToken = "e2e-verified-access-token";
+
+async function installVerifiedLiveSession(page: Page) {
+  await page.addInitScript((token) => {
+    Object.defineProperty(window, "__ROUTEMIND_OIDC_ACCESS_TOKEN__", {
+      configurable: true,
+      value: async () => token,
+    });
+  }, liveAccessToken);
+  await page.route("**/api/v1/session", async (route) => {
+    expect(route.request().headers().authorization).toBe(`Bearer ${liveAccessToken}`);
+    await route.fulfill({
+      json: {
+        schemaVersion: "v1",
+        subject: "e2e-user",
+        tenantId: liveTenantId,
+        roles: ["operator", "analyst", "customer", "merchant", "courier"],
+        expiresAt: "2099-01-01T00:00:00Z",
+      },
+    });
+  });
+}
+
 test.describe("role-aware web smoke", () => {
   async function selectDemo(page: Page) {
     await page.getByRole("combobox", { name: "Data source mode" }).selectOption("demo");
@@ -155,6 +179,7 @@ test.describe("role-aware web smoke", () => {
       });
     });
     await page.goto("/strategy");
+    await selectDemo(page);
     await expect(page.getByRole("heading", { name: "Compare a scenario variant." })).toBeVisible();
     await page.getByRole("button", { name: "Run comparison" }).click();
     await expect(page.getByText("Comparison ready")).toBeVisible();
@@ -210,6 +235,7 @@ test.describe("role-aware web smoke", () => {
 
   test("opens the strategy registry as an inspectable local surface", async ({ page }) => {
     await page.goto("/strategy");
+    await selectDemo(page);
     await expect(page.getByRole("button", { name: "Open strategy registry" })).toBeVisible();
     await page.getByRole("button", { name: "Open strategy registry" }).click();
     await expect(page.getByRole("region", { name: "Strategy registry" })).toContainText(
@@ -235,11 +261,14 @@ test.describe("role-aware web smoke", () => {
   });
 
   test("keeps live loading and unavailable states explicit and accessible", async ({ page }) => {
+    await installVerifiedLiveSession(page);
     let releaseOperations!: () => void;
     const operationsPending = new Promise<void>((resolve) => {
       releaseOperations = resolve;
     });
     await page.route("**/api/v1/operations/snapshot", async (route) => {
+      expect(route.request().headers().authorization).toBe(`Bearer ${liveAccessToken}`);
+      expect(route.request().headers()["x-actor"]).toBe("operator");
       await operationsPending;
       await route.fulfill({ status: 503, contentType: "application/json", body: "{}" });
     });
@@ -254,6 +283,7 @@ test.describe("role-aware web smoke", () => {
   });
 
   test("surfaces stale courier data and stale realtime cursors", async ({ page }) => {
+    await installVerifiedLiveSession(page);
     const operations = {
       source: "live",
       generatedAt: "2026-08-23T10:00:00.000Z",
@@ -268,11 +298,14 @@ test.describe("role-aware web smoke", () => {
         },
       ],
     };
-    await page.route("**/api/v1/operations/snapshot", (route) =>
-      route.fulfill({ json: operations }),
-    );
-    await page.route("**/api/v1/dispatch/snapshot", (route) =>
-      route.fulfill({
+    await page.route("**/api/v1/operations/snapshot", async (route) => {
+      expect(route.request().headers().authorization).toBe(`Bearer ${liveAccessToken}`);
+      expect(route.request().headers()["x-actor"]).toBe("operator");
+      await route.fulfill({ json: operations });
+    });
+    await page.route("**/api/v1/dispatch/snapshot", async (route) => {
+      expect(route.request().headers().authorization).toBe(`Bearer ${liveAccessToken}`);
+      await route.fulfill({
         json: {
           source: "live",
           strategy: "weighted-greedy",
@@ -283,58 +316,36 @@ test.describe("role-aware web smoke", () => {
           latency_millis: 4,
           trace_id: "trace-stale",
         },
-      }),
-    );
-    await page.addInitScript(() => {
-      class StaleEventSource {
-        static CONNECTING = 0;
-        static OPEN = 1;
-        static CLOSED = 2;
-        readyState = StaleEventSource.CONNECTING;
-        onopen: ((event: Event) => void) | null = null;
-        onerror: ((event: Event) => void) | null = null;
-        onmessage: ((event: MessageEvent<string>) => void) | null = null;
-        listeners = new Map<string, Array<(event: MessageEvent<string>) => void>>();
-
-        constructor() {
-          window.setTimeout(() => {
-            this.readyState = StaleEventSource.OPEN;
-            this.onopen?.(new Event("open"));
-            const stale = JSON.stringify({
-              schemaVersion: "v1",
-              cursor: "1",
-              event: {
-                specVersion: "1.0",
-                eventId: "stale-event",
-                eventType: "order.created",
-                occurredAt: "2026-08-23T10:00:01.000Z",
-                producer: "test",
-                aggregateId: "order-stale",
-                aggregateVersion: 1,
-                correlationId: "correlation-stale",
-                causationId: null,
-                traceId: "trace-stale",
-                payload: { orderId: "order-stale", status: "CREATED" },
-              },
-              replay: false,
-              stale: true,
-              staleReason: "Retention boundary reached",
-            });
-            this.listeners
-              .get("order.created")
-              ?.forEach((listener) => listener({ data: stale } as MessageEvent<string>));
-          }, 30);
-        }
-
-        addEventListener(type: string, listener: (event: MessageEvent<string>) => void) {
-          this.listeners.set(type, [...(this.listeners.get(type) ?? []), listener]);
-        }
-
-        close() {
-          this.readyState = StaleEventSource.CLOSED;
-        }
-      }
-      Object.defineProperty(window, "EventSource", { configurable: true, value: StaleEventSource });
+      });
+    });
+    await page.route("**/api/v1/events/stream**", async (route) => {
+      expect(route.request().headers().authorization).toBe(`Bearer ${liveAccessToken}`);
+      expect(route.request().url()).not.toContain(liveAccessToken);
+      await route.fulfill({
+        status: 200,
+        contentType: "text/event-stream",
+        body: `event: order.created\ndata: ${JSON.stringify({
+          schemaVersion: "v1",
+          cursor: "1",
+          event: {
+            specVersion: "1.0",
+            eventId: "stale-event",
+            eventType: "order.created",
+            occurredAt: "2026-08-23T10:00:01.000Z",
+            producer: "test",
+            tenantId: liveTenantId,
+            aggregateId: "order-stale",
+            aggregateVersion: 1,
+            correlationId: "correlation-stale",
+            causationId: null,
+            traceId: "trace-stale",
+            payload: { orderId: "order-stale", status: "CREATED" },
+          },
+          replay: false,
+          stale: true,
+          staleReason: "Retention boundary reached",
+        })}\n\n`,
+      });
     });
     await page.goto("/operations");
     await expect(page.getByText("Operational projections degraded")).toBeVisible();

@@ -3781,3 +3781,47 @@ button {
     display: none;
   }
 }
+.identity-status {
+  display: grid;
+  min-width: 9rem;
+  gap: 0.12rem;
+  color: var(--ink);
+  font-size: 0.78rem;
+}
+
+.identity-status span,
+.identity-status small {
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.identity-status small {
+  color: var(--muted);
+  font-size: 0.7rem;
+}
+
+.access-boundary {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  width: min(42rem, 100%);
+  padding: 1.25rem 0;
+  color: var(--ink);
+}
+
+.access-boundary svg {
+  flex: 0 0 auto;
+  color: var(--red);
+}
+
+.access-boundary h2 {
+  margin: 0.25rem 0 0.45rem;
+  font-size: 1.15rem;
+}
+
+.access-boundary p:last-child {
+  margin: 0;
+  color: var(--muted);
+}

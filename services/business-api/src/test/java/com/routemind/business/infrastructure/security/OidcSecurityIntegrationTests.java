@@ -4,6 +4,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.time.Instant;
 import java.util.List;
@@ -69,5 +70,25 @@ class OidcSecurityIntegrationTests {
 		mockMvc.perform(get("/api/v1/system")
 				.header("X-Tenant-Id", "20000000-0000-0000-0000-000000000002").with(operator))
 				.andExpect(status().isForbidden());
+	}
+
+	@Test
+	void sessionEndpointReturnsOnlyServerVerifiedTenantAndRoleClaims() throws Exception {
+		Instant now = Instant.now();
+		mockMvc.perform(get("/api/v1/session").with(jwt().jwt(token -> token
+				.subject("customer-42")
+				.issuer("http://127.0.0.1:19090/issuer")
+				.audience(List.of("routemind-business-api"))
+				.claim("jti", "token-session-1")
+				.claim("roles", List.of("customer"))
+				.claim("scope", "orders:read")
+				.claim("tenant_id", "10000000-0000-0000-0000-000000000001")
+				.issuedAt(now.minusSeconds(30))
+				.expiresAt(now.plusSeconds(300)))))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.schemaVersion").value("v1"))
+				.andExpect(jsonPath("$.subject").value("customer-42"))
+				.andExpect(jsonPath("$.tenantId").value("10000000-0000-0000-0000-000000000001"))
+				.andExpect(jsonPath("$.roles[0]").value("customer"));
 	}
 }

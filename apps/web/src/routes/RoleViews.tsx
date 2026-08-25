@@ -25,6 +25,7 @@ import {
   type CustomerOrderCommandResult,
 } from "../data/orderCommands";
 import type { RealtimeConnectionState } from "../data/realtime";
+import type { TenantSession } from "../data/session";
 import type { OperationsSnapshot } from "../domain/model";
 import { orderStatusLabel } from "../domain/selectors";
 import { LifecycleTimeline } from "../components/LifecycleTimeline";
@@ -201,15 +202,20 @@ type CourierCommandState =
 export function CustomerView({
   snapshot,
   realtime,
+  session,
 }: {
   snapshot: OperationsSnapshot;
   realtime: RealtimeConnectionState;
+  session?: TenantSession | null;
 }) {
   const order = snapshot.orders[0];
   const courier = snapshot.couriers[0];
   const [command, setCommand] = useState<CustomerCommandState>(null);
   const [idempotencyKey, setIdempotencyKey] = useState(createIdempotencyKey);
-  const commandAvailable = snapshot.source === "live" && snapshot.availability === "ready";
+  const commandAvailable =
+    snapshot.source === "live" &&
+    snapshot.availability === "ready" &&
+    Boolean(session?.roles.includes("customer"));
   const trackingStatus =
     realtime.status === "connected"
       ? "healthy"
@@ -224,9 +230,9 @@ export function CustomerView({
         : "Tracking degraded";
 
   const submitOrder = async () => {
-    if (!commandAvailable || command?.kind === "pending") return;
+    if (!commandAvailable || !session || command?.kind === "pending") return;
     setCommand({ kind: "pending", idempotencyKey });
-    const result = await createCustomerOrder({ idempotencyKey });
+    const result = await createCustomerOrder({ session, idempotencyKey });
     setCommand(result);
     if (result.kind === "success") setIdempotencyKey(createIdempotencyKey());
   };
@@ -324,9 +330,11 @@ export function CustomerView({
             {!commandAvailable && (
               <p className="command-note" role="status">
                 {snapshot.source === "live"
-                  ? snapshot.availability === "degraded"
-                    ? "Live data is degraded; commands are temporarily unavailable."
-                    : "Waiting for the live Java snapshot."
+                  ? !session
+                    ? "A verified customer identity is required for commands."
+                    : snapshot.availability === "degraded"
+                      ? "Live data is degraded; commands are temporarily unavailable."
+                      : "Waiting for the live Java snapshot."
                   : "Writing is disabled for demo and replay sources."}
               </p>
             )}
@@ -365,7 +373,13 @@ export function CustomerView({
   );
 }
 
-export function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
+export function MerchantView({
+  snapshot,
+  session,
+}: {
+  snapshot: OperationsSnapshot;
+  session?: TenantSession | null;
+}) {
   const [command, setCommand] = useState<CustomerCommandState>(null);
   const order =
     snapshot.orders.find((candidate) =>
@@ -380,7 +394,10 @@ export function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
           ? { target: "READY_FOR_PICKUP" as const, label: "Mark ready" }
           : null
     : null;
-  const commandAvailable = snapshot.source === "live" && snapshot.availability === "ready";
+  const commandAvailable =
+    snapshot.source === "live" &&
+    snapshot.availability === "ready" &&
+    Boolean(session?.roles.includes("merchant"));
   const ordersInPrep =
     snapshot.availability === "ready"
       ? snapshot.orders.filter((candidate) => candidate.status === "PREPARING").length
@@ -398,10 +415,12 @@ export function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
         : "open";
   const readyEvent = order?.events.find((event) => event.status === "READY_FOR_PICKUP");
   const submitTransition = async () => {
-    if (!order || !nextCommand || !commandAvailable || command?.kind === "pending") return;
+    if (!order || !nextCommand || !commandAvailable || !session || command?.kind === "pending")
+      return;
     const idempotencyKey = `merchant-${nextCommand.target.toLowerCase()}-${order.id}-${order.version ?? 0}`;
     setCommand({ kind: "pending", idempotencyKey });
     const result = await transitionMerchantOrder({
+      session,
       orderId: order.id,
       target: nextCommand.target,
       expectedVersion: order.version ?? 0,
@@ -506,9 +525,11 @@ export function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
           {!commandAvailable && (
             <p className="command-note" role="status">
               {snapshot.source === "live"
-                ? snapshot.availability === "degraded"
-                  ? "Live data is degraded; commands are temporarily unavailable."
-                  : "Waiting for the live Java snapshot."
+                ? !session
+                  ? "A verified merchant identity is required for commands."
+                  : snapshot.availability === "degraded"
+                    ? "Live data is degraded; commands are temporarily unavailable."
+                    : "Waiting for the live Java snapshot."
                 : "Writing is disabled for demo and replay sources."}
             </p>
           )}
@@ -546,7 +567,13 @@ export function MerchantView({ snapshot }: { snapshot: OperationsSnapshot }) {
   );
 }
 
-export function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
+export function CourierView({
+  snapshot,
+  session,
+}: {
+  snapshot: OperationsSnapshot;
+  session?: TenantSession | null;
+}) {
   const courier = snapshot.couriers[0];
   const [command, setCommand] = useState<CustomerCommandState>(null);
   const [shiftCommand, setShiftCommand] = useState<CourierCommandState>(null);
@@ -571,10 +598,20 @@ export function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
             : null
     : null;
   const commandAvailable =
-    snapshot.source === "live" && snapshot.availability === "ready" && Boolean(courier);
+    snapshot.source === "live" &&
+    snapshot.availability === "ready" &&
+    Boolean(courier) &&
+    Boolean(session?.roles.includes("courier"));
   const online = localShift ?? (courier?.status === "offline" ? "OFFLINE" : "ONLINE");
   const submitOrderTransition = async () => {
-    if (!courier || !order || !nextCommand || !commandAvailable || command?.kind === "pending")
+    if (
+      !courier ||
+      !order ||
+      !nextCommand ||
+      !commandAvailable ||
+      !session ||
+      command?.kind === "pending"
+    )
       return;
     const expectedVersion = order.version;
     if (expectedVersion === undefined) {
@@ -593,6 +630,7 @@ export function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
     setCommand({ kind: "pending", idempotencyKey });
     setCommand(
       await transitionCourierOrder({
+        session,
         orderId: order.id,
         target: nextCommand.target,
         expectedVersion,
@@ -601,10 +639,11 @@ export function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
     );
   };
   const submitShift = async (target: "ONLINE" | "OFFLINE") => {
-    if (!courier || !commandAvailable || shiftCommand?.kind === "pending") return;
+    if (!courier || !commandAvailable || !session || shiftCommand?.kind === "pending") return;
     const idempotencyKey = `courier-shift-${target.toLowerCase()}-${courier.id}-${shiftVersion}`;
     setShiftCommand({ kind: "pending", idempotencyKey });
     const result = await transitionCourierShift({
+      session,
       courierId: courier.id,
       target,
       expectedVersion: shiftVersion,
@@ -617,13 +656,14 @@ export function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
     }
   };
   const submitLocation = async () => {
-    if (!courier || !commandAvailable || locationCommand?.kind === "pending") return;
+    if (!courier || !commandAvailable || !session || locationCommand?.kind === "pending") return;
     const observedAt = new Date().toISOString();
     const sequence = (courier.sequence ?? 0) + 1;
     const idempotencyKey = `courier-location-${courier.id}-${observedAt}`;
     setLocationCommand({ kind: "pending", idempotencyKey });
     setLocationCommand(
       await recordCourierLocation({
+        session,
         courierId: courier.id,
         latitude: courier.position.y,
         longitude: courier.position.x,
@@ -719,9 +759,11 @@ export function CourierView({ snapshot }: { snapshot: OperationsSnapshot }) {
           {!commandAvailable && (
             <p className="command-note" role="status">
               {snapshot.source === "live"
-                ? snapshot.availability === "degraded"
-                  ? "Live data is degraded; commands are temporarily unavailable."
-                  : "Waiting for the live Java snapshot."
+                ? !session
+                  ? "A verified courier identity is required for commands."
+                  : snapshot.availability === "degraded"
+                    ? "Live data is degraded; commands are temporarily unavailable."
+                    : "Waiting for the live Java snapshot."
                 : "Writing is disabled for demo and replay sources."}
             </p>
           )}

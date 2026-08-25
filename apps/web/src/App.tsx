@@ -9,24 +9,33 @@ import {
   Route,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import type { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route as RouterRoute, Routes } from "react-router-dom";
 import { demoDataSource } from "./data/demoSnapshot";
 import { probeServices } from "./data/health";
-import { liveDataSource } from "./data/liveSnapshot";
+import { liveDataSource, loadLiveSnapshot } from "./data/liveSnapshot";
 import { replayDataSource } from "./data/replay";
 import { simulationDataSource } from "./data/simulation";
 import {
   applyRealtimeItem,
-  createRealtimeStream,
+  createAuthenticatedRealtimeStream,
   type RealtimeConnectionState,
 } from "./data/realtime";
+import {
+  loadBrowserTenantSession,
+  sessionScope,
+  type TenantSession,
+  type TenantSessionProvider,
+} from "./data/session";
 import type {
   DataSourceMode,
   OperationsDataSource,
   ReplayCommand,
   ServiceHealth,
   SimulationCommand,
+  Role,
 } from "./domain/model";
+import { roles } from "./domain/model";
 import { countOpenExceptions, findOrder, orderStatusLabel, statusTone } from "./domain/selectors";
 import { AppShell } from "./components/AppShell";
 import { LifecycleTimeline } from "./components/LifecycleTimeline";
@@ -50,9 +59,14 @@ import "./styles.css";
 interface AppProps {
   dataSource?: OperationsDataSource;
   healthProbe?: () => Promise<ServiceHealth[]>;
+  sessionProvider?: TenantSessionProvider;
 }
 
-export default function App({ dataSource, healthProbe = probeServices }: AppProps) {
+export default function App({
+  dataSource,
+  healthProbe = probeServices,
+  sessionProvider = loadBrowserTenantSession,
+}: AppProps) {
   const suppliedDataSource = dataSource;
   const [activeDataSource, setActiveDataSource] = useState<OperationsDataSource>(
     suppliedDataSource ?? liveDataSource,
@@ -61,6 +75,9 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
   const [snapshot, setSnapshot] = useState(initialSnapshot);
   const [health, setHealth] = useState<ServiceHealth[]>([...snapshot.health]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [session, setSession] = useState<TenantSession | null>(null);
+  const [sessionDetail, setSessionDetail] = useState("Verifying tenant session");
+  const [sessionEpoch, setSessionEpoch] = useState(0);
   const [realtime, setRealtime] = useState<RealtimeConnectionState>({
     status: suppliedDataSource ? "disabled" : "connecting",
     cursor: "0",
@@ -74,15 +91,53 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
 
   useEffect(() => {
     setSnapshot(initialSnapshot);
-    if (!activeDataSource.loadSnapshot) return;
     let mounted = true;
-    void activeDataSource.loadSnapshot().then((loaded) => {
-      if (mounted) setSnapshot(loaded);
-    });
+    if (activeDataSource === liveDataSource && !suppliedDataSource) {
+      setSession(null);
+      setSessionDetail("Verifying tenant session");
+      void sessionProvider().then(async (result) => {
+        if (!mounted) return;
+        setSessionDetail(result.detail);
+        if (!result.ok || !result.session) {
+          setSnapshot({
+            ...liveDataSource.getSnapshot(),
+            availability: "unavailable",
+            sourceDetail: `Live unavailable: ${result.detail}`,
+          });
+          return;
+        }
+        setSnapshot({
+          ...liveDataSource.getSnapshot(),
+          identityScope: sessionScope(result.session),
+        });
+        setSession(result.session);
+        const loaded = await loadLiveSnapshot(result.session);
+        if (mounted) setSnapshot(loaded);
+      });
+    } else {
+      setSession(null);
+      setSessionDetail("Isolated non-production source");
+      if (activeDataSource.loadSnapshot) {
+        void activeDataSource.loadSnapshot().then((loaded) => {
+          if (mounted) setSnapshot(loaded);
+        });
+      }
+    }
     return () => {
       mounted = false;
     };
-  }, [activeDataSource, initialSnapshot]);
+  }, [activeDataSource, initialSnapshot, sessionEpoch, sessionProvider, suppliedDataSource]);
+
+  useEffect(() => {
+    const reload = () => {
+      setSession(null);
+      setSessionDetail("Tenant session changed; cached data cleared");
+      setSnapshot(liveDataSource.getSnapshot());
+      setSessionEpoch((epoch) => epoch + 1);
+    };
+    window.addEventListener("routemind:session-changed", reload);
+    return () => window.removeEventListener("routemind:session-changed", reload);
+  }, []);
 
   useEffect(() => {
     if (activeDataSource !== liveDataSource) {
@@ -96,26 +151,28 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
       });
       return;
     }
-    if (typeof EventSource === "undefined") {
+    if (!session) {
       setRealtime({
         status: "degraded",
         cursor: "0",
-        detail: "Browser EventSource is unavailable",
+        detail: "Verified tenant session is required for realtime",
         appliedEvents: 0,
-        staleReason: "Browser EventSource is unavailable",
+        staleReason: "Verified tenant session is required for realtime",
         recentEvents: [],
       });
       return;
     }
     const endpoint = `${import.meta.env.VITE_BUSINESS_API_URL ?? "http://localhost:18080"}/api/v1/events/stream`;
-    const stream = createRealtimeStream({
+    const stream = createAuthenticatedRealtimeStream({
       endpoint,
-      onEvent: (item) => setSnapshot((current) => applyRealtimeItem(current, item)),
+      session,
+      onEvent: (item) =>
+        setSnapshot((current) => applyRealtimeItem(current, item, session.tenantId)),
       onStateChange: setRealtime,
     });
     stream.start();
     return () => stream.stop();
-  }, [activeDataSource]);
+  }, [activeDataSource, session]);
 
   const refreshHealth = useCallback(async () => {
     setIsRefreshing(true);
@@ -162,6 +219,16 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
     void refreshHealth();
   }, [refreshHealth]);
 
+  const allowedRoles = useMemo<readonly Role[]>(
+    () =>
+      suppliedDataSource || activeDataSource !== liveDataSource
+        ? roles
+        : session && snapshot.identityScope === sessionScope(session)
+          ? session.roles
+          : [],
+    [activeDataSource, session, snapshot.identityScope, suppliedDataSource],
+  );
+
   return (
     <BrowserRouter>
       <AppShell
@@ -170,6 +237,9 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
         availability={snapshot.availability}
         sourceDetail={snapshot.sourceDetail}
         realtime={realtime}
+        session={session}
+        sessionDetail={sessionDetail}
+        allowedRoles={allowedRoles}
         onSourceChange={changeSource}
         onRefreshHealth={() => void refreshHealth()}
       >
@@ -179,6 +249,8 @@ export default function App({ dataSource, healthProbe = probeServices }: AppProp
           health={health}
           onSimulationControl={controlSimulation}
           onReplayControl={controlReplay}
+          session={session}
+          allowedRoles={allowedRoles}
         />
       </AppShell>
       {isRefreshing && (
@@ -196,36 +268,78 @@ export function AppRoutes({
   health,
   onSimulationControl,
   onReplayControl,
+  session,
+  allowedRoles = roles,
 }: {
   snapshot: OperationsSnapshot;
   realtime: RealtimeConnectionState;
   health: readonly ServiceHealth[];
   onSimulationControl?: (command: SimulationCommand) => Promise<void>;
   onReplayControl?: (command: ReplayCommand) => Promise<void>;
+  session?: TenantSession | null;
+  allowedRoles?: readonly Role[];
 }) {
+  const authorize = (role: Role, element: ReactNode) =>
+    allowedRoles.includes(role) ? element : <UnauthorizedRole role={role} />;
+  const fallback = allowedRoles[0];
   return (
     <Routes>
       <RouterRoute
         path="/operations"
-        element={
+        element={authorize(
+          "operations",
           <OperationsView
             snapshot={snapshot}
             realtime={realtime}
             health={health}
             onSimulationControl={onSimulationControl}
             onReplayControl={onReplayControl}
-          />
-        }
+          />,
+        )}
       />
-      <RouterRoute path="/strategy" element={<StrategyView snapshot={snapshot} />} />
+      <RouterRoute
+        path="/strategy"
+        element={authorize("strategy", <StrategyView snapshot={snapshot} />)}
+      />
       <RouterRoute
         path="/customer"
-        element={<CustomerView snapshot={snapshot} realtime={realtime} />}
+        element={authorize(
+          "customer",
+          <CustomerView snapshot={snapshot} realtime={realtime} session={session} />,
+        )}
       />
-      <RouterRoute path="/merchant" element={<MerchantView snapshot={snapshot} />} />
-      <RouterRoute path="/courier" element={<CourierView snapshot={snapshot} />} />
-      <RouterRoute path="*" element={<Navigate to="/operations" replace />} />
+      <RouterRoute
+        path="/merchant"
+        element={authorize("merchant", <MerchantView snapshot={snapshot} session={session} />)}
+      />
+      <RouterRoute
+        path="/courier"
+        element={authorize("courier", <CourierView snapshot={snapshot} session={session} />)}
+      />
+      <RouterRoute
+        path="*"
+        element={
+          fallback ? <Navigate to={`/${fallback}`} replace /> : <UnauthorizedRole role={null} />
+        }
+      />
     </Routes>
+  );
+}
+
+function UnauthorizedRole({ role }: { role: Role | null }) {
+  return (
+    <section className="access-boundary" role="alert" aria-labelledby="access-boundary-title">
+      <AlertTriangle size={22} aria-hidden="true" />
+      <div>
+        <p className="eyebrow">Identity boundary</p>
+        <h2 id="access-boundary-title">Workspace access unavailable</h2>
+        <p>
+          {role
+            ? `The verified session is not authorized for the ${role} workspace.`
+            : "A verified tenant session with a RouteMind role is required."}
+        </p>
+      </div>
+    </section>
   );
 }
 
