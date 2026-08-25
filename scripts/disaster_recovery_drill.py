@@ -46,6 +46,11 @@ def docker(*arguments: str, input_bytes: bytes | None = None, check: bool = True
     return run(["docker", *arguments], input_bytes=input_bytes, check=check)
 
 
+def command_succeeds(arguments: list[str]) -> bool:
+    result = subprocess.run(arguments, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+    return result.returncode == 0
+
+
 def remove_container(name: str) -> None:
     inspected = docker("inspect", name, check=False)
     if inspected:
@@ -190,7 +195,11 @@ def start_rabbit(name: str, password: str) -> None:
         f"RABBITMQ_DEFAULT_PASS={password}",
         RABBITMQ_IMAGE,
     )
-    wait_until(name, lambda: docker("exec", name, "rabbitmq-diagnostics", "-q", "ping", check=False).strip() == b"Ping succeeded")
+    try:
+        wait_until(name, lambda: command_succeeds(["docker", "exec", name, "rabbitmq-diagnostics", "-q", "ping"]))
+    except DrillFailure as error:
+        logs = docker("logs", "--tail", "100", name, check=False).decode("utf-8", errors="replace")
+        raise DrillFailure(f"{error}\nRabbitMQ container logs:\n{logs}") from error
 
 
 def rabbit_port(name: str) -> int:

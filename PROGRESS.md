@@ -18,7 +18,7 @@ Last Completed: R4-401 - Select a deployment target and freeze SLO and failure-d
 
 Current Gate: R4-406 is `IMPLEMENTED / SERVICE_DRILL_PENDING / TARGET_PENDING`. The fail-closed contract, five mutation-test groups, isolated PostgreSQL/RabbitMQ/Redis recovery drill, Outbox replay, Redis rebuild, reconciliation, tenant/audit continuity, rollback, CI artifact, and runbook are implemented. The local Docker daemon was unresponsive, so no local service-backed pass is claimed; the implementation CI must execute it. Vultr Tokyo RPO/RTO proof remains external.
 
-CI: PASS for R4-401 closure SHA fdc45cb3db879e0aadefce00bba22714a7d66c9b in run 32843874880; all five jobs passed. R4-401 implementation run 32843310725, R4-423 run 32839582664, R4-450 run 32827906691, R4-421 run 32826218396, and R4-420 run 32820839648 also passed all five jobs. R4-406 implementation CI is pending.
+CI: R4-406 implementation SHA 13d689b failed run 32845758884 only in the new RabbitMQ readiness probe; control, Java, Python, Web, and focused resilience passed. The probe incorrectly required stdout text instead of the diagnostic exit code; remediation CI is pending. R4-401 closure run 32843874880 and implementation run 32843310725 passed all five jobs.
 
 Regression: PASS locally for R4-406 syntax, five fail-closed mutation-test groups, full gate (110/110 Java, 920/920 Python at 95.11%, 104/104 Web, production build), serial focused resilience (15 Java / 2 Python), task graph, Round 4 mirror, R4-401 deployment contract, security, supply-chain, product, agent, recovery, release, staged-release, and Compose configuration. An earlier concurrent resilience invocation raced Maven `clean`; the serial rerun passed without code or assertion changes. The previous R4-401 browser gate remains 34 Playwright scenarios with two expected skips. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
@@ -75,6 +75,9 @@ Next Candidates: R4-406 is active as the highest-priority dependency-ready task.
   rebuild, reconciliation, tenant/audit digest continuity, rollback, and a
   retained CI JSON artifact are implemented. The local Docker daemon was
   unresponsive, so the service-backed result is correctly pending CI.
+- Diagnostic CI: run `32845758884` passed four jobs and the resilience baseline,
+  then found a stdout-dependent RabbitMQ readiness probe before any recovery
+  claim. The remediation uses the diagnostic exit code and retains log tails.
 - Evidence: `evidence/gates/R4-420/product-contract.md` and
   `docs/product/R4_PRODUCT_SEMANTICS.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as

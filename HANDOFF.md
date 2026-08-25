@@ -8,7 +8,7 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: R4-406 - Prove backup, restore, disaster recovery, and data reconciliation
 
-Task Status: R4-401 closure `fdc45cb3db879e0aadefce00bba22714a7d66c9b` passed all five jobs in Actions run `32843874880`. R4-406 is `IMPLEMENTED / SERVICE_DRILL_PENDING / TARGET_PENDING`: fail-closed report validation, five mutation groups, isolated PostgreSQL/RabbitMQ/Redis source-destroy/restore, Outbox replay, Redis rebuild, reconciliation, tenant/audit continuity, rollback, runbook, and CI artifact retention are implemented. The local Docker daemon was unresponsive, so no local service-backed recovery pass is claimed.
+Task Status: R4-406 is `IMPLEMENTED / SERVICE_DRILL_REMEDIATION / TARGET_PENDING`. Implementation `13d689b` run `32845758884` passed control, Java, Python, Web, and focused resilience, then failed before restore because the RabbitMQ readiness probe required stdout text instead of the diagnostic command's exit code. The remediation uses the exit code and retains container logs on timeout. No recovery pass is claimed from the failed run. R4-401 closure run `32843874880` remains green.
 
 Next: validate and commit/push the R4-406 implementation, observe the real Actions recovery drill and retained JSON, fix failures, then record `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`. Do not claim the 15-minute RPO or 120-minute RTO until a matching Vultr Tokyo drill runs. After the local/CI closure, mark R4-406 externally blocked and activate R4-405. Credentials and explicit resource/spend approval are required before the external drill. Keep `.codex-tmp/` untouched and untracked.
 

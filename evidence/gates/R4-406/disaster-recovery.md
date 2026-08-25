@@ -51,9 +51,14 @@ evidence digest, RPO at most 900 seconds, and RTO at most 7200 seconds.
   the retained serial result confirms no product regression.
 - R4-401 closure commit `fdc45cb` passed all five GitHub Actions jobs in run
   `32843874880`.
-- The local Docker daemon was unresponsive before the implementation checkpoint;
-  therefore no local service-backed recovery pass is claimed.
-- The implementation CI run and its retained recovery JSON artifact are pending.
+- Implementation `13d689b` run `32845758884` passed control, Java, Python, Web,
+  and the focused resilience baseline, then failed before restore because the
+  RabbitMQ readiness probe incorrectly depended on diagnostic text appearing on
+  stdout. The diagnostic command's exit code is now authoritative and future
+  timeouts retain the container log tail. No service-backed recovery pass is
+  claimed from the failed run.
+- The local Docker daemon was unresponsive before the implementation checkpoint.
+  The remediation CI run and its retained recovery JSON artifact are pending.
 
 ## Evidence boundary
 
