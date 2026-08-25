@@ -15,6 +15,7 @@ import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.tracing.Span;
 import io.micrometer.tracing.Tracer;
+import com.routemind.business.application.observability.TelemetryAttribution;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -25,10 +26,13 @@ public final class RequestObservabilityFilter extends OncePerRequestFilter {
 	private static final Pattern SAFE_IDENTIFIER = Pattern.compile("[A-Za-z0-9._:-]{1,128}");
 	private final MeterRegistry meterRegistry;
 	private final Tracer tracer;
+	private final TelemetryAttribution telemetry;
 
-	public RequestObservabilityFilter(MeterRegistry meterRegistry, Tracer tracer) {
+	public RequestObservabilityFilter(MeterRegistry meterRegistry, Tracer tracer,
+			TelemetryAttribution telemetry) {
 		this.meterRegistry = meterRegistry;
 		this.tracer = tracer;
+		this.telemetry = telemetry;
 	}
 
 	@Override
@@ -58,6 +62,10 @@ public final class RequestObservabilityFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 		} finally {
 			long durationMicros = (System.nanoTime() - started) / 1_000;
+			Object attributed = request.getAttribute(TelemetryAttribution.REQUEST_ATTRIBUTE);
+			String tenantKey = attributed instanceof String value ? value
+					: TelemetryAttribution.UNATTRIBUTED_KEY;
+			if (currentSpan != null) currentSpan.tag("routemind.tenant_key", tenantKey);
 			LOGGER.atInfo()
 					.addKeyValue("event", "http_request_completed")
 					.addKeyValue("method", request.getMethod())
@@ -71,6 +79,8 @@ public final class RequestObservabilityFilter extends OncePerRequestFilter {
 					.description("Completed HTTP request duration")
 					.tags("method", request.getMethod(), "status", Integer.toString(response.getStatus()))
 					.register(meterRegistry).record(durationMicros, java.util.concurrent.TimeUnit.MICROSECONDS);
+			telemetry.record("trace", "http", tenantKey);
+			telemetry.record("metric", "http", tenantKey);
 			MDC.remove("request_id");
 			MDC.remove("trace_id");
 		}

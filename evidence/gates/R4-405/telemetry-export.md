@@ -1,0 +1,94 @@
+# R4-405 Telemetry Export Evidence
+
+Date: 2026-08-25 (Asia/Shanghai)
+
+Entry revision: `UNCOMMITTED`
+
+Status: `LOCAL_VALIDATED / CI_PENDING / TARGET_PENDING`
+
+## Implemented boundary
+
+`contracts/observability/r4-405-telemetry-export-v1.json` freezes the Vultr
+`nrt` target, five correlation boundaries, tenant pseudonym and cardinality
+policy, logical export-record attribution, application batch limits, collector
+queue/retry limits, durable-truth authority, target qualification evidence, and
+the frozen scientific boundary. `scripts/telemetry_export_contract.py` validates
+the contract and collector structure fail closed; eight mutation groups exercise
+identity, target-claim, correlation, tenant leakage, cardinality, collector,
+authority, and science drift.
+
+Java owns raw durable tenant identity and derives an HMAC-SHA256 telemetry key.
+The key contains only the `rtk_` prefix and 24 digest characters. Metric labels
+are bounded to service, signal, operation, and tenant key. The existing HTTP,
+message publication, decision, and worker spans now carry bounded correlation
+and logical record attribution without using raw tenant identity.
+
+Python accepts only an already pseudonymized key from the private authenticated
+Java-to-Python boundary. Invalid or absent keys become `rtk_unattributed`; keys
+beyond the default 64-key runtime budget become `rtk_overflow`. W3C context is
+injected for message carriers, and simulation and experiment routes create
+bounded child spans under the incoming trace.
+
+The candidate Collector config deletes six raw identity attributes and applies
+memory limiting, batching, bounded persistent queueing, bounded retry, and
+environment-only backend credentials. It is a target-pending configuration,
+not evidence of a running collector.
+
+## Durable truth and failure semantics
+
+Python uses `BatchSpanProcessor` for configured production export. A deliberately
+failing exporter leaves the tested HTTP business response successful. Telemetry
+has no API capable of committing or rolling back PostgreSQL, acknowledging a
+RabbitMQ message, mutating Outbox/Inbox state, or changing a business retry.
+
+Application and collector queues are bounded. Overflow or retry exhaustion may
+drop telemetry and emit diagnostics. The collector's persistent queue is not a
+business durability mechanism. PostgreSQL remains durable truth, Java remains
+the consistency authority, and telemetry failure cannot be interpreted as a
+business failure.
+
+## Validation state
+
+- Contract validator: PASS. Contract digest
+  `767ae48b9c377d0718eb28d16fe5539302d2dfc46f66f03e7ca71506fb502395`;
+  collector digest
+  `b7af884b5f6ad247157dac45da4df448af09e7acbc6ddcb7a758a159404a1b9e`.
+- Contract mutation suite: PASS, 8 tests.
+- Focused Python telemetry/tracing tests: PASS, 9 tests. This includes W3C
+  message parent continuity, simulation and experiment child correlation,
+  tenant overflow/unattributed behavior, and exporter-failure business
+  independence.
+- Python Ruff format/check and strict mypy: PASS.
+- Java full gate: PASS, 113 tests, including architecture, HTTP metric exposure,
+  tenant pseudonym/cardinality, message/worker tracing, OIDC, and isolation.
+- Python full gate: PASS, 925 tests at 95.09% total coverage; the telemetry
+  attribution module is at 100% statement/branch coverage.
+- Web gate: PASS, 104 unit tests and production build.
+- Full repository gate: PASS, including task graph, Round 4 mirror, contracts,
+  security/supply-chain, determinism, analytics, product, agent, recovery,
+  release, staged-release, and Compose configuration.
+- Serial resilience gate: PASS, 16 Java and 2 Python tests.
+- `./scripts/verify.ps1`: PASS after task-control synchronization.
+- `./scripts/resume.ps1`: PASS; R4-405 is reported as `validating`, repository
+  total remains 165/196, and no task is falsely promoted to passed.
+- Real GitHub Actions for this implementation: PENDING.
+
+## Target qualification still required
+
+R4-405 cannot pass or close from the current evidence. Matching credentialed
+Vultr Tokyo evidence must prove:
+
+1. the exact collector, storage, network, backend, and `nrt` identities;
+2. trace continuity across HTTP, messaging, workers, simulation, and experiments;
+3. a backend leakage scan with no raw tenant or principal identity;
+4. observed cardinality, queue saturation, loss, and recovery behavior;
+5. an isolated collector/backend outage drill that leaves durable truth intact;
+6. backend usage and rate evidence reconciled to tenant-safe logical records.
+
+No telemetry backend has been selected, no credentialed collector call has run,
+no Vultr resource has been created, no spend has been authorized, and no
+production telemetry or production cost claim is made.
+
+R3-325 was not rerun, tuned, reinterpreted, or changed. It remains exactly
+`E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`; this operational telemetry work is not
+scientific evidence.

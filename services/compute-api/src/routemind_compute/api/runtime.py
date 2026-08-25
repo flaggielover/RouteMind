@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from routemind_compute.application.registry import StrategyRegistry, default_registry
+from routemind_compute.application.telemetry import TenantTelemetryAttribution
 from routemind_compute.application.tracing import TracingRuntime
 from routemind_compute.application.travel import (
     DeterministicLocalTravelProvider,
@@ -21,11 +22,15 @@ class ComputeRuntime:
     registry: StrategyRegistry
     travel_provider: TravelTimeProvider
     tracing: TracingRuntime
+    telemetry: TenantTelemetryAttribution
     twin_control: TwinControlService
     what_if: WhatIfRunner
 
 
-def create_runtime(tracing_runtime: TracingRuntime | None = None) -> ComputeRuntime:
+def create_runtime(
+    tracing_runtime: TracingRuntime | None = None,
+    telemetry: TenantTelemetryAttribution | None = None,
+) -> ComputeRuntime:
     tracing = tracing_runtime or TracingRuntime()
     registry = default_registry(tracer=tracing.tracer)
     travel_provider = TracedTravelTimeProvider(
@@ -38,6 +43,7 @@ def create_runtime(tracing_runtime: TracingRuntime | None = None) -> ComputeRunt
         registry=registry,
         travel_provider=travel_provider,
         tracing=tracing,
+        telemetry=telemetry or TenantTelemetryAttribution(),
         twin_control=TwinControlService(registry, travel_provider),
         what_if=WhatIfRunner(registry, travel_provider),
     )

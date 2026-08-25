@@ -437,7 +437,16 @@ def twin_control(payload: TwinControlRequest, request: Request) -> TwinControlRe
             seed=payload.seed,
             strategy=payload.strategy,
         )
-        result = _runtime(request).twin_control.apply(command)
+        with _runtime(request).tracing.start_span(
+            "routemind.simulation.control",
+            attributes={
+                "routemind.boundary": "simulation",
+                "routemind.simulation.action": payload.action,
+                "routemind.scenario_id": payload.scenario_id or "current",
+                "routemind.tenant_key": getattr(request.state, "tenant_key", "rtk_unattributed"),
+            },
+        ):
+            result = _runtime(request).twin_control.apply(command)
     except TwinCommandConflict as error:
         raise HTTPException(status_code=409, detail=str(error)) from error
     except KeyError as error:
@@ -667,7 +676,17 @@ def run_routebench_experiment(
         )
         registry = _registry(request)
         travel_provider = _runtime(request).travel_provider
-        run = RouteBenchRunner(registry, travel_provider).run(manifest, scenario)
+        with _runtime(request).tracing.start_span(
+            "routemind.experiment.routebench",
+            attributes={
+                "routemind.boundary": "experiment",
+                "routemind.manifest_id": payload.manifest_id,
+                "routemind.scenario_id": payload.scenario_id,
+                "routemind.experiment.strategy_count": len(payload.strategies),
+                "routemind.tenant_key": getattr(request.state, "tenant_key", "rtk_unattributed"),
+            },
+        ):
+            run = RouteBenchRunner(registry, travel_provider).run(manifest, scenario)
     except KeyError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
     except ValueError as error:
@@ -740,12 +759,21 @@ def run_what_if_experiment(
             )
             for variant in payload.variants
         )
-        comparison = _runtime(request).what_if.run(
-            payload.recorded_run_id,
-            payload.baseline_strategy,
-            manifest,
-            variants,
-        )
+        with _runtime(request).tracing.start_span(
+            "routemind.experiment.what_if",
+            attributes={
+                "routemind.boundary": "experiment",
+                "routemind.scenario_id": payload.scenario_id,
+                "routemind.experiment.variant_count": len(payload.variants) + 1,
+                "routemind.tenant_key": getattr(request.state, "tenant_key", "rtk_unattributed"),
+            },
+        ):
+            comparison = _runtime(request).what_if.run(
+                payload.recorded_run_id,
+                payload.baseline_strategy,
+                manifest,
+                variants,
+            )
     except KeyError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
     except ValueError as error:

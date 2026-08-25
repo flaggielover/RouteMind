@@ -1,6 +1,7 @@
 package com.routemind.business.infrastructure.security;
 
 import com.routemind.business.application.security.TenantContext;
+import com.routemind.business.application.observability.TelemetryAttribution;
 import com.routemind.business.domain.security.TenantId;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -20,19 +21,24 @@ public final class TenantContextFilter extends OncePerRequestFilter {
 	private final TenantContext tenants;
 	private final String tenantClaim;
 	private final boolean localMode;
+	private final TelemetryAttribution telemetry;
 
-	private TenantContextFilter(TenantContext tenants, String tenantClaim, boolean localMode) {
+	private TenantContextFilter(TenantContext tenants, String tenantClaim, boolean localMode,
+			TelemetryAttribution telemetry) {
 		this.tenants = Objects.requireNonNull(tenants, "tenants");
 		this.tenantClaim = tenantClaim;
 		this.localMode = localMode;
+		this.telemetry = Objects.requireNonNull(telemetry, "telemetry");
 	}
 
-	static TenantContextFilter oidc(TenantContext tenants, String tenantClaim) {
-		return new TenantContextFilter(tenants, Objects.requireNonNull(tenantClaim, "tenantClaim"), false);
+	static TenantContextFilter oidc(TenantContext tenants, String tenantClaim,
+			TelemetryAttribution telemetry) {
+		return new TenantContextFilter(tenants, Objects.requireNonNull(tenantClaim, "tenantClaim"), false,
+				telemetry);
 	}
 
-	static TenantContextFilter local(TenantContext tenants) {
-		return new TenantContextFilter(tenants, null, true);
+	static TenantContextFilter local(TenantContext tenants, TelemetryAttribution telemetry) {
+		return new TenantContextFilter(tenants, null, true, telemetry);
 	}
 
 	@Override
@@ -48,6 +54,8 @@ public final class TenantContextFilter extends OncePerRequestFilter {
 				chain.doFilter(request, response);
 				return;
 			}
+			request.setAttribute(TelemetryAttribution.REQUEST_ATTRIBUTE,
+					telemetry.tenantKey(tenant.value()));
 			try (TenantContext.Scope ignored = tenants.open(tenant)) {
 				chain.doFilter(request, response);
 			}

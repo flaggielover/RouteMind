@@ -41,6 +41,18 @@ class TraceSettings:
     service_name: str = "routemind-compute-api"
     sdk_enabled: bool = True
     otlp_export_enabled: bool = False
+    max_queue_size: int = 2048
+    max_export_batch_size: int = 512
+    schedule_delay_millis: int = 5000
+    export_timeout_millis: int = 10000
+
+    def __post_init__(self) -> None:
+        if self.max_queue_size <= 0:
+            raise ValueError("max_queue_size must be positive")
+        if not 1 <= self.max_export_batch_size <= self.max_queue_size:
+            raise ValueError("max_export_batch_size must fit within max_queue_size")
+        if self.schedule_delay_millis <= 0 or self.export_timeout_millis <= 0:
+            raise ValueError("export timing must be positive")
 
     @classmethod
     def from_environment(cls) -> TraceSettings:
@@ -48,6 +60,10 @@ class TraceSettings:
             service_name=os.getenv("OTEL_SERVICE_NAME", "routemind-compute-api"),
             sdk_enabled=not _truthy(os.getenv("OTEL_SDK_DISABLED", "false")),
             otlp_export_enabled=_truthy(os.getenv("ROUTEMIND_OTLP_EXPORT_ENABLED", "false")),
+            max_queue_size=_positive_int("OTEL_BSP_MAX_QUEUE_SIZE", 2048),
+            max_export_batch_size=_positive_int("OTEL_BSP_MAX_EXPORT_BATCH_SIZE", 512),
+            schedule_delay_millis=_positive_int("OTEL_BSP_SCHEDULE_DELAY", 5000),
+            export_timeout_millis=_positive_int("OTEL_BSP_EXPORT_TIMEOUT", 10000),
         )
 
 
@@ -74,7 +90,15 @@ class TracingRuntime:
         if span_exporter is not None:
             provider.add_span_processor(SimpleSpanProcessor(span_exporter))
         elif self.settings.otlp_export_enabled:
-            provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
+            provider.add_span_processor(
+                BatchSpanProcessor(
+                    OTLPSpanExporter(),
+                    max_queue_size=self.settings.max_queue_size,
+                    max_export_batch_size=self.settings.max_export_batch_size,
+                    schedule_delay_millis=self.settings.schedule_delay_millis,
+                    export_timeout_millis=self.settings.export_timeout_millis,
+                )
+            )
         self.provider = provider
         self.tracer = provider.get_tracer("routemind.compute", "v1")
         self.propagator = TraceContextTextMapPropagator()
@@ -120,6 +144,9 @@ class TracingRuntime:
     def force_flush(self) -> bool:
         return bool(self.provider.force_flush())
 
+    def inject(self, carrier: dict[str, str]) -> None:
+        self.propagator.inject(carrier)
+
 
 def span_trace_id(span: Span) -> str:
     return f"{span.get_span_context().trace_id:032x}"
@@ -133,6 +160,17 @@ def span_traceparent(span: Span) -> str:
 
 def _truthy(value: str) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def _positive_int(name: str, default: int) -> int:
+    raw = os.getenv(name, str(default))
+    try:
+        value = int(raw)
+    except ValueError as error:
+        raise ValueError(f"{name} must be an integer") from error
+    if value <= 0:
+        raise ValueError(f"{name} must be positive")
+    return value
 
 
 __all__ = [

@@ -15,12 +15,13 @@ public class LocalSecurityConfiguration {
 	@Bean
 	SecurityFilterChain localCompatibilitySecurityFilterChain(HttpSecurity http,
 			com.routemind.business.application.security.TenantContext tenants,
+			com.routemind.business.application.observability.TelemetryAttribution telemetry,
 			EdgeSecurityFilter edgeSecurityFilter) throws Exception {
 		http.csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.requestCache(cache -> cache.disable())
 				.logout(logout -> logout.disable())
-				.addFilterBefore(TenantContextFilter.local(tenants), AnonymousAuthenticationFilter.class)
+				.addFilterBefore(TenantContextFilter.local(tenants, telemetry), AnonymousAuthenticationFilter.class)
 				.addFilterAfter(edgeSecurityFilter, TenantContextFilter.class)
 				.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 		return http.build();

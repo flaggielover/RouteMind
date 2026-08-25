@@ -91,6 +91,18 @@ class BusinessApiApplicationTests {
 	}
 
 	@Test
+	void tenantTelemetryIsPseudonymousAndCostAttributionIsExposed() throws Exception {
+		String rawTenantId = java.util.UUID.randomUUID().toString();
+		mockMvc.perform(get("/api/v1/system").header("X-Tenant-Id", rawTenantId))
+				.andExpect(status().isOk());
+
+		String metrics = mockMvc.perform(get("/metrics")).andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+		assertThat(metrics).contains("routemind_telemetry_attributed_records_total")
+				.doesNotContain(rawTenantId);
+	}
+
+	@Test
 	void w3cTraceContextIsContinuedWithoutACollector() throws Exception {
 		String traceId = "11111111111111111111111111111111";
 		mockMvc.perform(get("/api/v1/system")

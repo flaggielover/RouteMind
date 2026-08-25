@@ -40,6 +40,7 @@ public class OidcSecurityConfiguration {
 	SecurityFilterChain oidcSecurityFilterChain(HttpSecurity http, JwtDecoder decoder,
 			OidcSecurityProperties properties,
 			com.routemind.business.application.security.TenantContext tenants,
+			com.routemind.business.application.observability.TelemetryAttribution telemetry,
 			EdgeSecurityFilter edgeSecurityFilter) throws Exception {
 		JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
 		authenticationConverter.setJwtGrantedAuthoritiesConverter(new OidcAuthorityConverter(properties.rolesClaim()));
@@ -48,7 +49,7 @@ public class OidcSecurityConfiguration {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.requestCache(cache -> cache.disable())
 				.logout(logout -> logout.disable())
-				.addFilterAfter(TenantContextFilter.oidc(tenants, properties.tenantClaim()),
+				.addFilterAfter(TenantContextFilter.oidc(tenants, properties.tenantClaim(), telemetry),
 						BearerTokenAuthenticationFilter.class)
 				.addFilterAfter(new OidcActorBindingFilter(), TenantContextFilter.class)
 				.addFilterAfter(edgeSecurityFilter, OidcActorBindingFilter.class)

@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-405-telemetry-export-v1",
+  "status": "LOCAL_IMPLEMENTED_TARGET_PENDING",
+  "target": {
+    "provider": "Vultr",
+    "region": "nrt",
+    "dataResidency": "Tokyo, Japan",
+    "collectorVerified": false,
+    "backendSelected": false,
+    "productionCostVerified": false
+  },
+  "correlation": {
+    "propagator": "W3C Trace Context",
+    "boundaries": ["http", "messaging", "worker", "simulation", "experiment"],
+    "traceAttributes": [
+      "routemind.request_id",
+      "routemind.correlation_id",
+      "routemind.event_id",
+      "routemind.order_id",
+      "routemind.decision_id",
+      "routemind.scenario_id",
+      "routemind.manifest_id",
+      "routemind.tenant_key"
+    ],
+    "messageHeaders": [
+      "traceparent",
+      "X-Trace-Id",
+      "X-Correlation-Id",
+      "X-Event-Id",
+      "X-Aggregate-Id",
+      "X-Tenant-Id"
+    ]
+  },
+  "tenantAttribution": {
+    "algorithm": "HMAC-SHA256",
+    "tokenPrefix": "rtk_",
+    "digestHexCharacters": 24,
+    "secretEnvironmentVariable": "ROUTEMIND_TELEMETRY_ATTRIBUTION_KEY",
+    "forwardedHeader": "X-RouteMind-Tenant-Key",
+    "forwardedHeaderTrust": "private_authenticated_service_boundary_only",
+    "maxActiveKeysPerRuntime": 64,
+    "overflowKey": "rtk_overflow",
+    "unattributedKey": "rtk_unattributed",
+    "rawTenantIdentifierExported": false,
+    "rawTenantIdentifierMetricLabel": false
+  },
+  "cardinality": {
+    "metricSeriesPlanningCeilingPerRuntime": 2048,
+    "approvedMetricLabels": [
+      "service",
+      "signal",
+      "operation",
+      "method",
+      "status",
+      "tenant_key"
+    ],
+    "forbiddenMetricLabels": [
+      "request_id",
+      "trace_id",
+      "correlation_id",
+      "event_id",
+      "order_id",
+      "courier_id",
+      "principal_id",
+      "exception_message",
+      "url"
+    ]
+  },
+  "costAttribution": {
+    "metric": "routemind_telemetry_attributed_records_total",
+    "unit": "logical_export_record",
+    "requiredLabels": ["service", "signal", "operation", "tenant_key"],
+    "signals": ["metric", "trace"],
+    "vendorRateStatus": "TARGET_BACKEND_REQUIRED",
+    "currencyCostClaim": false
+  },
+  "applicationExporter": {
+    "enabledByDefault": false,
+    "processor": "batch",
+    "maxQueueSize": 2048,
+    "maxExportBatchSize": 512,
+    "scheduleDelayMilliseconds": 5000,
+    "exportTimeoutMilliseconds": 10000,
+    "queueOverflowOutcome": "DROP_TELEMETRY_AND_RECORD_SDK_DIAGNOSTIC",
+    "businessOutcomeOnFailure": "UNCHANGED"
+  },
+  "collector": {
+    "configPath": "infra/observability/otel-collector.yaml",
+    "otlpGrpcEndpoint": "0.0.0.0:4317",
+    "otlpHttpEndpoint": "0.0.0.0:4318",
+    "targetEndpointEnvironmentVariable": "ROUTEMIND_TELEMETRY_OTLP_ENDPOINT",
+    "authorizationEnvironmentVariable": "ROUTEMIND_TELEMETRY_AUTHORIZATION",
+    "memoryLimitMiB": 384,
+    "memorySpikeLimitMiB": 96,
+    "batchSize": 512,
+    "batchMaximumSize": 1024,
+    "persistentQueueDirectory": "/var/lib/otelcol/queue",
+    "persistentQueueSize": 4096,
+    "retryMaximumElapsedSeconds": 300,
+    "rawTenantAttributesRemoved": [
+      "routemind.tenant_id",
+      "tenant.id",
+      "enduser.id",
+      "user.id",
+      "courier.id",
+      "principal.id"
+    ]
+  },
+  "durableTruthBoundary": {
+    "telemetryDurableAuthority": false,
+    "exportCanBlockBusinessRequest": false,
+    "exportCanChangeTransactionOutcome": false,
+    "exportCanAcknowledgeMessage": false,
+    "exportFailureCanTriggerBusinessRetry": false,
+    "postgresqlRemainsDurableTruth": true
+  },
+  "qualification": {
+    "localStatus": "LOCAL_CONTRACT_AND_FAILURE_TESTS_REQUIRED",
+    "targetStatus": "TARGET_PENDING",
+    "requiredTargetEvidence": [
+      "credentialed Vultr Tokyo collector identity",
+      "trace continuity across all five boundaries",
+      "tenant leakage scan",
+      "cardinality and queue saturation observations",
+      "collector outage and recovery drill",
+      "backend usage and cost attribution reconciliation"
+    ]
+  },
+  "scientificBoundary": {
+    "frozenR3_325": "E-PASS / X-PASS / S-FAIL / C-NO-CLAIM",
+    "telemetryEvidenceIsScientificEvidence": false,
+    "scientificClaimEstablished": false
+  }
+}

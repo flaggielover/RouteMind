@@ -21,7 +21,11 @@ def create_app(runtime: ComputeRuntime | None = None) -> FastAPI:
         allow_methods=["GET", "POST"],
         allow_headers=["*"],
     )
-    application.add_middleware(RequestObservabilityMiddleware, tracing=selected_runtime.tracing)
+    application.add_middleware(
+        RequestObservabilityMiddleware,
+        tracing=selected_runtime.tracing,
+        telemetry=selected_runtime.telemetry,
+    )
     application.state.compute_runtime = selected_runtime
     application.include_router(router)
     return application

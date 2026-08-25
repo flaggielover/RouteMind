@@ -12,6 +12,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.types import ASGIApp
 
+from routemind_compute.application.telemetry import TenantTelemetryAttribution
 from routemind_compute.application.tracing import (
     TracingRuntime,
     span_trace_id,
@@ -44,18 +45,26 @@ def request_context(request: Request) -> tuple[str, str | None]:
 
 
 class RequestObservabilityMiddleware(BaseHTTPMiddleware):
-    def __init__(self, app: ASGIApp, tracing: TracingRuntime) -> None:
+    def __init__(
+        self,
+        app: ASGIApp,
+        tracing: TracingRuntime,
+        telemetry: TenantTelemetryAttribution,
+    ) -> None:
         super().__init__(app)
         self.tracing = tracing
+        self.telemetry = telemetry
 
     async def dispatch(self, request: Request, call_next: RequestResponseEndpoint) -> Response:
         request_id, legacy_trace_id = request_context(request)
+        tenant_key = self.telemetry.resolve(request.headers)
         started = perf_counter()
         attributes = {
             "http.request.method": request.method,
             "url.path": request.url.path,
             "server.address": request.url.hostname or "unknown",
             "routemind.request_id": request_id,
+            "routemind.tenant_key": tenant_key,
         }
         if legacy_trace_id is not None:
             attributes["routemind.legacy_trace_id"] = legacy_trace_id
@@ -72,6 +81,7 @@ class RequestObservabilityMiddleware(BaseHTTPMiddleware):
             trace_id = legacy_trace_id or otel_trace_id
             request.state.request_id = request_id
             request.state.trace_id = trace_id
+            request.state.tenant_key = tenant_key
             response = await call_next(request)
             duration = perf_counter() - started
             path = request.url.path
@@ -81,6 +91,7 @@ class RequestObservabilityMiddleware(BaseHTTPMiddleware):
                 span.set_status(Status(StatusCode.ERROR))
             REQUEST_COUNT.labels("compute-api", request.method, status).inc()
             REQUEST_LATENCY.labels("compute-api", request.method).observe(duration)
+            self.telemetry.record_http(tenant_key)
             response.headers["X-Request-Id"] = request_id
             response.headers["X-Trace-Id"] = trace_id
             response.headers["traceparent"] = span_traceparent(span)

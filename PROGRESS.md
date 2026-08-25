@@ -16,11 +16,11 @@ Current Task: R4-405 - Export traces and metrics with tenant-safe cost attributi
 
 Last Completed: R4-401 - Select a deployment target and freeze SLO and failure-domain assumptions
 
-Current Gate: R4-405 is active. R4-406 is `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`: all 11 isolated recovery checks passed in real GitHub Actions, while the fail-closed validator correctly returned `TARGET_NOT_QUALIFIED`. Vultr Tokyo RPO/RTO proof remains external and R4-406 is not closed.
+Current Gate: R4-405 is `LOCAL_VALIDATED / CI_PENDING / TARGET_PENDING`. Correlation, tenant-safe logical volume attribution, bounded exporter/collector contracts, and failure semantics pass locally; no running Vultr Tokyo collector, backend usage, target outage, or currency-cost evidence exists. R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING` and is not closed.
 
-CI: R4-406 readiness remediation `cf6a63e` passed all five jobs in run `32847143691`, including the isolated PostgreSQL/RabbitMQ/Redis recovery drill and artifact upload. Downloaded artifact `9562802809` independently validates as `LOCAL_DRILL_PASS_TARGET_PENDING / TARGET_NOT_QUALIFIED`; its report byte SHA-256 is `4493027b...71db`. No target recovery pass is claimed.
+CI: R4-405 implementation checkpoint has not yet been pushed; real Actions evidence is pending. The preceding control revision `0d9ffdd` passed all five jobs in run `32847777823`. R4-406 readiness remediation `cf6a63e` passed all five jobs in run `32847143691`; downloaded artifact `9562802809` validates as `LOCAL_DRILL_PASS_TARGET_PENDING / TARGET_NOT_QUALIFIED`.
 
-Regression: PASS locally for R4-406 syntax, five fail-closed mutation-test groups, full gate (110/110 Java, 920/920 Python at 95.11%, 104/104 Web, production build), serial focused resilience (15 Java / 2 Python), task graph, Round 4 mirror, R4-401 deployment contract, security, supply-chain, product, agent, recovery, release, staged-release, and Compose configuration. An earlier concurrent resilience invocation raced Maven `clean`; the serial rerun passed without code or assertion changes. The previous R4-401 browser gate remains 34 Playwright scenarios with two expected skips. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
+Regression: PASS locally for the R4-405 contract plus 8 mutation tests, W3C correlation, tenant pseudonym/cardinality tests, exporter-failure semantics, full gate (113/113 Java, 925/925 Python at 95.09%, 104/104 Web, production build), serial resilience (16 Java / 2 Python), task graph, Round 4 mirror, deployment, security, supply-chain, product, agent, recovery, release, staged-release, and Compose configuration. The telemetry contract digest is `767ae48b...2395`; collector config digest is `b7af884b...a1b9e`. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
 Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly deferred/reclassified; no required task remains open.
 
@@ -28,14 +28,14 @@ Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-P
 
 Blocked: R4-406 cannot close without matching restore/RPO/RTO evidence in Vultr Tokyo; credentials and explicit resource/spend authorization are not currently available. R4-410 and R4-422 retain separate provider/notification human gates; R4-437 remains conditional and inactive.
 
-Human Action Required: NONE while R4-405 local telemetry work remains executable; Vultr credentials plus explicit resource/spend authorization will be required for the R4-406 target restore drill
+Human Action Required: NONE while the R4-405 implementation checkpoint and real CI remain executable. Target qualification later requires Vultr credentials, an approved Tokyo-resident telemetry backend, and explicit resource/spend authorization; R4-406 needs the same external authorization for its target restore drill.
 
-Next Candidates: R4-405 is active as the highest-priority unblocked task. R4-410 and R4-422 retain separate human/external gates.
+Next Candidates: R4-405 is validating as the highest-priority task. After real CI, recompute the graph without promoting it past the target-evidence gate. R4-410 and R4-422 retain separate human/external gates.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
 - Current task: R4-405 tenant-safe trace, metric, and cost attribution export.
 - Workstream: P - Production Safety and Deployment.
-- Status: R4-401 closure CI is green; R4-406 is `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING` and externally blocked. R4-405 is active. No Vultr infrastructure has been created.
+- Status: R4-405 is `LOCAL_VALIDATED / CI_PENDING / TARGET_PENDING`; R4-406 is `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`. No Vultr infrastructure or telemetry backend has been created.
 - Completed gate: opaque tenant/role/actor/route quotas, bounded degradation,
   local WAF-equivalent policy, secret automation, 527-component SBOM, and
   explicitly unsigned provenance all have executable evidence.
@@ -95,11 +95,23 @@ Next Candidates: R4-405 is active as the highest-priority unblocked task. R4-410
   `docs/product/R4_PRODUCT_SEMANTICS.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as
   complete or authorized by graph promotion.
-- Next: implement and validate R4-405's tenant-safe telemetry export and
-  fail-open exporter boundary. Target RPO/RTO proof remains gated on Vultr
-  Tokyo evidence.
-- Human action required: NONE while local R4-405 work remains; credentials and
-  resource/spend approval are required before the real R4-406 target drill.
+- R4-405 contract: digest `767ae48b...2395`; five boundaries, HMAC-SHA256
+  tenant keys, 64-key runtime budget, 2,048-series planning ceiling, logical
+  record attribution, and explicit false target/currency claims pass 8 mutation
+  tests. Collector config digest is `b7af884b...a1b9e`.
+- R4-405 application boundary: Java generates pseudonyms and owns raw durable
+  tenant identity; Python accepts only bounded pseudonyms. W3C correlation spans
+  HTTP, messaging, worker, simulation, and experiment paths. Exporter failure
+  leaves business responses and durable truth unchanged.
+- R4-405 local gates: 113 Java, 925 Python at 95.09%, 104 Web tests plus build,
+  8 telemetry contract mutations, all controls, and serial resilience 16 Java /
+  2 Python pass. Real Actions remains pending.
+- Next: commit/push the R4-405 implementation and observe every real Actions
+  job. If green, retain R4-405 at the separate Vultr Tokyo target gate rather
+  than claiming collector/backend/cost qualification.
+- Human action required: NONE until remote CI completes. Credentials, selected
+  Tokyo-resident backend, and resource/spend approval are required for R4-405
+  target qualification and the real R4-406 target drill.
 
 ### R3-365 Round 3 scientific closure - 2026-08-25
 - Implementation `9e9537e` passed all five jobs in Actions run `32790948926`,

@@ -97,6 +97,16 @@ try {
         throw "Deployment target contract self-tests failed"
     }
 
+    python scripts/telemetry_export_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Telemetry export contract validation failed"
+    }
+
+    python scripts/telemetry_export_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Telemetry export contract self-tests failed"
+    }
+
     python scripts/product_contract.py
     if ($LASTEXITCODE -ne 0) {
         throw "Product semantics contract validation failed"

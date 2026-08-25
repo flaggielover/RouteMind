@@ -1,6 +1,11 @@
 from __future__ import annotations
 
+from collections.abc import Sequence
+
+import pytest
 from fastapi.testclient import TestClient
+from opentelemetry.sdk.trace import ReadableSpan
+from opentelemetry.sdk.trace.export import SpanExporter, SpanExportResult
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 from opentelemetry.trace import SpanKind
 
@@ -8,6 +13,11 @@ from routemind_compute.api.app import create_app
 from routemind_compute.api.runtime import create_runtime
 from routemind_compute.application.nearest import NearestStrategy
 from routemind_compute.application.registry import StrategyRegistry
+from routemind_compute.application.telemetry import (
+    TENANT_KEY_HEADER,
+    TelemetrySettings,
+    TenantTelemetryAttribution,
+)
 from routemind_compute.application.tracing import (
     TraceSettings,
     TracingRuntime,
@@ -119,3 +129,108 @@ def test_disabled_sdk_and_invalid_carrier_do_not_fake_exported_context() -> None
     with runtime.start_span("disabled", carrier={"traceparent": "invalid"}) as span:
         assert span.is_recording() is False
     assert exporter.get_finished_spans() == ()
+
+
+def test_message_context_injection_and_simulation_experiment_spans_are_correlated() -> None:
+    tracing, exporter = _runtime()
+    telemetry = TenantTelemetryAttribution(TelemetrySettings(max_active_tenant_keys=2))
+    client = TestClient(create_app(create_runtime(tracing, telemetry)))
+    tenant_key = "rtk_0123456789abcdef01234567"
+
+    response = client.post(
+        "/api/v1/twin/control",
+        headers={
+            "traceparent": f"00-{TRACE_ID}-{PARENT_SPAN_ID}-01",
+            TENANT_KEY_HEADER: tenant_key,
+        },
+        json={"command_id": "trace-simulation", "action": "reset"},
+    )
+    assert response.status_code == 200
+    response = client.post(
+        "/api/v1/experiments/routebench",
+        headers={
+            "traceparent": f"00-{TRACE_ID}-{PARENT_SPAN_ID}-01",
+            TENANT_KEY_HEADER: tenant_key,
+        },
+        json={
+            "manifest_id": "trace-manifest",
+            "code_version": "git:test",
+            "scenario_id": "trace-scenario",
+            "seed": 7,
+            "load_profile": "tiny",
+            "city_state": "fixture",
+            "dataset_provenance": "fixture:test",
+            "strategies": ["nearest"],
+            "demands": [
+                {
+                    "request_id": "trace-demand",
+                    "pickup": {"latitude": 31.2304, "longitude": 121.4737},
+                    "tick": 0,
+                }
+            ],
+            "couriers": [
+                {
+                    "courier_id": "trace-courier",
+                    "location": {"latitude": 31.231, "longitude": 121.474},
+                }
+            ],
+        },
+    )
+    assert response.status_code == 200
+
+    spans = exporter.get_finished_spans()
+    names = {span.name for span in spans}
+    assert "routemind.simulation.control" in names
+    assert "routemind.experiment.routebench" in names
+    workflow_spans = [
+        span
+        for span in spans
+        if span.name.startswith(("routemind.simulation", "routemind.experiment"))
+    ]
+    assert all(
+        span.context is not None and f"{span.context.trace_id:032x}" == TRACE_ID
+        for span in workflow_spans
+    )
+    assert all(
+        span.attributes is not None and span.attributes["routemind.tenant_key"] == tenant_key
+        for span in workflow_spans
+    )
+
+    carrier: dict[str, str] = {}
+    with tracing.start_span("message-producer"):
+        tracing.inject(carrier)
+    assert carrier["traceparent"].startswith("00-")
+    with tracing.start_span("message-worker", carrier=carrier):
+        pass
+    message_spans = {span.name: span for span in exporter.get_finished_spans()}
+    worker_parent = message_spans["message-worker"].parent
+    producer_context = message_spans["message-producer"].context
+    assert worker_parent is not None and producer_context is not None
+    assert worker_parent.trace_id == producer_context.trace_id
+    assert worker_parent.span_id == producer_context.span_id
+    assert worker_parent.is_remote is True
+
+
+class FailingExporter(SpanExporter):
+    def export(self, spans: Sequence[ReadableSpan]) -> SpanExportResult:
+        return SpanExportResult.FAILURE
+
+    def shutdown(self) -> None:
+        return None
+
+
+def test_exporter_failure_does_not_change_http_business_outcome() -> None:
+    runtime = TracingRuntime(
+        TraceSettings(service_name="failing-exporter"), span_exporter=FailingExporter()
+    )
+    client = TestClient(create_app(create_runtime(runtime)))
+
+    response = client.get("/api/v1/system")
+
+    assert response.status_code == 200
+    assert response.json()["durable_state_owner"] is False
+
+
+def test_batch_export_settings_are_bounded_and_fail_closed() -> None:
+    with pytest.raises(ValueError, match="fit within"):
+        TraceSettings(max_queue_size=8, max_export_batch_size=9)
