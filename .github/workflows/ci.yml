@@ -35,9 +35,22 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.14"
       - name: Run clean Java gate
         shell: pwsh
         run: ./scripts/business-api.ps1 test
+      - name: Generate dependency, SBOM, and OCI provenance evidence
+        shell: pwsh
+        run: ./scripts/supply-chain.ps1
+      - name: Retain supply-chain evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: r4-404-supply-chain-${{ github.sha }}
+          path: evidence/tests/tmp/R4-404
+          if-no-files-found: error
+          retention-days: 30
 
   python-contracts:
     name: Python compute and contracts

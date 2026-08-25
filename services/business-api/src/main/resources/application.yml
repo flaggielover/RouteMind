@@ -68,6 +68,24 @@ logging:
 
 routemind:
   security:
+    edge:
+      enabled: ${ROUTEMIND_EDGE_SECURITY_ENABLED:true}
+      policy-version: ${ROUTEMIND_EDGE_POLICY_VERSION:edge-v1}
+      window-seconds: ${ROUTEMIND_EDGE_WINDOW_SECONDS:60}
+      burst-allowance: ${ROUTEMIND_EDGE_BURST_ALLOWANCE:20}
+      anonymous-requests: ${ROUTEMIND_EDGE_ANONYMOUS_REQUESTS:60}
+      authenticated-requests: ${ROUTEMIND_EDGE_AUTHENTICATED_REQUESTS:120}
+      customer-requests: ${ROUTEMIND_EDGE_CUSTOMER_REQUESTS:180}
+      courier-requests: ${ROUTEMIND_EDGE_COURIER_REQUESTS:300}
+      merchant-requests: ${ROUTEMIND_EDGE_MERCHANT_REQUESTS:240}
+      analyst-requests: ${ROUTEMIND_EDGE_ANALYST_REQUESTS:300}
+      operator-requests: ${ROUTEMIND_EDGE_OPERATOR_REQUESTS:600}
+      max-tracked-keys: ${ROUTEMIND_EDGE_MAX_TRACKED_KEYS:10000}
+      max-header-count: ${ROUTEMIND_EDGE_MAX_HEADER_COUNT:64}
+      max-header-bytes: ${ROUTEMIND_EDGE_MAX_HEADER_BYTES:16384}
+      max-query-bytes: ${ROUTEMIND_EDGE_MAX_QUERY_BYTES:4096}
+      max-path-bytes: ${ROUTEMIND_EDGE_MAX_PATH_BYTES:2048}
+      max-body-bytes: ${ROUTEMIND_EDGE_MAX_BODY_BYTES:1048576}
     oidc:
       enabled: ${ROUTEMIND_OIDC_ENABLED:false}
       issuer: ${ROUTEMIND_OIDC_ISSUER:}

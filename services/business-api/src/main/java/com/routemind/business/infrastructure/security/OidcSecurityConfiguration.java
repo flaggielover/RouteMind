@@ -39,7 +39,8 @@ public class OidcSecurityConfiguration {
 	@Bean
 	SecurityFilterChain oidcSecurityFilterChain(HttpSecurity http, JwtDecoder decoder,
 			OidcSecurityProperties properties,
-			com.routemind.business.application.security.TenantContext tenants) throws Exception {
+			com.routemind.business.application.security.TenantContext tenants,
+			EdgeSecurityFilter edgeSecurityFilter) throws Exception {
 		JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
 		authenticationConverter.setJwtGrantedAuthoritiesConverter(new OidcAuthorityConverter(properties.rolesClaim()));
 		http.csrf(csrf -> csrf.disable())
@@ -50,6 +51,7 @@ public class OidcSecurityConfiguration {
 				.addFilterAfter(TenantContextFilter.oidc(tenants, properties.tenantClaim()),
 						BearerTokenAuthenticationFilter.class)
 				.addFilterAfter(new OidcActorBindingFilter(), TenantContextFilter.class)
+				.addFilterAfter(edgeSecurityFilter, OidcActorBindingFilter.class)
 				.authorizeHttpRequests(authorize -> authorize
 						.dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
 						.requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()

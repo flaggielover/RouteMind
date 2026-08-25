@@ -112,6 +112,32 @@ def check_workflows() -> list[str]:
     return findings
 
 
+def check_supply_chain_automation() -> list[str]:
+    findings: list[str] = []
+    required_files = (
+        "scripts/supply-chain.ps1",
+        "scripts/supply_chain_evidence.py",
+        "scripts/supply_chain_evidence_test.py",
+    )
+    findings.extend(f"{relative}: supply-chain automation is missing" for relative in required_files if not (ROOT / relative).is_file())
+    workflow = WORKFLOW_DIR / "ci.yml"
+    if not workflow.is_file():
+        return findings + [".github/workflows/ci.yml: supply-chain workflow is missing"]
+    text = workflow.read_text(encoding="utf-8")
+    markers = {
+        "./scripts/supply-chain.ps1": "SBOM and provenance generation step",
+        "actions/upload-artifact@v7": "supply-chain artifact retention step",
+        "if-no-files-found: error": "missing-artifact failure policy",
+        "retention-days: 30": "bounded artifact retention policy",
+    }
+    findings.extend(
+        f".github/workflows/ci.yml: missing {description}"
+        for marker, description in markers.items()
+        if marker not in text
+    )
+    return findings
+
+
 def check_compose() -> list[str]:
     compose = ROOT / "compose.yaml"
     if not compose.is_file():
@@ -136,6 +162,7 @@ def validate() -> list[str]:
     findings = check_tracked_files(files)
     findings.extend(check_lockfiles())
     findings.extend(check_workflows())
+    findings.extend(check_supply_chain_automation())
     findings.extend(check_compose())
     if not any(path.relative_to(ROOT).as_posix() == ".env.example" for path in files):
         findings.append(".env.example: committed local configuration example is missing")
@@ -151,6 +178,7 @@ def main() -> int:
     print("PASS: tracked secret isolation")
     print("PASS: dependency lockfile metadata")
     print("PASS: workflow least-privilege permissions")
+    print("PASS: SBOM and provenance automation")
     print("PASS: Compose image and loopback hygiene")
     return 0
 

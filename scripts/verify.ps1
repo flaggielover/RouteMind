@@ -82,6 +82,11 @@ try {
         throw "Security gate self-tests failed"
     }
 
+    python scripts/supply_chain_evidence_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Supply-chain evidence self-tests failed"
+    }
+
     python scripts/recovery_contract_test.py
     if ($LASTEXITCODE -ne 0) {
         throw "Recovery contract self-tests failed"

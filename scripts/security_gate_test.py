@@ -28,6 +28,9 @@ class SecurityGateTests(unittest.TestCase):
         )
         self.assertEqual(findings, [])
 
+    def test_supply_chain_automation_is_present(self) -> None:
+        self.assertEqual(security_gate.check_supply_chain_automation(), [])
+
 
 if __name__ == "__main__":
     unittest.main()

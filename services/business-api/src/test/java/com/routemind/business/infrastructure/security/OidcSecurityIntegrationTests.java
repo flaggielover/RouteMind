@@ -3,6 +3,7 @@ package com.routemind.business.infrastructure.security;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 import java.time.Instant;
 import java.util.List;
@@ -49,7 +50,9 @@ class OidcSecurityIntegrationTests {
 				.claim("tenant_id", "10000000-0000-0000-0000-000000000001")
 				.issuedAt(Instant.now().minusSeconds(30))
 				.expiresAt(Instant.now().plusSeconds(300)))))
-				.andExpect(status().isOk());
+				.andExpect(status().isOk())
+				.andExpect(header().string("X-Edge-Policy", "edge-v1"))
+				.andExpect(header().string("X-RateLimit-Mode", "primary"));
 		mockMvc.perform(get("/not-an-endpoint").with(jwt())).andExpect(status().isForbidden());
 	}
 
