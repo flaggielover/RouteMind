@@ -4,7 +4,7 @@ Date: 2026-08-25 (Asia/Shanghai)
 
 Entry revision: `6f7bc9b682e04301218a2ed70d259c577e8387e0`
 
-Status: `LOCAL_VALIDATED / CI_PENDING`
+Status: passed - `LOCAL_VALIDATED / CI_VALIDATED`
 
 ## Human approval
 
@@ -104,8 +104,11 @@ label proves that Vultr resources exist or that RouteMind runs in production.
 Live and production labels require matching credentialed remote evidence in
 later tasks.
 
-GitHub Actions is pending for the implementation checkpoint. The task remains
-`validating` until all five remote jobs pass.
+Implementation `30d59615b4d3bbdab68200e3f0e7097c0ebaabfb` passed all
+five jobs in GitHub Actions run `32843310725`: control/Compose, Java and supply
+chain, Python/contracts, bounded degradation/resilience, and Web
+unit/build/browser. This closes target selection and contract validation only;
+it does not prove a Vultr deployment.
 
 R3-325 remains frozen exactly as
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`; no Round 3 experiment was rerun or

@@ -8,17 +8,17 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Round 4 Progress: 8 / 38 tasks passed
+Round 4 Progress: 9 / 38 tasks passed
 
-Repository Total: 164 / 196 tasks passed
+Repository Total: 165 / 196 tasks passed
 
-Current Task: R4-401 - Select a deployment target and freeze SLO and failure-domain assumptions
+Current Task: R4-406 - Prove backup, restore, disaster recovery, and data reconciliation
 
-Last Completed: R4-423 - Make all role-aware surfaces tenant and identity aware
+Last Completed: R4-401 - Select a deployment target and freeze SLO and failure-domain assumptions
 
-Current Gate: R4-401 is `LOCAL_VALIDATED / CI_PENDING`. The owner explicitly approved Vultr Tokyo (`nrt`) as the target platform and Japan/Tokyo as the data-residency boundary. Contract digest `7018f0a0...ce2aa`, 11 directed mutation tests, full local regression, browser, and resilience gates pass. This approval does not authorize resource creation, spend, or a production-deployment claim.
+Current Gate: R4-401 is `LOCAL_VALIDATED / CI_VALIDATED` after all five jobs passed for implementation `30d5961` in Actions run `32843310725`. R4-406 is `IN_PROGRESS`; local recovery/reconciliation preparation is authorized, while the required Vultr Tokyo RPO/RTO proof remains external evidence and cannot be inferred from Compose.
 
-CI: PASS for R4-423 implementation SHA 7bc03a85cb159b023b098b54a1d69311f0543abb in run 32839582664; all five jobs passed. R4-450 run 32827906691, R4-421 run 32826218396, and R4-420 run 32820839648 also passed all five jobs. Earlier R4-404 runs 32818303442 and 32818849130 remain preserved as failed diagnostic evidence.
+CI: PASS for R4-401 implementation SHA 30d59615b4d3bbdab68200e3f0e7097c0ebaabfb in run 32843310725; all five jobs passed. R4-423 run 32839582664, R4-450 run 32827906691, R4-421 run 32826218396, and R4-420 run 32820839648 also passed all five jobs. Earlier R4-404 runs 32818303442 and 32818849130 remain preserved as failed diagnostic evidence.
 
 Regression: PASS locally for the R4-401 contract validator and 11 mutation tests, 110/110 Java tests, 920/920 Python tests at 95.11%, 36 Web files / 104 tests, 34 Playwright scenarios with two expected project-specific skips, focused resilience (15 Java / 2 Python), formatting, lint, typecheck, production build, Round 4 graph, negative-results, final-claim, security, supply-chain, product, agent, recovery, release, staged-release, and Compose gates. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
@@ -26,16 +26,16 @@ Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly defer
 
 Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-347 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
 
-Blocked: R4-410 and R4-422 retain separate provider/notification external and human gates. R4-437 remains conditional and inactive. R4-401 implementation is not blocked; real Vultr provisioning remains unauthorized and outside this target-selection gate.
+Blocked: R4-406 cannot close without matching restore/RPO/RTO evidence in Vultr Tokyo; credentials and resource/spend authorization are not currently available. Local recovery implementation remains unblocked. R4-410 and R4-422 retain separate provider/notification human gates; R4-437 remains conditional and inactive.
 
-Human Action Required: NONE for R4-401 target selection; Vultr credentials and spend authorization will be required before any real provisioning or deployment evidence
+Human Action Required: NONE while R4-406 local recovery preparation remains executable; Vultr credentials plus explicit resource/spend authorization will be required for the target restore drill
 
-Next Candidates: complete R4-401 local and remote evidence, then recompute the graph. R4-405 and R4-406 become dependency-eligible only after R4-401 passes; their external validation may require Vultr credentials. R4-410 and R4-422 retain separate human/external gates.
+Next Candidates: R4-406 is active as the highest-priority dependency-ready task. R4-405 is the next high-priority lane. R4-410 and R4-422 retain separate human/external gates.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
-- Current task: R4-401 deployment-target/SLO/failure-domain contract.
+- Current task: R4-406 backup, restore, DR, and reconciliation.
 - Workstream: P - Production Safety and Deployment.
-- Status: LOCAL_VALIDATED / CI_PENDING after explicit Vultr Tokyo (`nrt`) and Japan/Tokyo data-residency approval; no infrastructure has been created.
+- Status: R4-401 closed `LOCAL_VALIDATED / CI_VALIDATED`; R4-406 activated for local recovery preparation. No Vultr infrastructure has been created.
 - Completed gate: opaque tenant/role/actor/route quotas, bounded degradation,
   local WAF-equivalent policy, secret automation, 527-component SBOM, and
   explicitly unsigned provenance all have executable evidence.
@@ -67,15 +67,17 @@ Next Candidates: complete R4-401 local and remote evidence, then recompute the g
 - Local R4-401 gates: 11 deployment mutations, Java 110/110, Python 920/920 at
   95.11%, Web 104/104, Playwright 34 passed / 2 expected skips, focused
   resilience 15 Java / 2 Python, all controls, and Compose configuration pass.
+- CI: R4-401 implementation `30d5961` passed all five jobs in Actions run
+  `32843310725`.
 - Evidence: `evidence/gates/R4-420/product-contract.md` and
   `docs/product/R4_PRODUCT_SEMANTICS.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as
   complete or authorized by graph promotion.
-- Next: freeze and validate the R4-401 contract, push it, observe real CI, then
-  activate the highest-priority dependency-ready task. R4-410 and R4-422 retain
-  their separate human/external gates.
-- Human action required: NONE for the current contract-only gate. Real resource
-  creation still requires credentials and explicit spend authorization.
+- Next: implement and validate the local R4-406 recovery package, restore,
+  reconciliation, isolation, audit, and rollback surfaces. Target RPO/RTO proof
+  remains gated on real Vultr Tokyo evidence.
+- Human action required: NONE while local R4-406 work remains; credentials and
+  resource/spend approval are required before the real target drill.
 
 ### R3-365 Round 3 scientific closure - 2026-08-25
 - Implementation `9e9537e` passed all five jobs in Actions run `32790948926`,

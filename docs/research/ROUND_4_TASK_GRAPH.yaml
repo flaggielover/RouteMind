@@ -68,7 +68,7 @@
       "evidence": ["evidence/gates/R4-400/control-plane.md"], "round3_lineage": ["R3-300", "R3-365"]
     },
     {
-      "id": "R4-401", "title": "Select a deployment target and freeze SLO and failure-domain assumptions", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-400"], "status": "validating", "external_gate": true, "human_approval": true,
+      "id": "R4-401", "title": "Select a deployment target and freeze SLO and failure-domain assumptions", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-400"], "status": "passed", "external_gate": true, "human_approval": true,
       "acceptance": ["Deployment topology, ownership, regions, data residency, scaling, and failure domains are explicit", "SLOs and capacity assumptions are measurable and costed", "No production verification is claimed from Compose-only evidence"],
       "evidence": ["evidence/gates/R4-401/deployment-contract.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
@@ -93,7 +93,7 @@
       "evidence": ["evidence/gates/R4-405/telemetry-export.md"], "round3_lineage": ["ROUND_4_OPERATIONS_RECLASSIFICATION"]
     },
     {
-      "id": "R4-406", "title": "Prove backup, restore, disaster recovery, and data reconciliation", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-401", "R4-403"], "status": "pending", "external_gate": true, "human_approval": false,
+      "id": "R4-406", "title": "Prove backup, restore, disaster recovery, and data reconciliation", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-401", "R4-403"], "status": "in_progress", "external_gate": true, "human_approval": false,
       "acceptance": ["PostgreSQL restore meets recorded RPO/RTO targets in the selected target", "Outbox, Inbox, RabbitMQ, and Redis rebuild/reconciliation paths are exercised", "Restore evidence covers tenant isolation, audit continuity, and rollback"],
       "evidence": ["evidence/gates/R4-406/disaster-recovery.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
