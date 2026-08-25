@@ -6,13 +6,13 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-402 - Implement OIDC authentication boundary and threat model
+Current Task: R4-403 - Enforce durable multi-tenant isolation and migration compatibility
 
-Task Status: R4-402 is `in_progress / CI_PENDING`. Its OIDC/JWKS boundary, actor-role binding, threat model, and 89/89 Java tests pass locally; evidence is `evidence/gates/R4-402/oidc-boundary.md`.
+Task Status: R4-402 passed `CI_VALIDATED`; implementation `a313586` passed all five jobs in Actions run `32810095615`. R4-403 is `in_progress`.
 
-Next: run the complete local control gates, commit/push R4-402, observe the real Actions run, close only if every required job passes, then activate R4-403. Do not activate R4-401 or R4-410 without their task-specific human/external gates.
+Next: implement the durable tenant migration and Java transaction/query/event/idempotency/audit isolation boundary for R4-403, including cross-tenant concurrency and replay failures plus rollback and single-tenant compatibility evidence. Do not activate R4-401 or R4-410 without their task-specific human/external gates.
 
-R3-365 closure report remains `docs/research/r3/ROUND_3_SCIENTIFIC_CLOSURE_REPORT.md`, byte SHA-256 `f5e12a289ccd7cd01c37edad739b4e4ace8496c80fd1dc82cc055d172a769632`. The active `docs/research/ROUND_4_TASK_GRAPH.yaml`, byte SHA-256 `99f6e9a9a02d927afcec3bed24d50dc915cc6e7e7244f1f8c95fc4a1db3e739b`, has 38 tasks across six workstreams, 15 external gates, 12 human approvals, three conditional tasks, 11 closure classifications, and 11 preserved Round 3 reclassification lanes. `scripts/round4_graph_gate.py` plus nine directed tests validate the live `TASK_GRAPH.yaml` mirror, reject gate/dependency/classification drift or claim promotion, and bind R3-325 plus the zero-`C-PASS` Claim Matrix. R3-313 maps to optional R4-437; R3-355 maps to R4-438/R4-439 and conditional R4-440. No external call, production action, experiment, or R3-325 rerun occurred during promotion.
+R3-365 closure report remains `docs/research/r3/ROUND_3_SCIENTIFIC_CLOSURE_REPORT.md`, byte SHA-256 `f5e12a289ccd7cd01c37edad739b4e4ace8496c80fd1dc82cc055d172a769632`. The active `docs/research/ROUND_4_TASK_GRAPH.yaml`, byte SHA-256 `be92cf929558ba93c05d21496496c3c6a8478c9aa768c44ac48718b5dfad3a97`, has 38 tasks across six workstreams, 15 external gates, 12 human approvals, three conditional tasks, 11 closure classifications, and 11 preserved Round 3 reclassification lanes. `scripts/round4_graph_gate.py` plus nine directed tests validate the live `TASK_GRAPH.yaml` mirror, reject gate/dependency/classification drift or claim promotion, and bind R3-325 plus the zero-`C-PASS` Claim Matrix. R3-313 maps to optional R4-437; R3-355 maps to R4-438/R4-439 and conditional R4-440. No external call, production action, experiment, or R3-325 rerun occurred during promotion.
 
 R3-360 evidence is `evidence/gates/R3-360/final-figures.md`. Final plan digest is `10e12aa0f586ad94e963396feb0a045fc1b21fe4ff0cd7537d0d769f145bb30d`; bundle digest is `2b230697ea367ace51afcd52c7544efd6cd024abca0104f10a35b50ebce34684`. Actions run `32789597203` passed all five jobs. The final 16/12/7 rows retain six non-estimable cells, unexecuted confirmatory inference, zero Twin observations, unsupported RADS location noise, zero exclusions, and zero `C-PASS`. R3-325 was not rerun.
 

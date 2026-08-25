@@ -73,12 +73,12 @@
       "evidence": ["evidence/gates/R4-401/deployment-contract.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
     {
-      "id": "R4-402", "title": "Implement OIDC authentication boundary and threat model", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-400"], "status": "in_progress", "external_gate": false, "human_approval": false,
+      "id": "R4-402", "title": "Implement OIDC authentication boundary and threat model", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-400"], "status": "passed", "external_gate": false, "human_approval": false,
       "acceptance": ["OIDC issuer, audience, token, session, logout, key rotation, and failure semantics are explicit", "Java remains authoritative for durable business authorization", "Threat model covers confused deputy, replay, privilege escalation, and service-to-service identity"],
       "evidence": ["evidence/gates/R4-402/oidc-boundary.md"], "round3_lineage": ["ROUND_4_IDENTITY_RECLASSIFICATION"]
     },
     {
-      "id": "R4-403", "title": "Enforce durable multi-tenant isolation and migration compatibility", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-402"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-403", "title": "Enforce durable multi-tenant isolation and migration compatibility", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-402"], "status": "in_progress", "external_gate": false, "human_approval": false,
       "acceptance": ["Tenant identity is enforced in Java transactions, queries, events, idempotency, and audit records", "Cross-tenant reads and writes fail closed under concurrency and replay", "Migrations, backfill, rollback, and existing single-tenant compatibility are executable"],
       "evidence": ["evidence/gates/R4-403/tenant-isolation.md"], "round3_lineage": ["ROUND_4_IDENTITY_RECLASSIFICATION"]
     },

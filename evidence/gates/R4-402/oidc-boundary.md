@@ -4,7 +4,7 @@ Date: 2026-08-25 (Asia/Shanghai)
 
 Entry revision: `6bb86573719b30f64e0d2d51a2942fbf073df193`
 
-Status: in progress - `CI_PENDING`
+Status: passed - `CI_VALIDATED`
 
 ## Implemented boundary
 
@@ -62,5 +62,7 @@ the complete suite passed twice (88/88 before actor binding and 89/89 after it).
 ## Evidence boundary
 
 This checkpoint does not claim a live IdP, credential, certificate, revocation,
-JWKS outage, or production key-rotation result. R4-402 remains `in_progress`
-until the implementation commit passes every required GitHub Actions job.
+JWKS outage, or production key-rotation result. Implementation
+`a313586c18955d7c79ffcf80f67e62cecd0d058d` passed all five jobs in GitHub
+Actions run `32810095615`: Java, control/Compose, Python/contracts, bounded
+degradation/resilience, and Web unit/build/browser smoke.
