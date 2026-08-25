@@ -2,7 +2,9 @@
 
 Date: 2026-08-25 (Asia/Shanghai)
 
-Status: `LOCAL_VALIDATED / CI_PENDING`
+Implementation revision: `7bc03a85cb159b023b098b54a1d69311f0543abb`
+
+Status: `LOCAL_VALIDATED / CI_VALIDATED`
 
 ## Implementation boundary
 
@@ -52,4 +54,7 @@ data, or production credential was used. R3-325 remains frozen exactly as
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM` and was not rerun, tuned, reinterpreted,
 or optimized.
 
-GitHub Actions validation for the implementation revision remains pending.
+GitHub Actions run `32839582664` passed all five jobs for the implementation
+revision: Python compute/contracts, Java business runtime with supply-chain
+evidence, role-aware Web static/unit/browser gates, bounded resilience, and the
+repository control plane with Compose validation.

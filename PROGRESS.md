@@ -8,34 +8,34 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Round 4 Progress: 7 / 38 tasks passed
+Round 4 Progress: 8 / 38 tasks passed
 
-Repository Total: 163 / 196 tasks passed
+Repository Total: 164 / 196 tasks passed
 
-Current Task: R4-423 - Make all role-aware surfaces tenant and identity aware
+Current Task: NONE - waiting at explicit external/human approval gates
 
-Last Completed: R4-450 - Freeze agent authority, tool policy, audit, and evaluation boundaries
+Last Completed: R4-423 - Make all role-aware surfaces tenant and identity aware
 
-Current Gate: R4-450 is `LOCAL_VALIDATED / CI_VALIDATED`; R4-423 is active. All role-aware surfaces must enforce verified identity and tenant context, fail closed on unauthorized navigation/cached data/realtime/deep links, and retain accessible empty/error/stale/degraded states.
+Current Gate: R4-423 is `LOCAL_VALIDATED / CI_VALIDATED`. No ordinary internal task is dependency-ready. R4-401 is the highest-priority next gate and requires deployment-target/SLO/failure-domain evidence plus explicit human approval; R4-410 and R4-422 also retain external/human gates.
 
-CI: PASS for R4-450 implementation SHA 8e2498b in run 32827906691; all five jobs passed. R4-421 implementation run 32826218396 and R4-420 implementation run 32820839648 also passed all five jobs. Earlier R4-404 runs 32818303442 and 32818849130 remain preserved as failed diagnostic evidence.
+CI: PASS for R4-423 implementation SHA 7bc03a85cb159b023b098b54a1d69311f0543abb in run 32839582664; all five jobs passed. R4-450 run 32827906691, R4-421 run 32826218396, and R4-420 run 32820839648 also passed all five jobs. Earlier R4-404 runs 32818303442 and 32818849130 remain preserved as failed diagnostic evidence.
 
-Regression: PASS locally for 102/102 Java tests, 920 Python tests at 95.11% coverage, six schemas, 18 contract fixtures, Round 4 graph, negative-results, final-claim, security, supply-chain, recovery, release, and staged-release gates. Local Compose validation passes. The remote SBOM contains 527 components across Maven/PyPI/npm/OCI, binds three live registry manifests and exact source revision, and retains `signed=false`; its downloaded artifact passed validation. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
+Regression: PASS locally for 110/110 Java tests, 36 Web files / 104 tests, 34 Playwright scenarios with two expected project-specific skips, formatting, lint, typecheck, production build, Round 4 graph, negative-results, final-claim, security, supply-chain, product, agent, recovery, release, staged-release, and Compose gates. The remote SBOM/provenance job also passed. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
 Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly deferred/reclassified; no required task remains open.
 
 Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-347 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
 
-Blocked: NONE for R4-423. Task-specific external, human-approval, and conditional gates remain inactive and preserved.
+Blocked: R4-401 requires a real deployment target and explicit approval of topology, ownership, regions, data residency, scaling, failure domains, measurable SLOs, capacity, and cost assumptions. R4-410 and R4-422 retain separate provider/notification external and human gates. R4-437 remains conditional and inactive.
 
-Human Action Required: NO for the active task
+Human Action Required: YES - approve and supply the R4-401 deployment target assumptions, or explicitly authorize another recorded human-gated lane
 
-Next Candidates: R4-423 is active. R4-401, R4-410, and R4-422 retain their task-specific human/external gates; R4-430 and R4-451 remain dependency-bound.
+Next Candidates: R4-401 is the highest-priority gate. R4-410 and R4-422 are alternate explicit external/human gates. R4-430 and R4-451 remain dependency-bound; R4-437 cannot activate unless pickup-delivery semantics enter the current research scope.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
-- Current task: R4-423.
+- Current task: none; waiting at explicit external/human approval gates.
 - Workstream: U - Multi-End Product Completion.
-- Status: R4-450 passed; R4-423 is active and unblocked.
+- Status: R4-423 passed locally and remotely; no ordinary internal task is dependency-ready.
 - Completed gate: opaque tenant/role/actor/route quotas, bounded degradation,
   local WAF-equivalent policy, secret automation, 527-component SBOM, and
   explicitly unsigned provenance all have executable evidence.
@@ -55,15 +55,20 @@ Next Candidates: R4-423 is active. R4-401, R4-410, and R4-422 retain their task-
 - Agent authority: R4-450 contract digest `75296ef7...4609`, six mutation
   tests, Ruff/mypy, and 1019 Python tests passed; implementation `8e2498b`
   passed all five jobs in Actions run `32827906691`.
+- Tenant surfaces: Java verified-session projection, scoped navigation/cache,
+  bearer-bound commands/preferences, authenticated tenant-checked SSE, and
+  accessible fail-closed states passed 110 Java tests, 104 Web unit tests, and
+  34 Playwright scenarios. Implementation `7bc03a8` passed all five jobs in
+  Actions run `32839582664`.
 - Evidence: `evidence/gates/R4-420/product-contract.md` and
   `docs/product/R4_PRODUCT_SEMANTICS.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as
   complete or authorized by graph promotion.
-- Next: make all role-aware surfaces tenant and identity aware, including
-  unauthorized navigation, cached data, realtime events, deep links, and
-  accessible empty/error/stale/degraded states. R4-401, R4-410, and R4-422
-  retain their human/external gates.
-- Human action required: NONE for R4-423.
+- Next: R4-401 requires selection and explicit approval of a real deployment
+  target, measurable SLOs, capacity/cost assumptions, and failure domains.
+  R4-410 and R4-422 retain separate human/external gates; no internal task can
+  be truthfully activated before one of those dependency gates closes.
+- Human action required: YES for the next Round 4 gate.
 
 ### R3-365 Round 3 scientific closure - 2026-08-25
 - Implementation `9e9537e` passed all five jobs in Actions run `32790948926`,
