@@ -2,7 +2,7 @@
 
 Date: 2026-08-25 (Asia/Shanghai)
 
-Status: `LOCAL_VALIDATED / CI_PENDING`
+Status: `LOCAL_VALIDATED / CI_VALIDATED`
 
 ## Frozen contract
 
@@ -31,4 +31,6 @@ Status: `LOCAL_VALIDATED / CI_PENDING`
 - No external LLM, provider, production data, state-changing command, or R3-325
   rerun occurred. R3-325 remains `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
 
-Remote GitHub Actions validation is the remaining Evidence Gate for this task.
+GitHub Actions run `32827906691` for implementation revision `8e2498b` passed
+all five jobs: Python compute/contracts, Java business runtime, role-aware Web
+browser smoke, bounded resilience, and control-plane validation.

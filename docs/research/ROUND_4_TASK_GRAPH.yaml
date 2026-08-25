@@ -148,7 +148,7 @@
       "evidence": ["evidence/gates/R4-422/notifications.md"], "round3_lineage": ["ROUND_4_PRODUCT_RECLASSIFICATION"]
     },
     {
-      "id": "R4-423", "title": "Make all role-aware surfaces tenant and identity aware", "workstream": "U", "priority": "high", "classification": "PRODUCT", "depends_on": ["R4-403", "R4-421"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-423", "title": "Make all role-aware surfaces tenant and identity aware", "workstream": "U", "priority": "high", "classification": "PRODUCT", "depends_on": ["R4-403", "R4-421"], "status": "in_progress", "external_gate": false, "human_approval": false,
       "acceptance": ["Operations, strategy, customer, merchant, and courier workflows enforce identity and tenant context", "Unauthorized navigation, cached data, realtime events, and deep links fail closed", "Accessible empty, error, stale, and degraded states remain complete"],
       "evidence": ["evidence/gates/R4-423/tenant-surfaces.md"], "round3_lineage": ["ROUND_4_IDENTITY_RECLASSIFICATION", "ROUND_4_PRODUCT_RECLASSIFICATION"]
     },
@@ -213,7 +213,7 @@
       "evidence": ["evidence/gates/R4-440/ips-dr.md"], "round3_lineage": ["R3-355"]
     },
     {
-      "id": "R4-450", "title": "Freeze agent authority, tool policy, audit, and evaluation boundaries", "workstream": "A", "priority": "high", "classification": "AGENT_EVALUATION", "depends_on": ["R4-400"], "status": "in_progress", "external_gate": false, "human_approval": false,
+      "id": "R4-450", "title": "Freeze agent authority, tool policy, audit, and evaluation boundaries", "workstream": "A", "priority": "high", "classification": "AGENT_EVALUATION", "depends_on": ["R4-400"], "status": "passed", "external_gate": false, "human_approval": false,
       "acceptance": ["Read, analysis, experiment orchestration, and state-changing tool classes are separated", "Deterministic dispatch and Java durable authority cannot be delegated to an LLM", "Prompt injection, data leakage, tool abuse, approval, audit, timeout, and rollback policies are frozen"],
       "evidence": ["evidence/gates/R4-450/agent-policy.md"], "round3_lineage": ["ROUND_4_AGENT_RECLASSIFICATION"]
     },
