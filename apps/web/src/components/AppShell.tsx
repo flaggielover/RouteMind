@@ -9,11 +9,12 @@ import {
   Store,
   UserRound,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { DataAvailability, DataSourceMode, Role, ServiceHealth } from "../domain/model";
 import type { RealtimeConnectionState } from "../data/realtime";
 import { StatusPill } from "./StatusPill";
+import { PreferencesPanel } from "./PreferencesPanel";
 
 const navigation: Array<{ role: Role; label: string; icon: typeof LayoutDashboard }> = [
   { role: "operations", label: "Operations", icon: LayoutDashboard },
@@ -44,6 +45,8 @@ export function AppShell({
   onRefreshHealth,
   children,
 }: AppShellProps) {
+  const location = useLocation();
+  const activeRole = (location.pathname.split("/")[1] || "operations") as Role;
   const unavailable = health.filter((item) => item.status === "unavailable").length;
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const mobileNavToggleRef = useRef<HTMLButtonElement>(null);
@@ -181,6 +184,16 @@ export function AppShell({
                 <option value="simulation">Simulation</option>
               </select>
             </label>
+            <PreferencesPanel
+              role={
+                activeRole in
+                { operations: true, strategy: true, customer: true, merchant: true, courier: true }
+                  ? activeRole
+                  : "operations"
+              }
+              source={source}
+              availability={availability}
+            />
             <div className="health-summary" role="status" aria-label="Service health summary">
               {health.map((item) => (
                 <StatusPill key={item.service} status={item.status} label={item.label} />

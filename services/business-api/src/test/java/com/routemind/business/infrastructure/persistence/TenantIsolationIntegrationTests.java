@@ -169,7 +169,7 @@ class TenantIsolationIntegrationTests {
 				""", "a".repeat(64), orderId);
 
 		Flyway.configure().dataSource(dataSource).createSchemas(true).schemas("routemind")
-				.defaultSchema("routemind").load().migrate();
+				.defaultSchema("routemind").target("16").load().migrate();
 
 		assertThat(migrationJdbc.queryForObject("""
 				select tenant_id from routemind.order_command_idempotency where idempotency_key = 'legacy-key'
