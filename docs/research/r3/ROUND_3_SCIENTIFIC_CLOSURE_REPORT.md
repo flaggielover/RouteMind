@@ -258,6 +258,8 @@ Round 3 as closed, R3-313/R3-355 as explicit deferred/reclassified
 dispositions, and Round 4 as `PREPARED_NOT_STARTED`. All five jobs passed again
 in Actions run `32791413681`.
 
-The final evidence-synchronization checkpoint records this accepted closure run.
-It still requires its own green Actions run before the repository-level handoff
-may claim final CI green, clean tracked worktree, and `main == origin/main`.
+The final evidence-synchronization checkpoint
+`fb33b8e5eed5b1af8c435ad83cb2de86d295817d` passed all five jobs in Actions
+run `32791713983`. At that checkpoint the tracked worktree was clean and
+`main == origin/main`; the user-owned untracked `.codex-tmp/` directory was
+preserved without modification.
