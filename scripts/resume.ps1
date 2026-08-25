@@ -22,6 +22,7 @@ try {
     $current = @($graph.tasks | Where-Object { $_.status -in @("in_progress", "validating", "implemented") })
     $passed = @($graph.tasks | Where-Object { $_.status -eq "passed" })
     $passedIds = @($passed | ForEach-Object { $_.id })
+    $blocked = @($graph.tasks | Where-Object { $_.status -eq "blocked" })
     $eligible = @($graph.tasks | Where-Object {
         $_.status -in @("pending", "ready") -and
         @($_.depends_on | Where-Object { $_ -notin $passedIds }).Count -eq 0
@@ -38,7 +39,16 @@ try {
     }
     Write-Host "Passed: $($passed.Count) / $($graph.tasks.Count)"
     Write-Host "Next eligible: $(if ($eligible) { ($eligible | ForEach-Object { $_.id }) -join ', ' } else { 'NONE' })"
-    Write-Host "Human action: NONE recorded"
+    if ($blocked) {
+        $blockedSummary = @($blocked | ForEach-Object {
+            $requirements = @($_.blocked_by | Where-Object { $_ }) -join "; "
+            if ($requirements) { "$($_.id): $requirements" } else { "$($_.id): reason not recorded" }
+        }) -join " | "
+        Write-Host "Human/external action: $blockedSummary"
+    }
+    else {
+        Write-Host "Human/external action: NONE recorded"
+    }
     Write-Host ""
 
     & (Join-Path $PSScriptRoot "verify.ps1")

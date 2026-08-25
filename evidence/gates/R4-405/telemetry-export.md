@@ -2,9 +2,9 @@
 
 Date: 2026-08-25 (Asia/Shanghai)
 
-Entry revision: `UNCOMMITTED`
+Entry revision: `49680bd2cad52244acd44b8f389f62078daa7167`
 
-Status: `LOCAL_VALIDATED / CI_PENDING / TARGET_PENDING`
+Status: `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`
 
 ## Implemented boundary
 
@@ -71,7 +71,23 @@ business failure.
 - `./scripts/verify.ps1`: PASS after task-control synchronization.
 - `./scripts/resume.ps1`: PASS; R4-405 is reported as `validating`, repository
   total remains 165/196, and no task is falsely promoted to passed.
-- Real GitHub Actions for this implementation: PENDING.
+- Final resume after CI closure: PASS. It reports `Current: NONE`, R4-405 and
+  R4-406 human/external requirements from their `blocked_by` records, and next
+  eligible R4-410/R4-422/R4-437. The former hard-coded `NONE recorded` output
+  was removed so the real-time progress capsule remains truthful.
+- Implementation `49680bd` passed all five jobs in real GitHub Actions run
+  `32852309878`: control/Compose, Java/SBOM/provenance, Python/contracts,
+  Web/browser, and resilience/recovery.
+- Remote control log reports the exact contract digest
+  `767ae48b9c377d0718eb28d16fe5539302d2dfc46f66f03e7ca71506fb502395`
+  and collector digest
+  `b7af884b5f6ad247157dac45da4df448af09e7acbc6ddcb7a758a159404a1b9e`,
+  with `collectorVerified:false`, `productionCostVerified:false`, and
+  `targetStatus:TARGET_PENDING`.
+- The run retained recovery artifact `9564818949`, GitHub digest
+  `sha256:f72fd4fdc14119d4a1c893ff31c04a13e495e00815df2f2638b80f4d2f02ae62`.
+  This revalidates the separate R4-406 local-CI lane and is not target telemetry
+  or target recovery evidence.
 
 ## Target qualification still required
 
