@@ -18,7 +18,7 @@ Last Completed: R4-401 - Select a deployment target and freeze SLO and failure-d
 
 Current Gate: R4-406 is `IMPLEMENTED / SERVICE_DRILL_PENDING / TARGET_PENDING`. The fail-closed contract, five mutation-test groups, isolated PostgreSQL/RabbitMQ/Redis recovery drill, Outbox replay, Redis rebuild, reconciliation, tenant/audit continuity, rollback, CI artifact, and runbook are implemented. The local Docker daemon was unresponsive, so no local service-backed pass is claimed; the implementation CI must execute it. Vultr Tokyo RPO/RTO proof remains external.
 
-CI: R4-406 implementation SHA 13d689b failed run 32845758884 only in the new RabbitMQ readiness probe; control, Java, Python, Web, and focused resilience passed. The probe incorrectly required stdout text instead of the diagnostic exit code; remediation CI is pending. R4-401 closure run 32843874880 and implementation run 32843310725 passed all five jobs.
+CI: R4-406 run 32845758884 first exposed the Rabbit readiness probe defect; remediation c109a27 run 32846265052 passed control, Java, Python, Web, and resilience, then retained the actual Rabbit startup failure `.erlang.cookie: eacces` on its anonymous data volume. The next remediation uses a random in-memory cookie and explicit tmpfs Mnesia base; CI is pending. No recovery pass is claimed. R4-401 closure run 32843874880 remains green.
 
 Regression: PASS locally for R4-406 syntax, five fail-closed mutation-test groups, full gate (110/110 Java, 920/920 Python at 95.11%, 104/104 Web, production build), serial focused resilience (15 Java / 2 Python), task graph, Round 4 mirror, R4-401 deployment contract, security, supply-chain, product, agent, recovery, release, staged-release, and Compose configuration. An earlier concurrent resilience invocation raced Maven `clean`; the serial rerun passed without code or assertion changes. The previous R4-401 browser gate remains 34 Playwright scenarios with two expected skips. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
@@ -78,6 +78,9 @@ Next Candidates: R4-406 is active as the highest-priority dependency-ready task.
 - Diagnostic CI: run `32845758884` passed four jobs and the resilience baseline,
   then found a stdout-dependent RabbitMQ readiness probe before any recovery
   claim. The remediation uses the diagnostic exit code and retains log tails.
+- Diagnostic CI: run `32846265052` confirmed the probe fix and retained the
+  underlying Rabbit `.erlang.cookie: eacces` startup failure. The next isolated
+  runner uses a generated cookie and tmpfs Mnesia state; no secret is reported.
 - Evidence: `evidence/gates/R4-420/product-contract.md` and
   `docs/product/R4_PRODUCT_SEMANTICS.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as

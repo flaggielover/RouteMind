@@ -8,7 +8,7 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: R4-406 - Prove backup, restore, disaster recovery, and data reconciliation
 
-Task Status: R4-406 is `IMPLEMENTED / SERVICE_DRILL_REMEDIATION / TARGET_PENDING`. Implementation `13d689b` run `32845758884` passed control, Java, Python, Web, and focused resilience, then failed before restore because the RabbitMQ readiness probe required stdout text instead of the diagnostic command's exit code. The remediation uses the exit code and retains container logs on timeout. No recovery pass is claimed from the failed run. R4-401 closure run `32843874880` remains green.
+Task Status: R4-406 is `IMPLEMENTED / SERVICE_DRILL_REMEDIATION / TARGET_PENDING`. Run `32845758884` found the stdout-dependent Rabbit readiness probe; remediation `c109a27` run `32846265052` confirmed the probe fix and retained the underlying `.erlang.cookie: eacces` failure on Rabbit's anonymous data volume. Control, Java, Python, Web, and focused resilience passed in both runs. The next remediation supplies a random in-memory cookie and an explicit tmpfs Mnesia base; neither is reported. No recovery pass is claimed from either failed run. R4-401 closure remains green.
 
 Next: validate and commit/push the R4-406 implementation, observe the real Actions recovery drill and retained JSON, fix failures, then record `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`. Do not claim the 15-minute RPO or 120-minute RTO until a matching Vultr Tokyo drill runs. After the local/CI closure, mark R4-406 externally blocked and activate R4-405. Credentials and explicit resource/spend approval are required before the external drill. Keep `.codex-tmp/` untouched and untracked.
 

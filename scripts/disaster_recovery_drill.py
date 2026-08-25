@@ -182,18 +182,32 @@ def restore_postgres(name: str, path: Path) -> None:
     )
 
 
-def start_rabbit(name: str, password: str) -> None:
+def start_rabbit(name: str, password: str, erlang_cookie: str) -> None:
     docker(
         "run",
         "-d",
         "--name",
         name,
+        "--hostname",
+        name,
+        "--tmpfs",
+        "/tmp/rabbitmq:rw,exec,nosuid,nodev",
+        "--entrypoint",
+        "sh",
         "-P",
         "-e",
         "RABBITMQ_DEFAULT_USER=routemind",
         "-e",
         f"RABBITMQ_DEFAULT_PASS={password}",
+        "-e",
+        f"RABBITMQ_ERLANG_COOKIE={erlang_cookie}",
+        "-e",
+        "RABBITMQ_MNESIA_BASE=/tmp/rabbitmq/mnesia",
+        "-e",
+        "HOME=/tmp/rabbitmq",
         RABBITMQ_IMAGE,
+        "-c",
+        "mkdir -p /tmp/rabbitmq/mnesia && chown -R rabbitmq:rabbitmq /tmp/rabbitmq && exec docker-entrypoint.sh rabbitmq-server",
     )
     try:
         wait_until(name, lambda: command_succeeds(["docker", "exec", name, "rabbitmq-diagnostics", "-q", "ping"]))
@@ -362,6 +376,7 @@ def execute(output: Path) -> dict[str, Any]:
     }
     postgres_password = secrets.token_urlsafe(24)
     rabbit_password = secrets.token_urlsafe(24)
+    rabbit_erlang_cookie = secrets.token_urlsafe(32)
     redis_password = secrets.token_urlsafe(24)
     revision = run(["git", "rev-parse", "HEAD"]).decode("ascii").strip()
     started_at = datetime.now(UTC)
@@ -382,7 +397,7 @@ def execute(output: Path) -> dict[str, Any]:
             dump_postgres(names["pg_source"], postgres_dump)
 
             vhost = "/r4-406"
-            start_rabbit(names["rabbit_source"], rabbit_password)
+            start_rabbit(names["rabbit_source"], rabbit_password, rabbit_erlang_cookie)
             source_rabbit_port = rabbit_port(names["rabbit_source"])
             wait_rabbit_http(source_rabbit_port, rabbit_password)
             configure_rabbit(source_rabbit_port, rabbit_password, vhost)
@@ -425,7 +440,7 @@ def execute(output: Path) -> dict[str, Any]:
                 reconciliation_evidence=restored["reconciliation"] == source["reconciliation"],
             )
 
-            start_rabbit(names["rabbit_restore"], rabbit_password)
+            start_rabbit(names["rabbit_restore"], rabbit_password, rabbit_erlang_cookie)
             restored_rabbit_port = rabbit_port(names["rabbit_restore"])
             wait_rabbit_http(restored_rabbit_port, rabbit_password)
             import_rabbit(restored_rabbit_port, rabbit_password, vhost, rabbit_definitions)

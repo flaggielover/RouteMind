@@ -57,6 +57,12 @@ evidence digest, RPO at most 900 seconds, and RTO at most 7200 seconds.
   stdout. The diagnostic command's exit code is now authoritative and future
   timeouts retain the container log tail. No service-backed recovery pass is
   claimed from the failed run.
+- Readiness remediation `c109a27` run `32846265052` passed the same four jobs
+  and resilience baseline and retained the actual RabbitMQ startup error:
+  `.erlang.cookie: eacces` on the runner-provided anonymous data volume. The
+  isolated drill now supplies a random in-memory Erlang cookie and mounts its
+  Mnesia base on an explicit container tmpfs. Neither value is persisted in the
+  report. No service-backed recovery pass is claimed from this failed run.
 - The local Docker daemon was unresponsive before the implementation checkpoint.
   The remediation CI run and its retained recovery JSON artifact are pending.
 
