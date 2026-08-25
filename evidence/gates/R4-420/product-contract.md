@@ -2,9 +2,9 @@
 
 Date: 2026-08-25 (Asia/Shanghai)
 
-Entry revision: `bf984d7e59033938dff2684dc0849920e47360b1`
+Implementation revision: `bddc03befb40dac9fe3b876995d81c7b0d2666f6`
 
-Status: in progress - `LOCAL_VALIDATED / CI_PENDING`
+Status: passed - `LOCAL_VALIDATED / CI_VALIDATED`
 
 ## Frozen boundary
 
@@ -35,7 +35,10 @@ Status: in progress - `LOCAL_VALIDATED / CI_PENDING`
   receipts, terminal states, and external-send authority fail closed.
 - `./scripts/verify.ps1`: passed with product contract and tests integrated into
   the fast repository gate.
-- Real GitHub Actions: pending implementation commit.
+- Real GitHub Actions run `32820839648` passed all five jobs for implementation
+  revision `bddc03befb40dac9fe3b876995d81c7b0d2666f6`, including Java, Python and
+  contracts, role-aware Web browser smoke, bounded resilience, and repository
+  control-plane validation.
 
 ## Scientific preservation
 

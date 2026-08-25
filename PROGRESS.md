@@ -8,17 +8,17 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Round 4 Progress: 4 / 38 tasks passed
+Round 4 Progress: 5 / 38 tasks passed
 
-Repository Total: 160 / 196 tasks passed
+Repository Total: 161 / 196 tasks passed
 
-Current Task: R4-420 - Freeze preference, accessibility, consent, and notification semantics
+Current Task: R4-421 - Implement durable tenant-aware user preferences
 
-Last Completed: R4-404 - Harden gateway rate limits, secret handling, WAF policy, SBOM, and provenance
+Last Completed: R4-420 - Freeze preference, accessibility, consent, and notification semantics
 
-Current Gate: R4-420 is locally complete and `CI_PENDING`. The frozen executable contract covers preference ownership/defaults/versioning, consent, deterministic quiet hours, locale/accessibility requirements, exact notification acknowledgement states, privacy, and role/tenant persistence boundaries; real provider sending remains unauthorized.
+Current Gate: R4-420 is `LOCAL_VALIDATED / CI_VALIDATED`; R4-421 is active. The durable preference implementation must keep Java/PostgreSQL authority, optimistic concurrency, idempotency, audit, tenant/role isolation, and explicit Web loading/stale/conflict/unavailable/rollback states.
 
-CI: PASS for R4-404 remediation SHA f6d8ef03b91b57d5753c87f7fbc55b16784286c8 in run 32819593245 and R4-420 activation SHA bf984d7e59033938dff2684dc0849920e47360b1 in run 32820084182; each passed all five jobs. Earlier R4-404 runs 32818303442 and 32818849130 are preserved as failed diagnostic evidence.
+CI: PASS for R4-420 implementation SHA bddc03befb40dac9fe3b876995d81c7b0d2666f6 in run 32820839648; all five jobs passed. R4-404 remediation run 32819593245 and R4-420 activation run 32820084182 also passed all five jobs. Earlier R4-404 runs 32818303442 and 32818849130 are preserved as failed diagnostic evidence.
 
 Regression: PASS locally for 102/102 Java tests, 920 Python tests at 95.11% coverage, six schemas, 18 contract fixtures, Round 4 graph, negative-results, final-claim, security, supply-chain, recovery, release, and staged-release gates. Local Compose validation passes. The remote SBOM contains 527 components across Maven/PyPI/npm/OCI, binds three live registry manifests and exact source revision, and retains `signed=false`; its downloaded artifact passed validation. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
@@ -26,16 +26,16 @@ Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly defer
 
 Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-347 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
 
-Blocked: NONE for R4-420. Task-specific external, human-approval, and conditional gates remain inactive and preserved.
+Blocked: NONE for R4-421. Task-specific external, human-approval, and conditional gates remain inactive and preserved.
 
 Human Action Required: NO for the active task
 
-Next Candidates: R4-420 is active. R4-401 and R4-410 require their task-specific human/external gates; R4-450 remains an independent local candidate.
+Next Candidates: R4-421 is active. R4-401 and R4-410 require their task-specific human/external gates; R4-450 remains an independent local candidate.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
-- Current task: R4-420.
+- Current task: R4-421.
 - Workstream: U - Multi-End Product Completion.
-- Status: R4-404 passed; R4-420 is locally complete and `CI_PENDING`.
+- Status: R4-420 passed; R4-421 is active and unblocked.
 - Completed gate: opaque tenant/role/actor/route quotas, bounded degradation,
   local WAF-equivalent policy, secret automation, 527-component SBOM, and
   explicitly unsigned provenance all have executable evidence.
@@ -46,14 +46,16 @@ Next Candidates: R4-420 is active. R4-401 and R4-410 require their task-specific
 - Product contract: digest `821e782c...2406`; five roles, five consent
   purposes, nine accessibility requirements, ten states, and eighteen exact
   transitions pass 12 directed mutation tests. Real provider send is false.
+- CI: R4-420 implementation `bddc03b` passed all five jobs in Actions run
+  `32820839648`.
 - Evidence: `evidence/gates/R4-420/product-contract.md` and
   `docs/product/R4_PRODUCT_SEMANTICS.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as
   complete or authorized by graph promotion.
-- Next: commit/push the R4-420 contract, observe all five Actions jobs, then
-  close it and activate the highest-priority eligible successor. R4-401 and
-  R4-410 retain their human/external gates.
-- Human action required: NONE for R4-420.
+- Next: implement durable tenant-aware preferences with Java/PostgreSQL
+  authority and complete Web failure, conflict, stale, and rollback states.
+  R4-401 and R4-410 retain their human/external gates.
+- Human action required: NONE for R4-421.
 
 ### R3-365 Round 3 scientific closure - 2026-08-25
 - Implementation `9e9537e` passed all five jobs in Actions run `32790948926`,
