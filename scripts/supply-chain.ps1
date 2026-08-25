@@ -6,6 +6,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
+$onWindows = [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT
 $output = [System.IO.Path]::GetFullPath((Join-Path $root $OutputDirectory))
 $allowedRoot = [System.IO.Path]::GetFullPath((Join-Path $root "evidence/tests/tmp"))
 if (-not $output.StartsWith($allowedRoot + [System.IO.Path]::DirectorySeparatorChar, [System.StringComparison]::OrdinalIgnoreCase)) {
@@ -25,7 +26,7 @@ $versionLine = $settings | Where-Object { $_ -match '^\s*java\.version\s*=' } | 
 $javaHome = ($homeLine -replace '^\s*java\.home\s*=\s*', '').Trim()
 $javaVersion = ($versionLine -replace '^\s*java\.version\s*=\s*', '').Trim()
 $major = if ($javaVersion -match '^1\.(\d+)') { [int]$Matches[1] } elseif ($javaVersion -match '^(\d+)') { [int]$Matches[1] } else { 0 }
-$javacName = if ($IsWindows -or [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT) { "javac.exe" } else { "javac" }
+$javacName = if ($onWindows) { "javac.exe" } else { "javac" }
 if ($major -lt 17 -or -not (Test-Path -LiteralPath (Join-Path $javaHome "bin/$javacName"))) {
     throw "A full JDK 17 or newer is required"
 }
@@ -36,12 +37,31 @@ $manifestDirectory = Join-Path $output "oci-manifests"
 New-Item -ItemType Directory -Force -Path $manifestDirectory | Out-Null
 $javaTree = Join-Path $output "maven-dependency-tree.txt"
 $serviceRoot = Join-Path $root "services/business-api"
-$wrapper = Join-Path $serviceRoot $(if ($IsWindows -or [System.Environment]::OSVersion.Platform -eq [System.PlatformID]::Win32NT) { "mvnw.cmd" } else { "mvnw" })
+$wrapper = Join-Path $serviceRoot $(if ($onWindows) { "mvnw.cmd" } else { "mvnw" })
 $mavenRepository = Join-Path $root ".tools/m2"
+
+function Invoke-Maven {
+    param([Parameter(Mandatory)][string[]] $MavenArguments)
+
+    if ($onWindows) {
+        & $wrapper @MavenArguments
+    }
+    else {
+        if (-not (Get-Command bash -ErrorAction SilentlyContinue)) {
+            throw "Bash is required to launch the Maven Wrapper on this platform"
+        }
+        & bash $wrapper @MavenArguments
+    }
+}
 
 Push-Location $serviceRoot
 try {
-    & $wrapper "-Dmaven.repo.local=$mavenRepository" "org.apache.maven.plugins:maven-dependency-plugin:3.10.0:tree" "-DoutputFile=$javaTree" "-DoutputType=text"
+    Invoke-Maven -MavenArguments @(
+        "-Dmaven.repo.local=$mavenRepository",
+        "org.apache.maven.plugins:maven-dependency-plugin:3.10.0:tree",
+        "-DoutputFile=$javaTree",
+        "-DoutputType=text"
+    )
     if ($LASTEXITCODE -ne 0) { throw "Maven dependency tree generation failed" }
 }
 finally {

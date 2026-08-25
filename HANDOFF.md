@@ -8,7 +8,7 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: R4-404 - Harden gateway rate limits, secret handling, WAF policy, SBOM, and provenance
 
-Task Status: R4-403 passed as implementation `534b9efc8a1ae303bcc26f11207adf47d61efbe6` in all five jobs of GitHub Actions run `32814670130`. R4-404 is `in_progress` and locally complete: 102/102 Java tests pass, repository controls pass, and a validated 527-component SBOM plus explicitly unsigned provenance binds Maven, PyPI, npm, and three live OCI manifests. Real CI and retained-artifact validation are pending.
+Task Status: R4-403 passed as implementation `534b9efc8a1ae303bcc26f11207adf47d61efbe6` in all five jobs of GitHub Actions run `32814670130`. R4-404 is `in_progress` and locally complete: 102/102 Java tests pass, repository controls pass, and a validated 527-component SBOM plus explicitly unsigned provenance binds Maven, PyPI, npm, and three live OCI manifests. Initial R4-404 run `32818303442` passed four jobs but exposed that POSIX `mvnw` was sent to `xdg-open` instead of executed. Explicit Bash launchers and a regression gate are implemented; clean replacement CI and artifact validation are pending.
 
 Next: commit and push the coherent R4-404 implementation, observe all five real GitHub Actions jobs, retrieve and validate `r4-404-supply-chain-<sha>`, record the remote evidence, then close R4-404 and activate the highest-priority eligible local successor. Do not claim a vendor WAF deployment or signed provenance that did not run. Do not activate R4-401 or R4-410 without their task-specific human/external gates. Keep `.codex-tmp/` untouched and untracked.
 

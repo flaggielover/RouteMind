@@ -45,6 +45,20 @@ function Set-RepositoryJavaHome {
     Write-Host "Using Java $javaVersion from $javaHome"
 }
 
+function Invoke-Maven {
+    param([Parameter(Mandatory)][string[]] $MavenArguments)
+
+    if ($onWindows) {
+        & $wrapper @MavenArguments
+    }
+    else {
+        if (-not (Get-Command bash -ErrorAction SilentlyContinue)) {
+            throw "Bash is required to launch the Maven Wrapper on this platform"
+        }
+        & bash $wrapper @MavenArguments
+    }
+}
+
 if (-not (Test-Path -LiteralPath $wrapper)) {
     throw "Business API Maven Wrapper is missing"
 }
@@ -53,10 +67,10 @@ Set-RepositoryJavaHome
 Push-Location $serviceRoot
 try {
     switch ($Action) {
-        "test" { & $wrapper "-Dmaven.repo.local=$mavenRepository" "clean" "test" }
-        "package" { & $wrapper "-Dmaven.repo.local=$mavenRepository" "clean" "package" }
-        "run" { & $wrapper "-Dmaven.repo.local=$mavenRepository" "spring-boot:run" }
-        "resilience" { & $wrapper "-Dmaven.repo.local=$mavenRepository" "test" "-Dtest=BusinessApiApplicationTests" }
+        "test" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "clean", "test") }
+        "package" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "clean", "package") }
+        "run" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "spring-boot:run") }
+        "resilience" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "test", "-Dtest=BusinessApiApplicationTests") }
     }
     if ($LASTEXITCODE -ne 0) {
         throw "Business API $Action failed with exit code $LASTEXITCODE"

@@ -135,7 +135,17 @@ def check_supply_chain_automation() -> list[str]:
         for marker, description in markers.items()
         if marker not in text
     )
+    for relative in ("scripts/business-api.ps1", "scripts/supply-chain.ps1"):
+        path = ROOT / relative
+        if path.is_file():
+            findings.extend(check_maven_launcher_text(relative, path.read_text(encoding="utf-8")))
     return findings
+
+
+def check_maven_launcher_text(relative: str, text: str) -> list[str]:
+    if "& bash $wrapper @MavenArguments" not in text:
+        return [f"{relative}: POSIX Maven Wrapper must be launched explicitly through bash"]
+    return []
 
 
 def check_compose() -> list[str]:

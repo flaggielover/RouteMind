@@ -48,6 +48,20 @@ Status: in progress - `CI_PENDING`
 - Remote artifact validation remains pending until the implementation commit
   completes real GitHub Actions.
 
+## CI remediation
+
+- Initial implementation `b63f7b98cb4c65632eb046666447df24413860ad`
+  entered Actions run `32818303442`. Control, Python, Web, and resilience jobs
+  passed; the Java job failed before artifact upload.
+- The job log proved that the non-executable POSIX `mvnw` had been handed to
+  `xdg-open`, and the PowerShell entrypoint did not propagate that non-execution
+  as failure. Consequently the supply-chain generator correctly failed closed
+  on a missing Maven tree. This run is not completion evidence.
+- Both Java and supply-chain entrypoints now launch the POSIX wrapper explicitly
+  through `bash`. The security gate includes a directed negative test that
+  rejects a launcher without that explicit execution path. A clean replacement
+  Actions run and its retained artifact remain required.
+
 ## Claim boundary
 
 The current limiter is a bounded per-instance adapter, not proof of fleet-wide

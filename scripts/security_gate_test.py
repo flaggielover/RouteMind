@@ -31,6 +31,13 @@ class SecurityGateTests(unittest.TestCase):
     def test_supply_chain_automation_is_present(self) -> None:
         self.assertEqual(security_gate.check_supply_chain_automation(), [])
 
+    def test_posix_wrapper_cannot_silently_open_instead_of_execute(self) -> None:
+        findings = security_gate.check_maven_launcher_text(
+            "fixture.ps1", "& $wrapper clean test"
+        )
+        self.assertEqual(len(findings), 1)
+        self.assertIn("through bash", findings[0])
+
 
 if __name__ == "__main__":
     unittest.main()
