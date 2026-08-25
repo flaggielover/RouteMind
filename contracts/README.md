@@ -7,6 +7,8 @@ major versions and do not mirror service release versions.
 - `events/v1`: durable event envelope payloads.
 - `product`: versioned product-semantics contracts used before durable product
   implementation or external delivery is authorized.
+- `agent`: versioned agent-authority contracts used before analytical tools or
+  experiment orchestration can be evaluated.
 - `examples`: positive and negative executable examples.
 - `compatibility/v1`: permanent payloads every compatible v1 schema must accept.
 
@@ -39,3 +41,6 @@ negative examples are rejected.
 
 Run `python scripts/product_contract.py` and
 `python scripts/product_contract_test.py` for the R4 product-semantics boundary.
+
+Run `python scripts/agent_policy.py` and `python scripts/agent_policy_test.py`
+for the R4 agent-authority boundary.

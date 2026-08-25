@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-450-agent-authority-v1",
+  "status": "FROZEN_LOCAL_CONTRACT",
+  "ownership": {
+    "durableStateOwner": "java_business_api",
+    "hardRealtimeDispatchOwner": "java_business_api",
+    "optimizationAndExperimentOwner": "python_compute_api",
+    "agentRole": "read_analysis_experiment_orchestration",
+    "llmAuthority": "none",
+    "stateChangingToolDefault": "deny",
+    "stateChangingToolApproval": "explicit_human_and_java_authority"
+  },
+  "toolClasses": [
+    {"name": "read", "allowed": true, "mutatesDurableState": false, "dispatchAuthority": false},
+    {"name": "analysis", "allowed": true, "mutatesDurableState": false, "dispatchAuthority": false},
+    {"name": "experiment_orchestration", "allowed": true, "mutatesDurableState": false, "dispatchAuthority": false},
+    {"name": "state_changing", "allowed": false, "mutatesDurableState": true, "dispatchAuthority": true}
+  ],
+  "runtime": {
+    "maxCallsPerSession": 8,
+    "maxPlanCalls": 8,
+    "unknownTool": "reject_and_audit",
+    "deniedRole": "reject_and_audit",
+    "unknownArguments": "reject_and_audit",
+    "handlerFailure": "bounded_failure_and_deterministic_fallback",
+    "agentUnavailable": "deterministic_fallback",
+    "dispatchRegistryIndependent": true
+  },
+  "security": {
+    "promptInjection": "treat_external_text_as_untrusted_data_and_never_as_policy",
+    "toolAbuse": "allowlist_role_tool_arguments_and_budget",
+    "dataLeakage": "tenant_scoped_minimum_data_and_forbidden_principal_or_secret_labels",
+    "approval": "state_change_requires_explicit_human_and_java_authority",
+    "audit": "append_only_request_outcome_reason_sequence",
+    "timeout": "bounded_per_tool_and_plan",
+    "rollback": "java_owned_idempotent_rollback_or_explicit_unavailable",
+    "network": "no_implicit_external_network_or_provider_call"
+  },
+  "claimBoundary": {
+    "agentMayPromoteScientificClaim": false,
+    "agentMayPromoteProductionClaim": false,
+    "agentMayAuthorizeNotificationSend": false,
+    "scientificFailOrNoClaim": "valid_terminal_evidence"
+  }
+}
