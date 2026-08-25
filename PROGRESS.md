@@ -16,9 +16,9 @@ Current Task: R4-420 - Freeze preference, accessibility, consent, and notificati
 
 Last Completed: R4-404 - Harden gateway rate limits, secret handling, WAF policy, SBOM, and provenance
 
-Current Gate: R4-420 is active. Preference ownership/defaults/versioning, consent and quiet-hour semantics, locale/accessibility requirements, notification acknowledgement states, and role/tenant persistence boundaries require a frozen executable contract.
+Current Gate: R4-420 is locally complete and `CI_PENDING`. The frozen executable contract covers preference ownership/defaults/versioning, consent, deterministic quiet hours, locale/accessibility requirements, exact notification acknowledgement states, privacy, and role/tenant persistence boundaries; real provider sending remains unauthorized.
 
-CI: PASS for R4-404 remediation SHA f6d8ef03b91b57d5753c87f7fbc55b16784286c8 in run 32819593245; all five jobs passed, including true execution of 102 Java tests and retained supply-chain artifact validation. Earlier R4-404 runs 32818303442 and 32818849130 are preserved as failed diagnostic evidence. Prior Round 3 and Round 4 completed-task CI evidence remains recorded in task evidence and capsules below.
+CI: PASS for R4-404 remediation SHA f6d8ef03b91b57d5753c87f7fbc55b16784286c8 in run 32819593245 and R4-420 activation SHA bf984d7e59033938dff2684dc0849920e47360b1 in run 32820084182; each passed all five jobs. Earlier R4-404 runs 32818303442 and 32818849130 are preserved as failed diagnostic evidence.
 
 Regression: PASS locally for 102/102 Java tests, 920 Python tests at 95.11% coverage, six schemas, 18 contract fixtures, Round 4 graph, negative-results, final-claim, security, supply-chain, recovery, release, and staged-release gates. Local Compose validation passes. The remote SBOM contains 527 components across Maven/PyPI/npm/OCI, binds three live registry manifests and exact source revision, and retains `signed=false`; its downloaded artifact passed validation. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
@@ -35,7 +35,7 @@ Next Candidates: R4-420 is active. R4-401 and R4-410 require their task-specific
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
 - Current task: R4-420.
 - Workstream: U - Multi-End Product Completion.
-- Status: R4-404 passed; R4-420 is `in_progress`.
+- Status: R4-404 passed; R4-420 is locally complete and `CI_PENDING`.
 - Completed gate: opaque tenant/role/actor/route quotas, bounded degradation,
   local WAF-equivalent policy, secret automation, 527-component SBOM, and
   explicitly unsigned provenance all have executable evidence.
@@ -43,11 +43,16 @@ Next Candidates: R4-420 is active. R4-401 and R4-410 require their task-specific
   Downloaded artifact `9552635104` validates against source SHA and three OCI
   manifests; GitHub artifact digest begins `a25a93d0`.
 - Evidence: `evidence/gates/R4-404/security-edge.md`.
+- Product contract: digest `821e782c...2406`; five roles, five consent
+  purposes, nine accessibility requirements, ten states, and eighteen exact
+  transitions pass 12 directed mutation tests. Real provider send is false.
+- Evidence: `evidence/gates/R4-420/product-contract.md` and
+  `docs/product/R4_PRODUCT_SEMANTICS.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as
   complete or authorized by graph promotion.
-- Next: freeze and validate the R4-420 preference/consent/notification product
-  contract, including role/tenant ownership and provider acknowledgement states.
-  R4-401 and R4-410 retain their human/external gates.
+- Next: commit/push the R4-420 contract, observe all five Actions jobs, then
+  close it and activate the highest-priority eligible successor. R4-401 and
+  R4-410 retain their human/external gates.
 - Human action required: NONE for R4-420.
 
 ### R3-365 Round 3 scientific closure - 2026-08-25

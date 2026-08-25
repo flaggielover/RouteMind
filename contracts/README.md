@@ -5,6 +5,8 @@ major versions and do not mirror service release versions.
 
 - `api/v1`: JSON payloads crossing HTTP/runtime boundaries.
 - `events/v1`: durable event envelope payloads.
+- `product`: versioned product-semantics contracts used before durable product
+  implementation or external delivery is authorized.
 - `examples`: positive and negative executable examples.
 - `compatibility/v1`: permanent payloads every compatible v1 schema must accept.
 
@@ -34,3 +36,6 @@ dispatch, courier, exception, and simulation updates.
 Run `./scripts/compute-api.ps1 check` from the repository root. It checks every
 schema, asserts positive and compatibility fixtures are accepted, and asserts
 negative examples are rejected.
+
+Run `python scripts/product_contract.py` and
+`python scripts/product_contract_test.py` for the R4 product-semantics boundary.

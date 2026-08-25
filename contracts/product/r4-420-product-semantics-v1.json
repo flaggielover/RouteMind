@@ -1,0 +1,228 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-420-product-semantics-v1",
+  "status": "FROZEN_LOCAL_CONTRACT",
+  "authority": {
+    "durableOwner": "java_business_api",
+    "durableStore": "postgresql",
+    "identitySource": [
+      "verified_tenant_id",
+      "verified_principal_id",
+      "verified_roles"
+    ],
+    "preferenceKey": ["tenant_id", "principal_id", "namespace"],
+    "writeConcurrency": {
+      "versionField": "version",
+      "precondition": "expected_version_required",
+      "conflict": "409_version_conflict",
+      "idempotencyScope": ["tenant_id", "principal_id", "operation", "idempotency_key"]
+    },
+    "notificationIntent": "same_transaction_outbox",
+    "pythonAuthority": "none",
+    "llmAuthority": "none"
+  },
+  "ownership": {
+    "roles": [
+      {
+        "role": "customer",
+        "namespaces": ["accessibility", "locale", "notifications", "quiet_hours"]
+      },
+      {
+        "role": "courier",
+        "namespaces": ["accessibility", "locale", "notifications", "quiet_hours"]
+      },
+      {
+        "role": "merchant",
+        "namespaces": ["accessibility", "locale", "notifications", "quiet_hours"]
+      },
+      {
+        "role": "analyst",
+        "namespaces": ["accessibility", "locale", "notifications", "quiet_hours"]
+      },
+      {
+        "role": "operator",
+        "namespaces": ["accessibility", "locale", "notifications", "quiet_hours"]
+      }
+    ],
+    "selfRead": true,
+    "selfWrite": true,
+    "tenantMatchRequired": true,
+    "principalMatchRequired": true,
+    "crossTenant": "deny",
+    "crossPrincipal": "deny",
+    "roleImpersonation": "deny",
+    "tenantAdminOverride": "not_defined_v1",
+    "deliveryWorkerMayWrite": ["notification_delivery_state"],
+    "deliveryWorkerMayNotWrite": ["preferences", "consent"]
+  },
+  "defaults": {
+    "locale": "en-US",
+    "timeZone": "UTC",
+    "quietHours": {
+      "enabled": false,
+      "startLocal": "22:00",
+      "endLocal": "07:00"
+    },
+    "channels": {
+      "in_app": true,
+      "email": false,
+      "sms": false,
+      "push": false
+    },
+    "accessibility": {
+      "theme": "system",
+      "contrast": "system",
+      "reducedMotion": "system",
+      "textScale": 1.0,
+      "screenReaderAnnouncements": "polite",
+      "visibleFocus": true,
+      "colorOnlyStatus": false
+    }
+  },
+  "consent": {
+    "states": ["NOT_ASKED", "GRANTED", "DENIED", "WITHDRAWN"],
+    "key": ["tenant_id", "principal_id", "purpose", "channel"],
+    "recordFields": ["state", "version", "source", "captured_at", "policy_version"],
+    "withdrawalEffective": "before_next_provider_attempt",
+    "dispatchRecheckRequired": true,
+    "purposes": [
+      {
+        "purpose": "transactional_order",
+        "roles": ["customer", "merchant", "operator"],
+        "inAppBasis": "service_transaction",
+        "externalBasis": "explicit_grant"
+      },
+      {
+        "purpose": "dispatch_assignment",
+        "roles": ["courier", "operator"],
+        "inAppBasis": "active_role_duty",
+        "externalBasis": "explicit_grant"
+      },
+      {
+        "purpose": "operations_incident",
+        "roles": ["analyst", "operator"],
+        "inAppBasis": "on_call_duty",
+        "externalBasis": "explicit_grant"
+      },
+      {
+        "purpose": "security",
+        "roles": ["customer", "courier", "merchant", "analyst", "operator"],
+        "inAppBasis": "security_notice",
+        "externalBasis": "explicit_grant"
+      },
+      {
+        "purpose": "marketing",
+        "roles": ["customer", "merchant"],
+        "inAppBasis": "explicit_grant",
+        "externalBasis": "explicit_grant"
+      }
+    ]
+  },
+  "quietHours": {
+    "zoneFormat": "IANA_TZDB",
+    "interval": "start_inclusive_end_exclusive",
+    "nonCriticalAction": "defer_until_next_eligible_instant",
+    "consentRecheckAfterDeferral": true,
+    "dstGap": "advance_to_first_valid_instant",
+    "dstOverlap": "earlier_offset",
+    "bypass": [
+      {
+        "purpose": "security",
+        "condition": "severity_critical"
+      },
+      {
+        "purpose": "operations_incident",
+        "condition": "severity_critical_and_principal_on_call"
+      },
+      {
+        "purpose": "active_delivery_failure",
+        "condition": "active_order_requires_immediate_action"
+      }
+    ],
+    "marketingBypass": false,
+    "bypassAuditRequired": true
+  },
+  "locale": {
+    "format": "BCP47",
+    "templateLocaleRecorded": true,
+    "fallbackOrder": ["exact_tag", "base_language", "en-US"],
+    "missingExternalTemplate": "fail_terminal_no_send",
+    "missingInAppTemplate": "use_reviewed_en-US_fallback"
+  },
+  "accessibilityRequirements": [
+    "keyboard_complete",
+    "visible_focus",
+    "screen_reader_names_and_status",
+    "status_not_color_only",
+    "reduced_motion_respected",
+    "contrast_aa",
+    "responsive_reflow",
+    "errors_linked_to_controls",
+    "live_updates_announced_without_focus_theft"
+  ],
+  "notificationLifecycle": {
+    "states": [
+      {"name": "INTENT_RECORDED", "terminal": false, "delivered": false},
+      {"name": "SUPPRESSED_NO_CONSENT", "terminal": true, "delivered": false},
+      {"name": "DEFERRED_QUIET_HOURS", "terminal": false, "delivered": false},
+      {"name": "READY", "terminal": false, "delivered": false},
+      {"name": "PROVIDER_ACCEPTED", "terminal": false, "delivered": false},
+      {"name": "FAILED_RETRYABLE", "terminal": false, "delivered": false},
+      {"name": "FAILED_TERMINAL", "terminal": true, "delivered": false},
+      {"name": "BOUNCED", "terminal": true, "delivered": false},
+      {"name": "CANCELLED", "terminal": true, "delivered": false},
+      {"name": "DELIVERED", "terminal": true, "delivered": true}
+    ],
+    "transitions": [
+      {"from": "INTENT_RECORDED", "to": "SUPPRESSED_NO_CONSENT", "guard": "consent_not_satisfied"},
+      {"from": "INTENT_RECORDED", "to": "DEFERRED_QUIET_HOURS", "guard": "quiet_hours_apply"},
+      {"from": "INTENT_RECORDED", "to": "READY", "guard": "consent_satisfied_and_not_quiet"},
+      {"from": "INTENT_RECORDED", "to": "CANCELLED", "guard": "intent_cancelled"},
+      {"from": "DEFERRED_QUIET_HOURS", "to": "READY", "guard": "eligible_and_consent_rechecked"},
+      {"from": "DEFERRED_QUIET_HOURS", "to": "SUPPRESSED_NO_CONSENT", "guard": "consent_withdrawn"},
+      {"from": "DEFERRED_QUIET_HOURS", "to": "CANCELLED", "guard": "intent_cancelled"},
+      {"from": "READY", "to": "PROVIDER_ACCEPTED", "guard": "provider_acceptance_ack"},
+      {"from": "READY", "to": "FAILED_RETRYABLE", "guard": "bounded_retryable_failure"},
+      {"from": "READY", "to": "FAILED_TERMINAL", "guard": "terminal_provider_failure"},
+      {"from": "READY", "to": "CANCELLED", "guard": "cancelled_before_attempt"},
+      {"from": "FAILED_RETRYABLE", "to": "READY", "guard": "bounded_retry_due_and_consent_rechecked"},
+      {"from": "FAILED_RETRYABLE", "to": "FAILED_TERMINAL", "guard": "retry_budget_exhausted"},
+      {"from": "FAILED_RETRYABLE", "to": "CANCELLED", "guard": "intent_cancelled"},
+      {"from": "PROVIDER_ACCEPTED", "to": "DELIVERED", "guard": "authenticated_provider_delivery_receipt"},
+      {"from": "PROVIDER_ACCEPTED", "to": "FAILED_RETRYABLE", "guard": "provider_retryable_status"},
+      {"from": "PROVIDER_ACCEPTED", "to": "FAILED_TERMINAL", "guard": "provider_terminal_status"},
+      {"from": "PROVIDER_ACCEPTED", "to": "BOUNCED", "guard": "authenticated_provider_bounce_receipt"}
+    ],
+    "deliveryEvidence": {
+      "requiredForState": "DELIVERED",
+      "type": "provider_delivery_ack",
+      "fields": [
+        "provider",
+        "channel",
+        "provider_message_id",
+        "receipt_at",
+        "authenticated_callback"
+      ],
+      "providerAcceptanceIsDelivery": false,
+      "intentIsDelivery": false,
+      "inAppProviderAck": "durable_visible_record_ack"
+    },
+    "attemptKey": ["tenant_id", "notification_id", "channel", "attempt_number"],
+    "maxAttempts": 5,
+    "callbackAuthenticationRequired": true
+  },
+  "privacy": {
+    "telemetryLabels": ["tenant_hash", "role", "channel", "purpose", "state", "provider_code_class"],
+    "forbiddenTelemetry": ["principal_id", "address", "phone", "email", "message_body", "provider_message_id"],
+    "contentEncryptionAtRest": "deployment_target_policy_required",
+    "retention": "deployment_target_policy_required"
+  },
+  "executionBoundary": {
+    "realProviderSendAuthorized": false,
+    "approvedRecipientsRequired": true,
+    "credentialsRequired": true,
+    "spendLimitRequired": true,
+    "currentEvidence": "contract_and_local_validator_only",
+    "nextImplementationTasks": ["R4-421", "R4-422", "R4-423", "R4-424"]
+  }
+}
