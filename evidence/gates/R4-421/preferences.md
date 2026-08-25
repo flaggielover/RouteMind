@@ -2,7 +2,7 @@
 
 Date: 2026-08-25 (Asia/Shanghai)
 
-Status: `LOCAL_VALIDATED / CI_PENDING`
+Status: `LOCAL_VALIDATED / CI_VALIDATED`
 
 ## Implementation boundary
 
@@ -35,3 +35,8 @@ Status: `LOCAL_VALIDATED / CI_PENDING`
   `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM` and was not rerun.
 
 Remote GitHub Actions validation is the remaining Evidence Gate for this task.
+
+GitHub Actions run `32826218396` for implementation revision
+`e1845ce82e1358e7ae6dc00a6ba88fb3676f1630` passed all five jobs: Java business
+runtime, Python contracts, role-aware Web browser smoke, bounded resilience,
+and control-plane validation.

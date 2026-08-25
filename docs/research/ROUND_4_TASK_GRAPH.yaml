@@ -138,7 +138,7 @@
       "evidence": ["evidence/gates/R4-420/product-contract.md"], "round3_lineage": ["ROUND_4_PRODUCT_RECLASSIFICATION"]
     },
     {
-      "id": "R4-421", "title": "Implement durable tenant-aware user preferences", "workstream": "U", "priority": "high", "classification": "PRODUCT", "depends_on": ["R4-403", "R4-420"], "status": "in_progress", "external_gate": false, "human_approval": false,
+      "id": "R4-421", "title": "Implement durable tenant-aware user preferences", "workstream": "U", "priority": "high", "classification": "PRODUCT", "depends_on": ["R4-403", "R4-420"], "status": "passed", "external_gate": false, "human_approval": false,
       "acceptance": ["Java owns durable preference state, concurrency, idempotency, and audit", "Web surfaces expose loading, stale, conflict, unavailable, and rollback states", "Cross-tenant and cross-role access fails closed"],
       "evidence": ["evidence/gates/R4-421/preferences.md"], "round3_lineage": ["ROUND_4_PRODUCT_RECLASSIFICATION"]
     },
@@ -213,7 +213,7 @@
       "evidence": ["evidence/gates/R4-440/ips-dr.md"], "round3_lineage": ["R3-355"]
     },
     {
-      "id": "R4-450", "title": "Freeze agent authority, tool policy, audit, and evaluation boundaries", "workstream": "A", "priority": "high", "classification": "AGENT_EVALUATION", "depends_on": ["R4-400"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-450", "title": "Freeze agent authority, tool policy, audit, and evaluation boundaries", "workstream": "A", "priority": "high", "classification": "AGENT_EVALUATION", "depends_on": ["R4-400"], "status": "in_progress", "external_gate": false, "human_approval": false,
       "acceptance": ["Read, analysis, experiment orchestration, and state-changing tool classes are separated", "Deterministic dispatch and Java durable authority cannot be delegated to an LLM", "Prompt injection, data leakage, tool abuse, approval, audit, timeout, and rollback policies are frozen"],
       "evidence": ["evidence/gates/R4-450/agent-policy.md"], "round3_lineage": ["ROUND_4_AGENT_RECLASSIFICATION"]
     },
