@@ -2,9 +2,9 @@
 
 Date: 2026-08-25 (Asia/Shanghai)
 
-Entry revision: `fdc45cb3db879e0aadefce00bba22714a7d66c9b`
+Entry revision: `cf6a63e039091c926b1dc7b2244557a8ebef3089`
 
-Status: `IMPLEMENTED / SERVICE_DRILL_PENDING / TARGET_PENDING`
+Status: `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`
 
 ## Recovery boundary
 
@@ -70,12 +70,32 @@ evidence digest, RPO at most 900 seconds, and RTO at most 7200 seconds.
   `routemind` existed, so the final `pg_restore` raced database creation. The
   readiness condition now executes `SELECT 1` against the target database. No
   service-backed recovery pass is claimed from this failed run.
-- The local Docker daemon was unresponsive before the implementation checkpoint.
-  The remediation CI run and its retained recovery JSON artifact are pending.
+- Readiness remediation `cf6a63e` passed all five jobs in GitHub Actions run
+  `32847143691`. The recovery step and artifact upload both passed.
+- Retained artifact `9562802809`, named
+  `r4-406-local-recovery-cf6a63e039091c926b1dc7b2244557a8ebef3089`, has
+  GitHub artifact digest
+  `sha256:c89ea3a51f14f72cb92598c3c26c1e01681cd517567fe4b0919bf02189f112a4`.
+  Its downloaded report byte SHA-256 is
+  `4493027b8b4d47200940152af4eee6874acb332386d9b3cbe3c141d76ef071db`
+  and its self-digest is
+  `8977fb21a8c47fea51cab0b4f7b9b4f92f7d2de935cc1b8ca09e42e86bb880f3`.
+- Independent validation returned `LOCAL_DRILL_PASS_TARGET_PENDING` and
+  `TARGET_NOT_QUALIFIED`. All 11 checks passed for two tenants; package digest
+  `fb0845e75c2a22daf534ce4467eb5e671386ac11109011fbc4df91d349c68c51`
+  binds the PostgreSQL, RabbitMQ, and Redis artifacts. Source, restored, and
+  rollback continuity digests all equal
+  `315eaf1bbaeb74ff271c7b669ebf6d6d53b4f9d1744f4310ce0a458e561f07a8`.
+- The CI fixture measured zero-second fixture RPO, 11.826-second restore, and
+  3.31-second rollback. These are isolated runner observations only and are not
+  Vultr Tokyo or production RPO/RTO evidence.
+- The local Docker daemon was unresponsive before the implementation checkpoint;
+  the real GitHub-hosted service drill now supplies the retained local-CI result.
 
 ## Evidence boundary
 
-This checkpoint does not close R4-406. It does not claim a Vultr resource,
+This evidence does not close R4-406. The task is externally blocked after its
+local/CI lane. It does not claim a Vultr resource,
 Tokyo restore, production deployment, production data, production RPO/RTO, or
 regional recovery. Matching credentialed Vultr Tokyo evidence plus explicit
 resource/spend authorization remain required. R3-325 was not rerun, tuned,

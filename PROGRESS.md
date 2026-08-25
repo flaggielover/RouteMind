@@ -12,13 +12,13 @@ Round 4 Progress: 9 / 38 tasks passed
 
 Repository Total: 165 / 196 tasks passed
 
-Current Task: R4-406 - Prove backup, restore, disaster recovery, and data reconciliation
+Current Task: R4-405 - Export traces and metrics with tenant-safe cost attribution
 
 Last Completed: R4-401 - Select a deployment target and freeze SLO and failure-domain assumptions
 
-Current Gate: R4-406 is `IMPLEMENTED / SERVICE_DRILL_PENDING / TARGET_PENDING`. The fail-closed contract, five mutation-test groups, isolated PostgreSQL/RabbitMQ/Redis recovery drill, Outbox replay, Redis rebuild, reconciliation, tenant/audit continuity, rollback, CI artifact, and runbook are implemented. The local Docker daemon was unresponsive, so no local service-backed pass is claimed; the implementation CI must execute it. Vultr Tokyo RPO/RTO proof remains external.
+Current Gate: R4-405 is active. R4-406 is `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`: all 11 isolated recovery checks passed in real GitHub Actions, while the fail-closed validator correctly returned `TARGET_NOT_QUALIFIED`. Vultr Tokyo RPO/RTO proof remains external and R4-406 is not closed.
 
-CI: R4-406 diagnostics progressed through runs 32845758884 and 32846265052. Runtime-state remediation 55031d2 run 32846798159 passed control, Java, Python, Web, resilience, Rabbit startup, package/source destruction, main restore, replay, and rebuild, then found PostgreSQL `pg_isready` accepting the temporary initialization server before database creation during rollback. Readiness now executes `SELECT 1` against `routemind`; CI is pending. No recovery pass is claimed. R4-401 closure remains green.
+CI: R4-406 readiness remediation `cf6a63e` passed all five jobs in run `32847143691`, including the isolated PostgreSQL/RabbitMQ/Redis recovery drill and artifact upload. Downloaded artifact `9562802809` independently validates as `LOCAL_DRILL_PASS_TARGET_PENDING / TARGET_NOT_QUALIFIED`; its report byte SHA-256 is `4493027b...71db`. No target recovery pass is claimed.
 
 Regression: PASS locally for R4-406 syntax, five fail-closed mutation-test groups, full gate (110/110 Java, 920/920 Python at 95.11%, 104/104 Web, production build), serial focused resilience (15 Java / 2 Python), task graph, Round 4 mirror, R4-401 deployment contract, security, supply-chain, product, agent, recovery, release, staged-release, and Compose configuration. An earlier concurrent resilience invocation raced Maven `clean`; the serial rerun passed without code or assertion changes. The previous R4-401 browser gate remains 34 Playwright scenarios with two expected skips. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
@@ -26,16 +26,16 @@ Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly defer
 
 Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-347 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
 
-Blocked: R4-406 cannot close without matching restore/RPO/RTO evidence in Vultr Tokyo; credentials and resource/spend authorization are not currently available. Local recovery implementation remains unblocked. R4-410 and R4-422 retain separate provider/notification human gates; R4-437 remains conditional and inactive.
+Blocked: R4-406 cannot close without matching restore/RPO/RTO evidence in Vultr Tokyo; credentials and explicit resource/spend authorization are not currently available. R4-410 and R4-422 retain separate provider/notification human gates; R4-437 remains conditional and inactive.
 
-Human Action Required: NONE while R4-406 local recovery preparation remains executable; Vultr credentials plus explicit resource/spend authorization will be required for the target restore drill
+Human Action Required: NONE while R4-405 local telemetry work remains executable; Vultr credentials plus explicit resource/spend authorization will be required for the R4-406 target restore drill
 
-Next Candidates: R4-406 is active as the highest-priority dependency-ready task. R4-405 is the next high-priority lane. R4-410 and R4-422 retain separate human/external gates.
+Next Candidates: R4-405 is active as the highest-priority unblocked task. R4-410 and R4-422 retain separate human/external gates.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
-- Current task: R4-406 backup, restore, DR, and reconciliation.
+- Current task: R4-405 tenant-safe trace, metric, and cost attribution export.
 - Workstream: P - Production Safety and Deployment.
-- Status: R4-401 closure CI is green; R4-406 is `IMPLEMENTED / SERVICE_DRILL_PENDING / TARGET_PENDING`. No Vultr infrastructure has been created.
+- Status: R4-401 closure CI is green; R4-406 is `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING` and externally blocked. R4-405 is active. No Vultr infrastructure has been created.
 - Completed gate: opaque tenant/role/actor/route quotas, bounded degradation,
   local WAF-equivalent policy, secret automation, 527-component SBOM, and
   explicitly unsigned provenance all have executable evidence.
@@ -85,15 +85,21 @@ Next Candidates: R4-406 is active as the highest-priority dependency-ready task.
   package/source destruction/main restore/replay/rebuild, then exposed a
   PostgreSQL initialization readiness race. Target-database `SELECT 1` now gates
   both restore containers.
+- Recovery CI: readiness remediation `cf6a63e` passed all five jobs in run
+  `32847143691`. Artifact `9562802809` independently validates all 11 checks,
+  two-tenant continuity, source destruction, restore, replay, rebuild, and
+  rollback as `LOCAL_DRILL_PASS_TARGET_PENDING / TARGET_NOT_QUALIFIED`.
+- Local-CI recovery observations are fixture RPO 0 seconds, restore 11.826
+  seconds, and rollback 3.31 seconds. They are not Vultr Tokyo SLO evidence.
 - Evidence: `evidence/gates/R4-420/product-contract.md` and
   `docs/product/R4_PRODUCT_SEMANTICS.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as
   complete or authorized by graph promotion.
-- Next: push R4-406, observe the isolated GitHub Actions recovery drill, fix any
-  failure, retain its report digest, then mark the task external-blocked and
-  activate R4-405. Target RPO/RTO proof remains gated on Vultr Tokyo evidence.
-- Human action required: NONE while local R4-406 work remains; credentials and
-  resource/spend approval are required before the real target drill.
+- Next: implement and validate R4-405's tenant-safe telemetry export and
+  fail-open exporter boundary. Target RPO/RTO proof remains gated on Vultr
+  Tokyo evidence.
+- Human action required: NONE while local R4-405 work remains; credentials and
+  resource/spend approval are required before the real R4-406 target drill.
 
 ### R3-365 Round 3 scientific closure - 2026-08-25
 - Implementation `9e9537e` passed all five jobs in Actions run `32790948926`,
