@@ -139,4 +139,3 @@ def validate_report(report: Mapping[str, Any], *, require_target: bool = False) 
 def qualify_report(report: Mapping[str, Any]) -> str:
     findings = validate_report(report, require_target=True)
     return TARGET_CLASSIFICATION if not findings else "TARGET_NOT_QUALIFIED"
-
