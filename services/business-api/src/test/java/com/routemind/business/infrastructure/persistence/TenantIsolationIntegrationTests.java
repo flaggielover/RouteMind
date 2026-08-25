@@ -31,6 +31,8 @@ import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -40,6 +42,13 @@ class TenantIsolationIntegrationTests {
 	private static final TenantId TENANT_A = TenantId.parse("10000000-0000-0000-0000-000000000001");
 	private static final TenantId TENANT_B = TenantId.parse("20000000-0000-0000-0000-000000000002");
 	private static final String TRACE_ID = "0123456789abcdef0123456789abcdef";
+	private static final String ISOLATED_DATABASE = "jdbc:h2:mem:tenant_isolation_context;MODE=PostgreSQL;"
+			+ "DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1";
+
+	@DynamicPropertySource
+	static void useIsolatedDatabase(DynamicPropertyRegistry registry) {
+		registry.add("spring.datasource.url", () -> ISOLATED_DATABASE);
+	}
 
 	@Autowired
 	private TenantContext tenants;

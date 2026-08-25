@@ -59,8 +59,15 @@ Status: in progress - `CI_PENDING`
   on a missing Maven tree. This run is not completion evidence.
 - Both Java and supply-chain entrypoints now launch the POSIX wrapper explicitly
   through `bash`. The security gate includes a directed negative test that
-  rejects a launcher without that explicit execution path. A clean replacement
-  Actions run and its retained artifact remain required.
+  rejects a launcher without that explicit execution path.
+- Replacement revision `0ff56158cac1fba550b5b0b4a22cc4c236ad2bbe`
+  entered run `32818849130` and proved all 102 Java tests actually executed. It
+  exposed 15 order-dependent H2 errors after `TenantIsolationIntegrationTests`
+  dirtied a shared Spring context on Linux; the other four jobs passed.
+- The tenant-isolation suite now binds its own H2 database before dirtying its
+  context. A forced reverse-alphabetical regression ran that suite before the
+  business integration suite and passed 20/20. Full local and clean replacement
+  Actions runs plus retained-artifact validation remain required.
 
 ## Claim boundary
 
