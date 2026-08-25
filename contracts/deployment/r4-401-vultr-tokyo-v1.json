@@ -1,0 +1,288 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-401-vultr-tokyo-v1",
+  "status": "FROZEN_APPROVED_TARGET_NOT_DEPLOYED",
+  "approvedAt": "2026-08-25",
+  "approval": {
+    "approvedBy": "RouteMind owner",
+    "approvedScope": ["provider", "target_region", "data_residency"],
+    "provider": "Vultr",
+    "targetRegion": "nrt",
+    "dataResidency": "Tokyo, Japan",
+    "resourceCreationAuthorized": false,
+    "spendAuthorized": false,
+    "productionDeploymentAuthorized": false
+  },
+  "evidence": {
+    "catalogPath": "evidence/external/R4-401/vultr-public-catalog-2026-08-25.json",
+    "catalogSha256": "e9ee677ebacadcded020dc330760985ea35eb08112a8e1c085962ea5de44d133",
+    "catalogCaptureMode": "public_read_only_no_credentials",
+    "humanApprovalRecorded": true
+  },
+  "target": {
+    "provider": "Vultr",
+    "regionId": "nrt",
+    "city": "Tokyo",
+    "country": "JP",
+    "regionCount": 1,
+    "maturity": "TARGET_SELECTED_NOT_DEPLOYED",
+    "productionVerified": false,
+    "externalAccountVerified": false
+  },
+  "ownership": {
+    "accountAndBilling": "RouteMind owner",
+    "dataController": "RouteMind owner",
+    "platformOperations": "RouteMind operator",
+    "durableBusinessState": "Java business API",
+    "optimizationSimulationResearch": "Python compute API",
+    "runtimeInfrastructure": "Vultr managed substrate plus RouteMind operator",
+    "secretsAndKeys": "RouteMind operator",
+    "releaseApproval": "RouteMind owner or delegated operator"
+  },
+  "topology": {
+    "orchestrator": {
+      "product": "Vultr Kubernetes Engine",
+      "region": "nrt",
+      "haControlPlaneRequested": true,
+      "multiRegion": false
+    },
+    "workerPool": {
+      "plan": "vhp-4c-8gb-amd",
+      "minimumNodes": 3,
+      "initialNodes": 3,
+      "maximumNodes": 6,
+      "podAntiAffinityRequired": true,
+      "totalInitialVcpu": 12,
+      "totalInitialRamMiB": 24576
+    },
+    "backupHost": {
+      "plan": "vhp-2c-4gb-amd",
+      "count": 1,
+      "region": "nrt",
+      "publicIngress": false
+    },
+    "ingress": {
+      "product": "Vultr Load Balancer",
+      "count": 1,
+      "tlsTermination": true,
+      "healthChecksRequired": true
+    },
+    "services": [
+      {
+        "id": "web",
+        "placement": "vke",
+        "minimumReplicas": 2,
+        "durableAuthority": false
+      },
+      {
+        "id": "business-api",
+        "placement": "vke",
+        "minimumReplicas": 2,
+        "durableAuthority": true
+      },
+      {
+        "id": "compute-api",
+        "placement": "vke",
+        "minimumReplicas": 2,
+        "durableAuthority": false
+      },
+      {
+        "id": "postgresql",
+        "placement": "vke_stateful",
+        "minimumReplicas": 3,
+        "durableAuthority": true
+      },
+      {
+        "id": "rabbitmq",
+        "placement": "vke_stateful_quorum",
+        "minimumReplicas": 3,
+        "durableAuthority": false
+      },
+      {
+        "id": "redis",
+        "placement": "vke_stateful_sentinel",
+        "minimumReplicas": 3,
+        "durableAuthority": false
+      },
+      {
+        "id": "telemetry",
+        "placement": "vke",
+        "minimumReplicas": 2,
+        "durableAuthority": false
+      }
+    ],
+    "storageGiB": [
+      {"id": "postgresql", "volumeCount": 3, "perVolumeGiB": 50, "totalGiB": 150},
+      {"id": "rabbitmq", "volumeCount": 3, "perVolumeGiB": 20, "totalGiB": 60},
+      {"id": "research-data", "volumeCount": 1, "perVolumeGiB": 100, "totalGiB": 100},
+      {"id": "backup-vault", "volumeCount": 1, "perVolumeGiB": 300, "totalGiB": 300}
+    ]
+  },
+  "dataResidency": {
+    "boundary": "Tokyo, Japan (Vultr nrt)",
+    "inRegionData": [
+      "PostgreSQL durable business state",
+      "RabbitMQ messages and definitions",
+      "Redis hot state and projections",
+      "application telemetry containing tenant-safe identifiers",
+      "ROUTEMIND_DATA_ROOT research and analytical artifacts",
+      "encrypted recovery packages"
+    ],
+    "forbiddenOutsideRegion": [
+      "customer personal data",
+      "courier trajectories",
+      "merchant operational data",
+      "tenant-scoped business events",
+      "notification content",
+      "unencrypted recovery payloads"
+    ],
+    "sourceAndCiBoundary": "GitHub may retain source, CI metadata, and synthetic fixtures outside Tokyo; production/customer payloads are prohibited from source and CI.",
+    "providerMetadataBoundary": "Vultr account, billing, support, and control-plane metadata are outside the application payload residency claim.",
+    "providerAutomaticBackups": "disabled_until_backup_storage_location_is_contractually_verified",
+    "externalTravelAndNotificationProviders": "outside_r4_401_scope_and_not_authorized"
+  },
+  "capacityAssumptions": {
+    "qualificationWorkload": {
+      "dispatchSustainedRequestsPerSecond": 10,
+      "dispatchFiveMinuteBurstRequestsPerSecond": 25,
+      "concurrentSseConnections": 200,
+      "activeCourierLocations": 1000,
+      "ordersPerDay": 50000
+    },
+    "baselineEvidence": {
+      "source": "evidence/gates/RM-180/round2-performance.md",
+      "localDispatchP95Millis": 33.85,
+      "localDispatchThroughputRequestsPerSecond": 305.51,
+      "scope": "loopback_regression_only_no_capacity_carry_forward"
+    },
+    "scalePolicy": {
+      "workerMinimum": 3,
+      "workerMaximum": 6,
+      "scaleOutSignal": "sustained_cpu_memory_queue_or_latency_pressure",
+      "scaleInGuard": "no_error_budget_burn_and_no_pending_durable_work"
+    },
+    "validationTask": "R4-407"
+  },
+  "serviceLevelObjectives": [
+    {
+      "id": "api-availability",
+      "sli": "successful_eligible_api_requests / eligible_api_requests",
+      "target": 99.5,
+      "unit": "percent_monthly",
+      "windowDays": 30,
+      "errorBudgetMinutes": 216
+    },
+    {
+      "id": "dispatch-latency",
+      "sli": "business_api_request_to_verified_dispatch_response",
+      "target": 500,
+      "unit": "p95_milliseconds",
+      "windowDays": 30
+    },
+    {
+      "id": "event-publication-lag",
+      "sli": "committed_outbox_event_to_rabbitmq_publish_ack",
+      "target": 2,
+      "unit": "p95_seconds",
+      "windowDays": 30
+    },
+    {
+      "id": "sse-freshness",
+      "sli": "published_business_event_to_authorized_client_receive",
+      "target": 3,
+      "unit": "p95_seconds",
+      "windowDays": 30
+    },
+    {
+      "id": "location-freshness",
+      "sli": "accepted_courier_location_age_for_active_delivery",
+      "target": 30,
+      "unit": "p95_seconds",
+      "windowDays": 30
+    },
+    {
+      "id": "in-region-postgresql-rpo",
+      "sli": "maximum_committed_data_loss_during_qualified_restore",
+      "target": 15,
+      "unit": "minutes",
+      "windowDays": 30
+    },
+    {
+      "id": "in-region-postgresql-rto",
+      "sli": "backup_selection_to_verified_service_recovery",
+      "target": 120,
+      "unit": "minutes",
+      "windowDays": 30
+    }
+  ],
+  "failureDomains": [
+    {
+      "id": "process_or_pod",
+      "mitigation": "minimum two stateless replicas with probes and graceful shutdown",
+      "residual": "simultaneous software defect remains shared"
+    },
+    {
+      "id": "worker_node",
+      "mitigation": "three workers plus required pod anti-affinity",
+      "residual": "provider placement diversity is not assumed beyond distinct nodes"
+    },
+    {
+      "id": "vke_control_plane",
+      "mitigation": "request VKE HA control plane",
+      "residual": "provider-managed implementation is externally trusted and must be live-verified"
+    },
+    {
+      "id": "stateful_replica_or_volume",
+      "mitigation": "three PostgreSQL and RabbitMQ replicas with independent volumes; Redis remains rebuildable",
+      "residual": "common operator or region failure can affect all replicas"
+    },
+    {
+      "id": "tokyo_region",
+      "mitigation": "none in v1 because data is pinned to Tokyo",
+      "residual": "single regional failure domain; no committed regional RPO or RTO"
+    },
+    {
+      "id": "vultr_provider_or_account",
+      "mitigation": "portable containers, PostgreSQL exports, recovery manifests, and provider-neutral application interfaces",
+      "residual": "no hot alternate provider or pre-provisioned failover"
+    }
+  ],
+  "costModel": {
+    "currency": "USD",
+    "estimateAsOf": "2026-08-25",
+    "priceStatus": "PUBLIC_CATALOG_PLANNING_ESTIMATE_REQUOTE_BEFORE_SPEND",
+    "recurringItems": [
+      {"id": "vke-worker-nodes", "quantity": 3, "unitMonthlyUsdCents": 4800, "monthlyUsdCents": 14400, "source": "vultr-api-plan-vhp-4c-8gb-amd"},
+      {"id": "backup-host", "quantity": 1, "unitMonthlyUsdCents": 2400, "monthlyUsdCents": 2400, "source": "vultr-api-plan-vhp-2c-4gb-amd"},
+      {"id": "load-balancer", "quantity": 1, "unitMonthlyUsdCents": 1000, "monthlyUsdCents": 1000, "source": "vultr-published-starting-price"},
+      {"id": "block-storage-gib", "quantity": 610, "unitMonthlyUsdCents": 10, "monthlyUsdCents": 6100, "source": "vultr-published-entry-price"},
+      {"id": "vke-control-plane", "quantity": 1, "unitMonthlyUsdCents": 0, "monthlyUsdCents": 0, "source": "vultr-vke-cost-doc"}
+    ],
+    "catalogSubtotalMonthlyUsdCents": 23900,
+    "contingencyMonthlyUsdCents": 6100,
+    "planningCeilingMonthlyUsdCents": 30000,
+    "excludedVariableCosts": ["tax", "egress_overage", "regional_price_variance", "paid_external_travel", "paid_notifications", "domain_registration"],
+    "spendAuthorized": false
+  },
+  "qualificationGates": {
+    "beforeAnyProvisioning": [
+      "Vultr credentials supplied out of band",
+      "authenticated nrt quota and product availability check",
+      "authenticated regional quote at or below the approved future spend ceiling",
+      "explicit resource-creation and spend approval"
+    ],
+    "beforeProductionCandidate": ["R4-405", "R4-406", "R4-407", "R4-408", "R4-409"],
+    "requiredLabels": {
+      "current": "TARGET_SELECTED_NOT_DEPLOYED",
+      "local": "LOCAL_VALIDATED",
+      "ci": "CI_VALIDATED",
+      "live": "requires_matching_vultr_evidence",
+      "production": "not_claimed"
+    }
+  },
+  "scientificBoundary": {
+    "frozenR3_325": "E-PASS / X-PASS / S-FAIL / C-NO-CLAIM",
+    "round4DeploymentEvidenceIsScientificEvidence": false,
+    "scientificClaimEstablished": false
+  }
+}

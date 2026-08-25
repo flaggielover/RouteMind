@@ -87,6 +87,16 @@ try {
         throw "Supply-chain evidence self-tests failed"
     }
 
+    python scripts/deployment_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Deployment target contract validation failed"
+    }
+
+    python scripts/deployment_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Deployment target contract self-tests failed"
+    }
+
     python scripts/product_contract.py
     if ($LASTEXITCODE -ne 0) {
         throw "Product semantics contract validation failed"

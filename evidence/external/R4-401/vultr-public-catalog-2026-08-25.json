@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "evidenceId": "r4-401-vultr-public-catalog-2026-08-25",
+  "capturedAt": "2026-08-25T19:21:38+08:00",
+  "captureMode": "public_read_only_no_credentials",
+  "provider": "Vultr",
+  "region": {
+    "source": "https://api.vultr.com/v2/regions",
+    "id": "nrt",
+    "city": "Tokyo",
+    "country": "JP",
+    "continent": "Asia",
+    "options": [
+      "ddos_protection",
+      "block_storage_high_perf",
+      "block_storage_storage_opt",
+      "load_balancers",
+      "kubernetes"
+    ],
+    "connectivity": ["public_ip", "nat_gateway"]
+  },
+  "plans": [
+    {
+      "source": "https://api.vultr.com/v2/plans?per_page=500",
+      "id": "vhp-4c-8gb-amd",
+      "type": "vhp",
+      "vcpuCount": 4,
+      "ramMiB": 8192,
+      "diskGiB": 180,
+      "monthlyUsdCents": 4800,
+      "hourlyUsd": 0.066,
+      "regionAvailable": "nrt"
+    },
+    {
+      "source": "https://api.vultr.com/v2/plans?per_page=500",
+      "id": "vhp-2c-4gb-amd",
+      "type": "vhp",
+      "vcpuCount": 2,
+      "ramMiB": 4096,
+      "diskGiB": 100,
+      "monthlyUsdCents": 2400,
+      "hourlyUsd": 0.033,
+      "regionAvailable": "nrt"
+    }
+  ],
+  "publishedPricing": {
+    "vkeControlPlaneMonthlyUsdCents": 0,
+    "loadBalancerStartingMonthlyUsdCents": 1000,
+    "blockStorageMonthlyUsdCentsPerGiB": 10,
+    "priceQualification": "public_catalog_lower_bound_region_quote_required_before_spend"
+  },
+  "officialDocumentation": [
+    {
+      "id": "vke-cost",
+      "url": "https://docs.vultr.com/support/products/vke/how-much-does-the-vultr-kubernetes-engine-cost",
+      "observedFact": "VKE managed control plane has no additional charge; worker nodes, load balancers, and storage are billed."
+    },
+    {
+      "id": "vke-ha",
+      "url": "https://docs.vultr.com/products/compute/kubernetes/features/high-availability",
+      "observedFact": "VKE exposes an HA control-plane setting; the cluster creation request still selects one Vultr region."
+    },
+    {
+      "id": "load-balancer-price",
+      "url": "https://docs.vultr.com/support/platform/billing/how-are-vultr-load-balancers-priced",
+      "observedFact": "Load balancers start at USD 10 per month and region pricing may vary."
+    },
+    {
+      "id": "block-storage-price",
+      "url": "https://www.vultr.com/products/block-storage/",
+      "observedFact": "Published block-storage entry price is USD 1 per month for 10 GiB."
+    }
+  ],
+  "limitations": [
+    "No authenticated availability or account quota endpoint was called.",
+    "No resource was created and no charge was incurred.",
+    "Public catalog availability does not prove deployability for a specific account.",
+    "The catalog does not establish Tokyo as multiple independent availability zones.",
+    "An authenticated regional quote is required before any spend is authorized."
+  ]
+}

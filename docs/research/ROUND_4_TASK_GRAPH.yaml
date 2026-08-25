@@ -68,7 +68,7 @@
       "evidence": ["evidence/gates/R4-400/control-plane.md"], "round3_lineage": ["R3-300", "R3-365"]
     },
     {
-      "id": "R4-401", "title": "Select a deployment target and freeze SLO and failure-domain assumptions", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-400"], "status": "pending", "external_gate": true, "human_approval": true,
+      "id": "R4-401", "title": "Select a deployment target and freeze SLO and failure-domain assumptions", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-400"], "status": "validating", "external_gate": true, "human_approval": true,
       "acceptance": ["Deployment topology, ownership, regions, data residency, scaling, and failure domains are explicit", "SLOs and capacity assumptions are measurable and costed", "No production verification is claimed from Compose-only evidence"],
       "evidence": ["evidence/gates/R4-401/deployment-contract.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
