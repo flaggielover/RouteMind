@@ -8,6 +8,7 @@ from disaster_recovery import (
     REQUIRED_CHECKS,
     TARGET_CLASSIFICATION,
     canonical_digest,
+    external_identity_digest,
     qualify_report,
     validate_report,
 )
@@ -15,6 +16,20 @@ from disaster_recovery import (
 
 def report(mode: str = "local-ci") -> dict[str, object]:
     target = mode == "target"
+    external_identity = (
+        {
+            "provider": "Vultr",
+            "region": "nrt",
+            "resourceType": "Vultr Cloud Compute",
+            "resourceId": "fixture-resource-id",
+            "observedAt": "2026-08-25T12:00:00Z",
+            "credentialedProviderEvidence": True,
+            "executionManifestSha256": "e" * 64,
+            "workloadDataClass": "SYNTHETIC_NO_CUSTOMER_DATA",
+        }
+        if target
+        else None
+    )
     value: dict[str, object] = {
         "schemaVersion": "r4-406.v1",
         "reportId": "fixture",
@@ -24,8 +39,9 @@ def report(mode: str = "local-ci") -> dict[str, object]:
             "mode": mode,
             "provider": "Vultr" if target else "Docker",
             "region": "nrt" if target else "loopback",
-            "targetEvidenceSha256": "e" * 64 if target else None,
+            "targetEvidenceSha256": external_identity_digest(external_identity) if target else None,
         },
+        "externalIdentity": external_identity,
         "safety": {
             "scope": "isolated_ephemeral_only",
             "productionDataUsed": False,
@@ -68,9 +84,11 @@ class DisasterRecoveryTests(unittest.TestCase):
         wrong_region = mutate(value, lambda item: item["environment"].update(region="ewr"))  # type: ignore[union-attr]
         excessive_rpo = mutate(value, lambda item: item["metrics"].update(rpoSeconds=901))  # type: ignore[union-attr]
         excessive_rto = mutate(value, lambda item: item["metrics"].update(rtoSeconds=7201))  # type: ignore[union-attr]
+        uncredentialed = mutate(value, lambda item: item["externalIdentity"].update(credentialedProviderEvidence=False))  # type: ignore[union-attr]
         self.assertIn("target_identity", validate_report(wrong_region, require_target=True))
         self.assertIn("target_rpo_exceeded", validate_report(excessive_rpo, require_target=True))
         self.assertIn("target_rto_exceeded", validate_report(excessive_rto, require_target=True))
+        self.assertIn("target_external_evidence", validate_report(uncredentialed, require_target=True))
 
     def test_claim_checks_and_artifacts_cannot_be_weakened(self) -> None:
         value = report()

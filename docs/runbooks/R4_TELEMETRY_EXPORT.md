@@ -16,8 +16,15 @@ Provision these values through the approved secret/configuration mechanism:
   epoch.
 - `ROUTEMIND_TELEMETRY_OTLP_ENDPOINT`: the approved Tokyo-resident backend OTLP
   endpoint used by the collector.
-- `ROUTEMIND_TELEMETRY_AUTHORIZATION`: backend authorization, supplied only to
-  the collector.
+- `ROUTEMIND_TELEMETRY_RECEIVER_CA_FILE`,
+  `ROUTEMIND_TELEMETRY_RECEIVER_CERT_FILE`, and
+  `ROUTEMIND_TELEMETRY_RECEIVER_KEY_FILE`: receiver-side mTLS material.
+- `ROUTEMIND_TELEMETRY_EXPORTER_CA_FILE`,
+  `ROUTEMIND_TELEMETRY_EXPORTER_CERT_FILE`, and
+  `ROUTEMIND_TELEMETRY_EXPORTER_KEY_FILE`: backend client mTLS material.
+- `ROUTEMIND_TELEMETRY_METRICS_ADDRESS`: Collector diagnostic bind address;
+  use loopback locally and `0.0.0.0:8888` only behind the target `ClusterIP` and
+  NetworkPolicy boundary.
 - `ROUTEMIND_TELEMETRY_MAX_TENANT_KEYS`: optional runtime bound, 1 through 256;
   the frozen default is 64.
 - Standard OTLP application endpoint and `OTEL_BSP_*` values matching the

@@ -19,6 +19,14 @@ EXPECTED_RAW_TENANT_ATTRIBUTES = {
     "principal.id",
 }
 EXPECTED_PIPELINE_PROCESSORS = ["memory_limiter", "attributes/tenant_safety", "batch"]
+EXPECTED_TLS_ENVIRONMENT = {
+    "receiverCaFile": "ROUTEMIND_TELEMETRY_RECEIVER_CA_FILE",
+    "receiverCertificateFile": "ROUTEMIND_TELEMETRY_RECEIVER_CERT_FILE",
+    "receiverPrivateKeyFile": "ROUTEMIND_TELEMETRY_RECEIVER_KEY_FILE",
+    "exporterCaFile": "ROUTEMIND_TELEMETRY_EXPORTER_CA_FILE",
+    "exporterCertificateFile": "ROUTEMIND_TELEMETRY_EXPORTER_CERT_FILE",
+    "exporterPrivateKeyFile": "ROUTEMIND_TELEMETRY_EXPORTER_KEY_FILE",
+}
 
 
 def load_object(path: Path) -> dict[str, Any]:
@@ -49,9 +57,12 @@ def validate_contract(contract: dict[str, Any], collector: dict[str, Any]) -> li
         or target.get("dataResidency") != "Tokyo, Japan"
     ):
         findings.append("target:identity")
-    if any(
-        target.get(field) is not False
-        for field in ("collectorVerified", "backendSelected", "productionCostVerified")
+    if (
+        target.get("collectorVerified") is not False
+        or target.get("backendSelected") is not True
+        or target.get("backend") != "self-hosted-signoz"
+        or target.get("backendDeploymentStatus") != "NOT_DEPLOYED"
+        or target.get("productionCostVerified") is not False
     ):
         findings.append("target:false_claim")
 
@@ -104,7 +115,7 @@ def validate_contract(contract: dict[str, Any], collector: dict[str, Any]) -> li
         or cost.get("unit") != "logical_export_record"
         or set(cost.get("requiredLabels", []))
         != {"service", "signal", "operation", "tenant_key"}
-        or set(cost.get("signals", [])) != {"metric", "trace"}
+        or set(cost.get("signals", [])) != {"log", "metric", "trace"}
         or cost.get("vendorRateStatus") != "TARGET_BACKEND_REQUIRED"
         or cost.get("currencyCostClaim") is not False
     ):
@@ -138,6 +149,11 @@ def validate_contract(contract: dict[str, Any], collector: dict[str, Any]) -> li
     if (
         collector_contract.get("configPath")
         != "infra/observability/otel-collector.yaml"
+        or collector_contract.get("authenticationMode") != "mTLS"
+        or collector_contract.get("metricsEndpointEnvironmentVariable")
+        != "ROUTEMIND_TELEMETRY_METRICS_ADDRESS"
+        or collector_contract.get("tlsEnvironmentVariables")
+        != EXPECTED_TLS_ENVIRONMENT
         or set(collector_contract.get("rawTenantAttributesRemoved", []))
         != EXPECTED_RAW_TENANT_ATTRIBUTES
     ):
@@ -148,10 +164,12 @@ def validate_contract(contract: dict[str, Any], collector: dict[str, Any]) -> li
     target_evidence = set(qualification.get("requiredTargetEvidence", []))
     if (
         qualification.get("targetStatus") != "TARGET_PENDING"
-        or len(target_evidence) != 6
+        or len(target_evidence) != 9
+        or not any("OTLP log" in item for item in target_evidence)
         or not any("leakage" in item for item in target_evidence)
-        or not any("outage" in item for item in target_evidence)
+        or not any("backend outage" in item for item in target_evidence)
         or not any("cost attribution" in item for item in target_evidence)
+        or not any("cleanup" in item for item in target_evidence)
     ):
         findings.append("qualification:target")
 
@@ -168,9 +186,17 @@ def validate_contract(contract: dict[str, Any], collector: dict[str, Any]) -> li
 def _validate_collector(contract: dict[str, Any], collector: dict[str, Any]) -> list[str]:
     findings: list[str] = []
     receiver = collector.get("receivers", {}).get("otlp", {}).get("protocols", {})
+    expected_receiver_tls = {
+        "ca_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_CA_FILE}",
+        "cert_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_CERT_FILE}",
+        "key_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_KEY_FILE}",
+        "client_ca_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_CA_FILE}",
+    }
     if (
         receiver.get("grpc", {}).get("endpoint") != contract.get("otlpGrpcEndpoint")
+        or receiver.get("grpc", {}).get("tls") != expected_receiver_tls
         or receiver.get("http", {}).get("endpoint") != contract.get("otlpHttpEndpoint")
+        or receiver.get("http", {}).get("tls") != expected_receiver_tls
     ):
         findings.append("collector:receiver")
 
@@ -201,11 +227,18 @@ def _validate_collector(contract: dict[str, Any], collector: dict[str, Any]) -> 
     if storage.get("directory") != contract.get("persistentQueueDirectory"):
         findings.append("collector:storage")
     exporter = collector.get("exporters", {}).get("otlphttp/target", {})
+    expected_exporter_tls = {
+        "ca_file": "${env:ROUTEMIND_TELEMETRY_EXPORTER_CA_FILE}",
+        "cert_file": "${env:ROUTEMIND_TELEMETRY_EXPORTER_CERT_FILE}",
+        "key_file": "${env:ROUTEMIND_TELEMETRY_EXPORTER_KEY_FILE}",
+        "insecure": False,
+        "insecure_skip_verify": False,
+    }
     if (
         exporter.get("endpoint")
         != "${env:" + str(contract.get("targetEndpointEnvironmentVariable")) + "}"
-        or exporter.get("headers", {}).get("Authorization")
-        != "${env:" + str(contract.get("authorizationEnvironmentVariable")) + "}"
+        or exporter.get("tls") != expected_exporter_tls
+        or "headers" in exporter
     ):
         findings.append("collector:credentials")
     queue = exporter.get("sending_queue", {})
@@ -224,11 +257,16 @@ def _validate_collector(contract: dict[str, Any], collector: dict[str, Any]) -> 
         findings.append("collector:retry")
 
     service = collector.get("service", {})
-    if service.get("extensions") != [storage_name]:
+    if service.get("telemetry", {}).get("metrics", {}).get("address") != (
+        "${env:" + str(contract.get("metricsEndpointEnvironmentVariable")) + "}"
+    ):
+        findings.append("collector:metrics_endpoint")
+    if service.get("extensions") != ["health_check", storage_name]:
         findings.append("collector:extensions")
     pipelines = service.get("pipelines", {})
     traces = pipelines.get("traces", {})
     metrics = pipelines.get("metrics", {})
+    logs = pipelines.get("logs", {})
     if (
         traces.get("receivers") != ["otlp"]
         or traces.get("processors") != EXPECTED_PIPELINE_PROCESSORS
@@ -241,6 +279,12 @@ def _validate_collector(contract: dict[str, Any], collector: dict[str, Any]) -> 
         or metrics.get("exporters") != ["otlphttp/target"]
     ):
         findings.append("collector:metric_pipeline")
+    if (
+        logs.get("receivers") != ["otlp"]
+        or logs.get("processors") != EXPECTED_PIPELINE_PROCESSORS
+        or logs.get("exporters") != ["otlphttp/target"]
+    ):
+        findings.append("collector:log_pipeline")
     return findings
 
 

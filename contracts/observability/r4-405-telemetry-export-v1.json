@@ -7,7 +7,9 @@
     "region": "nrt",
     "dataResidency": "Tokyo, Japan",
     "collectorVerified": false,
-    "backendSelected": false,
+    "backendSelected": true,
+    "backend": "self-hosted-signoz",
+    "backendDeploymentStatus": "NOT_DEPLOYED",
     "productionCostVerified": false
   },
   "correlation": {
@@ -71,7 +73,7 @@
     "metric": "routemind_telemetry_attributed_records_total",
     "unit": "logical_export_record",
     "requiredLabels": ["service", "signal", "operation", "tenant_key"],
-    "signals": ["metric", "trace"],
+    "signals": ["log", "metric", "trace"],
     "vendorRateStatus": "TARGET_BACKEND_REQUIRED",
     "currencyCostClaim": false
   },
@@ -90,7 +92,16 @@
     "otlpGrpcEndpoint": "0.0.0.0:4317",
     "otlpHttpEndpoint": "0.0.0.0:4318",
     "targetEndpointEnvironmentVariable": "ROUTEMIND_TELEMETRY_OTLP_ENDPOINT",
-    "authorizationEnvironmentVariable": "ROUTEMIND_TELEMETRY_AUTHORIZATION",
+    "authenticationMode": "mTLS",
+    "metricsEndpointEnvironmentVariable": "ROUTEMIND_TELEMETRY_METRICS_ADDRESS",
+    "tlsEnvironmentVariables": {
+      "receiverCaFile": "ROUTEMIND_TELEMETRY_RECEIVER_CA_FILE",
+      "receiverCertificateFile": "ROUTEMIND_TELEMETRY_RECEIVER_CERT_FILE",
+      "receiverPrivateKeyFile": "ROUTEMIND_TELEMETRY_RECEIVER_KEY_FILE",
+      "exporterCaFile": "ROUTEMIND_TELEMETRY_EXPORTER_CA_FILE",
+      "exporterCertificateFile": "ROUTEMIND_TELEMETRY_EXPORTER_CERT_FILE",
+      "exporterPrivateKeyFile": "ROUTEMIND_TELEMETRY_EXPORTER_KEY_FILE"
+    },
     "memoryLimitMiB": 384,
     "memorySpikeLimitMiB": 96,
     "batchSize": 512,
@@ -121,10 +132,13 @@
     "requiredTargetEvidence": [
       "credentialed Vultr Tokyo collector identity",
       "trace continuity across all five boundaries",
+      "metrics export and correlated OTLP log query",
       "tenant leakage scan",
       "cardinality and queue saturation observations",
       "collector outage and recovery drill",
-      "backend usage and cost attribution reconciliation"
+      "backend outage and recovery drill",
+      "backend usage and cost attribution reconciliation",
+      "credentialed cleanup inventory with no remaining resource identity"
     ]
   },
   "scientificBoundary": {

@@ -1,0 +1,305 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-vultr-tokyo-external-validation-v1",
+  "status": "PREPARED_EXTERNAL_EXECUTION_HUMAN_GATE",
+  "preparedAt": "2026-08-25",
+  "scope": {
+    "qualificationTasks": ["R4-405", "R4-406"],
+    "recomputeAfterQualification": ["R4-407", "R4-408", "R4-409"],
+    "auditedIndependentHumanGates": ["R4-410", "R4-422"],
+    "productionDeploymentClaimed": false,
+    "externalValidationExecuted": false
+  },
+  "approvalBoundary": {
+    "providerAndResidencyApproved": true,
+    "provider": "Vultr",
+    "region": "nrt",
+    "dataResidency": "Tokyo, Japan",
+    "resourceCreationAuthorized": false,
+    "spendAuthorized": false,
+    "liveMutationCallsAuthorized": false,
+    "requiredFinalGate": "EXTERNAL EXECUTION HUMAN GATE",
+    "approvalDigestEnvironmentVariable": "ROUTEMIND_EXTERNAL_EXECUTION_APPROVAL_DIGEST"
+  },
+  "backendDecision": {
+    "selected": "self-hosted-signoz",
+    "selectionStatus": "APPROVED_FOR_BOUNDED_EXTERNAL_VALIDATION_NOT_DEPLOYED",
+    "selectionReasons": [
+      "OpenTelemetry-native traces, metrics, and logs in one self-hosted backend",
+      "all telemetry payloads and storage remain inside the Vultr nrt validation boundary",
+      "official Kubernetes Helm automation and health endpoint are available",
+      "no paid SaaS registration or external telemetry credential is required",
+      "collector and backend outage, leakage, resource, and bounded-cost evidence can be collected locally in the target"
+    ],
+    "candidates": [
+      {
+        "id": "self-hosted-signoz",
+        "signals": ["traces", "metrics", "logs"],
+        "otelNative": true,
+        "tokyoResidencyControl": "SELF_HOSTED_IN_VULTR_NRT",
+        "automation": "OFFICIAL_HELM_CHART",
+        "costModel": "USES_APPROVED_VKE_WORKERS_AND_BLOCK_STORAGE",
+        "disposition": "SELECTED"
+      },
+      {
+        "id": "grafana-otel-lgtm",
+        "signals": ["traces", "metrics", "logs"],
+        "otelNative": true,
+        "tokyoResidencyControl": "SELF_HOSTED_IN_VULTR_NRT",
+        "automation": "KUBERNETES_MANIFEST_OR_CONTAINER",
+        "costModel": "LOW_SINGLE_CONTAINER",
+        "disposition": "REJECTED_AS_PRIMARY_OFFICIAL_SCOPE_IS_DEVELOPMENT_DEMO_TEST"
+      },
+      {
+        "id": "self-hosted-uptrace",
+        "signals": ["traces", "metrics", "logs"],
+        "otelNative": true,
+        "tokyoResidencyControl": "SELF_HOSTED_IN_VULTR_NRT",
+        "automation": "HELM_OR_COMPOSE",
+        "costModel": "REQUIRES_CLICKHOUSE_POSTGRESQL_AND_REDIS",
+        "disposition": "VALID_ALTERNATIVE_NOT_SELECTED_DUE_TO_ADDITIONAL_DEPENDENCIES"
+      }
+    ],
+    "pinnedArtifacts": {
+      "signozHelmChartVersion": "0.138.0",
+      "signozApplicationVersion": "v0.138.0",
+      "signozHelmChartSha256": "b180a601b85b63b2e30ba953ea2242124a2c40f8f1cb66d8d948d71cd27d7418",
+      "otelCollectorContribVersion": "0.159.0",
+      "artifactDigestResolutionRequiredBeforeDeploy": true
+    }
+  },
+  "infrastructure": {
+    "executionClass": "ISOLATED_SYNTHETIC_EXTERNAL_QUALIFICATION",
+    "resources": [
+      {
+        "id": "validation-vke",
+        "type": "Vultr Kubernetes Engine",
+        "region": "nrt",
+        "quantity": 1,
+        "haControlPlane": true,
+        "workerPlan": "vhp-4c-8gb-amd",
+        "workerCount": 3,
+        "autoscaling": false
+      },
+      {
+        "id": "recovery-drill-host",
+        "type": "Vultr Cloud Compute",
+        "region": "nrt",
+        "quantity": 1,
+        "plan": "vhp-2c-4gb-amd",
+        "automaticBackups": false,
+        "productionDataAllowed": false
+      },
+      {
+        "id": "validation-block-storage",
+        "type": "Vultr Block Storage",
+        "region": "nrt",
+        "maximumGiB": 60,
+        "dynamicProvisioning": "VKE_CSI",
+        "reclaimPolicyRequired": "Delete"
+      }
+    ],
+    "publicLoadBalancers": 0,
+    "publicApplicationIngress": false,
+    "maximumRuntimeHours": 8,
+    "resourceLabelsRequired": ["routemind", "r4-external-validation", "execution-id", "expires-at"],
+    "resourceLimits": {
+      "observabilityNamespaceCpu": "4",
+      "observabilityNamespaceMemory": "8Gi",
+      "observabilityNamespaceStorage": "60Gi",
+      "persistentVolumeClaimCountMaximum": 5,
+      "routeMindCollectorReplicas": 2,
+      "routeMindCollectorCpuPerReplica": "500m",
+      "routeMindCollectorMemoryPerReplica": "512Mi",
+      "collectorPersistentQueueGiBPerReplica": 10
+    }
+  },
+  "telemetryTopology": {
+    "flow": [
+      "RouteMind actual synthetic qualification workload (Java durable API, Python compute API, Outbox relay)",
+      "RouteMind OpenTelemetry gateway Collector",
+      "self-hosted SigNoz OpenTelemetry Collector",
+      "Tokyo-resident ClickHouse",
+      "SigNoz query service through local kubectl port-forward only"
+    ],
+    "collectorMode": "TWO_REPLICA_GATEWAY_WITH_BOUNDED_PERSISTENT_QUEUE",
+    "backendMode": "SINGLE_VALIDATION_BACKEND_NOT_PRODUCTION_HA",
+    "logEvidence": "CORRELATED_OTLP_CONNECTIVITY_LOG_AND_ACTUAL_WORKLOAD_TRACE_REQUIRED",
+    "networkBoundaries": [
+      {
+        "id": "application-to-routemind-collector",
+        "protocol": "OTLP_HTTP_mTLS",
+        "port": 4318,
+        "exposure": "ClusterIP_only"
+      },
+      {
+        "id": "routemind-collector-to-signoz",
+        "protocol": "OTLP_HTTP_mTLS",
+        "port": 4318,
+        "exposure": "ClusterIP_only"
+      },
+      {
+        "id": "collector-health-and-metrics",
+        "protocol": "HTTP",
+        "ports": [13133, 8888],
+        "exposure": "ClusterIP_only"
+      },
+      {
+        "id": "signoz-ui",
+        "protocol": "HTTPS_over_kubectl_control_plane_tunnel",
+        "port": 8080,
+        "exposure": "no_public_service"
+      },
+      {
+        "id": "recovery-operator",
+        "protocol": "SSH",
+        "port": 22,
+        "exposure": "temporary_public_ipv4_operator_cidr_only"
+      },
+      {
+        "id": "provider-control-plane",
+        "protocol": "HTTPS_TLS_1_2_OR_NEWER",
+        "port": 443,
+        "exposure": "Vultr_API_and_VKE_control_plane"
+      }
+    ],
+    "tls": {
+      "publicPlaintextAllowed": false,
+      "otlpMutualTlsRequired": true,
+      "certificateAuthority": "ephemeral_execution_scoped_private_CA",
+      "privateKeysPersistedAfterCleanup": false,
+      "certificateSanValidationRequired": true
+    }
+  },
+  "secretHandling": {
+    "userConfiguredSecretNames": ["VULTR_API_KEY", "ROUTEMIND_SSH_PRIVATE_KEY_PATH"],
+    "userConfiguredNonSecretNames": ["ROUTEMIND_VULTR_SSH_KEY_ID", "ROUTEMIND_OPERATOR_CIDR"],
+    "ephemeralGeneratedSecrets": [
+      "ROUTEMIND_TELEMETRY_ATTRIBUTION_KEY",
+      "RouteMind OTLP client private key",
+      "RouteMind Collector server private key",
+      "SigNoz Collector server private key",
+      "ClickHouse password",
+      "recovery fixture credentials"
+    ],
+    "injection": [
+      "VULTR_API_KEY is read only from the execution process environment",
+      "the SSH private key is referenced by an absolute path outside the repository",
+      "Kubernetes Secrets are created from restricted temporary files and never rendered to terminal output",
+      "ephemeral credentials are generated after provisioning and destroyed during cleanup"
+    ],
+    "forbiddenLocations": ["Git", "evidence", "logs", "fixtures", "screenshots", "Progress Capsule", "tracked .env files"],
+    "secretValueLoggingAllowed": false
+  },
+  "dataGovernance": {
+    "allowedWorkloadData": "SYNTHETIC_NO_CUSTOMER_DATA",
+    "payloadResidency": "Vultr nrt only",
+    "forbiddenOutsideTokyo": [
+      "customer personal data",
+      "courier trajectories",
+      "merchant operational data",
+      "tenant-scoped production events",
+      "notification content",
+      "unencrypted recovery payloads"
+    ],
+    "sourceAndSyntheticEvidenceMayLeaveTokyo": true,
+    "backendRawRetentionMaximumHours": 8,
+    "sanitizedEvidenceRetentionDays": 30,
+    "cleanupDeletesBackendStorage": true,
+    "providerAutomaticBackups": false
+  },
+  "cost": {
+    "currency": "USD",
+    "publicCatalogExpectedMaximumUsdCents": 500,
+    "executionAuthorizationCeilingUsdCents": 1500,
+    "emergencyMonthlyCeilingUsdCents": 30000,
+    "maximumRuntimeHours": 8,
+    "authenticatedQuoteRequiredBeforeProvision": true,
+    "abortIfQuoteExceedsExecutionCeiling": true,
+    "actualOrBoundedCostEvidenceRequired": true,
+    "spendAuthorized": false
+  },
+  "automation": {
+    "controller": "scripts/r4_external_validation.ps1",
+    "contractValidator": "scripts/r4_external_validation.py",
+    "iacRoot": "infra/external-validation/vultr-tokyo",
+    "stateRootEnvironmentVariable": "ROUTEMIND_DATA_ROOT",
+    "defaultAction": "OfflinePreflight",
+    "mutatingActionsRequireExplicitSwitch": true,
+    "mutatingActionsRequireApprovalDigest": true,
+    "provisionPlanAllowedResourceTypes": [
+      "vultr_firewall_group",
+      "vultr_firewall_rule",
+      "vultr_instance",
+      "vultr_kubernetes"
+    ],
+    "idempotency": "execution-id scoped state and labels",
+    "timeoutCleanup": "Full action always enters teardown; recovery Teardown action uses the exact state directory",
+    "unsafeBroadDeleteAllowed": false
+  },
+  "failureAndRecovery": {
+    "networkFailure": "deny RouteMind Collector to SigNoz egress and verify bounded queue/drop diagnostics without changing business outcome",
+    "collectorOutage": "scale RouteMind Collector to zero and verify business success plus recovery after restore",
+    "backendOutage": "scale SigNoz Collector to zero and verify queue/backpressure then recovered export",
+    "recoveryDrill": "run the existing isolated R4-406 Docker drill on the exact nrt recovery host and bind its report to credentialed resource evidence",
+    "abortConditions": [
+      "provider or resource region is not nrt",
+      "authenticated quote exceeds USD 15",
+      "resource shape differs from the approved inventory",
+      "any secret appears in logs or evidence",
+      "any production or customer data is detected",
+      "cleanup target identity cannot be proven",
+      "R3-325 scientific boundary changes"
+    ]
+  },
+  "evidenceContract": {
+    "schema": "r4-external-validation-evidence.v1",
+    "requiredChecks": [
+      "vultr_tokyo_identity",
+      "collector_health",
+      "otlp_connectivity",
+      "five_boundary_trace",
+      "metrics_export",
+      "log_correlation",
+      "tenant_security_boundary",
+      "leakage_scan",
+      "network_failure",
+      "collector_outage",
+      "backend_outage",
+      "recovery_behavior",
+      "durable_business_truth",
+      "r4_406_restore",
+      "resource_consumption",
+      "cost_accounting",
+      "cleanup"
+    ],
+    "requiredCorrelationBoundaries": ["http", "messaging", "worker", "simulation", "experiment"],
+    "requiredArtifacts": [
+      "authenticated-resource-manifest",
+      "environment-version-manifest",
+      "collector-health",
+      "actual-routemind-workload",
+      "trace-query",
+      "metric-query",
+      "correlated-log-query",
+      "leakage-scan",
+      "failure-recovery-timeline",
+      "target-recovery-report",
+      "resource-usage",
+      "cost-bound",
+      "cleanup-inventory"
+    ],
+    "timestampsMustBeUtc": true,
+    "artifactSha256Required": true,
+    "mockEvidenceAccepted": false,
+    "composeEvidenceAcceptedAsTarget": false,
+    "providerDocumentationAcceptedAsRuntimeEvidence": false,
+    "externalPassMayClaimProductionDeployment": false
+  },
+  "scientificBoundary": {
+    "frozenR3_325": "E-PASS / X-PASS / S-FAIL / C-NO-CLAIM",
+    "rerunAllowed": false,
+    "externalValidationIsScientificEvidence": false,
+    "scientificClaimEstablished": false
+  }
+}

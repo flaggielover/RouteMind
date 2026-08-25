@@ -25,6 +25,7 @@ try {
     $blocked = @($graph.tasks | Where-Object { $_.status -eq "blocked" })
     $eligible = @($graph.tasks | Where-Object {
         $_.status -in @("pending", "ready") -and
+        (-not $_.activation_condition -or $_.status -eq "ready") -and
         @($_.depends_on | Where-Object { $_ -notin $passedIds }).Count -eq 0
     })
 

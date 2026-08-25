@@ -12,29 +12,35 @@ Round 4 Progress: 9 / 38 tasks passed
 
 Repository Total: 165 / 196 tasks passed
 
-Current Task: NONE - R4-405/R4-406 are at external Vultr Tokyo evidence gates
+Current Task: NONE - EXTERNAL EXECUTION HUMAN GATE for R4-405/R4-406
 
 Last Completed: R4-401 - Select a deployment target and freeze SLO and failure-domain assumptions
 
-Current Gate: R4-405 is `LOCAL_AND_CI_VALIDATED / TARGET_PENDING` and blocked, not passed. Correlation, tenant-safe logical volume attribution, bounded exporter/collector contracts, and failure semantics are green locally and in real Actions; no running Vultr Tokyo collector, backend usage, target outage, or currency-cost evidence exists. R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING` and is not closed.
+Current Gate: Vultr Tokyo preparation is complete locally under contract digest `3e320b5b...1a47d`. Self-hosted SigNoz is selected; exact Terraform/Kubernetes topology, mTLS, actual RouteMind synthetic workload, secret injection, retention, USD 15 / eight-hour ceiling, failure/recovery, leakage scan, Evidence Contract, and exact teardown are fail-closed. This did not run credentialed provider calls or create resources. R4-405 remains `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`; R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`.
 
-CI: R4-405 implementation `49680bd` passed all five jobs in run `32852309878`. The remote control log matches contract digest `767ae48b...2395`, collector digest `b7af884b...a1b9e`, and explicit `TARGET_PENDING` false-claim fields. Recovery artifact `9564818949` was retained separately; it does not qualify telemetry or the target.
+CI: R4-405 implementation `49680bd` passed all five jobs in run `32852309878` against its then-current digests `767ae48b...2395` / `b7af884b...a1b9e` and explicit `TARGET_PENDING` fields. The prepared mTLS revision now validates locally as `f063de18...1d5f` / `e1cf3579...6fa7` and awaits its own Actions run. Recovery artifact `9564818949` remains separate and does not qualify the target.
 
-Regression: PASS locally for the R4-405 contract plus 8 mutation tests, W3C correlation, tenant pseudonym/cardinality tests, exporter-failure semantics, full gate (113/113 Java, 925/925 Python at 95.09%, 104/104 Web, production build), serial resilience (16 Java / 2 Python), task graph, Round 4 mirror, deployment, security, supply-chain, product, agent, recovery, release, staged-release, and Compose configuration. The telemetry contract digest is `767ae48b...2395`; collector config digest is `b7af884b...a1b9e`. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
+Regression: PASS locally for the preparation contract (8 mutations), evidence assembler (3 fail-closed tests), telemetry contract (9 tests), target-aware DR contract (5 tests), Terraform provider 2.32.0 validation, SigNoz Helm 0.138.0 lint/render, security, task graph, Round 4 mirror, fast repository controls, Java 113/113, Python 925/925 at 95.09%, Web 104/104 plus production build, Playwright 34 passed / 2 expected skips, and focused resilience 16 Java / 2 Python. The isolated local DR rerun stopped before resource creation because Docker Desktop did not return from `docker version`; the independent Actions recovery job must pass before closure. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
-Progress Capsule: `resume.ps1` now derives human/external action directly from blocked task `blocked_by` records. It reports R4-405 and R4-406 requirements, `Current: NONE`, 165/196 passed, and next eligible R4-410/R4-422/R4-437 instead of the previous hard-coded `NONE recorded` message.
+Progress Capsule: `resume.ps1` reports `Current: NONE`, 165/196 passed, `Next eligible: NONE`, and the four truthful external gates. R4-410/R4-422 are now blocked on their independent travel/notification approvals; conditional R4-437 is inactive and no longer appears eligible.
 
 Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly deferred/reclassified; no required task remains open.
 
 Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-347 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
 
-Blocked: R4-405 needs Vultr credentials, an approved Tokyo-resident telemetry backend/credential, explicit resource/spend authorization, and matching five-boundary continuity/leakage/saturation/outage/usage/cost evidence. R4-406 needs matching restore/RPO/RTO evidence plus the same resource authorization. R4-410 and R4-422 retain separate provider/notification human gates; R4-437 remains conditional and inactive.
+Blocked: R4-405/R4-406 now need only the final USD 15 / eight-hour execution approval, safely configured Vultr API and SSH credentials/non-secret target values, then matching credentialed target and cleanup evidence. R4-410 and R4-422 retain separate provider/notification Human Gates; R4-437 remains conditional and inactive.
 
-Human Action Required: provide Vultr credentials through an approved secret channel, identify/approve the Tokyo-resident telemetry backend, and explicitly authorize the bounded resource/spend envelope before R4-405/R4-406 target work. Alternatively, R4-410 requires approval of an external travel-provider contract and credentials, or R4-422 requires notification-provider/channel approval and credentials.
+Human Action Required: at the final `EXTERNAL EXECUTION HUMAN GATE`, securely configure `VULTR_API_KEY` and an SSH private-key path outside Git, provide the existing public SSH key ID and operator IPv4 `/32`, then approve the exact contract digest, resource inventory, maximum eight-hour runtime, and USD 15 ceiling. Do not send secret values in chat.
 
-Next Candidates: graph recomputation yields R4-410 and R4-422, both high-priority human/external gates. R4-437 is low-priority conditional and remains inactive because pickup-delivery semantics are not in the current research scope. No safe unblocked implementation task remains.
+Next Candidates: none before a Human Gate. Successful R4-405/R4-406 target qualification would recompute R4-407 as the next critical production task; R4-410/R4-422 remain independent blocked gates.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
+- External validation preparation: self-hosted SigNoz in Vultr `nrt`, contract
+  digest `3e320b5b...1a47d`, exact Terraform/Kubernetes/mTLS/actual-workload/failure/evidence/
+  cleanup automation, USD 5 expected maximum, USD 15 authorization ceiling,
+  eight-hour maximum. No provider credential was used and no resource exists.
+- Progress capsule: 165/196 passed, current NONE, next eligible NONE;
+  R4-405/R4-406/R4-410/R4-422 are explicit Human/external blockers.
 - Current task: R4-405 tenant-safe trace, metric, and cost attribution export.
 - Workstream: P - Production Safety and Deployment.
 - Status: R4-405 is `LOCAL_AND_CI_VALIDATED / TARGET_PENDING` and blocked; R4-406 is `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING` and blocked. No Vultr infrastructure or telemetry backend has been created.
@@ -97,25 +103,31 @@ Next Candidates: graph recomputation yields R4-410 and R4-422, both high-priorit
   `docs/product/R4_PRODUCT_SEMANTICS.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as
   complete or authorized by graph promotion.
-- R4-405 contract: digest `767ae48b...2395`; five boundaries, HMAC-SHA256
+- R4-405 contract: digest `f063de18...1d5f`; five boundaries, HMAC-SHA256
   tenant keys, 64-key runtime budget, 2,048-series planning ceiling, logical
   record attribution, and explicit false target/currency claims pass 8 mutation
-  tests. Collector config digest is `b7af884b...a1b9e`.
+  tests. Prepared mTLS contract/config digests are `f063de18...1d5f` and
+  `e1cf3579...6fa7`; their real CI run is pending this checkpoint.
 - R4-405 application boundary: Java generates pseudonyms and owns raw durable
   tenant identity; Python accepts only bounded pseudonyms. W3C correlation spans
   HTTP, messaging, worker, simulation, and experiment paths. Exporter failure
   leaves business responses and durable truth unchanged.
-- R4-405 local gates: 113 Java, 925 Python at 95.09%, 104 Web tests plus build,
+- R4-405 original local gates: 113 Java, 925 Python at 95.09%, 104 Web tests plus build,
   8 telemetry contract mutations, all controls, and serial resilience 16 Java /
   2 Python pass.
 - R4-405 CI: implementation `49680bd` passed all five jobs in run
   `32852309878`. The remote contract output retains false collector/cost claims
   and `TARGET_PENDING`; CI green is not target qualification.
-- Graph recomputation: only R4-410 and R4-422 are eligible, and both require
-  human approval plus external provider inputs. Conditional R4-437 is inactive.
-- Human action required: credentials, a selected Tokyo-resident telemetry
-  backend, and bounded resource/spend approval for R4-405/R4-406, or the
-  separate provider approval/credentials required by R4-410 or R4-422.
+- External preparation: contract digest `3e320b5b...1a47d`; self-hosted SigNoz,
+  pinned chart and image resolution, exact IaC, mTLS, actual Java/Python/Outbox
+  workload, target backend queries,
+  leakage scan, USD 15 / eight-hour bound, and verified teardown are prepared.
+  No provider credential or resource was used.
+- Graph recomputation: no task is eligible. R4-405/R4-406 await their shared
+  final Human Gate; R4-410/R4-422 await independent provider gates; R4-437 is
+  inactive.
+- Human action required: securely configure only the documented Vultr/SSH
+  values, then approve the exact external contract/resource/cost boundary.
 
 ### R3-365 Round 3 scientific closure - 2026-08-25
 - Implementation `9e9537e` passed all five jobs in Actions run `32790948926`,

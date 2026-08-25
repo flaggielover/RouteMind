@@ -1,5 +1,6 @@
 {
   "extensions": {
+    "health_check": {"endpoint": "0.0.0.0:13133"},
     "file_storage/telemetry_queue": {
       "directory": "/var/lib/otelcol/queue",
       "create_directory": true,
@@ -13,8 +14,24 @@
   "receivers": {
     "otlp": {
       "protocols": {
-        "grpc": {"endpoint": "0.0.0.0:4317"},
-        "http": {"endpoint": "0.0.0.0:4318"}
+        "grpc": {
+          "endpoint": "0.0.0.0:4317",
+          "tls": {
+            "ca_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_CA_FILE}",
+            "cert_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_CERT_FILE}",
+            "key_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_KEY_FILE}",
+            "client_ca_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_CA_FILE}"
+          }
+        },
+        "http": {
+          "endpoint": "0.0.0.0:4318",
+          "tls": {
+            "ca_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_CA_FILE}",
+            "cert_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_CERT_FILE}",
+            "key_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_KEY_FILE}",
+            "client_ca_file": "${env:ROUTEMIND_TELEMETRY_RECEIVER_CA_FILE}"
+          }
+        }
       }
     },
     "prometheus": {
@@ -23,12 +40,13 @@
           {
             "job_name": "routemind-business-api",
             "scrape_interval": "30s",
-            "static_configs": [{"targets": ["business-api:18080"]}]
+            "metrics_path": "/actuator/prometheus",
+            "static_configs": [{"targets": ["business-api.routemind-app.svc.cluster.local:18080"]}]
           },
           {
             "job_name": "routemind-compute-api",
             "scrape_interval": "30s",
-            "static_configs": [{"targets": ["compute-api:18081"]}]
+            "static_configs": [{"targets": ["compute-api.routemind-app.svc.cluster.local:18081"]}]
           }
         ]
       }
@@ -59,8 +77,12 @@
   "exporters": {
     "otlphttp/target": {
       "endpoint": "${env:ROUTEMIND_TELEMETRY_OTLP_ENDPOINT}",
-      "headers": {
-        "Authorization": "${env:ROUTEMIND_TELEMETRY_AUTHORIZATION}"
+      "tls": {
+        "ca_file": "${env:ROUTEMIND_TELEMETRY_EXPORTER_CA_FILE}",
+        "cert_file": "${env:ROUTEMIND_TELEMETRY_EXPORTER_CERT_FILE}",
+        "key_file": "${env:ROUTEMIND_TELEMETRY_EXPORTER_KEY_FILE}",
+        "insecure": false,
+        "insecure_skip_verify": false
       },
       "timeout": "10s",
       "sending_queue": {
@@ -78,9 +100,9 @@
     }
   },
   "service": {
-    "extensions": ["file_storage/telemetry_queue"],
+    "extensions": ["health_check", "file_storage/telemetry_queue"],
     "telemetry": {
-      "metrics": {"address": "127.0.0.1:8888"}
+      "metrics": {"address": "${env:ROUTEMIND_TELEMETRY_METRICS_ADDRESS}"}
     },
     "pipelines": {
       "traces": {
@@ -90,6 +112,11 @@
       },
       "metrics": {
         "receivers": ["otlp", "prometheus"],
+        "processors": ["memory_limiter", "attributes/tenant_safety", "batch"],
+        "exporters": ["otlphttp/target"]
+      },
+      "logs": {
+        "receivers": ["otlp"],
         "processors": ["memory_limiter", "attributes/tenant_safety", "batch"],
         "exporters": ["otlphttp/target"]
       }

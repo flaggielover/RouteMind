@@ -21,3 +21,8 @@ test-results/
 .coverage
 evidence/tests/tmp/
 evidence/failures/tmp/
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log

@@ -19,7 +19,15 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from disaster_recovery import LOCAL_CLASSIFICATION, REQUIRED_CHECKS, canonical_digest, validate_report
+from disaster_recovery import (
+    LOCAL_CLASSIFICATION,
+    REQUIRED_CHECKS,
+    TARGET_CLASSIFICATION,
+    canonical_digest,
+    external_identity_digest,
+    validate_external_identity,
+    validate_report,
+)
 from recovery_contract import RecoveryArtifact, RecoveryPackage, RollbackManifest, rehearse, sha256_file
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -364,7 +372,7 @@ def artifact(service: str, format_name: str, path: Path, order: int, revision: s
     )
 
 
-def execute(output: Path) -> dict[str, Any]:
+def execute(output: Path, target_identity: dict[str, Any] | None = None) -> dict[str, Any]:
     run_id = uuid.uuid4().hex[:12]
     prefix = f"r4-406-{run_id}"
     names = {
@@ -409,6 +417,7 @@ def execute(output: Path) -> dict[str, Any]:
             seed_redis(names["redis_source"], redis_password)
             dump_redis(names["redis_source"], redis_password, redis_dump)
 
+            target = target_identity is not None
             package = RecoveryPackage(
                 f"r4-406-{run_id}",
                 started_at.isoformat().replace("+00:00", "Z"),
@@ -418,7 +427,7 @@ def execute(output: Path) -> dict[str, Any]:
                     artifact("rabbitmq", "rabbitmq-definitions", rabbit_definitions, 2, revision),
                     artifact("redis", "redis-rdb", redis_dump, 3, revision),
                 ),
-                (("environment", "local-ci"), ("production-data", "false")),
+                (("environment", "target" if target else "local-ci"), ("production-data", "false")),
             )
             rehearsal = rehearse(package, package_root)
             if rehearsal.status != "ready":
@@ -492,9 +501,15 @@ def execute(output: Path) -> dict[str, Any]:
                 "sourceRevision": revision,
                 "startedAt": started_at.isoformat().replace("+00:00", "Z"),
                 "completedAt": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
-                "classification": LOCAL_CLASSIFICATION,
+                "classification": TARGET_CLASSIFICATION if target else LOCAL_CLASSIFICATION,
                 "productionDeploymentVerified": False,
-                "environment": {"mode": "local-ci", "provider": "Docker", "region": "loopback", "targetEvidenceSha256": None},
+                "environment": {
+                    "mode": "target" if target else "local-ci",
+                    "provider": "Vultr" if target else "Docker",
+                    "region": "nrt" if target else "loopback",
+                    "targetEvidenceSha256": external_identity_digest(target_identity) if target else None,
+                },
+                "externalIdentity": target_identity,
                 "safety": {"scope": "isolated_ephemeral_only", "productionDataUsed": False, "sourceContainersDestroyedBeforeRestore": True},
                 "artifacts": artifacts,
                 "packageDigest": package.digest,
@@ -502,14 +517,22 @@ def execute(output: Path) -> dict[str, Any]:
                 "metrics": {"rpoSeconds": 0, "rtoSeconds": rto_seconds, "rollbackSeconds": rollback_seconds},
                 "continuity": {"tenantCount": source["tenants"], "sourceDigest": source["digest"], "restoredDigest": restored["digest"], "rollbackDigest": rollback["digest"]},
                 "rollback": {"ack": "required", "manifestDigest": rollback_manifest.digest},
-                "limitations": [
-                    "ephemeral Docker evidence is not Vultr Tokyo target evidence",
-                    "zero fixture data loss is not a production RPO claim",
-                    "measured local restore time is not a production RTO claim",
-                ],
+                "limitations": (
+                    [
+                        "the isolated drill ran on a credentialed Vultr Tokyo resource with synthetic fixtures",
+                        "zero synthetic fixture data loss is not a production RPO claim",
+                        "measured target restore time is not a production deployment claim",
+                    ]
+                    if target
+                    else [
+                        "ephemeral Docker evidence is not Vultr Tokyo target evidence",
+                        "zero fixture data loss is not a production RPO claim",
+                        "measured local restore time is not a production RTO claim",
+                    ]
+                ),
             }
             report["reportDigest"] = canonical_digest(report)
-            findings = validate_report(report)
+            findings = validate_report(report, require_target=target)
             if findings:
                 raise DrillFailure(f"generated report is invalid: {findings}")
             output.parent.mkdir(parents=True, exist_ok=True)
@@ -523,11 +546,25 @@ def execute(output: Path) -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run the isolated R4-406 recovery drill")
     parser.add_argument("--output", type=Path, default=ROOT / "evidence" / "tests" / "tmp" / "R4-406" / "local-drill.json")
+    parser.add_argument(
+        "--target-identity",
+        type=Path,
+        help="Credentialed Vultr Tokyo identity manifest; absent means local-CI mode",
+    )
     arguments = parser.parse_args()
     if not shutil_which("docker"):
         raise DrillFailure("Docker CLI is required")
     docker("version", "--format", "{{.Server.Version}}")
-    report = execute(arguments.output.resolve())
+    target_identity = None
+    if arguments.target_identity is not None:
+        loaded = json.loads(arguments.target_identity.read_text(encoding="utf-8"))
+        if not isinstance(loaded, dict):
+            raise DrillFailure("target identity manifest must be an object")
+        identity_findings = validate_external_identity(loaded)
+        if identity_findings:
+            raise DrillFailure(f"target identity manifest is invalid: {identity_findings}")
+        target_identity = loaded
+    report = execute(arguments.output.resolve(), target_identity)
     print(json.dumps({"classification": report["classification"], "reportDigest": report["reportDigest"], "rpoSeconds": report["metrics"]["rpoSeconds"], "rtoSeconds": report["metrics"]["rtoSeconds"], "valid": True}, sort_keys=True))
     return 0
 

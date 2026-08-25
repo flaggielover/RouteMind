@@ -69,10 +69,22 @@ class TelemetryExportContractTests(unittest.TestCase):
 
     def test_collector_credentials_remain_environment_only(self) -> None:
         self.assert_rejected(
-            lambda _contract, collector: collector["exporters"]["otlphttp/target"].update(
-                endpoint="https://collector.example.invalid/v1"
-            ),
+            lambda _contract, collector: collector["exporters"]["otlphttp/target"][
+                "tls"
+            ].update(insecure_skip_verify=True),
             "collector:credentials",
+        )
+
+    def test_logs_and_mutual_tls_are_required(self) -> None:
+        self.assert_rejected(
+            lambda _contract, collector: collector["service"]["pipelines"].pop("logs"),
+            "collector:log_pipeline",
+        )
+        self.assert_rejected(
+            lambda _contract, collector: collector["receivers"]["otlp"]["protocols"][
+                "grpc"
+            ].pop("tls"),
+            "collector:receiver",
         )
 
     def test_all_five_correlation_boundaries_are_required(self) -> None:

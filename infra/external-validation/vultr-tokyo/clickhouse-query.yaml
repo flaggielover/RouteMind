@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: routemind-clickhouse-query
+  namespace: routemind-observability
+  labels:
+    routemind.io/purpose: external-validation-query
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 120
+  ttlSecondsAfterFinished: 600
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: routemind-clickhouse-query
+        routemind.io/purpose: external-validation-query
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        runAsGroup: 101
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: query
+          image: clickhouse/clickhouse-server:25.12.5
+          command: [sh, -ec]
+          args: ['exec clickhouse-client --host routemind-clickhouse --user "$CLICKHOUSE_USER" --query "$QUERY FORMAT JSON"']
+          env:
+            - {name: CLICKHOUSE_USER, value: admin}
+            - {name: CLICKHOUSE_PASSWORD, valueFrom: {secretKeyRef: {name: routemind-clickhouse-query, key: CLICKHOUSE_PASSWORD}}}
+            - {name: QUERY, valueFrom: {configMapKeyRef: {name: routemind-clickhouse-query, key: QUERY}}}
+            - {name: HOME, value: /tmp}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+          resources:
+            requests: {cpu: 25m, memory: 64Mi}
+            limits: {cpu: 250m, memory: 256Mi}
+          volumeMounts: [{name: tmp, mountPath: /tmp}]
+      volumes:
+        - {name: tmp, emptyDir: {sizeLimit: 32Mi}}

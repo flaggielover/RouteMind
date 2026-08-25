@@ -113,7 +113,7 @@
       "evidence": ["evidence/gates/R4-409/production-readiness.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
     {
-      "id": "R4-410", "title": "Freeze external travel-provider capability, credential, privacy, and fallback contract", "workstream": "T", "priority": "high", "classification": "EXTERNAL_VALIDATION", "depends_on": ["R4-400"], "status": "pending", "external_gate": true, "human_approval": true,
+      "id": "R4-410", "title": "Freeze external travel-provider capability, credential, privacy, and fallback contract", "workstream": "T", "priority": "high", "classification": "EXTERNAL_VALIDATION", "depends_on": ["R4-400"], "status": "blocked", "external_gate": true, "human_approval": true,
       "acceptance": ["Point, matrix, time-context, quota, timeout, privacy, and cost semantics are provider explicit", "Credentials remain external and deterministic local fallback remains available", "The contract does not name a provider as validated before live evidence"],
       "evidence": ["evidence/gates/R4-410/provider-contract.md"], "round3_lineage": ["ROUND_4_PROVIDER_RECLASSIFICATION"]
     },
@@ -143,7 +143,7 @@
       "evidence": ["evidence/gates/R4-421/preferences.md"], "round3_lineage": ["ROUND_4_PRODUCT_RECLASSIFICATION"]
     },
     {
-      "id": "R4-422", "title": "Implement consent-aware notification delivery and failure recovery", "workstream": "U", "priority": "high", "classification": "PRODUCT", "depends_on": ["R4-403", "R4-420"], "status": "pending", "external_gate": true, "human_approval": true,
+      "id": "R4-422", "title": "Implement consent-aware notification delivery and failure recovery", "workstream": "U", "priority": "high", "classification": "PRODUCT", "depends_on": ["R4-403", "R4-420"], "status": "blocked", "external_gate": true, "human_approval": true,
       "acceptance": ["Notification intent is transactional and delivery is asynchronous, idempotent, observable, and consent bounded", "Provider retries, bounces, duplicates, quiet hours, and opt-out are executable", "Real sends use approved recipients, credentials, and spend limits"],
       "evidence": ["evidence/gates/R4-422/notifications.md"], "round3_lineage": ["ROUND_4_PRODUCT_RECLASSIFICATION"]
     },

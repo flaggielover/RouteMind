@@ -1,0 +1,103 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: routemind-observability
+  labels:
+    routemind.io/external-validation: "true"
+    routemind.io/data-residency: tokyo
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: routemind-observability-budget
+  namespace: routemind-observability
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 8Gi
+    limits.cpu: "8"
+    limits.memory: 16Gi
+    requests.storage: 60Gi
+    persistentvolumeclaims: "5"
+    services.loadbalancers: "0"
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: routemind-observability-container-defaults
+  namespace: routemind-observability
+spec:
+  limits:
+    - type: Container
+      default:
+        cpu: 250m
+        memory: 384Mi
+      defaultRequest:
+        cpu: 50m
+        memory: 128Mi
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  namespace: routemind-observability
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-observability-internal-and-dns
+  namespace: routemind-observability
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+  ingress:
+    - from:
+        - podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              routemind.io/external-validation: "true"
+      ports:
+        - protocol: TCP
+          port: 18080
+        - protocol: TCP
+          port: 18081
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-validation-otlp
+  namespace: routemind-observability
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: routemind-otel-collector
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              routemind.io/external-validation-client: "true"
+        - namespaceSelector:
+            matchLabels:
+              routemind.io/external-validation: "true"
+      ports:
+        - protocol: TCP
+          port: 4317
+        - protocol: TCP
+          port: 4318

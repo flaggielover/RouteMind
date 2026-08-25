@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: routemind-workload-qualification
+  namespace: routemind-app
+  labels: {routemind.io/purpose: external-validation}
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 300
+  ttlSecondsAfterFinished: 1800
+  template:
+    metadata: {labels: {app.kubernetes.io/name: routemind-workload-qualification}}
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext: {runAsNonRoot: true, runAsUser: 65532, runAsGroup: 65532, seccompProfile: {type: RuntimeDefault}}
+      containers:
+        - name: qualification
+          image: python:3.13.7-slim
+          command: [python, /opt/routemind-workload/r4_workload_qualification.py]
+          env:
+            - {name: ROUTEMIND_SOURCE_REVISION, valueFrom: {configMapKeyRef: {name: routemind-source, key: revision}}}
+            - {name: ROUTEMIND_BUSINESS_URL, value: http://business-api:18080}
+            - {name: ROUTEMIND_COMPUTE_URL, value: http://compute-api:18081}
+            - {name: ROUTEMIND_QUALIFICATION_ID, value: qualification}
+          securityContext: {allowPrivilegeEscalation: false, readOnlyRootFilesystem: true, capabilities: {drop: [ALL]}}
+          resources: {requests: {cpu: 50m, memory: 64Mi}, limits: {cpu: 200m, memory: 128Mi}}
+          volumeMounts: [{name: workload, mountPath: /opt/routemind-workload, readOnly: true}, {name: tmp, mountPath: /tmp}]
+      volumes:
+        - {name: workload, configMap: {name: routemind-workload-qualification}}
+        - {name: tmp, emptyDir: {sizeLimit: 32Mi}}

@@ -1,0 +1,95 @@
+global:
+  storageClass: vultr-block-storage
+  clusterName: routemind-r4-external-validation
+
+clickhouse:
+  service:
+    type: ClusterIP
+  persistence:
+    enabled: true
+    storageClass: vultr-block-storage
+    size: 30Gi
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 4Gi
+  zookeeper:
+    persistence:
+      enabled: true
+      storageClass: vultr-block-storage
+      size: 3Gi
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
+signoz:
+  replicaCount: 1
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+  persistence:
+    enabled: true
+    storageClass: vultr-block-storage
+    size: 2Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+
+otelCollector:
+  replicaCount: 1
+  service:
+    type: ClusterIP
+  ingress:
+    enabled: false
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: "1"
+      memory: 1Gi
+  extraVolumes:
+    - name: routemind-signoz-tls
+      secret:
+        secretName: routemind-signoz-tls
+  extraVolumeMounts:
+    - name: routemind-signoz-tls
+      mountPath: /var/run/routemind-signoz-tls
+      readOnly: true
+  config:
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+            max_recv_msg_size_mib: 16
+            tls:
+              ca_file: /var/run/routemind-signoz-tls/ca.crt
+              cert_file: /var/run/routemind-signoz-tls/tls.crt
+              key_file: /var/run/routemind-signoz-tls/tls.key
+              client_ca_file: /var/run/routemind-signoz-tls/ca.crt
+          http:
+            endpoint: 0.0.0.0:4318
+            tls:
+              ca_file: /var/run/routemind-signoz-tls/ca.crt
+              cert_file: /var/run/routemind-signoz-tls/tls.crt
+              key_file: /var/run/routemind-signoz-tls/tls.key
+              client_ca_file: /var/run/routemind-signoz-tls/ca.crt
+
+signoz-otel-gateway:
+  enabled: false
+
+redpanda:
+  enabled: false

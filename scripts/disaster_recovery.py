@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from datetime import datetime
 from collections.abc import Mapping
 from typing import Any
 
@@ -42,6 +43,44 @@ def _is_sha256(value: object) -> bool:
     return isinstance(value, str) and len(value) == 64 and all(character in "0123456789abcdef" for character in value)
 
 
+def _is_utc_timestamp(value: object) -> bool:
+    if not isinstance(value, str) or not value.endswith("Z"):
+        return False
+    try:
+        datetime.fromisoformat(value[:-1] + "+00:00")
+    except ValueError:
+        return False
+    return True
+
+
+def external_identity_digest(value: Mapping[str, Any]) -> str:
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def validate_external_identity(value: object) -> tuple[str, ...]:
+    if not isinstance(value, Mapping):
+        return ("target_external_identity",)
+    findings: list[str] = []
+    if (
+        value.get("provider") != TARGET_PROVIDER
+        or value.get("region") != TARGET_REGION
+        or value.get("resourceType") != "Vultr Cloud Compute"
+        or not isinstance(value.get("resourceId"), str)
+        or len(value.get("resourceId", "")) < 8
+    ):
+        findings.append("target_external_identity")
+    if (
+        value.get("credentialedProviderEvidence") is not True
+        or value.get("workloadDataClass") != "SYNTHETIC_NO_CUSTOMER_DATA"
+        or not _is_utc_timestamp(value.get("observedAt"))
+        or not _is_sha256(value.get("executionManifestSha256"))
+    ):
+        findings.append("target_external_evidence")
+    return tuple(sorted(set(findings)))
+
+
 def validate_report(report: Mapping[str, Any], *, require_target: bool = False) -> tuple[str, ...]:
     findings: list[str] = []
     if report.get("schemaVersion") != SCHEMA_VERSION:
@@ -55,13 +94,26 @@ def validate_report(report: Mapping[str, Any], *, require_target: bool = False) 
     provider = environment.get("provider")
     region = environment.get("region")
     target_evidence = environment.get("targetEvidenceSha256")
+    external_identity = report.get("externalIdentity")
 
     if mode == "target":
-        if provider != TARGET_PROVIDER or region != TARGET_REGION or not _is_sha256(target_evidence):
+        if (
+            provider != TARGET_PROVIDER
+            or region != TARGET_REGION
+            or not _is_sha256(target_evidence)
+            or not isinstance(external_identity, Mapping)
+            or target_evidence != external_identity_digest(external_identity)
+        ):
             findings.append("target_identity")
+        findings.extend(validate_external_identity(external_identity))
         expected_classification = TARGET_CLASSIFICATION
     elif mode == "local-ci":
-        if provider != "Docker" or region != "loopback" or target_evidence is not None:
+        if (
+            provider != "Docker"
+            or region != "loopback"
+            or target_evidence is not None
+            or external_identity is not None
+        ):
             findings.append("local_identity")
         expected_classification = LOCAL_CLASSIFICATION
     else:

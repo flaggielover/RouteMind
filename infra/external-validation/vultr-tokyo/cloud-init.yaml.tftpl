@@ -1,0 +1,15 @@
+#cloud-config
+package_update: true
+packages:
+  - ca-certificates
+  - curl
+  - docker.io
+  - git
+  - python3
+runcmd:
+  - [systemctl, enable, --now, docker]
+  - [mkdir, -p, /var/lib/routemind-validation]
+  - [chmod, "0700", /var/lib/routemind-validation]
+  - [sh, -c, "printf '%s\\n' 'execution_id=${execution_id}' 'source_revision=${source_revision}' 'expires_at=${expires_at}' > /var/lib/routemind-validation/identity"]
+  - [chmod, "0600", /var/lib/routemind-validation/identity]
+final_message: "RouteMind external validation host preparation complete"

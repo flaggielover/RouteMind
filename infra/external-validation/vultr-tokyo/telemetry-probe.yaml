@@ -1,0 +1,132 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: routemind-validation
+  labels:
+    routemind.io/external-validation-client: "true"
+    routemind.io/data-residency: tokyo
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  namespace: routemind-validation
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-probe-required-egress
+  namespace: routemind-validation
+spec:
+  podSelector:
+    matchLabels:
+      routemind.io/purpose: external-validation
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: routemind-observability
+      ports:
+        - {protocol: TCP, port: 4318}
+    - ports:
+        - {protocol: TCP, port: 443}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: routemind-telemetry-probe
+  namespace: routemind-validation
+  labels:
+    routemind.io/purpose: external-validation
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 300
+  ttlSecondsAfterFinished: 1800
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: routemind-telemetry-probe
+        routemind.io/purpose: external-validation
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: probe
+          image: python:3.13.7-slim
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              python -m pip install --disable-pip-version-check --no-cache-dir --target /tmp/site \
+                opentelemetry-api==1.44.0 \
+                opentelemetry-sdk==1.44.0 \
+                opentelemetry-exporter-otlp-proto-http==1.44.0
+              PYTHONPATH=/tmp/site python /opt/routemind-probe/r4_telemetry_probe.py
+          env:
+            - name: ROUTEMIND_PROBE_ID
+              value: qualification
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: https://routemind-otel-collector.routemind-observability.svc.cluster.local:4318
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: http/protobuf
+            - name: OTEL_EXPORTER_OTLP_CERTIFICATE
+              value: /var/run/routemind-probe-tls/ca.crt
+            - name: OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE
+              value: /var/run/routemind-probe-tls/tls.crt
+            - name: OTEL_EXPORTER_OTLP_CLIENT_KEY
+              value: /var/run/routemind-probe-tls/tls.key
+            - name: OTEL_BSP_EXPORT_TIMEOUT
+              value: "10000"
+            - name: OTEL_BLRP_EXPORT_TIMEOUT
+              value: "10000"
+            - name: TMPDIR
+              value: /tmp
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          volumeMounts:
+            - name: probe
+              mountPath: /opt/routemind-probe
+              readOnly: true
+            - name: tls
+              mountPath: /var/run/routemind-probe-tls
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: probe
+          configMap:
+            name: routemind-telemetry-probe
+        - name: tls
+          secret:
+            secretName: routemind-telemetry-probe-tls
+        - name: tmp
+          emptyDir:
+            sizeLimit: 256Mi

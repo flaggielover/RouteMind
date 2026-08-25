@@ -101,3 +101,20 @@ regional recovery. Matching credentialed Vultr Tokyo evidence plus explicit
 resource/spend authorization remain required. R3-325 was not rerun, tuned,
 reinterpreted, or changed and remains exactly
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
+
+## Vultr Tokyo execution preparation
+
+The shared R4-405/R4-406 external contract now freezes a temporary
+`vhp-2c-4gb-amd` recovery host in `nrt`, public SSH limited to the operator's
+single IPv4 `/32`, an existing public SSH key identity, automatic backups off,
+synthetic fixtures only, and exact cleanup. Target mode additionally requires a
+credentialed Vultr resource ID, UTC observation time, resource-manifest digest,
+and `SYNTHETIC_NO_CUSTOMER_DATA`; local reports cannot be promoted.
+
+The controller transfers only a non-secret target identity, checks out the
+exact Git revision on the isolated host, runs the existing source-destroy/
+restore/reconcile/rollback drill, downloads the sanitized report, and validates
+it with `require_target=True`. SSH host state and restricted execution material
+are removed during teardown. This is preparation only: no remote host exists,
+no target drill ran, and R4-406 remains
+`LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`.

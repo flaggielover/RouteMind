@@ -107,6 +107,21 @@ try {
         throw "Telemetry export contract self-tests failed"
     }
 
+    python scripts/r4_external_validation.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo external-validation preparation contract failed"
+    }
+
+    python scripts/r4_external_validation_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo external-validation contract self-tests failed"
+    }
+
+    python scripts/r4_external_evidence_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo external-evidence assembler self-tests failed"
+    }
+
     python scripts/product_contract.py
     if ($LASTEXITCODE -ne 0) {
         throw "Product semantics contract validation failed"
