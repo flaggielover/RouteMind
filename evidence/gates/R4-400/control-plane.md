@@ -4,7 +4,7 @@ Date: 2026-08-25 (Asia/Shanghai)
 
 Entry revision: `6f4dd92c3ed2ac79126aaca5b0466a353b6c693c`
 
-Status: implementation complete; remote evidence pending
+Status: passed - `CI_VALIDATED`
 
 ## Implemented
 
@@ -25,8 +25,9 @@ Status: implementation complete; remote evidence pending
 - `python scripts/round4_graph_gate_test.py`
 - `./scripts/resume.ps1`
 
-The first three commands pass during implementation. The full recovery gate and
-real GitHub Actions run are required before R4-400 can be marked passed.
+All commands passed. Implementation `83e749f567bf6b4982a76d587521aa964164113b`
+passed all five jobs in GitHub Actions run `32804264415`: control/Compose, Java,
+Python/contracts, bounded degradation/resilience, and Web unit/build/browser.
 
 ## Scope
 

@@ -8,15 +8,15 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Round 4 Progress: 0 / 38 tasks passed
+Round 4 Progress: 1 / 38 tasks passed
 
-Repository Total: 156 / 196 tasks passed
+Repository Total: 157 / 196 tasks passed
 
-Current Task: R4-400 - Promote the Round 4 control plane and production/thesis contract
+Current Task: R4-402 - Implement OIDC authentication boundary and threat model
 
-Last Completed: R3-365 - Close Round 3 science and prepare Round 4 graph
+Last Completed: R4-400 - Promote the Round 4 control plane and production/thesis contract
 
-Current Gate: R4-400 local control-plane, Round 4 mirror, and nine directed graph tests pass; implementation commit and real GitHub Actions evidence are pending.
+Current Gate: R4-400 implementation `83e749f` passed all five jobs in Actions run `32804264415`. R4-402 is active; local implementation evidence is pending.
 
 CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168, R3-342 implementation SHA d82138b394e7ab0832acb85a6575931054eff48c in run 32758618433, R3-343 implementation SHA 44df8e2c1215230ca5a7ee24f13f87d708050bcc in run 32776065978, R3-344 implementation SHA 65c992fce1b73495c01b650996c167fe9c7ec86e in run 32759977254, R3-345 implementation SHA bdb6967 in run 32761030125, R3-348 implementation SHA 771e8a81c819c2006473fa6a0a55fef5bcfc7fe6 in run 32774570495, R3-349 implementation SHA 94f1a3e3000fa645a775f3ffca3de3157bf3df97 in run 32777694427, R3-356 recovery SHA 76468caf2f5f50806b86b3b5da5a444b3605856a in run 32781478836, R3-358 implementation SHA 200c4d41bf93a0199b389770c3edb2dbb469a792 in run 32782886790, R3-346 implementation SHA 43e3549cf2db17b3554637b9406c2395d60eefb9 in run 32784278395, and R3-347 closure SHA ddb998e5d5d1ca50810478831d9c2240ea18e99c in run 32785809240; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
 
@@ -30,24 +30,22 @@ Blocked: NONE for R4-400. Task-specific external, human-approval, and conditiona
 
 Human Action Required: NO for the active task
 
-Next Candidates: After R4-400 passes remote CI, activate local critical task R4-402. R4-401 and R4-410 require their task-specific human/external gates; R4-420 and R4-450 remain independent local candidates.
+Next Candidates: R4-402 is active. R4-401 and R4-410 require their task-specific human/external gates; R4-420 and R4-450 remain independent local candidates.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
-- Current task: R4-400.
+- Current task: R4-402.
 - Workstream: P - Production Safety and Deployment.
-- Status: `in_progress`; all 38 prepared tasks are promoted and the Round 4
-  graph is `ACTIVE`.
-- Local gate: control-plane validator, active graph mirror, nine mutation tests,
-  and frozen-science checks pass.
-- CI: implementation checkpoint pending; latest pre-Round-4 run `32792320950`
-  passed all five jobs at `6f4dd92`.
-- Evidence: `docs/closure/ROUND_4_GRAPH_AUDIT.md`,
-  `docs/closure/ROUND_4_CONTROL_CONTRACT.md`, and
-  `evidence/gates/R4-400/control-plane.md`.
+- Status: R4-400 passed; R4-402 is `in_progress`.
+- Local gate: R4-400 control-plane validator, active graph mirror, nine directed
+  tests, strict Ruff/Mypy, and frozen-science checks pass.
+- CI: R4-400 implementation `83e749f` passed all five jobs in run
+  `32804264415`.
+- Evidence: `evidence/gates/R4-400/control-plane.md`; R4-402 evidence pending.
 - Deferred external: 15 declared external-evidence tasks; none is represented as
   complete or authorized by graph promotion.
-- Next: commit, push, observe real CI, close R4-400, then activate R4-402.
-- Human action required: NONE for R4-400.
+- Next: implement the OIDC/JWKS boundary, threat model, failure semantics, and
+  directed negative-path tests without claiming a live IdP deployment.
+- Human action required: NONE for R4-402.
 
 ### R3-365 Round 3 scientific closure - 2026-08-25
 - Implementation `9e9537e` passed all five jobs in Actions run `32790948926`,

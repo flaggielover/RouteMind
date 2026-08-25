@@ -63,7 +63,7 @@
   "critical_spine": ["R4-400", "R4-401", "R4-402", "R4-403", "R4-405", "R4-406", "R4-407", "R4-408", "R4-409", "R4-430", "R4-431", "R4-432", "R4-433", "R4-434", "R4-435", "R4-436", "R4-460", "R4-461", "R4-462", "R4-499"],
   "tasks": [
     {
-      "id": "R4-400", "title": "Promote the Round 4 control plane and production/thesis contract", "workstream": "P", "priority": "critical", "classification": "CONTROL_PLANE", "depends_on": [], "status": "in_progress", "external_gate": false, "human_approval": false,
+      "id": "R4-400", "title": "Promote the Round 4 control plane and production/thesis contract", "workstream": "P", "priority": "critical", "classification": "CONTROL_PLANE", "depends_on": [], "status": "passed", "external_gate": false, "human_approval": false,
       "acceptance": ["Prepared tasks are audited and promoted into the executable graph without changing their dependency intent", "Production, scientific, external, and human-approval gates remain distinct", "Round 3 frozen outcomes remain immutable inputs rather than targets for optimization"],
       "evidence": ["evidence/gates/R4-400/control-plane.md"], "round3_lineage": ["R3-300", "R3-365"]
     },
@@ -73,7 +73,7 @@
       "evidence": ["evidence/gates/R4-401/deployment-contract.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
     {
-      "id": "R4-402", "title": "Implement OIDC authentication boundary and threat model", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-400"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-402", "title": "Implement OIDC authentication boundary and threat model", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-400"], "status": "in_progress", "external_gate": false, "human_approval": false,
       "acceptance": ["OIDC issuer, audience, token, session, logout, key rotation, and failure semantics are explicit", "Java remains authoritative for durable business authorization", "Threat model covers confused deputy, replay, privilege escalation, and service-to-service identity"],
       "evidence": ["evidence/gates/R4-402/oidc-boundary.md"], "round3_lineage": ["ROUND_4_IDENTITY_RECLASSIFICATION"]
     },
