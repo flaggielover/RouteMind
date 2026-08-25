@@ -86,7 +86,9 @@ def start_postgres(name: str, password: str) -> None:
     )
     wait_until(
         name,
-        lambda: docker("exec", name, "pg_isready", "-U", "routemind", "-d", "routemind", check=False).strip().endswith(b"accepting connections"),
+        lambda: command_succeeds(
+            ["docker", "exec", name, "psql", "-U", "routemind", "-d", "routemind", "-Atc", "SELECT 1"]
+        ),
     )
 
 

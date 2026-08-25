@@ -63,6 +63,13 @@ evidence digest, RPO at most 900 seconds, and RTO at most 7200 seconds.
   isolated drill now supplies a random in-memory Erlang cookie and mounts its
   Mnesia base on an explicit container tmpfs. Neither value is persisted in the
   report. No service-backed recovery pass is claimed from this failed run.
+- Runtime-state remediation `55031d2` run `32846798159` passed the four other
+  jobs, resilience, Rabbit startup, package creation, source destruction, main
+  restore, replay, rebuild, and reached the rollback restore. PostgreSQL
+  `pg_isready` accepted the temporary initialization server before database
+  `routemind` existed, so the final `pg_restore` raced database creation. The
+  readiness condition now executes `SELECT 1` against the target database. No
+  service-backed recovery pass is claimed from this failed run.
 - The local Docker daemon was unresponsive before the implementation checkpoint.
   The remediation CI run and its retained recovery JSON artifact are pending.
 
