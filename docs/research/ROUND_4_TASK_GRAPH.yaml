@@ -83,7 +83,7 @@
       "evidence": ["evidence/gates/R4-403/tenant-isolation.md"], "round3_lineage": ["ROUND_4_IDENTITY_RECLASSIFICATION"]
     },
     {
-      "id": "R4-404", "title": "Harden gateway rate limits, secret handling, WAF policy, SBOM, and provenance", "workstream": "P", "priority": "high", "classification": "PRODUCTION", "depends_on": ["R4-402"], "status": "in_progress", "external_gate": false, "human_approval": false,
+      "id": "R4-404", "title": "Harden gateway rate limits, secret handling, WAF policy, SBOM, and provenance", "workstream": "P", "priority": "high", "classification": "PRODUCTION", "depends_on": ["R4-402"], "status": "passed", "external_gate": false, "human_approval": false,
       "acceptance": ["Rate and abuse controls are role and tenant aware with bounded degradation", "Secrets, dependency attestations, container provenance, and SBOM evidence are automated", "WAF or equivalent policy is tested without claiming a vendor deployment that did not run"],
       "evidence": ["evidence/gates/R4-404/security-edge.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
@@ -133,7 +133,7 @@
       "evidence": ["evidence/gates/R4-413/travel-closure.md"], "round3_lineage": ["ROUND_4_PROVIDER_RECLASSIFICATION"]
     },
     {
-      "id": "R4-420", "title": "Freeze preference, accessibility, consent, and notification semantics", "workstream": "U", "priority": "high", "classification": "PRODUCT", "depends_on": ["R4-400"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-420", "title": "Freeze preference, accessibility, consent, and notification semantics", "workstream": "U", "priority": "high", "classification": "PRODUCT", "depends_on": ["R4-400"], "status": "in_progress", "external_gate": false, "human_approval": false,
       "acceptance": ["Preference ownership, defaults, versioning, consent, quiet hours, locale, and accessibility requirements are explicit", "No notification channel is treated as delivered without provider acknowledgement", "Role and tenant boundaries are mapped before persistence"],
       "evidence": ["evidence/gates/R4-420/product-contract.md"], "round3_lineage": ["ROUND_4_PRODUCT_RECLASSIFICATION"]
     },

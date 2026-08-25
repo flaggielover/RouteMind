@@ -8,53 +8,47 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Round 4 Progress: 3 / 38 tasks passed
+Round 4 Progress: 4 / 38 tasks passed
 
-Repository Total: 159 / 196 tasks passed
+Repository Total: 160 / 196 tasks passed
 
-Current Task: R4-404 - Harden gateway rate limits, secret handling, WAF policy, SBOM, and provenance
+Current Task: R4-420 - Freeze preference, accessibility, consent, and notification semantics
 
-Last Completed: R4-403 - Enforce durable multi-tenant isolation and migration compatibility
+Last Completed: R4-404 - Harden gateway rate limits, secret handling, WAF policy, SBOM, and provenance
 
-Current Gate: R4-404 implementation is in `CI_REMEDIATION`. Run 32818303442 exposed a silently skipped POSIX Maven wrapper; run 32818849130 proved Maven execution and exposed Linux test-order H2 contamination. Explicit Bash launchers and an isolated tenant-test database are implemented; a forced Tenant-before-Business regression passes 20/20. Full local and clean replacement CI plus artifact validation remain required.
+Current Gate: R4-420 is active. Preference ownership/defaults/versioning, consent and quiet-hour semantics, locale/accessibility requirements, notification acknowledgement states, and role/tenant persistence boundaries require a frozen executable contract.
 
-CI: PASS for R3-325 implementation SHA ce8dafb65358b9ae0250a0ddc3973bd2ca59eb1f in run 32725900984, R3-327 report SHA ed0104423937fcd2d87bb83be16c3bc4c2066e68 in run 32737520239, R3-350 corpus SHA 15c29fefcd10f1644b03899dab9e8f4fa6329d8a in run 32739524990, R3-352 design SHA c36881e3a9a393a09b3c136078fa753a9208db90 in run 32740971993, R3-330 split contract SHA 825384d124a412fad386dbdaa4330cab3ac0b1a9 in run 32742587929, R3-333 fidelity protocol SHA c0283c74e2cc9ad9e9703adc60bfe1097835e421 in run 32744065301, R3-331 calibration SHA e5dce058db948d78cfacb4179f4b87cf52a2b4a5 in run 32746310588, R3-332 validation SHA 311d7a09136a91962f0583980eb86a0df625c29c in run 32748083203, R3-334 drift SHA 46b179c34d42d6405a539ccce6c33958344dd0e4 in run 32749546141, R3-335 validity SHA 4fb44c1803ec2bd91853736d0acba9f28f80e96a in run 32750946090, R3-336 implementation SHA 2d0600178e3d271fc798f71946569ae827927ae0 in run 32752905068, R3-340 implementation SHA dd671f63c36bcad43f7141358da174ff51fc5400 in run 32754734242, R3-341 implementation SHA d33662a9dac967f2f46598d41557e81cc2293497 in run 32756793168, R3-342 implementation SHA d82138b394e7ab0832acb85a6575931054eff48c in run 32758618433, R3-343 implementation SHA 44df8e2c1215230ca5a7ee24f13f87d708050bcc in run 32776065978, R3-344 implementation SHA 65c992fce1b73495c01b650996c167fe9c7ec86e in run 32759977254, R3-345 implementation SHA bdb6967 in run 32761030125, R3-348 implementation SHA 771e8a81c819c2006473fa6a0a55fef5bcfc7fe6 in run 32774570495, R3-349 implementation SHA 94f1a3e3000fa645a775f3ffca3de3157bf3df97 in run 32777694427, R3-356 recovery SHA 76468caf2f5f50806b86b3b5da5a444b3605856a in run 32781478836, R3-358 implementation SHA 200c4d41bf93a0199b389770c3edb2dbb469a792 in run 32782886790, R3-346 implementation SHA 43e3549cf2db17b3554637b9406c2395d60eefb9 in run 32784278395, and R3-347 closure SHA ddb998e5d5d1ca50810478831d9c2240ea18e99c in run 32785809240; each completed all five jobs. The earlier 4788606 run was cancelled by branch concurrency before Web smoke completed.
+CI: PASS for R4-404 remediation SHA f6d8ef03b91b57d5753c87f7fbc55b16784286c8 in run 32819593245; all five jobs passed, including true execution of 102 Java tests and retained supply-chain artifact validation. Earlier R4-404 runs 32818303442 and 32818849130 are preserved as failed diagnostic evidence. Prior Round 3 and Round 4 completed-task CI evidence remains recorded in task evidence and capsules below.
 
-Regression: PASS locally for 102/102 Java tests, 920 Python tests at 95.11% coverage, six schemas, 18 contract fixtures, Round 4 graph, negative-results, final-claim, security, supply-chain, recovery, release, and staged-release gates. Local Compose validation passes. The generated SBOM contains 527 components across Maven/PyPI/npm/OCI and binds three live registry manifests to an explicitly unsigned provenance statement. Clean remote Actions and artifact retrieval remain required. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
+Regression: PASS locally for 102/102 Java tests, 920 Python tests at 95.11% coverage, six schemas, 18 contract fixtures, Round 4 graph, negative-results, final-claim, security, supply-chain, recovery, release, and staged-release gates. Local Compose validation passes. The remote SBOM contains 527 components across Maven/PyPI/npm/OCI, binds three live registry manifests and exact source revision, and retains `signed=false`; its downloaded artifact passed validation. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
 Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly deferred/reclassified; no required task remains open.
 
 Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-347 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
 
-Blocked: NONE for R4-404. Task-specific external, human-approval, and conditional gates remain inactive and preserved.
+Blocked: NONE for R4-420. Task-specific external, human-approval, and conditional gates remain inactive and preserved.
 
 Human Action Required: NO for the active task
 
-Next Candidates: R4-404 is active. R4-401 and R4-410 require their task-specific human/external gates; R4-420 and R4-450 remain independent local candidates.
+Next Candidates: R4-420 is active. R4-401 and R4-410 require their task-specific human/external gates; R4-450 remains an independent local candidate.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
-- Current task: R4-404.
-- Workstream: P - Production Safety and Deployment.
-- Status: R4-404 implementation is locally complete and `CI_REMEDIATION`.
-- Completed local gate: the Java chain enforces opaque tenant/role/actor/route
-  quotas, bounded primary/fallback counters, structural request policy, and
-  bounded replay of unknown-length bodies. Java passes 102/102.
-- Supply chain: local evidence validates 527 components (226 Maven, 64 PyPI,
-  234 npm, three OCI manifests); provenance is explicitly `signed=false`.
-- CI: run `32818303442` exposed the skipped POSIX wrapper. Run `32818849130`
-  then truly executed all 102 Java tests and exposed 15 Linux-order H2 errors;
-  its other four jobs passed. The tenant suite now owns a separate database and
-  forced Tenant-before-Business regression passes 20/20. Replacement CI is
-  pending. R4-403 `534b9ef` remains green in run `32814670130`.
-- Evidence: `evidence/gates/R4-404/security-edge.md` and
-  `docs/security/R4_EDGE_SECURITY_POLICY.md`.
+- Current task: R4-420.
+- Workstream: U - Multi-End Product Completion.
+- Status: R4-404 passed; R4-420 is `in_progress`.
+- Completed gate: opaque tenant/role/actor/route quotas, bounded degradation,
+  local WAF-equivalent policy, secret automation, 527-component SBOM, and
+  explicitly unsigned provenance all have executable evidence.
+- CI: R4-404 remediation `f6d8ef0` passed all five jobs in run `32819593245`.
+  Downloaded artifact `9552635104` validates against source SHA and three OCI
+  manifests; GitHub artifact digest begins `a25a93d0`.
+- Evidence: `evidence/gates/R4-404/security-edge.md`.
 - Deferred external: 15 declared external-evidence tasks; none is represented as
   complete or authorized by graph promotion.
-- Next: commit/push R4-404, observe all five real Actions jobs, retrieve and
-  validate the retained supply-chain artifact, then close the task and activate
-  the highest-priority eligible local successor. R4-401 and R4-410 retain their
-  human/external gates.
-- Human action required: NONE for R4-404.
+- Next: freeze and validate the R4-420 preference/consent/notification product
+  contract, including role/tenant ownership and provider acknowledgement states.
+  R4-401 and R4-410 retain their human/external gates.
+- Human action required: NONE for R4-420.
 
 ### R3-365 Round 3 scientific closure - 2026-08-25
 - Implementation `9e9537e` passed all five jobs in Actions run `32790948926`,

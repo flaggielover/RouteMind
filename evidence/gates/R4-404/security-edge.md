@@ -4,7 +4,7 @@ Date: 2026-08-25 (Asia/Shanghai)
 
 Entry revision: `00c2706bb55abacd089ed83e9fc5a616763b66db`
 
-Status: in progress - `CI_PENDING`
+Status: passed - `CI_VALIDATED`
 
 ## Implemented boundary
 
@@ -66,8 +66,27 @@ Status: in progress - `CI_PENDING`
   dirtied a shared Spring context on Linux; the other four jobs passed.
 - The tenant-isolation suite now binds its own H2 database before dirtying its
   context. A forced reverse-alphabetical regression ran that suite before the
-  business integration suite and passed 20/20. Full local and clean replacement
-  Actions runs plus retained-artifact validation remain required.
+  business integration suite and passed 20/20. The clean replacement Actions
+  and retained-artifact requirements were subsequently satisfied below.
+
+## Remote closure
+
+- Final remediation revision:
+  `f6d8ef03b91b57d5753c87f7fbc55b16784286c8`.
+- GitHub Actions run `32819593245`: all five jobs passed. The Java job truly
+  executed 102 tests before generating and uploading the evidence bundle.
+- Artifact: `r4-404-supply-chain-f6d8ef03b91b57d5753c87f7fbc55b16784286c8`,
+  artifact ID `9552635104`, 68,966 bytes, retained through 2026-09-24. GitHub
+  artifact digest is
+  `sha256:a25a93d0e7d47d15b5d4d04be99dce9df3623eeb11ed043124bac64e87f2f860`.
+- The downloaded bundle passed the repository validator. It binds source
+  revision `f6d8ef03b91b57d5753c87f7fbc55b16784286c8`, 527 components
+  (226 Maven, 64 PyPI, 234 npm, three OCI), and the three declared Compose
+  images. Remote SBOM SHA-256 is
+  `6d8761909eb55a44d74d41fb6e322ae09a75a780384b957e231f9558b9b04cd7`;
+  remote provenance SHA-256 is
+  `7ecd82bffbce5dc966147a238c62083f912ecd55e072fccc11a87a78af750864`.
+  `signed=false` remains explicit.
 
 ## Claim boundary
 
