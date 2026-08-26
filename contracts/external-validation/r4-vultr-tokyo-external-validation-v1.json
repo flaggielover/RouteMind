@@ -157,10 +157,16 @@
         "exposure": "temporary_public_ipv4_operator_cidr_only"
       },
       {
-        "id": "provider-control-plane",
+        "id": "provider-api",
         "protocol": "HTTPS_TLS_1_2_OR_NEWER",
         "port": 443,
-        "exposure": "Vultr_API_and_VKE_control_plane"
+        "exposure": "Vultr_API_outbound_only"
+      },
+      {
+        "id": "provider-kubernetes-control-plane",
+        "protocol": "HTTPS_TLS_1_2_OR_NEWER",
+        "port": 6443,
+        "exposure": "VKE_API_outbound_only"
       }
     ],
     "tls": {

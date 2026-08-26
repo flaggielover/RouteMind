@@ -118,3 +118,19 @@ it with `require_target=True`. SSH host state and restricted execution material
 are removed during teardown. This is preparation only: no remote host exists,
 no target drill ran, and R4-406 remains
 `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`.
+
+## First Vultr attempt
+
+Execution `r4-ext-20260826t042548z-eb70db776c` created the approved temporary
+Tokyo VKE, recovery instance, firewall group, and SSH rule, but failed before
+the controller invoked the recovery drill. No recovery fixture or production
+data reached the host. Exact Terraform teardown and credentialed zero-inventory
+checks passed; the conservative one-hour attempt cost bound is USD 0.24.
+This is cleanup evidence, not target recovery evidence, so R4-406 remains
+`LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`. The shared attempt record is
+`evidence/gates/R4-405/2026-08-26-external-attempt-1.md`.
+
+The corrected shared contract has SHA-256
+`4956d29a5cbd69344a70c4d89514608b1acd32924e0598155c7f90848be77393`.
+Another external attempt requires approval of that exact digest; the existing
+local-CI recovery result cannot substitute for it.

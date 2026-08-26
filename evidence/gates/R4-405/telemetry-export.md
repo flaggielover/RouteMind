@@ -118,8 +118,8 @@ The selection, exact infrastructure, network/TLS boundary, secret mechanism,
 retention, USD 15 / eight-hour execution ceiling, teardown, and 17-check
 Evidence Contract are frozen in
 `contracts/external-validation/r4-vultr-tokyo-external-validation-v1.json`.
-The contract digest is
-`3e320b5b68924bc1a6843f03b0e421116093fb19cf968a649086028d5c71a47d`.
+The remediated contract digest is
+`4956d29a5cbd69344a70c4d89514608b1acd32924e0598155c7f90848be77393`.
 
 Preparation adds exact Terraform resources, Kubernetes quotas and
 NetworkPolicies, two-replica RouteMind Collector deployment, an actual
@@ -151,3 +151,27 @@ or cost evidence exists. R4-405 therefore remains exactly
 R3-325 was not rerun, tuned, reinterpreted, or changed. It remains exactly
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`; this operational telemetry work is not
 scientific evidence.
+
+## First external attempt and remediation
+
+Approved execution `r4-ext-20260826t042548z-eb70db776c` created exactly the
+four planned Vultr `nrt` resources and failed closed before Kubernetes workload
+creation when OpenSSL rejected a service DNS name that exceeded the X.509 CN
+limit. Exact teardown completed with zero matching provider inventory and no
+retained state, kubeconfig, or key material. The conservative one-hour cost
+bound is USD 0.24; no provider invoice claim is made. Full sanitized details
+are in `evidence/gates/R4-405/2026-08-26-external-attempt-1.md`.
+
+The remediation preserves the resource and USD 15/eight-hour boundaries but
+corrects CN/SAN generation, fake-DNS VKE access, failure-stage cleanup, state
+backup deletion, provider inventory convergence, and the real TCP 6443 VKE API
+boundary. Because the frozen contract digest changed, no second paid execution
+is authorized until the new exact digest receives approval. R4-405 remains
+`LOCAL_AND_CI_VALIDATED / TARGET_PENDING`.
+
+The remediated implementation passes 6 TLS identity tests including actual
+OpenSSL certificate generation, 5 VKE endpoint tests, 4 controller cleanup
+guards, 8 contract mutations, offline Terraform/Helm validation, security and
+graph controls, Java 113/113, Python 925/925 at 95.09%, and Web 104/104 plus the
+production build. These are local preparation results only; real CI and a newly
+approved target execution remain mandatory.

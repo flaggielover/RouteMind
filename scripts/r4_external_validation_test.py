@@ -165,6 +165,17 @@ class ExternalValidationPreparationTests(unittest.TestCase):
             "infrastructure",
             external.validate_contract(candidate, self.deployment),
         )
+        candidate = copy.deepcopy(self.contract)
+        kubernetes_boundary = next(
+            item
+            for item in candidate["telemetryTopology"]["networkBoundaries"]
+            if item["id"] == "provider-kubernetes-control-plane"
+        )
+        kubernetes_boundary["port"] = 443
+        self.assertIn(
+            "telemetry_topology",
+            external.validate_contract(candidate, self.deployment),
+        )
 
     def test_secret_cost_and_science_gates_cannot_weaken(self) -> None:
         candidate = copy.deepcopy(self.contract)

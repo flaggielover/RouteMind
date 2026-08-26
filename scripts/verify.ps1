@@ -122,6 +122,21 @@ try {
         throw "External-validation path safety self-tests failed"
     }
 
+    python scripts/r4_tls_identities_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "External-validation TLS identity self-tests failed"
+    }
+
+    python scripts/r4_kube_endpoint_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "External-validation Kubernetes endpoint self-tests failed"
+    }
+
+    python scripts/r4_controller_guard_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "External-validation controller guard self-tests failed"
+    }
+
     python scripts/r4_external_evidence_test.py
     if ($LASTEXITCODE -ne 0) {
         throw "Vultr Tokyo external-evidence assembler self-tests failed"

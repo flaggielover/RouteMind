@@ -1,3 +1,5 @@
+#Requires -Version 7.0
+
 [CmdletBinding()]
 param(
     [ValidateSet("OfflinePreflight", "LivePreflight", "Provision", "Deploy", "Validate", "Teardown", "Full")]
@@ -14,6 +16,8 @@ $IacRoot = Join-Path $Root "infra/external-validation/vultr-tokyo"
 $ContractScript = Join-Path $PSScriptRoot "r4_external_validation.py"
 $EvidenceAssembler = Join-Path $PSScriptRoot "r4_external_evidence.py"
 $PathSafetyScript = Join-Path $PSScriptRoot "path_safety.py"
+$TlsIdentityScript = Join-Path $PSScriptRoot "r4_tls_identities.py"
+$KubeEndpointScript = Join-Path $PSScriptRoot "r4_kube_endpoint.py"
 $ContractPath = Join-Path $Root "contracts/external-validation/r4-vultr-tokyo-external-validation-v1.json"
 $CollectorConfig = Join-Path $Root "infra/observability/otel-collector.yaml"
 $ProbeScript = Join-Path $PSScriptRoot "r4_telemetry_probe.py"
@@ -105,6 +109,7 @@ function Get-ExecutionPaths {
         Secrets = Join-Path $rootPath "secrets"
         TerraformData = Join-Path $rootPath "terraform-data"
         TerraformState = Join-Path $rootPath "terraform.tfstate"
+        TerraformStateBackup = Join-Path $rootPath "terraform.tfstate.backup"
         Vars = Join-Path $rootPath "execution.auto.tfvars.json"
         Quote = Join-Path $rootPath "authenticated-quote.json"
         Kubeconfig = Join-Path $rootPath "kubeconfig.yaml"
@@ -112,6 +117,7 @@ function Get-ExecutionPaths {
         Lifecycle = Join-Path $rootPath "execution-lifecycle.json"
         FinalReport = Join-Path $rootPath "r4-external-validation-evidence.json"
         TraceId = Join-Path $rootPath "validated-trace-id.txt"
+        KubernetesMutationStarted = Join-Path $rootPath "kubernetes-mutation-started.txt"
     }
 }
 
@@ -135,8 +141,11 @@ function Initialize-StateDirectory {
 
 function Invoke-OfflinePreflight {
     $summary = Get-ContractSummary
-    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $EvidenceAssembler, $PathSafetyScript, $ProbeScript, $WorkloadScript)
+    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $EvidenceAssembler, $PathSafetyScript, $TlsIdentityScript, $KubeEndpointScript, $ProbeScript, $WorkloadScript)
     Invoke-Native "python" @(Join-Path $PSScriptRoot "path_safety_test.py")
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_tls_identities_test.py")
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_kube_endpoint_test.py")
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_controller_guard_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_external_validation_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "telemetry_export_contract.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "telemetry_export_contract_test.py")
@@ -275,8 +284,10 @@ function Invoke-Provision {
     Invoke-Native "terraform" @("-chdir=$IacRoot", "apply", "-auto-approve", $planPath)
     $inventory = Invoke-NativeCapture "terraform" @("-chdir=$IacRoot", "output", "-json", "validation_inventory")
     $inventory | Set-Content -LiteralPath (Join-Path $Paths.Evidence "terraform-resource-output.json") -Encoding utf8
+    $inventoryRecord = $inventory | ConvertFrom-Json
     $kubeConfigBase64 = (Invoke-NativeCapture "terraform" @("-chdir=$IacRoot", "output", "-raw", "vke_kube_config")).Trim()
     [IO.File]::WriteAllBytes($Paths.Kubeconfig, [Convert]::FromBase64String($kubeConfigBase64))
+    Invoke-Native "python" @($KubeEndpointScript, "--kubeconfig", $Paths.Kubeconfig, "--provider-ip", [string]$inventoryRecord.vke_ip)
     $env:KUBECONFIG = $Paths.Kubeconfig
     for ($attempt = 0; $attempt -lt 60; $attempt++) {
         & kubectl get nodes | Out-Null
@@ -297,20 +308,15 @@ function New-TlsMaterial {
     $caCert = Join-Path $certRoot "ca.crt"
     Invoke-Native "openssl" @("genrsa", "-out", $caKey, "3072")
     Invoke-Native "openssl" @("req", "-x509", "-new", "-nodes", "-key", $caKey, "-sha256", "-days", "1", "-subj", "/CN=RouteMind-R4-External-Validation-CA", "-out", $caCert)
-    $identities = @(
-        @{ Name = "signoz"; CommonName = "routemind-signoz-otel-collector.routemind-observability.svc.cluster.local"; Usage = "serverAuth" },
-        @{ Name = "receiver"; CommonName = "routemind-otel-collector.routemind-observability.svc.cluster.local"; Usage = "serverAuth" },
-        @{ Name = "exporter"; CommonName = "routemind-collector-client"; Usage = "clientAuth" },
-        @{ Name = "probe"; CommonName = "routemind-validation-probe"; Usage = "clientAuth" }
-    )
+    $identityPlan = (Invoke-NativeCapture "python" @($TlsIdentityScript)) | ConvertFrom-Json
     $first = $true
-    foreach ($identity in $identities) {
+    foreach ($identity in @($identityPlan.identities)) {
         $key = Join-Path $certRoot "$($identity.Name).key"
         $csr = Join-Path $certRoot "$($identity.Name).csr"
         $cert = Join-Path $certRoot "$($identity.Name).crt"
         $extension = Join-Path $certRoot "$($identity.Name).ext"
         $extensionLines = @("extendedKeyUsage=$($identity.Usage)")
-        if ($identity.Usage -eq "serverAuth") { $extensionLines += "subjectAltName=DNS:$($identity.CommonName)" }
+        if ($identity.usage -eq "serverAuth") { $extensionLines += "subjectAltName=DNS:$($identity.dnsName)" }
         $extensionLines | Set-Content -LiteralPath $extension -Encoding ascii
         Invoke-Native "openssl" @("req", "-new", "-newkey", "rsa:2048", "-nodes", "-keyout", $key, "-out", $csr, "-subj", "/CN=$($identity.CommonName)")
         $serialArguments = if ($first) { @("-CAcreateserial") } else { @("-CAserial", (Join-Path $certRoot "ca.srl")) }
@@ -436,6 +442,7 @@ function Invoke-Deploy {
     if ($storageClass.reclaimPolicy -ne "Delete" -or $storageClass.volumeBindingMode -notin @("WaitForFirstConsumer", "Immediate")) {
         throw "VKE storage class is not safely reclaimable for bounded validation"
     }
+    [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'") | Set-Content -LiteralPath $Paths.KubernetesMutationStarted -Encoding ascii -NoNewline
     Invoke-Native "kubectl" @("apply", "-f", (Join-Path $IacRoot "namespace-boundaries.yaml"))
     $validationNamespace = Invoke-NativeCapture "kubectl" @("create", "namespace", "routemind-validation", "--dry-run=client", "-o", "json")
     $validationNamespace | & kubectl apply -f - | Out-Null
@@ -855,17 +862,27 @@ function Invoke-Teardown {
     $blockIds = @()
     if ($manifest) {
         $blockIds = @($manifest.resources | Where-Object { $_.type -eq "Vultr Block Storage" } | ForEach-Object { $_.providerId })
-    } elseif (Test-Path -LiteralPath $Paths.Kubeconfig) {
+    } elseif (Test-Path -LiteralPath $Paths.KubernetesMutationStarted) {
+        if (-not (Test-Path -LiteralPath $Paths.Kubeconfig)) { throw "Kubernetes mutation marker exists but kubeconfig is absent" }
         $env:KUBECONFIG = $Paths.Kubeconfig
         $pvs = Invoke-NativeCapture "kubectl" @("get", "pv", "-o", "json") | ConvertFrom-Json
         $blockIds = @($pvs.items) | Where-Object { $_.spec.claimRef.namespace -eq "routemind-observability" } |
             ForEach-Object { $_.spec.csi.volumeHandle } | Where-Object { $_ } | Sort-Object -Unique
     }
-    if (Test-Path -LiteralPath $Paths.Kubeconfig) {
+    if (Test-Path -LiteralPath $Paths.KubernetesMutationStarted) {
+        if (-not (Test-Path -LiteralPath $Paths.Kubeconfig)) { throw "Kubernetes mutation marker exists but kubeconfig is absent" }
         $env:KUBECONFIG = $Paths.Kubeconfig
         & helm status routemind -n routemind-observability | Out-Null
         if ($LASTEXITCODE -eq 0) { Invoke-Native "helm" @("uninstall", "routemind", "-n", "routemind-observability", "--wait", "--timeout", "15m") }
-        Invoke-Native "kubectl" @("delete", "namespace", "routemind-app", "routemind-validation", "routemind-observability", "--ignore-not-found", "--wait=true", "--timeout=15m")
+        for ($attempt = 0; $attempt -lt 6; $attempt++) {
+            try {
+                Invoke-Native "kubectl" @("delete", "namespace", "routemind-app", "routemind-validation", "routemind-observability", "--ignore-not-found", "--wait=true", "--timeout=15m")
+                break
+            } catch {
+                if ($attempt -eq 5) { throw }
+                Start-Sleep -Seconds 10
+            }
+        }
     }
     for ($attempt = 0; $attempt -lt 90; $attempt++) {
         $remainingBlocks = @($blockIds | Where-Object { -not (Test-VultrResourceAbsent "/blocks/$_") })
@@ -880,24 +897,31 @@ function Invoke-Teardown {
     Invoke-Native "python" @($ContractScript, "--terraform-plan", $destroyJson, "--destroy-plan", "--allow-partial-destroy")
     Invoke-Native "terraform" @("-chdir=$IacRoot", "apply", "-auto-approve", $destroyPlan)
     $exactChecks = [ordered]@{}
-    if ($terraformInventory) {
-        $exactChecks.vke = Test-VultrResourceAbsent "/kubernetes/clusters/$($terraformInventory.vke_id)"
-        $exactChecks.recovery = Test-VultrResourceAbsent "/instances/$($terraformInventory.recovery_id)"
-        $exactChecks.firewall = Test-VultrResourceAbsent "/firewalls/$($terraformInventory.firewall_group_id)"
+    $remaining = @("not-yet-checked")
+    for ($attempt = 0; $attempt -lt 18; $attempt++) {
+        try {
+            $exactChecks = [ordered]@{}
+            if ($terraformInventory) {
+                $exactChecks.vke = Test-VultrResourceAbsent "/kubernetes/clusters/$($terraformInventory.vke_id)"
+                $exactChecks.recovery = Test-VultrResourceAbsent "/instances/$($terraformInventory.recovery_id)"
+                $exactChecks.firewall = Test-VultrResourceAbsent "/firewalls/$($terraformInventory.firewall_group_id)"
+            }
+            foreach ($blockId in $blockIds) { $exactChecks["block:$blockId"] = Test-VultrResourceAbsent "/blocks/$blockId" }
+            $clusters = Invoke-VultrGet "/kubernetes/clusters?per_page=500"
+            $instances = Invoke-VultrGet "/instances?per_page=500"
+            $firewalls = Invoke-VultrGet "/firewalls?per_page=500"
+            $remaining = @(
+                @($clusters.vke_clusters) | Where-Object { $_.label -like "*$ExecutionId*" } | ForEach-Object { $_.id }
+                @($instances.instances) | Where-Object { $_.label -like "*$ExecutionId*" } | ForEach-Object { $_.id }
+                @($firewalls.firewall_groups) | Where-Object { $_.description -like "*$ExecutionId*" } | ForEach-Object { $_.id }
+            )
+            if (@($exactChecks.GetEnumerator() | Where-Object { -not $_.Value }).Count -eq 0 -and $remaining.Count -eq 0) { break }
+        } catch {
+            if ($attempt -eq 17) { throw }
+        }
+        if ($attempt -eq 17) { throw "Credentialed cleanup inventory did not converge" }
+        Start-Sleep -Seconds 10
     }
-    foreach ($blockId in $blockIds) { $exactChecks["block:$blockId"] = Test-VultrResourceAbsent "/blocks/$blockId" }
-    if (@($exactChecks.GetEnumerator() | Where-Object { -not $_.Value }).Count -ne 0) {
-        throw "Credentialed exact-resource cleanup verification failed"
-    }
-    $clusters = Invoke-VultrGet "/kubernetes/clusters?per_page=500"
-    $instances = Invoke-VultrGet "/instances?per_page=500"
-    $firewalls = Invoke-VultrGet "/firewalls?per_page=500"
-    $remaining = @(
-        @($clusters.vke_clusters) | Where-Object { $_.label -like "*$ExecutionId*" } | ForEach-Object { $_.id }
-        @($instances.instances) | Where-Object { $_.label -like "*$ExecutionId*" } | ForEach-Object { $_.id }
-        @($firewalls.firewall_groups) | Where-Object { $_.description -like "*$ExecutionId*" } | ForEach-Object { $_.id }
-    )
-    if ($remaining.Count -ne 0) { throw "Credentialed cleanup inventory still contains execution resources" }
     $verifiedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
     $completedResources = if ($manifest) {
         @($manifest.resources | ForEach-Object {
@@ -908,7 +932,8 @@ function Invoke-Teardown {
         })
     } else { @() }
     foreach ($path in @(
-        $Paths.Kubeconfig, $Paths.Secrets, $Paths.TerraformData, $Paths.TerraformState,
+        $Paths.Kubeconfig, $Paths.Secrets, $Paths.TerraformData, $Paths.TerraformState, $Paths.TerraformStateBackup,
+        $Paths.KubernetesMutationStarted,
         (Join-Path $Paths.Root "provision.tfplan"), (Join-Path $Paths.Root "provision-plan.json"),
         (Join-Path $Paths.Root "destroy.tfplan"), (Join-Path $Paths.Root "destroy-plan.json"),
         (Join-Path $Paths.Root "known_hosts")

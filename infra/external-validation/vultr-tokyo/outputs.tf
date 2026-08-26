@@ -6,6 +6,8 @@ output "validation_inventory" {
     execution_id      = var.execution_id
     vke_id            = vultr_kubernetes.validation.id
     vke_label         = vultr_kubernetes.validation.label
+    vke_endpoint      = vultr_kubernetes.validation.endpoint
+    vke_ip            = vultr_kubernetes.validation.ip
     vke_version       = vultr_kubernetes.validation.version
     vke_ha            = vultr_kubernetes.validation.ha_controlplanes
     firewall_group_id = vultr_firewall_group.recovery.id

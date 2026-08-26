@@ -217,6 +217,9 @@ def validate_contract(
     boundary_ids = {
         item.get("id") for item in boundaries if isinstance(item, Mapping)
     }
+    boundary_by_id = {
+        item.get("id"): item for item in boundaries if isinstance(item, Mapping)
+    }
     tls = topology.get("tls", {})
     if (
         topology.get("collectorMode")
@@ -230,8 +233,18 @@ def validate_contract(
             "collector-health-and-metrics",
             "signoz-ui",
             "recovery-operator",
-            "provider-control-plane",
+            "provider-api",
+            "provider-kubernetes-control-plane",
         }
+        or boundary_by_id.get("provider-api", {}).get("port") != 443
+        or boundary_by_id.get("provider-kubernetes-control-plane", {}).get("port")
+        != 6443
+        or boundary_by_id.get("provider-api", {}).get("exposure")
+        != "Vultr_API_outbound_only"
+        or boundary_by_id.get("provider-kubernetes-control-plane", {}).get(
+            "exposure"
+        )
+        != "VKE_API_outbound_only"
         or tls.get("publicPlaintextAllowed") is not False
         or tls.get("otlpMutualTlsRequired") is not True
         or tls.get("privateKeysPersistedAfterCleanup") is not False

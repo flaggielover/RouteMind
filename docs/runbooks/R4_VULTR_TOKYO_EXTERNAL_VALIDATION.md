@@ -55,7 +55,10 @@ Network surfaces are:
 - TCP 13133 and 8888: Collector health/diagnostics, `ClusterIP` only;
 - TCP 8080: SigNoz UI, local `kubectl` control-plane tunnel only;
 - TCP 22: recovery host, temporary public IPv4, exactly one operator `/32`;
-- TCP 443: Vultr API and VKE control plane, TLS 1.2 or newer.
+- TCP 443: Vultr provider API, outbound only, TLS 1.2 or newer;
+- TCP 6443: VKE Kubernetes API, outbound only, with kubeconfig CA and hostname
+  validation retained even when a local fake-DNS resolver requires the
+  provider-returned control-plane IP.
 
 Default-deny NetworkPolicies protect the observability, application, and
 validation namespaces. Application dependencies remain namespace-internal;
@@ -102,6 +105,9 @@ backups are off. Sanitized evidence may leave Tokyo after a leakage scan and is
 retained for at most 30 days.
 
 ## Execution
+
+Use PowerShell 7 (`pwsh`). The controller declares this runtime explicitly so
+Windows PowerShell 5.1 cannot fail later on modern path and cryptography APIs.
 
 Offline preparation is always safe:
 
