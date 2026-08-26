@@ -2,7 +2,7 @@
 
 Date: 2026-08-25 (Asia/Shanghai)
 
-Entry revision: `49680bd2cad52244acd44b8f389f62078daa7167`
+Entry revision: `10ec5378c9bf276f0c96152ab5a4adb177c66b58`
 
 Status: `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`
 
@@ -78,6 +78,10 @@ business failure.
 - Implementation `49680bd` passed all five jobs in real GitHub Actions run
   `32852309878`: control/Compose, Java/SBOM/provenance, Python/contracts,
   Web/browser, and resilience/recovery.
+- Preparation revision `10ec537` passed all five jobs in real GitHub Actions
+  run `32920903229`, including the Terraform provider checksum and SigNoz
+  Helm offline gate. This validates the preparation checkpoint only; it does
+  not qualify a Vultr target or promote R4-405.
 - Remote control log reports the exact contract digest
   `767ae48b9c377d0718eb28d16fe5539302d2dfc46f66f03e7ca71506fb502395`
   and collector digest
