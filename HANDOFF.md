@@ -23,6 +23,11 @@ with `--no-ledger --no-updater`; SigNoz analytics, stats reporting, and identity
 collection are disabled. Execution-scoped backend credentials and an egress
 block are mandatory target preconditions. No paid resource was created.
 
+Preparation implementation `0a900ce` passed all five jobs in real GitHub Actions
+run `32993990760`. The control-plane job independently rendered and validated the
+platform-neutral Terraform/Compose/Foundry assets on Linux without provider
+mutation. This is preparation evidence only and does not qualify R4-405/R4-406.
+
 The v2 execution's sanitized evidence is under
 `ROUTEMIND_DATA_ROOT/external-validation/r4-diag-20260826t134703z-03f22ab836/`.
 It records the Operator result, firewall readback, exact resource inventory,

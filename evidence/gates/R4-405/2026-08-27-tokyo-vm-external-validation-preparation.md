@@ -89,3 +89,7 @@ No Round 3 experiment was rerun. R3-325 remains exactly
   focused resilience 16 Java / 2 Python, security, graph, and control gates passed.
 
 These are preparation evidence only and do not qualify the target.
+
+Implementation `0a900ce` passed all five jobs in real GitHub Actions run
+`32993990760`. The Linux control-plane job ran the new offline
+Terraform/Compose/Foundry gate; no provider mutation or target workload occurred.
