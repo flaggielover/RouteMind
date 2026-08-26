@@ -168,3 +168,8 @@ Tokyo recovery evidence.
 Evidence checkpoint `fd94ce2` passed all five jobs in real GitHub Actions run
 `32945284919`, including the independent recovery job. This remains non-target
 evidence.
+
+The subsequent read-only VKE connectivity audit is recorded in
+`docs/closure/r4/VKE_TLS_EOF_DIAGNOSTIC.md`. It keeps target DR evidence
+pending and proposes a two-observer, no-PVC diagnostic only; the prepared
+contract digest `30c9580e...4a426` is not an approval or a recovery result.

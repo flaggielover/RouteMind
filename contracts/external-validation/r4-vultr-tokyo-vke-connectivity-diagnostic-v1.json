@@ -1,0 +1,223 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-vultr-tokyo-vke-connectivity-diagnostic-v1",
+  "status": "PREPARED_VKE_TLS_EOF_DIAGNOSTIC_HUMAN_GATE",
+  "preparedAt": "2026-08-26",
+  "supersedesContractDigest": "c2a1695104ba7297b51b1c949fa689a4efeb5974dcf1a2122c12f91a57f4e2df",
+  "scope": {
+    "purpose": "Differentially diagnose VKE API TLS EOF before Kubernetes mutation",
+    "qualificationTasks": ["R4-405", "R4-406"],
+    "productionDeploymentClaimed": false,
+    "telemetryPersistence": false,
+    "scientificValidation": false,
+    "routeMindDeployment": false
+  },
+  "approvalBoundary": {
+    "providerAndResidencyApproved": true,
+    "provider": "Vultr",
+    "region": "nrt",
+    "dataResidency": "Tokyo, Japan",
+    "resourceCreationAuthorized": false,
+    "spendAuthorized": false,
+    "liveMutationCallsAuthorized": false,
+    "requiredFinalGate": "VKE TLS EOF DIAGNOSTIC HUMAN GATE",
+    "approvalDigestEnvironmentVariable": "ROUTEMIND_EXTERNAL_EXECUTION_APPROVAL_DIGEST"
+  },
+  "infrastructure": {
+    "executionClass": "ISOLATED_READ_ONLY_CONNECTIVITY_DIAGNOSTIC",
+    "resources": [
+      {
+        "id": "diagnostic-vke",
+        "type": "Vultr Kubernetes Engine",
+        "region": "nrt",
+        "quantity": 1,
+        "haControlPlane": true,
+        "workerPlan": "vhp-4c-8gb-amd",
+        "workerCount": 1,
+        "autoscaling": false,
+        "persistentStorageGiB": 0,
+        "publicLoadBalancers": 0,
+        "publicApplicationIngress": false
+      },
+      {
+        "id": "diagnostic-recovery-host",
+        "type": "Vultr Cloud Compute",
+        "region": "nrt",
+        "quantity": 1,
+        "plan": "vhp-2c-4gb-amd",
+        "automaticBackups": false,
+        "productionDataAllowed": false,
+        "purpose": "Independent Tokyo-side TCP/TLS observer"
+      },
+      {
+        "id": "diagnostic-recovery-firewall",
+        "type": "Vultr Firewall Group",
+        "region": "nrt",
+        "quantity": 1
+      }
+    ],
+    "firewallRules": [
+      {
+        "id": "diagnostic-recovery-ssh",
+        "attachedTo": "diagnostic-recovery-firewall",
+        "protocol": "tcp",
+        "port": 22,
+        "ipType": "v4",
+        "source": "ROUTEMIND_OPERATOR_CIDR",
+        "subnetSize": 32
+      },
+      {
+        "id": "diagnostic-vke-api-operator",
+        "attachedTo": "provider-managed-vke-control-plane-firewall",
+        "protocol": "tcp",
+        "port": 6443,
+        "ipType": "v4",
+        "source": "ROUTEMIND_OPERATOR_CIDR",
+        "subnetSize": 32
+      },
+      {
+        "id": "diagnostic-vke-api-recovery",
+        "attachedTo": "provider-managed-vke-control-plane-firewall",
+        "protocol": "tcp",
+        "port": 6443,
+        "ipType": "v4",
+        "source": "DIAGNOSTIC_RECOVERY_PUBLIC_IPV4",
+        "subnetSize": 32,
+        "creationOrder": "after-recovery-ip-readback-before-any-probe"
+      }
+    ],
+    "maximumRuntimeHours": 2,
+    "maximumResourceCount": 6,
+    "noPersistentVolumes": true,
+    "noPublicIngress": true
+  },
+  "observers": {
+    "operator": {
+      "path": "operator-machine-to-vke-api",
+      "source": "ROUTEMIND_OPERATOR_CIDR",
+      "networkStack": "direct-raw-tcp-and-tls; proxy bypassed"
+    },
+    "tokyoRecovery": {
+      "path": "recovery-host-to-vke-api",
+      "source": "DIAGNOSTIC_RECOVERY_PUBLIC_IPV4",
+      "necessity": "Separates operator/VPN/ISP path failure from VKE/provider endpoint failure"
+    }
+  },
+  "endpointContract": {
+    "scheme": "https",
+    "port": 6443,
+    "sniRequired": true,
+    "fakeDnsRewriteAllowed": true,
+    "fakeDnsNetwork": "198.18.0.0/15",
+    "tlsServerNameMustEqualProviderHostname": true,
+    "httpProbe": "GET /version without mutation or credential logging"
+  },
+  "readinessLadder": [
+    "provider_cluster_state_active",
+    "endpoint_hostname_and_provider_ip_present",
+    "dns_resolution_recorded",
+    "tcp_6443_from_each_observer",
+    "tls_client_hello_and_handshake_with_hostname_sni",
+    "http_version_response_without_mutation"
+  ],
+  "backoff": {
+    "initialSeconds": 2,
+    "multiplier": 2,
+    "maximumSeconds": 32,
+    "deadlineMinutes": 20,
+    "fixedSleepAloneIsNotEvidence": true
+  },
+  "diagnosticOutputs": {
+    "phaseLabels": [
+      "DNS_OK",
+      "DNS_FAIL",
+      "TCP_OK",
+      "TCP_FAIL",
+      "TLS_HELLO_SENT",
+      "TLS_OK",
+      "TLS_EOF",
+      "TLS_RESET",
+      "TLS_TIMEOUT",
+      "TLS_CERT_FAILURE",
+      "HTTP_OK",
+      "HTTP_FAIL"
+    ],
+    "secretValuesPrinted": false,
+    "proxyValuesPrinted": false,
+    "certificateContentsPrinted": false
+  },
+  "secretHandling": {
+    "requiredSecretNames": ["VULTR_API_KEY", "ROUTEMIND_SSH_PRIVATE_KEY_PATH"],
+    "requiredNonSecretNames": ["ROUTEMIND_VULTR_SSH_KEY_ID", "ROUTEMIND_OPERATOR_CIDR"],
+    "kubeconfigLifetime": "restricted execution directory only; delete during teardown",
+    "forbiddenLocations": ["Git", "evidence", "logs", "fixtures", "screenshots", "tracked .env files"],
+    "secretValueLoggingAllowed": false
+  },
+  "evidenceContract": {
+    "requiredArtifacts": [
+      "authenticated-quote",
+      "resource-identity",
+      "firewall-readback",
+      "endpoint-semantics",
+      "operator-connectivity-probe",
+      "tokyo-recovery-connectivity-probe",
+      "operator-network-snapshot",
+      "readiness-timeline",
+      "cleanup-inventory",
+      "environment-version-manifest"
+    ],
+    "requiredChecks": [
+      "vultr_tokyo_identity",
+      "endpoint_hostname_port_scheme",
+      "endpoint_dns_family_and_fake_dns",
+      "kubeconfig_endpoint_and_sni",
+      "vke_control_plane_firewall_readback",
+      "operator_raw_tcp_tls_http",
+      "tokyo_recovery_raw_tcp_tls_http",
+      "readiness_timing",
+      "proxy_vpn_route_differential",
+      "cleanup"
+    ],
+    "timestampsMustBeUtc": true,
+    "artifactSha256Required": true,
+    "mockEvidenceAccepted": false,
+    "providerDocumentationAcceptedAsRuntimeEvidence": false,
+    "diagnosticDoesNotQualifyR4Tasks": true
+  },
+  "stopConditions": [
+    "any resource differs from this exact inventory",
+    "any firewall rule is broader than the two observer /32 sources",
+    "any Kubernetes mutation, Helm install, PVC, load balancer, or application ingress is attempted",
+    "any secret appears in output or evidence",
+    "deadline or cost ceiling would be exceeded",
+    "cleanup identity cannot be proven"
+  ],
+  "cost": {
+    "currency": "USD",
+    "maximumRuntimeHours": 2,
+    "incrementalExecutionCeilingUsdCents": 500,
+    "aggregatePriorAttemptsUpperBoundUsdCents": 440,
+    "aggregateCeilingUsdCents": 1500,
+    "authenticatedQuoteRequiredBeforeProvision": true,
+    "spendAuthorized": false
+  },
+  "teardown": {
+    "order": [
+      "remove-recovery-vke-firewall-rule",
+      "remove-operator-vke-firewall-rule",
+      "destroy-vke",
+      "destroy-recovery-host",
+      "destroy-recovery-firewall",
+      "verify-four-identities-404-and-zero-execution-label-matches",
+      "delete-kubeconfig-state-and-private-key-material"
+    ],
+    "broadDeleteAllowed": false,
+    "cleanupEvidenceRequired": true
+  },
+  "scientificBoundary": {
+    "frozenR3_325": "E-PASS / X-PASS / S-FAIL / C-NO-CLAIM",
+    "rerunAllowed": false,
+    "diagnosticIsScientificEvidence": false,
+    "scientificClaimEstablished": false
+  }
+}

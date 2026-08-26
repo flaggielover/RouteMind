@@ -223,3 +223,10 @@ provider/network diagnosis; this failure is not an operational pass.
 Evidence checkpoint `fd94ce2` passed all five jobs in real GitHub Actions run
 `32945284919`, including the independent recovery job; the target remains
 unqualified.
+
+The subsequent read-only VKE connectivity audit is recorded in
+`docs/closure/r4/VKE_TLS_EOF_DIAGNOSTIC.md`. It found that the raw TCP path
+uses the `Mihomo` TUN interface and does not match the configured operator
+`/32`, while the HTTP `api.ipify.org` path does match it. This is a supported
+VPN/TUN-routing hypothesis, not a root-cause claim. The prepared minimal
+diagnostic contract is `30c9580e...4a426` and remains unauthorized.

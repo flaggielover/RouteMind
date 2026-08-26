@@ -117,6 +117,16 @@ try {
         throw "Vultr Tokyo external-validation contract self-tests failed"
     }
 
+    python scripts/r4_vke_connectivity_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "VKE TLS EOF diagnostic contract validation failed"
+    }
+
+    python scripts/r4_vke_connectivity_diagnostic_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "VKE TLS EOF diagnostic self-tests failed"
+    }
+
     python scripts/path_safety_test.py
     if ($LASTEXITCODE -ne 0) {
         throw "External-validation path safety self-tests failed"

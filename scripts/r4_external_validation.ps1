@@ -22,6 +22,8 @@ $ContractPath = Join-Path $Root "contracts/external-validation/r4-vultr-tokyo-ex
 $CollectorConfig = Join-Path $Root "infra/observability/otel-collector.yaml"
 $ProbeScript = Join-Path $PSScriptRoot "r4_telemetry_probe.py"
 $WorkloadScript = Join-Path $PSScriptRoot "r4_workload_qualification.py"
+$VkeDiagnosticScript = Join-Path $PSScriptRoot "r4_vke_connectivity_diagnostic.py"
+$VkeDiagnosticContract = Join-Path $PSScriptRoot "r4_vke_connectivity_contract.py"
 $DataRoot = if ($env:ROUTEMIND_DATA_ROOT) {
     [IO.Path]::GetFullPath($env:ROUTEMIND_DATA_ROOT)
 } else {
@@ -141,12 +143,14 @@ function Initialize-StateDirectory {
 
 function Invoke-OfflinePreflight {
     $summary = Get-ContractSummary
-    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $EvidenceAssembler, $PathSafetyScript, $TlsIdentityScript, $KubeEndpointScript, $ProbeScript, $WorkloadScript)
+    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $EvidenceAssembler, $PathSafetyScript, $TlsIdentityScript, $KubeEndpointScript, $ProbeScript, $WorkloadScript, $VkeDiagnosticScript, $VkeDiagnosticContract)
     Invoke-Native "python" @(Join-Path $PSScriptRoot "path_safety_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_tls_identities_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_kube_endpoint_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_controller_guard_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_external_validation_test.py")
+    Invoke-Native "python" @($VkeDiagnosticContract)
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_diagnostic_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "telemetry_export_contract.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "telemetry_export_contract_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "disaster_recovery_test.py")
