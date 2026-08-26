@@ -70,3 +70,8 @@ closed TLS before handshake. This is a live provider/network boundary failure,
 not evidence that the application or telemetry contract passed. Further paid
 execution requires diagnosing this provider endpoint behavior and, if the
 resource/network contract changes, a new exact contract digest and Human Gate.
+
+The evidence checkpoint `fd94ce2` passed all five jobs in real GitHub Actions
+run `32945284919`, including the control-plane contract gate and independent
+recovery drill. This CI result validates the failure/cleanup evidence and does
+not qualify the external target.

@@ -165,3 +165,6 @@ checks passed. The attempt's quote bound is USD 3.92 and the three-attempt
 aggregate conservative bound is USD 4.40. R4-406 remains
 `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`; this is cleanup evidence, not
 Tokyo recovery evidence.
+Evidence checkpoint `fd94ce2` passed all five jobs in real GitHub Actions run
+`32945284919`, including the independent recovery job. This remains non-target
+evidence.

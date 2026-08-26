@@ -220,3 +220,6 @@ The authenticated eight-hour quote bound was USD 3.92; the conservative
 aggregate for all three attempts is USD 4.40. Provider invoice settlement is
 not asserted. R4-405 remains `LOCAL_AND_CI_VALIDATED / TARGET_PENDING` pending
 provider/network diagnosis; this failure is not an operational pass.
+Evidence checkpoint `fd94ce2` passed all five jobs in real GitHub Actions run
+`32945284919`, including the independent recovery job; the target remains
+unqualified.
