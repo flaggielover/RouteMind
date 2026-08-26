@@ -199,6 +199,11 @@ The new contract validator rejects identity, scope, resource, firewall,
 endpoint, readiness, cost, teardown, evidence, and scientific-boundary drift.
 No provider mutation was performed while preparing this report.
 
+Commit `98b287734c058006569c2d5c5961c0cb2ffdfd25` passed all five jobs in real
+GitHub Actions run `32948600781`, including the control-plane preparation,
+Python contract, Java, web, and resilience jobs. CI success validates the
+diagnostic preparation only; it does not qualify a Vultr target.
+
 The next state is **VKE TLS EOF DIAGNOSTIC HUMAN GATE**. Approval must name the
 new digest above, the exact two-hour/minimal resource shape, the two observer
 `/32` rules, and the USD 5.00 incremental ceiling. Without that approval, no

@@ -230,3 +230,5 @@ uses the `Mihomo` TUN interface and does not match the configured operator
 `/32`, while the HTTP `api.ipify.org` path does match it. This is a supported
 VPN/TUN-routing hypothesis, not a root-cause claim. The prepared minimal
 diagnostic contract is `30c9580e...4a426` and remains unauthorized.
+The preparation commit `98b2877` passed all five jobs in Actions run
+`32948600781`; this does not qualify a live telemetry target.

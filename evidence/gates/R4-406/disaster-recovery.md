@@ -173,3 +173,5 @@ The subsequent read-only VKE connectivity audit is recorded in
 `docs/closure/r4/VKE_TLS_EOF_DIAGNOSTIC.md`. It keeps target DR evidence
 pending and proposes a two-observer, no-PVC diagnostic only; the prepared
 contract digest `30c9580e...4a426` is not an approval or a recovery result.
+The preparation commit `98b2877` passed all five jobs in Actions run
+`32948600781`; this does not qualify Tokyo recovery evidence.
