@@ -71,10 +71,11 @@ business failure.
 - `./scripts/verify.ps1`: PASS after task-control synchronization.
 - `./scripts/resume.ps1`: PASS; R4-405 is reported as `validating`, repository
   total remains 165/196, and no task is falsely promoted to passed.
-- Final resume after CI closure: PASS. It reports `Current: NONE`, R4-405 and
-  R4-406 human/external requirements from their `blocked_by` records, and next
-  eligible R4-410/R4-422/R4-437. The former hard-coded `NONE recorded` output
-  was removed so the real-time progress capsule remains truthful.
+- Final resume after CI closure: PASS. It reports `Current: NONE`, `Next
+  eligible: NONE`, and the R4-405/R4-406/R4-410/R4-422 human/external
+  requirements from their `blocked_by` records. The former hard-coded `NONE
+  recorded` output was removed so the real-time progress capsule remains
+  truthful.
 - Implementation `49680bd` passed all five jobs in real GitHub Actions run
   `32852309878`: control/Compose, Java/SBOM/provenance, Python/contracts,
   Web/browser, and resilience/recovery.
