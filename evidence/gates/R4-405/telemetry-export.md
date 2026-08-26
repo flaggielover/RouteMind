@@ -2,7 +2,7 @@
 
 Date: 2026-08-25 (Asia/Shanghai)
 
-Entry revision: `10ec5378c9bf276f0c96152ab5a4adb177c66b58`
+Entry revision: `2efb0f6203752427be6dceb1cddd9ef247082231`
 
 Status: `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`
 
@@ -83,6 +83,11 @@ business failure.
   run `32920903229`, including the Terraform provider checksum and SigNoz
   Helm offline gate. This validates the preparation checkpoint only; it does
   not qualify a Vultr target or promote R4-405.
+- Cross-volume path remediation `a6ca115` plus portable redirect-fixture fix
+  `2efb0f6` passed all five jobs in Actions run `32928947867`. Nine path-safety
+  tests cover same-volume containment and siblings, cross-volume paths,
+  normalized traversal, case/trailing separators, UNC boundaries, device
+  namespaces, and symlink/junction rejection.
 - Remote control log reports the exact contract digest
   `767ae48b9c377d0718eb28d16fe5539302d2dfc46f66f03e7ca71506fb502395`
   and collector digest
@@ -134,9 +139,12 @@ at an unresponsive Docker Desktop `docker version` before resource creation;
 the preparation checkpoint therefore still requires the independent Actions
 recovery job rather than treating that local attempt as evidence.
 
-This preparation is not target execution. No credentialed provider call ran, no
-Vultr resource was created or changed, no spend was authorized, and no target
-telemetry or cost evidence exists. R4-405 therefore remains exactly
+This preparation is not target execution. An authenticated read-only preflight
+confirmed the account, Tokyo VKE region, required plan availability, catalog
+pricing within the frozen ceiling, VKE versions, and recovery OS without
+persisting secret or target evidence. No mutating provider call ran, no Vultr
+resource was created or changed, no spend was authorized, and no target telemetry
+or cost evidence exists. R4-405 therefore remains exactly
 `LOCAL_AND_CI_VALIDATED / TARGET_PENDING` and blocked at the final
 `EXTERNAL EXECUTION HUMAN GATE`.
 
