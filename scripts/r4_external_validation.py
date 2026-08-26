@@ -32,7 +32,7 @@ EXPECTED_RESOURCE_TYPES = {
 }
 EXPECTED_TERRAFORM_TYPES = {
     "vultr_firewall_group": 1,
-    "vultr_firewall_rule": 1,
+    "vultr_firewall_rule": 2,
     "vultr_instance": 1,
     "vultr_kubernetes": 1,
 }
@@ -201,6 +201,13 @@ def validate_contract(
         or vke.get("workerPlan") != "vhp-4c-8gb-amd"
         or vke.get("workerCount") != 3
         or vke.get("haControlPlane") is not True
+        or vke.get("controlPlaneFirewall")
+        != {
+            "enabled": True,
+            "port": 6443,
+            "source": "ROUTEMIND_OPERATOR_CIDR",
+            "subnetSizeRequired": 32,
+        }
         or recovery.get("region") != "nrt"
         or recovery.get("plan") != "vhp-2c-4gb-amd"
         or recovery.get("automaticBackups") is not False
@@ -244,7 +251,7 @@ def validate_contract(
         or boundary_by_id.get("provider-kubernetes-control-plane", {}).get(
             "exposure"
         )
-        != "VKE_API_outbound_only"
+        != "temporary_public_control_plane_operator_cidr_only"
         or tls.get("publicPlaintextAllowed") is not False
         or tls.get("otlpMutualTlsRequired") is not True
         or tls.get("privateKeysPersistedAfterCleanup") is not False
@@ -300,6 +307,8 @@ def validate_contract(
         or automation.get("mutatingActionsRequireApprovalDigest") is not True
         or set(automation.get("provisionPlanAllowedResourceTypes", []))
         != set(EXPECTED_TERRAFORM_TYPES)
+        or automation.get("provisionPlanExactResourceCounts")
+        != EXPECTED_TERRAFORM_TYPES
         or automation.get("unsafeBroadDeleteAllowed") is not False
     ):
         findings.append("automation_boundary")

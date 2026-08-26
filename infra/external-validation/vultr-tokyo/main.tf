@@ -75,3 +75,13 @@ resource "vultr_kubernetes" "validation" {
     }
   }
 }
+
+resource "vultr_firewall_rule" "vke_api" {
+  firewall_group_id = vultr_kubernetes.validation.firewall_group_id
+  protocol          = "tcp"
+  ip_type           = "v4"
+  subnet            = local.operator_network
+  subnet_size       = local.operator_network_bits
+  port              = "6443"
+  notes             = "Temporary operator VKE API for ${var.execution_id}"
+}

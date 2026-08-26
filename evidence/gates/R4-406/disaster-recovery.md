@@ -134,3 +134,19 @@ The corrected shared contract has SHA-256
 `4956d29a5cbd69344a70c4d89514608b1acd32924e0598155c7f90848be77393`.
 Another external attempt requires approval of that exact digest; the existing
 local-CI recovery result cannot substitute for it.
+
+## Second Vultr attempt
+
+Execution `r4-ext-20260826t054111z-ea80181368` stopped at the VKE control-plane
+firewall before any recovery fixture was transferred or drill command ran. The
+active recovery instance contained only its synthetic cloud-init identity.
+Exact teardown and zero-inventory checks passed; the second-attempt conservative
+cost bound is USD 0.24 and the two-attempt aggregate bound is USD 0.48. This is
+cleanup evidence, not target recovery evidence. Shared details are in
+`evidence/gates/R4-405/2026-08-26-external-attempt-2.md`.
+
+The shared contract now includes the missing operator `/32` VKE API rule and has
+SHA-256
+`c2a1695104ba7297b51b1c949fa689a4efeb5974dcf1a2122c12f91a57f4e2df`.
+R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING` until that exact
+contract is approved and the credentialed target drill completes.

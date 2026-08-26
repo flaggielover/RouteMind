@@ -425,7 +425,11 @@ function Write-AuthenticatedResourceManifest {
         observedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
         provider = "Vultr"; region = "nrt"; executionId = $ExecutionId
         resources = $resources
-        controlResourceIds = [ordered]@{ firewallGroup = [string]$terraformInventory.firewall_group_id }
+        controlResourceIds = [ordered]@{
+            recoveryFirewallGroup = [string]$terraformInventory.firewall_group_id
+            vkeFirewallGroup = [string]$terraformInventory.vke_firewall_group_id
+            vkeApiFirewallRule = [string]$terraformInventory.vke_api_firewall_rule_id
+        }
         sourceRevision = [string]$terraformInventory.source_revision
     }
     $manifest | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath (Join-Path $Paths.Evidence "authenticated-resource-manifest.json") -Encoding utf8
@@ -905,6 +909,7 @@ function Invoke-Teardown {
                 $exactChecks.vke = Test-VultrResourceAbsent "/kubernetes/clusters/$($terraformInventory.vke_id)"
                 $exactChecks.recovery = Test-VultrResourceAbsent "/instances/$($terraformInventory.recovery_id)"
                 $exactChecks.firewall = Test-VultrResourceAbsent "/firewalls/$($terraformInventory.firewall_group_id)"
+                $exactChecks.vkeFirewall = Test-VultrResourceAbsent "/firewalls/$($terraformInventory.vke_firewall_group_id)"
             }
             foreach ($blockId in $blockIds) { $exactChecks["block:$blockId"] = Test-VultrResourceAbsent "/blocks/$blockId" }
             $clusters = Invoke-VultrGet "/kubernetes/clusters?per_page=500"

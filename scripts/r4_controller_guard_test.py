@@ -15,6 +15,9 @@ class ControllerGuardTests(unittest.TestCase):
         cls.terraform = (
             ROOT / "infra" / "external-validation" / "vultr-tokyo" / "outputs.tf"
         ).read_text(encoding="utf-8")
+        cls.terraform_main = (
+            ROOT / "infra" / "external-validation" / "vultr-tokyo" / "main.tf"
+        ).read_text(encoding="utf-8")
 
     def test_runtime_uses_validated_tls_identity_plan(self) -> None:
         self.assertTrue(self.controller.startswith("#Requires -Version 7.0"))
@@ -26,6 +29,13 @@ class ControllerGuardTests(unittest.TestCase):
         self.assertIn("$KubeEndpointScript", self.controller)
         self.assertIn("--provider-ip", self.controller)
         self.assertIn("vke_ip", self.terraform)
+
+    def test_vke_api_is_operator_cidr_allowlisted_and_audited(self) -> None:
+        self.assertIn('resource "vultr_firewall_rule" "vke_api"', self.terraform_main)
+        self.assertIn('port              = "6443"', self.terraform_main)
+        self.assertIn("subnet            = local.operator_network", self.terraform_main)
+        self.assertIn("vke_firewall_group_id", self.terraform)
+        self.assertIn("$exactChecks.vkeFirewall", self.controller)
 
     def test_kubernetes_mutation_marker_precedes_first_apply(self) -> None:
         marker = self.controller.index(

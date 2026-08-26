@@ -79,7 +79,13 @@
         "haControlPlane": true,
         "workerPlan": "vhp-4c-8gb-amd",
         "workerCount": 3,
-        "autoscaling": false
+        "autoscaling": false,
+        "controlPlaneFirewall": {
+          "enabled": true,
+          "port": 6443,
+          "source": "ROUTEMIND_OPERATOR_CIDR",
+          "subnetSizeRequired": 32
+        }
       },
       {
         "id": "recovery-drill-host",
@@ -166,7 +172,7 @@
         "id": "provider-kubernetes-control-plane",
         "protocol": "HTTPS_TLS_1_2_OR_NEWER",
         "port": 6443,
-        "exposure": "VKE_API_outbound_only"
+        "exposure": "temporary_public_control_plane_operator_cidr_only"
       }
     ],
     "tls": {
@@ -239,6 +245,12 @@
       "vultr_instance",
       "vultr_kubernetes"
     ],
+    "provisionPlanExactResourceCounts": {
+      "vultr_firewall_group": 1,
+      "vultr_firewall_rule": 2,
+      "vultr_instance": 1,
+      "vultr_kubernetes": 1
+    },
     "idempotency": "execution-id scoped state and labels",
     "timeoutCleanup": "Full action always enters teardown; recovery Teardown action uses the exact state directory",
     "unsafeBroadDeleteAllowed": false

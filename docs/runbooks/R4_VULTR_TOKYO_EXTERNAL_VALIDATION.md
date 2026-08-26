@@ -16,8 +16,9 @@ target recovery, production deployment, or production readiness.
 
 ## Infrastructure and cost boundary
 
-The exact Terraform create inventory is one firewall group, one allowlisted SSH
-rule, one `vhp-2c-4gb-amd` recovery instance, and one HA VKE with three
+The exact Terraform create inventory is one recovery firewall group, two
+allowlisted rules (recovery SSH and VKE API), one `vhp-2c-4gb-amd` recovery
+instance, and one HA VKE with three
 `vhp-4c-8gb-amd` workers in `nrt`. Kubernetes creates exactly five CSI block
 volumes totaling 55 GiB, bounded by a 60 GiB quota. The VKE has no autoscaling. Automatic
 backups, DDoS add-on, IPv6 on the recovery host, activation email, public load
@@ -56,9 +57,9 @@ Network surfaces are:
 - TCP 8080: SigNoz UI, local `kubectl` control-plane tunnel only;
 - TCP 22: recovery host, temporary public IPv4, exactly one operator `/32`;
 - TCP 443: Vultr provider API, outbound only, TLS 1.2 or newer;
-- TCP 6443: VKE Kubernetes API, outbound only, with kubeconfig CA and hostname
-  validation retained even when a local fake-DNS resolver requires the
-  provider-returned control-plane IP.
+- TCP 6443: VKE Kubernetes API, temporary public control plane restricted to the
+  operator `/32`, with kubeconfig CA and hostname validation retained even when
+  a local fake-DNS resolver requires the provider-returned control-plane IP.
 
 Default-deny NetworkPolicies protect the observability, application, and
 validation namespaces. Application dependencies remain namespace-internal;
@@ -167,7 +168,8 @@ complete.
 attempt with state. Helm and all three validation namespaces are deleted first so CSI volumes
 can reclaim. The controller then waits for every captured volume identity to
 return 404, validates an exact Terraform destroy plan, destroys VKE/instance/
-firewall resources, and checks each exact API identity plus execution labels.
+firewall resources, and checks each exact API identity, both firewall groups,
+and execution labels.
 
 It then deletes kubeconfig, Terraform state/data/plans, SSH known-host state,
 and generated secret material. Sanitized cleanup evidence records only resource

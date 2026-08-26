@@ -177,3 +177,26 @@ production build. These are local preparation results only; real CI and a newly
 approved target execution remain mandatory. Remediation revision `fb6adcd`
 passed all five jobs in real GitHub Actions run `32934187355`; this validates
 the implementation and preparation but does not qualify the external target.
+
+## Second external attempt and VKE firewall remediation
+
+Approved execution `r4-ext-20260826t054111z-ea80181368` reached active Tokyo
+VKE and recovery resources, then failed closed before Kubernetes mutation. The
+provider-created VKE firewall group had zero rules, so TLS on the otherwise
+reachable TCP 6443 endpoint closed before handshake. Terraform teardown and
+credentialed zero-inventory checks passed, including a separate read-only 404
+for the VKE-managed firewall group. The second-attempt conservative bound is
+USD 0.24 and the aggregate two-attempt bound is USD 0.48. Details are in
+`evidence/gates/R4-405/2026-08-26-external-attempt-2.md`.
+
+The corrected plan retains the enabled VKE firewall and adds exactly one
+operator `/32` TCP 6443 rule. It now has five Terraform resources and records
+the VKE firewall group/rule identities for cleanup evidence. The new contract
+SHA-256 is
+`c2a1695104ba7297b51b1c949fa689a4efeb5974dcf1a2122c12f91a57f4e2df`.
+A fresh read-only Terraform plan passed the exact five-create validator and its
+temporary plan artifacts were deleted without applying any change. The full
+local Java/Python/Web gate and focused contract, controller, Terraform/Helm,
+security, graph, and repository controls passed.
+No paid execution is authorized for this digest yet; R4-405 remains
+`LOCAL_AND_CI_VALIDATED / TARGET_PENDING`.

@@ -176,6 +176,17 @@ class ExternalValidationPreparationTests(unittest.TestCase):
             "telemetry_topology",
             external.validate_contract(candidate, self.deployment),
         )
+        candidate = copy.deepcopy(self.contract)
+        vke = next(
+            item
+            for item in candidate["infrastructure"]["resources"]
+            if item["id"] == "validation-vke"
+        )
+        vke["controlPlaneFirewall"]["subnetSizeRequired"] = 24
+        self.assertIn(
+            "infrastructure",
+            external.validate_contract(candidate, self.deployment),
+        )
 
     def test_secret_cost_and_science_gates_cannot_weaken(self) -> None:
         candidate = copy.deepcopy(self.contract)
@@ -266,7 +277,8 @@ class ExternalValidationPreparationTests(unittest.TestCase):
                         "type": resource_type,
                         "change": {"actions": [action]},
                     }
-                    for resource_type in external.EXPECTED_TERRAFORM_TYPES
+                    for resource_type, count in external.EXPECTED_TERRAFORM_TYPES.items()
+                    for index in range(count)
                 ]
             }
 
