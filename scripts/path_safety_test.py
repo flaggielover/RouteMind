@@ -128,7 +128,10 @@ class ExistingFileSafetyTests(unittest.TestCase):
                         repository, redirect / "operator.key"
                     )
             finally:
-                redirect.rmdir()
+                if redirect.is_symlink():
+                    redirect.unlink()
+                else:
+                    redirect.rmdir()
 
     @staticmethod
     def _create_directory_redirect(link: Path, target: Path) -> None:
