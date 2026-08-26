@@ -151,6 +151,7 @@ function Invoke-OfflinePreflight {
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_controller_guard_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_external_validation_test.py")
     Invoke-Native "python" @($VkeDiagnosticContract)
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_contract_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_diagnostic_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_plan_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_controller_test.py")

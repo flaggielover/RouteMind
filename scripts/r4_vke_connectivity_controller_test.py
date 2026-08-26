@@ -30,6 +30,17 @@ class VkeConnectivityControllerTests(unittest.TestCase):
         self.assertIn("$PlanScript, $planJson", self.controller)
         self.assertIn("finally", self.controller)
         self.assertIn("Invoke-Teardown", self.controller)
+        self.assertIn("Wait-VultrAbsent", self.controller)
+        self.assertIn("executionLabelMatches", self.controller)
+
+    def test_controller_retains_fail_closed_phase_evidence(self) -> None:
+        self.assertIn('classification = "DIAGNOSTIC_INCOMPLETE"', self.controller)
+        self.assertIn("failurePhase", self.controller)
+
+    def test_tokyo_observer_requires_identity_and_python_readiness(self) -> None:
+        self.assertIn("test -r /var/lib/routemind-vke-diagnostic/identity", self.controller)
+        self.assertIn("command -v python3", self.controller)
+        self.assertIn('$remoteScript = "/tmp/r4_vke_connectivity_diagnostic.py"', self.controller)
 
     def test_controller_never_allows_broad_firewall_or_public_ingress(self) -> None:
         self.assertIn("subnet_size -ne 32", self.controller)

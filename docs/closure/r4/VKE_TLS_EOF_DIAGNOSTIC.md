@@ -166,7 +166,8 @@ The new prepared contract is
 `contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v1.json`.
 Its canonical SHA-256 is
 `30c9580eb2fe43de1306b299a73c4a1c5d0f286ac7bef4be0c3d0f4b7994a426`.
-It supersedes, but does not reuse, the consumed validation digest.
+It superseded, but did not reuse, the consumed validation digest. That digest
+was later consumed once by the approved diagnostic execution below.
 
 The contract is fail-closed and currently unauthorized. If approved later, it
 would create only one minimal HA VKE with one worker, one two-hour recovery
@@ -204,7 +205,24 @@ GitHub Actions run `32948600781`, including the control-plane preparation,
 Python contract, Java, web, and resilience jobs. CI success validates the
 diagnostic preparation only; it does not qualify a Vultr target.
 
-The next state is **VKE TLS EOF DIAGNOSTIC HUMAN GATE**. Approval must name the
-new digest above, the exact two-hour/minimal resource shape, the two observer
-`/32` rules, and the USD 5.00 incremental ceiling. Without that approval, no
-paid resource execution is authorized.
+## Approved attempt and replacement gate
+
+Execution `r4-diag-20260826t091304z-ec5bcf4d62` used the approved digest
+`30c9580e...4a426` exactly once and the exact six-resource/two-`/32` shape.
+Operator evidence recorded `DNS_OK / TCP_OK / TLS_EOF`; the Tokyo observer
+artifact was not recorded before teardown. The result is therefore
+`DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE`, with no root-cause branch or
+target claim authorized. Exact teardown later proved four provider identities
+`404` and zero execution-label matches; sensitive runtime artifacts were
+deleted and retained files had zero leakage findings. Full detail is in
+`evidence/gates/R4-405/2026-08-26-vke-connectivity-diagnostic-attempt-1.md`.
+
+The consumed digest cannot be reused. Controller remediation preserves the
+same resource shape while requiring observer identity/Python readiness, direct
+sanitized-artifact retention, phase-failure evidence, and bounded asynchronous
+cleanup convergence. Replacement contract
+`contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v2.json`
+has canonical SHA-256
+`1f78b9d3562a6bac3cfa7b9ad070545e5b1eb2c7c9d88090acc9e765c20dc782` and awaits
+a new **VKE TLS EOF DIAGNOSTIC RETRY HUMAN GATE**. Until approved, no paid
+resource execution is authorized.

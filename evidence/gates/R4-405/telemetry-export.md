@@ -232,3 +232,21 @@ VPN/TUN-routing hypothesis, not a root-cause claim. The prepared minimal
 diagnostic contract is `30c9580e...4a426` and remains unauthorized.
 The preparation commit `98b2877` passed all five jobs in Actions run
 `32948600781`; this does not qualify a live telemetry target.
+
+## VKE connectivity diagnostic attempt
+
+Approved diagnostic `r4-diag-20260826t091304z-ec5bcf4d62` used the distinct
+digest `30c9580e...4a426` and the exact one-worker/two-observer-rule boundary.
+Operator TCP succeeded but TLS ended with EOF. The required Tokyo observer
+artifact was not retained before teardown, so the result is conservatively
+`DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE`; no root-cause branch or target
+qualification is authorized. Exact destroy applied, four provider identities
+subsequently returned 404, execution-label matches were zero, and retained
+external artifacts passed leakage scan. The conservative attempt/cumulative
+bounds are USD 2.20/USD 6.60. Full detail is in
+`evidence/gates/R4-405/2026-08-26-vke-connectivity-diagnostic-attempt-1.md`.
+
+The consumed digest cannot be reused. A remediated v2 controller and contract
+preserve the resource shape while adding observer readiness, retained phase
+evidence, and bounded asynchronous cleanup convergence. R4-405 remains
+`LOCAL_AND_CI_VALIDATED / TARGET_PENDING` pending a new exact Human Gate.

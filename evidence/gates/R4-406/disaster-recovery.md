@@ -175,3 +175,15 @@ pending and proposes a two-observer, no-PVC diagnostic only; the prepared
 contract digest `30c9580e...4a426` is not an approval or a recovery result.
 The preparation commit `98b2877` passed all five jobs in Actions run
 `32948600781`; this does not qualify Tokyo recovery evidence.
+
+## VKE connectivity diagnostic attempt
+
+Execution `r4-diag-20260826t091304z-ec5bcf4d62` did not deploy or execute a DR
+fixture. Its operator probe observed TCP success and TLS EOF, but no Tokyo
+observer artifact was retained, so the connectivity result is
+`DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE`. Exact cleanup later proved all
+four provider identities absent and zero execution-label resources. This is
+cleanup evidence only, not Tokyo restore/reconciliation/RPO/RTO evidence.
+R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`; the consumed
+`30c9580e...4a426` digest is not reusable and any retry requires the new v2
+contract Human Gate.

@@ -12,9 +12,9 @@ CONTRACT_PATH = (
     ROOT
     / "contracts"
     / "external-validation"
-    / "r4-vultr-tokyo-vke-connectivity-diagnostic-v1.json"
+    / "r4-vultr-tokyo-vke-connectivity-diagnostic-v2.json"
 )
-OLD_CONTRACT_DIGEST = "c2a1695104ba7297b51b1c949fa689a4efeb5974dcf1a2122c12f91a57f4e2df"
+OLD_CONTRACT_DIGEST = "30c9580eb2fe43de1306b299a73c4a1c5d0f286ac7bef4be0c3d0f4b7994a426"
 
 
 class ConnectivityContractError(ValueError):
@@ -40,8 +40,8 @@ def validate(contract: Mapping[str, Any]) -> tuple[str, ...]:
     findings: list[str] = []
     if (
         contract.get("schemaVersion") != 1
-        or contract.get("contractId") != "r4-vultr-tokyo-vke-connectivity-diagnostic-v1"
-        or contract.get("status") != "PREPARED_VKE_TLS_EOF_DIAGNOSTIC_HUMAN_GATE"
+        or contract.get("contractId") != "r4-vultr-tokyo-vke-connectivity-diagnostic-v2"
+        or contract.get("status") != "PREPARED_VKE_TLS_EOF_DIAGNOSTIC_RETRY_HUMAN_GATE"
         or contract.get("supersedesContractDigest") != OLD_CONTRACT_DIGEST
     ):
         findings.append("identity")
@@ -61,7 +61,7 @@ def validate(contract: Mapping[str, Any]) -> tuple[str, ...]:
         approval.get("provider") != "Vultr"
         or approval.get("region") != "nrt"
         or approval.get("dataResidency") != "Tokyo, Japan"
-        or approval.get("requiredFinalGate") != "VKE TLS EOF DIAGNOSTIC HUMAN GATE"
+        or approval.get("requiredFinalGate") != "VKE TLS EOF DIAGNOSTIC RETRY HUMAN GATE"
         or approval.get("resourceCreationAuthorized") is not False
         or approval.get("spendAuthorized") is not False
         or approval.get("liveMutationCallsAuthorized") is not False
@@ -148,6 +148,25 @@ def validate(contract: Mapping[str, Any]) -> tuple[str, ...]:
     ):
         findings.append("backoff")
 
+    repair = contract.get("repairControls", {})
+    if (
+        repair.get("oldDigestAccepted") is not False
+        or repair.get("resourceShapeChangedFromV1") is not False
+        or "identity file" not in repair.get("observerReadiness", "")
+        or "bounded retry" not in repair.get("teardownConvergence", "")
+    ):
+        findings.append("repair_controls")
+
+    prior = contract.get("priorExecution", {})
+    if (
+        prior.get("classification") != "DIAGNOSTIC_INCOMPLETE"
+        or prior.get("rootCauseConfidence") != "INSUFFICIENT_EVIDENCE"
+        or prior.get("tokyoObserverResult") != "NOT_RECORDED"
+        or prior.get("historicalEvidenceImmutable") is not True
+        or prior.get("digestConsumedAndNotReusable") is not True
+    ):
+        findings.append("prior_execution")
+
     outputs = contract.get("diagnosticOutputs", {})
     if (
         outputs.get("secretValuesPrinted") is not False
@@ -170,7 +189,7 @@ def validate(contract: Mapping[str, Any]) -> tuple[str, ...]:
 
     evidence = contract.get("evidenceContract", {})
     if (
-        len(evidence.get("requiredArtifacts", [])) != 10
+        len(evidence.get("requiredArtifacts", [])) != 11
         or len(evidence.get("requiredChecks", [])) != 10
         or evidence.get("timestampsMustBeUtc") is not True
         or evidence.get("artifactSha256Required") is not True
@@ -184,7 +203,7 @@ def validate(contract: Mapping[str, Any]) -> tuple[str, ...]:
         cost.get("currency") != "USD"
         or cost.get("maximumRuntimeHours") != 2
         or cost.get("incrementalExecutionCeilingUsdCents") != 500
-        or cost.get("aggregatePriorAttemptsUpperBoundUsdCents") != 440
+        or cost.get("aggregatePriorAttemptsUpperBoundUsdCents") != 660
         or cost.get("aggregateCeilingUsdCents") != 1500
         or cost.get("authenticatedQuoteRequiredBeforeProvision") is not True
         or cost.get("spendAuthorized") is not False

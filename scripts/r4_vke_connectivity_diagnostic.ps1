@@ -17,7 +17,7 @@ $ContractScript = Join-Path $PSScriptRoot "r4_vke_connectivity_contract.py"
 $PlanScript = Join-Path $PSScriptRoot "r4_vke_connectivity_plan.py"
 $ProbeScript = Join-Path $PSScriptRoot "r4_vke_connectivity_diagnostic.py"
 $PathSafetyScript = Join-Path $PSScriptRoot "path_safety.py"
-$ContractPath = Join-Path $Root "contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v1.json"
+$ContractPath = Join-Path $Root "contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v2.json"
 $DataRoot = if ($env:ROUTEMIND_DATA_ROOT) { [IO.Path]::GetFullPath($env:ROUTEMIND_DATA_ROOT) } else { [IO.Path]::GetFullPath((Join-Path (Split-Path -Parent $Root) "RouteMind-Data")) }
 $relativeData = [IO.Path]::GetRelativePath($Root, $DataRoot)
 if (-not $relativeData.StartsWith("..") -and -not [IO.Path]::IsPathRooted($relativeData)) { throw "ROUTEMIND_DATA_ROOT must remain outside the repository" }
@@ -54,6 +54,17 @@ function Test-VultrAbsent {
     }
 }
 
+function Wait-VultrAbsent {
+    param([Parameter(Mandatory)][string]$Path, [int]$Attempts = 48)
+    for ($attempt = 1; $attempt -le $Attempts; $attempt++) {
+        try {
+            if (Test-VultrAbsent $Path) { return $true }
+        } catch { }
+        if ($attempt -lt $Attempts) { Start-Sleep -Seconds 5 }
+    }
+    return $false
+}
+
 function New-ExecutionId {
     $revision = (Invoke-NativeCapture "git" @("rev-parse", "--short=10", "HEAD")).Trim()
     $stamp = [DateTime]::UtcNow.ToString("yyyyMMdd't'HHmmss'z'").ToLowerInvariant()
@@ -76,10 +87,11 @@ function Get-ExecutionPaths {
         Kubeconfig = Join-Path $rootPath "kubeconfig.yaml"
         StartedAt = Join-Path $rootPath "execution-started-at.txt"
         Lifecycle = Join-Path $rootPath "execution-lifecycle.json"
-        OperatorProbe = Join-Path $rootPath "operator-connectivity.json"
-        TokyoProbe = Join-Path $rootPath "tokyo-recovery-connectivity.json"
-        Timeline = Join-Path $rootPath "readiness-timeline.json"
-        Firewall = Join-Path $rootPath "firewall-readback.json"
+        OperatorProbe = Join-Path $rootPath "sanitized-evidence/operator-connectivity.json"
+        TokyoProbe = Join-Path $rootPath "sanitized-evidence/tokyo-recovery-connectivity.json"
+        Timeline = Join-Path $rootPath "sanitized-evidence/readiness-timeline.json"
+        Firewall = Join-Path $rootPath "sanitized-evidence/firewall-readback.json"
+        Failure = Join-Path $rootPath "sanitized-evidence/diagnostic-failure.json"
     }
 }
 
@@ -111,6 +123,7 @@ function Invoke-OfflinePreflight {
     Require-Command "python"
     Invoke-Native "python" @("-m", "py_compile", $ContractScript, $PlanScript, $ProbeScript)
     Invoke-Native "python" @($ContractScript)
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_contract_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_diagnostic_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_plan_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_controller_test.py")
@@ -156,7 +169,7 @@ function Invoke-LivePreflight {
         vkeVersion = $version; recoveryOsId = [int]$os.id
         workerPlan = [ordered]@{ id = $worker.id; count = 1; hourlyUsd = [double]$worker.hourly_cost }
         recoveryPlan = [ordered]@{ id = $recovery.id; count = 1; hourlyUsd = [double]$recovery.hourly_cost }
-        maximumRuntimeHours = 2; upperBoundUsdCents = $upper; incrementalCeilingUsdCents = 500; aggregatePriorAttemptsUpperBoundUsdCents = 440; aggregateCeilingUsdCents = 1500; withinApprovedCeiling = $true
+        maximumRuntimeHours = 2; upperBoundUsdCents = $upper; incrementalCeilingUsdCents = 500; aggregatePriorAttemptsUpperBoundUsdCents = 660; aggregateCeilingUsdCents = 1500; withinApprovedCeiling = $true
     } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $Paths.Quote -Encoding utf8
     [ordered]@{ execution_id = $ExecutionId; source_revision = (git rev-parse HEAD).Trim(); expires_at = $expires; vke_version = $version; recovery_os_id = [int]$os.id; ssh_key_id = $env:ROUTEMIND_VULTR_SSH_KEY_ID; operator_cidr = $env:ROUTEMIND_OPERATOR_CIDR } | ConvertTo-Json | Set-Content -LiteralPath $Paths.Vars -Encoding utf8
     return Get-Content -LiteralPath $Paths.Quote -Raw | ConvertFrom-Json
@@ -216,17 +229,20 @@ function Invoke-RemoteProbe {
     $knownHosts = Join-Path $Paths.Root "known_hosts"
     $opts = @("-i", $key, "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=accept-new", "-o", "UserKnownHostsFile=$knownHosts", "-o", "ConnectTimeout=20")
     $hostName = "root@$($Inventory.recovery_ip)"
+    $script:DiagnosticPhase = "tokyo_observer_ready"
     $ready = $false
     for ($i = 0; $i -lt 18; $i++) {
-        & ssh @opts $hostName "cloud-init status --wait >/dev/null 2>&1" *> $null
+        & ssh @opts $hostName "cloud-init status --wait >/dev/null 2>&1 && test -r /var/lib/routemind-vke-diagnostic/identity && command -v python3 >/dev/null 2>&1" *> $null
         if ($LASTEXITCODE -eq 0) { $ready = $true; break }
         Start-Sleep -Seconds 5
     }
-    if (-not $ready) { throw "Tokyo recovery observer cloud-init did not become ready" }
-    $remoteScript = "/var/lib/routemind-vke-diagnostic/r4_vke_connectivity_diagnostic.py"
+    if (-not $ready) { throw "Tokyo recovery observer identity and Python readiness did not become available" }
+    $remoteScript = "/tmp/r4_vke_connectivity_diagnostic.py"
+    $script:DiagnosticPhase = "tokyo_probe_copy"
     Invoke-Native "scp" ($opts + @($ProbeScript, "${hostName}:$remoteScript"))
     $endpoint = "https://$($Inventory.vke_endpoint):6443"
     $remoteCommand = "python3 $remoteScript --endpoint '$endpoint' --connect-host '$($Inventory.vke_ip)' --timeout 10 --max-addresses 1 --json"
+    $script:DiagnosticPhase = "tokyo_probe_execution"
     $raw = (& ssh @opts $hostName $remoteCommand) -join "`n"
     if ($LASTEXITCODE -ne 0) { throw "Tokyo observer probe failed" }
     $raw | Set-Content -LiteralPath $Paths.TokyoProbe -Encoding utf8
@@ -235,6 +251,7 @@ function Invoke-RemoteProbe {
 
 function Invoke-OperatorProbe {
     param([Parameter(Mandatory)]$Inventory, [Parameter(Mandatory)]$Paths)
+    $script:DiagnosticPhase = "operator_probe"
     $endpoint = "https://$($Inventory.vke_endpoint):6443"
     Invoke-NativeCapture "python" @($ProbeScript, "--endpoint", $endpoint, "--connect-host", [string]$Inventory.vke_ip, "--kubeconfig", $Paths.Kubeconfig, "--timeout", "10", "--max-addresses", "1", "--json") | Set-Content -LiteralPath $Paths.OperatorProbe -Encoding utf8
     return Get-Content -LiteralPath $Paths.OperatorProbe -Raw | ConvertFrom-Json
@@ -274,27 +291,37 @@ function Invoke-Teardown {
     Invoke-Native "python" @($PlanScript, $destroyJson, "--destroy")
     Invoke-Terraform @("apply", "-auto-approve", $destroyPlan)
     $checks = [ordered]@{
-        vke = Test-VultrAbsent "/kubernetes/clusters/$($Inventory.vke_id)"
-        recovery = Test-VultrAbsent "/instances/$($Inventory.recovery_id)"
-        recoveryFirewall = Test-VultrAbsent "/firewalls/$($Inventory.recovery_firewall_group_id)"
-        vkeFirewall = Test-VultrAbsent "/firewalls/$($Inventory.vke_firewall_group_id)"
+        vke = Wait-VultrAbsent "/kubernetes/clusters/$($Inventory.vke_id)"
+        recovery = Wait-VultrAbsent "/instances/$($Inventory.recovery_id)"
+        recoveryFirewall = Wait-VultrAbsent "/firewalls/$($Inventory.recovery_firewall_group_id)"
+        vkeFirewall = Wait-VultrAbsent "/firewalls/$($Inventory.vke_firewall_group_id)"
     }
     if (@($checks.GetEnumerator() | Where-Object { -not $_.Value }).Count -ne 0) { throw "Exact diagnostic cleanup checks did not converge" }
-    $clusters = Invoke-VultrGet "/kubernetes/clusters?per_page=500"
-    $instances = Invoke-VultrGet "/instances?per_page=500"
-    $firewalls = Invoke-VultrGet "/firewalls?per_page=500"
-    $remaining = @(
-        @($clusters.vke_clusters) | Where-Object { $_.label -like "*$ExecutionId*" } | ForEach-Object { $_.id }
-        @($instances.instances) | Where-Object { $_.label -like "*$ExecutionId*" } | ForEach-Object { $_.id }
-        @($firewalls.firewall_groups) | Where-Object { $_.description -like "*$ExecutionId*" } | ForEach-Object { $_.id }
-    )
+    $remaining = @()
+    for ($attempt = 1; $attempt -le 48; $attempt++) {
+        try {
+            $clusters = Invoke-VultrGet "/kubernetes/clusters?per_page=500"
+            $instances = Invoke-VultrGet "/instances?per_page=500"
+            $firewalls = Invoke-VultrGet "/firewalls?per_page=500"
+            $remaining = @(
+                @($clusters.vke_clusters) | Where-Object { $_.label -like "*$ExecutionId*" } | ForEach-Object { $_.id }
+                @($instances.instances) | Where-Object { $_.label -like "*$ExecutionId*" } | ForEach-Object { $_.id }
+                @($firewalls.firewall_groups) | Where-Object { $_.description -like "*$ExecutionId*" } | ForEach-Object { $_.id }
+            )
+            if ($remaining.Count -eq 0) { break }
+        } catch {
+            $remaining = @("INVENTORY_CHECK_FAILED")
+        }
+        if ($attempt -lt 48) { Start-Sleep -Seconds 5 }
+    }
     if ($remaining.Count -ne 0) { throw "Execution-label resources remain after teardown: $($remaining -join ',')" }
-    [ordered]@{ complete = $true; credentialedInventoryCheck = $true; executionId = $ExecutionId; remainingResourceIds = @($remaining); exactProviderChecks = $checks; kubeconfigDeleted = $true; verifiedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'") } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $Paths.Evidence "cleanup-inventory.json") -Encoding utf8
-    foreach ($file in @($Paths.Kubeconfig, $Paths.TerraformData, $Paths.TerraformState, $Paths.OperatorProbe, $Paths.TokyoProbe, $Paths.Timeline, $Paths.Firewall, (Join-Path $Paths.Root "known_hosts"), (Join-Path $Paths.Root "diagnostic.tfplan"), (Join-Path $Paths.Root "diagnostic-plan.json"), $destroyPlan, $destroyJson)) { if (Test-Path -LiteralPath $file) { Remove-Item -LiteralPath $file -Recurse -Force } }
+    [ordered]@{ complete = $true; credentialedInventoryCheck = $true; executionId = $ExecutionId; remainingResourceIds = @($remaining); executionLabelMatches = 0; exactProviderChecks = $checks; kubeconfigDeleted = $true; verifiedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'") } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $Paths.Evidence "cleanup-inventory.json") -Encoding utf8
+    foreach ($file in @($Paths.Kubeconfig, $Paths.TerraformData, $Paths.TerraformState, (Join-Path $Paths.Root "known_hosts"), (Join-Path $Paths.Root "diagnostic.tfplan"), (Join-Path $Paths.Root "diagnostic-plan.json"), $destroyPlan, $destroyJson)) { if (Test-Path -LiteralPath $file) { Remove-Item -LiteralPath $file -Recurse -Force } }
 }
 
 $summary = (Invoke-NativeCapture "python" @($ContractScript)).Trim() | ConvertFrom-Json
 $script:ProvisionApplyStarted = $false
+$script:DiagnosticPhase = "not_started"
 if (-not $ExecutionId -and $Action -ne "OfflinePreflight") { $ExecutionId = New-ExecutionId }
 $Paths = if ($ExecutionId) { Get-ExecutionPaths $ExecutionId } else { $null }
 
@@ -304,15 +331,25 @@ switch ($Action) {
     "Full" {
         Assert-Gate
         $inventory = $null
+        $failurePhase = $null
+        $teardownFailure = $null
         try {
+            $script:DiagnosticPhase = "live_preflight"
             $null = Invoke-LivePreflight $summary $Paths
+            $script:DiagnosticPhase = "provision"
             $inventory = Invoke-Provision $Paths
+            $script:DiagnosticPhase = "firewall_readback"
             Invoke-Readback $inventory $Paths
             $records = Invoke-Readiness $inventory $Paths
             $operator = Get-Content -LiteralPath $Paths.OperatorProbe -Raw | ConvertFrom-Json
             $tokyo = Get-Content -LiteralPath $Paths.TokyoProbe -Raw | ConvertFrom-Json
             $classification = if ($operator.summary.tls -eq "TLS_OK" -and $tokyo.summary.tls -eq "TLS_OK") { "BOTH_OBSERVERS_TLS_OK" } elseif ($tokyo.summary.tls -eq "TLS_OK") { "OPERATOR_PATH_SUSPECTED" } elseif ($operator.summary.tls -eq "TLS_OK") { "TOKYO_PATH_SUSPECTED" } else { "BOTH_OBSERVERS_FAILED" }
             [ordered]@{ executionId = $ExecutionId; classification = $classification; operator = $operator.summary; tokyoRecovery = $tokyo.summary; observedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'") } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $Paths.Evidence "diagnostic-classification.json") -Encoding utf8
+        } catch {
+            $failurePhase = $script:DiagnosticPhase
+            if (Test-Path -LiteralPath $Paths.Evidence) {
+                Write-Artifact $Paths.Failure ([ordered]@{ executionId = $ExecutionId; classification = "DIAGNOSTIC_INCOMPLETE"; failurePhase = $failurePhase; errorType = $_.Exception.GetType().Name; observedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'") })
+            }
         } finally {
             if ($script:ProvisionApplyStarted -and -not $inventory -and (Test-Path -LiteralPath $Paths.Evidence)) {
                 try {
@@ -321,9 +358,16 @@ switch ($Action) {
                     $inventory = $rawInventory | ConvertFrom-Json
                 } catch { }
             }
-            if ($script:ProvisionApplyStarted -and $inventory) { Invoke-Teardown $Paths $inventory }
-            elseif ($script:ProvisionApplyStarted) { throw "Terraform apply started but exact inventory is unavailable; refusing broad cleanup" }
+            $script:DiagnosticPhase = "teardown"
+            try {
+                if ($script:ProvisionApplyStarted -and $inventory) { Invoke-Teardown $Paths $inventory }
+                elseif ($script:ProvisionApplyStarted) { throw "Terraform apply started but exact inventory is unavailable; refusing broad cleanup" }
+            } catch {
+                $teardownFailure = $_.Exception.GetType().Name
+            }
         }
+        if ($teardownFailure) { throw "Diagnostic teardown failed closed after phase: $failurePhase" }
+        if ($failurePhase) { throw "Diagnostic failed closed during phase: $failurePhase" }
         Write-Output "VKE diagnostic completed: $($Paths.Root)"
     }
 }
