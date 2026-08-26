@@ -198,5 +198,7 @@ A fresh read-only Terraform plan passed the exact five-create validator and its
 temporary plan artifacts were deleted without applying any change. The full
 local Java/Python/Web gate and focused contract, controller, Terraform/Helm,
 security, graph, and repository controls passed.
+Remediation revision `160f670` passed all five jobs in real GitHub Actions run
+`32937109761`, including Linux offline Terraform/Helm and independent recovery.
 No paid execution is authorized for this digest yet; R4-405 remains
 `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`.

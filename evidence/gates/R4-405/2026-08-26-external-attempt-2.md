@@ -68,5 +68,7 @@ A fresh read-only Terraform plan passed the exact resource validator with five
 creates and no resource mutation. The temporary plan was deleted. The complete
 local gate then passed Java 113/113, Python 925/925 at 95.09% coverage, Web
 104/104 plus production build, contract/controller tests, Terraform/Helm,
-security, graph, and repository controls. Real GitHub Actions remains mandatory
-before requesting approval of the changed contract.
+security, graph, and repository controls. Remediation revision `160f670` then
+passed all five jobs in real GitHub Actions run `32937109761`, including the
+Linux offline Terraform/Helm gate and independent recovery drill. This CI result
+validates preparation only and does not qualify the external target.

@@ -150,3 +150,6 @@ SHA-256
 `c2a1695104ba7297b51b1c949fa689a4efeb5974dcf1a2122c12f91a57f4e2df`.
 R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING` until that exact
 contract is approved and the credentialed target drill completes.
+The shared VKE firewall remediation revision `160f670` passed all five jobs in
+real GitHub Actions run `32937109761`, including the independent local-CI
+recovery drill. That result remains non-target evidence.
