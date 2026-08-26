@@ -262,3 +262,18 @@ over a private VPC.
 VKE API/TLS, NetworkPolicy, Kubernetes Metrics API, PVC/CSI reclaim, pod/worker
 placement, managed control-plane HA, and Kubernetes rollout remain
 `DEFERRED_VKE`. This design creates no resource and does not qualify R4-406.
+
+## Approved Tokyo VM execution attempt 1
+
+The approved platform-neutral VM contract
+`2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a` was
+consumed once under execution `r4-vm-20260826t182938z-d3255b7d6c`. The exact
+six-resource plan passed locally, but Vultr rejected VPC creation because the
+account had reached its five-VPC-per-location quota. Only the execution firewall
+group and two exact SSH rules were created; all three were destroyed by the
+exact partial teardown plan. Provider identity `404` and zero execution-label
+resources were verified. No recovery VM, backup package, restore, or target DR
+evidence exists. R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`.
+
+Immutable attempt details are recorded at
+`evidence/gates/R4-405/2026-08-27-tokyo-vm-execution-attempt-1.md`.

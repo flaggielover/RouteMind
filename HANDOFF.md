@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - TOKYO VM EXTERNAL VALIDATION HUMAN GATE
+Current Task: NONE - TOKYO VM EXTERNAL VALIDATION BLOCKED BY VULTR VPC QUOTA
 
-Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, immutable attempt/failure/cost/teardown evidence, and no v4. Canonical VM contract SHA-256 is `2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a`; it has not been approved or executed and authorizes no resource, spend, or provider mutation.
+Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, immutable attempt/failure/cost/teardown evidence, and no v4. The VM contract SHA-256 `2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a` was approved and consumed once. Vultr rejected VPC creation at the account five-VPC-per-location quota; only the execution firewall group and two exact rules were created, then exactly destroyed. No VM, VPC, workload, telemetry, or target evidence exists.
 
-Next: approve the exact Tokyo VM contract only after its real Actions run is green. The future boundary is one `vc2-8c-32gb` primary VM, one `vc2-2c-4gb` recovery VM, one `10.77.0.0/24` VPC, one firewall group, two SSH rules, six hours, and USD 3 incremental maximum. VKE-specific checks remain `DEFERRED_VKE`. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+Next: resolve the Vultr `nrt` five-VPC-per-location quota or approve a new exact bounded topology/contract; the consumed VM digest cannot be reused. No retry is authorized automatically. VKE-specific checks remain `DEFERRED_VKE`. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
 
 Tokyo VM preparation: contract
 `contracts/external-validation/r4-vultr-tokyo-vm-external-validation-v1.json`
@@ -804,6 +804,30 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   RM-230 active. Repository total is 105/113. RM-228 remains independently
   eligible, while RM-230 is the active reliability sequence.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
+
+## Tokyo VM execution attempt 1 - 2026-08-27
+
+The exact approved VM contract `2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a` was applied once under execution
+`r4-vm-20260826t182938z-d3255b7d6c`. Read-only provider preflight proved `nrt`
+Tokyo, both approved VM plans, Ubuntu 24.04 x64, the configured SSH key, exact
+operator `/32`, and an authenticated six-hour quote of USD 1.476.
+
+The exact six-create plan passed: two instances, one VPC, one firewall group,
+and two firewall rules. Vultr then rejected the VPC create with HTTP 400 because
+the account had reached the five-VPC-per-location quota. No VM or VPC was
+created. The execution firewall group and its two exact rules were the only
+created identities; Terraform destroyed all three with an exact partial destroy
+plan. Provider readback returned firewall identity `404` and zero resources
+matching the execution label. No workload, telemetry backend, recovery package,
+or customer data ran; conservative execution cost is USD 0.00.
+
+Immutable details are in
+`evidence/gates/R4-405/2026-08-27-tokyo-vm-execution-attempt-1.md`.
+R4-405/R4-406 remain `TARGET_PENDING`; this is not target evidence and does not
+establish a provider or root-cause claim. The consumed contract digest may not
+be reused. A future retry needs a new safe quota/topology decision and a new
+exact Human Gate. R3-325 remains exactly
+`E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
 
 RM-216 closure, RM-217 implementation, RM-218 notes, and RM-219 status: checkpoint `c98ea76` is
 remote-green in Actions run `32649193769`, and RM-217 checkpoint `7234ff6` is
