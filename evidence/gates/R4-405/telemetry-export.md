@@ -174,4 +174,6 @@ OpenSSL certificate generation, 5 VKE endpoint tests, 4 controller cleanup
 guards, 8 contract mutations, offline Terraform/Helm validation, security and
 graph controls, Java 113/113, Python 925/925 at 95.09%, and Web 104/104 plus the
 production build. These are local preparation results only; real CI and a newly
-approved target execution remain mandatory.
+approved target execution remain mandatory. Remediation revision `fb6adcd`
+passed all five jobs in real GitHub Actions run `32934187355`; this validates
+the implementation and preparation but does not qualify the external target.
