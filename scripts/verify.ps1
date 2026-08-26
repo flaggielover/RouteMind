@@ -117,6 +117,11 @@ try {
         throw "Vultr Tokyo external-validation contract self-tests failed"
     }
 
+    python scripts/path_safety_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "External-validation path safety self-tests failed"
+    }
+
     python scripts/r4_external_evidence_test.py
     if ($LASTEXITCODE -ne 0) {
         throw "Vultr Tokyo external-evidence assembler self-tests failed"

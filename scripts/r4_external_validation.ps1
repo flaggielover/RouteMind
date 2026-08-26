@@ -13,6 +13,7 @@ $Root = Split-Path -Parent $PSScriptRoot
 $IacRoot = Join-Path $Root "infra/external-validation/vultr-tokyo"
 $ContractScript = Join-Path $PSScriptRoot "r4_external_validation.py"
 $EvidenceAssembler = Join-Path $PSScriptRoot "r4_external_evidence.py"
+$PathSafetyScript = Join-Path $PSScriptRoot "path_safety.py"
 $ContractPath = Join-Path $Root "contracts/external-validation/r4-vultr-tokyo-external-validation-v1.json"
 $CollectorConfig = Join-Path $Root "infra/observability/otel-collector.yaml"
 $ProbeScript = Join-Path $PSScriptRoot "r4_telemetry_probe.py"
@@ -75,14 +76,11 @@ function Assert-ExternalGate {
             throw "Required external-execution configuration is absent: $name"
         }
     }
-    $privateKey = [IO.Path]::GetFullPath($env:ROUTEMIND_SSH_PRIVATE_KEY_PATH)
-    if (-not (Test-Path -LiteralPath $privateKey -PathType Leaf)) {
-        throw "ROUTEMIND_SSH_PRIVATE_KEY_PATH does not identify a file"
-    }
-    $repoRelative = [IO.Path]::GetRelativePath($Root, $privateKey)
-    if (-not $repoRelative.StartsWith("..")) {
-        throw "The SSH private key must remain outside the repository"
-    }
+    Invoke-Native "python" @(
+        $PathSafetyScript,
+        "--root", $Root,
+        "--candidate-env", "ROUTEMIND_SSH_PRIVATE_KEY_PATH"
+    )
 }
 
 function New-ExecutionId {
@@ -137,7 +135,8 @@ function Initialize-StateDirectory {
 
 function Invoke-OfflinePreflight {
     $summary = Get-ContractSummary
-    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $EvidenceAssembler, $ProbeScript, $WorkloadScript)
+    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $EvidenceAssembler, $PathSafetyScript, $ProbeScript, $WorkloadScript)
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "path_safety_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_external_validation_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "telemetry_export_contract.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "telemetry_export_contract_test.py")
