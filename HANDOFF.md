@@ -830,8 +830,10 @@ exact Human Gate. R3-325 remains exactly
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
 
 The evidence checkpoint `e6e009f` passed all five required jobs in real GitHub
-Actions run `33000804025`; CI validates repository controls only and does not
-qualify the target.
+Actions run `33000804025`; final closure checkpoint `1ac8320` passed all five
+required jobs in run `33001205407`. CI validates repository controls only and
+does not qualify the target. The exact execution state was removed after
+cleanup verification.
 
 RM-216 closure, RM-217 implementation, RM-218 notes, and RM-219 status: checkpoint `c98ea76` is
 remote-green in Actions run `32649193769`, and RM-217 checkpoint `7234ff6` is
