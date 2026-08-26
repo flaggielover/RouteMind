@@ -187,3 +187,21 @@ cleanup evidence only, not Tokyo restore/reconciliation/RPO/RTO evidence.
 R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`; the consumed
 `30c9580e...4a426` digest is not reusable and any retry requires the new v2
 contract Human Gate.
+
+## VKE connectivity diagnostic attempt 2 (v2)
+
+Execution `r4-diag-20260826t134703z-03f22ab836` used approved digest
+`1f78b9d3562a6bac3cfa7b9ad070545e5b1eb2c7c9d88090acc9e765c20dc782` and
+created only the bounded six-resource diagnostic shape. The Operator probe
+recorded `DNS_OK / TCP_OK / TLS_EOF`; a PowerShell JSON case-collision in the
+proxy status object stopped the controller before the Tokyo observer probe.
+No recovery fixture, PostgreSQL restore, reconciliation, PVC, or Kubernetes
+workload ran. The result is `DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE` and
+does not qualify R4-406.
+
+Exact teardown and credentialed cleanup checks completed (four provider `404`
+responses, zero execution-label matches); no resource was retained. The
+attempt quote bound is USD 2.20 and the conservative aggregate is USD 8.80.
+The parser defect is fixed locally with a regression test, but any future
+two-observer retry requires a new contract digest and Human Gate. R4-406
+remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`.

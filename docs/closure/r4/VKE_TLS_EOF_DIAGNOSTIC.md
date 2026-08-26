@@ -226,3 +226,27 @@ has canonical SHA-256
 `1f78b9d3562a6bac3cfa7b9ad070545e5b1eb2c7c9d88090acc9e765c20dc782` and awaits
 a new **VKE TLS EOF DIAGNOSTIC RETRY HUMAN GATE**. Until approved, no paid
 resource execution is authorized.
+
+## Approved v2 diagnostic execution
+
+Execution `r4-diag-20260826t134703z-03f22ab836` ran under the approved v2
+contract digest
+`1f78b9d3562a6bac3cfa7b9ad070545e5b1eb2c7c9d88090acc9e765c20dc782`.
+Authenticated preflight and Terraform readback proved the exact Tokyo
+six-resource shape and two `/32` TCP 6443 rules. The Operator probe retained
+`DNS_OK / TCP_OK / TLS_EOF / HTTP_NOT_ATTEMPTED` with hostname SNI. Before the
+Tokyo observer probe could run, PowerShell rejected the probe JSON because
+case-variant proxy names were duplicate keys. The run therefore remains
+`DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE`; no provider, VPN/TUN, or
+readiness root cause is promoted.
+
+The controller completed exact teardown: four provider identities returned
+`404`, execution-label inventory was zero, and a residual Terraform backup was
+removed by identity-scoped cleanup. The attempt quote bound was USD 2.20 and
+the conservative aggregate bound is USD 8.80 within the approved USD 15 cap;
+no invoice claim is made. Retained sanitized artifacts had zero leakage
+findings. The probe now emits unique case-insensitive proxy keys with a
+regression test. Any further differential experiment requires a fresh bounded
+contract and Human Gate; the v2 digest is consumed. R4-405/R4-406 remain
+target-pending, and R3-325 remains frozen at
+`E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.

@@ -24,15 +24,14 @@ from typing import Any
 from urllib.parse import urlsplit
 
 FAKE_DNS_NETWORK = ipaddress.ip_network("198.18.0.0/15")
+# Keep one canonical key per proxy setting. Windows environment lookups are
+# case-insensitive, and emitting both casing variants creates duplicate JSON
+# keys that PowerShell's ConvertFrom-Json rejects.
 PROXY_NAMES = (
     "HTTP_PROXY",
     "HTTPS_PROXY",
     "ALL_PROXY",
     "NO_PROXY",
-    "http_proxy",
-    "https_proxy",
-    "all_proxy",
-    "no_proxy",
 )
 STATUS_LINE = re.compile(r"^HTTP/1\.[01]\s+(\d{3})(?:\s|$)")
 
@@ -250,7 +249,10 @@ def probe_address(
 def inspect_proxy_environment() -> dict[str, Any]:
     return {
         "environment": {
-            name: "SET" if os.environ.get(name) else "MISSING" for name in PROXY_NAMES
+            name: "SET"
+            if (os.environ.get(name) or os.environ.get(name.lower()))
+            else "MISSING"
+            for name in PROXY_NAMES
         },
         "winhttp": _winhttp_proxy_state(),
         "systemProxy": "NOT_PROBED_BY_THIS_TOOL",

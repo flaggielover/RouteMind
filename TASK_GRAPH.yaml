@@ -1661,5 +1661,18 @@
     {"id":"R4-461","title":"Refresh prior art and assign final Round 4 claim statuses","phase":"R4-S","priority":"critical","depends_on":["R4-439","R4-460"],"status":"pending","classification":"SCIENTIFIC_REVIEW","closure_classification":"THESIS_DEFENSE","workstream":"S","external_gate":true,"human_approval":false,"acceptance":["Every candidate claim maps hypothesis, prior art, data, manifest, metric, test, effect, uncertainty, verification, and reproduction","Only supported and non-subsumed claims can pass","Production, empirical, mathematical, and novelty claims remain distinct"],"gates":["L2-r4-461","L6-evidence-audit","external-evidence"],"evidence":["evidence/gates/R4-461/claim-review.md"],"round3_lineage":["R3-357","R3-359"],"blocked_by":[],"notes":"Promoted from the audited Round 4 graph; completion remains evidence-gated and cannot alter frozen Round 3 scientific outcomes."},
     {"id":"R4-462","title":"Synthesize the thesis package with negative results and reproducibility artifacts","phase":"R4-S","priority":"critical","depends_on":["R4-461"],"status":"pending","classification":"THESIS","closure_classification":"THESIS_DEFENSE","workstream":"S","external_gate":false,"human_approval":false,"acceptance":["Methods, engineering evidence, experiments, statistics, claims, prior art, external validity, reproduction, and limitations are separated","Negative and no-claim outcomes are first-class and append-only","Every figure and table is generated from manifest-linked results"],"gates":["L2-r4-462","L6-evidence-audit"],"evidence":["docs/research/r4/THESIS_EVIDENCE_PACKAGE.md"],"round3_lineage":["R3-358","R3-360","R3-365"],"blocked_by":[],"notes":"Promoted from the audited Round 4 graph; completion remains evidence-gated and cannot alter frozen Round 3 scientific outcomes."},
     {"id":"R4-499","title":"Close Round 4 production and thesis program","phase":"R4-S","priority":"critical","depends_on":["R4-409","R4-413","R4-424","R4-433","R4-436","R4-439","R4-452","R4-460","R4-462"],"status":"pending","classification":"CLOSURE","closure_classification":"CORE_CLOSURE","workstream":"S","external_gate":false,"human_approval":false,"acceptance":["Production, external-provider, product, scientific, agent, reproduction, thesis, conditional, and deferred outcomes are reconciled","Required CI and approved external gates are green, tracked worktree is clean, and main equals origin/main","Closure does not convert an unexecuted conditional or optional task into a pass"],"gates":["L2-r4-499","L6-evidence-audit"],"evidence":["docs/research/r4/ROUND_4_CLOSURE_REPORT.md"],"round3_lineage":["R3-365"],"blocked_by":[],"notes":"Promoted from the audited Round 4 graph; completion remains evidence-gated and cannot alter frozen Round 3 scientific outcomes."}
+  ],
+  "diagnostic_history": [
+    {
+      "execution_id": "r4-diag-20260826t134703z-03f22ab836",
+      "contract_digest": "1f78b9d3562a6bac3cfa7b9ad070545e5b1eb2c7c9d88090acc9e765c20dc782",
+      "status": "DIAGNOSTIC_INCOMPLETE",
+      "failure_phase": "operator_probe",
+      "operator": "DNS_OK / TCP_OK / TLS_EOF / HTTP_NOT_ATTEMPTED",
+      "tokyo_observer": "NOT_RECORDED_BEFORE_FAIL_CLOSED",
+      "cleanup": "404_ALL_IDENTITIES / EXECUTION_LABEL_COUNT_0",
+      "target_claim": "NONE",
+      "next_action": "NEW_BOUNDED_TWO_OBSERVER_CONTRACT_AND_HUMAN_GATE_REQUIRED"
+    }
   ]
 }

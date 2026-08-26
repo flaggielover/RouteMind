@@ -4,6 +4,7 @@ import ssl
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 import r4_vke_connectivity_diagnostic as diagnostic
 
@@ -74,6 +75,13 @@ class VkeConnectivityDiagnosticTests(unittest.TestCase):
         self.assertEqual(report["port"], 6443)
         self.assertEqual(report["tlsServerName"], "cluster.example")
         self.assertTrue(report["sniMatchesEndpointHostname"])
+
+    def test_proxy_environment_uses_unique_case_insensitive_keys(self) -> None:
+        with mock.patch.dict(diagnostic.os.environ, {"all_proxy": "configured"}, clear=False):
+            report = diagnostic.inspect_proxy_environment()
+        self.assertEqual(report["environment"]["ALL_PROXY"], "SET")
+        self.assertNotIn("all_proxy", report["environment"])
+        self.assertEqual(len(report["environment"]), len(set(report["environment"])))
 
 
 if __name__ == "__main__":

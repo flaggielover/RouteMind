@@ -250,3 +250,24 @@ The consumed digest cannot be reused. A remediated v2 controller and contract
 preserve the resource shape while adding observer readiness, retained phase
 evidence, and bounded asynchronous cleanup convergence. R4-405 remains
 `LOCAL_AND_CI_VALIDATED / TARGET_PENDING` pending a new exact Human Gate.
+
+## VKE connectivity diagnostic attempt 2 (v2)
+
+Approved execution `r4-diag-20260826t134703z-03f22ab836` used the fresh v2
+digest `1f78b9d3562a6bac3cfa7b9ad070545e5b1eb2c7c9d88090acc9e765c20dc782`
+and the exact six-resource/two-`/32` diagnostic boundary. The Operator probe
+recorded `DNS_OK / TCP_OK / TLS_EOF / HTTP_NOT_ATTEMPTED` with hostname SNI;
+the controller then failed closed while parsing duplicate case-variant proxy
+keys, before the Tokyo observer probe ran. The result is therefore
+`DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE`, not a provider or operator
+root-cause claim. Full detail is in
+`evidence/gates/R4-405/2026-08-26-vke-connectivity-diagnostic-attempt-2.md`.
+
+Exact teardown completed with four provider `404` checks and zero
+execution-label resources; the residual Terraform backup was removed by
+identity-scoped cleanup. The attempt quote upper bound was USD 2.20 and the
+conservative aggregate bound is USD 8.80 within the USD 15 ceiling. No
+telemetry backend, workload, DR fixture, or target evidence exists. The probe
+now emits unique case-insensitive proxy keys with a regression test. A future
+retry requires a new bounded contract that executes both observers
+independently and a new Human Gate; the v2 digest is consumed.
