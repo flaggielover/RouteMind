@@ -1,0 +1,8 @@
+FROM ghcr.io/astral-sh/uv:0.12.5-python3.13-bookworm-slim
+WORKDIR /opt/routemind/compute-api
+COPY services/compute-api/pyproject.toml services/compute-api/uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
+COPY services/compute-api/src ./src
+RUN uv sync --frozen --no-dev
+USER 10001:10001
+ENTRYPOINT ["uv", "run", "uvicorn", "routemind_compute.api.app:app", "--host", "0.0.0.0", "--port", "18081"]

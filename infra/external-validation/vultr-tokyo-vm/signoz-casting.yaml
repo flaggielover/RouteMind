@@ -1,0 +1,35 @@
+apiVersion: v1alpha1
+kind: Installation
+metadata:
+  name: signoz
+spec:
+  deployment:
+    flavor: compose
+    mode: docker
+  signoz:
+    spec:
+      env:
+        SIGNOZ_ANALYTICS_ENABLED: "false"
+        SIGNOZ_STATSREPORTER_ENABLED: "false"
+        SIGNOZ_STATSREPORTER_COLLECT_IDENTITIES: "false"
+  patches:
+    - target: deployment/compose.yaml
+      operations:
+        - {op: replace, path: /services/ingester/image, value: "signoz/signoz-otel-collector:v0.139.0"}
+        - {op: replace, path: /services/signoz-telemetrystore-migrator/image, value: "signoz/signoz-otel-collector:v0.139.0"}
+        - {op: replace, path: /services/signoz-signoz-0/image, value: "signoz/signoz:v0.139.0"}
+        - {op: replace, path: /services/signoz-metastore-postgres-0/image, value: "postgres:16.10-alpine"}
+        - {op: replace, path: /services/ingester/ports, value: []}
+        - {op: replace, path: /services/signoz-signoz-0/ports, value: ["127.0.0.1:8080:8080"]}
+        - {op: add, path: /services/ingester/mem_limit, value: "2g"}
+        - {op: add, path: /services/ingester/cpus, value: 1.5}
+        - {op: add, path: /services/signoz-metastore-postgres-0/mem_limit, value: "1g"}
+        - {op: add, path: /services/signoz-metastore-postgres-0/cpus, value: 0.5}
+        - {op: add, path: /services/signoz-signoz-0/mem_limit, value: "2g"}
+        - {op: add, path: /services/signoz-signoz-0/cpus, value: 1.5}
+        - {op: add, path: /services/signoz-telemetrykeeper-clickhousekeeper-0/mem_limit, value: "1g"}
+        - {op: add, path: /services/signoz-telemetrykeeper-clickhousekeeper-0/cpus, value: 0.5}
+        - {op: add, path: /services/signoz-telemetrystore-clickhouse-0-0/mem_limit, value: "8g"}
+        - {op: add, path: /services/signoz-telemetrystore-clickhouse-0-0/cpus, value: 3.0}
+        - {op: add, path: /services/signoz-telemetrystore-migrator/mem_limit, value: "1g"}
+        - {op: add, path: /services/signoz-telemetrystore-migrator/cpus, value: 0.5}

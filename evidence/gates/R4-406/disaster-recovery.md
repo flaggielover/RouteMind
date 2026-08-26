@@ -244,3 +244,21 @@ and deletion of all runtime state. Incremental/cumulative conservative bounds
 are USD 2.20/USD 11.00, and the 15-file leakage scan has zero findings. R4-406
 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`. No v4 retry or full
 external validation is authorized.
+
+## VKE freeze and platform-neutral Tokyo VM preparation
+
+The VKE diagnostic line is terminally frozen as
+`EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`, `NO_TARGET_CLAIM`, and
+`NO_ROOT_CAUSE_CLAIM`. R4-406 remains `TARGET_PENDING`; no v4 may be designed or
+executed and all v1/v2/v3 failure, cost, and teardown evidence remains immutable.
+
+PostgreSQL target RPO/RTO, Outbox/Inbox continuity, RabbitMQ topology/replay,
+Redis rebuild, tenant isolation, audit continuity, reconciliation, rollback,
+cost, leakage, and exact cleanup do not require Kubernetes. The prepared
+two-VM Vultr `nrt` contract keeps the source workload and recovery execution
+surface separate and transfers only a digest-bound encrypted synthetic package
+over a private VPC.
+
+VKE API/TLS, NetworkPolicy, Kubernetes Metrics API, PVC/CSI reclaim, pod/worker
+placement, managed control-plane HA, and Kubernetes rollout remain
+`DEFERRED_VKE`. This design creates no resource and does not qualify R4-406.

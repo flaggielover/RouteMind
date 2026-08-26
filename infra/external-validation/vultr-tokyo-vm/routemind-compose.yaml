@@ -1,0 +1,211 @@
+name: routemind-r4-vm-validation
+
+services:
+  log-volume-init:
+    image: alpine:3.22.1
+    user: "0:0"
+    command: ["sh", "-ec", "chown -R 10001:10001 /var/log/routemind && chmod 0750 /var/log/routemind"]
+    volumes:
+      - routemind-logs:/var/log/routemind
+    networks: [routemind-app]
+    restart: "no"
+
+  postgres:
+    image: postgres:18.6-alpine
+    environment:
+      POSTGRES_DB: routemind
+      POSTGRES_USER: routemind
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets: [postgres_password]
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U routemind -d routemind"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    networks: [routemind-app]
+    restart: unless-stopped
+    mem_limit: 2g
+    cpus: 1.5
+
+  rabbitmq:
+    image: rabbitmq:4.3.5-management-alpine
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - export RABBITMQ_DEFAULT_USER=routemind; export RABBITMQ_DEFAULT_PASS="$$(cat /run/secrets/rabbitmq_password)"; exec docker-entrypoint.sh rabbitmq-server
+    secrets: [rabbitmq_password]
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+    networks: [routemind-app]
+    restart: unless-stopped
+    mem_limit: 2g
+    cpus: 1.5
+
+  redis:
+    image: redis:8.10.1-alpine
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - exec redis-server --appendonly yes --requirepass "$$(cat /run/secrets/redis_password)"
+    secrets: [redis_password]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=$$(cat /run/secrets/redis_password) redis-cli ping | grep PONG"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+    networks: [routemind-app]
+    restart: unless-stopped
+    mem_limit: 1g
+    cpus: 0.5
+
+  business-api:
+    build:
+      context: ../../..
+      dockerfile: infra/external-validation/vultr-tokyo-vm/Dockerfile.business-api
+    entrypoint: ["/bin/bash", "-ec"]
+    command:
+      - export POSTGRES_PASSWORD="$$(cat /run/secrets/postgres_password)"; export RABBITMQ_DEFAULT_PASS="$$(cat /run/secrets/rabbitmq_password)"; export REDIS_PASSWORD="$$(cat /run/secrets/redis_password)"; export ROUTEMIND_TELEMETRY_ATTRIBUTION_KEY="$$(cat /run/secrets/telemetry_attribution_key)"; exec java -jar /opt/routemind/business-api.jar
+    environment:
+      ROUTEMIND_POSTGRES_URL: jdbc:postgresql://postgres:5432/routemind
+      POSTGRES_USER: routemind
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_AMQP_PORT: "5672"
+      RABBITMQ_DEFAULT_USER: routemind
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      ROUTEMIND_EDGE_SECURITY_ENABLED: "false"
+      SPRING_APPLICATION_NAME: routemind-business-api
+      ROUTEMIND_OTLP_EXPORT_ENABLED: "true"
+      MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: https://routemind-collector:4318/v1/traces
+      MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_SSL_BUNDLE: routemind
+      SPRING_SSL_BUNDLE_PEM_ROUTEMIND_TRUSTSTORE_CERTIFICATE: file:/run/tls/app-client/ca.crt
+      SPRING_SSL_BUNDLE_PEM_ROUTEMIND_KEYSTORE_CERTIFICATE: file:/run/tls/app-client/tls.crt
+      SPRING_SSL_BUNDLE_PEM_ROUTEMIND_KEYSTORE_PRIVATE_KEY: file:/run/tls/app-client/tls.key
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,info,prometheus
+      LOGGING_FILE_NAME: /var/log/routemind/business-api.log
+    secrets: [postgres_password, rabbitmq_password, redis_password, telemetry_attribution_key]
+    volumes:
+      - ${ROUTEMIND_SECRET_ROOT:?ROUTEMIND_SECRET_ROOT required}/tls:/run/tls:ro
+      - routemind-logs:/var/log/routemind
+    depends_on:
+      log-volume-init: {condition: service_completed_successfully}
+      postgres: {condition: service_healthy}
+      rabbitmq: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 2 bash -c '</dev/tcp/127.0.0.1/18080'"]
+      interval: 10s
+      timeout: 3s
+      retries: 30
+    networks: [routemind-app, routemind-observability]
+    restart: unless-stopped
+    mem_limit: 2g
+    cpus: 1.5
+
+  compute-api:
+    build:
+      context: ../../..
+      dockerfile: infra/external-validation/vultr-tokyo-vm/Dockerfile.compute-api
+    environment:
+      ROUTEMIND_OTLP_EXPORT_ENABLED: "true"
+      OTEL_EXPORTER_OTLP_ENDPOINT: https://routemind-collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      OTEL_EXPORTER_OTLP_CERTIFICATE: /run/tls/app-client/ca.crt
+      OTEL_EXPORTER_OTLP_CLIENT_CERTIFICATE: /run/tls/app-client/tls.crt
+      OTEL_EXPORTER_OTLP_CLIENT_KEY: /run/tls/app-client/tls.key
+      OTEL_SERVICE_NAME: routemind-compute-api
+    volumes:
+      - ${ROUTEMIND_SECRET_ROOT:?ROUTEMIND_SECRET_ROOT required}/tls:/run/tls:ro
+      - routemind-logs:/var/log/routemind
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - exec uv run uvicorn routemind_compute.api.app:app --host 0.0.0.0 --port 18081 >> /var/log/routemind/compute-api.log 2>&1
+    depends_on:
+      log-volume-init: {condition: service_completed_successfully}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:18081/healthz', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 30
+    networks: [routemind-app, routemind-observability]
+    restart: unless-stopped
+    mem_limit: 3g
+    cpus: 2
+
+  routemind-collector:
+    image: otel/opentelemetry-collector-contrib:0.159.0
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./gateway-collector.yaml:/etc/otelcol/config.yaml:ro
+      - ${ROUTEMIND_SECRET_ROOT:?ROUTEMIND_SECRET_ROOT required}/tls:/run/tls:ro
+      - collector-queue:/var/lib/otelcol/queue
+      - routemind-logs:/var/log/routemind:ro
+    depends_on: [backend-ingress]
+    networks: [routemind-app, routemind-observability]
+    restart: unless-stopped
+    mem_limit: 1g
+    cpus: 1
+
+  backend-ingress:
+    image: otel/opentelemetry-collector-contrib:0.159.0
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./backend-ingress-collector.yaml:/etc/otelcol/config.yaml:ro
+      - ${ROUTEMIND_SECRET_ROOT:?ROUTEMIND_SECRET_ROOT required}/tls:/run/tls:ro
+      - backend-queue:/var/lib/otelcol/queue
+    networks: [routemind-observability, signoz-network]
+    restart: unless-stopped
+    mem_limit: 1g
+    cpus: 1
+
+  qualification:
+    image: python:3.13.7-slim
+    command: ["python", "/opt/routemind/r4_workload_qualification.py"]
+    environment:
+      ROUTEMIND_BUSINESS_URL: http://business-api:18080
+      ROUTEMIND_COMPUTE_URL: http://compute-api:18081
+      ROUTEMIND_SOURCE_REVISION: ${ROUTEMIND_SOURCE_REVISION:?ROUTEMIND_SOURCE_REVISION required}
+      ROUTEMIND_QUALIFICATION_ID: ${ROUTEMIND_QUALIFICATION_ID:-vm-validation}
+    volumes:
+      - ../../../scripts/r4_workload_qualification.py:/opt/routemind/r4_workload_qualification.py:ro
+    depends_on:
+      business-api: {condition: service_healthy}
+      compute-api: {condition: service_healthy}
+    networks: [routemind-app]
+    profiles: [qualification]
+    mem_limit: 256m
+    cpus: 0.25
+
+secrets:
+  postgres_password:
+    file: ${ROUTEMIND_SECRET_ROOT:?ROUTEMIND_SECRET_ROOT required}/postgres-password
+  rabbitmq_password:
+    file: ${ROUTEMIND_SECRET_ROOT:?ROUTEMIND_SECRET_ROOT required}/rabbitmq-password
+  redis_password:
+    file: ${ROUTEMIND_SECRET_ROOT:?ROUTEMIND_SECRET_ROOT required}/redis-password
+  telemetry_attribution_key:
+    file: ${ROUTEMIND_SECRET_ROOT:?ROUTEMIND_SECRET_ROOT required}/telemetry-attribution-key
+
+volumes:
+  postgres-data: {}
+  rabbitmq-data: {}
+  redis-data: {}
+  collector-queue: {}
+  backend-queue: {}
+  routemind-logs: {}
+
+networks:
+  routemind-app:
+    internal: true
+  routemind-observability:
+    internal: true
+  signoz-network:
+    external: true
+    name: signoz-network

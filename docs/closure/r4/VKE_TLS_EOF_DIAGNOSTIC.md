@@ -1,5 +1,23 @@
 # RouteMind R4 VKE TLS EOF Diagnostic
 
+## Frozen terminal disposition (2026-08-27)
+
+The owner stopped further VKE diagnostic design and execution. The complete v1,
+v2, and v3 record is immutable and closes with:
+
+```text
+EXTERNAL_VKE_VALIDATION = INCONCLUSIVE
+R4-405 / R4-406 = TARGET_PENDING
+NO_TARGET_CLAIM
+NO_ROOT_CAUSE_CLAIM
+```
+
+No v4 may be designed or executed under this diagnostic line. Historical attempt,
+failure, cost, and teardown evidence must not be deleted, overwritten, or
+reinterpreted. A separate platform-neutral Tokyo VM qualification may test the
+original R4-405/R4-406 properties, but it cannot change this VKE disposition or
+claim VKE validation.
+
 Date: 2026-08-26 (Asia/Shanghai)
 
 Status: `DIAGNOSTIC_PREPARED / ROOT_CAUSE_UNKNOWN / NO_RESOURCE_MUTATION`

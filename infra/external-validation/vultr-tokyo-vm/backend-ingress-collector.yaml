@@ -1,0 +1,38 @@
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+  file_storage:
+    directory: /var/lib/otelcol/queue
+    create_directory: true
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+        tls:
+          ca_file: /run/tls/backend-server/ca.crt
+          cert_file: /run/tls/backend-server/tls.crt
+          key_file: /run/tls/backend-server/tls.key
+          client_ca_file: /run/tls/backend-server/ca.crt
+      http:
+        endpoint: 0.0.0.0:4318
+        tls:
+          ca_file: /run/tls/backend-server/ca.crt
+          cert_file: /run/tls/backend-server/tls.crt
+          key_file: /run/tls/backend-server/tls.key
+          client_ca_file: /run/tls/backend-server/ca.crt
+processors:
+  memory_limiter: {check_interval: 1s, limit_mib: 768, spike_limit_mib: 128}
+  batch: {timeout: 5s, send_batch_size: 512, send_batch_max_size: 1024}
+exporters:
+  otlphttp/signoz:
+    endpoint: http://signoz-ingester:4318
+    timeout: 10s
+    sending_queue: {enabled: true, queue_size: 4096, storage: file_storage}
+    retry_on_failure: {enabled: true, initial_interval: 5s, max_interval: 30s, max_elapsed_time: 300s}
+service:
+  extensions: [health_check, file_storage]
+  pipelines:
+    traces: {receivers: [otlp], processors: [memory_limiter, batch], exporters: [otlphttp/signoz]}
+    metrics: {receivers: [otlp], processors: [memory_limiter, batch], exporters: [otlphttp/signoz]}
+    logs: {receivers: [otlp], processors: [memory_limiter, batch], exporters: [otlphttp/signoz]}

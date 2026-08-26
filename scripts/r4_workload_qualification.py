@@ -7,6 +7,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+import uuid
 from typing import Any
 
 TENANT_KEY = "rtk_bbbbbbbbbbbbbbbbbbbbbbbb"
@@ -37,7 +38,7 @@ def main() -> int:
     qualification_id = os.environ.get("ROUTEMIND_QUALIFICATION_ID", "qualification")
     trace_id = secrets.token_hex(16)
     parent_span_id = secrets.token_hex(8)
-    correlation_id = secrets.token_hex(16)
+    correlation_id = str(uuid.uuid4())
     traceparent = f"00-{trace_id}-{parent_span_id}-01"
     common = {
         "traceparent": traceparent,

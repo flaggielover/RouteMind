@@ -6,11 +6,22 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - V3 DIAGNOSTIC INCOMPLETE CLOSURE; no automatic v4 retry
+Current Task: NONE - TOKYO VM EXTERNAL VALIDATION HUMAN GATE
 
-Task Status: v3 execution `r4-diag-20260826t145702z-d099467849` consumed SHA-256 `e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660` exactly once. Operator raw/canonical evidence is complete at `DNS_OK / TCP_OK / TLS_EOF`; Tokyo raw/canonical failure evidence is independent but terminal `OBSERVER_NOT_READY`, with connectivity phases not recorded. The result is `DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE`, not an operator/provider/network root-cause result. Four exact provider identities are `404`, execution-label resources are zero, runtime state is deleted, and leakage findings are zero. R4-405/R4-406 remain target-pending.
+Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, immutable attempt/failure/cost/teardown evidence, and no v4. Canonical VM contract SHA-256 is `2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a`; it has not been approved or executed and authorizes no resource, spend, or provider mutation.
 
-Next: review `evidence/gates/R4-405/2026-08-26-vke-connectivity-diagnostic-attempt-3.md`. A future experiment would need a new contract/Human Gate and independent persistence of SSH, cloud-init, identity-file, and Python readiness sub-stages; no v4 retry is automatic and the v3 digest cannot be reused. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+Next: approve the exact Tokyo VM contract only after its real Actions run is green. The future boundary is one `vc2-8c-32gb` primary VM, one `vc2-2c-4gb` recovery VM, one `10.77.0.0/24` VPC, one firewall group, two SSH rules, six hours, and USD 3 incremental maximum. VKE-specific checks remain `DEFERRED_VKE`. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+
+Tokyo VM preparation: contract
+`contracts/external-validation/r4-vultr-tokyo-vm-external-validation-v1.json`
+has canonical SHA-256
+`2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a`.
+Its offline gate validates an exact two-VM Terraform inventory, no VKE/block/LB,
+only operator `/32` and private-VPC SSH ingress, real RouteMind Compose services,
+two mTLS Collector boundaries, and pinned SigNoz Foundry rendering. Foundry runs
+with `--no-ledger --no-updater`; SigNoz analytics, stats reporting, and identity
+collection are disabled. Execution-scoped backend credentials and an egress
+block are mandatory target preconditions. No paid resource was created.
 
 The v2 execution's sanitized evidence is under
 `ROUTEMIND_DATA_ROOT/external-validation/r4-diag-20260826t134703z-03f22ab836/`.

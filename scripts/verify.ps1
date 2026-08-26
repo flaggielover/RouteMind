@@ -117,6 +117,21 @@ try {
         throw "Vultr Tokyo external-validation contract self-tests failed"
     }
 
+    python scripts/r4_vm_external_validation.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo VM external-validation preparation contract failed"
+    }
+
+    python scripts/r4_vm_external_validation_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo VM external-validation contract self-tests failed"
+    }
+
+    python scripts/r4_workload_qualification_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo VM actual-workload qualification self-tests failed"
+    }
+
     python scripts/r4_vke_connectivity_contract.py
     if ($LASTEXITCODE -ne 0) {
         throw "VKE TLS EOF diagnostic contract validation failed"

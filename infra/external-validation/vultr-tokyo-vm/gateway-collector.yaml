@@ -1,0 +1,72 @@
+extensions:
+  health_check:
+    endpoint: 0.0.0.0:13133
+  file_storage:
+    directory: /var/lib/otelcol/queue
+    create_directory: true
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+        tls:
+          ca_file: /run/tls/gateway-server/ca.crt
+          cert_file: /run/tls/gateway-server/tls.crt
+          key_file: /run/tls/gateway-server/tls.key
+          client_ca_file: /run/tls/gateway-server/ca.crt
+      http:
+        endpoint: 0.0.0.0:4318
+        tls:
+          ca_file: /run/tls/gateway-server/ca.crt
+          cert_file: /run/tls/gateway-server/tls.crt
+          key_file: /run/tls/gateway-server/tls.key
+          client_ca_file: /run/tls/gateway-server/ca.crt
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: routemind-business-api
+                metrics_path: /actuator/prometheus
+          static_configs: [{targets: [business-api:18080]}]
+        - job_name: routemind-compute-api
+          static_configs: [{targets: [compute-api:18081]}]
+  filelog/business:
+    include: [/var/log/routemind/business-api.log]
+    start_at: beginning
+    include_file_path: true
+    operators:
+      - {type: add, field: 'resource["service.name"]', value: routemind-business-api}
+  filelog/compute:
+    include: [/var/log/routemind/compute-api.log]
+    start_at: beginning
+    include_file_path: true
+    operators:
+      - {type: add, field: 'resource["service.name"]', value: routemind-compute-api}
+processors:
+  memory_limiter: {check_interval: 1s, limit_mib: 768, spike_limit_mib: 128}
+  attributes/tenant_safety:
+    actions:
+      - {key: routemind.tenant_id, action: delete}
+      - {key: tenant.id, action: delete}
+      - {key: enduser.id, action: delete}
+      - {key: user.id, action: delete}
+      - {key: courier.id, action: delete}
+      - {key: principal.id, action: delete}
+  batch: {timeout: 5s, send_batch_size: 512, send_batch_max_size: 1024}
+exporters:
+  otlphttp/backend:
+    endpoint: https://backend-ingress:4318
+    tls:
+      ca_file: /run/tls/gateway-client/ca.crt
+      cert_file: /run/tls/gateway-client/tls.crt
+      key_file: /run/tls/gateway-client/tls.key
+      insecure: false
+      insecure_skip_verify: false
+    timeout: 10s
+    sending_queue: {enabled: true, queue_size: 4096, storage: file_storage}
+    retry_on_failure: {enabled: true, initial_interval: 5s, max_interval: 30s, max_elapsed_time: 300s}
+service:
+  extensions: [health_check, file_storage]
+  pipelines:
+    traces: {receivers: [otlp], processors: [memory_limiter, attributes/tenant_safety, batch], exporters: [otlphttp/backend]}
+    metrics: {receivers: [otlp, prometheus], processors: [memory_limiter, attributes/tenant_safety, batch], exporters: [otlphttp/backend]}
+    logs: {receivers: [otlp, filelog/business, filelog/compute], processors: [memory_limiter, attributes/tenant_safety, batch], exporters: [otlphttp/backend]}

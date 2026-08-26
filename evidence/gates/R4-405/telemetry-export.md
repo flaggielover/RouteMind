@@ -312,3 +312,22 @@ are USD 2.20/USD 11.00. Fifteen retained files passed leakage scanning with
 zero findings. R4-405 remains `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`; no
 telemetry backend, trace, metric, log, leakage-recovery, or target cost evidence
 was produced. No v4 retry is authorized.
+
+## VKE freeze and platform-neutral Tokyo VM preparation
+
+The VKE diagnostic line is now terminally frozen as
+`EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`, `NO_TARGET_CLAIM`, and
+`NO_ROOT_CAUSE_CLAIM`. R4-405 remains `TARGET_PENDING`; v1/v2/v3 attempt,
+failure, cost, and teardown evidence is immutable, and no v4 may be designed or
+executed.
+
+The original R4-405 properties are platform-neutral: real five-boundary
+correlation, tenant-safe cardinality/cost, mTLS OTLP, Collector/backend outage,
+backpressure, export recovery, leakage scanning, and unchanged durable business
+truth. A two-VM Vultr `nrt` Compose contract is prepared to exercise those
+properties without a VKE. VKE API/TLS, NetworkPolicy, Kubernetes Metrics API,
+PVC/CSI, pod/worker placement, managed control-plane HA, and Kubernetes rollout
+remain `DEFERRED_VKE` and cannot be promoted by VM evidence.
+
+This preparation creates no resource and supplies no target evidence. Its detailed
+audit is `evidence/gates/R4-405/2026-08-27-tokyo-vm-external-validation-preparation.md`.
