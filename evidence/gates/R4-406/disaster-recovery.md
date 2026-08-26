@@ -132,8 +132,8 @@ This is cleanup evidence, not target recovery evidence, so R4-406 remains
 
 The corrected shared contract has SHA-256
 `4956d29a5cbd69344a70c4d89514608b1acd32924e0598155c7f90848be77393`.
-Another external attempt requires approval of that exact digest; the existing
-local-CI recovery result cannot substitute for it.
+At that stage, another external attempt required approval of that exact digest;
+the existing local-CI recovery result could not substitute for it.
 
 ## Second Vultr attempt
 
@@ -148,8 +148,20 @@ cleanup evidence, not target recovery evidence. Shared details are in
 The shared contract now includes the missing operator `/32` VKE API rule and has
 SHA-256
 `c2a1695104ba7297b51b1c949fa689a4efeb5974dcf1a2122c12f91a57f4e2df`.
-R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING` until that exact
-contract is approved and the credentialed target drill completes.
+At that stage, R4-406 remained `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING` until
+that exact contract was approved and the credentialed target drill completed.
 The shared VKE firewall remediation revision `160f670` passed all five jobs in
 real GitHub Actions run `32937109761`, including the independent local-CI
 recovery drill. That result remains non-target evidence.
+
+## Third Vultr attempt
+
+Execution `r4-ext-20260826t063255z-18f9f4f51b` applied the approved five-resource
+Tokyo plan under digest `c2a1695104ba7297b51b1c949fa689a4efeb5974dcf1a2122c12f91a57f4e2df`.
+The VKE API still closed TLS before handshake despite the operator-only `/32`
+firewall rule, so no recovery fixture or DR command ran. Kubernetes mutation did
+not start. Teardown destroyed all five resources and credentialed zero-inventory
+checks passed. The attempt's quote bound is USD 3.92 and the three-attempt
+aggregate conservative bound is USD 4.40. R4-406 remains
+`LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`; this is cleanup evidence, not
+Tokyo recovery evidence.

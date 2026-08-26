@@ -200,5 +200,23 @@ local Java/Python/Web gate and focused contract, controller, Terraform/Helm,
 security, graph, and repository controls passed.
 Remediation revision `160f670` passed all five jobs in real GitHub Actions run
 `32937109761`, including Linux offline Terraform/Helm and independent recovery.
-No paid execution is authorized for this digest yet; R4-405 remains
-`LOCAL_AND_CI_VALIDATED / TARGET_PENDING`.
+At that stage, no paid execution had been authorized for this digest; R4-405
+remained `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`.
+
+## Third external attempt
+
+Execution `r4-ext-20260826t063255z-18f9f4f51b` ran under the approved digest
+`c2a1695104ba7297b51b1c949fa689a4efeb5974dcf1a2122c12f91a57f4e2df`. Terraform
+applied exactly five resources, including the VKE-managed operator `/32` TCP
+6443 rule. VKE and all workers became active, but the API endpoint continued to
+close TLS before handshake. The bounded probe was stopped after more than one
+hour; no Kubernetes mutation marker, namespace, PVC, collector, backend,
+telemetry, or target evidence exists. Full teardown destroyed all five
+resources; four provider identities returned 404 and execution-label matches
+were zero. Full sanitized detail is in
+`evidence/gates/R4-405/2026-08-26-external-attempt-3.md`.
+
+The authenticated eight-hour quote bound was USD 3.92; the conservative
+aggregate for all three attempts is USD 4.40. Provider invoice settlement is
+not asserted. R4-405 remains `LOCAL_AND_CI_VALIDATED / TARGET_PENDING` pending
+provider/network diagnosis; this failure is not an operational pass.
