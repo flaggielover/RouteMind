@@ -12,11 +12,11 @@ Round 4 Progress: 9 / 38 tasks passed
 
 Repository Total: 165 / 196 tasks passed
 
-Current Task: NONE - EXTERNAL EXECUTION HUMAN GATE for R4-405/R4-406
+Current Task: R4-406/R4-405 - approved Vultr Tokyo external validation execution
 
 Last Completed: R4-401 - Select a deployment target and freeze SLO and failure-domain assumptions
 
-Current Gate: Vultr Tokyo preparation is complete locally under contract digest `3e320b5b...1a47d`. Self-hosted SigNoz is selected; exact Terraform/Kubernetes topology, mTLS, actual RouteMind synthetic workload, secret injection, retention, USD 15 / eight-hour ceiling, failure/recovery, leakage scan, Evidence Contract, and exact teardown are fail-closed. Authenticated read-only provider preflight passed without resource mutation or creation. R4-405 remains `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`; R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`.
+Current Gate: Vultr Tokyo external execution is approved for exact contract SHA-256 `3e320b5b...1a47d`, with a USD 15 ceiling, eight-hour maximum, and mandatory teardown. Required local configuration, cross-volume key isolation, and authenticated read-only provider gates passed without leaking values. R4-405/R4-406 are `in_progress`; no target claim is allowed until the final sanitized report proves telemetry, recovery, cost, leakage, and cleanup.
 
 CI: R4-405 implementation `49680bd` passed all five jobs in run `32852309878`; preparation revision `10ec537` passed all five jobs in run `32920903229`; cross-volume path remediation `2efb0f6` passed all five jobs in run `32928947867`, including Linux symlink and offline Terraform/Helm gates. Current mTLS/collector digests remain `f063de18...1d5f` / `e1cf3579...6fa7`. Recovery artifact `9564818949` remains separate and does not qualify the target.
 
@@ -28,11 +28,11 @@ Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly defer
 
 Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-347 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
 
-Blocked: R4-405/R4-406 now need only the final USD 15 / eight-hour execution approval, safely configured Vultr API and SSH credentials/non-secret target values, then matching credentialed target and cleanup evidence. R4-410 and R4-422 retain separate provider/notification Human Gates; R4-437 remains conditional and inactive.
+Blocked: R4-410 and R4-422 retain separate provider/notification Human Gates; R4-437 remains conditional and inactive. R4-405/R4-406 are no longer Human-Gate blocked and are executing under the frozen bounded contract.
 
-Human Action Required: at the final `EXTERNAL EXECUTION HUMAN GATE`, securely configure `VULTR_API_KEY` and an SSH private-key path outside Git, provide the existing public SSH key ID and operator IPv4 `/32`, then approve the exact contract digest, resource inventory, maximum eight-hour runtime, and USD 15 ceiling. Do not send secret values in chat.
+Human Action Required: NONE for the approved R4-405/R4-406 execution. Never place configured secret values in chat, Git, logs, evidence, screenshots, or the Progress Capsule.
 
-Next Candidates: none before a Human Gate. Successful R4-405/R4-406 target qualification would recompute R4-407 as the next critical production task; R4-410/R4-422 remain independent blocked gates.
+Next Candidates: complete and tear down the approved R4-405/R4-406 target execution, then recompute R4-407 as the next critical production task. R4-410/R4-422 remain independent blocked gates.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
 - External validation preparation: self-hosted SigNoz in Vultr `nrt`, contract
