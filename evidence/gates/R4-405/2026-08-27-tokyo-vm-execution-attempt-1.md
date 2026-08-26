@@ -62,3 +62,10 @@ The actionable external blocker is the provider account's VPC-per-location
 quota. Existing VPCs were not modified or deleted. A future retry requires a
 new explicit contract/approval or an approved topology that does not violate
 the frozen resource and network boundaries.
+
+## Repository closure
+
+The evidence and task-graph update was committed as `e6e009f` and pushed to
+`main`. GitHub Actions run `33000804025` passed all five required jobs. This CI
+result validates repository controls only; it does not convert the quota-blocked
+attempt into Tokyo target evidence.

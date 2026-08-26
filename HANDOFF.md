@@ -829,6 +829,10 @@ be reused. A future retry needs a new safe quota/topology decision and a new
 exact Human Gate. R3-325 remains exactly
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
 
+The evidence checkpoint `e6e009f` passed all five required jobs in real GitHub
+Actions run `33000804025`; CI validates repository controls only and does not
+qualify the target.
+
 RM-216 closure, RM-217 implementation, RM-218 notes, and RM-219 status: checkpoint `c98ea76` is
 remote-green in Actions run `32649193769`, and RM-217 checkpoint `7234ff6` is
 remote-green in Actions run `32650330974`. V15 adds bounded courier location
