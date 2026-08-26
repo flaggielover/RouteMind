@@ -127,6 +127,16 @@ try {
         throw "VKE TLS EOF diagnostic self-tests failed"
     }
 
+    python scripts/r4_vke_connectivity_plan_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "VKE TLS EOF diagnostic Terraform-plan self-tests failed"
+    }
+
+    python scripts/r4_vke_connectivity_controller_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "VKE TLS EOF diagnostic controller self-tests failed"
+    }
+
     python scripts/path_safety_test.py
     if ($LASTEXITCODE -ne 0) {
         throw "External-validation path safety self-tests failed"

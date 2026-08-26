@@ -24,6 +24,7 @@ $ProbeScript = Join-Path $PSScriptRoot "r4_telemetry_probe.py"
 $WorkloadScript = Join-Path $PSScriptRoot "r4_workload_qualification.py"
 $VkeDiagnosticScript = Join-Path $PSScriptRoot "r4_vke_connectivity_diagnostic.py"
 $VkeDiagnosticContract = Join-Path $PSScriptRoot "r4_vke_connectivity_contract.py"
+$VkeDiagnosticPlan = Join-Path $PSScriptRoot "r4_vke_connectivity_plan.py"
 $DataRoot = if ($env:ROUTEMIND_DATA_ROOT) {
     [IO.Path]::GetFullPath($env:ROUTEMIND_DATA_ROOT)
 } else {
@@ -143,7 +144,7 @@ function Initialize-StateDirectory {
 
 function Invoke-OfflinePreflight {
     $summary = Get-ContractSummary
-    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $EvidenceAssembler, $PathSafetyScript, $TlsIdentityScript, $KubeEndpointScript, $ProbeScript, $WorkloadScript, $VkeDiagnosticScript, $VkeDiagnosticContract)
+    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $EvidenceAssembler, $PathSafetyScript, $TlsIdentityScript, $KubeEndpointScript, $ProbeScript, $WorkloadScript, $VkeDiagnosticScript, $VkeDiagnosticContract, $VkeDiagnosticPlan)
     Invoke-Native "python" @(Join-Path $PSScriptRoot "path_safety_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_tls_identities_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_kube_endpoint_test.py")
@@ -151,6 +152,8 @@ function Invoke-OfflinePreflight {
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_external_validation_test.py")
     Invoke-Native "python" @($VkeDiagnosticContract)
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_diagnostic_test.py")
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_plan_test.py")
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_controller_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "telemetry_export_contract.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "telemetry_export_contract_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "disaster_recovery_test.py")

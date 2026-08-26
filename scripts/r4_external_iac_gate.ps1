@@ -6,6 +6,7 @@ Set-StrictMode -Version Latest
 
 $Root = Split-Path -Parent $PSScriptRoot
 $IacRoot = Join-Path $Root "infra/external-validation/vultr-tokyo"
+$DiagnosticIacRoot = Join-Path $Root "infra/external-validation/vultr-tokyo-diagnostic"
 $tempBase = [IO.Path]::GetFullPath([IO.Path]::GetTempPath())
 $tempRoot = [IO.Path]::GetFullPath((Join-Path $tempBase "routemind-r4-iac-$([guid]::NewGuid().ToString('N'))"))
 if (-not $tempRoot.StartsWith($tempBase, [StringComparison]::OrdinalIgnoreCase)) {
@@ -33,6 +34,9 @@ try {
     Invoke-Checked "terraform" @("-chdir=$IacRoot", "fmt", "-check")
     Invoke-Checked "terraform" @("-chdir=$IacRoot", "init", "-backend=false", "-input=false", "-lockfile=readonly")
     Invoke-Checked "terraform" @("-chdir=$IacRoot", "validate")
+    Invoke-Checked "terraform" @("-chdir=$DiagnosticIacRoot", "fmt", "-check")
+    Invoke-Checked "terraform" @("-chdir=$DiagnosticIacRoot", "init", "-backend=false", "-input=false", "-lockfile=readonly")
+    Invoke-Checked "terraform" @("-chdir=$DiagnosticIacRoot", "validate")
 
     Invoke-Checked "helm" @(
         "pull", "signoz", "--repo", "https://charts.signoz.io", "--version", "0.138.0", "--destination", $tempRoot
@@ -92,6 +96,24 @@ try {
     if ($workload -match 'validation-only-|change-me-local-only') { throw "Tracked workload contains a static credential" }
     if ($queryJob -notmatch 'secretKeyRef' -or $queryJob -match '(?m)^\s*value:\s*[^\s].*password') {
         throw "ClickHouse query credential is not injected from a Kubernetes Secret"
+    }
+    $diagnosticMain = Get-Content -LiteralPath (Join-Path $DiagnosticIacRoot "main.tf") -Raw
+    $diagnosticCloudInit = Get-Content -LiteralPath (Join-Path $DiagnosticIacRoot "cloud-init.yaml.tftpl") -Raw
+    foreach ($pattern in @(
+        'node_quantity\s*=\s*1',
+        'port\s*=\s*"6443"',
+        'subnet_size\s*=\s*32',
+        'vultr_instance\.recovery\.main_ip',
+        'backups\s*=\s*"disabled"',
+        'enable_ipv6\s*=\s*false'
+    )) {
+        if ($diagnosticMain -notmatch $pattern) { throw "VKE diagnostic IaC boundary is absent: $pattern" }
+    }
+    if ($diagnosticMain -match 'vultr_load_balancer|persistent_volume|block_storage|services\.loadbalancers') {
+        throw "VKE diagnostic IaC contains a forbidden persistent or public resource"
+    }
+    if ($diagnosticCloudInit -match 'docker|git clone|customer|production') {
+        throw "VKE diagnostic observer cloud-init contains an out-of-scope dependency"
     }
     Write-Host "PASS: R4 external Terraform and SigNoz Helm offline gate (5 PVC / 55 GiB / 0 LoadBalancer)"
 }

@@ -1,0 +1,13 @@
+#cloud-config
+package_update: true
+packages:
+  - ca-certificates
+  - python3
+  - openssl
+  - curl
+runcmd:
+  - [mkdir, -p, /var/lib/routemind-vke-diagnostic]
+  - [chmod, "0700", /var/lib/routemind-vke-diagnostic]
+  - [sh, -c, "printf '%s\\n' 'execution_id=${execution_id}' 'source_revision=${source_revision}' 'expires_at=${expires_at}' > /var/lib/routemind-vke-diagnostic/identity"]
+  - [chmod, "0600", /var/lib/routemind-vke-diagnostic/identity]
+final_message: "RouteMind VKE connectivity observer ready"
