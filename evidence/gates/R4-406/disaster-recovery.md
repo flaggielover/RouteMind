@@ -205,3 +205,25 @@ attempt quote bound is USD 2.20 and the conservative aggregate is USD 8.80.
 The parser defect is fixed locally with a regression test, but any future
 two-observer retry requires a new contract digest and Human Gate. R4-406
 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`.
+
+## v3 preparation (not target recovery evidence)
+
+The independent-artifact v3 connectivity contract is prepared at
+`contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v3.json`
+with SHA-256
+`e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660`.
+Preparation performs no Vultr writes and creates no recovery fixture, storage,
+or Kubernetes workload. It only defines a bounded two-observer diagnostic:
+each side persists raw output before parsing and records canonical DNS, IP, TCP,
+TLS ClientHello, TLS handshake, and HTTP phases independently. Execution,
+malformed, missing, and aggregation failures are fail-closed and preserve the
+other side's artifact; local tests exercise all six single-point failures.
+
+The exact one-worker Tokyo VKE, recovery observer, firewall, operator SSH
+`/32`, and two VKE API TCP 6443 `/32` rules remain the only permitted resources.
+Maximum runtime is two hours, incremental cost is capped at USD 5.00, and
+teardown requires identity-scoped destroy plus four `404` checks and zero
+execution-label resources. R4-406 remains
+`LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`; v3 preparation is not restore,
+reconciliation, RPO/RTO, or target DR evidence. Approval must be given at
+`VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN GATE` for the exact digest above.

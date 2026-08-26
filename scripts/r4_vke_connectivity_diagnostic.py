@@ -334,13 +334,52 @@ def endpoint_report(
     }
 
 
+def _phase_records(report: dict[str, Any], observed_at: str, retry_count: int) -> dict[str, Any]:
+    summary = report["summary"]
+    endpoint = report["endpoint"]
+    return {
+        "dns": {
+            "status": summary["dns"],
+            "observedAt": observed_at,
+            "details": {"resolvedAddresses": endpoint["resolvedAddresses"]},
+        },
+        "tcp": {
+            "status": summary["tcp"],
+            "observedAt": observed_at,
+            "details": {"probeCount": len(report["probes"])},
+        },
+        "tls_client_hello": {
+            "status": "TLS_HELLO_SENT" if summary["tlsHelloSent"] else "TLS_NOT_ATTEMPTED",
+            "observedAt": observed_at,
+            "details": {"sni": endpoint["tlsServerName"]},
+        },
+        "tls_handshake": {
+            "status": summary["tls"],
+            "observedAt": observed_at,
+            "details": {},
+        },
+        "http": {
+            "status": summary["http"],
+            "observedAt": observed_at,
+            "details": {"path": "/version"},
+        },
+    }
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
     endpoint = parse_endpoint(args.endpoint)
     operator_cidr = os.environ.get("ROUTEMIND_OPERATOR_CIDR")
+    observed_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    observer = getattr(args, "observer", "operator")
+    execution_id = getattr(args, "execution_id", None) or "local-diagnostic"
+    retry_count = getattr(args, "retry_count", 0)
     report: dict[str, Any] = {
-        "schemaVersion": 1,
+        "schemaVersion": 2,
+        "observer": observer,
+        "executionId": execution_id,
+        "retryCount": retry_count,
         "tool": "r4-vke-connectivity-diagnostic",
-        "observedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "observedAt": observed_at,
         "endpoint": endpoint_report(
             endpoint,
             args.connect_host,
@@ -378,6 +417,14 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "HTTP_NOT_ATTEMPTED",
         ),
     }
+    report["phases"] = _phase_records(report, observed_at, retry_count)
+    report["artifactStatus"] = "COMPLETE"
+    report["terminalErrorClassification"] = (
+        report["summary"]["tls"]
+        if report["summary"]["tls"] != "TLS_OK"
+        else report["summary"]["http"]
+    )
+    report["summary"]["terminalErrorClassification"] = report["terminalErrorClassification"]
     return report
 
 
@@ -391,6 +438,9 @@ def main() -> int:
     parser.add_argument("--http-path", default="/version")
     parser.add_argument("--timeout", type=float, default=10.0)
     parser.add_argument("--max-addresses", type=int, default=8)
+    parser.add_argument("--observer", choices=("operator", "tokyo-recovery"), default="operator")
+    parser.add_argument("--execution-id", default="local-diagnostic")
+    parser.add_argument("--retry-count", type=int, default=0)
     parser.add_argument("--json", action="store_true", help="Emit compact JSON")
     args = parser.parse_args()
     if not 0.1 <= args.timeout <= 30:

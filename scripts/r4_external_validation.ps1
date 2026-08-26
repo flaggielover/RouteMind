@@ -144,7 +144,7 @@ function Initialize-StateDirectory {
 
 function Invoke-OfflinePreflight {
     $summary = Get-ContractSummary
-    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $EvidenceAssembler, $PathSafetyScript, $TlsIdentityScript, $KubeEndpointScript, $ProbeScript, $WorkloadScript, $VkeDiagnosticScript, $VkeDiagnosticContract, $VkeDiagnosticPlan)
+    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $EvidenceAssembler, $PathSafetyScript, $TlsIdentityScript, $KubeEndpointScript, $ProbeScript, $WorkloadScript, $VkeDiagnosticScript, $VkeDiagnosticContract, $VkeDiagnosticPlan, (Join-Path $PSScriptRoot "r4_vke_connectivity_artifacts.py"))
     Invoke-Native "python" @(Join-Path $PSScriptRoot "path_safety_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_tls_identities_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_kube_endpoint_test.py")
@@ -153,6 +153,7 @@ function Invoke-OfflinePreflight {
     Invoke-Native "python" @($VkeDiagnosticContract)
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_contract_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_diagnostic_test.py")
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_artifacts_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_plan_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_controller_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "telemetry_export_contract.py")

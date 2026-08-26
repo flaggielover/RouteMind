@@ -250,3 +250,37 @@ regression test. Any further differential experiment requires a fresh bounded
 contract and Human Gate; the v2 digest is consumed. R4-405/R4-406 remain
 target-pending, and R3-325 remains frozen at
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
+
+## Prepared v3 independent-artifact contract
+
+The v2 parser defect is fixed, but its evidence remains immutable and its
+digest `1f78b9d3562a6bac3cfa7b9ad070545e5b1eb2c7c9d88090acc9e765c20dc782`
+cannot be reused. The prepared v3 contract is
+`contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v3.json`
+with canonical SHA-256
+`e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660`.
+
+Its sole diagnostic objective is to persist independent Operator and Tokyo
+observer artifacts for the same VKE endpoint. Each artifact uses canonical
+schema version 2 with exact phase records for DNS, resolved IP, TCP, TLS
+ClientHello, TLS handshake, and HTTP/Kubernetes API, plus timestamps, retries,
+and terminal error classification. Raw probe output is written before parsing;
+execution, malformed JSON, missing artifact, and aggregation failures each
+produce a fail-closed artifact without deleting the other observer's evidence.
+Readiness is bounded and records provider state and first-success/failure
+timestamps. Local regression tests inject all six required single-point
+failures, including malformed Operator/Tokyo output, both execution failures,
+aggregation failure, and one-side missing data.
+
+The resource and network boundary is unchanged: one minimal Tokyo HA VKE with
+one worker, one Tokyo recovery observer, one recovery firewall, one operator
+SSH `/32`, and two exact VKE API TCP 6443 `/32` rules. No RouteMind/SigNoz
+workload, PVC, Block Storage, Load Balancer, or public application ingress is
+allowed. The v3 contract allows at most two hours and USD 5 incremental cost;
+prior conservative spend is USD 8.80 and the aggregate ceiling is USD 15.00.
+No Vultr resource was created, modified, or deleted while preparing v3.
+
+The contract is stopped at `VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN GATE`.
+R4-405/R4-406 remain `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`; this
+preparation cannot qualify telemetry or disaster-recovery evidence. R3-325
+remains exactly `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.

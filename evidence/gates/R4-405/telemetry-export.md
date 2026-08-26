@@ -271,3 +271,26 @@ telemetry backend, workload, DR fixture, or target evidence exists. The probe
 now emits unique case-insensitive proxy keys with a regression test. A future
 retry requires a new bounded contract that executes both observers
 independently and a new Human Gate; the v2 digest is consumed.
+
+## v3 preparation (not target evidence)
+
+The prepared v3 contract is
+`contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v3.json`
+with SHA-256
+`e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660`.
+It is limited to a two-observer connectivity diagnosis and has not been
+executed. Operator and Tokyo execution, raw-output persistence, JSON parsing,
+and aggregation are isolated. Canonical schema version 2 requires exact
+case-sensitive phase and summary keys; malformed, missing, or failed observer
+results are retained as explicit failure artifacts and cannot suppress the
+other side. Local tests cover all six required fault injections.
+
+The exact six-resource Tokyo boundary and two `/32` VKE API rules are retained,
+with no telemetry backend, RouteMind/SigNoz workload, storage, load balancer,
+or public application ingress. Runtime is bounded to two hours with USD 5.00
+incremental cost and mandatory identity-scoped teardown. No Vultr resource was
+created or changed during preparation. R4-405 remains
+`LOCAL_AND_CI_VALIDATED / TARGET_PENDING`; this report does not qualify traces,
+metrics, cost attribution, or external leakage/recovery evidence. The next
+step is approval of the exact digest at `VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN
+GATE`.

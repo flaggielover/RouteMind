@@ -37,6 +37,22 @@ class VkeConnectivityControllerTests(unittest.TestCase):
         self.assertIn('classification = "DIAGNOSTIC_INCOMPLETE"', self.controller)
         self.assertIn("failurePhase", self.controller)
 
+    def test_observers_persist_raw_output_before_canonical_parse_independently(self) -> None:
+        self.assertIn("OperatorRawProbe", self.controller)
+        self.assertIn("TokyoRawProbe", self.controller)
+        self.assertIn("$raw | Set-Content -LiteralPath $Paths.OperatorRawProbe", self.controller)
+        self.assertIn("$raw | Set-Content -LiteralPath $Paths.TokyoRawProbe", self.controller)
+        self.assertIn("Assert-CanonicalProbe", self.controller)
+        self.assertIn("New-ProbeFailureArtifact", self.controller)
+        self.assertIn("$operator = Invoke-OperatorProbe", self.controller)
+        self.assertIn("$tokyo = Invoke-RemoteProbe", self.controller)
+
+    def test_canonical_schema_records_all_required_phases_and_retry_identity(self) -> None:
+        self.assertIn('schemaVersion = 2', self.controller)
+        for phase in ("dns", "tcp", "tls_client_hello", "tls_handshake", "http"):
+            self.assertIn(f'"{phase}"', self.controller)
+        self.assertIn("retryCount", self.controller)
+
     def test_tokyo_observer_requires_identity_and_python_readiness(self) -> None:
         self.assertIn("test -r /var/lib/routemind-vke-diagnostic/identity", self.controller)
         self.assertIn("command -v python3", self.controller)

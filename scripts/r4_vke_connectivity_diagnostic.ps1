@@ -16,8 +16,9 @@ $IacRoot = Join-Path $Root "infra/external-validation/vultr-tokyo-diagnostic"
 $ContractScript = Join-Path $PSScriptRoot "r4_vke_connectivity_contract.py"
 $PlanScript = Join-Path $PSScriptRoot "r4_vke_connectivity_plan.py"
 $ProbeScript = Join-Path $PSScriptRoot "r4_vke_connectivity_diagnostic.py"
+$ArtifactSchemaScript = Join-Path $PSScriptRoot "r4_vke_connectivity_artifacts.py"
 $PathSafetyScript = Join-Path $PSScriptRoot "path_safety.py"
-$ContractPath = Join-Path $Root "contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v2.json"
+$ContractPath = Join-Path $Root "contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v3.json"
 $DataRoot = if ($env:ROUTEMIND_DATA_ROOT) { [IO.Path]::GetFullPath($env:ROUTEMIND_DATA_ROOT) } else { [IO.Path]::GetFullPath((Join-Path (Split-Path -Parent $Root) "RouteMind-Data")) }
 $relativeData = [IO.Path]::GetRelativePath($Root, $DataRoot)
 if (-not $relativeData.StartsWith("..") -and -not [IO.Path]::IsPathRooted($relativeData)) { throw "ROUTEMIND_DATA_ROOT must remain outside the repository" }
@@ -89,6 +90,8 @@ function Get-ExecutionPaths {
         Lifecycle = Join-Path $rootPath "execution-lifecycle.json"
         OperatorProbe = Join-Path $rootPath "sanitized-evidence/operator-connectivity.json"
         TokyoProbe = Join-Path $rootPath "sanitized-evidence/tokyo-recovery-connectivity.json"
+        OperatorRawProbe = Join-Path $rootPath "sanitized-evidence/operator-connectivity.raw"
+        TokyoRawProbe = Join-Path $rootPath "sanitized-evidence/tokyo-recovery-connectivity.raw"
         Timeline = Join-Path $rootPath "sanitized-evidence/readiness-timeline.json"
         Firewall = Join-Path $rootPath "sanitized-evidence/firewall-readback.json"
         Failure = Join-Path $rootPath "sanitized-evidence/diagnostic-failure.json"
@@ -121,12 +124,13 @@ function Assert-Gate {
 
 function Invoke-OfflinePreflight {
     Require-Command "python"
-    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $PlanScript, $ProbeScript)
+    Invoke-Native "python" @("-m", "py_compile", $ContractScript, $PlanScript, $ProbeScript, $ArtifactSchemaScript)
     Invoke-Native "python" @($ContractScript)
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_contract_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_diagnostic_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_plan_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_controller_test.py")
+    Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_vke_connectivity_artifacts_test.py")
     Invoke-Native "python" @(Join-Path $PSScriptRoot "r4_external_validation_test.py")
     [pscustomobject]@{ valid = $true; action = "OfflinePreflight" } | ConvertTo-Json -Compress
 }
@@ -169,7 +173,7 @@ function Invoke-LivePreflight {
         vkeVersion = $version; recoveryOsId = [int]$os.id
         workerPlan = [ordered]@{ id = $worker.id; count = 1; hourlyUsd = [double]$worker.hourly_cost }
         recoveryPlan = [ordered]@{ id = $recovery.id; count = 1; hourlyUsd = [double]$recovery.hourly_cost }
-        maximumRuntimeHours = 2; upperBoundUsdCents = $upper; incrementalCeilingUsdCents = 500; aggregatePriorAttemptsUpperBoundUsdCents = 660; aggregateCeilingUsdCents = 1500; withinApprovedCeiling = $true
+        maximumRuntimeHours = 2; upperBoundUsdCents = $upper; incrementalCeilingUsdCents = 500; aggregatePriorAttemptsUpperBoundUsdCents = 880; aggregateCeilingUsdCents = 1500; withinApprovedCeiling = $true
     } | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $Paths.Quote -Encoding utf8
     [ordered]@{ execution_id = $ExecutionId; source_revision = (git rev-parse HEAD).Trim(); expires_at = $expires; vke_version = $version; recovery_os_id = [int]$os.id; ssh_key_id = $env:ROUTEMIND_VULTR_SSH_KEY_ID; operator_cidr = $env:ROUTEMIND_OPERATOR_CIDR } | ConvertTo-Json | Set-Content -LiteralPath $Paths.Vars -Encoding utf8
     return Get-Content -LiteralPath $Paths.Quote -Raw | ConvertFrom-Json
@@ -224,7 +228,7 @@ function Invoke-Readback {
 }
 
 function Invoke-RemoteProbe {
-    param([Parameter(Mandatory)]$Inventory, [Parameter(Mandatory)]$Paths)
+    param([Parameter(Mandatory)]$Inventory, [Parameter(Mandatory)]$Paths, [int]$RetryCount = 0)
     $key = [IO.Path]::GetFullPath($env:ROUTEMIND_SSH_PRIVATE_KEY_PATH)
     $knownHosts = Join-Path $Paths.Root "known_hosts"
     $opts = @("-i", $key, "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=accept-new", "-o", "UserKnownHostsFile=$knownHosts", "-o", "ConnectTimeout=20")
@@ -236,25 +240,96 @@ function Invoke-RemoteProbe {
         if ($LASTEXITCODE -eq 0) { $ready = $true; break }
         Start-Sleep -Seconds 5
     }
-    if (-not $ready) { throw "Tokyo recovery observer identity and Python readiness did not become available" }
+    if (-not $ready) {
+        "" | Set-Content -LiteralPath $Paths.TokyoRawProbe -Encoding utf8
+        $failure = New-ProbeFailureArtifact "tokyo-recovery" "EXECUTION_FAILED" "OBSERVER_NOT_READY" $RetryCount
+        Write-Artifact $Paths.TokyoProbe $failure
+        return $failure
+    }
     $remoteScript = "/tmp/r4_vke_connectivity_diagnostic.py"
     $script:DiagnosticPhase = "tokyo_probe_copy"
-    Invoke-Native "scp" ($opts + @($ProbeScript, "${hostName}:$remoteScript"))
+    try { Invoke-Native "scp" ($opts + @($ProbeScript, "${hostName}:$remoteScript")) }
+    catch {
+        "" | Set-Content -LiteralPath $Paths.TokyoRawProbe -Encoding utf8
+        $failure = New-ProbeFailureArtifact "tokyo-recovery" "EXECUTION_FAILED" $_.Exception.GetType().Name $RetryCount
+        Write-Artifact $Paths.TokyoProbe $failure
+        return $failure
+    }
     $endpoint = "https://$($Inventory.vke_endpoint):6443"
-    $remoteCommand = "python3 $remoteScript --endpoint '$endpoint' --connect-host '$($Inventory.vke_ip)' --timeout 10 --max-addresses 1 --json"
+    $remoteCommand = "python3 $remoteScript --endpoint '$endpoint' --connect-host '$($Inventory.vke_ip)' --timeout 10 --max-addresses 1 --observer tokyo-recovery --execution-id '$ExecutionId' --retry-count $RetryCount --json"
     $script:DiagnosticPhase = "tokyo_probe_execution"
-    $raw = (& ssh @opts $hostName $remoteCommand) -join "`n"
-    if ($LASTEXITCODE -ne 0) { throw "Tokyo observer probe failed" }
-    $raw | Set-Content -LiteralPath $Paths.TokyoProbe -Encoding utf8
-    return $raw | ConvertFrom-Json
+    $raw = ((& ssh @opts $hostName $remoteCommand 2>&1) | ForEach-Object { [string]$_ }) -join "`n"
+    $exitCode = $LASTEXITCODE
+    $raw | Set-Content -LiteralPath $Paths.TokyoRawProbe -Encoding utf8
+    if ($exitCode -ne 0) {
+        $failure = New-ProbeFailureArtifact "tokyo-recovery" "EXECUTION_FAILED" "SSH_EXIT_$exitCode" $RetryCount
+        Write-Artifact $Paths.TokyoProbe $failure
+        return $failure
+    }
+    try {
+        $parsed = $raw | ConvertFrom-Json
+        Assert-CanonicalProbe $parsed "tokyo-recovery"
+        $parsed | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $Paths.TokyoProbe -Encoding utf8
+        return $parsed
+    } catch {
+        $failure = New-ProbeFailureArtifact "tokyo-recovery" "MALFORMED" $_.Exception.GetType().Name $RetryCount
+        Write-Artifact $Paths.TokyoProbe $failure
+        return $failure
+    }
 }
 
 function Invoke-OperatorProbe {
-    param([Parameter(Mandatory)]$Inventory, [Parameter(Mandatory)]$Paths)
+    param([Parameter(Mandatory)]$Inventory, [Parameter(Mandatory)]$Paths, [int]$RetryCount = 0)
     $script:DiagnosticPhase = "operator_probe"
     $endpoint = "https://$($Inventory.vke_endpoint):6443"
-    Invoke-NativeCapture "python" @($ProbeScript, "--endpoint", $endpoint, "--connect-host", [string]$Inventory.vke_ip, "--kubeconfig", $Paths.Kubeconfig, "--timeout", "10", "--max-addresses", "1", "--json") | Set-Content -LiteralPath $Paths.OperatorProbe -Encoding utf8
-    return Get-Content -LiteralPath $Paths.OperatorProbe -Raw | ConvertFrom-Json
+    $raw = ((& python @($ProbeScript, "--endpoint", $endpoint, "--connect-host", [string]$Inventory.vke_ip, "--kubeconfig", $Paths.Kubeconfig, "--timeout", "10", "--max-addresses", "1", "--observer", "operator", "--execution-id", $ExecutionId, "--retry-count", [string]$RetryCount, "--json") 2>&1) | ForEach-Object { [string]$_ }) -join "`n"
+    $exitCode = $LASTEXITCODE
+    $raw | Set-Content -LiteralPath $Paths.OperatorRawProbe -Encoding utf8
+    if ($exitCode -ne 0) {
+        $failure = New-ProbeFailureArtifact "operator" "EXECUTION_FAILED" "PYTHON_EXIT_$exitCode" $RetryCount
+        Write-Artifact $Paths.OperatorProbe $failure
+        return $failure
+    }
+    try {
+        $parsed = $raw | ConvertFrom-Json
+        Assert-CanonicalProbe $parsed "operator"
+        $parsed | ConvertTo-Json -Depth 20 | Set-Content -LiteralPath $Paths.OperatorProbe -Encoding utf8
+        return $parsed
+    } catch {
+        $failure = New-ProbeFailureArtifact "operator" "MALFORMED" $_.Exception.GetType().Name $RetryCount
+        Write-Artifact $Paths.OperatorProbe $failure
+        return $failure
+    }
+}
+
+function Assert-CanonicalProbe {
+    param([Parameter(Mandatory)]$Artifact, [Parameter(Mandatory)][string]$Observer)
+    if ($Artifact.schemaVersion -ne 2 -or $Artifact.observer -ne $Observer -or [string]::IsNullOrWhiteSpace([string]$Artifact.executionId)) { throw "Canonical probe identity is invalid" }
+    $phaseNames = @($Artifact.phases.PSObject.Properties.Name | Sort-Object)
+    if (($phaseNames -join ",") -ne "dns,http,tcp,tls_client_hello,tls_handshake") { throw "Canonical probe phase schema is invalid" }
+    foreach ($phase in $Artifact.phases.PSObject.Properties) {
+        if ([string]::IsNullOrWhiteSpace([string]$phase.Value.status)) { throw "Canonical probe phase status is missing" }
+    }
+    $summaryNames = @($Artifact.summary.PSObject.Properties.Name | Sort-Object)
+    if (($summaryNames -join ",") -ne "dns,http,tcp,terminalErrorClassification,tls,tlsHelloSent") { throw "Canonical probe summary schema is invalid" }
+    if ($Artifact.artifactStatus -notin @("COMPLETE", "EXECUTION_FAILED", "MALFORMED", "MISSING")) { throw "Canonical probe artifact status is invalid" }
+}
+
+function New-ProbeFailureArtifact {
+    param([Parameter(Mandatory)][string]$Observer, [Parameter(Mandatory)][string]$Status, [Parameter(Mandatory)][string]$ErrorClassification, [int]$RetryCount = 0)
+    $observedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    $phases = [ordered]@{}
+    foreach ($phase in @("dns", "tcp", "tls_client_hello", "tls_handshake", "http")) {
+        $phases[$phase] = [ordered]@{ status = "NOT_RECORDED"; observedAt = $observedAt; details = [ordered]@{} }
+    }
+    return [ordered]@{
+        schemaVersion = 2; tool = "r4-vke-connectivity-diagnostic"; observer = $Observer; executionId = $ExecutionId
+        observedAt = $observedAt; retryCount = $RetryCount; endpoint = [ordered]@{}
+        proxy = [ordered]@{ environment = [ordered]@{}; winhttp = "NOT_RECORDED"; systemProxy = "NOT_PROBED_BY_THIS_TOOL" }
+        probes = @(); phases = $phases
+        summary = [ordered]@{ dns = "DNS_NOT_RECORDED"; tcp = "TCP_NOT_RECORDED"; tlsHelloSent = $false; tls = "TLS_NOT_RECORDED"; http = "HTTP_NOT_ATTEMPTED"; terminalErrorClassification = $ErrorClassification }
+        artifactStatus = $Status; terminalErrorClassification = $ErrorClassification
+    }
 }
 
 function Invoke-Readiness {
@@ -262,10 +337,13 @@ function Invoke-Readiness {
     $records = [System.Collections.Generic.List[object]]::new()
     $delays = @(2, 4, 8, 16, 32, 32)
     for ($i = 0; $i -lt $delays.Count; $i++) {
-        $operator = Invoke-OperatorProbe $Inventory $Paths
-        $tokyo = Invoke-RemoteProbe $Inventory $Paths
-        $provider = Invoke-VultrGet "/kubernetes/clusters/$($Inventory.vke_id)"
-        $providerState = [string]$provider.vke_cluster.status
+        $operator = Invoke-OperatorProbe $Inventory $Paths ($i + 1)
+        $tokyo = Invoke-RemoteProbe $Inventory $Paths ($i + 1)
+        $providerState = "UNKNOWN"
+        try {
+            $provider = Invoke-VultrGet "/kubernetes/clusters/$($Inventory.vke_id)"
+            $providerState = [string]$provider.vke_cluster.status
+        } catch { $providerState = "READBACK_FAILED" }
         $record = [ordered]@{
             observedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
             attempt = $i + 1
@@ -275,7 +353,7 @@ function Invoke-Readiness {
         }
         $records.Add($record)
         Write-Artifact $Paths.Timeline @($records)
-        if ($operator.summary.tls -eq "TLS_OK" -and $tokyo.summary.tls -eq "TLS_OK") { return $records }
+        if ($operator.artifactStatus -eq "COMPLETE" -and $tokyo.artifactStatus -eq "COMPLETE" -and $operator.summary.tls -eq "TLS_OK" -and $tokyo.summary.tls -eq "TLS_OK") { return $records }
         Start-Sleep -Seconds $delays[$i]
     }
     return $records
@@ -343,7 +421,9 @@ switch ($Action) {
             $records = Invoke-Readiness $inventory $Paths
             $operator = Get-Content -LiteralPath $Paths.OperatorProbe -Raw | ConvertFrom-Json
             $tokyo = Get-Content -LiteralPath $Paths.TokyoProbe -Raw | ConvertFrom-Json
-            $classification = if ($operator.summary.tls -eq "TLS_OK" -and $tokyo.summary.tls -eq "TLS_OK") { "BOTH_OBSERVERS_TLS_OK" } elseif ($tokyo.summary.tls -eq "TLS_OK") { "OPERATOR_PATH_SUSPECTED" } elseif ($operator.summary.tls -eq "TLS_OK") { "TOKYO_PATH_SUSPECTED" } else { "BOTH_OBSERVERS_FAILED" }
+            Assert-CanonicalProbe $operator "operator"
+            Assert-CanonicalProbe $tokyo "tokyo-recovery"
+            $classification = if ($operator.artifactStatus -ne "COMPLETE" -or $tokyo.artifactStatus -ne "COMPLETE") { "DIAGNOSTIC_INCOMPLETE" } elseif ($operator.summary.tls -eq "TLS_OK" -and $tokyo.summary.tls -eq "TLS_OK") { "BOTH_OBSERVERS_TLS_OK" } elseif ($tokyo.summary.tls -eq "TLS_OK") { "OPERATOR_PATH_SUSPECTED" } elseif ($operator.summary.tls -eq "TLS_OK") { "TOKYO_PATH_SUSPECTED" } else { "BOTH_OBSERVERS_FAILED" }
             [ordered]@{ executionId = $ExecutionId; classification = $classification; operator = $operator.summary; tokyoRecovery = $tokyo.summary; observedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'") } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $Paths.Evidence "diagnostic-classification.json") -Encoding utf8
         } catch {
             $failurePhase = $script:DiagnosticPhase

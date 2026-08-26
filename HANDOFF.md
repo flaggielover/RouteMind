@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - VKE TLS EOF DIAGNOSTIC NEXT-EXPERIMENT HUMAN GATE for R4-405/R4-406
+Current Task: VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN GATE - preparation complete; no paid execution
 
-Task Status: R4-405/R4-406 remain blocked after approved v2 diagnostic `r4-diag-20260826t134703z-03f22ab836`. The exact six-resource diagnostic shape applied. Operator evidence was `DNS_OK / TCP_OK / TLS_EOF`; a PowerShell duplicate-key parser failure prevented the Tokyo observer artifact, so the result is `DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE` and no root-cause branch is claimed. Exact teardown converged to four provider `404` checks and zero execution-label matches; residual Terraform backup was removed. The authenticated quote upper bound was USD 2.20 and conservative aggregate bound is USD 8.80; no target telemetry or DR evidence exists.
+Task Status: v3 contract `contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v3.json` is prepared with SHA-256 `e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660` and awaits `VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN GATE`. It defines independent Operator/Tokyo execution, raw-first persistence, canonical schema v2, bounded readiness, and fail-closed aggregation. No Vultr resource was created or changed; R4-405/R4-406 remain target-pending. Historical v1/v2 artifacts remain immutable, including v2 `DNS_OK / TCP_OK / TLS_EOF` with Tokyo missing and no root-cause claim.
 
-Next: review `evidence/gates/R4-405/2026-08-26-vke-connectivity-diagnostic-attempt-2.md`. The v2 digest `1f78b9d3562a6bac3cfa7b9ad070545e5b1eb2c7c9d88090acc9e765c20dc782` is consumed and must not be reused. A future differential run needs a new bounded contract/Human Gate that executes both observers independently. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+Next: approve exact v3 digest `e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660` at `VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN GATE` if the bounded experiment is desired. The v3 boundary is one minimal Tokyo VKE/worker, one Tokyo observer, one recovery firewall, one SSH `/32`, two VKE API TCP 6443 `/32` rules, two hours, USD 5.00 incremental ceiling, and mandatory teardown. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
 
 The v2 execution's sanitized evidence is under
 `ROUTEMIND_DATA_ROOT/external-validation/r4-diag-20260826t134703z-03f22ab836/`.
