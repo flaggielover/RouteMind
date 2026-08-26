@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN GATE - preparation complete; no paid execution
+Current Task: NONE - V3 DIAGNOSTIC INCOMPLETE CLOSURE; no automatic v4 retry
 
-Task Status: v3 contract `contracts/external-validation/r4-vultr-tokyo-vke-connectivity-diagnostic-v3.json` is prepared with SHA-256 `e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660` and awaits `VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN GATE`. It defines independent Operator/Tokyo execution, raw-first persistence, canonical schema v2, bounded readiness, and fail-closed aggregation. No Vultr resource was created or changed; R4-405/R4-406 remain target-pending. Historical v1/v2 artifacts remain immutable, including v2 `DNS_OK / TCP_OK / TLS_EOF` with Tokyo missing and no root-cause claim.
+Task Status: v3 execution `r4-diag-20260826t145702z-d099467849` consumed SHA-256 `e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660` exactly once. Operator raw/canonical evidence is complete at `DNS_OK / TCP_OK / TLS_EOF`; Tokyo raw/canonical failure evidence is independent but terminal `OBSERVER_NOT_READY`, with connectivity phases not recorded. The result is `DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE`, not an operator/provider/network root-cause result. Four exact provider identities are `404`, execution-label resources are zero, runtime state is deleted, and leakage findings are zero. R4-405/R4-406 remain target-pending.
 
-Next: approve exact v3 digest `e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660` at `VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN GATE` if the bounded experiment is desired. The v3 boundary is one minimal Tokyo VKE/worker, one Tokyo observer, one recovery firewall, one SSH `/32`, two VKE API TCP 6443 `/32` rules, two hours, USD 5.00 incremental ceiling, and mandatory teardown. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+Next: review `evidence/gates/R4-405/2026-08-26-vke-connectivity-diagnostic-attempt-3.md`. A future experiment would need a new contract/Human Gate and independent persistence of SSH, cloud-init, identity-file, and Python readiness sub-stages; no v4 retry is automatic and the v3 digest cannot be reused. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
 
 The v2 execution's sanitized evidence is under
 `ROUTEMIND_DATA_ROOT/external-validation/r4-diag-20260826t134703z-03f22ab836/`.

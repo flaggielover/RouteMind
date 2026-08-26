@@ -227,3 +227,20 @@ execution-label resources. R4-406 remains
 `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`; v3 preparation is not restore,
 reconciliation, RPO/RTO, or target DR evidence. Approval must be given at
 `VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN GATE` for the exact digest above.
+
+## VKE connectivity diagnostic attempt 3 (v3)
+
+Execution `r4-diag-20260826t145702z-d099467849` consumed approved digest
+`e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660`.
+It deployed no recovery fixture or workload. Operator evidence remained
+`DNS_OK / TCP_OK / TLS_EOF`; Tokyo retained an independent failure artifact but
+never passed the compound observer readiness gate, leaving all connectivity
+phases `NOT_RECORDED`. The result is `DIAGNOSTIC_INCOMPLETE /
+INSUFFICIENT_EVIDENCE`, not Tokyo restore, reconciliation, RPO/RTO, or a
+provider/network root-cause result.
+
+Teardown verified four exact `404` identities, zero execution-label resources,
+and deletion of all runtime state. Incremental/cumulative conservative bounds
+are USD 2.20/USD 11.00, and the 15-file leakage scan has zero findings. R4-406
+remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`. No v4 retry or full
+external validation is authorized.

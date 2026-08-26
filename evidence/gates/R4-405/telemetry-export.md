@@ -294,3 +294,21 @@ created or changed during preparation. R4-405 remains
 metrics, cost attribution, or external leakage/recovery evidence. The next
 step is approval of the exact digest at `VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN
 GATE`.
+
+## VKE connectivity diagnostic attempt 3 (v3)
+
+Approved v3 execution `r4-diag-20260826t145702z-d099467849` used digest
+`e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660`.
+The Operator raw and schema-v2 artifacts independently recorded
+`DNS_OK / TCP_OK / TLS_EOF`; the Tokyo observer independently retained raw and
+schema-v2 failure artifacts but remained `OBSERVER_NOT_READY`, so its DNS/TCP/
+TLS/HTTP phases were not recorded. The paired six-attempt timeline is therefore
+`DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE` and cannot qualify a target or
+promote a network/provider root cause.
+
+Exact teardown produced four `404` checks, zero execution-label resources, and
+deletion of all runtime state. The incremental/cumulative conservative bounds
+are USD 2.20/USD 11.00. Fifteen retained files passed leakage scanning with
+zero findings. R4-405 remains `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`; no
+telemetry backend, trace, metric, log, leakage-recovery, or target cost evidence
+was produced. No v4 retry is authorized.

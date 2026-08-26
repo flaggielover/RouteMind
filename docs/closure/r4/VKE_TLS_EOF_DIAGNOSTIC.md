@@ -284,3 +284,34 @@ The contract is stopped at `VKE CONNECTIVITY DIAGNOSTIC V3 HUMAN GATE`.
 R4-405/R4-406 remain `LOCAL_AND_CI_VALIDATED / TARGET_PENDING`; this
 preparation cannot qualify telemetry or disaster-recovery evidence. R3-325
 remains exactly `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
+
+## Approved v3 diagnostic execution
+
+Execution `r4-diag-20260826t145702z-d099467849` consumed approved v3 digest
+`e1489efe5a21a464389322e29e85da992fee7c0038e4817f4e8392693d16d660`
+exactly once. The exact Tokyo six-resource shape and three `/32` rules applied,
+with no workload, persistent storage, load balancer, or public application
+ingress. The Operator raw and canonical artifacts were retained independently
+and recorded `DNS_OK / TCP_OK / TLS_EOF / HTTP_NOT_ATTEMPTED` across six
+attempts with correct hostname SNI.
+
+The Tokyo path also retained independent raw and canonical failure artifacts,
+but its compound SSH/cloud-init/identity/Python readiness check never passed.
+Its terminal state is `EXECUTION_FAILED / OBSERVER_NOT_READY`, with all
+connectivity phases `NOT_RECORDED`. Provider readback showed the instance and
+VKE active, but the evidence cannot distinguish the readiness sub-stages.
+Therefore v3 is `DIAGNOSTIC_INCOMPLETE / INSUFFICIENT_EVIDENCE`; it does not
+authorize any operator-only, both-failed, both-success, provider, firewall,
+VPN/TUN, CIDR, readiness, or shared-probe root-cause conclusion.
+
+Teardown returned four exact provider `404` results and zero execution-label
+resources. All runtime state was removed. The incremental conservative upper
+bound is USD 2.20 and the cumulative bound is USD 11.00 within the USD 15
+ceiling. Fifteen retained files passed the leakage scan with zero findings and
+their digests validate. Full detail is in
+`evidence/gates/R4-405/2026-08-26-vke-connectivity-diagnostic-attempt-3.md`.
+
+No v4 retry or full RouteMind external validation is authorized. A future
+experiment would need a fresh design and Human Gate that independently records
+each Tokyo readiness sub-stage. R4-405/R4-406 remain target-pending; R3-325
+remains exactly `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
