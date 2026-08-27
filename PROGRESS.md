@@ -34,13 +34,14 @@ Human Action Required: establish HERE account/Japan eligibility and secret readi
 
 Next Candidates: none safely executable. R4-411 is blocked at its independent external Human Gate; R4-422 remains independent and unapproved; R4-437 remains inactive.
 
-Overnight reconciliation (2026-08-28): `HEAD` and `origin/main` were both
-`e2a1b32f215594c471a917b53809e49286c9868f`; the tracked working tree is clean
-and only pre-existing untracked `.codex-tmp/` remains untouched. `scripts/resume.ps1`
-reports 166/196 passed, Round 4 10/38, and `Next eligible: NONE`. The Round 4
-graph gate and all repository control gates pass. No task state, frozen external
-evidence, cost record, retained-resource record, or R3-325 scientific outcome
-changed during this reconciliation.
+Overnight reconciliation (2026-08-28) started from clean `HEAD`/`origin/main`
+at `e2a1b32f215594c471a917b53809e49286c9868f`; the tracked working tree was
+clean and only pre-existing untracked `.codex-tmp/` remained untouched. The
+documentation synchronization commit `1392769` passed real GitHub Actions run
+`33092163129`. `scripts/resume.ps1` reports 166/196 passed, Round 4 10/38, and
+`Next eligible: NONE`. The Round 4 graph gate and all repository control gates
+pass. No task state, frozen external evidence, cost record, retained-resource
+record, or R3-325 scientific outcome changed during this reconciliation.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
 - External validation preparation: self-hosted SigNoz in Vultr `nrt`, contract
