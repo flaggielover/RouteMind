@@ -295,3 +295,19 @@ continuity, rollback, residency, leakage, and cleanup requirements. It is
 preparation only; R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`.
 The v2 canonical SHA-256 is
 `b1cf89b905b6bb42a98eba17de31fb21883ed94139301986a06247acc660a05b`.
+
+## No-new-VPC Tokyo VM v2 execution attempt 1
+
+The v2 digest was consumed once under execution
+`r4-vm-v2-20260827t051846z-7c7bd60337`. Exact two-VM/zero-VPC provisioning and
+provider readback passed, but both active hosts closed SSH before the server
+banner. One bounded recovery reboot did not change the result. Secure bootstrap,
+the encrypted recovery-package pull, target restore, RPO/RTO, reconciliation,
+tenant/audit continuity, and rollback were not executed.
+
+Exact five-resource teardown produced both VM and firewall 404s, zero execution-
+label resources, no VPC mutation, zero leakage findings, and a USD 0.246
+conservative incremental bound. R4-406 remains
+`LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`; no DR target claim or root-cause
+claim is authorized. Immutable details are in
+`evidence/gates/R4-405/2026-08-27-tokyo-vm-v2-execution-attempt-1.md`.

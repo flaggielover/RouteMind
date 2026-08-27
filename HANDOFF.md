@@ -6,11 +6,36 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - TOKYO VM EXTERNAL VALIDATION V2 HUMAN GATE
+Current Task: NONE - ROUND 4 EXTERNAL/HUMAN GATES
 
-Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, immutable attempt/failure/cost/teardown evidence, and no v4. VM v1 SHA-256 `2c6bd38...c608a` is consumed and immutable. The GET-only quota audit found five `nrt` VKE-labelled VPCs and proved no safe reuse; no resource was modified. VM v2 SHA-256 `b1cf89b905b6bb42a98eba17de31fb21883ed94139301986a06247acc660a05b` uses zero VPC creation/reuse and awaits its exact Human Gate.
+Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, and immutable evidence. VM v1 and v2 digests are consumed. VM v2 execution `r4-vm-v2-20260827t051846z-7c7bd60337` proved the exact zero-VPC infrastructure, then failed closed because both active VMs closed SSH before the server banner. No workload or target validation ran. Exact teardown and zero-retention verification passed.
 
-Next: obtain approval for the exact VM v2 digest, two VM plans, `nrt`, six-hour/USD 3 bounds, operator and recovery IPv4 `/32` SSH rules, zero VPC, and exact teardown. No retry is authorized automatically. VKE-specific checks remain `DEFERRED_VKE`. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+Next: no v2 retry is authorized. A human must first resolve or authorize a bounded provider-console/SSH-readiness investigation; any later paid attempt needs a new contract, SHA-256, and Human Gate. VKE-specific checks remain `DEFERRED_VKE`. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+
+## Tokyo VM v2 external execution attempt 1 - 2026-08-27
+
+Contract `b1cf89b...a05b` was consumed once under execution
+`r4-vm-v2-20260827t051846z-7c7bd60337` at source revision `7c7bd60`. Authenticated
+preflight and saved-plan validation passed at USD 1.476/six hours. Terraform
+created exactly two `nrt` VMs, one firewall group, two exact IPv4 `/32` TCP 22
+rules, and zero VPCs. Provider identity, region, plans, rules, and zero-VPC
+readback passed.
+
+Both instances reached `active / ok / running`; direct operator egress matched
+the approved rule and TCP 22 connected, but both connections closed before an
+SSH server banner. One bounded recovery reboot did not change the result. No
+firewall was widened. RouteMind, SigNoz, OTLP, failure injection, backup/restore,
+and DR did not execute, so R4-405/R4-406 remain `TARGET_PENDING` without a root-
+cause claim.
+
+The exact five-delete teardown passed. Both VM identities and the firewall are
+404, execution-label resources are zero, and no VPC was modified. Conservative
+incremental cost is USD 0.246; leakage findings are zero. Only sanitized
+evidence remains under `ROUTEMIND_DATA_ROOT/external-validation/r4-vm-v2-
+20260827t051846z-7c7bd60337/`, with artifact-manifest SHA-256
+`a67384b4b6fdaeee6a1738a7abaf47a1e6f9eafc70e03af206bedada26f1dcf6`.
+Repository evidence is `evidence/gates/R4-405/2026-08-27-tokyo-vm-v2-
+execution-attempt-1.md`.
 
 ## Tokyo VM v2 no-new-VPC preparation - 2026-08-27
 
