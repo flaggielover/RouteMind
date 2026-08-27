@@ -6,11 +6,37 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - R4-410 / R4-422 INDEPENDENT HUMAN GATES
+Current Task: NONE - SSH READINESS / R4-410 / R4-422 HUMAN GATES
 
-Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, and immutable evidence. VM v1 and v2 digests are consumed. VM v2 execution `r4-vm-v2-20260827t051846z-7c7bd60337` proved the exact zero-VPC infrastructure, then failed closed because both active VMs closed SSH before the server banner. No workload or target validation ran. Exact teardown and zero-retention verification passed. Commit `919d7d1` passed run `33043712819`; independent Human Gate preparation `c1ad450` passed all five jobs in real GitHub Actions run `33045007626`.
+Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, and immutable evidence. VM v1/v2 digests are consumed. VM v2 proved exact infrastructure but both active VMs closed before the SSH banner; one reboot was unchanged and exact teardown passed. The prepared local-only SSH-readiness contract `2ba069c9...fbb7` isolates ten stages with one minimal VM and cannot promote target status. It is unapproved/unexecuted; no new cloud resource or charge exists.
 
-Next: no v2 retry is authorized. A human must first resolve or authorize a bounded provider-console/SSH-readiness investigation; any later paid attempt needs a new contract, SHA-256, and Human Gate. VKE-specific checks remain `DEFERRED_VKE`. R4-410 has zero-call candidate contract `7f71f0...75d7`; R4-422 has zero-send candidate contract `0cc9bc...4ffb`. Both remain unapproved independent Human Gates and authorize no live execution. R4-437 is inactive because its conditional pickup-delivery scope trigger is false. No safe eligible task remains. Keep `.codex-tmp/` untouched and untracked.
+Next: no v2 retry is authorized. The Tokyo VM lane requires approval of exact SSH-readiness contract SHA-256 `2ba069c9886c69f1b38a22740c6c2367bd21a2bd129e8ff6c8148f336a46fbb7`; it proposes one `vc2-1c-1gb` in `nrt`, one firewall and one operator `/32` SSH rule, 60 minutes, USD 1 maximum, and exact teardown. R4-410 `7f71f0...75d7` and R4-422 `0cc9bc...4ffb` remain separate unapproved gates. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+
+## Tokyo VM SSH-readiness diagnostic v1 preparation - 2026-08-27
+
+The v2 startup audit found no explicit sshd/network restart, reboot, user
+creation, or authorized-key mutation. Its package update/install work is a
+possible timing or contention factor, not a root-cause claim. TCP success never
+proved SSH banner, KEX, host identity, authentication, cloud-init, or bootstrap
+readiness, so the root cause stays `UNKNOWN`.
+
+Contract
+`contracts/external-validation/r4-vultr-tokyo-vm-ssh-readiness-diagnostic-v1.json`
+has canonical SHA-256
+`2ba069c9886c69f1b38a22740c6c2367bd21a2bd129e8ff6c8148f336a46fbb7`.
+It freezes one `vc2-1c-1gb`, Ubuntu 24.04 LTS x64 OS ID 2284, user `root`,
+the configured ED25519 public fingerprint, one exact operator `/32` TCP 22
+rule, 60 minutes, and USD 1. It creates no VPC, storage, load balancer, public
+HTTP endpoint, RouteMind, SigNoz, or OTLP stack.
+
+The operator raw probe and guest local/console readiness artifact are atomic and
+independent; malformed/missing/execution/aggregation failures cannot delete the
+other evidence. Strict host-key checking is mandatory and `accept-new` is
+forbidden. The A-P matrix remains conservative. Local gates passed 21 artifact/protocol
+and fault tests, seven contract mutations, five plan mutations, PowerShell JSON
+and external-key checks, and a real Terraform `3 create / 0 change / 0 destroy`
+no-apply plan. Preparation evidence is
+`evidence/gates/R4-405/2026-08-27-tokyo-vm-ssh-readiness-diagnostic-preparation.md`.
 
 ## Independent provider Human Gate preparation - 2026-08-27
 

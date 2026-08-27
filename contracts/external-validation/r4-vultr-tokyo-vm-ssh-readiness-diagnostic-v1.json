@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-vultr-tokyo-vm-ssh-readiness-diagnostic-v1",
+  "status": "PREPARED_NOT_APPROVED_NOT_EXECUTED",
+  "preparedAt": "2026-08-27",
+  "purpose": "Distinguish the earliest failed VM, TCP, SSH protocol, authentication, cloud-init, or bootstrap-readiness stage without deploying RouteMind.",
+  "historicalFreeze": {
+    "vmV2ExecutionId": "r4-vm-v2-20260827t051846z-7c7bd60337",
+    "vmV2Result": "FAIL_CLOSED_AT_SECURE_BOOTSTRAP",
+    "primaryObservation": "TCP22_REACHABLE_SSH_CLOSED_BEFORE_BANNER_OR_KEX",
+    "recoveryObservation": "TCP22_REACHABLE_SSH_CLOSED_BEFORE_BANNER_OR_KEX",
+    "boundedRebootResult": "UNCHANGED",
+    "retainedVultrResources": 0,
+    "vmV2ConservativeCostUsdCents": 24.6,
+    "cumulativeConservativeExternalCostUsdCents": 1124.6,
+    "r4_405": "LOCAL_AND_CI_VALIDATED / TARGET_PENDING / NO_TARGET_CLAIM",
+    "r4_406": "LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING / NO_TARGET_CLAIM",
+    "vke": "EXTERNAL_VKE_VALIDATION_INCONCLUSIVE",
+    "rootCause": "UNKNOWN",
+    "historicalEvidenceImmutable": true
+  },
+  "approvalBoundary": {
+    "provider": "Vultr",
+    "region": "nrt",
+    "dataResidency": "Tokyo, Japan",
+    "resourceCreationAuthorized": false,
+    "spendAuthorized": false,
+    "liveMutationCallsAuthorized": false,
+    "terraformApplyAuthorized": false,
+    "requiredHumanGate": "ROUTEMIND TOKYO VM SSH-READINESS HUMAN GATE",
+    "approvalDigestEnvironmentVariable": "ROUTEMIND_VM_SSH_READINESS_V1_APPROVAL_DIGEST",
+    "oldDigestReuseAllowed": false
+  },
+  "infrastructure": {
+    "resources": [
+      {
+        "id": "ssh-readiness-diagnostic-vm",
+        "type": "Vultr Cloud Compute",
+        "quantity": 1,
+        "region": "nrt",
+        "plan": "vc2-1c-1gb",
+        "vcpu": 1,
+        "ramMiB": 1024,
+        "localDiskGiB": 25,
+        "imageId": 2284,
+        "image": "Ubuntu 24.04 LTS x64",
+        "expectedSshUsername": "root",
+        "role": "SSH readiness diagnostic only"
+      }
+    ],
+    "terraformResourceCounts": {
+      "vultr_firewall_group": 1,
+      "vultr_firewall_rule": 1,
+      "vultr_instance": 1,
+      "vultr_vpc": 0
+    },
+    "vkeClusters": 0,
+    "loadBalancers": 0,
+    "blockStorageVolumes": 0,
+    "additionalInstances": 0,
+    "routeMindDeploymentAllowed": false,
+    "signozDeploymentAllowed": false,
+    "packageInstallationAllowed": false,
+    "hostRebootAllowed": false,
+    "sshdOrNetworkRestartAllowed": false,
+    "maximumRuntimeMinutes": 60
+  },
+  "network": {
+    "publicIngressRules": [
+      {
+        "id": "operator-ssh",
+        "source": "ROUTEMIND_OPERATOR_CIDR",
+        "subnetSize": 32,
+        "protocol": "tcp",
+        "port": 22
+      }
+    ],
+    "forbiddenCidrs": ["0.0.0.0/0", "::/0"],
+    "publicHttpEndpoints": 0,
+    "publicApplicationEndpoints": 0,
+    "publicOtlpEndpoints": 0,
+    "consoleChannel": "Vultr out-of-band console may retain the sanitized cloud-init marker; no public observer endpoint is created."
+  },
+  "sshIdentity": {
+    "providerSshKeyIdEnvironmentVariable": "ROUTEMIND_VULTR_SSH_KEY_ID",
+    "privateKeyPathEnvironmentVariable": "ROUTEMIND_SSH_PRIVATE_KEY_PATH",
+    "privateKeyMustBeOutsideRepository": true,
+    "publicKeyType": "ED25519",
+    "expectedPublicKeySha256": "SHA256:JHiQkjaVyp5ft91S12iyyCbDB6PCAGhDqYTVnMJAUeI",
+    "providerPublicKeyFingerprintMustMatch": true,
+    "imageExpectedUsername": "root",
+    "terraformUserScheme": "root",
+    "strictHostKeyCheckingRequired": true,
+    "acceptNewAllowed": false,
+    "hostKeySource": "guest artifact emitted to the provider console or another independently retained out-of-band source",
+    "hostKeyPinningProcedure": "Acquire the ED25519 public host key with ssh-keyscan, require its SHA-256 to equal the independently retained console fingerprint, atomically write the exact host binding, then use StrictHostKeyChecking=yes.",
+    "hostKeyUnverifiedDisposition": "STOP_BEFORE_AUTH_AND_CLASSIFY_SSH_HOST_KEY_ABSENT",
+    "passwordAuthenticationAllowed": false,
+    "secretValueLoggingAllowed": false
+  },
+  "readinessStateMachine": {
+    "orderedStages": [
+      "VM_CREATED",
+      "PUBLIC_IP_ASSIGNED",
+      "TCP22_REACHABLE",
+      "SSH_BANNER_RECEIVED",
+      "SSH_KEX_STARTED",
+      "SSH_HOST_KEY_VERIFIED",
+      "SSH_AUTH_STARTED",
+      "SSH_AUTHENTICATED",
+      "CLOUD_INIT_COMPLETE",
+      "ROUTEMIND_BOOTSTRAP_READY"
+    ],
+    "tcpOkIsSufficient": false,
+    "successRequiresEveryStage": true,
+    "rootCauseOnIncompleteEvidence": "UNKNOWN",
+    "terminalClassifications": [
+      "READY",
+      "VM_NOT_CREATED",
+      "PUBLIC_IP_MISSING",
+      "TCP_TIMEOUT",
+      "TCP_RESET",
+      "TCP_ERROR",
+      "SSH_BANNER_NOT_RECEIVED",
+      "SSH_BANNER_MALFORMED",
+      "SSH_KEX_TIMEOUT",
+      "SSH_HOST_KEY_ABSENT",
+      "SSH_HOST_KEY_CHANGED",
+      "SSH_HOST_KEY_MISMATCH",
+      "SSH_AUTH_REJECTED",
+      "SSH_USERNAME_REJECTED",
+      "CLOUD_INIT_INCOMPLETE",
+      "BOOTSTRAP_NOT_READY",
+      "UNKNOWN"
+    ]
+  },
+  "polling": {
+    "maximumRuntimeMinutes": 60,
+    "phases": [
+      {"id": "provider-readiness", "maximumMinutes": 10, "intervalSeconds": 15},
+      {"id": "tcp22", "maximumMinutes": 10, "intervalSeconds": 10},
+      {"id": "banner-and-kex", "maximumMinutes": 15, "intervalSeconds": 15},
+      {"id": "host-key-and-auth", "maximumMinutes": 15, "intervalSeconds": 30},
+      {"id": "cloud-init-and-bootstrap", "maximumMinutes": 10, "intervalSeconds": 30}
+    ],
+    "backoffSeconds": [0, 5, 10, 15, 30, 60],
+    "maximumSingleConnectSeconds": 10,
+    "unboundedRetryAllowed": false,
+    "automaticRebootAllowed": false
+  },
+  "guestReadiness": {
+    "localArtifact": "/var/lib/routemind-ssh-readiness/guest-readiness.json",
+    "consolePrefix": "ROUTEMIND_SSH_READINESS_JSON_BASE64=",
+    "consolePayloadContainsSecrets": false,
+    "atomicWriteRequired": true,
+    "records": [
+      "cloud-init status",
+      "ssh.service state",
+      "TCP 22 listener state",
+      "sshd configuration syntax status",
+      "SSH host public-key fingerprints",
+      "authorized public-key fingerprints",
+      "root SSH directory and authorized_keys permissions",
+      "expected-key fingerprint match",
+      "UTC timestamp"
+    ],
+    "packageUpdate": false,
+    "packageUpgrade": false,
+    "sshdMutation": false,
+    "authorizedKeysMutation": false,
+    "networkMutation": false,
+    "reboot": false,
+    "limitation": "If neither strict SSH authentication nor provider-console retention is available, the local guest artifact is not claimable as external evidence and the diagnostic remains incomplete."
+  },
+  "artifactIndependence": {
+    "rawBeforeAggregation": true,
+    "perTargetAtomicWrite": true,
+    "oneTargetFailureMayBlockOtherTarget": false,
+    "aggregationMayDeleteRaw": false,
+    "malformedArtifactDisposition": "PRESERVE_RAW_AND_MARK_MALFORMED",
+    "missingArtifactDisposition": "MARK_MISSING_WITHOUT_DELETING_OTHER_TARGETS",
+    "actualContractTargets": ["ssh-readiness-diagnostic-vm"],
+    "multiTargetHarnessStillTested": true
+  },
+  "rootCauseMatrix": [
+    {"id": "A", "candidate": "sshd not ready", "support": "both v2 hosts accepted TCP then closed before banner", "contradiction": "provider state was active and one reboot was unchanged", "confidence": "LOW", "discriminatingTest": "guest ssh.service/listener state plus banner timeline"},
+    {"id": "B", "candidate": "cloud-init restarted sshd or networking", "support": "v2 used first-boot package operations", "contradiction": "v2 cloud-init had no explicit sshd, network, or reboot command", "confidence": "LOW", "discriminatingTest": "minimal no-package cloud-init and guest journal/marker"},
+    {"id": "C", "candidate": "sshd failed", "support": "pre-banner close is compatible with daemon failure or a non-sshd listener", "contradiction": "TCP 22 remained reachable", "confidence": "LOW", "discriminatingTest": "guest service/listener/host-key state"},
+    {"id": "D", "candidate": "authorized_keys absent or wrong permissions", "support": "key identity was not proven in guest evidence", "contradiction": "authorization normally occurs after banner and KEX", "confidence": "VERY_LOW_FOR_PRE_BANNER_FAILURE", "discriminatingTest": "fingerprint and permission evidence after strict host-key verification"},
+    {"id": "E", "candidate": "wrong SSH key", "support": "provider key-to-local-key equality was not retained in v2 target evidence", "contradiction": "key rejection normally occurs after banner and KEX", "confidence": "VERY_LOW_FOR_PRE_BANNER_FAILURE", "discriminatingTest": "local/provider/guest public fingerprint equality"},
+    {"id": "F", "candidate": "wrong default username", "support": "image username semantics require explicit confirmation", "contradiction": "username rejection occurs after banner and KEX", "confidence": "VERY_LOW_FOR_PRE_BANNER_FAILURE", "discriminatingTest": "freeze image user_scheme=root and classify username rejection separately"},
+    {"id": "G", "candidate": "MaxStartups or rate limiting", "support": "sshd may drop unauthenticated connections before authentication", "contradiction": "v2 used bounded low-rate attempts on two new hosts", "confidence": "LOW", "discriminatingTest": "single-client phased polling plus guest sshd effective config/journal"},
+    {"id": "H", "candidate": "image first-boot regeneration delay", "support": "host-key generation can delay sshd on first boot", "contradiction": "one bounded reboot did not change v2 behavior", "confidence": "LOW", "discriminatingTest": "host-key existence timestamps and post-cloud-init marker"},
+    {"id": "I", "candidate": "provider firewall interaction", "support": "firewall was attached to both v2 hosts", "contradiction": "exact provider readback passed and TCP 22 connected", "confidence": "LOW", "discriminatingTest": "one exact /32 rule plus provider readback and TCP/banner split"},
+    {"id": "J", "candidate": "fail2ban or equivalent host policy", "support": "a host policy can reset pre-auth connections", "contradiction": "fresh images and low-rate attempts make accumulated bans unlikely", "confidence": "LOW", "discriminatingTest": "guest process/rule/journal evidence without changing policy"},
+    {"id": "K", "candidate": "cloud-init package-manager deadlock", "support": "v2 requested package update and six packages", "contradiction": "package activity should not inherently suppress an already-running sshd", "confidence": "LOW_TO_MEDIUM", "discriminatingTest": "no-package diagnostic image and cloud-init completion timeline"},
+    {"id": "L", "candidate": "sshd configuration syntax or startup failure", "support": "no guest sshd validation existed in v2", "contradiction": "stock Ubuntu image should ship a valid configuration", "confidence": "LOW", "discriminatingTest": "sshd service state and sshd -t result from guest artifact or strict session"},
+    {"id": "M", "candidate": "host-key generation delay or failure", "support": "no server banner/KEX and no host-key evidence were retained", "contradiction": "v2 reboot was unchanged", "confidence": "LOW", "discriminatingTest": "host public-key fingerprint and creation timestamp"},
+    {"id": "N", "candidate": "provider image regression", "support": "two instances using the same image showed the same symptom", "contradiction": "shared harness and operator path are alternative shared causes", "confidence": "LOW", "discriminatingTest": "minimal image-isolated run plus provider-console guest evidence"},
+    {"id": "O", "candidate": "operator network middlebox, VPN, or TUN", "support": "both connections originated from one operator path", "contradiction": "TCP connected and the symptom alone does not prove path interference", "confidence": "LOW", "discriminatingTest": "provider-console guest readiness combined with operator banner/KEX stages"},
+    {"id": "P", "candidate": "provider platform networking anomaly", "support": "two fresh active instances had the same pre-banner close", "contradiction": "no independent guest or network vantage evidence exists", "confidence": "LOW", "discriminatingTest": "guest listener readiness plus bounded operator protocol timeline; escalate only with retained provider identities"}
+  ],
+  "cost": {
+    "currency": "USD",
+    "publicCatalogObservedAt": "2026-08-27",
+    "hourlyUsdCents": 0.7,
+    "catalogRuntimeUpperBoundUsdCents": 0.7,
+    "incrementalExecutionCeilingUsdCents": 100,
+    "cumulativeConservativeBeforeUsdCents": 1124.6,
+    "cumulativeCeilingAfterUsdCents": 1224.6,
+    "authenticatedQuoteRequiredBeforeApply": true,
+    "abortIfQuoteExceedsIncrementalCeiling": true,
+    "spendAuthorized": false
+  },
+  "evidenceContract": {
+    "schema": "r4-vm-ssh-readiness-evidence.v1",
+    "requiredArtifacts": [
+      "approval-digest-verification",
+      "authenticated-plan-and-os-quote",
+      "local-provider-guest-key-fingerprint-match",
+      "resource-and-firewall-readback",
+      "provider-readiness-timeline",
+      "raw-operator-probe",
+      "raw-guest-readiness-or-console-marker",
+      "stage-aggregate",
+      "root-cause-matrix-update",
+      "cost-record",
+      "leakage-scan",
+      "teardown-inventory",
+      "provider-identity-404",
+      "execution-label-zero-resource-inventory",
+      "artifact-manifest"
+    ],
+    "timestampsMustBeUtc": true,
+    "artifactSha256Required": true,
+    "secretValuesForbidden": true,
+    "mockEvidenceAcceptedAsExternal": false,
+    "tcpOkAcceptedAsSshReady": false,
+    "partialResultAcceptedAsTargetValidation": false,
+    "diagnosticMayPromoteR4_405OrR4_406": false
+  },
+  "teardown": {
+    "alwaysAttemptAfterCreate": true,
+    "ownedResources": ["one diagnostic VM", "one firewall group", "one exact /32 rule"],
+    "deleteOrder": ["diagnostic VM", "firewall group and owned rule"],
+    "requiredVerification": ["exact provider identities return 404", "execution-label resource count equals zero"],
+    "broadDeleteAllowed": false,
+    "retainResourcesAllowed": false,
+    "teardownFailureDisposition": "FAIL_CLOSED_AND_REPORT_EXACT_RETAINED_IDENTITY"
+  },
+  "stopConditions": [
+    "contract digest mismatch",
+    "region is not nrt",
+    "plan, image, username, key fingerprint, resource count, or firewall boundary mismatch",
+    "authenticated quote exceeds USD 1 incremental ceiling",
+    "strict host-key source is unavailable before authentication",
+    "secret may enter Git, logs, console payload, or evidence",
+    "teardown cannot be guaranteed",
+    "provider behavior cannot be safely reconciled with the exact plan"
+  ],
+  "automation": {
+    "contractValidator": "scripts/r4_vm_ssh_readiness_contract.py",
+    "artifactLibrary": "scripts/r4_ssh_readiness.py",
+    "boundedProbe": "scripts/r4_vm_ssh_readiness_probe.py",
+    "planValidator": "scripts/r4_vm_ssh_readiness_plan.py",
+    "offlineGate": "scripts/r4_vm_ssh_readiness_iac_gate.ps1",
+    "iacRoot": "infra/external-validation/vultr-tokyo-vm-ssh-readiness-v1",
+    "defaultAction": "OFFLINE_ONLY",
+    "terraformApplyAvailableInPreparationAutomation": false,
+    "mutatingActionsRequireFreshHumanGate": true,
+    "exactSavedPlanRequiredAfterApproval": true,
+    "exactTeardownRequired": true
+  },
+  "scientificBoundary": {
+    "frozenR3_325": "E-PASS / X-PASS / S-FAIL / C-NO-CLAIM",
+    "rerunAllowed": false,
+    "externalDiagnosticIsScientificEvidence": false,
+    "scientificClaimEstablished": false
+  }
+}
