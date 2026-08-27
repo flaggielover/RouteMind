@@ -12,8 +12,8 @@ Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest
 
 Next: no safe task is currently executable. R4-411 requires confirmed HERE account/Japan eligibility, `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through an external secret store, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-422 `0cc9bc...4ffb` remains independent and unapproved. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
-Latest control-plane checkpoint: commit `ecf76a9271c33826d35cfd5172f82b38210bc709`
-passed real GitHub Actions CI run `33083090749` (all five required jobs).
+Latest control-plane checkpoint: commit `467f333d5c4d0529f862920571ea4d9747249398`
+passed real GitHub Actions CI run `33083434000` (all five required jobs).
 
 ## Tokyo VM SSH-readiness diagnostic v1 execution - 2026-08-27
 

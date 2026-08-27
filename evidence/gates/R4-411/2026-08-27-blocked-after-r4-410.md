@@ -42,6 +42,9 @@ Control-plane recomputation checkpoint:
 - Documentation synchronization commit `ecf76a9271c33826d35cfd5172f82b38210bc709`
   passed real GitHub Actions CI run `33083090749`; all five required jobs passed.
 
+- Final Human Gate record commit `467f333d5c4d0529f862920571ea4d9747249398`
+  passed real GitHub Actions CI run `33083434000`; all five required jobs passed.
+
 The next bounded execution contract is now prepared, but not approved:
 
 - `contracts/provider/r4-411-travel-provider-live-validation-v1.json`
