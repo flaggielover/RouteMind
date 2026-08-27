@@ -65,7 +65,8 @@ The independent contract gate now validates the exact R4-411 contract, R4-410
 binding, 20/5/100 call limits, zero authorization, secret isolation, leakage
 scan, fallback, teardown, and conservative claims. `python
 scripts/r4_independent_human_gates_test.py` passed 19 tests. The full repository
-verification and Round 4 graph gate remain required before push.
+verification and Round 4 graph gate passed before push, and the pushed commit
+also passed the required remote CI jobs.
 
 ## Human Gate boundary
 
@@ -81,3 +82,6 @@ Remote validation checkpoint:
 - Commit `5017b72a08e91dfe43882f641c05e6a76847d256` was pushed to `main`.
 - Real GitHub Actions CI run `33082754675` completed successfully; all five
   required jobs passed.
+
+- Documentation synchronization commit `ecf76a9271c33826d35cfd5172f82b38210bc709`
+  passed real GitHub Actions CI run `33083090749`; all five required jobs passed.
