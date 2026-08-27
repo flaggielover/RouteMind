@@ -8,7 +8,7 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: NONE - SSH READINESS / R4-410 / R4-422 HUMAN GATES
 
-Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, and immutable evidence. VM v1/v2 digests are consumed. VM v2 proved exact infrastructure but both active VMs closed before the SSH banner; one reboot was unchanged and exact teardown passed. The prepared local-only SSH-readiness contract `2ba069c9...fbb7` isolates ten stages with one minimal VM and cannot promote target status. It is unapproved/unexecuted; no new cloud resource or charge exists.
+Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, and immutable evidence. VM v1/v2 digests are consumed. VM v2 proved exact infrastructure but both active VMs closed before the SSH banner; one reboot was unchanged and exact teardown passed. Local-only SSH-readiness contract `2ba069c9...fbb7` isolates ten stages with one minimal VM and cannot promote target status. Preparation commit `e4f9686` passed all five jobs in real GitHub Actions run `33047908200`. It remains unapproved/unexecuted; no new cloud resource or charge exists.
 
 Next: no v2 retry is authorized. The Tokyo VM lane requires approval of exact SSH-readiness contract SHA-256 `2ba069c9886c69f1b38a22740c6c2367bd21a2bd129e8ff6c8148f336a46fbb7`; it proposes one `vc2-1c-1gb` in `nrt`, one firewall and one operator `/32` SSH rule, 60 minutes, USD 1 maximum, and exact teardown. R4-410 `7f71f0...75d7` and R4-422 `0cc9bc...4ffb` remain separate unapproved gates. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
@@ -37,6 +37,8 @@ and fault tests, seven contract mutations, five plan mutations, PowerShell JSON
 and external-key checks, and a real Terraform `3 create / 0 change / 0 destroy`
 no-apply plan. Preparation evidence is
 `evidence/gates/R4-405/2026-08-27-tokyo-vm-ssh-readiness-diagnostic-preparation.md`.
+Preparation commit `e4f9686` passed all five jobs in real GitHub Actions run
+`33047908200`.
 
 ## Independent provider Human Gate preparation - 2026-08-27
 

@@ -123,6 +123,8 @@ bytes unchanged.
 - The full repository control gate passed after the graph mirror, frozen
   negative-result ledger, claim matrix, security, PowerShell syntax, and all
   existing contract gates were synchronized.
+- Preparation commit `e4f9686` passed all five jobs in real GitHub Actions run
+  `33047908200`, including the new Ubuntu no-provider-call/no-apply IaC gate.
 
 No local fixture, plan, public catalog response, or future partial diagnostic is
 accepted as R4-405/R4-406 target evidence. VKE remains
