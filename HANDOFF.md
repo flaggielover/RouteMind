@@ -15,8 +15,9 @@ Next: no safe task is currently executable. R4-411 requires confirmed HERE accou
 Latest observed pre-synchronization control-plane checkpoint: commit `e2a1b32f215594c471a917b53809e49286c9868f`
 passed real GitHub Actions CI run `33086123655` (all five required jobs). The
 following documentation synchronization also passed real GitHub Actions CI run
-`33092163129`; the overnight reconciliation found no stale graph blockers or
-safe eligible tasks;
+`33092163129`, and its follow-up wording correction at commit `ba09280` passed
+run `33092466943` (all five required jobs). The overnight reconciliation found
+no stale graph blockers or safe eligible tasks;
 R4-411 now lists only the three genuine blockers: HERE account/application and
 Japan eligibility, external secret injection, and its separate Human Gate.
 
