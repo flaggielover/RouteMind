@@ -311,3 +311,16 @@ conservative incremental bound. R4-406 remains
 `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`; no DR target claim or root-cause
 claim is authorized. Immutable details are in
 `evidence/gates/R4-405/2026-08-27-tokyo-vm-v2-execution-attempt-1.md`.
+
+## SSH-readiness diagnostic v1 execution
+
+The consumed one-VM diagnostic digest `2ba069c9...fbb7` produced six independent
+`TCP22=OK / SSH banner=MISSING` observations on a provider-ready Ubuntu 24.04
+minimal VM. It retained no independent guest/console artifact and is therefore
+`DIAGNOSTIC_INCOMPLETE / UNKNOWN`. No encrypted backup package, recovery VM,
+restore, RPO/RTO, reconciliation, tenant/audit continuity, or rollback step ran.
+
+Exact VM/firewall 404, zero execution-label resources, zero leakage findings,
+and USD 0.01 conservative incremental cost were verified. R4-406 remains
+`LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING / NO_TARGET_CLAIM`; evidence is
+`evidence/gates/R4-405/2026-08-27-tokyo-vm-ssh-readiness-diagnostic-v1-execution.md`.

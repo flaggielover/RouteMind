@@ -6,11 +6,36 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - SSH READINESS / R4-410 / R4-422 HUMAN GATES
+Current Task: NONE - R4-405/R4-406 NEW EXTERNAL CONTRACT / R4-410 / R4-422 HUMAN GATES
 
-Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, and immutable evidence. VM v1/v2 digests are consumed. VM v2 proved exact infrastructure but both active VMs closed before the SSH banner; one reboot was unchanged and exact teardown passed. Local-only SSH-readiness contract `2ba069c9...fbb7` isolates ten stages with one minimal VM and cannot promote target status. Preparation commit `e4f9686` passed all five jobs in real GitHub Actions run `33047908200`. It remains unapproved/unexecuted; no new cloud resource or charge exists.
+Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, and immutable evidence. VM v1/v2 and SSH-readiness digests are consumed. SSH execution `r4-vm-ssh-v1-20260827t072548z-b0006d8c04` produced six `TCP22=OK / banner=MISSING` observations on one provider-ready minimal VM, no claimable guest artifact, and truthful `DIAGNOSTIC_INCOMPLETE / UNKNOWN`. Exact teardown plus GET-only re-verification proved VM/firewall 404, zero labels, zero retained resources, and zero leakage findings.
 
-Next: no v2 retry is authorized. The Tokyo VM lane requires approval of exact SSH-readiness contract SHA-256 `2ba069c9886c69f1b38a22740c6c2367bd21a2bd129e8ff6c8148f336a46fbb7`; it proposes one `vc2-1c-1gb` in `nrt`, one firewall and one operator `/32` SSH rule, 60 minutes, USD 1 maximum, and exact teardown. R4-410 `7f71f0...75d7` and R4-422 `0cc9bc...4ffb` remain separate unapproved gates. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+Next: no v2 or SSH-readiness retry is authorized. Any further Tokyo telemetry/DR execution requires a new exact contract, new digest, and new Human Gate. R4-410 `7f71f0...75d7` and R4-422 `0cc9bc...4ffb` remain separate unapproved gates. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+
+## Tokyo VM SSH-readiness diagnostic v1 execution - 2026-08-27
+
+Approved canonical digest `2ba069c9...fbb7` was consumed once under execution
+`r4-vm-ssh-v1-20260827t072548z-b0006d8c04` at source revision `b0006d8`.
+Authenticated preflight, exact three-create saved plan, provider identity, Ubuntu
+24.04 image, matching client/provider ED25519 public key, and one operator `/32`
+TCP 22 firewall rule all passed.
+
+The VM reached `active / ok / running` on the first provider observation. Six
+bounded probes from `07:27:38Z` to `07:29:53Z` each connected TCP 22 but received
+no SSH banner. KEX, host-key verification, authentication, cloud-init, and
+bootstrap were not reached. There was no independently retained console host key
+or guest artifact, so the result is `DIAGNOSTIC_INCOMPLETE /
+SSH_BANNER_NOT_RECEIVED / UNKNOWN`, not a root-cause or target-readiness claim.
+
+Exact teardown and a second GET-only finalizer proved the VM and firewall return
+404 and execution-label resource count is zero. The conservative incremental
+bound is USD 0.01, cumulative conservative external cost USD 11.256, retained
+resources zero, and leakage findings zero. Sanitized external evidence has 11
+manifest entries; manifest SHA-256 is
+`aa4dabc54cfae06f93747477aef0af113cb2324a6e80ccca446c61f547e0e078`.
+Execution finalizer fix `5b5d42b` passed all five jobs in real Actions run
+`33050160883`. Repository evidence is
+`evidence/gates/R4-405/2026-08-27-tokyo-vm-ssh-readiness-diagnostic-v1-execution.md`.
 
 ## Tokyo VM SSH-readiness diagnostic v1 preparation - 2026-08-27
 
