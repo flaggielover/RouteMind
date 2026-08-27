@@ -49,6 +49,12 @@ class ControllerBoundaryTest(unittest.TestCase):
         self.assertIn("NO_INDEPENDENT_HOST_KEY_SOURCE_AND_STRICT_AUTH_NOT_REACHED", self.text)
         self.assertIn("$diagnosticIncomplete = [bool]$failurePhase -or -not $guestEvidence", self.text)
 
+    def test_get_only_finalizer_can_close_post_teardown_artifacts(self) -> None:
+        self.assertIn('"Finalize" {', self.text)
+        self.assertIn("GET-only cleanup re-verification failed", self.text)
+        self.assertIn("artifactManifestComplete = $true", self.text)
+        self.assertIn("if (-not (Test-Path -LiteralPath $costPath))", self.text)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

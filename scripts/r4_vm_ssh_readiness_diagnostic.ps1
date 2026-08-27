@@ -2,7 +2,7 @@
 
 [CmdletBinding()]
 param(
-    [ValidateSet("OfflinePreflight", "LivePreflight", "Full", "Teardown")]
+    [ValidateSet("OfflinePreflight", "LivePreflight", "Full", "Teardown", "Finalize")]
     [string]$Action = "OfflinePreflight",
     [string]$ExecutionId,
     [switch]$AcknowledgeExternalExecution
@@ -495,25 +495,28 @@ function Write-CostAndLeakageEvidence {
     param([Parameter(Mandatory)]$Paths, [Parameter(Mandatory)][DateTime]$StartedAt)
     $quote = Get-Content -LiteralPath $Paths.Quote -Raw | ConvertFrom-Json
     $elapsed = [Math]::Max(0, ([DateTime]::UtcNow - $StartedAt).TotalMinutes)
-    Write-Json (Join-Path $Paths.Evidence "cost-record.json") ([ordered]@{
-        schemaVersion = 1
-        source = "authenticated_catalog_rate_and_bounded_runtime"
-        currency = "USD"
-        runtimeMinutes = [Math]::Round($elapsed, 3)
-        catalogRuntimeUpperBoundUsdCents = [double]$quote.upperBoundUsdCents
-        incrementalApprovedCeilingUsdCents = 100
-        cumulativeConservativeBeforeUsdCents = 1124.6
-        cumulativeConservativeAfterUsdCents = 1124.6 + [double]$quote.upperBoundUsdCents
-        invoiceClaim = $false
-        withinApprovedCeiling = $true
-        observedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
-    })
+    $costPath = Join-Path $Paths.Evidence "cost-record.json"
+    if (-not (Test-Path -LiteralPath $costPath)) {
+        Write-Json $costPath ([ordered]@{
+            schemaVersion = 1
+            source = "authenticated_catalog_rate_and_bounded_runtime"
+            currency = "USD"
+            runtimeMinutes = [Math]::Round($elapsed, 3)
+            catalogRuntimeUpperBoundUsdCents = [double]$quote.upperBoundUsdCents
+            incrementalApprovedCeilingUsdCents = 100
+            cumulativeConservativeBeforeUsdCents = 1124.6
+            cumulativeConservativeAfterUsdCents = 1124.6 + [double]$quote.upperBoundUsdCents
+            invoiceClaim = $false
+            withinApprovedCeiling = $true
+            observedAt = [DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        })
+    }
 
     $forbidden = @(
-        Get-ConfiguredValue "VULTR_API_KEY",
-        Get-ConfiguredValue "ROUTEMIND_SSH_PRIVATE_KEY_PATH",
-        Get-ConfiguredValue "ROUTEMIND_VULTR_SSH_KEY_ID",
-        Get-ConfiguredValue "ROUTEMIND_OPERATOR_CIDR",
+        (Get-ConfiguredValue "VULTR_API_KEY")
+        (Get-ConfiguredValue "ROUTEMIND_SSH_PRIVATE_KEY_PATH")
+        (Get-ConfiguredValue "ROUTEMIND_VULTR_SSH_KEY_ID")
+        (Get-ConfiguredValue "ROUTEMIND_OPERATOR_CIDR")
         "BEGIN OPENSSH PRIVATE KEY",
         "Authorization: Bearer"
     ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
@@ -569,6 +572,34 @@ switch ($Action) {
         $inventory = Get-Content -LiteralPath $Paths.PrivateInventory -Raw | ConvertFrom-Json
         Invoke-Teardown $Paths $inventory
         [ordered]@{ executionId = $ExecutionId; teardownComplete = $true; retainedResources = 0 } | ConvertTo-Json -Compress
+    }
+    "Finalize" {
+        $null = Assert-Gate
+        foreach ($required in @($Paths.Quote, $Paths.Readback, $Paths.Lifecycle, (Join-Path $Paths.Evidence "teardown-inventory.json"))) {
+            if (-not (Test-Path -LiteralPath $required)) { throw "Execution finalization input is absent" }
+        }
+        $readback = Get-Content -LiteralPath $Paths.Readback -Raw | ConvertFrom-Json
+        $instanceAbsent = Wait-VultrAbsent "/instances/$($readback.instance.providerId)"
+        $firewallAbsent = Wait-VultrAbsent "/firewalls/$($readback.firewall.providerId)"
+        $matches = Get-ExecutionLabelMatches
+        if (-not $instanceAbsent -or -not $firewallAbsent -or $matches -ne 0) {
+            throw "GET-only cleanup re-verification failed"
+        }
+        $teardownPath = Join-Path $Paths.Evidence "teardown-inventory.json"
+        $teardown = Get-Content -LiteralPath $teardownPath -Raw | ConvertFrom-Json
+        $teardown | Add-Member -NotePropertyName getOnlyReverifiedAt -NotePropertyValue ([DateTime]::UtcNow.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'")) -Force
+        Write-Json $teardownPath $teardown
+        $quote = Get-Content -LiteralPath $Paths.Quote -Raw | ConvertFrom-Json
+        Write-CostAndLeakageEvidence $Paths ([DateTime]::Parse([string]$quote.observedAt).ToUniversalTime())
+        [ordered]@{
+            executionId = $ExecutionId
+            cleanupReverified = $true
+            instance404 = $true
+            firewall404 = $true
+            executionLabelResourceCount = 0
+            leakageFindings = 0
+            artifactManifestComplete = $true
+        } | ConvertTo-Json -Compress
     }
     "Full" {
         $startedAt = [DateTime]::UtcNow
