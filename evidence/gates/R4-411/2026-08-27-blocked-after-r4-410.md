@@ -35,6 +35,10 @@ Control-plane recomputation checkpoint:
 - Real GitHub Actions CI run `33080685485` completed successfully; all five
   required jobs passed.
 
+- The R4-411 preparation checkpoint commit `5017b72a08e91dfe43882f641c05e6a76847d256`
+  also passed real GitHub Actions CI run `33082754675`; all five required jobs
+  passed.
+
 The next bounded execution contract is now prepared, but not approved:
 
 - `contracts/provider/r4-411-travel-provider-live-validation-v1.json`

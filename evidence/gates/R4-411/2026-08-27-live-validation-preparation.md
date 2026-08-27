@@ -75,3 +75,9 @@ occurred. The exact next approval must name this contract SHA-256 and explicitly
 authorize only the bounded manifest after HERE account/Japan eligibility and
 secret readiness are independently confirmed. A provider live-validation result
 must not be inferred from this preparation.
+
+Remote validation checkpoint:
+
+- Commit `5017b72a08e91dfe43882f641c05e6a76847d256` was pushed to `main`.
+- Real GitHub Actions CI run `33082754675` completed successfully; all five
+  required jobs passed.
