@@ -1,0 +1,66 @@
+from __future__ import annotations
+
+import copy
+import unittest
+
+import r4_independent_human_gates as gates
+
+
+class IndependentHumanGateTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.travel = gates.load_contract(gates.TRAVEL)
+        self.notification = gates.load_contract(gates.NOTIFICATION)
+
+    def assert_travel_rejected(self, mutate, expected: str) -> None:  # type: ignore[no-untyped-def]
+        candidate = copy.deepcopy(self.travel)
+        mutate(candidate)
+        self.assertIn(expected, gates.validate_travel(candidate))
+
+    def assert_notification_rejected(self, mutate, expected: str) -> None:  # type: ignore[no-untyped-def]
+        candidate = copy.deepcopy(self.notification)
+        mutate(candidate)
+        self.assertIn(expected, gates.validate_notification(candidate))
+
+    def test_preparation_contracts_are_valid_and_digest_stable(self) -> None:
+        self.assertEqual(gates.validate_travel(self.travel), [])
+        self.assertEqual(gates.validate_notification(self.notification), [])
+        self.assertEqual(gates.digest(self.travel), gates.digest(copy.deepcopy(self.travel)))
+        self.assertEqual(gates.digest(self.notification), gates.digest(copy.deepcopy(self.notification)))
+
+    def test_travel_provider_cannot_be_claimed_selected_or_validated(self) -> None:
+        self.assert_travel_rejected(lambda value: value["selection"].update(selectedProvider="HERE"), "travel:selection_fail_closed")
+        self.assert_travel_rejected(lambda value: value["recommendedProvider"].update(validated=True), "travel:provider_claim")
+        self.assert_travel_rejected(lambda value: value["claims"].update(providerValidated=True), "travel:claims")
+
+    def test_travel_calls_budget_and_fallback_fail_closed(self) -> None:
+        self.assert_travel_rejected(lambda value: value["boundedLiveValidation"].update(authorized=True), "travel:execution_boundary")
+        self.assert_travel_rejected(lambda value: value["requestContract"].update(timeoutMilliseconds=0), "travel:bounded_request")
+        self.assert_travel_rejected(lambda value: value["fallback"].update(fallbackResultMayBeRepresentedAsProviderTruth=True), "travel:fallback")
+
+    def test_travel_privacy_and_credentials_are_frozen(self) -> None:
+        self.assert_travel_rejected(lambda value: value["privacy"]["outboundAllowlist"].append("tenant_id"), "travel:privacy_allowlist")
+        self.assert_travel_rejected(lambda value: value["privacy"]["outboundForbidden"].remove("phone"), "travel:privacy_forbidden")
+        self.assert_travel_rejected(lambda value: value["credentials"].update(logs="allowed"), "travel:credentials")
+
+    def test_notification_provider_cannot_be_claimed_selected_or_validated(self) -> None:
+        self.assert_notification_rejected(lambda value: value["selection"].update(selectedChannel="email"), "notification:selection_fail_closed")
+        self.assert_notification_rejected(lambda value: value["recommendedProvider"].update(validated=True), "notification:provider_claim")
+        self.assert_notification_rejected(lambda value: value["claims"].update(realMessageSent=True), "notification:claims")
+
+    def test_notification_sends_and_resources_are_not_authorized(self) -> None:
+        self.assert_notification_rejected(lambda value: value["boundedRealSend"].update(authorized=True), "notification:execution_boundary")
+        self.assert_notification_rejected(lambda value: value["boundedRealSend"].update(accountOrResourceCreationAuthorized=True), "notification:execution_boundary")
+        self.assert_notification_rejected(lambda value: value["boundedRealSend"].update(maximumMessages=100), "notification:execution_boundary")
+
+    def test_notification_receipts_privacy_and_recipients_fail_closed(self) -> None:
+        self.assert_notification_rejected(lambda value: value["localImplementationBoundary"].update(providerAcceptanceIsDelivery=True), "notification:local_boundary")
+        self.assert_notification_rejected(lambda value: value["networkAndPrivacy"]["telemetryForbidden"].remove("recipient"), "notification:privacy")
+        self.assert_notification_rejected(lambda value: value["identityAndRecipients"].update(syntheticRecipient="INJECTED_VALUE"), "notification:recipient_boundary")
+
+    def test_notification_failure_matrix_cannot_drop_adverse_outcomes(self) -> None:
+        self.assert_notification_rejected(lambda value: value["failureMatrix"].remove("authenticated_bounce_receipt"), "notification:failure_matrix")
+        self.assert_notification_rejected(lambda value: value["failureMatrix"].remove("opt_out_before_retry_suppressed"), "notification:failure_matrix")
+
+
+if __name__ == "__main__":
+    unittest.main()

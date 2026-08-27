@@ -7,6 +7,8 @@ major versions and do not mirror service release versions.
 - `events/v1`: durable event envelope payloads.
 - `product`: versioned product-semantics contracts used before durable product
   implementation or external delivery is authorized.
+- `provider`: versioned external-provider selection and privacy boundaries used
+  before credentials or paid calls are authorized.
 - `agent`: versioned agent-authority contracts used before analytical tools or
   experiment orchestration can be evaluated.
 - `examples`: positive and negative executable examples.
@@ -41,6 +43,11 @@ negative examples are rejected.
 
 Run `python scripts/product_contract.py` and
 `python scripts/product_contract_test.py` for the R4 product-semantics boundary.
+
+Run `python scripts/r4_independent_human_gates.py` and
+`python scripts/r4_independent_human_gates_test.py` for the R4 travel-provider
+and notification-provider preparation boundaries. These contracts authorize no
+live provider calls, account/resource creation, recipients, or real sends.
 
 Run `python scripts/agent_policy.py` and `python scripts/agent_policy_test.py`
 for the R4 agent-authority boundary.

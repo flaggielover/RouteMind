@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-422-notification-human-gate-v1",
+  "taskId": "R4-422",
+  "status": "PREPARED_NOTIFICATION_PROVIDER_HUMAN_GATE",
+  "semanticsContract": "r4-420-product-semantics-v1",
+  "selection": {
+    "recommendedCandidate": "AWS_SES_EMAIL_AP_NORTHEAST_1",
+    "selectedProvider": "UNAPPROVED",
+    "selectedChannel": "UNAPPROVED",
+    "providerValidated": false,
+    "firstStageChannel": "email",
+    "deferredChannels": ["sms", "push"]
+  },
+  "recommendedProvider": {
+    "provider": "AWS_SES",
+    "region": "ap-northeast-1",
+    "endpoint": "email.ap-northeast-1.amazonaws.com",
+    "validated": false,
+    "officialSources": [
+      "https://docs.aws.amazon.com/general/latest/gr/ses.html",
+      "https://aws.amazon.com/ses/pricing/",
+      "https://docs.aws.amazon.com/ses/latest/dg/monitor-using-event-publishing.html",
+      "https://docs.aws.amazon.com/ses/latest/dg/notification-contents.html"
+    ],
+    "recommendationBasis": ["Tokyo_service_endpoint", "delivery_bounce_and_complaint_events", "bounded_per_message_pricing", "email_only_minimum_scope"]
+  },
+  "localImplementationBoundary": {
+    "durableOwner": "java_business_api",
+    "durableStore": "postgresql",
+    "intentCreation": "same_transaction_outbox",
+    "delivery": "asynchronous_idempotent_worker",
+    "consentRecheck": "before_every_attempt",
+    "quietHours": "IANA_TZDB_and_r4_420_rules",
+    "providerAcceptanceIsDelivery": false,
+    "deliveryRequires": "authenticated_provider_delivery_receipt",
+    "maxAttempts": 5,
+    "realAdapterDefault": "disabled"
+  },
+  "credentials": {
+    "environmentVariables": ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN"],
+    "sessionTokenOptional": true,
+    "storage": "external_secret_store_or_process_environment",
+    "git": "forbidden",
+    "logs": "forbidden",
+    "evidence": "forbidden"
+  },
+  "identityAndRecipients": {
+    "senderIdentity": "UNAPPROVED_EXTERNAL_VALUE",
+    "syntheticRecipient": "UNAPPROVED_EXTERNAL_VALUE",
+    "senderEnvironmentVariable": "ROUTEMIND_NOTIFICATION_SENDER",
+    "syntheticRecipientEnvironmentVariable": "ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT",
+    "recipientInGit": "forbidden",
+    "recipientInLogs": "forbidden",
+    "recipientInEvidence": "redacted_digest_only",
+    "productionRecipients": "forbidden"
+  },
+  "networkAndPrivacy": {
+    "providerRegion": "ap-northeast-1",
+    "publicInboundRouteMindEndpoint": false,
+    "callbackAuthenticationRequired": true,
+    "outboundAllowlist": ["synthetic_recipient", "reviewed_template", "opaque_notification_id"],
+    "telemetryForbidden": ["recipient", "sender", "message_body", "credentials", "provider_message_id"],
+    "template": "reviewed_synthetic_non_personal_test_message"
+  },
+  "boundedRealSend": {
+    "authorized": false,
+    "maximumDurationMinutes": 30,
+    "maximumMessages": 10,
+    "maximumSpendUsdCents": 100,
+    "newExecutionContractRequired": true,
+    "accountOrResourceCreationAuthorized": false
+  },
+  "failureMatrix": [
+    "no_consent_suppressed",
+    "quiet_hours_deferred_then_rechecked",
+    "duplicate_intent_idempotent",
+    "retryable_failure_bounded",
+    "retry_exhaustion_terminal",
+    "provider_acceptance_not_delivery",
+    "authenticated_delivery_receipt",
+    "authenticated_bounce_receipt",
+    "unauthenticated_callback_rejected",
+    "opt_out_before_retry_suppressed"
+  ],
+  "evidenceContract": [
+    "transactional_intent_and_outbox_identity",
+    "consent_quiet_hours_and_opt_out",
+    "idempotency_retry_and_duplicate_behavior",
+    "provider_acceptance_delivery_and_bounce_distinction",
+    "authenticated_callback",
+    "tenant_and_principal_boundary",
+    "provider_region_and_identity_without_secrets",
+    "actual_or_conservative_cost",
+    "privacy_and_leakage_scan",
+    "timestamps_versions_and_artifact_digests"
+  ],
+  "humanGate": {
+    "requiredApprovals": ["AWS_ACCOUNT_AND_SES_PROVIDER", "EMAIL_CHANNEL", "VERIFIED_SENDER_IDENTITY", "SYNTHETIC_RECIPIENT", "CALLBACK_TOPOLOGY", "REAL_SEND_BUDGET"],
+    "requiredSecretNames": ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN", "ROUTEMIND_NOTIFICATION_SENDER", "ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT"],
+    "secretValuesInChat": "forbidden",
+    "recipientValueInChat": "forbidden",
+    "approvalDoesNotAuthorizeRealSend": true
+  },
+  "claims": {
+    "providerSelected": false,
+    "providerValidated": false,
+    "realMessageSent": false,
+    "deliveryValidated": false,
+    "productionValidated": false
+  }
+}

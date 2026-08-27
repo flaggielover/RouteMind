@@ -217,6 +217,16 @@ try {
         throw "Product semantics contract self-tests failed"
     }
 
+    python scripts/r4_independent_human_gates.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Independent travel and notification Human Gate contracts failed"
+    }
+
+    python scripts/r4_independent_human_gates_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Independent travel and notification Human Gate self-tests failed"
+    }
+
     python scripts/agent_policy.py
     if ($LASTEXITCODE -ne 0) {
         throw "Agent authority policy validation failed"

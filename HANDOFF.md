@@ -6,11 +6,31 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - ROUND 4 EXTERNAL/HUMAN GATES
+Current Task: NONE - R4-410 / R4-422 INDEPENDENT HUMAN GATES
 
-Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, and immutable evidence. VM v1 and v2 digests are consumed. VM v2 execution `r4-vm-v2-20260827t051846z-7c7bd60337` proved the exact zero-VPC infrastructure, then failed closed because both active VMs closed SSH before the server banner. No workload or target validation ran. Exact teardown and zero-retention verification passed.
+Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, and immutable evidence. VM v1 and v2 digests are consumed. VM v2 execution `r4-vm-v2-20260827t051846z-7c7bd60337` proved the exact zero-VPC infrastructure, then failed closed because both active VMs closed SSH before the server banner. No workload or target validation ran. Exact teardown and zero-retention verification passed. Commit `919d7d1` passed all five jobs in real GitHub Actions run `33043712819`.
 
-Next: no v2 retry is authorized. A human must first resolve or authorize a bounded provider-console/SSH-readiness investigation; any later paid attempt needs a new contract, SHA-256, and Human Gate. VKE-specific checks remain `DEFERRED_VKE`. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+Next: no v2 retry is authorized. A human must first resolve or authorize a bounded provider-console/SSH-readiness investigation; any later paid attempt needs a new contract, SHA-256, and Human Gate. VKE-specific checks remain `DEFERRED_VKE`. R4-410 has zero-call candidate contract `7f71f0...75d7`; R4-422 has zero-send candidate contract `0cc9bc...4ffb`. Both remain unapproved independent Human Gates and authorize no live execution. R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+
+## Independent provider Human Gate preparation - 2026-08-27
+
+R4-410 now has an executable fail-closed preparation contract at
+`contracts/provider/r4-410-travel-provider-human-gate-v1.json`, SHA-256
+`7f71f018a6d22fe1ee7f70026edda71149ea38efdbe87b82860861579e4675d7`.
+It recommends HERE Matrix Routing v8 on capability fit, retains Google Routes
+and Mapbox as alternatives, freezes outbound/privacy/timeout/fallback/budget
+semantics, and authorizes zero calls. Human ratification of provider contract,
+DPA, processing locations, Tokyo synthetic-coordinate use, and billing ownership
+is still required. R4-411 needs a later exact live-call contract.
+
+R4-422 now has a zero-send preparation contract at
+`contracts/product/r4-422-notification-human-gate-v1.json`, SHA-256
+`0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb`.
+It recommends email-only AWS SES in `ap-northeast-1`, preserves the frozen
+R4-420 delivery truth, and requires external sender/recipient/credential
+injection. No provider/channel/recipient is selected, no AWS resource or adapter
+is activated, and no message is sent. A later exact execution contract is
+required for any resource creation or real send.
 
 ## Tokyo VM v2 external execution attempt 1 - 2026-08-27
 
