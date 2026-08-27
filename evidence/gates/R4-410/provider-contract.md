@@ -135,5 +135,5 @@ behind a new exact contract and Human Gate. R4-422 remains an independent gate.
 Local validation passed eleven directed contract mutation tests, the Round 4
 graph and active-mirror gate, tracked-secret isolation, supply-chain controls,
 Compose validation, PowerShell syntax, and the complete repository
-`scripts/verify.ps1` gate. Real GitHub Actions remains required for this
-checkpoint before the Human Gate is declared ready.
+`scripts/verify.ps1` gate. Preparation commit `5d4cee5` passed all five jobs in
+real GitHub Actions run `33066336359`.

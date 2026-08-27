@@ -80,6 +80,8 @@ and explicit deterministic-local fallback provenance. Human ratification of the
 provider/products, Japan access path, HERE contract/DPA, processing locations,
 privacy boundary, and billing ownership is required. R4-411 still needs a new
 exact live-call contract, credential, USD 1 maximum budget, and Human Gate.
+Preparation commit `5d4cee5` passed all five jobs in real GitHub Actions run
+`33066336359`.
 
 R4-422 now has a zero-send preparation contract at
 `contracts/product/r4-422-notification-human-gate-v1.json`, SHA-256
