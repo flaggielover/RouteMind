@@ -12,9 +12,10 @@ Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest
 
 Next: no safe task is currently executable. R4-411 requires confirmed HERE account/Japan eligibility, `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through an external secret store, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-422 `0cc9bc...4ffb` remains independent and unapproved. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
-Latest control-plane checkpoint: commit `cb99abce233999b90299b66a64908d8dcef83b8f`
-passed real GitHub Actions CI run `33084375382` (all five required jobs). This
-checkpoint removes the stale prepared-contract blocker from the active graph;
+Latest control-plane checkpoint: commit `ad03e1801ae82e1be8abc7ccef71a63a6e7c0b42`
+passed real GitHub Actions CI run `33084881561` (all five required jobs). This
+checkpoint records the final evidence/progress synchronization after the stale
+prepared-contract blocker was removed from the active graph;
 R4-411 now lists only the three genuine blockers: HERE account/application and
 Japan eligibility, external secret injection, and its separate Human Gate.
 
