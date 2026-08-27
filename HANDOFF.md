@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-411 - PREPARE SEPARATELY AUTHORIZED LIVE PROVIDER VALIDATION
+Current Task: NONE - R4-411 LIVE PROVIDER VALIDATION HUMAN GATE
 
-Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate with separate Routing API v8 and Matrix Routing API v8 products; Japan eligibility remains `UNCONFIRMED_REQUIRES_HERE`, processing remains `NOT_REGION_PINNED`, and no live/provider/production validation is claimed. Approval authorized zero account creation, credentials, live calls, or spend. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
+Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate with separate Routing API v8 and Matrix Routing API v8 products; Japan eligibility remains `UNCONFIRMED_REQUIRES_HERE`, processing remains `NOT_REGION_PINNED`, and no live/provider/production validation is claimed. Approval authorized zero account creation, credentials, live calls, or spend. R4-411 is explicitly `BLOCKED / DEFERRED_EXTERNAL` pending HERE account/Japan eligibility, external secret injection, a new exact live-validation contract, and a separate Human Gate. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
 
-Next: use the now-unblocked R4-411 lane only for provider-neutral local preparation. Any future HERE call still requires confirmed account/Japan eligibility, `ROUTEMIND_TRAVEL_PROVIDER_API_KEY`, a new exact execution contract, bounded budget, and a separate Human Gate. R4-422 `0cc9bc...4ffb` remains independent and unapproved. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+Next: no safe task is currently executable. R4-411 requires confirmed HERE account/Japan eligibility, `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through an external secret store, a new exact bounded execution contract, and a separate Human Gate. R4-422 `0cc9bc...4ffb` remains independent and unapproved. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
 ## Tokyo VM SSH-readiness diagnostic v1 execution - 2026-08-27
 
@@ -74,6 +74,10 @@ ratifies HERE Technologies as the candidate provider without changing the
 immutable pre-approval contract bytes. It explicitly preserves unconfirmed Japan
 eligibility, non-region-pinned processing, zero account/credential creation, zero
 live calls, zero spend, and no live or production claim.
+
+Approval-closure commit `a59a0b4` passed all five jobs in real GitHub Actions run
+`33079533974`; detailed local and remote evidence is retained at
+`evidence/gates/R4-410/2026-08-27-approval-closure.md`.
 
 R4-410 v2 is the current executable fail-closed preparation contract at
 `contracts/provider/r4-410-travel-provider-human-gate-v2.json`, canonical

@@ -148,4 +148,6 @@ claim inflation. The Round 4 graph and active-mirror gate, tracked-secret
 isolation, supply-chain controls, Compose validation, PowerShell syntax, and the
 complete repository `scripts/verify.ps1` gate also pass. The prior preparation
 commit `5d4cee5` passed all five jobs in real GitHub Actions run `33066336359`;
-this approval closure is a new checkpoint and has its own CI run recorded below.
+approval-closure commit `a59a0b4` passed all five jobs in real GitHub Actions run
+`33079533974`. The detailed closure record is
+`2026-08-27-approval-closure.md`.
