@@ -10,7 +10,7 @@ Current Task: NONE - TOKYO VM EXTERNAL VALIDATION V2 HUMAN GATE
 
 Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, immutable attempt/failure/cost/teardown evidence, and no v4. VM v1 SHA-256 `2c6bd38...c608a` is consumed and immutable. The GET-only quota audit found five `nrt` VKE-labelled VPCs and proved no safe reuse; no resource was modified. VM v2 SHA-256 `b1cf89b905b6bb42a98eba17de31fb21883ed94139301986a06247acc660a05b` uses zero VPC creation/reuse and awaits its exact Human Gate.
 
-Next: after real CI passes, obtain approval for the exact VM v2 digest, two VM plans, `nrt`, six-hour/ USD 3 bounds, operator and recovery IPv4 `/32` SSH rules, zero VPC, and exact teardown. No retry is authorized automatically. VKE-specific checks remain `DEFERRED_VKE`. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+Next: obtain approval for the exact VM v2 digest, two VM plans, `nrt`, six-hour/USD 3 bounds, operator and recovery IPv4 `/32` SSH rules, zero VPC, and exact teardown. No retry is authorized automatically. VKE-specific checks remain `DEFERRED_VKE`. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
 
 ## Tokyo VM v2 no-new-VPC preparation - 2026-08-27
 
@@ -37,6 +37,9 @@ Compose/Foundry gates, and an authenticated `-refresh=false` plan with five
 creates, zero changes/deletes, and zero VPCs. The plan was not applied and its
 isolated directory was deleted. Evidence is
 `evidence/gates/R4-405/2026-08-27-tokyo-vpc-quota-resolution.md`.
+Preparation commit `760e1ca` passed all five jobs in real GitHub Actions run
+`33039469513`, including the Linux v2 Terraform/Compose/Foundry gate. This is
+preparation evidence only and does not authorize a paid execution.
 
 Tokyo VM preparation: contract
 `contracts/external-validation/r4-vultr-tokyo-vm-external-validation-v1.json`

@@ -78,3 +78,10 @@ R4-405/R4-406 remain `TARGET_PENDING`; VKE remains
 `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`, with `NO_TARGET_CLAIM` and
 `NO_ROOT_CAUSE_CLAIM`. R3-325 remains exactly
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
+
+## Repository closure
+
+Preparation commit `760e1ca` was pushed to `main`. Real GitHub Actions run
+`33039469513` passed all five required jobs, including the Linux no-new-VPC v2
+Terraform/Compose/Foundry gate. This proves repository preparation only and does
+not authorize provider mutation or qualify R4-405/R4-406 target evidence.
