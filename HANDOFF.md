@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - R4-405/R4-406 NEW EXTERNAL CONTRACT / R4-410 / R4-422 HUMAN GATES
+Current Task: NONE - R4-410 TRAVEL PROVIDER / R4-422 NOTIFICATION HUMAN GATES
 
-Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, and immutable evidence. VM v1/v2 and SSH-readiness digests are consumed. SSH execution `r4-vm-ssh-v1-20260827t072548z-b0006d8c04` produced six `TCP22=OK / banner=MISSING` observations on one provider-ready minimal VM, no claimable guest artifact, and truthful `DIAGNOSTIC_INCOMPLETE / UNKNOWN`. Exact teardown plus GET-only re-verification proved VM/firewall 404, zero labels, zero retained resources, and zero leakage findings.
+Task Status: `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE` and `TOKYO_VM_EXTERNAL_VALIDATION = INCONCLUSIVE` are frozen with immutable attempt, cost, and teardown evidence. R4-405 is `LOCAL_AND_CI_VALIDATED / TARGET_PENDING / NO_TARGET_CLAIM`; R4-406 is `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING / NO_TARGET_CLAIM`. SSH readiness is `TCP22_OK / SSH_BANNER_NOT_RECEIVED / ROOT_CAUSE_UNKNOWN`. No automatic paid VKE/VM/SSH attempt is authorized. R4-410 v2 is prepared but unapproved and authorizes zero account creation and zero live calls.
 
-Next: no v2 or SSH-readiness retry is authorized. Any further Tokyo telemetry/DR execution requires a new exact contract, new digest, and new Human Gate. R4-410 `7f71f0...75d7` and R4-422 `0cc9bc...4ffb` remain separate unapproved gates. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+Next: ratify R4-410 v2 digest `6d71059d...3ac5c` only after accepting the separate HERE Routing/Matrix products, Japan service eligibility path, non-region-pinned processing, synthetic-coordinate privacy, and billing ownership. R4-422 `0cc9bc...4ffb` remains a separate unapproved gate. Any future R4-411 call requires a new contract, HERE credential, budget, and Human Gate. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
 ## Tokyo VM SSH-readiness diagnostic v1 execution - 2026-08-27
 
@@ -67,14 +67,19 @@ Preparation commit `e4f9686` passed all five jobs in real GitHub Actions run
 
 ## Independent provider Human Gate preparation - 2026-08-27
 
-R4-410 now has an executable fail-closed preparation contract at
-`contracts/provider/r4-410-travel-provider-human-gate-v1.json`, SHA-256
-`7f71f018a6d22fe1ee7f70026edda71149ea38efdbe87b82860861579e4675d7`.
-It recommends HERE Matrix Routing v8 on capability fit, retains Google Routes
-and Mapbox as alternatives, freezes outbound/privacy/timeout/fallback/budget
-semantics, and authorizes zero calls. Human ratification of provider contract,
-DPA, processing locations, Tokyo synthetic-coordinate use, and billing ownership
-is still required. R4-411 needs a later exact live-call contract.
+R4-410 v2 is the current executable fail-closed preparation contract at
+`contracts/provider/r4-410-travel-provider-human-gate-v2.json`, canonical
+SHA-256 `6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c`.
+The unapproved v1 digest `7f71f018...75d7` remains historical and is superseded,
+not rewritten. v2 recommends HERE Technologies with separate HERE Routing API
+v8 point and HERE Matrix Routing API v8 matrix products. It records Japan service
+eligibility as `UNCONFIRMED_REQUIRES_HERE`, processing as `NOT_REGION_PINNED`,
+and Tokyo residency as unclaimed. It freezes the synthetic-coordinate allowlist,
+one external future secret name, zero current calls/spend, no fail-open behavior,
+and explicit deterministic-local fallback provenance. Human ratification of the
+provider/products, Japan access path, HERE contract/DPA, processing locations,
+privacy boundary, and billing ownership is required. R4-411 still needs a new
+exact live-call contract, credential, USD 1 maximum budget, and Human Gate.
 
 R4-422 now has a zero-send preparation contract at
 `contracts/product/r4-422-notification-human-gate-v1.json`, SHA-256

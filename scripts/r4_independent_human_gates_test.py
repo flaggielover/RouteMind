@@ -34,13 +34,33 @@ class IndependentHumanGateTests(unittest.TestCase):
 
     def test_travel_calls_budget_and_fallback_fail_closed(self) -> None:
         self.assert_travel_rejected(lambda value: value["boundedLiveValidation"].update(authorized=True), "travel:execution_boundary")
+        self.assert_travel_rejected(lambda value: value["boundedLiveValidation"].update(allowedCallsAtThisGate=1), "travel:execution_boundary")
         self.assert_travel_rejected(lambda value: value["requestContract"].update(timeoutMilliseconds=0), "travel:bounded_request")
         self.assert_travel_rejected(lambda value: value["fallback"].update(fallbackResultMayBeRepresentedAsProviderTruth=True), "travel:fallback")
+        self.assert_travel_rejected(lambda value: value["fallback"].update(failOpen=True), "travel:fallback")
 
     def test_travel_privacy_and_credentials_are_frozen(self) -> None:
         self.assert_travel_rejected(lambda value: value["privacy"]["outboundAllowlist"].append("tenant_id"), "travel:privacy_allowlist")
         self.assert_travel_rejected(lambda value: value["privacy"]["outboundForbidden"].remove("phone"), "travel:privacy_forbidden")
         self.assert_travel_rejected(lambda value: value["credentials"].update(logs="allowed"), "travel:credentials")
+
+    def test_travel_products_japan_access_and_processing_region_fail_closed(self) -> None:
+        self.assert_travel_rejected(lambda value: value["recommendedProvider"]["products"]["point"].update(product="HERE_MATRIX_ROUTING_API_V8"), "travel:products")
+        self.assert_travel_rejected(lambda value: value["recommendedProvider"]["documentedCapabilities"].update(japanRegionAccessRestricted=False), "travel:japan_access")
+        self.assert_travel_rejected(lambda value: value["selection"].update(japanServiceEligibility="ASSUMED"), "travel:selection_fail_closed")
+        self.assert_travel_rejected(lambda value: value["privacy"].update(processingRegion="TOKYO"), "travel:processing_region")
+        self.assert_travel_rejected(lambda value: value["privacy"].update(tokyoResidencyGuaranteed=True), "travel:processing_region")
+        self.assert_travel_rejected(lambda value: value["recommendedProvider"]["mandatoryHumanFindings"].pop(), "travel:processing_findings")
+
+    def test_travel_human_gate_cannot_authorize_calls_or_claim_access(self) -> None:
+        self.assert_travel_rejected(lambda value: value["humanGate"].update(approvalDoesNotAuthorizeLiveCalls=False), "travel:human_gate")
+        self.assert_travel_rejected(lambda value: value["humanGate"].update(approvalDoesNotClaimJapanAccess=False), "travel:human_gate")
+        self.assert_travel_rejected(lambda value: value["humanGate"]["requiredApprovals"].remove("NON_REGION_PINNED_PROCESSING"), "travel:human_gate")
+
+    def test_travel_evidence_contract_cannot_drop_adverse_or_cost_evidence(self) -> None:
+        self.assert_travel_rejected(lambda value: value["evidenceContract"].remove("Japan_service_eligibility_confirmation"), "travel:evidence_contract")
+        self.assert_travel_rejected(lambda value: value["evidenceContract"].remove("privacy_and_secret_leakage_scan"), "travel:evidence_contract")
+        self.assert_travel_rejected(lambda value: value["evidenceContract"].remove("actual_or_conservative_cost"), "travel:evidence_contract")
 
     def test_notification_provider_cannot_be_claimed_selected_or_validated(self) -> None:
         self.assert_notification_rejected(lambda value: value["selection"].update(selectedChannel="email"), "notification:selection_fail_closed")

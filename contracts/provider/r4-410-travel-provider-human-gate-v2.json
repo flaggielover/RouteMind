@@ -1,0 +1,219 @@
+{
+  "schemaVersion": 2,
+  "contractId": "r4-410-travel-provider-human-gate-v2",
+  "taskId": "R4-410",
+  "status": "PREPARED_TRAVEL_PROVIDER_HUMAN_GATE",
+  "supersedes": {
+    "contractId": "r4-410-travel-provider-human-gate-v1",
+    "canonicalSha256": "7f71f018a6d22fe1ee7f70026edda71149ea38efdbe87b82860861579e4675d7",
+    "reason": "separate_point_and_matrix_products_and_fail_closed_Japan_access_and_processing_region"
+  },
+  "selection": {
+    "recommendedCandidate": "HERE_ROUTING_V8_AND_MATRIX_ROUTING_V8",
+    "selectedProvider": "UNAPPROVED",
+    "providerValidated": false,
+    "japanServiceEligibility": "UNCONFIRMED_REQUIRES_HERE",
+    "processingRegion": "NOT_REGION_PINNED",
+    "recommendationBasis": [
+      "separate_point_and_matrix_routing_products",
+      "time_aware_routing",
+      "large_matrix_capability",
+      "transaction_based_billing",
+      "deterministic_local_fallback_remains_available"
+    ],
+    "alternatives": [
+      {
+        "provider": "GOOGLE_ROUTES_API",
+        "tradeoff": "mature point and matrix routing; matrix billing is per element and traffic-aware-optimal matrices have tighter element limits"
+      },
+      {
+        "provider": "MAPBOX_MATRIX_API",
+        "tradeoff": "traffic-aware routing is available; the driving-traffic matrix has a tighter coordinate limit"
+      }
+    ]
+  },
+  "recommendedProvider": {
+    "provider": "HERE_TECHNOLOGIES",
+    "validated": false,
+    "products": {
+      "point": {
+        "product": "HERE_ROUTING_API_V8",
+        "method": "GET",
+        "endpoint": "https://router.hereapi.com/v8/routes"
+      },
+      "matrix": {
+        "product": "HERE_MATRIX_ROUTING_API_V8",
+        "method": "POST",
+        "endpoint": "https://matrix.router.hereapi.com/v8/matrix",
+        "boundedValidationMode": "synchronous_async_false"
+      }
+    },
+    "officialSources": [
+      "https://docs.here.com/routing/docs/routing-v8-intro",
+      "https://docs.here.com/routing/docs/routing-v8-get-started",
+      "https://docs.here.com/routing/docs/matrix-v8-intro",
+      "https://docs.here.com/routing/docs/matrix-v8-get-started",
+      "https://www.here.com/get-started/pricing",
+      "https://legal.here.com/en-gb/data-protection-addendum",
+      "https://www.here.com/en-gb/privacy/subprocessor-list"
+    ],
+    "documentedCapabilities": {
+      "pointRouting": true,
+      "matrixRouting": true,
+      "timeAwareRouting": true,
+      "distanceAndDuration": true,
+      "documentedMaximumOrigins": 10000,
+      "documentedMaximumDestinations": 10000,
+      "japanRegionAccessRestricted": true
+    },
+    "mandatoryHumanFindings": [
+      "HERE documentation states that Routing service access in the Japan region is restricted and requires contacting HERE",
+      "HERE documentation does not guarantee that Tokyo coordinate data is processed or retained only in Tokyo",
+      "HERE DPA permits storage or processing in a country different from where the service is provided",
+      "HERE subprocessor locations include multiple countries and may change"
+    ]
+  },
+  "requestContract": {
+    "pointFields": [
+      "origin_latitude",
+      "origin_longitude",
+      "destination_latitude",
+      "destination_longitude",
+      "departure_time",
+      "transport_mode"
+    ],
+    "matrixFields": [
+      "origins",
+      "destinations",
+      "departure_time",
+      "transport_mode",
+      "derived_region_definition"
+    ],
+    "responseFields": [
+      "distance_metres",
+      "duration_seconds",
+      "provider_status",
+      "provider_request_id"
+    ],
+    "units": {
+      "distance": "metres",
+      "duration": "seconds",
+      "time": "RFC3339_UTC"
+    },
+    "timeoutMilliseconds": 1500,
+    "maxRetries": 1,
+    "retryJitter": "deterministic_seeded",
+    "invalidOrPartialMatrix": "fail_closed_then_explicit_local_fallback",
+    "asynchronousMatrixRedirects": "forbidden_in_bounded_live_validation"
+  },
+  "privacy": {
+    "outboundAllowlist": [
+      "coordinates",
+      "departure_time",
+      "transport_mode",
+      "derived_region_definition",
+      "opaque_request_id"
+    ],
+    "outboundForbidden": [
+      "tenant_id",
+      "principal_id",
+      "order_id",
+      "courier_id",
+      "customer_name",
+      "street_address",
+      "phone",
+      "email",
+      "message_body"
+    ],
+    "telemetryForbidden": [
+      "credentials",
+      "raw_coordinates",
+      "request_url_query",
+      "provider_response_body",
+      "provider_request_id"
+    ],
+    "coordinatePrecision": "minimum_required_by_approved_synthetic_fixture",
+    "liveFixture": "synthetic_Tokyo_coordinates_only",
+    "personalOrDurableBusinessIdentifiers": "forbidden",
+    "processingRegion": "NOT_REGION_PINNED",
+    "tokyoResidencyGuaranteed": false,
+    "crossBorderProcessingPossible": true,
+    "retention": "subject_to_human_accepted_HERE_contract_DPA_and_service_terms",
+    "privacyImplication": "synthetic_location_and_time_data_leave_RouteMind_control_and_may_be_processed_outside_Tokyo_or_Japan"
+  },
+  "credentials": {
+    "requiredNow": [],
+    "requiredForLaterLiveValidation": [
+      "ROUTEMIND_TRAVEL_PROVIDER_API_KEY"
+    ],
+    "authentication": "HERE_API_KEY",
+    "storage": "external_secret_store_or_process_environment",
+    "queryLogging": "forbidden",
+    "git": "forbidden",
+    "logs": "forbidden",
+    "evidence": "forbidden",
+    "chat": "forbidden"
+  },
+  "fallback": {
+    "provider": "deterministic-local",
+    "semantics": "external_fail_closed_then_explicit_local_fallback",
+    "failOpen": false,
+    "alwaysAvailable": true,
+    "providerFailureChangesDurableTruth": false,
+    "fallbackResultMayBeRepresentedAsProviderTruth": false,
+    "fallbackReasonRequired": true,
+    "fallbackProvenanceRequired": true
+  },
+  "boundedLiveValidation": {
+    "authorized": false,
+    "allowedCallsAtThisGate": 0,
+    "maximumDurationMinutesIfSeparatelyAuthorized": 30,
+    "maximumPointCallsIfSeparatelyAuthorized": 20,
+    "maximumMatrixRequestsIfSeparatelyAuthorized": 5,
+    "maximumMatrixElementsIfSeparatelyAuthorized": 100,
+    "maximumSpendUsdCentsIfSeparatelyAuthorized": 100,
+    "newExecutionContractRequired": true,
+    "japanServiceEligibilityRequired": true,
+    "credentialRequired": true
+  },
+  "evidenceContract": [
+    "HERE_account_and_application_identity_without_secrets",
+    "Japan_service_eligibility_confirmation",
+    "contract_DPA_and_non_region_pinned_processing_acceptance",
+    "documented_and_observed_point_product_semantics",
+    "documented_and_observed_matrix_product_semantics",
+    "time_context_units_and_synthetic_fixture_identity",
+    "quota_timeout_error_and_partial_matrix_behavior",
+    "deterministic_fallback_transition_and_provenance",
+    "privacy_and_secret_leakage_scan",
+    "actual_or_conservative_cost",
+    "timestamps_versions_and_artifact_digests"
+  ],
+  "humanGate": {
+    "requiredApprovals": [
+      "HERE_PROVIDER_SELECTION",
+      "HERE_ROUTING_AND_MATRIX_PRODUCTS",
+      "HERE_JAPAN_SERVICE_ELIGIBILITY_PATH",
+      "HERE_CONTRACT_AND_DPA",
+      "NON_REGION_PINNED_PROCESSING",
+      "SYNTHETIC_TOKYO_COORDINATE_PRIVACY",
+      "ACCOUNT_AND_BILLING_OWNERSHIP"
+    ],
+    "requiredSecretNamesNow": [],
+    "requiredSecretNamesForLaterLiveValidation": [
+      "ROUTEMIND_TRAVEL_PROVIDER_API_KEY"
+    ],
+    "secretValuesInChat": "forbidden",
+    "approvalDoesNotAuthorizeAccountCreation": true,
+    "approvalDoesNotAuthorizeLiveCalls": true,
+    "approvalDoesNotClaimJapanAccess": true
+  },
+  "claims": {
+    "providerSelected": false,
+    "providerValidated": false,
+    "japanServiceEligibilityValidated": false,
+    "tokyoDataResidencyClaimed": false,
+    "productionValidated": false,
+    "localFallbackValidated": true
+  }
+}

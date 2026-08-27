@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-TRAVEL = ROOT / "contracts/provider/r4-410-travel-provider-human-gate-v1.json"
+TRAVEL = ROOT / "contracts/provider/r4-410-travel-provider-human-gate-v2.json"
 NOTIFICATION = ROOT / "contracts/product/r4-422-notification-human-gate-v1.json"
 
 
@@ -24,52 +24,149 @@ def digest(payload: dict[str, Any]) -> str:
 
 def validate_travel(payload: dict[str, Any]) -> list[str]:
     findings: list[str] = []
-    if payload.get("schemaVersion") != 1 or payload.get("contractId") != "r4-410-travel-provider-human-gate-v1":
+    if payload.get("schemaVersion") != 2 or payload.get("contractId") != "r4-410-travel-provider-human-gate-v2":
         findings.append("travel:identity")
     if payload.get("taskId") != "R4-410" or payload.get("status") != "PREPARED_TRAVEL_PROVIDER_HUMAN_GATE":
         findings.append("travel:status")
 
     selection = payload.get("selection", {})
-    if selection.get("recommendedCandidate") != "HERE_MATRIX_ROUTING_V8" or selection.get("selectedProvider") != "UNAPPROVED" or selection.get("providerValidated") is not False:
+    if (
+        selection.get("recommendedCandidate") != "HERE_ROUTING_V8_AND_MATRIX_ROUTING_V8"
+        or selection.get("selectedProvider") != "UNAPPROVED"
+        or selection.get("providerValidated") is not False
+        or selection.get("japanServiceEligibility") != "UNCONFIRMED_REQUIRES_HERE"
+        or selection.get("processingRegion") != "NOT_REGION_PINNED"
+    ):
         findings.append("travel:selection_fail_closed")
     provider = payload.get("recommendedProvider", {})
+    products = provider.get("products", {})
+    point = products.get("point", {})
+    matrix = products.get("matrix", {})
     capabilities = provider.get("documentedCapabilities", {})
-    if provider.get("provider") != "HERE_MATRIX_ROUTING_V8" or provider.get("validated") is not False:
+    if provider.get("provider") != "HERE_TECHNOLOGIES" or provider.get("validated") is not False:
         findings.append("travel:provider_claim")
+    if point != {
+        "product": "HERE_ROUTING_API_V8",
+        "method": "GET",
+        "endpoint": "https://router.hereapi.com/v8/routes",
+    } or matrix != {
+        "product": "HERE_MATRIX_ROUTING_API_V8",
+        "method": "POST",
+        "endpoint": "https://matrix.router.hereapi.com/v8/matrix",
+        "boundedValidationMode": "synchronous_async_false",
+    }:
+        findings.append("travel:products")
     if not all(capabilities.get(name) is True for name in ("pointRouting", "matrixRouting", "timeAwareRouting", "distanceAndDuration")):
         findings.append("travel:capabilities")
     if capabilities.get("documentedMaximumOrigins") != 10000 or capabilities.get("documentedMaximumDestinations") != 10000:
         findings.append("travel:matrix_boundary")
-    if any(not str(source).startswith("https://") for source in provider.get("officialSources", [])) or len(provider.get("officialSources", [])) < 3:
+    if capabilities.get("japanRegionAccessRestricted") is not True:
+        findings.append("travel:japan_access")
+    mandatory_findings = {
+        "HERE documentation states that Routing service access in the Japan region is restricted and requires contacting HERE",
+        "HERE documentation does not guarantee that Tokyo coordinate data is processed or retained only in Tokyo",
+        "HERE DPA permits storage or processing in a country different from where the service is provided",
+        "HERE subprocessor locations include multiple countries and may change",
+    }
+    if set(provider.get("mandatoryHumanFindings", [])) != mandatory_findings:
+        findings.append("travel:processing_findings")
+    if any(not str(source).startswith("https://") for source in provider.get("officialSources", [])) or len(provider.get("officialSources", [])) < 7:
         findings.append("travel:official_sources")
 
     request = payload.get("requestContract", {})
-    if request.get("timeoutMilliseconds") != 1500 or request.get("maxRetries") != 1 or request.get("invalidOrPartialMatrix") != "fail_closed_then_local_fallback":
+    if (
+        request.get("timeoutMilliseconds") != 1500
+        or request.get("maxRetries") != 1
+        or request.get("invalidOrPartialMatrix") != "fail_closed_then_explicit_local_fallback"
+        or request.get("asynchronousMatrixRedirects") != "forbidden_in_bounded_live_validation"
+    ):
         findings.append("travel:bounded_request")
     privacy = payload.get("privacy", {})
-    if set(privacy.get("outboundAllowlist", [])) != {"coordinates", "departure_time", "transport_mode", "opaque_request_id"}:
+    if set(privacy.get("outboundAllowlist", [])) != {"coordinates", "departure_time", "transport_mode", "derived_region_definition", "opaque_request_id"}:
         findings.append("travel:privacy_allowlist")
     if not {"tenant_id", "principal_id", "order_id", "courier_id", "phone", "email"}.issubset(set(privacy.get("outboundForbidden", []))):
         findings.append("travel:privacy_forbidden")
+    if (
+        privacy.get("processingRegion") != "NOT_REGION_PINNED"
+        or privacy.get("tokyoResidencyGuaranteed") is not False
+        or privacy.get("crossBorderProcessingPossible") is not True
+    ):
+        findings.append("travel:processing_region")
     credentials = payload.get("credentials", {})
-    if credentials.get("environmentVariable") != "ROUTEMIND_TRAVEL_PROVIDER_API_KEY" or {credentials.get("git"), credentials.get("logs"), credentials.get("evidence")} != {"forbidden"}:
+    if (
+        credentials.get("requiredNow") != []
+        or credentials.get("requiredForLaterLiveValidation") != ["ROUTEMIND_TRAVEL_PROVIDER_API_KEY"]
+        or credentials.get("queryLogging") != "forbidden"
+        or {credentials.get("git"), credentials.get("logs"), credentials.get("evidence"), credentials.get("chat")} != {"forbidden"}
+    ):
         findings.append("travel:credentials")
     fallback = payload.get("fallback", {})
-    if fallback.get("provider") != "deterministic-local" or fallback.get("alwaysAvailable") is not True or fallback.get("fallbackResultMayBeRepresentedAsProviderTruth") is not False:
+    if (
+        fallback.get("provider") != "deterministic-local"
+        or fallback.get("semantics") != "external_fail_closed_then_explicit_local_fallback"
+        or fallback.get("failOpen") is not False
+        or fallback.get("alwaysAvailable") is not True
+        or fallback.get("fallbackResultMayBeRepresentedAsProviderTruth") is not False
+        or fallback.get("fallbackProvenanceRequired") is not True
+    ):
         findings.append("travel:fallback")
     bounded = payload.get("boundedLiveValidation", {})
     if bounded != {
         "authorized": False,
-        "maximumDurationMinutes": 30,
-        "maximumPointCalls": 20,
-        "maximumMatrixRequests": 5,
-        "maximumMatrixElements": 100,
-        "maximumSpendUsdCents": 100,
+        "allowedCallsAtThisGate": 0,
+        "maximumDurationMinutesIfSeparatelyAuthorized": 30,
+        "maximumPointCallsIfSeparatelyAuthorized": 20,
+        "maximumMatrixRequestsIfSeparatelyAuthorized": 5,
+        "maximumMatrixElementsIfSeparatelyAuthorized": 100,
+        "maximumSpendUsdCentsIfSeparatelyAuthorized": 100,
         "newExecutionContractRequired": True,
+        "japanServiceEligibilityRequired": True,
+        "credentialRequired": True,
     }:
         findings.append("travel:execution_boundary")
+    human_gate = payload.get("humanGate", {})
+    required_approvals = {
+        "HERE_PROVIDER_SELECTION",
+        "HERE_ROUTING_AND_MATRIX_PRODUCTS",
+        "HERE_JAPAN_SERVICE_ELIGIBILITY_PATH",
+        "HERE_CONTRACT_AND_DPA",
+        "NON_REGION_PINNED_PROCESSING",
+        "SYNTHETIC_TOKYO_COORDINATE_PRIVACY",
+        "ACCOUNT_AND_BILLING_OWNERSHIP",
+    }
+    if (
+        set(human_gate.get("requiredApprovals", [])) != required_approvals
+        or human_gate.get("requiredSecretNamesNow") != []
+        or human_gate.get("requiredSecretNamesForLaterLiveValidation") != ["ROUTEMIND_TRAVEL_PROVIDER_API_KEY"]
+        or human_gate.get("approvalDoesNotAuthorizeLiveCalls") is not True
+        or human_gate.get("approvalDoesNotAuthorizeAccountCreation") is not True
+        or human_gate.get("approvalDoesNotClaimJapanAccess") is not True
+    ):
+        findings.append("travel:human_gate")
+    required_evidence = {
+        "HERE_account_and_application_identity_without_secrets",
+        "Japan_service_eligibility_confirmation",
+        "contract_DPA_and_non_region_pinned_processing_acceptance",
+        "documented_and_observed_point_product_semantics",
+        "documented_and_observed_matrix_product_semantics",
+        "time_context_units_and_synthetic_fixture_identity",
+        "quota_timeout_error_and_partial_matrix_behavior",
+        "deterministic_fallback_transition_and_provenance",
+        "privacy_and_secret_leakage_scan",
+        "actual_or_conservative_cost",
+        "timestamps_versions_and_artifact_digests",
+    }
+    if set(payload.get("evidenceContract", [])) != required_evidence:
+        findings.append("travel:evidence_contract")
     claims = payload.get("claims", {})
-    if claims != {"providerSelected": False, "providerValidated": False, "productionValidated": False, "localFallbackValidated": True}:
+    if claims != {
+        "providerSelected": False,
+        "providerValidated": False,
+        "japanServiceEligibilityValidated": False,
+        "tokyoDataResidencyClaimed": False,
+        "productionValidated": False,
+        "localFallbackValidated": True,
+    }:
         findings.append("travel:claims")
     return sorted(set(findings))
 
