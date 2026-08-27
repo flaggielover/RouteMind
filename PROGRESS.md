@@ -8,31 +8,31 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
 
-Round 4 Progress: 9 / 38 tasks passed
+Round 4 Progress: 10 / 38 tasks passed
 
-Repository Total: 165 / 196 tasks passed
+Repository Total: 166 / 196 tasks passed
 
-Current Task: NONE - R4-410 TRAVEL PROVIDER / R4-422 NOTIFICATION HUMAN GATES
+Current Task: R4-411 - PREPARE SEPARATELY AUTHORIZED LIVE PROVIDER VALIDATION
 
-Last Completed: R4-401 - Select a deployment target and freeze SLO and failure-domain assumptions
+Last Completed: R4-410 - Freeze external travel-provider capability, credential, privacy, and fallback contract
 
-Current Gate: `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE` and `TOKYO_VM_EXTERNAL_VALIDATION = INCONCLUSIVE` are frozen with immutable history, cost, and teardown evidence. R4-405 is `LOCAL_AND_CI_VALIDATED / TARGET_PENDING / NO_TARGET_CLAIM`; R4-406 is `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING / NO_TARGET_CLAIM`. SSH readiness is `TCP22_OK / SSH_BANNER_NOT_RECEIVED / ROOT_CAUSE_UNKNOWN`. No automatic paid VKE/VM/SSH retry is authorized. R4-410 v2 is prepared at `6d71059d...3ac5c`; it authorizes zero account creation and zero live calls.
+Current Gate: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact v2 digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate using separate Routing API v8 and Matrix Routing API v8 products; Japan eligibility remains unconfirmed and processing remains non-region-pinned. Approval authorized zero account creation, credentials, live calls, and spend. R4-411 now enters provider-neutral local preparation only. External VKE/VM validation remains frozen inconclusive and R4-405/R4-406 retain target-pending/no-claim states.
 
 CI: R4-405 implementation `49680bd` passed all five jobs in run `32852309878`; VKE v3 execution closure `19e0988` passed all five jobs in run `32987266627`; VM v2 closure `919d7d1` passed run `33043712819`; R4-410/R4-422 v1 preparation `c1ad450` passed run `33045007626`; SSH-readiness preparation `e4f9686` passed run `33047908200`; bounded execution controller `b0006d8` passed run `33049481401`; GET-only finalizer fix `5b5d42b` passed run `33050160883`; frozen SSH outcome `ed88f37` passed run `33050840801`; R4-410 v2 preparation `5d4cee5` passed all five jobs in real GitHub Actions run `33066336359`.
 
-Regression: R4-410 v2 passes eleven directed independent-gate tests locally, including product separation, Japan eligibility, non-region-pinned processing, zero-call budget, credential isolation, no fail-open, fallback provenance, evidence completeness, and claim boundaries. Round 4 graph/mirror, secret isolation, supply-chain, Compose, PowerShell syntax, and the full repository `verify.ps1` gate pass. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
+Regression: R4-410 v2 preparation passed eleven directed independent-gate tests. Approval closure adds exact digest/statement binding plus mutation coverage preventing account, credential, call, spend, region, eligibility, live-validation, or production-claim inflation. Round 4 graph/mirror, secret isolation, supply-chain, Compose, PowerShell syntax, and the full repository `verify.ps1` gate remain required. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
-Progress Capsule: 165/196 passed; Round 4 is 9/38. `Next eligible: NONE`. External VKE and Tokyo VM validation are frozen inconclusive; SSH root cause is unknown; no automatic diagnostic retry is permitted. Cumulative conservative external cost is USD 11.256; teardown is complete; retained resources and leakage findings are zero. R4-405/R4-406 retain their exact target-pending/no-claim states. R4-410 `6d71059d...3ac5c` and R4-422 `0cc9bc...4ffb` are independent unapproved Human Gates.
+Progress Capsule: 166/196 passed; Round 4 is 10/38. `Next eligible: R4-411` for no-call local contract preparation only. External VKE and Tokyo VM validation are frozen inconclusive; SSH root cause is unknown; no automatic diagnostic retry is permitted. Cumulative conservative external cost is USD 11.256; teardown is complete; retained resources and leakage findings are zero. R4-405/R4-406 retain their exact target-pending/no-claim states. R4-410 is approved and closed without live calls; R4-422 `0cc9bc...4ffb` remains an independent unapproved Human Gate.
 
 Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly deferred/reclassified; no required task remains open.
 
 Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-350 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-352 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-330 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-333 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-331 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-332 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-334 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-335 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM; R3-336 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-340 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NOT-APPLICABLE; R3-341 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-342 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-343 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-344 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-DEFERRED; R3-345 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-346 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-347 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-348 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-349 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-356 E-PASS / X-PASS / S-NOT-APPLICABLE / C-NO-CLAIM; R3-358 E-PASS / X-NOT-REQUIRED / S-NOT-APPLICABLE / C-NO-CLAIM
 
-Blocked: R4-405/R4-406 remain frozen target-pending; reopening requires a new, clearly higher-information human proposal, exact contract, budget, and Human Gate. Existing VPCs remain `UNKNOWN / NOT_SAFE_TO_REUSE`; VKE-specific properties remain `DEFERRED_VKE`. R4-410 requires provider/DPA/Japan-access/non-region-pinned-processing ratification. R4-422 retains its independent provider/recipient gate. R4-437 remains inactive.
+Blocked: R4-405/R4-406 remain frozen target-pending; reopening requires a new, clearly higher-information human proposal, exact contract, budget, and Human Gate. Existing VPCs remain `UNKNOWN / NOT_SAFE_TO_REUSE`; VKE-specific properties remain `DEFERRED_VKE`. R4-411 live execution requires HERE account/Japan eligibility, `ROUTEMIND_TRAVEL_PROVIDER_API_KEY`, a new exact execution contract, budget, and Human Gate. R4-422 retains its independent provider/recipient gate. R4-437 remains inactive.
 
-Human Action Required: R4-410 may ratify v2 digest `6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c`, including separate HERE Routing/Matrix products, Japan service eligibility confirmation, non-region-pinned processing, synthetic-coordinate privacy, and billing ownership. This authorizes zero account creation and zero live calls. R4-422 remains independently ratifiable at `0cc9bc...4ffb`.
+Human Action Required: none for the current R4-411 local preparation checkpoint. Any future provider call requires a new R4-411 contract and separate approval after HERE account/Japan eligibility and secret readiness are established. R4-422 remains independently ratifiable at `0cc9bc...4ffb`.
 
-Next Candidates: none safely executable without a new Human Gate. R4-411 remains dependency-blocked and additionally requires HERE account/Japan eligibility, `ROUTEMIND_TRAVEL_PROVIDER_API_KEY`, a new exact live-call contract, and a separate USD 1 maximum budget approval. R4-422 remains independent; R4-437 remains inactive.
+Next Candidates: R4-411 provider-neutral preparation is dependency-unblocked; it may freeze a no-call execution proposal and local fail-closed validation, but cannot create an account, acquire/configure a credential, confirm Japan entitlement, or call HERE. R4-422 remains independent; R4-437 remains inactive.
 
 ### RouteMind Round 4 Final Closure capsule - 2026-08-25
 - External validation preparation: self-hosted SigNoz in Vultr `nrt`, contract

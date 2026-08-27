@@ -1,11 +1,13 @@
-# R4-410 Travel Provider Human Gate Preparation
+# R4-410 Travel Provider Contract Closure
 
 ## Gate classification
 
-R4-410 remains `BLOCKED / PREPARED_TRAVEL_PROVIDER_HUMAN_GATE`. This artifact
-does not select, register, authenticate to, call, spend against, or validate an
-external travel provider. The deterministic local provider remains the only
-validated runtime provider.
+R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN`. On 2026-08-27 the human
+owner ratified HERE Technologies with the separate HERE Routing API v8 and HERE
+Matrix Routing API v8 products under the exact v2 digest below. This approval
+selects the candidate contract; it does not register, authenticate to, call,
+spend against, or live-validate an external travel provider. The deterministic
+local provider remains the only validated runtime provider.
 
 The prior v1 contract remains immutable history at canonical SHA-256
 `7f71f018a6d22fe1ee7f70026edda71149ea38efdbe87b82860861579e4675d7`.
@@ -14,7 +16,7 @@ routing under one product name and did not elevate the documented Japan access
 restriction or non-region-pinned processing boundary. It is superseded, not
 approved or reinterpreted.
 
-Current canonical preparation contract:
+Approved immutable preparation contract:
 
 ```text
 contract = contracts/provider/r4-410-travel-provider-human-gate-v2.json
@@ -22,7 +24,7 @@ sha256 = 6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c
 recommended_provider = HERE_TECHNOLOGIES
 point_product = HERE_ROUTING_API_V8
 matrix_product = HERE_MATRIX_ROUTING_API_V8
-selected_provider = UNAPPROVED
+selected_provider_at_contract_freeze = UNAPPROVED
 Japan_service_eligibility = UNCONFIRMED_REQUIRES_HERE
 processing_region = NOT_REGION_PINNED
 live_calls_authorized = false
@@ -127,13 +129,23 @@ Minimum exact human action:
 I approve R4-410 contract SHA-256 6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c, ratify HERE Technologies using HERE Routing API v8 and HERE Matrix Routing API v8 as the RouteMind candidate travel provider, accept that Japan-region Routing service access requires HERE confirmation and that processing is not Tokyo-region-pinned under the reviewed HERE contract/DPA/subprocessor locations, accept the synthetic Tokyo coordinate privacy boundary and billing ownership, and acknowledge that this approval authorizes zero account creation and zero live calls.
 ```
 
-After ratification, R4-410 may close as a frozen provider contract, not as live or
+The exact statement above was received on 2026-08-27 and is retained in the
+machine-validated receipt
+`evidence/gates/R4-410/r4-410-human-approval-v1.json`. The receipt is bound to the
+canonical contract digest and preserves `UNCONFIRMED_REQUIRES_HERE`,
+`NOT_REGION_PINNED`, zero account creation, zero credential acquisition, zero
+live calls, and zero authorized spend.
+
+R4-410 therefore closes as a frozen candidate-provider contract, not as live or
 production validation. Account setup, Japan entitlement confirmation, credential
 configuration, budget authorization, and any provider call remain R4-411 work
 behind a new exact contract and Human Gate. R4-422 remains an independent gate.
 
-Local validation passed eleven directed contract mutation tests, the Round 4
-graph and active-mirror gate, tracked-secret isolation, supply-chain controls,
-Compose validation, PowerShell syntax, and the complete repository
-`scripts/verify.ps1` gate. Preparation commit `5d4cee5` passed all five jobs in
-real GitHub Actions run `33066336359`.
+Approval-closure validation passed fifteen directed independent-gate tests,
+including exact receipt-to-contract binding and mutation tests for account,
+credential, call, spend, region, eligibility, live-validation, and production
+claim inflation. The Round 4 graph and active-mirror gate, tracked-secret
+isolation, supply-chain controls, Compose validation, PowerShell syntax, and the
+complete repository `scripts/verify.ps1` gate also pass. The prior preparation
+commit `5d4cee5` passed all five jobs in real GitHub Actions run `33066336359`;
+this approval closure is a new checkpoint and has its own CI run recorded below.

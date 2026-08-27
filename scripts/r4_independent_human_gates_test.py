@@ -9,6 +9,7 @@ import r4_independent_human_gates as gates
 class IndependentHumanGateTests(unittest.TestCase):
     def setUp(self) -> None:
         self.travel = gates.load_contract(gates.TRAVEL)
+        self.travel_approval = gates.load_contract(gates.TRAVEL_APPROVAL)
         self.notification = gates.load_contract(gates.NOTIFICATION)
 
     def assert_travel_rejected(self, mutate, expected: str) -> None:  # type: ignore[no-untyped-def]
@@ -21,11 +22,66 @@ class IndependentHumanGateTests(unittest.TestCase):
         mutate(candidate)
         self.assertIn(expected, gates.validate_notification(candidate))
 
+    def assert_travel_approval_rejected(self, mutate, expected: str) -> None:  # type: ignore[no-untyped-def]
+        candidate = copy.deepcopy(self.travel_approval)
+        mutate(candidate)
+        self.assertIn(expected, gates.validate_travel_approval(candidate, self.travel))
+
     def test_preparation_contracts_are_valid_and_digest_stable(self) -> None:
         self.assertEqual(gates.validate_travel(self.travel), [])
+        self.assertEqual(
+            gates.validate_travel_approval(self.travel_approval, self.travel), []
+        )
         self.assertEqual(gates.validate_notification(self.notification), [])
         self.assertEqual(gates.digest(self.travel), gates.digest(copy.deepcopy(self.travel)))
         self.assertEqual(gates.digest(self.notification), gates.digest(copy.deepcopy(self.notification)))
+
+    def test_travel_approval_is_bound_to_exact_frozen_contract(self) -> None:
+        self.assertEqual(gates.digest(self.travel), gates.APPROVED_TRAVEL_DIGEST)
+        self.assert_travel_approval_rejected(
+            lambda value: value.update(approvedCanonicalSha256="0" * 64),
+            "travel_approval:contract_binding",
+        )
+        self.assert_travel_approval_rejected(
+            lambda value: value.update(approvalStatement="different"),
+            "travel_approval:contract_binding",
+        )
+
+    def test_travel_approval_cannot_authorize_account_credentials_calls_or_spend(self) -> None:
+        self.assert_travel_approval_rejected(
+            lambda value: value["authorization"].update(accountCreation=True),
+            "travel_approval:authorization_boundary",
+        )
+        self.assert_travel_approval_rejected(
+            lambda value: value["authorization"].update(liveCalls=True),
+            "travel_approval:authorization_boundary",
+        )
+        self.assert_travel_approval_rejected(
+            lambda value: value["authorization"].update(maximumSpendUsdCents=1),
+            "travel_approval:authorization_boundary",
+        )
+
+    def test_travel_approval_preserves_adverse_region_and_access_boundaries(self) -> None:
+        self.assert_travel_approval_rejected(
+            lambda value: value["ratification"].update(
+                japanServiceEligibility="CONFIRMED"
+            ),
+            "travel_approval:ratification_boundary",
+        )
+        self.assert_travel_approval_rejected(
+            lambda value: value["ratification"].update(processingRegion="TOKYO"),
+            "travel_approval:ratification_boundary",
+        )
+
+    def test_travel_approval_cannot_inflate_live_or_production_claims(self) -> None:
+        self.assert_travel_approval_rejected(
+            lambda value: value["claims"].update(providerLiveValidated=True),
+            "travel_approval:claims",
+        )
+        self.assert_travel_approval_rejected(
+            lambda value: value["claims"].update(productionValidated=True),
+            "travel_approval:claims",
+        )
 
     def test_travel_provider_cannot_be_claimed_selected_or_validated(self) -> None:
         self.assert_travel_rejected(lambda value: value["selection"].update(selectedProvider="HERE"), "travel:selection_fail_closed")

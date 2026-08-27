@@ -7,7 +7,19 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 TRAVEL = ROOT / "contracts/provider/r4-410-travel-provider-human-gate-v2.json"
+TRAVEL_APPROVAL = ROOT / "evidence/gates/R4-410/r4-410-human-approval-v1.json"
 NOTIFICATION = ROOT / "contracts/product/r4-422-notification-human-gate-v1.json"
+APPROVED_TRAVEL_DIGEST = "6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c"
+APPROVAL_STATEMENT = (
+    "I approve R4-410 contract SHA-256 "
+    f"{APPROVED_TRAVEL_DIGEST}, ratify HERE Technologies using HERE Routing API v8 "
+    "and HERE Matrix Routing API v8 as the RouteMind candidate travel provider, "
+    "accept that Japan-region Routing service access requires HERE confirmation and "
+    "that processing is not Tokyo-region-pinned under the reviewed HERE contract/DPA/"
+    "subprocessor locations, accept the synthetic Tokyo coordinate privacy boundary "
+    "and billing ownership, and acknowledge that this approval authorizes zero account "
+    "creation and zero live calls."
+)
 
 
 def load_contract(path: Path) -> dict[str, Any]:
@@ -171,6 +183,57 @@ def validate_travel(payload: dict[str, Any]) -> list[str]:
     return sorted(set(findings))
 
 
+def validate_travel_approval(
+    payload: dict[str, Any], travel: dict[str, Any]
+) -> list[str]:
+    findings: list[str] = []
+    if (
+        payload.get("schemaVersion") != 1
+        or payload.get("approvalId") != "r4-410-travel-provider-human-approval-v1"
+        or payload.get("taskId") != "R4-410"
+        or payload.get("approvalStatus") != "HUMAN_APPROVED_CONTRACT_FROZEN"
+        or payload.get("approvalSource") != "USER_EXPLICIT_INSTRUCTION"
+    ):
+        findings.append("travel_approval:identity")
+    if (
+        payload.get("approvedContractId") != travel.get("contractId")
+        or payload.get("approvedCanonicalSha256") != APPROVED_TRAVEL_DIGEST
+        or digest(travel) != APPROVED_TRAVEL_DIGEST
+        or payload.get("approvalStatement") != APPROVAL_STATEMENT
+    ):
+        findings.append("travel_approval:contract_binding")
+    if payload.get("approvalDate") != "2026-08-27":
+        findings.append("travel_approval:date")
+    if payload.get("ratification") != {
+        "candidateProvider": "HERE_TECHNOLOGIES",
+        "pointProduct": "HERE_ROUTING_API_V8",
+        "matrixProduct": "HERE_MATRIX_ROUTING_API_V8",
+        "japanServiceEligibility": "UNCONFIRMED_REQUIRES_HERE",
+        "processingRegion": "NOT_REGION_PINNED",
+        "syntheticTokyoCoordinatePrivacyAccepted": True,
+        "billingOwnershipAccepted": True,
+    }:
+        findings.append("travel_approval:ratification_boundary")
+    if payload.get("authorization") != {
+        "accountCreation": False,
+        "credentialAcquisition": False,
+        "secretConfiguration": False,
+        "liveCalls": False,
+        "maximumCalls": 0,
+        "maximumSpendUsdCents": 0,
+    }:
+        findings.append("travel_approval:authorization_boundary")
+    if payload.get("claims") != {
+        "candidateProviderRatified": True,
+        "providerLiveValidated": False,
+        "japanServiceEligibilityValidated": False,
+        "tokyoDataResidencyClaimed": False,
+        "productionValidated": False,
+    }:
+        findings.append("travel_approval:claims")
+    return sorted(set(findings))
+
+
 def validate_notification(payload: dict[str, Any]) -> list[str]:
     findings: list[str] = []
     if payload.get("schemaVersion") != 1 or payload.get("contractId") != "r4-422-notification-human-gate-v1":
@@ -238,12 +301,21 @@ def validate_notification(payload: dict[str, Any]) -> list[str]:
     return sorted(set(findings))
 
 
-def summary(travel: dict[str, Any], notification: dict[str, Any]) -> dict[str, Any]:
+def summary(
+    travel: dict[str, Any],
+    travel_approval: dict[str, Any],
+    notification: dict[str, Any],
+) -> dict[str, Any]:
     return {
         "valid": True,
         "travelContractId": travel["contractId"],
         "travelDigest": digest(travel),
-        "travelProviderSelected": travel["claims"]["providerSelected"],
+        "travelCandidateProviderRatified": travel_approval["claims"][
+            "candidateProviderRatified"
+        ],
+        "travelProviderLiveValidated": travel_approval["claims"][
+            "providerLiveValidated"
+        ],
         "travelLiveCallsAuthorized": travel["boundedLiveValidation"]["authorized"],
         "notificationContractId": notification["contractId"],
         "notificationDigest": digest(notification),
@@ -254,13 +326,24 @@ def summary(travel: dict[str, Any], notification: dict[str, Any]) -> dict[str, A
 
 def main() -> int:
     travel = load_contract(TRAVEL)
+    travel_approval = load_contract(TRAVEL_APPROVAL)
     notification = load_contract(NOTIFICATION)
-    findings = validate_travel(travel) + validate_notification(notification)
+    findings = (
+        validate_travel(travel)
+        + validate_travel_approval(travel_approval, travel)
+        + validate_notification(notification)
+    )
     if findings:
         for finding in sorted(findings):
             print(f"ERROR: {finding}")
         return 1
-    print(json.dumps(summary(travel, notification), sort_keys=True, separators=(",", ":")))
+    print(
+        json.dumps(
+            summary(travel, travel_approval, notification),
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+    )
     return 0
 
 

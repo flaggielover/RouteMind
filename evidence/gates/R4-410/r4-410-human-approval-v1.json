@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "approvalId": "r4-410-travel-provider-human-approval-v1",
+  "taskId": "R4-410",
+  "approvalStatus": "HUMAN_APPROVED_CONTRACT_FROZEN",
+  "approvalDate": "2026-08-27",
+  "approvalSource": "USER_EXPLICIT_INSTRUCTION",
+  "approvedContractId": "r4-410-travel-provider-human-gate-v2",
+  "approvedCanonicalSha256": "6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c",
+  "approvalStatement": "I approve R4-410 contract SHA-256 6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c, ratify HERE Technologies using HERE Routing API v8 and HERE Matrix Routing API v8 as the RouteMind candidate travel provider, accept that Japan-region Routing service access requires HERE confirmation and that processing is not Tokyo-region-pinned under the reviewed HERE contract/DPA/subprocessor locations, accept the synthetic Tokyo coordinate privacy boundary and billing ownership, and acknowledge that this approval authorizes zero account creation and zero live calls.",
+  "ratification": {
+    "candidateProvider": "HERE_TECHNOLOGIES",
+    "pointProduct": "HERE_ROUTING_API_V8",
+    "matrixProduct": "HERE_MATRIX_ROUTING_API_V8",
+    "japanServiceEligibility": "UNCONFIRMED_REQUIRES_HERE",
+    "processingRegion": "NOT_REGION_PINNED",
+    "syntheticTokyoCoordinatePrivacyAccepted": true,
+    "billingOwnershipAccepted": true
+  },
+  "authorization": {
+    "accountCreation": false,
+    "credentialAcquisition": false,
+    "secretConfiguration": false,
+    "liveCalls": false,
+    "maximumCalls": 0,
+    "maximumSpendUsdCents": 0
+  },
+  "claims": {
+    "candidateProviderRatified": true,
+    "providerLiveValidated": false,
+    "japanServiceEligibilityValidated": false,
+    "tokyoDataResidencyClaimed": false,
+    "productionValidated": false
+  }
+}
