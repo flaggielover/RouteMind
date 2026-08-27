@@ -10,6 +10,7 @@ class IndependentHumanGateTests(unittest.TestCase):
     def setUp(self) -> None:
         self.travel = gates.load_contract(gates.TRAVEL)
         self.travel_approval = gates.load_contract(gates.TRAVEL_APPROVAL)
+        self.travel_live = gates.load_contract(gates.TRAVEL_LIVE)
         self.notification = gates.load_contract(gates.NOTIFICATION)
 
     def assert_travel_rejected(self, mutate, expected: str) -> None:  # type: ignore[no-untyped-def]
@@ -27,14 +28,22 @@ class IndependentHumanGateTests(unittest.TestCase):
         mutate(candidate)
         self.assertIn(expected, gates.validate_travel_approval(candidate, self.travel))
 
+    def assert_travel_live_rejected(self, mutate, expected: str) -> None:  # type: ignore[no-untyped-def]
+        candidate = copy.deepcopy(self.travel_live)
+        mutate(candidate)
+        self.assertIn(expected, gates.validate_travel_live(candidate, self.travel))
+
     def test_preparation_contracts_are_valid_and_digest_stable(self) -> None:
         self.assertEqual(gates.validate_travel(self.travel), [])
         self.assertEqual(
             gates.validate_travel_approval(self.travel_approval, self.travel), []
         )
+        self.assertEqual(gates.validate_travel_live(self.travel_live, self.travel), [])
         self.assertEqual(gates.validate_notification(self.notification), [])
         self.assertEqual(gates.digest(self.travel), gates.digest(copy.deepcopy(self.travel)))
         self.assertEqual(gates.digest(self.notification), gates.digest(copy.deepcopy(self.notification)))
+        self.assertEqual(gates.digest(self.travel_live), gates.TRAVEL_LIVE_DIGEST)
+        self.assertEqual(gates.digest(self.travel_live), gates.digest(copy.deepcopy(self.travel_live)))
 
     def test_travel_approval_is_bound_to_exact_frozen_contract(self) -> None:
         self.assertEqual(gates.digest(self.travel), gates.APPROVED_TRAVEL_DIGEST)
@@ -81,6 +90,77 @@ class IndependentHumanGateTests(unittest.TestCase):
         self.assert_travel_approval_rejected(
             lambda value: value["claims"].update(productionValidated=True),
             "travel_approval:claims",
+        )
+
+    def test_travel_live_contract_is_bound_to_approved_r4_410(self) -> None:
+        self.assertEqual(
+            self.travel_live["prerequisiteBinding"]["r4-410CanonicalSha256"],
+            gates.APPROVED_TRAVEL_DIGEST,
+        )
+        self.assert_travel_live_rejected(
+            lambda value: value["prerequisiteBinding"].update(
+                **{"r4-410CanonicalSha256": "0" * 64}
+            ),
+            "travel_live:prerequisite_binding",
+        )
+        self.assert_travel_live_rejected(
+            lambda value: value["provider"].update(
+                japanServiceEligibility="ASSUMED"
+            ),
+            "travel_live:provider_boundary",
+        )
+
+    def test_travel_live_call_manifest_is_exact_and_fail_closed(self) -> None:
+        manifest = self.travel_live["liveCallManifest"]
+        self.assertFalse(manifest["authorized"])
+        self.assertEqual(len(manifest["pointCalls"]), 20)
+        self.assertEqual(len(manifest["matrixRequests"]), 5)
+        self.assertEqual(
+            sum(item["elements"] for item in manifest["matrixRequests"]), 100
+        )
+        self.assert_travel_live_rejected(
+            lambda value: value["liveCallManifest"].update(maximumPointCalls=21),
+            "travel_live:call_budget",
+        )
+        self.assert_travel_live_rejected(
+            lambda value: value["liveCallManifest"]["pointCalls"].pop(),
+            "travel_live:call_budget",
+        )
+        self.assert_travel_live_rejected(
+            lambda value: value["liveCallManifest"]["matrixRequests"][0].update(
+                elements=21
+            ),
+            "travel_live:matrix_manifest",
+        )
+
+    def test_travel_live_secret_and_leakage_boundaries_are_required(self) -> None:
+        self.assert_travel_live_rejected(
+            lambda value: value["secretInjection"].update(source="Git"),
+            "travel_live:secret_injection",
+        )
+        self.assert_travel_live_rejected(
+            lambda value: value["secretInjection"]["forbiddenDestinations"].remove(
+                "logs"
+            ),
+            "travel_live:secret_injection",
+        )
+        self.assert_travel_live_rejected(
+            lambda value: value["leakageScan"].update(secretValueOutput="allowed"),
+            "travel_live:leakage_scan",
+        )
+
+    def test_travel_live_fallback_teardown_and_claims_remain_conservative(self) -> None:
+        self.assert_travel_live_rejected(
+            lambda value: value["fallback"].update(failOpen=True),
+            "travel_live:fallback",
+        )
+        self.assert_travel_live_rejected(
+            lambda value: value["teardown"].update(providerResourcesCreated=1),
+            "travel_live:teardown",
+        )
+        self.assert_travel_live_rejected(
+            lambda value: value["claims"].update(liveCallsExecuted=True),
+            "travel_live:claims",
         )
 
     def test_travel_provider_cannot_be_claimed_selected_or_validated(self) -> None:

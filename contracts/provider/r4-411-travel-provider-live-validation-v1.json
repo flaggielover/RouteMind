@@ -1,0 +1,245 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-411-travel-provider-live-validation-v1",
+  "taskId": "R4-411",
+  "status": "PREPARED_TRAVEL_PROVIDER_LIVE_VALIDATION_HUMAN_GATE",
+  "prerequisiteBinding": {
+    "r4-410ContractId": "r4-410-travel-provider-human-gate-v2",
+    "r4-410CanonicalSha256": "6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c",
+    "r4-410ApprovalReceipt": "evidence/gates/R4-410/r4-410-human-approval-v1.json",
+    "r4-410ApprovalAllowsLiveCalls": false,
+    "newHumanGateRequired": true
+  },
+  "provider": {
+    "provider": "HERE_TECHNOLOGIES",
+    "pointProduct": "HERE_ROUTING_API_V8",
+    "matrixProduct": "HERE_MATRIX_ROUTING_API_V8",
+    "pointEndpoint": "https://router.hereapi.com/v8/routes",
+    "matrixEndpoint": "https://matrix.router.hereapi.com/v8/matrix",
+    "matrixMode": "synchronous_async_false",
+    "providerValidated": false,
+    "japanServiceEligibility": "MUST_BE_CONFIRMED_BY_HERE_BEFORE_EXECUTION",
+    "processingRegion": "NOT_REGION_PINNED"
+  },
+  "accountApplicationPrerequisites": [
+    "HERE account and application identity must be supplied outside Git without secrets",
+    "HERE must confirm entitlement for Routing service access in Japan before execution",
+    "Reviewed HERE contract, DPA, and subprocessor locations must remain accepted",
+    "Account and billing ownership must be confirmed by the human approver"
+  ],
+  "secretInjection": {
+    "requiredSecretNames": [
+      "ROUTEMIND_TRAVEL_PROVIDER_API_KEY"
+    ],
+    "source": "external_secret_store_or_process_environment",
+    "scope": "single_bounded_validation_process",
+    "presenceCheck": "SET_OR_MISSING_ONLY",
+    "missingSecretBehavior": "fail_closed_before_any_provider_request",
+    "forbiddenDestinations": [
+      "Git",
+      "command_output",
+      "URLs",
+      "logs",
+      "telemetry",
+      "evidence",
+      "fixtures",
+      "screenshots",
+      "chat"
+    ],
+    "cleanup": "unset_process_value_and_remove_ephemeral_secret_mount_after_run"
+  },
+  "syntheticFixture": {
+    "fixtureId": "r4-411-synthetic-tokyo-v1",
+    "locationClass": "synthetic_Tokyo_coordinates_only",
+    "coordinateSource": "committed_non_secret_fixture_referenced_by_id",
+    "durableBusinessIdentifiers": "forbidden",
+    "outboundFields": [
+      "coordinates",
+      "departure_time",
+      "transport_mode",
+      "derived_region_definition",
+      "opaque_request_id"
+    ],
+    "processingRegion": "NOT_REGION_PINNED",
+    "tokyoResidencyGuaranteed": false,
+    "rawCoordinatesInEvidence": false
+  },
+  "liveCallManifest": {
+    "authorized": false,
+    "authorizationMode": "NEW_HUMAN_GATE_REQUIRED",
+    "maximumDurationMinutes": 30,
+    "maximumPointCalls": 20,
+    "maximumMatrixRequests": 5,
+    "maximumMatrixElements": 100,
+    "maximumSpendUsdCents": 100,
+    "pointCalls": [
+      {"id": "P01", "scenario": "baseline", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P02", "scenario": "baseline", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P03", "scenario": "baseline", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P04", "scenario": "baseline", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P05", "scenario": "time_context", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P06", "scenario": "time_context", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P07", "scenario": "time_context", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P08", "scenario": "time_context", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P09", "scenario": "retry_timeout_observation", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P10", "scenario": "retry_timeout_observation", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P11", "scenario": "retry_timeout_observation", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P12", "scenario": "retry_timeout_observation", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P13", "scenario": "error_classification", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P14", "scenario": "error_classification", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P15", "scenario": "error_classification", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P16", "scenario": "error_classification", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P17", "scenario": "quota_observation", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P18", "scenario": "quota_observation", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P19", "scenario": "quota_observation", "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "P20", "scenario": "quota_observation", "fixture": "r4-411-synthetic-tokyo-v1"}
+    ],
+    "matrixRequests": [
+      {"id": "M01", "scenario": "baseline_matrix", "origins": 4, "destinations": 5, "elements": 20, "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "M02", "scenario": "time_context_matrix", "origins": 4, "destinations": 5, "elements": 20, "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "M03", "scenario": "partial_matrix_observation", "origins": 4, "destinations": 5, "elements": 20, "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "M04", "scenario": "quota_error_classification", "origins": 4, "destinations": 5, "elements": 20, "fixture": "r4-411-synthetic-tokyo-v1"},
+      {"id": "M05", "scenario": "fallback_provenance", "origins": 4, "destinations": 5, "elements": 20, "fixture": "r4-411-synthetic-tokyo-v1"}
+    ],
+    "plannedPointCallCount": 20,
+    "plannedMatrixRequestCount": 5,
+    "plannedMatrixElementCount": 100,
+    "overageBehavior": "fail_closed_and_stop_before_overage"
+  },
+  "requestContract": {
+    "pointMethod": "GET",
+    "matrixMethod": "POST",
+    "timeoutMilliseconds": 1500,
+    "maxRetries": 1,
+    "retryJitter": "deterministic_seeded",
+    "pointRequestFields": [
+      "origin_latitude",
+      "origin_longitude",
+      "destination_latitude",
+      "destination_longitude",
+      "departure_time",
+      "transport_mode",
+      "opaque_request_id"
+    ],
+    "matrixRequestFields": [
+      "origins",
+      "destinations",
+      "departure_time",
+      "transport_mode",
+      "derived_region_definition",
+      "opaque_request_id"
+    ],
+    "responseFields": [
+      "distance_metres",
+      "duration_seconds",
+      "provider_status",
+      "provider_request_id"
+    ],
+    "units": {
+      "distance": "metres",
+      "duration": "seconds",
+      "time": "RFC3339_UTC"
+    },
+    "invalidOrPartialMatrix": "fail_closed_then_explicit_local_fallback",
+    "asynchronousMatrixRedirects": "forbidden",
+    "errorClasses": [
+      "TIMEOUT",
+      "NETWORK_ERROR",
+      "HTTP_4XX",
+      "HTTP_5XX",
+      "JAPAN_ACCESS_DENIED",
+      "QUOTA_REJECTED",
+      "INVALID_SCHEMA",
+      "PARTIAL_MATRIX",
+      "UNKNOWN"
+    ]
+  },
+  "fallback": {
+    "provider": "deterministic-local",
+    "failOpen": false,
+    "transition": "external_failure_then_explicit_local_fallback",
+    "fallbackReasonRequired": true,
+    "fallbackProvenanceRequired": true,
+    "providerTruthAfterFallback": false,
+    "durableBusinessTruthChangedByFallback": false,
+    "evidenceFields": [
+      "trigger_error_class",
+      "trigger_request_id_hash",
+      "fallback_provider",
+      "fallback_algorithm_version",
+      "fallback_timestamp",
+      "result_provenance"
+    ]
+  },
+  "evidenceContract": [
+    "HERE_account_and_application_identity_without_secrets",
+    "written_Japan_service_eligibility_confirmation",
+    "accepted_contract_DPA_and_non_region_pinned_processing",
+    "manifest_digest_and_execution_window",
+    "per_call_timestamp_status_and_redacted_response_metadata",
+    "point_distance_duration_units_and_time_context",
+    "matrix_element_count_and_partial_or_invalid_behavior",
+    "quota_timeout_network_and_HTTP_error_classification",
+    "deterministic_fallback_reason_and_provenance",
+    "secret_presence_only_check_and_leakage_scan",
+    "actual_or_conservative_cost_with_budget_comparison",
+    "environment_versions_and_artifact_digests",
+    "teardown_secret_cleanup_and_zero_provider_resource_claim"
+  ],
+  "leakageScan": {
+    "required": true,
+    "scanTargets": [
+      "Git diff",
+      "stdout and stderr capture",
+      "logs",
+      "telemetry",
+      "evidence",
+      "temporary files",
+      "screenshots"
+    ],
+    "secretValueOutput": "forbidden",
+    "failureBehavior": "fail_closed_and_preserve_redacted_failure_metadata"
+  },
+  "teardown": {
+    "required": true,
+    "providerResourcesCreated": 0,
+    "actions": [
+      "stop bounded validation process",
+      "unset ROUTEMIND_TRAVEL_PROVIDER_API_KEY from process scope",
+      "remove ephemeral secret mount and untracked runtime output",
+      "retain only redacted evidence and digests",
+      "verify no provider resource or account mutation was performed"
+    ],
+    "failureBehavior": "fail_closed_and_report_cleanup_incomplete"
+  },
+  "humanGate": {
+    "required": true,
+    "requiredApprovals": [
+      "HERE_ACCOUNT_AND_APPLICATION_IDENTITY",
+      "HERE_JAPAN_SERVICE_ELIGIBILITY",
+      "HERE_CONTRACT_DPA_AND_NON_REGION_PINNED_PROCESSING",
+      "ROUTEMIND_TRAVEL_PROVIDER_API_KEY_EXTERNAL_INJECTION",
+      "SYNTHETIC_TOKYO_FIXTURE_AND_BILLING_OWNERSHIP",
+      "MAX_20_POINT_CALLS",
+      "MAX_5_MATRIX_REQUESTS_AND_100_ELEMENTS",
+      "MAX_USD_1",
+      "MAX_30_MINUTES",
+      "FAIL_CLOSED_FALLBACK_AND_TEARDOWN"
+    ],
+    "requiredSecretNames": [
+      "ROUTEMIND_TRAVEL_PROVIDER_API_KEY"
+    ],
+    "approvalDoesNotAuthorizeAccountCreation": true,
+    "approvalDoesNotAuthorizeCredentialAcquisition": true,
+    "approvalDoesNotAuthorizeUntilJapanEligibilityConfirmed": true,
+    "secretValuesInChat": "forbidden"
+  },
+  "claims": {
+    "contractPrepared": true,
+    "providerValidated": false,
+    "japanServiceEligibilityValidated": false,
+    "liveCallsExecuted": false,
+    "productionValidated": false,
+    "localFallbackValidated": true
+  }
+}

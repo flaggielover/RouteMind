@@ -8,8 +8,10 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 TRAVEL = ROOT / "contracts/provider/r4-410-travel-provider-human-gate-v2.json"
 TRAVEL_APPROVAL = ROOT / "evidence/gates/R4-410/r4-410-human-approval-v1.json"
+TRAVEL_LIVE = ROOT / "contracts/provider/r4-411-travel-provider-live-validation-v1.json"
 NOTIFICATION = ROOT / "contracts/product/r4-422-notification-human-gate-v1.json"
 APPROVED_TRAVEL_DIGEST = "6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c"
+TRAVEL_LIVE_DIGEST = "4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c"
 APPROVAL_STATEMENT = (
     "I approve R4-410 contract SHA-256 "
     f"{APPROVED_TRAVEL_DIGEST}, ratify HERE Technologies using HERE Routing API v8 "
@@ -234,6 +236,169 @@ def validate_travel_approval(
     return sorted(set(findings))
 
 
+def validate_travel_live(payload: dict[str, Any], travel: dict[str, Any]) -> list[str]:
+    findings: list[str] = []
+    if payload.get("schemaVersion") != 1 or payload.get("contractId") != "r4-411-travel-provider-live-validation-v1":
+        findings.append("travel_live:identity")
+    if payload.get("taskId") != "R4-411" or payload.get("status") != "PREPARED_TRAVEL_PROVIDER_LIVE_VALIDATION_HUMAN_GATE":
+        findings.append("travel_live:status")
+    binding = payload.get("prerequisiteBinding", {})
+    if binding != {
+        "r4-410ContractId": travel.get("contractId"),
+        "r4-410CanonicalSha256": APPROVED_TRAVEL_DIGEST,
+        "r4-410ApprovalReceipt": "evidence/gates/R4-410/r4-410-human-approval-v1.json",
+        "r4-410ApprovalAllowsLiveCalls": False,
+        "newHumanGateRequired": True,
+    }:
+        findings.append("travel_live:prerequisite_binding")
+    provider = payload.get("provider", {})
+    if provider != {
+        "provider": "HERE_TECHNOLOGIES",
+        "pointProduct": "HERE_ROUTING_API_V8",
+        "matrixProduct": "HERE_MATRIX_ROUTING_API_V8",
+        "pointEndpoint": "https://router.hereapi.com/v8/routes",
+        "matrixEndpoint": "https://matrix.router.hereapi.com/v8/matrix",
+        "matrixMode": "synchronous_async_false",
+        "providerValidated": False,
+        "japanServiceEligibility": "MUST_BE_CONFIRMED_BY_HERE_BEFORE_EXECUTION",
+        "processingRegion": "NOT_REGION_PINNED",
+    }:
+        findings.append("travel_live:provider_boundary")
+    prerequisites = {
+        "HERE account and application identity must be supplied outside Git without secrets",
+        "HERE must confirm entitlement for Routing service access in Japan before execution",
+        "Reviewed HERE contract, DPA, and subprocessor locations must remain accepted",
+        "Account and billing ownership must be confirmed by the human approver",
+    }
+    if set(payload.get("accountApplicationPrerequisites", [])) != prerequisites:
+        findings.append("travel_live:account_prerequisites")
+    secret = payload.get("secretInjection", {})
+    if secret != {
+        "requiredSecretNames": ["ROUTEMIND_TRAVEL_PROVIDER_API_KEY"],
+        "source": "external_secret_store_or_process_environment",
+        "scope": "single_bounded_validation_process",
+        "presenceCheck": "SET_OR_MISSING_ONLY",
+        "missingSecretBehavior": "fail_closed_before_any_provider_request",
+        "forbiddenDestinations": ["Git", "command_output", "URLs", "logs", "telemetry", "evidence", "fixtures", "screenshots", "chat"],
+        "cleanup": "unset_process_value_and_remove_ephemeral_secret_mount_after_run",
+    }:
+        findings.append("travel_live:secret_injection")
+    fixture = payload.get("syntheticFixture", {})
+    if fixture != {
+        "fixtureId": "r4-411-synthetic-tokyo-v1",
+        "locationClass": "synthetic_Tokyo_coordinates_only",
+        "coordinateSource": "committed_non_secret_fixture_referenced_by_id",
+        "durableBusinessIdentifiers": "forbidden",
+        "outboundFields": ["coordinates", "departure_time", "transport_mode", "derived_region_definition", "opaque_request_id"],
+        "processingRegion": "NOT_REGION_PINNED",
+        "tokyoResidencyGuaranteed": False,
+        "rawCoordinatesInEvidence": False,
+    }:
+        findings.append("travel_live:fixture_boundary")
+
+    manifest = payload.get("liveCallManifest", {})
+    point_calls = manifest.get("pointCalls", [])
+    matrix_requests = manifest.get("matrixRequests", [])
+    if (
+        manifest.get("authorized") is not False
+        or manifest.get("authorizationMode") != "NEW_HUMAN_GATE_REQUIRED"
+        or manifest.get("maximumDurationMinutes") != 30
+        or manifest.get("maximumPointCalls") != 20
+        or manifest.get("maximumMatrixRequests") != 5
+        or manifest.get("maximumMatrixElements") != 100
+        or manifest.get("maximumSpendUsdCents") != 100
+        or manifest.get("plannedPointCallCount") != 20
+        or len(point_calls) != 20
+        or manifest.get("plannedMatrixRequestCount") != 5
+        or len(matrix_requests) != 5
+        or manifest.get("plannedMatrixElementCount") != 100
+        or sum(int(item.get("elements", 0)) for item in matrix_requests) != 100
+        or manifest.get("overageBehavior") != "fail_closed_and_stop_before_overage"
+    ):
+        findings.append("travel_live:call_budget")
+    expected_point_ids = [f"P{index:02d}" for index in range(1, 21)]
+    if [item.get("id") for item in point_calls] != expected_point_ids or any(item.get("fixture") != "r4-411-synthetic-tokyo-v1" for item in point_calls):
+        findings.append("travel_live:point_manifest")
+    expected_matrix_ids = [f"M{index:02d}" for index in range(1, 6)]
+    if [item.get("id") for item in matrix_requests] != expected_matrix_ids or any(
+        item.get("fixture") != "r4-411-synthetic-tokyo-v1"
+        or item.get("origins") != 4
+        or item.get("destinations") != 5
+        or item.get("elements") != 20
+        for item in matrix_requests
+    ):
+        findings.append("travel_live:matrix_manifest")
+
+    request = payload.get("requestContract", {})
+    if (
+        request.get("pointMethod") != "GET"
+        or request.get("matrixMethod") != "POST"
+        or request.get("timeoutMilliseconds") != 1500
+        or request.get("maxRetries") != 1
+        or request.get("retryJitter") != "deterministic_seeded"
+        or request.get("invalidOrPartialMatrix") != "fail_closed_then_explicit_local_fallback"
+        or request.get("asynchronousMatrixRedirects") != "forbidden"
+        or len(request.get("errorClasses", [])) != 9
+    ):
+        findings.append("travel_live:request_contract")
+    fallback = payload.get("fallback", {})
+    if (
+        fallback.get("provider") != "deterministic-local"
+        or fallback.get("failOpen") is not False
+        or fallback.get("transition") != "external_failure_then_explicit_local_fallback"
+        or fallback.get("fallbackReasonRequired") is not True
+        or fallback.get("fallbackProvenanceRequired") is not True
+        or fallback.get("providerTruthAfterFallback") is not False
+        or fallback.get("durableBusinessTruthChangedByFallback") is not False
+        or len(fallback.get("evidenceFields", [])) != 6
+    ):
+        findings.append("travel_live:fallback")
+    evidence = {
+        "HERE_account_and_application_identity_without_secrets",
+        "written_Japan_service_eligibility_confirmation",
+        "accepted_contract_DPA_and_non_region_pinned_processing",
+        "manifest_digest_and_execution_window",
+        "per_call_timestamp_status_and_redacted_response_metadata",
+        "point_distance_duration_units_and_time_context",
+        "matrix_element_count_and_partial_or_invalid_behavior",
+        "quota_timeout_network_and_HTTP_error_classification",
+        "deterministic_fallback_reason_and_provenance",
+        "secret_presence_only_check_and_leakage_scan",
+        "actual_or_conservative_cost_with_budget_comparison",
+        "environment_versions_and_artifact_digests",
+        "teardown_secret_cleanup_and_zero_provider_resource_claim",
+    }
+    if set(payload.get("evidenceContract", [])) != evidence:
+        findings.append("travel_live:evidence_contract")
+    leakage = payload.get("leakageScan", {})
+    if leakage.get("required") is not True or leakage.get("secretValueOutput") != "forbidden" or leakage.get("failureBehavior") != "fail_closed_and_preserve_redacted_failure_metadata":
+        findings.append("travel_live:leakage_scan")
+    teardown = payload.get("teardown", {})
+    if teardown.get("required") is not True or teardown.get("providerResourcesCreated") != 0 or teardown.get("failureBehavior") != "fail_closed_and_report_cleanup_incomplete":
+        findings.append("travel_live:teardown")
+    human_gate = payload.get("humanGate", {})
+    if (
+        human_gate.get("required") is not True
+        or human_gate.get("requiredSecretNames") != ["ROUTEMIND_TRAVEL_PROVIDER_API_KEY"]
+        or human_gate.get("approvalDoesNotAuthorizeAccountCreation") is not True
+        or human_gate.get("approvalDoesNotAuthorizeCredentialAcquisition") is not True
+        or human_gate.get("approvalDoesNotAuthorizeUntilJapanEligibilityConfirmed") is not True
+        or human_gate.get("secretValuesInChat") != "forbidden"
+        or len(human_gate.get("requiredApprovals", [])) != 10
+    ):
+        findings.append("travel_live:human_gate")
+    if payload.get("claims") != {
+        "contractPrepared": True,
+        "providerValidated": False,
+        "japanServiceEligibilityValidated": False,
+        "liveCallsExecuted": False,
+        "productionValidated": False,
+        "localFallbackValidated": True,
+    }:
+        findings.append("travel_live:claims")
+    return sorted(set(findings))
+
+
 def validate_notification(payload: dict[str, Any]) -> list[str]:
     findings: list[str] = []
     if payload.get("schemaVersion") != 1 or payload.get("contractId") != "r4-422-notification-human-gate-v1":
@@ -304,6 +469,7 @@ def validate_notification(payload: dict[str, Any]) -> list[str]:
 def summary(
     travel: dict[str, Any],
     travel_approval: dict[str, Any],
+    travel_live: dict[str, Any],
     notification: dict[str, Any],
 ) -> dict[str, Any]:
     return {
@@ -317,6 +483,10 @@ def summary(
             "providerLiveValidated"
         ],
         "travelLiveCallsAuthorized": travel["boundedLiveValidation"]["authorized"],
+        "travelLiveContractId": travel_live["contractId"],
+        "travelLiveContractDigest": digest(travel_live),
+        "travelLiveExecutionPrepared": travel_live["claims"]["contractPrepared"],
+        "travelLiveExecutionAuthorized": travel_live["liveCallManifest"]["authorized"],
         "notificationContractId": notification["contractId"],
         "notificationDigest": digest(notification),
         "notificationProviderSelected": notification["claims"]["providerSelected"],
@@ -327,10 +497,12 @@ def summary(
 def main() -> int:
     travel = load_contract(TRAVEL)
     travel_approval = load_contract(TRAVEL_APPROVAL)
+    travel_live = load_contract(TRAVEL_LIVE)
     notification = load_contract(NOTIFICATION)
     findings = (
         validate_travel(travel)
         + validate_travel_approval(travel_approval, travel)
+        + validate_travel_live(travel_live, travel)
         + validate_notification(notification)
     )
     if findings:
@@ -339,7 +511,7 @@ def main() -> int:
         return 1
     print(
         json.dumps(
-            summary(travel, travel_approval, notification),
+            summary(travel, travel_approval, travel_live, notification),
             sort_keys=True,
             separators=(",", ":"),
         )

@@ -8,9 +8,9 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: NONE - R4-411 LIVE PROVIDER VALIDATION HUMAN GATE
 
-Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate with separate Routing API v8 and Matrix Routing API v8 products; Japan eligibility remains `UNCONFIRMED_REQUIRES_HERE`, processing remains `NOT_REGION_PINNED`, and no live/provider/production validation is claimed. Approval authorized zero account creation, credentials, live calls, or spend. R4-411 is explicitly `BLOCKED / DEFERRED_EXTERNAL` pending HERE account/Japan eligibility, external secret injection, a new exact live-validation contract, and a separate Human Gate. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
+Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate with separate Routing API v8 and Matrix Routing API v8 products; Japan eligibility remains `UNCONFIRMED_REQUIRES_HERE`, processing remains `NOT_REGION_PINNED`, and no live/provider/production validation is claimed. Approval authorized zero account creation, credentials, live calls, or spend. R4-411 is explicitly `BLOCKED / DEFERRED_EXTERNAL`; its exact v1 live-validation contract is prepared at SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`, while HERE account/Japan eligibility, external secret injection, and a separate Human Gate remain pending. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
 
-Next: no safe task is currently executable. R4-411 requires confirmed HERE account/Japan eligibility, `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through an external secret store, a new exact bounded execution contract, and a separate Human Gate. R4-422 `0cc9bc...4ffb` remains independent and unapproved. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+Next: no safe task is currently executable. R4-411 requires confirmed HERE account/Japan eligibility, `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through an external secret store, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-422 `0cc9bc...4ffb` remains independent and unapproved. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
 Latest control-plane checkpoint: commit `0150acfdb6d816b92d6a20bc63f2412c962a56d0`
 passed real GitHub Actions CI run `33080685485` (all five required jobs).
@@ -93,10 +93,22 @@ and Tokyo residency as unclaimed. It freezes the synthetic-coordinate allowlist,
 one external future secret name, zero current calls/spend, no fail-open behavior,
 and explicit deterministic-local fallback provenance. Human ratification of the
 provider/products, Japan access path, HERE contract/DPA, processing locations,
-privacy boundary, and billing ownership is required. R4-411 still needs a new
-exact live-call contract, credential, USD 1 maximum budget, and Human Gate.
+privacy boundary, and billing ownership is required. R4-411's exact v1
+live-validation contract is now prepared at SHA-256
+`4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`; it remains
+unauthorized until HERE account/Japan eligibility, external secret readiness,
+and a separate Human Gate are complete. The contract caps execution at 20 point
+calls, 5 matrix requests/100 elements, 30 minutes, and USD 1 with fail-closed
+fallback and teardown.
 Preparation commit `5d4cee5` passed all five jobs in real GitHub Actions run
 `33066336359`.
+
+R4-411 preparation evidence is
+`evidence/gates/R4-411/2026-08-27-live-validation-preparation.md`, with the
+prior blocked checkpoint retained at
+`evidence/gates/R4-411/2026-08-27-blocked-after-r4-410.md`. The independent
+contract gate passes 19 tests, and this checkpoint must observe its own real CI
+before being considered synchronized.
 
 R4-422 now has a zero-send preparation contract at
 `contracts/product/r4-422-notification-human-gate-v1.json`, SHA-256

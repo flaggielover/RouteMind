@@ -34,3 +34,14 @@ Control-plane recomputation checkpoint:
   blocker graph and progress capsule after the R4-410 approval closure.
 - Real GitHub Actions CI run `33080685485` completed successfully; all five
   required jobs passed.
+
+The next bounded execution contract is now prepared, but not approved:
+
+- `contracts/provider/r4-411-travel-provider-live-validation-v1.json`
+- canonical SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`
+- `authorized: false`, maximum 20 point calls, 5 matrix requests, 100 matrix
+  elements, USD 1, and 30 minutes.
+
+This preparation removes the missing-contract blocker only. HERE account and
+application identity, written Japan eligibility, external secret readiness, and
+the new R4-411 Human Gate remain required before any request can be made.
