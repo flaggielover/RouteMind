@@ -88,3 +88,9 @@ Remote validation checkpoint:
 
 - Final Human Gate record commit `467f333d5c4d0529f862920571ea4d9747249398`
   passed real GitHub Actions CI run `33083434000`; all five required jobs passed.
+
+- DAG blocker correction commit `cb99abce233999b90299b66a64908d8dcef83b8f`
+  passed all five required jobs in real GitHub Actions CI run `33084375382`.
+  The active graph now records only the genuine account/Japan eligibility,
+  external-secret, and separate-Human-Gate blockers; the prepared contract is
+  no longer incorrectly represented as missing.

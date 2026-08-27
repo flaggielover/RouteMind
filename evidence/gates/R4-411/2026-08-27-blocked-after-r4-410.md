@@ -55,3 +55,13 @@ The next bounded execution contract is now prepared, but not approved:
 This preparation removes the missing-contract blocker only. HERE account and
 application identity, written Japan eligibility, external secret readiness, and
 the new R4-411 Human Gate remain required before any request can be made.
+
+Graph correction checkpoint:
+
+- Commit `cb99abce233999b90299b66a64908d8dcef83b8f` removed the stale
+  "new exact contract" blocker after validating the canonical contract. Real
+  GitHub Actions run `33084375382` passed all five required jobs. The remaining
+  blockers are limited to HERE account/application identity and Japan service
+  eligibility, external `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` injection, and the
+  separate R4-411 Human Gate. No account, credential, provider call, or spend
+  occurred.
