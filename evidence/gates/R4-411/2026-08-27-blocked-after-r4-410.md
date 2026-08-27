@@ -27,3 +27,10 @@ and R4-406 remain `TARGET_PENDING / NO_TARGET_CLAIM`. R3-325 remains
 The next permissible action is to prepare and approve a new precise R4-411 live
 validation contract. Until then, this task must not be treated as eligible for
 execution.
+
+Control-plane recomputation checkpoint:
+
+- Commit `0150acfdb6d816b92d6a20bc63f2412c962a56d0` refreshed the Round 4
+  blocker graph and progress capsule after the R4-410 approval closure.
+- Real GitHub Actions CI run `33080685485` completed successfully; all five
+  required jobs passed.
