@@ -1,0 +1,28 @@
+#cloud-config
+package_update: true
+ssh_pwauth: false
+packages:
+  - docker.io
+  - docker-compose-v2
+  - git
+  - jq
+  - openssl
+  - python3
+write_files:
+  - path: /etc/routemind-external-identity.json
+    owner: root:root
+    permissions: "0600"
+    content: |
+      {"executionId":"${execution_id}","role":"${role}","region":"nrt","syntheticDataOnly":true,"vpcMode":"NONE"}
+  - path: /etc/docker/daemon.json
+    owner: root:root
+    permissions: "0644"
+    content: |
+      {"log-driver":"local","log-opts":{"max-size":"20m","max-file":"3"},"live-restore":false}
+runcmd:
+  - [mkdir, -p, /opt/routemind-external, /var/lib/routemind-evidence, /run/routemind-secrets]
+  - [chmod, "0700", /opt/routemind-external, /var/lib/routemind-evidence, /run/routemind-secrets]
+  - [systemctl, enable, --now, docker]
+  - [docker, version]
+  - [docker, compose, version]
+final_message: "RouteMind Tokyo VM v2 external validation host ready"

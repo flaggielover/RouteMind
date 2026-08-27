@@ -277,3 +277,21 @@ evidence exists. R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`.
 
 Immutable attempt details are recorded at
 `evidence/gates/R4-405/2026-08-27-tokyo-vm-execution-attempt-1.md`.
+
+## No-new-VPC Tokyo VM v2 preparation
+
+The GET-only quota audit did not prove any existing `nrt` VPC safe to reuse and
+did not modify any provider resource. The new v2 contract creates and reuses zero
+VPCs while retaining the independent recovery VM.
+
+The recovery host receives an exact provider-derived IPv4 `/32` TCP 22 rule and
+pulls a pre-encrypted, SHA-256-bound package directly from the primary with
+public-key authentication and strict host-key checking. PostgreSQL, RabbitMQ,
+Redis, RouteMind APIs, OTLP, Collectors, ClickHouse, and SigNoz backend remain
+unpublished. No raw package may transit the operator machine.
+
+This preserves the R4-406 target RPO/RTO, reconciliation, tenant/audit,
+continuity, rollback, residency, leakage, and cleanup requirements. It is
+preparation only; R4-406 remains `LOCAL_CI_DRILL_VALIDATED / TARGET_PENDING`.
+The v2 canonical SHA-256 is
+`b1cf89b905b6bb42a98eba17de31fb21883ed94139301986a06247acc660a05b`.

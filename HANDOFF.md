@@ -6,11 +6,37 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - TOKYO VM EXTERNAL VALIDATION BLOCKED BY VULTR VPC QUOTA
+Current Task: NONE - TOKYO VM EXTERNAL VALIDATION V2 HUMAN GATE
 
-Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, immutable attempt/failure/cost/teardown evidence, and no v4. The VM contract SHA-256 `2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a` was approved and consumed once. Vultr rejected VPC creation at the account five-VPC-per-location quota; only the execution firewall group and two exact rules were created, then exactly destroyed. No VM, VPC, workload, telemetry, or target evidence exists.
+Task Status: VKE v1/v2/v3 is frozen permanently as `EXTERNAL_VKE_VALIDATION = INCONCLUSIVE`; R4-405/R4-406 remain `TARGET_PENDING`, with `NO_TARGET_CLAIM`, `NO_ROOT_CAUSE_CLAIM`, immutable attempt/failure/cost/teardown evidence, and no v4. VM v1 SHA-256 `2c6bd38...c608a` is consumed and immutable. The GET-only quota audit found five `nrt` VKE-labelled VPCs and proved no safe reuse; no resource was modified. VM v2 SHA-256 `b1cf89b905b6bb42a98eba17de31fb21883ed94139301986a06247acc660a05b` uses zero VPC creation/reuse and awaits its exact Human Gate.
 
-Next: resolve the Vultr `nrt` five-VPC-per-location quota or approve a new exact bounded topology/contract; the consumed VM digest cannot be reused. No retry is authorized automatically. VKE-specific checks remain `DEFERRED_VKE`. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+Next: after real CI passes, obtain approval for the exact VM v2 digest, two VM plans, `nrt`, six-hour/ USD 3 bounds, operator and recovery IPv4 `/32` SSH rules, zero VPC, and exact teardown. No retry is authorized automatically. VKE-specific checks remain `DEFERRED_VKE`. R4-410/R4-422 remain independent blocked Human Gates; R4-437 is inactive. Keep `.codex-tmp/` untouched and untracked.
+
+## Tokyo VM v2 no-new-VPC preparation - 2026-08-27
+
+The authenticated GET-only audit returned five `nrt` VPCs, all named
+`VKE-Network-*`, and zero listed instances, Kubernetes clusters, load balancers,
+bare-metal servers, or managed databases. Absence from those lists is not proof
+of ownership or non-use. Every VPC remains `UNKNOWN / NOT_SAFE_TO_REUSE`; no
+provider resource was created, modified, attached, detached, or deleted.
+
+The new contract is
+`contracts/external-validation/r4-vultr-tokyo-vm-external-validation-v2.json`.
+Its canonical SHA-256 is
+`b1cf89b905b6bb42a98eba17de31fb21883ed94139301986a06247acc660a05b`
+and byte SHA-256 is
+`a572e7fa0bd1eaa7a4ddeb8a60d3a9fcb5ba7cdd74ea411069e04591ec20ea65`.
+It creates exactly two VMs, one firewall group, two SSH `/32` rules, and zero
+VPCs. Recovery pulls only an encrypted, digest-bound package directly from the
+primary with public-key SSH and pinned host identity. No internal service is
+public and no raw package transits the operator.
+
+Local validation passed 16 contract mutations, seven exact-plan mutations, four
+GET-only audit tests, Terraform 1.9.8/provider 2.32.0 `fmt/init/validate`, shared
+Compose/Foundry gates, and an authenticated `-refresh=false` plan with five
+creates, zero changes/deletes, and zero VPCs. The plan was not applied and its
+isolated directory was deleted. Evidence is
+`evidence/gates/R4-405/2026-08-27-tokyo-vpc-quota-resolution.md`.
 
 Tokyo VM preparation: contract
 `contracts/external-validation/r4-vultr-tokyo-vm-external-validation-v1.json`

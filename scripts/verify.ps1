@@ -127,6 +127,26 @@ try {
         throw "Vultr Tokyo VM external-validation contract self-tests failed"
     }
 
+    python scripts/r4_vm_external_validation_v2.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo no-new-VPC VM v2 preparation contract failed"
+    }
+
+    python scripts/r4_vm_external_validation_v2_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo no-new-VPC VM v2 contract self-tests failed"
+    }
+
+    python scripts/r4_vm_external_plan_v2_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo no-new-VPC VM v2 Terraform-plan self-tests failed"
+    }
+
+    python scripts/r4_vpc_quota_audit_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo read-only VPC quota audit self-tests failed"
+    }
+
     python scripts/r4_workload_qualification_test.py
     if ($LASTEXITCODE -ne 0) {
         throw "Vultr Tokyo VM actual-workload qualification self-tests failed"

@@ -38,6 +38,9 @@ jobs:
       - name: Validate platform-neutral Tokyo VM preparation without provider calls
         shell: pwsh
         run: ./scripts/r4_vm_external_iac_gate.ps1
+      - name: Validate no-new-VPC Tokyo VM v2 preparation without provider calls
+        shell: pwsh
+        run: ./scripts/r4_vm_external_iac_gate_v2.ps1
 
   java:
     name: Java business runtime

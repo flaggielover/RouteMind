@@ -1,0 +1,375 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-vultr-tokyo-vm-external-validation-v2",
+  "status": "PREPARED_VM_EXTERNAL_EXECUTION_V2_HUMAN_GATE",
+  "preparedAt": "2026-08-27",
+  "predecessor": {
+    "contractId": "r4-vultr-tokyo-vm-external-validation-v1",
+    "canonicalSha256": "2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a",
+    "executionId": "r4-vm-20260826t182938z-d3255b7d6c",
+    "digestConsumed": true,
+    "result": "VPC_QUOTA_BLOCKED_BEFORE_VM_CREATION",
+    "reusable": false
+  },
+  "scope": {
+    "qualificationTasks": ["R4-405", "R4-406"],
+    "recomputeAfterQualification": ["R4-407", "R4-408", "R4-409", "R4-430", "R4-451"],
+    "productionDeploymentClaimed": false,
+    "externalValidationExecuted": false,
+    "paidResourcesCreated": false
+  },
+  "vkeDiagnosticFreeze": {
+    "status": "EXTERNAL_VKE_VALIDATION_INCONCLUSIVE",
+    "r4_405": "TARGET_PENDING",
+    "r4_406": "TARGET_PENDING",
+    "targetClaim": "NO_TARGET_CLAIM",
+    "rootCauseClaim": "NO_ROOT_CAUSE_CLAIM",
+    "automaticV4Allowed": false,
+    "historicalAttemptsImmutable": true,
+    "preservedAttemptVersions": ["v1", "v2", "v3"],
+    "preservedEvidenceClasses": ["attempt", "failure", "cost", "teardown"]
+  },
+  "quotaResolution": {
+    "auditMode": "READ_ONLY",
+    "observedAt": "2026-08-27T04:01:18Z",
+    "providerMutationPerformed": false,
+    "nrtVpcCount": 5,
+    "nrtRelatedResourceCounts": {
+      "instances": 0,
+      "kubernetesClusters": 0,
+      "loadBalancers": 0,
+      "bareMetal": 0,
+      "managedDatabases": 0
+    },
+    "existingVpcReuseProvenSafe": false,
+    "existingVpcReuseDisposition": "NOT_SAFE_TO_REUSE",
+    "unusedInferenceAllowed": false,
+    "selectedTopology": "NO_NEW_VPC",
+    "vpcCreateCount": 0,
+    "vpcReuseCount": 0,
+    "quotaIncreaseRequiredForThisTopology": false,
+    "auditEvidence": "evidence/gates/R4-405/2026-08-27-tokyo-vpc-quota-resolution.md"
+  },
+  "evidenceContractAudit": {
+    "conclusion": "VPC_IS_IMPLEMENTATION_CHOICE_NOT_REQUIRED_PROPERTY",
+    "platformIndependentGates": [
+      "vultr_tokyo_identity_and_residency",
+      "actual_routemind_synthetic_workload",
+      "collector_health",
+      "otlp_mtls_connectivity",
+      "five_boundary_trace",
+      "metrics_export",
+      "log_correlation",
+      "tenant_security_boundary",
+      "cardinality_and_cost_attribution",
+      "leakage_scan",
+      "network_failure",
+      "collector_outage",
+      "backend_outage",
+      "export_recovery",
+      "durable_business_truth",
+      "postgres_restore_rpo_rto",
+      "outbox_inbox_rabbitmq_redis_reconciliation",
+      "tenant_audit_and_rollback_continuity",
+      "resource_consumption",
+      "cost_accounting",
+      "exact_cleanup"
+    ],
+    "propertyClassification": {
+      "workloadExecution": "REQUIRED_PROPERTY",
+      "postgresDurableTruth": "REQUIRED_PROPERTY",
+      "rabbitMqMessaging": "REQUIRED_PROPERTY",
+      "redisRebuildability": "REQUIRED_PROPERTY",
+      "javaPythonCommunication": "REQUIRED_PROPERTY",
+      "otlpTelemetry": "REQUIRED_PROPERTY",
+      "telemetryBackend": "REQUIRED_PROPERTY",
+      "crossVmBackupRestore": "REQUIRED_PROPERTY",
+      "recoveryVm": "REQUIRED_PROPERTY",
+      "securityBoundary": "REQUIRED_PROPERTY",
+      "tokyoResidency": "REQUIRED_PROPERTY",
+      "networkIsolation": "REQUIRED_PROPERTY",
+      "newVpc": "IMPLEMENTATION_CHOICE"
+    },
+    "deferredVke": [
+      {"id": "vke_control_plane_tls_and_api", "disposition": "DEFERRED_VKE"},
+      {"id": "kubernetes_network_policy", "disposition": "DEFERRED_VKE"},
+      {"id": "kubernetes_metrics_api", "disposition": "DEFERRED_VKE"},
+      {"id": "pvc_csi_reclaim", "disposition": "DEFERRED_VKE"},
+      {"id": "pod_anti_affinity_and_worker_failure_domain", "disposition": "DEFERRED_VKE"},
+      {"id": "managed_control_plane_ha", "disposition": "DEFERRED_VKE"},
+      {"id": "kubernetes_rollout_and_namespace_isolation", "disposition": "DEFERRED_VKE"}
+    ],
+    "closureSemantics": {
+      "vmEvidenceMayQualifyPlatformNeutralR4_405AndR4_406Properties": true,
+      "vmEvidenceMayClaimVkeValidation": false,
+      "vmEvidenceMayClaimProductionDeployment": false,
+      "deferredVkeItemsMayBeMarkedPassed": false
+    }
+  },
+  "approvalBoundary": {
+    "providerAndResidencyApproved": true,
+    "provider": "Vultr",
+    "region": "nrt",
+    "dataResidency": "Tokyo, Japan",
+    "resourceCreationAuthorized": false,
+    "spendAuthorized": false,
+    "liveMutationCallsAuthorized": false,
+    "requiredFinalGate": "ROUTEMIND TOKYO VM EXTERNAL VALIDATION V2 HUMAN GATE",
+    "approvalDigestEnvironmentVariable": "ROUTEMIND_VM_EXTERNAL_EXECUTION_V2_APPROVAL_DIGEST"
+  },
+  "backendDecision": {
+    "selected": "self-hosted-signoz-foundry-compose",
+    "selectionStatus": "PREPARED_NOT_DEPLOYED",
+    "pinnedArtifacts": {
+      "foundryVersion": "v0.2.17",
+      "foundryLinuxAmd64Sha256": "51f41204b8048cd1f7e278fb5d2ba5d82d2ee8fb619bfe9330e2f8ceffc0d886",
+      "signozVersion": "v0.139.0",
+      "otelCollectorContribVersion": "0.159.0",
+      "runtimeImageDigestResolutionRequiredBeforeDeploy": true,
+      "mutableLatestTagsAllowedAtDeploy": false
+    },
+    "backendSecurity": {
+      "metastoreCredentialGeneratedAtExecution": true,
+      "clickHouseCredentialGeneratedAtExecution": true,
+      "credentialsInjectedFromAclRestrictedSecretFiles": true,
+      "directBackendPortsPublished": false,
+      "foundryInvocationRequiredFlags": ["--no-ledger", "--no-updater"],
+      "signozAnalyticsEnabled": false,
+      "signozStatsReporterEnabled": false,
+      "signozStatsReporterIdentityCollectionEnabled": false,
+      "foundryProductTelemetryDisabledOrEgressBlockedBeforeTargetForge": true,
+      "deploymentMustFailIfCredentialOrTelemetryControlCannotBeVerified": true
+    }
+  },
+  "infrastructure": {
+    "executionClass": "ISOLATED_SYNTHETIC_PLATFORM_NEUTRAL_EXTERNAL_QUALIFICATION",
+    "vpcMode": "NONE",
+    "vpcCreateCount": 0,
+    "vpcReuseCount": 0,
+    "resources": [
+      {
+        "id": "primary-validation-vm",
+        "type": "Vultr Cloud Compute",
+        "region": "nrt",
+        "quantity": 1,
+        "plan": "vc2-8c-32gb",
+        "vcpu": 8,
+        "ramMiB": 32768,
+        "localDiskGiB": 640,
+        "role": "RouteMind workload, OpenTelemetry Collectors, SigNoz, and local evidence staging"
+      },
+      {
+        "id": "recovery-validation-vm",
+        "type": "Vultr Cloud Compute",
+        "region": "nrt",
+        "quantity": 1,
+        "plan": "vc2-2c-4gb",
+        "vcpu": 2,
+        "ramMiB": 4096,
+        "localDiskGiB": 80,
+        "role": "independent restore, reconciliation, rollback, and cleanup observer"
+      }
+    ],
+    "terraformResourceCounts": {
+      "vultr_firewall_group": 1,
+      "vultr_firewall_rule": 2,
+      "vultr_instance": 2,
+      "vultr_vpc": 0
+    },
+    "publicLoadBalancers": 0,
+    "blockStorageVolumes": 0,
+    "vkeClusters": 0,
+    "publicApplicationIngress": false,
+    "providerAutomaticBackups": false,
+    "maximumRuntimeHours": 6,
+    "resourceLabelsRequired": ["routemind", "r4-vm-external-validation-v2", "execution-id", "expires-at"],
+    "hostResourceLimits": {
+      "primaryMemoryMaximumGiB": 29,
+      "primaryDiskEvidenceMaximumGiB": 120,
+      "collectorQueueMaximumGiB": 10,
+      "signozRetentionMaximumHours": 6,
+      "recoveryPackageMaximumGiB": 10
+    }
+  },
+  "network": {
+    "firewallGroupCount": 1,
+    "publicIngressRules": [
+      {"id": "operator-ssh", "protocol": "tcp", "port": 22, "source": "ROUTEMIND_OPERATOR_CIDR", "subnetSize": 32, "purpose": "operator administration"},
+      {"id": "recovery-to-primary-ssh", "protocol": "tcp", "port": 22, "source": "RECOVERY_INSTANCE_MAIN_IP", "subnetSize": 32, "purpose": "encrypted recovery package pull"}
+    ],
+    "forbiddenPublicCidrs": ["0.0.0.0/0", "::/0"],
+    "publishedApplicationPorts": 0,
+    "publishedDatabasePorts": 0,
+    "publishedMessagingPorts": 0,
+    "publishedCachePorts": 0,
+    "publishedOtlpPorts": 0,
+    "publishedCollectorHealthPorts": 0,
+    "publishedBackendPorts": 0,
+    "signozUi": "127.0.0.1:8080 reachable only through operator SSH tunnel",
+    "outbound": ["TCP 443 for pinned source, package, and OCI retrieval", "direct recovery-to-primary SSH over provider-assigned public IPv4"],
+    "dockerBoundaries": ["internal routemind-app network", "internal routemind-observability network", "external signoz-network generated by pinned Foundry"]
+  },
+  "interVmSecurity": {
+    "transport": "SSH_22_TCP",
+    "source": "RECOVERY_INSTANCE_MAIN_IP/32",
+    "destinationRole": "primary-validation",
+    "sourceRuleCreatedOnlyAfterRecoveryIdentityExists": true,
+    "publicKeyAuthenticationOnly": true,
+    "passwordAuthenticationAllowed": false,
+    "strictHostKeyCheckingRequired": true,
+    "hostKeyFingerprintPersistedBeforeTransfer": true,
+    "payloadEncryptedBeforeTransfer": true,
+    "payloadSha256Bound": true,
+    "rawPayloadMayTransitOperatorMachine": false,
+    "plaintextServiceTrafficBetweenVmsAllowed": false
+  },
+  "telemetryTopology": {
+    "flow": [
+      "real RouteMind Java/Python/PostgreSQL/RabbitMQ/Redis synthetic workload",
+      "RouteMind gateway OpenTelemetry Collector over execution-scoped mTLS",
+      "backend ingress OpenTelemetry Collector over execution-scoped mTLS",
+      "SigNoz ingester on isolated signoz-network",
+      "Tokyo-resident ClickHouse",
+      "backend query through local container execution or SSH tunnel only"
+    ],
+    "signals": ["traces", "metrics", "logs"],
+    "logSource": "read-only shared application log volume collected by filelog receivers with service identity and trace/request correlation",
+    "requiredCorrelationBoundaries": ["http", "messaging", "worker", "simulation", "experiment"],
+    "gatewayCollectorReplicas": 1,
+    "gatewayPersistentQueue": true,
+    "gatewayPersistentQueueMaximumGiB": 10,
+    "tls": {
+      "applicationToGatewayMutualTls": true,
+      "gatewayToBackendIngressMutualTls": true,
+      "publicPlaintextAllowed": false,
+      "certificateSanValidationRequired": true,
+      "ephemeralPrivateCa": true,
+      "privateKeysPersistedAfterCleanup": false
+    }
+  },
+  "workload": {
+    "actualComponents": ["business-api", "compute-api", "PostgreSQL", "RabbitMQ", "Redis", "Outbox relay"],
+    "qualificationOperations": ["durable order", "simulation control", "RouteBench experiment", "asynchronous Outbox publication"],
+    "dataClass": "SYNTHETIC_NO_CUSTOMER_DATA",
+    "productionTrafficAllowed": false,
+    "productionDataAllowed": false,
+    "sourceRevisionMustEqualApprovedHead": true
+  },
+  "failureAndRecovery": {
+    "networkFailure": "disconnect backend ingress from signoz-network, record bounded queue/backpressure, then reconnect",
+    "collectorOutage": "stop the RouteMind gateway Collector, execute the real workload, verify durable business truth, restart, and prove export recovery",
+    "backendOutage": "stop the SigNoz ingester, execute bounded telemetry, verify queue/backpressure, restart, and prove backend recovery",
+    "liveBackup": "snapshot actual synthetic PostgreSQL state, RabbitMQ definitions, and Redis projection on the primary VM",
+    "crossVmTransfer": "recovery VM pulls an encrypted digest-bound package directly from primary over SSH restricted to its provider-assigned /32",
+    "targetRestore": "restore into isolated recovery containers and verify RPO/RTO, Outbox, Inbox, RabbitMQ, Redis rebuild, tenant isolation, audit continuity, and rollback",
+    "businessTruthRule": "telemetry failure must never delete or mutate durable RouteMind business records"
+  },
+  "secretHandling": {
+    "userConfiguredSecretNames": ["VULTR_API_KEY", "ROUTEMIND_SSH_PRIVATE_KEY_PATH"],
+    "userConfiguredNonSecretNames": ["ROUTEMIND_VULTR_SSH_KEY_ID", "ROUTEMIND_OPERATOR_CIDR"],
+    "injection": "process environment plus ACL-restricted execution directory outside Git; Docker secret files are mounted read-only",
+    "forbiddenLocations": ["Git", "logs", "evidence", "fixtures", "screenshots", "Progress Capsule", "tracked .env files"],
+    "secretValueLoggingAllowed": false,
+    "generatedSecretsDestroyedDuringCleanup": true
+  },
+  "dataGovernance": {
+    "payloadResidency": "Vultr nrt only",
+    "rawTelemetryRetentionMaximumHours": 6,
+    "sanitizedEvidenceRetentionDays": 30,
+    "encryptedRecoveryPackageDeletedBeforeTeardown": true,
+    "backendVolumesDeletedBeforeVmTeardown": true,
+    "allowedToLeaveTokyoAfterLeakageScan": ["sanitized evidence", "artifact digests", "environment/version manifest", "cost and cleanup evidence"]
+  },
+  "cost": {
+    "currency": "USD",
+    "authenticatedCatalogObservedAt": "2026-08-27",
+    "primaryHourlyUsdCents": 21.9,
+    "recoveryHourlyUsdCents": 2.7,
+    "catalogSixHourUpperBoundUsdCents": 147.6,
+    "incrementalExecutionCeilingUsdCents": 300,
+    "previousConservativeVkeAndDiagnosticCostUsdCents": 1100,
+    "aggregateCeilingAfterVmExecutionUsdCents": 1400,
+    "maximumRuntimeHours": 6,
+    "authenticatedQuoteRequiredBeforeProvision": true,
+    "abortIfQuoteExceedsIncrementalCeiling": true,
+    "spendAuthorized": false
+  },
+  "evidenceContract": {
+    "schema": "r4-vm-external-validation-evidence.v2",
+    "requiredChecks": [
+      "vultr_tokyo_vm_firewall_identity",
+      "vpc_create_count_zero",
+      "actual_routemind_workload",
+      "collector_health",
+      "otlp_mtls_connectivity",
+      "five_boundary_trace",
+      "metrics_export",
+      "log_correlation",
+      "tenant_security_boundary",
+      "cardinality_cost_attribution",
+      "leakage_scan",
+      "network_failure",
+      "collector_outage",
+      "backend_outage",
+      "export_recovery",
+      "durable_business_truth",
+      "encrypted_cross_vm_backup_restore",
+      "outbox_inbox_rabbitmq_redis_reconciliation",
+      "tenant_audit_rollback_continuity",
+      "resource_consumption",
+      "cost_accounting",
+      "cleanup"
+    ],
+    "requiredArtifacts": [
+      "authenticated-resource-manifest",
+      "environment-version-manifest",
+      "network-firewall-readback",
+      "inter-vm-ssh-identity",
+      "collector-health",
+      "actual-routemind-workload",
+      "trace-query",
+      "metric-query",
+      "correlated-log-query",
+      "tenant-cardinality-report",
+      "failure-recovery-timeline",
+      "target-recovery-report",
+      "resource-usage",
+      "cost-bound",
+      "leakage-scan",
+      "cleanup-inventory",
+      "artifact-manifest"
+    ],
+    "timestampsMustBeUtc": true,
+    "artifactSha256Required": true,
+    "rawArtifactsPersistBeforeAggregation": true,
+    "mockEvidenceAccepted": false,
+    "localComposeEvidenceAcceptedAsTarget": false,
+    "providerDocumentationAcceptedAsRuntimeEvidence": false,
+    "vmPassMayClaimVke": false,
+    "externalPassMayClaimProductionDeployment": false
+  },
+  "automation": {
+    "contractValidator": "scripts/r4_vm_external_validation_v2.py",
+    "planValidator": "scripts/r4_vm_external_plan_v2.py",
+    "offlineGate": "scripts/r4_vm_external_iac_gate_v2.ps1",
+    "iacRoot": "infra/external-validation/vultr-tokyo-vm-v2",
+    "runtimeRoot": "infra/external-validation/vultr-tokyo-vm",
+    "defaultAction": "OfflinePreflight",
+    "stateRootEnvironmentVariable": "ROUTEMIND_DATA_ROOT",
+    "mutatingActionsRequireFreshHumanGate": true,
+    "mutatingActionsRequireApprovalDigest": true,
+    "exactCreatePlanRequiredBeforeApply": true,
+    "applyMayUseOnlyValidatedSavedPlan": true,
+    "idempotency": "execution-id scoped Terraform state, labels, Compose project, secrets, and evidence",
+    "teardown": "stop and remove Compose projects and volumes, delete generated secrets and encrypted recovery package, destroy exactly two VMs, one firewall group and two rules, verify exact 404 identities and zero execution-label resources; no VPC is owned or deleted",
+    "ownedProviderResourceTypes": ["vultr_instance", "vultr_firewall_group", "vultr_firewall_rule"],
+    "vpcDeleteAllowed": false,
+    "unsafeBroadDeleteAllowed": false
+  },
+  "scientificBoundary": {
+    "frozenR3_325": "E-PASS / X-PASS / S-FAIL / C-NO-CLAIM",
+    "rerunAllowed": false,
+    "externalValidationIsScientificEvidence": false,
+    "scientificClaimEstablished": false
+  }
+}
