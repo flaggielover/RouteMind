@@ -474,6 +474,13 @@ def validate_iac_sources(root: Path = IAC_ROOT) -> tuple[str, ...]:
 
     gateway = (root / "gateway-collector.yaml").read_text(encoding="utf-8")
     backend = (root / "backend-ingress-collector.yaml").read_text(encoding="utf-8")
+    if not re.search(
+        r"(?m)^\s{8}- job_name: routemind-business-api\s*$\n"
+        r"^\s{10}metrics_path: /actuator/prometheus\s*$\n"
+        r"^\s{10}static_configs:",
+        gateway,
+    ):
+        findings.append("gateway_prometheus_yaml_structure")
     if "file_storage" not in gateway or "client_ca_file" not in gateway:
         findings.append("gateway_queue_or_mtls")
     if (

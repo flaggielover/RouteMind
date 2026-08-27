@@ -214,6 +214,23 @@ class VmExternalValidationContractTest(unittest.TestCase):
             )
             self.assertIn("gateway_log_export", validate_iac_sources(target))
 
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory)
+            for source in IAC_ROOT.iterdir():
+                if source.is_file():
+                    (target / source.name).write_bytes(source.read_bytes())
+            gateway = target / "gateway-collector.yaml"
+            gateway.write_text(
+                gateway.read_text(encoding="utf-8").replace(
+                    "          metrics_path: /actuator/prometheus",
+                    "                metrics_path: /actuator/prometheus",
+                ),
+                encoding="utf-8",
+            )
+            self.assertIn(
+                "gateway_prometheus_yaml_structure", validate_iac_sources(target)
+            )
+
     def test_contract_file_is_canonical_json_object(self) -> None:
         value = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
         self.assertIsInstance(value, dict)

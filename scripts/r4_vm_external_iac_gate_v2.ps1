@@ -47,6 +47,15 @@ try {
         $env:ROUTEMIND_SECRET_ROOT = $SecretRoot
         $env:ROUTEMIND_SOURCE_REVISION = "0000000000000000000000000000000000000000"
         Invoke-Checked "docker" @("compose", "-f", (Join-Path $RuntimeRoot "routemind-compose.yaml"), "config", "--quiet")
+        if ($IsLinux) {
+            $GatewayConfig = Join-Path $RuntimeRoot "gateway-collector.yaml"
+            Invoke-Checked "docker" @(
+                "run", "--rm",
+                "--volume", ($GatewayConfig + ":/etc/otelcol/config.yaml:ro"),
+                "otel/opentelemetry-collector-contrib:0.159.0",
+                "validate", "--config=/etc/otelcol/config.yaml"
+            )
+        }
     }
     finally {
         $env:ROUTEMIND_SECRET_ROOT = $previousSecretRoot
