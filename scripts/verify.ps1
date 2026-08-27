@@ -167,6 +167,11 @@ try {
         throw "Vultr Tokyo VM SSH-readiness Terraform-plan self-tests failed"
     }
 
+    python scripts/r4_vm_ssh_readiness_controller_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Vultr Tokyo VM SSH-readiness execution-controller tests failed"
+    }
+
     python scripts/r4_vpc_quota_audit_test.py
     if ($LASTEXITCODE -ne 0) {
         throw "Vultr Tokyo read-only VPC quota audit self-tests failed"

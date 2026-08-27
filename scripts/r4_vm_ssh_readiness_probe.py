@@ -234,7 +234,7 @@ def main() -> int:
     parser.add_argument("--host", required=True)
     parser.add_argument("--artifact-root", required=True, type=Path)
     parser.add_argument("--known-hosts", required=True, type=Path)
-    parser.add_argument("--expected-host-key-sha256", required=True)
+    parser.add_argument("--expected-host-key-sha256", default="")
     parser.add_argument("--username", default="root", choices=("root",))
     parser.add_argument("--maximum-minutes", type=int, default=60, choices=range(1, 61))
     arguments = parser.parse_args()
@@ -272,7 +272,9 @@ def main() -> int:
             kex_started=False,
         )
         if network["tcp"] == "OK" and network["banner"] == "VALID":
-            if not known_hosts_has_fingerprint(
+            out_of_band_key_available = bool(arguments.expected_host_key_sha256)
+            attempt["outOfBandHostKeyAvailable"] = out_of_band_key_available
+            if out_of_band_key_available and not known_hosts_has_fingerprint(
                 arguments.known_hosts, arguments.expected_host_key_sha256, arguments.host
             ):
                 try:
@@ -290,7 +292,11 @@ def main() -> int:
                 username=arguments.username,
                 private_key=private_key,
                 known_hosts=arguments.known_hosts,
-                expected_host_key_sha256=arguments.expected_host_key_sha256,
+                expected_host_key_sha256=(
+                    arguments.expected_host_key_sha256
+                    if out_of_band_key_available
+                    else "OUT_OF_BAND_HOST_KEY_UNAVAILABLE"
+                ),
                 timeout_seconds=10,
             )
             observation = ssh_observation

@@ -35,9 +35,13 @@ def load_plan(path: Path) -> dict[str, Any]:
     return result
 
 
-def validate_plan(plan: Mapping[str, Any], *, destroy: bool = False) -> tuple[str, ...]:
+def validate_plan(
+    plan: Mapping[str, Any], *, destroy: bool = False, allow_partial_destroy: bool = False
+) -> tuple[str, ...]:
     findings: list[str] = []
     changes = plan.get("resource_changes")
+    if changes is None and destroy and allow_partial_destroy:
+        return ()
     if not isinstance(changes, list):
         return ("resource_changes",)
     expected_action = ["delete"] if destroy else ["create"]
@@ -79,10 +83,18 @@ def validate_plan(plan: Mapping[str, Any], *, destroy: bool = False) -> tuple[st
             or after.get("subnet") in {"0.0.0.0", "::", "0.0.0.0/0", "::/0"}
         ):
             findings.append("firewall_boundary")
-    if actual_types != EXPECTED_TYPES:
-        findings.append("resource_inventory")
-    if actual_addresses != EXPECTED_ADDRESSES:
-        findings.append("resource_addresses")
+    if destroy and allow_partial_destroy:
+        if any(actual_types[key] > count for key, count in EXPECTED_TYPES.items()):
+            findings.append("resource_inventory")
+        if any(key not in EXPECTED_TYPES for key in actual_types):
+            findings.append("resource_inventory")
+        if not actual_addresses.issubset(EXPECTED_ADDRESSES):
+            findings.append("resource_addresses")
+    else:
+        if actual_types != EXPECTED_TYPES:
+            findings.append("resource_inventory")
+        if actual_addresses != EXPECTED_ADDRESSES:
+            findings.append("resource_addresses")
     return tuple(sorted(set(findings)))
 
 
@@ -90,8 +102,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Validate the exact SSH-readiness plan")
     parser.add_argument("plan", type=Path)
     parser.add_argument("--destroy", action="store_true")
+    parser.add_argument("--allow-partial-destroy", action="store_true")
     arguments = parser.parse_args()
-    findings = validate_plan(load_plan(arguments.plan), destroy=arguments.destroy)
+    if arguments.allow_partial_destroy and not arguments.destroy:
+        parser.error("--allow-partial-destroy requires --destroy")
+    findings = validate_plan(
+        load_plan(arguments.plan),
+        destroy=arguments.destroy,
+        allow_partial_destroy=arguments.allow_partial_destroy,
+    )
     if findings:
         print("FAIL: " + ", ".join(findings))
         return 1

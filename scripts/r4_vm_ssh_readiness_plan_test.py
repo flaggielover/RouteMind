@@ -79,6 +79,40 @@ class SshReadinessPlanTest(unittest.TestCase):
             item["change"]["actions"] = ["delete"]
         self.assertEqual((), validate_plan(destroy_plan, destroy=True))
 
+    def test_partial_destroy_accepts_only_owned_state_subset(self) -> None:
+        plan = valid_plan()
+        destroy_plan = copy.deepcopy(plan)
+        destroy_plan["resource_changes"] = destroy_plan["resource_changes"][:2]
+        for item in destroy_plan["resource_changes"]:
+            item["change"]["actions"] = ["delete"]
+        self.assertEqual(
+            (),
+            validate_plan(
+                destroy_plan, destroy=True, allow_partial_destroy=True
+            ),
+        )
+
+        destroy_plan["resource_changes"].append(
+            {
+                "address": "vultr_vpc.unapproved",
+                "type": "vultr_vpc",
+                "change": {"actions": ["delete"], "after": {}},
+            }
+        )
+        findings = validate_plan(
+            destroy_plan, destroy=True, allow_partial_destroy=True
+        )
+        self.assertIn("resource_inventory", findings)
+        self.assertIn("resource_addresses", findings)
+
+    def test_empty_partial_destroy_is_safe_after_zero_resource_apply(self) -> None:
+        self.assertEqual(
+            (),
+            validate_plan(
+                {}, destroy=True, allow_partial_destroy=True
+            ),
+        )
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

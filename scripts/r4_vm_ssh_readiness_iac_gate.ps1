@@ -56,6 +56,7 @@ try {
     Invoke-Checked "python" @("scripts/r4_ssh_readiness_test.py")
     Invoke-Checked "python" @("scripts/r4_vm_ssh_readiness_probe_test.py")
     Invoke-Checked "python" @("scripts/r4_vm_ssh_readiness_plan_test.py")
+    Invoke-Checked "python" @("scripts/r4_vm_ssh_readiness_controller_test.py")
 
     $contract = Get-Content -LiteralPath $ContractPath -Raw | ConvertFrom-Json -AsHashtable
     Assert-NoCaseAmbiguousKeys -Value $contract
