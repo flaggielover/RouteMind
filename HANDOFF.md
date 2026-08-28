@@ -20,6 +20,19 @@ prior attempts, usage ledger, and the classification correction are retained
 under `evidence/gates/R4-411B/`. No provider-live validation, production,
 Tokyo-pinned processing, or Japan Matrix entitlement claim is made.
 
+Offline matrix root-cause audit (2026-08-28): the retained normalized result
+pinpoints cell `[1][0]` to synthetic `SHINJUKU -> SHINJUKU`, with HTTP 200,
+`ERROR / ROUTE_EXISTS`, and absent distance/duration. Three other cells are
+successful. The point result `TOKYO_STATION -> SHINJUKU` matches matrix cell
+`[0][0]`; the failing self-pair has no point-route counterpart. Point and
+matrix payloads share `DRIVE` and `TRAFFIC_AWARE_OPTIMAL` but have distinct
+schemas. The raw provider body was not retained, so the origin field and exact
+provider semantics cannot be recovered. The conservative classification is
+`INCONCLUSIVE_FIXTURE_REACHABILITY_OR_PROVIDER_CELL_SEMANTICS` with
+`MEDIUM_LOW` confidence; no adapter, connectivity, or capability defect is
+demonstrated. No retry or new contract is justified. Evidence:
+`evidence/gates/R4-411B/2026-08-28-google-matrix-partial-root-cause-audit.md`.
+
 HERE retirement checkpoint (2026-08-28): contract
 `contracts/provider/r4-411-here-provider-retirement-v1.json` is validated at
 SHA-256 `0991151bdce71f5be2e725a21708efecf0184ba830903632e3584bfad74f3e3c`.

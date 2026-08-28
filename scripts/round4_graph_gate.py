@@ -122,6 +122,7 @@ EXPECTED_REPLACEMENT_PROVIDER_GATE = {
         "evidence/gates/R4-411B/google-live-validation-20260828T103154Z.json",
         "evidence/gates/R4-411B/2026-08-28-google-live-validation-classification-correction.md",
         "evidence/gates/R4-411B/google-live-validation-usage.json",
+        "evidence/gates/R4-411B/2026-08-28-google-matrix-partial-root-cause-audit.md",
     ],
     "canonical_sha256": "a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1",
     "live_calls_authorized": True,

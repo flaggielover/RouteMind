@@ -26,6 +26,21 @@ USD 1.00. Redacted evidence and append-only correction are retained under
 `evidence/gates/R4-411B/`. Provider-live validation, production, Tokyo-pinned
 processing, and Japan Matrix entitlement are not claimed.
 
+Offline matrix root-cause audit (2026-08-28): the retained redacted artifact
+identifies matrix cell `[1][0]` as synthetic `SHINJUKU -> SHINJUKU`, normalized
+`ERROR / ROUTE_EXISTS`, with HTTP 200 and no distance or duration. The other
+three cells are successful. The only matching point evidence is
+`TOKYO_STATION -> SHINJUKU`, which matches matrix cell `[0][0]`; no point call
+exists for the failing self-pair. Request bodies share DRIVE and
+TRAFFIC_AWARE_OPTIMAL but use distinct point/matrix schemas. Offline evidence
+does not demonstrate an adapter defect or provider connectivity/capability
+failure; the conservative classification is
+`INCONCLUSIVE_FIXTURE_REACHABILITY_OR_PROVIDER_CELL_SEMANTICS` at
+`MEDIUM_LOW` confidence. Raw provider JSON was not retained, so the source
+field for `ROUTE_EXISTS` cannot be established. No retry or new contract is
+justified; R4-411B remains `FAILED / PARTIAL_NO_PRODUCTION_CLAIM`.
+Audit evidence: `evidence/gates/R4-411B/2026-08-28-google-matrix-partial-root-cause-audit.md`.
+
 R4-411B control-plane synchronization (2026-08-28): commit `74488e1` restored
 the frozen R4-411 HERE-only evidence list and added a graph-root
 `replacement_provider_gates` entry for the independent Google gate. Graph and
@@ -55,7 +70,7 @@ CI: R4-405 implementation `49680bd` passed all five jobs in run `32852309878`; V
 
 Regression: R4-410 v2 preparation passed eleven directed independent-gate tests. Approval closure adds exact digest/statement binding plus mutation coverage preventing account, credential, call, spend, region, eligibility, live-validation, or production-claim inflation. R4-411 v1 preparation adds four directed contract-boundary tests; the independent gate now passes 19 tests. Round 4 graph/mirror, secret isolation, supply-chain, Compose, PowerShell syntax, and the full repository `verify.ps1` gate remain required. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
-Progress Capsule: 166/196 passed; Round 4 is 10/38 formal tasks passed, with R4-411B independently closed as partial/failed. `Next eligible: NONE`. R4-411B total contract usage is 3 point requests, 1 matrix request, 4 elements; final elapsed 2.433 seconds, no fallback, conservative ceiling USD 1.00 without billing readback. Evidence, prior attempts, and the classification correction are retained under `evidence/gates/R4-411B/`; Google processing is not Tokyo-pinned, Matrix entitlement is not asserted, and production claim is false. HERE is retired with historical evidence preserved; R4-405/R4-406 remain target-pending/no-claim; R4-422 `0cc9bc...4ffb` remains an independent unapproved Human Gate.
+Progress Capsule: 166/196 passed; Round 4 is 10/38 formal tasks passed, with R4-411B independently closed as partial/failed. `Next eligible: NONE`. R4-411B total contract usage is 3 point requests, 1 matrix request, 4 elements; final elapsed 2.433 seconds, no fallback, conservative ceiling USD 1.00 without billing readback. Evidence, prior attempts, the classification correction, and the offline matrix root-cause audit are retained under `evidence/gates/R4-411B/`; the audit finds only inconclusive self-pair/response semantics and does not justify a retry. Google processing is not Tokyo-pinned, Matrix entitlement is not asserted, and production claim is false. HERE is retired with historical evidence preserved; R4-405/R4-406 remain target-pending/no-claim; R4-422 `0cc9bc...4ffb` remains an independent unapproved Human Gate.
 
 Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly deferred/reclassified; no required task remains open.
 
