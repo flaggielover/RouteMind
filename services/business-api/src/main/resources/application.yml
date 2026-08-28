@@ -102,3 +102,11 @@ routemind:
   rabbit:
     publisher:
       enabled: ${ROUTEMIND_RABBIT_PUBLISHER_ENABLED:true}
+  notification:
+    ses:
+      # Disabled unless a separately approved live-send contract enables it.
+      enabled: ${ROUTEMIND_NOTIFICATION_SES_ENABLED:false}
+      profile: ${AWS_PROFILE:}
+      region: ${AWS_REGION:ap-northeast-1}
+      sender: ${ROUTEMIND_NOTIFICATION_SENDER:}
+      synthetic-recipient: ${ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT:}

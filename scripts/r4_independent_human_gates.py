@@ -12,8 +12,10 @@ TRAVEL = ROOT / "contracts/provider/r4-410-travel-provider-human-gate-v2.json"
 TRAVEL_APPROVAL = ROOT / "evidence/gates/R4-410/r4-410-human-approval-v1.json"
 TRAVEL_LIVE = ROOT / "contracts/provider/r4-411-travel-provider-live-validation-v1.json"
 NOTIFICATION = ROOT / "contracts/product/r4-422-notification-human-gate-v1.json"
+NOTIFICATION_LIVE = ROOT / "contracts/provider/r4-422-aws-ses-live-validation-v1.json"
 APPROVED_TRAVEL_DIGEST = "6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c"
 TRAVEL_LIVE_DIGEST = "4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c"
+NOTIFICATION_LIVE_DIGEST = "e6576212ff580f57231ceb83ca95363fb4fd8b42053e85461b6dcd0b1d41b3ca"
 APPROVAL_STATEMENT = (
     "I approve R4-410 contract SHA-256 "
     f"{APPROVED_TRAVEL_DIGEST}, ratify HERE Technologies using HERE Routing API v8 "
@@ -468,11 +470,178 @@ def validate_notification(payload: dict[str, Any]) -> list[str]:
     return sorted(set(findings))
 
 
+def validate_notification_live(payload: dict[str, Any]) -> list[str]:
+    findings: list[str] = []
+    if (
+        payload.get("schemaVersion") != 1
+        or payload.get("contractId") != "r4-422-aws-ses-live-validation-v1"
+        or payload.get("taskId") != "R4-422"
+        or payload.get("status") != "PREPARED_AWS_SES_LIVE_EXECUTION_HUMAN_GATE"
+    ):
+        findings.append("notification_live:identity")
+    if digest(payload) != NOTIFICATION_LIVE_DIGEST:
+        findings.append("notification_live:digest")
+
+    if payload.get("prerequisiteBinding") != {
+        "providerBoundaryContract": "contracts/product/r4-422-notification-human-gate-v1.json",
+        "providerBoundarySha256": "0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb",
+        "provider": "AWS_SES",
+        "channel": "EMAIL",
+        "region": "ap-northeast-1",
+    }:
+        findings.append("notification_live:prerequisite_binding")
+
+    if payload.get("authentication") != {
+        "mechanism": "AWS_STANDARD_CREDENTIAL_PROVIDER_CHAIN",
+        "sdk": "AWS_SDK_FOR_JAVA_V2",
+        "profileSource": "AWS_PROFILE_OR_EXPLICIT_NON_SECRET_PROFILE_CONFIGURATION",
+        "expectedProfile": "routemind-ses",
+        "credentialFileHandling": "SDK_ONLY_NO_MANUAL_PARSING",
+        "offlineReadinessDoesNotResolveCredentials": True,
+        "secretValuesInRepositoryLogsEvidenceChat": "forbidden",
+        "readinessStates": ["AVAILABLE", "MISSING", "INVALID_CONFIGURATION"],
+    }:
+        findings.append("notification_live:authentication")
+
+    if payload.get("configuration") != {
+        "profileEnvironmentVariable": "AWS_PROFILE",
+        "regionEnvironmentVariable": "AWS_REGION",
+        "senderEnvironmentVariable": "ROUTEMIND_NOTIFICATION_SENDER",
+        "syntheticRecipientEnvironmentVariable": "ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT",
+        "senderAndRecipientValues": "external_only_redacted_digest_in_evidence",
+        "productionRecipients": "forbidden",
+    }:
+        findings.append("notification_live:configuration")
+
+    if payload.get("scope") != {
+        "syntheticOnly": True,
+        "maximumMessages": 10,
+        "maximumDurationMinutes": 30,
+        "maximumSpendUsdCents": 100,
+        "accountCreationAuthorized": False,
+        "resourceMutationAuthorized": False,
+        "iamMutationAuthorized": False,
+        "productionAccessRequestAuthorized": False,
+        "liveCallsAuthorized": False,
+    }:
+        findings.append("notification_live:scope")
+
+    manifest = payload.get("liveCallManifest", {})
+    if (
+        manifest.get("minimumMessages") != "minimum_needed_for_evidence"
+        or manifest.get("messageClasses")
+        != [
+            "provider_acceptance_probe",
+            "delivery_receipt_probe",
+            "bounce_or_failure_probe",
+            "idempotency_duplicate_probe",
+            "retry_suppression_probe",
+        ]
+        or manifest.get("maximumMessages") != 10
+        or manifest.get("transport") != "SES_EMAIL"
+        or set(manifest.get("outboundAllowlist", []))
+        != {"synthetic_sender", "synthetic_recipient", "reviewed_synthetic_template", "opaque_notification_id"}
+        or set(manifest.get("outboundForbidden", []))
+        != {"customer_identity", "courier_identity", "merchant_identity", "order_identifier", "address", "phone", "credential_value"}
+    ):
+        findings.append("notification_live:call_manifest")
+
+    if payload.get("fallback") != {
+        "deterministicLocalAllowed": True,
+        "reasonRequired": True,
+        "provenanceRequired": True,
+        "fallbackMayBeRepresentedAsAwsTruth": False,
+    }:
+        findings.append("notification_live:fallback")
+    if payload.get("teardown") != {
+        "providerResourcesExpected": 0,
+        "accountOrIamMutationExpected": False,
+        "sharedCredentialStoreMutation": "forbidden",
+        "localArtifacts": "retain_redacted_evidence_only",
+        "cleanupVerificationRequired": True,
+    }:
+        findings.append("notification_live:teardown")
+    if payload.get("leakageScan") != {
+        "required": True,
+        "secretValueOutput": "forbidden",
+        "credentialFileCopy": "forbidden",
+        "recipientValueOutput": "forbidden",
+        "messageBodyOutput": "forbidden",
+        "providerMessageId": "redacted_or_digest_only",
+    }:
+        findings.append("notification_live:leakage_scan")
+
+    expected_evidence = {
+        "configuration_and_credential_chain_readiness_without_values",
+        "transactional_intent_and_outbox_identity",
+        "provider_request_provenance_and_region",
+        "provider_acceptance_and_message_id_if_returned",
+        "authenticated_delivery_or_bounce_receipt",
+        "idempotency_and_duplicate_suppression",
+        "bounded_retry_and_failure_classification",
+        "fallback_reason_and_provenance",
+        "tenant_principal_and_privacy_boundary",
+        "actual_or_conservative_cost",
+        "timestamps_versions_and_artifact_digests",
+        "secret_and_data_leakage_scan",
+        "negative_and_partial_results",
+    }
+    if set(payload.get("evidenceContract", [])) != expected_evidence:
+        findings.append("notification_live:evidence_contract")
+    if payload.get("providerBoundary") != {
+        "sandboxAccepted": True,
+        "productionAccessRequest": False,
+        "customDomainRequired": False,
+        "dkimRequired": False,
+        "providerAcceptanceIsDelivery": False,
+        "deliveryRequiresAuthenticatedReceipt": True,
+    }:
+        findings.append("notification_live:provider_boundary")
+    if payload.get("claims") != {
+        "providerSelected": True,
+        "providerValidated": False,
+        "liveCallsExecuted": False,
+        "deliveryValidated": False,
+        "productionValidated": False,
+        "tokyoProcessingPinned": False,
+        "humanGateRequired": True,
+    }:
+        findings.append("notification_live:claims")
+
+    human_gate = payload.get("humanGate", {})
+    if (
+        set(human_gate.get("requiredApprovals", []))
+        != {
+            "NEW_CONTRACT_DIGEST",
+            "AWS_ACCOUNT_OWNER",
+            "AWS_SES_EMAIL_CHANNEL",
+            "VERIFIED_SYNTHETIC_SENDER",
+            "VERIFIED_SYNTHETIC_RECIPIENT",
+            "AUTHENTICATED_EVENT_TOPOLOGY",
+            "MAXIMUM_10_MESSAGES",
+            "MAXIMUM_30_MINUTES",
+            "MAXIMUM_USD_1",
+            "NO_RESOURCE_OR_IAM_MUTATION",
+        }
+        or set(human_gate.get("requiredNonSecretConfigurationNames", []))
+        != {"AWS_PROFILE", "AWS_REGION", "ROUTEMIND_NOTIFICATION_SENDER", "ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT"}
+        or human_gate.get("credentialMechanism") != "shared_aws_profile_or_standard_sdk_chain"
+        or human_gate.get("approvalDoesNotAuthorizeAccountOrResourceCreation") is not True
+        or human_gate.get("approvalDoesNotAuthorizeProductionAccess") is not True
+        or human_gate.get("approvalAuthorizesOnlyBoundedLiveSend") is not True
+        or not isinstance(human_gate.get("approvalStatementTemplate"), str)
+        or "exact SHA-256 digest" not in human_gate.get("approvalStatementTemplate", "")
+    ):
+        findings.append("notification_live:human_gate")
+    return sorted(set(findings))
+
+
 def summary(
     travel: dict[str, Any],
     travel_approval: dict[str, Any],
     travel_live: dict[str, Any],
     notification: dict[str, Any],
+    notification_live: dict[str, Any],
 ) -> dict[str, Any]:
     return {
         "valid": True,
@@ -493,6 +662,9 @@ def summary(
         "notificationDigest": digest(notification),
         "notificationProviderSelected": notification["claims"]["providerSelected"],
         "notificationRealSendAuthorized": notification["boundedRealSend"]["authorized"],
+        "notificationLiveContractId": notification_live["contractId"],
+        "notificationLiveContractDigest": digest(notification_live),
+        "notificationLiveExecutionAuthorized": notification_live["scope"]["liveCallsAuthorized"],
     }
 
 
@@ -501,11 +673,13 @@ def main() -> int:
     travel_approval = load_contract(TRAVEL_APPROVAL)
     travel_live = load_contract(TRAVEL_LIVE)
     notification = load_contract(NOTIFICATION)
+    notification_live = load_contract(NOTIFICATION_LIVE)
     findings = (
         validate_travel(travel)
         + validate_travel_approval(travel_approval, travel)
         + validate_travel_live(travel_live, travel)
         + validate_notification(notification)
+        + validate_notification_live(notification_live)
     )
     if findings:
         for finding in sorted(findings):
@@ -513,7 +687,7 @@ def main() -> int:
         return 1
     print(
         json.dumps(
-            summary(travel, travel_approval, travel_live, notification),
+            summary(travel, travel_approval, travel_live, notification, notification_live),
             sort_keys=True,
             separators=(",", ":"),
         )

@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-422-aws-ses-live-validation-v1",
+  "taskId": "R4-422",
+  "status": "PREPARED_AWS_SES_LIVE_EXECUTION_HUMAN_GATE",
+  "prerequisiteBinding": {
+    "providerBoundaryContract": "contracts/product/r4-422-notification-human-gate-v1.json",
+    "providerBoundarySha256": "0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb",
+    "provider": "AWS_SES",
+    "channel": "EMAIL",
+    "region": "ap-northeast-1"
+  },
+  "authentication": {
+    "mechanism": "AWS_STANDARD_CREDENTIAL_PROVIDER_CHAIN",
+    "sdk": "AWS_SDK_FOR_JAVA_V2",
+    "profileSource": "AWS_PROFILE_OR_EXPLICIT_NON_SECRET_PROFILE_CONFIGURATION",
+    "expectedProfile": "routemind-ses",
+    "credentialFileHandling": "SDK_ONLY_NO_MANUAL_PARSING",
+    "offlineReadinessDoesNotResolveCredentials": true,
+    "secretValuesInRepositoryLogsEvidenceChat": "forbidden",
+    "readinessStates": ["AVAILABLE", "MISSING", "INVALID_CONFIGURATION"]
+  },
+  "configuration": {
+    "profileEnvironmentVariable": "AWS_PROFILE",
+    "regionEnvironmentVariable": "AWS_REGION",
+    "senderEnvironmentVariable": "ROUTEMIND_NOTIFICATION_SENDER",
+    "syntheticRecipientEnvironmentVariable": "ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT",
+    "senderAndRecipientValues": "external_only_redacted_digest_in_evidence",
+    "productionRecipients": "forbidden"
+  },
+  "scope": {
+    "syntheticOnly": true,
+    "maximumMessages": 10,
+    "maximumDurationMinutes": 30,
+    "maximumSpendUsdCents": 100,
+    "accountCreationAuthorized": false,
+    "resourceMutationAuthorized": false,
+    "iamMutationAuthorized": false,
+    "productionAccessRequestAuthorized": false,
+    "liveCallsAuthorized": false
+  },
+  "liveCallManifest": {
+    "minimumMessages": "minimum_needed_for_evidence",
+    "messageClasses": [
+      "provider_acceptance_probe",
+      "delivery_receipt_probe",
+      "bounce_or_failure_probe",
+      "idempotency_duplicate_probe",
+      "retry_suppression_probe"
+    ],
+    "maximumMessages": 10,
+    "transport": "SES_EMAIL",
+    "outboundAllowlist": [
+      "synthetic_sender",
+      "synthetic_recipient",
+      "reviewed_synthetic_template",
+      "opaque_notification_id"
+    ],
+    "outboundForbidden": [
+      "customer_identity",
+      "courier_identity",
+      "merchant_identity",
+      "order_identifier",
+      "address",
+      "phone",
+      "credential_value"
+    ]
+  },
+  "fallback": {
+    "deterministicLocalAllowed": true,
+    "reasonRequired": true,
+    "provenanceRequired": true,
+    "fallbackMayBeRepresentedAsAwsTruth": false
+  },
+  "teardown": {
+    "providerResourcesExpected": 0,
+    "accountOrIamMutationExpected": false,
+    "sharedCredentialStoreMutation": "forbidden",
+    "localArtifacts": "retain_redacted_evidence_only",
+    "cleanupVerificationRequired": true
+  },
+  "leakageScan": {
+    "required": true,
+    "secretValueOutput": "forbidden",
+    "credentialFileCopy": "forbidden",
+    "recipientValueOutput": "forbidden",
+    "messageBodyOutput": "forbidden",
+    "providerMessageId": "redacted_or_digest_only"
+  },
+  "evidenceContract": [
+    "configuration_and_credential_chain_readiness_without_values",
+    "transactional_intent_and_outbox_identity",
+    "provider_request_provenance_and_region",
+    "provider_acceptance_and_message_id_if_returned",
+    "authenticated_delivery_or_bounce_receipt",
+    "idempotency_and_duplicate_suppression",
+    "bounded_retry_and_failure_classification",
+    "fallback_reason_and_provenance",
+    "tenant_principal_and_privacy_boundary",
+    "actual_or_conservative_cost",
+    "timestamps_versions_and_artifact_digests",
+    "secret_and_data_leakage_scan",
+    "negative_and_partial_results"
+  ],
+  "providerBoundary": {
+    "sandboxAccepted": true,
+    "productionAccessRequest": false,
+    "customDomainRequired": false,
+    "dkimRequired": false,
+    "providerAcceptanceIsDelivery": false,
+    "deliveryRequiresAuthenticatedReceipt": true
+  },
+  "claims": {
+    "providerSelected": true,
+    "providerValidated": false,
+    "liveCallsExecuted": false,
+    "deliveryValidated": false,
+    "productionValidated": false,
+    "tokyoProcessingPinned": false,
+    "humanGateRequired": true
+  },
+  "humanGate": {
+    "requiredApprovals": [
+      "NEW_CONTRACT_DIGEST",
+      "AWS_ACCOUNT_OWNER",
+      "AWS_SES_EMAIL_CHANNEL",
+      "VERIFIED_SYNTHETIC_SENDER",
+      "VERIFIED_SYNTHETIC_RECIPIENT",
+      "AUTHENTICATED_EVENT_TOPOLOGY",
+      "MAXIMUM_10_MESSAGES",
+      "MAXIMUM_30_MINUTES",
+      "MAXIMUM_USD_1",
+      "NO_RESOURCE_OR_IAM_MUTATION"
+    ],
+    "requiredNonSecretConfigurationNames": [
+      "AWS_PROFILE",
+      "AWS_REGION",
+      "ROUTEMIND_NOTIFICATION_SENDER",
+      "ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT"
+    ],
+    "credentialMechanism": "shared_aws_profile_or_standard_sdk_chain",
+    "approvalDoesNotAuthorizeAccountOrResourceCreation": true,
+    "approvalDoesNotAuthorizeProductionAccess": true,
+    "approvalAuthorizesOnlyBoundedLiveSend": true,
+    "approvalStatementTemplate": "I approve R4-422 AWS SES live validation contract by its exact SHA-256 digest, authorize only synthetic email validation in ap-northeast-1 within the stated message, time, cost, privacy, and no-mutation boundaries, and accept that fallback is not AWS provider truth."
+  }
+}

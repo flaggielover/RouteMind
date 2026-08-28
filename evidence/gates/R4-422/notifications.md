@@ -134,3 +134,38 @@ retry-exhaustion-to-DLQ, duplicate suppression, consent/quiet-hours behavior,
 and every offline mock outcome. They are local evidence only: no AWS account,
 sender, recipient, callback, credential, delivery, bounce, cost, or production
 claim is established by this checkpoint.
+
+## AWS SES offline preparation checkpoint - 2026-08-28
+
+The Java notification boundary now includes non-secret SES configuration under
+`routemind.notification.ses`. `AWS_PROFILE` (or an explicit profile property)
+selects the AWS SDK for Java v2 standard `DefaultCredentialsProvider` chain;
+RouteMind does not parse shared credential files or resolve credentials during
+offline readiness checks. The SES client factory is not a sender bean and the
+configuration default is disabled. Readiness returns only `AVAILABLE`,
+`MISSING`, or `INVALID_CONFIGURATION`.
+
+The independent future execution contract is
+`contracts/provider/r4-422-aws-ses-live-validation-v1.json` with SHA-256
+`e6576212ff580f57231ceb83ca95363fb4fd8b42053e85461b6dcd0b1d41b3ca`. It binds
+to the frozen provider contract without modifying it, limits synthetic email
+validation to `ap-northeast-1`, ten messages, thirty minutes, and USD 1.00,
+and forbids account/IAM/resource mutation, production access, and secret or
+recipient leakage. It is not authorized or executed; no AWS network request
+was made. Evidence path: this file plus the contract and design record at
+`docs/superpowers/specs/2026-08-28-r4-422-aws-ses-offline-preparation-design.md`.
+
+## Verification checkpoint - 2026-08-28
+
+- `NotificationSesConfigurationTests`: 4 passed, 0 failed under JDK 17
+- Business API full Maven suite: 124 passed, 0 failed under JDK 17
+- `r4_independent_human_gates_test.py`: 21 passed, 0 failed
+- Contract, control-plane, security, scientific, and external-boundary gates
+  reached `PASS` before the repository Compose check.
+- The local Docker client did not return from `docker compose config --quiet`;
+  no container or network mutation occurred. Compose validation remains a CI
+  responsibility and is required before this checkpoint is considered fully
+  CI-closed.
+
+No AWS network request, credential resolution, account/resource mutation, or
+email send occurred during verification.

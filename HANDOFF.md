@@ -25,6 +25,16 @@ Science readiness audit checkpoint commit `78b16c2` is pushed to
 required jobs, including the focused failure-injection and isolated backup /
 restore drills. No external provider call or paid resource action occurred.
 
+R4-422 AWS SES offline preparation (2026-08-28): the frozen provider-boundary
+contract remains unchanged at SHA-256
+`0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb`. The AWS
+SDK v2 standard credential provider chain is wired through non-secret
+`AWS_PROFILE`/profile configuration; no credential file is parsed and SES is
+disabled by default. New contract
+`contracts/provider/r4-422-aws-ses-live-validation-v1.json` is prepared with
+SHA-256 `e6576212ff580f57231ceb83ca95363fb4fd8b42053e85461b6dcd0b1d41b3ca`;
+no AWS request or send occurred.
+
 R4-422 local implementation checkpoint (2026-08-28): the frozen contract
 `contracts/product/r4-422-notification-human-gate-v1.json` remains unchanged at
 SHA-256 `0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb`.

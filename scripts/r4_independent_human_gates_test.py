@@ -12,6 +12,7 @@ class IndependentHumanGateTests(unittest.TestCase):
         self.travel_approval = gates.load_contract(gates.TRAVEL_APPROVAL)
         self.travel_live = gates.load_contract(gates.TRAVEL_LIVE)
         self.notification = gates.load_contract(gates.NOTIFICATION)
+        self.notification_live = gates.load_contract(gates.NOTIFICATION_LIVE)
 
     def assert_travel_rejected(self, mutate, expected: str) -> None:  # type: ignore[no-untyped-def]
         candidate = copy.deepcopy(self.travel)
@@ -22,6 +23,11 @@ class IndependentHumanGateTests(unittest.TestCase):
         candidate = copy.deepcopy(self.notification)
         mutate(candidate)
         self.assertIn(expected, gates.validate_notification(candidate))
+
+    def assert_notification_live_rejected(self, mutate, expected: str) -> None:  # type: ignore[no-untyped-def]
+        candidate = copy.deepcopy(self.notification_live)
+        mutate(candidate)
+        self.assertIn(expected, gates.validate_notification_live(candidate))
 
     def assert_travel_approval_rejected(self, mutate, expected: str) -> None:  # type: ignore[no-untyped-def]
         candidate = copy.deepcopy(self.travel_approval)
@@ -40,8 +46,11 @@ class IndependentHumanGateTests(unittest.TestCase):
         )
         self.assertEqual(gates.validate_travel_live(self.travel_live, self.travel), [])
         self.assertEqual(gates.validate_notification(self.notification), [])
+        self.assertEqual(gates.validate_notification_live(self.notification_live), [])
         self.assertEqual(gates.digest(self.travel), gates.digest(copy.deepcopy(self.travel)))
         self.assertEqual(gates.digest(self.notification), gates.digest(copy.deepcopy(self.notification)))
+        self.assertEqual(gates.digest(self.notification_live), gates.NOTIFICATION_LIVE_DIGEST)
+        self.assertEqual(gates.digest(self.notification_live), gates.digest(copy.deepcopy(self.notification_live)))
         self.assertEqual(gates.digest(self.travel_live), gates.TRAVEL_LIVE_DIGEST)
         self.assertEqual(gates.digest(self.travel_live), gates.digest(copy.deepcopy(self.travel_live)))
 
@@ -216,6 +225,32 @@ class IndependentHumanGateTests(unittest.TestCase):
     def test_notification_failure_matrix_cannot_drop_adverse_outcomes(self) -> None:
         self.assert_notification_rejected(lambda value: value["failureMatrix"].remove("authenticated_bounce_receipt"), "notification:failure_matrix")
         self.assert_notification_rejected(lambda value: value["failureMatrix"].remove("opt_out_before_retry_suppressed"), "notification:failure_matrix")
+
+    def test_notification_live_contract_is_independent_and_fail_closed(self) -> None:
+        self.assert_notification_live_rejected(
+            lambda value: value["scope"].update(liveCallsAuthorized=True),
+            "notification_live:scope",
+        )
+        self.assert_notification_live_rejected(
+            lambda value: value["authentication"].update(credentialFileHandling="manual"),
+            "notification_live:authentication",
+        )
+        self.assert_notification_live_rejected(
+            lambda value: value["fallback"].update(fallbackMayBeRepresentedAsAwsTruth=True),
+            "notification_live:fallback",
+        )
+        self.assert_notification_live_rejected(
+            lambda value: value["humanGate"].update(approvalAuthorizesOnlyBoundedLiveSend=False),
+            "notification_live:human_gate",
+        )
+
+    def test_notification_live_contract_preserves_frozen_provider_boundary(self) -> None:
+        self.assertEqual(
+            self.notification_live["prerequisiteBinding"]["providerBoundarySha256"],
+            "0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb",
+        )
+        self.assertEqual(self.notification_live["prerequisiteBinding"]["region"], "ap-northeast-1")
+        self.assertEqual(self.notification_live["authentication"]["expectedProfile"], "routemind-ses")
 
 
 if __name__ == "__main__":
