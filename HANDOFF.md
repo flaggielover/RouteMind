@@ -8,9 +8,9 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: NONE - R4-411 LIVE PROVIDER VALIDATION HUMAN GATE
 
-Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate with separate Routing API v8 and Matrix Routing API v8 products; Japan eligibility remains `UNCONFIRMED_REQUIRES_HERE`, processing remains `NOT_REGION_PINNED`, and no live/provider/production validation is claimed. Approval authorized zero account creation, credentials, live calls, or spend. R4-411 is explicitly `BLOCKED / DEFERRED_EXTERNAL`; its exact v1 live-validation contract is prepared at SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`, while HERE account/Japan eligibility, external secret injection, and a separate Human Gate remain pending. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
+Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate with separate Routing API v8 and Matrix Routing API v8 products; its original zero-account, zero-credential, zero-live-call, and zero-spend boundary remains unchanged. R4-411 is `BLOCKED / HUMAN_GATE_PENDING`; HERE account and application are confirmed and `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` is `SET` in Windows User scope by presence-only check. HERE Routing API v8 Japan car-routing is `DOCUMENTED_SUPPORTED`; Matrix Routing API v8 Japan remains `RESTRICTED / REQUIRES_HERE_CONFIRMATION`, so `JAPAN_SERVICE_ELIGIBILITY = PARTIAL_PENDING_CONFIRMATION`. The exact v1 live-validation contract remains frozen at SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`; no live/provider/production validation is claimed. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
 
-Next: no safe task is currently executable. R4-411 requires confirmed HERE account/Japan eligibility, `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through an external secret store, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-422 `0cc9bc...4ffb` remains independent and unapproved. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+Next: no safe task is currently executable. R4-411 requires written HERE confirmation for Matrix Routing API v8 Japan access, process-scoped injection of `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through the external mechanism, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-422 `0cc9bc...4ffb` remains independent and unapproved. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
 Latest observed pre-synchronization control-plane checkpoint: commit `e2a1b32f215594c471a917b53809e49286c9868f`
 passed real GitHub Actions CI run `33086123655` (all five required jobs). The
@@ -19,7 +19,9 @@ following documentation synchronization also passed real GitHub Actions CI run
 run `33092466943` (all five required jobs). The overnight reconciliation found
 no stale graph blockers or safe eligible tasks;
 R4-411 now lists only the three genuine blockers: HERE account/application and
-Japan eligibility, external secret injection, and its separate Human Gate.
+Matrix Japan entitlement/overall partial Japan eligibility, external secret
+injection, and its separate Human Gate; account/application identity is now
+confirmed.
 
 ## Tokyo VM SSH-readiness diagnostic v1 execution - 2026-08-27
 

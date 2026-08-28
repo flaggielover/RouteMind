@@ -94,3 +94,35 @@ Remote validation checkpoint:
   The active graph now records only the genuine account/Japan eligibility,
   external-secret, and separate-Human-Gate blockers; the prepared contract is
   no longer incorrectly represented as missing.
+
+## Prerequisite revalidation - 2026-08-28
+
+This append-only revalidation records the owner's current prerequisite facts;
+the historical preparation and blocked checkpoints above remain unchanged.
+No HERE endpoint was called, the API key was not tested, and no account or
+billing action occurred during this revalidation.
+
+- `HERE_ACCOUNT = CONFIRMED` (owner-provided fact; no secret recorded).
+- `HERE_APPLICATION = CONFIRMED` and application state is reported as Active
+  (owner-provided fact; no application credential recorded).
+- `HERE_API_KEY = SET` was checked by presence only in the Windows User
+  environment. The key value was not read, printed, copied, logged, captured,
+  or committed. The current shell process did not inherit a value, so a future
+  run must still inject the key into one bounded process through the approved
+  external mechanism.
+- HERE Routing API v8 Japan car-routing coverage is
+  `DOCUMENTED_SUPPORTED` according to the reviewed official documentation.
+  This documents the point-product capability only; it is not live validation.
+- HERE Matrix Routing API v8 Japan access remains
+  `RESTRICTED / REQUIRES_HERE_CONFIRMATION`, as stated by the reviewed official
+  documentation. An API key's presence cannot promote Matrix Japan eligibility.
+- Overall `JAPAN_SERVICE_ELIGIBILITY = PARTIAL_PENDING_CONFIRMATION` because
+  the point-product documentation is supported while the Matrix entitlement
+  still requires explicit HERE confirmation.
+
+R4-411 therefore remains `BLOCKED / HUMAN_GATE_PENDING` with the frozen
+contract SHA-256 unchanged at
+`4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. The
+remaining execution boundary is written Matrix Japan confirmation, secure
+process-scoped secret injection, and the separate Human Gate for the exact
+bounded manifest. No live/provider/production claim is made.
