@@ -14,6 +14,14 @@ Repository Total: 166 / 196 tasks passed
 
 Current Task: R4-411B - GOOGLE ROUTES HUMAN GATE
 
+R4-411B control-plane synchronization (2026-08-28): commit `74488e1` restored
+the frozen R4-411 HERE-only evidence list and added a graph-root
+`replacement_provider_gates` entry for the independent Google gate. Graph and
+mirror validation enforce the exact R4-411B contract digest, zero-live-call
+boundary, and fixed 38-task denominator. Real GitHub Actions run
+`33158830218` passed all five required jobs. No HERE/Google live call is
+authorized.
+
 Last Completed: R4-410 - Freeze external travel-provider capability, credential, privacy, and fallback contract
 
 Current Gate: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact v2 digest `6d71059d...3ac5c`. HERE Technologies remains the ratified candidate using separate Routing API v8 and Matrix Routing API v8 products; its original zero-account, zero-credential, zero-live-call, and zero-spend boundary remains unchanged. R4-411 is `BLOCKED / HUMAN_GATE_PENDING`; HERE account and application are confirmed, and the API key is `SET` in Windows User scope by presence-only check. HERE Routing API v8 Japan car-routing coverage is `DOCUMENTED_SUPPORTED`, while Matrix Routing API v8 Japan access remains `RESTRICTED / REQUIRES_HERE_CONFIRMATION`; therefore overall `JAPAN_SERVICE_ELIGIBILITY = PARTIAL_PENDING_CONFIRMATION`. HERE Support ticket `CS0184597` is `NEW` and records an entitlement inquiry only; it does not change that eligibility state. Its exact v1 live-validation contract remains frozen at SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`; no HERE live call was made. R4-411B is an independent Google replacement-provider gate represented under the R4-411 control-plane record at contract SHA-256 `a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1`, with `authorized=false`, no live calls, and no production claim. External VKE/VM validation remains frozen inconclusive and R4-405/R4-406 retain target-pending/no-claim states.
