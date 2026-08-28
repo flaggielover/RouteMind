@@ -52,3 +52,11 @@ processing.
 
 No credential value, sender value, recipient value, message body, or provider
 message identifier is recorded in this evidence.
+
+## Remote CI checkpoint
+
+Commit `50053f8` was pushed to `main` and GitHub Actions run `33178392686`
+completed successfully. All five required jobs passed, including the control
+plane/Compose validation and the clean Java business-runtime gate. This confirms
+repository and CI validation only; it is not AWS connectivity or delivery
+evidence.
