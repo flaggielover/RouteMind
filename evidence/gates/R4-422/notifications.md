@@ -80,3 +80,28 @@ The named secrets and sender/recipient values must then be configured through a
 secure external mechanism. Real sends remain prohibited until a new exact
 execution contract states any resources, recipient digest, callback topology,
 message count, cost, cleanup, and separate approval.
+
+## Provider-neutral local preparation audit - 2026-08-28
+
+The frozen contract's local boundary is already represented by executable
+repository evidence: Java remains the durable owner; PostgreSQL migrations and
+repositories retain business/outbox/inbox identity; RabbitMQ publication uses
+bounded retry; Inbox processing deduplicates by event identity and routes poison
+messages to a bounded dead-letter state. The frozen R4-420 product contract
+supplies notification intent, consent, quiet-hours, opt-out, tenant/principal,
+template-locale, lifecycle, authenticated-receipt, and privacy semantics.
+
+The zero-send R4-422 preparation contract provides the provider-neutral seam for
+a future sender adapter: an asynchronous idempotent worker, consent recheck
+before every attempt, maximum five attempts, explicit retry/DLQ outcomes,
+provider acceptance distinct from delivery, authenticated delivery and bounce
+receipts, bounded timeout/rate/cost policy, synthetic recipient and sender
+injection, redacted recipient digests, and telemetry exclusion of recipient,
+sender, body, credentials, and provider message IDs. The real adapter remains
+disabled by default.
+
+Local gates validate the frozen contract and mutation boundaries; they do not
+prove AWS account ownership, sender verification, recipient ownership, callback
+authentication in AWS, delivery, bounce, cost, or any real send. Those facts
+remain the independent Human Gate and later execution contract boundary. The
+contract JSON and canonical SHA-256 are unchanged.

@@ -6,17 +6,33 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - R4-411 LIVE PROVIDER VALIDATION HUMAN GATE
+Current Task: NONE - R4-422 NOTIFICATION PROVIDER HUMAN GATE
 
-Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate with separate Routing API v8 and Matrix Routing API v8 products; its original zero-account, zero-credential, zero-live-call, and zero-spend boundary remains unchanged. R4-411 is `BLOCKED / HUMAN_GATE_PENDING`; HERE account and application are confirmed and `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` is `SET` in Windows User scope by presence-only check. HERE Routing API v8 Japan car-routing is `DOCUMENTED_SUPPORTED`; Matrix Routing API v8 Japan remains `RESTRICTED / REQUIRES_HERE_CONFIRMATION`, so `JAPAN_SERVICE_ELIGIBILITY = PARTIAL_PENDING_CONFIRMATION`. The exact v1 live-validation contract remains frozen at SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`; no live/provider/production validation is claimed. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
+Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate with separate Routing API v8 and Matrix Routing API v8 products; its original zero-account, zero-credential, zero-live-call, and zero-spend boundary remains unchanged. R4-411 is `BLOCKED / HUMAN_GATE_PENDING`; HERE account and application are confirmed and `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` is `SET` in Windows User scope by presence-only check. HERE Routing API v8 Japan car-routing is `DOCUMENTED_SUPPORTED`; Matrix Routing API v8 Japan remains `RESTRICTED / REQUIRES_HERE_CONFIRMATION`, so `JAPAN_SERVICE_ELIGIBILITY = PARTIAL_PENDING_CONFIRMATION`. HERE Support ticket `CS0184597` is `NEW` and is an entitlement inquiry only, not an access approval. The exact v1 live-validation contract remains frozen at SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`; no live/provider/production validation is claimed. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
 
-Next: no safe task is currently executable. R4-411 requires written HERE confirmation for Matrix Routing API v8 Japan access, process-scoped injection of `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through the external mechanism, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-422 `0cc9bc...4ffb` remains independent and unapproved. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+Next: no safe task is currently executable. R4-411 requires the HERE response to ticket `CS0184597`, process-scoped injection of `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through the external mechanism, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-422 is prepared to its independent Human Gate at `0cc9bc...4ffb`; provider-neutral Outbox/Inbox, consent, idempotency, retry/DLQ, privacy, budget, and zero-send evidence are locally validated, but no provider/channel/recipient is selected and no message was sent. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
 R4-411 prerequisite revalidation checkpoint: commit `6da7c15` passed real GitHub
 Actions CI run `33151723573` (all five required jobs). The checkpoint records
 HERE account/application confirmation, presence-only User-scope API-key status,
 documented Routing Japan support, and the still-restricted Matrix Japan access;
 no HERE live call was made and the frozen contract digest is unchanged.
+
+R4-411 support-ticket evidence checkpoint: ticket `CS0184597` is recorded in
+`evidence/gates/R4-411/2026-08-28-here-support-ticket-cs0184597.md` with status
+`NEW`, type `Product Catalog`, and category `Account Support`. Submission is
+not entitlement approval; Matrix Japan remains restricted and R4-411 remains
+blocked. No HERE live call or API-key inspection occurred.
+
+R4-422 provider-neutral preparation checkpoint: the frozen contract
+`contracts/product/r4-422-notification-human-gate-v1.json` remains at SHA-256
+`0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb`. Java-owned
+PostgreSQL Outbox/Inbox, bounded retry and dead-letter handling, consent and
+quiet-hours rechecks, duplicate suppression, provider-neutral sender/template
+boundaries, privacy/leakage rules, and zero-send budget guards are locally
+validated in `evidence/gates/R4-422/notifications.md`. AWS SES email in
+`ap-northeast-1` remains only the unapproved candidate; real sends, credentials,
+account/resource changes, and provider claims remain forbidden.
 
 Latest observed pre-synchronization control-plane checkpoint: commit `e2a1b32f215594c471a917b53809e49286c9868f`
 passed real GitHub Actions CI run `33086123655` (all five required jobs). The

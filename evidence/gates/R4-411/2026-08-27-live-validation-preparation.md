@@ -126,3 +126,19 @@ contract SHA-256 unchanged at
 remaining execution boundary is written Matrix Japan confirmation, secure
 process-scoped secret injection, and the separate Human Gate for the exact
 bounded manifest. No live/provider/production claim is made.
+
+## HERE Support ticket revalidation - 2026-08-28
+
+The owner reports that HERE Support ticket `CS0184597` was successfully
+submitted to ask for Japan access eligibility and required entitlement for HERE
+Matrix Routing API v8. The ticket is `NEW`, type `Product Catalog`, category
+`Account Support`, and HERE Support may inspect the current Platform
+organization for this entitlement review. The non-sensitive ticket record is
+preserved at
+`evidence/gates/R4-411/2026-08-28-here-support-ticket-cs0184597.md`.
+
+Submission starts an entitlement inquiry but does not confirm access. The
+Matrix Japan restriction, partial overall Japan eligibility, frozen contract
+digest, and `BLOCKED / HUMAN_GATE_PENDING` state therefore remain unchanged.
+No HERE endpoint was called and no API-key value was read, tested, emitted, or
+stored.
