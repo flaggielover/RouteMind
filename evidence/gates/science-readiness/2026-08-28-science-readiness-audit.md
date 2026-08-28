@@ -64,6 +64,17 @@ Twin/RADS outcomes block their claims, not local experiment design.
   preparation contracts, product, provider-retirement, and agent-authority
   gates. No provider call or resource mutation occurred.
 
+## CI closure
+
+- Checkpoint commit: `78b16c2330b28607e1ccce8ec46e838fada12897`.
+- Real GitHub Actions run: `33171244301` (`success`).
+- Required jobs all passed: Control plane and Compose; Python compute and
+  contracts; Java business runtime; Role-aware web application; Bounded
+  degradation and resilience.
+- The resilience job completed the focused failure-injection and isolated
+  backup/restore drills. No provider call, paid resource action, or secret
+  exposure occurred.
+
 ## Frozen boundaries
 
 R3-325 remains exactly `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`. R4-405/R4-406,

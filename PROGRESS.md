@@ -32,6 +32,13 @@ The active graph records this audit under its `science_readiness` metadata;
 task identities, Round 4 denominator/statuses, and R3-325's
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM` outcome are unchanged.
 
+Science readiness audit checkpoint commit `78b16c2` is pushed to
+`origin/main`. Real GitHub Actions CI run `33171244301` passed all five
+required jobs: Control plane and Compose, Python compute and contracts, Java
+business runtime, Role-aware web application, and Bounded degradation and
+resilience. The run included the focused failure-injection and isolated backup
+and restore drills. No external provider call or paid resource action occurred.
+
 R4-422 local implementation checkpoint (2026-08-28): the frozen contract
 `contracts/product/r4-422-notification-human-gate-v1.json` remains unchanged at
 SHA-256 `0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb`.
