@@ -1,7 +1,12 @@
 # ADR-0036: Google Routes replacement-provider gate
 
 Date: 2026-08-28  
-Status: Accepted for preparation only
+Status: Superseded by ADR-0038; retained as historical decision record
+
+> Historical note (2026-08-28): the HERE candidate described below has since
+> been formally retired. R4-411 is terminal without a live claim; the Google
+> gate remains the active replacement path. The original contract and evidence
+> boundaries in this ADR are retained for audit.
 
 ## Context
 

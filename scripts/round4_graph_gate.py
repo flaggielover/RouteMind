@@ -109,20 +109,23 @@ EXPECTED_CLOSURE_DEPENDENCIES = {
 EXPECTED_REPLACEMENT_PROVIDER_GATE = {
     "id": "R4-411B",
     "parent_task": "R4-411",
-    "title": "Google Maps Routes provider evaluation / replacement Human Gate",
+    "title": "Google Maps Routes active replacement-provider Human Gate",
     "status": "blocked",
     "classification": "EXTERNAL_VALIDATION",
     "external_gate": True,
     "human_approval": True,
     "contract": "contracts/provider/r4-411b-google-routes-live-validation-v1.json",
-    "evidence": ["evidence/gates/R4-411B/provider-contract.md"],
+    "evidence": [
+        "evidence/gates/R4-411B/provider-contract.md",
+        "evidence/gates/R4-411/2026-08-28-here-provider-retirement.md",
+    ],
     "canonical_sha256": "a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1",
     "live_calls_authorized": False,
     "provider_live_validated": False,
     "production_claim": False,
     "japan_matrix_entitlement_claim": False,
     "depends_on": ["R4-410"],
-    "notes": "Independent replacement provider gate; does not alter HERE R4-411 contract/evidence/status or Round 4 denominator.",
+    "notes": "Active replacement-provider gate after HERE retirement; no live calls or production claim until its separate Human Gate. Historical HERE R4-411 contracts and evidence remain preserved; Round 4 denominator is unchanged.",
 }
 
 

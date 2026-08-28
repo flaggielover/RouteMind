@@ -8,6 +8,16 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: R4-411B - GOOGLE ROUTES HUMAN GATE
 
+HERE retirement checkpoint (2026-08-28): contract
+`contracts/provider/r4-411-here-provider-retirement-v1.json` is validated at
+SHA-256 `0991151bdce71f5be2e725a21708efecf0184ba830903632e3584bfad74f3e3c`.
+R4-411 is terminal `deferred_external` with
+`CLOSED_NOT_SELECTED / SUPERSEDED_BY_GOOGLE / NO_LIVE_CLAIM`. Historical HERE
+contracts, support ticket `CS0184597`, diagnostics, costs, teardown records, and
+frozen validators remain retained. Active runtime/configuration has no HERE code,
+dependency, or secret requirement; GoogleRoutesProvider is primary and
+deterministic-local is the explicit fallback. No provider live call occurred.
+
 R4-411B final synchronization (2026-08-28): commit `74488e1` is pushed to
 `origin/main` and real GitHub Actions run `33158830218` passed all five required
 jobs. The frozen R4-411 HERE-only evidence record is unchanged; R4-411B is
@@ -15,9 +25,9 @@ represented only by the graph-root `replacement_provider_gates` entry, with
 contract SHA-256 `a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1`,
 live calls unauthorized, and no production or Matrix-entitlement claim.
 
-Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate with separate Routing API v8 and Matrix Routing API v8 products; its original zero-account, zero-credential, zero-live-call, and zero-spend boundary remains unchanged. R4-411 is `BLOCKED / HUMAN_GATE_PENDING`; HERE account and application are confirmed and `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` is `SET` in Windows User scope by presence-only check. HERE Routing API v8 Japan car-routing is `DOCUMENTED_SUPPORTED`; Matrix Routing API v8 Japan remains `RESTRICTED / REQUIRES_HERE_CONFIRMATION`, so `JAPAN_SERVICE_ELIGIBILITY = PARTIAL_PENDING_CONFIRMATION`. HERE Support ticket `CS0184597` is `NEW` and is an entitlement inquiry only, not an access approval. The exact v1 live-validation contract remains frozen at SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`; no live/provider/production validation is claimed. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
+Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE is retired and not selected: its historical contracts, support ticket `CS0184597`, diagnostics, costs, and teardown evidence are preserved, with no HERE live/provider/production claim. R4-411 is terminal `deferred_external` with `CLOSED_NOT_SELECTED / SUPERSEDED_BY_GOOGLE / NO_LIVE_CLAIM`; it is no longer an active blocker. R4-411B is the active Google Maps Routes replacement-provider Human Gate at exact contract SHA-256 `a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1`, with `authorized=false`, no live calls, no production claim, and Matrix Japan entitlement unclaimed. Active runtime composition is GoogleRoutesProvider primary plus explicit deterministic-local fallback; default transport is unconfigured and cannot make live I/O. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
 
-Next: no safe task is currently executable. R4-411 requires the HERE response to ticket `CS0184597`, process-scoped injection of `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through the external mechanism, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-411B is independently prepared to its Google Routes Human Gate at `a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1`; adapter and zero-live-call evidence are locally validated, but key rotation, exact approval, non-Tokyo-pinned processing acceptance, and bounded execution approval remain required. R4-422 is prepared to its independent Human Gate at `0cc9bc...4ffb`; provider-neutral Outbox/Inbox, consent, idempotency, retry/DLQ, privacy, budget, and zero-send evidence are locally validated, but no provider/channel/recipient is selected and no message was sent. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+Next: no safe task is currently executable. R4-411B is prepared to its active Google Routes Human Gate; key rotation, secure process-scoped injection of `ROUTEMIND_GOOGLE_ROUTES_API_KEY`, exact approval, non-Tokyo-pinned processing acceptance, and bounded execution approval remain required. R4-422 is prepared to its independent Human Gate at `0cc9bc...4ffb`; provider-neutral Outbox/Inbox, consent, idempotency, retry/DLQ, privacy, budget, and zero-send evidence are locally validated, but no provider/channel/recipient is selected and no message was sent. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
 R4-411 prerequisite revalidation checkpoint: commit `6da7c15` passed real GitHub
 Actions CI run `33151723573` (all five required jobs). The checkpoint records

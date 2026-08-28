@@ -1,3 +1,5 @@
+"""Validate frozen historical R4 contracts; not active runtime configuration."""
+
 from __future__ import annotations
 
 import hashlib

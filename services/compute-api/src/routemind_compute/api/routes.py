@@ -946,6 +946,14 @@ def dispatch_snapshot(
             "travel_fallback_used",
             str(selected_travel.fallback_used if selected_travel else False).lower(),
         ),
+        (
+            "travel_fallback_reason",
+            (
+                selected_travel.fallback_reason
+                if selected_travel and selected_travel.fallback_reason
+                else "none"
+            ),
+        ),
     )
     canonical_input = payload.model_dump(mode="json")
     provenance = execution_provenance(canonical_input, decision)

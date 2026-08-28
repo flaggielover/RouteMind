@@ -257,6 +257,16 @@ try {
         throw "Independent travel and notification Human Gate self-tests failed"
     }
 
+    python scripts/here_provider_retirement.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "HERE provider retirement boundary validation failed"
+    }
+
+    python scripts/here_provider_retirement_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "HERE provider retirement self-tests failed"
+    }
+
     python scripts/agent_policy.py
     if ($LASTEXITCODE -ne 0) {
         throw "Agent authority policy validation failed"

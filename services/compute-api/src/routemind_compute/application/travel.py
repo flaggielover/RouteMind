@@ -325,6 +325,11 @@ class DeterministicLocalTravelProvider:
         return TravelTimeMatrix(values, self.name, effective_context)
 
 
+# Public architecture name for the deterministic local fallback. Keep the
+# existing class name as a compatibility alias for callers and historical data.
+LocalRoutingProvider = DeterministicLocalTravelProvider
+
+
 @dataclass(frozen=True, slots=True)
 class TravelNetworkNode:
     node_id: str

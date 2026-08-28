@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-411-here-provider-retirement-v1",
+  "taskId": "R4-411",
+  "status": "CLOSED_NOT_SELECTED",
+  "provider": "HERE_TECHNOLOGIES",
+  "decision": {
+    "selection": "NOT_SELECTED",
+    "retirement": "RETIRED",
+    "replacement": "GOOGLE_MAPS_ROUTES",
+    "salesApplication": "NOT_PURSUED",
+    "matrixJapanAccess": "COMMERCIAL_ENTITLEMENT_REQUIRED",
+    "liveValidation": "NOT_PERFORMED",
+    "liveClaim": "NONE"
+  },
+  "historicalContracts": [
+    {
+      "path": "contracts/provider/r4-410-travel-provider-human-gate-v2.json",
+      "sha256": "6d71059d2db366ce0ab3e54b7959f532346b0875101ebc1ab8da9189e8b3ac5c"
+    },
+    {
+      "path": "contracts/provider/r4-411-travel-provider-live-validation-v1.json",
+      "sha256": "4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c"
+    }
+  ],
+  "historicalEvidence": [
+    "evidence/gates/R4-411/2026-08-28-here-support-ticket-cs0184597.md"
+  ],
+  "activeRuntime": {
+    "provider": "GOOGLE_MAPS_ROUTES",
+    "primaryAdapter": "GoogleRoutesProvider",
+    "fallbackAdapter": "LocalRoutingProvider",
+    "hereCodeConfigDependencies": false,
+    "hereSecretEnvironmentVariable": null,
+    "liveCallsAuthorized": false,
+    "productionClaim": false
+  },
+  "claims": {
+    "hereProviderLiveValidated": false,
+    "hereMatrixJapanEligible": false,
+    "hereProductionSelected": false,
+    "googleProviderLiveValidated": false
+  },
+  "evidenceContract": [
+    "support-ticket-outcome-without-account-or-secret-data",
+    "historical-contract-digest-preservation",
+    "active-runtime-residue-audit",
+    "replacement-provider-contract-reference",
+    "secret-leakage-scan"
+  ],
+  "humanGate": {
+    "requiredForRetirement": false,
+    "requiredForGoogleLiveValidation": true,
+    "googleContract": "contracts/provider/r4-411b-google-routes-live-validation-v1.json",
+    "googleContractSha256": "a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1"
+  }
+}
