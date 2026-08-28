@@ -33,6 +33,25 @@ class Round4GraphGateTests(unittest.TestCase):
         self.assertEqual(result["conditional_task_count"], 3)
         self.assertEqual(result["closure_classification_count"], 11)
         self.assertEqual(result["preservation_lane_count"], 11)
+        self.assertEqual(result["replacement_provider_gate_count"], 1)
+
+    def test_replacement_provider_gate_representation_is_frozen(self) -> None:
+        mutated = copy.deepcopy(self.graph)
+        mutated["replacement_provider_gates"][0]["live_calls_authorized"] = True
+
+        with self.assertRaisesRegex(
+            Round4GraphError, "replacement provider gate representation drifted"
+        ):
+            validate_graph(mutated, self.active_graph)
+
+    def test_active_replacement_provider_gate_must_match(self) -> None:
+        active = copy.deepcopy(self.active_graph)
+        active["replacement_provider_gates"][0]["canonical_sha256"] = "0" * 64
+
+        with self.assertRaisesRegex(
+            Round4GraphError, "active replacement provider gate representation drifted"
+        ):
+            validate_graph(self.graph, active)
 
     def test_prepared_graph_rejects_started_task(self) -> None:
         mutated = copy.deepcopy(self.graph)
