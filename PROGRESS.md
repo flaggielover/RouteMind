@@ -34,6 +34,13 @@ Human Action Required: obtain HERE's written response to ticket `CS0184597` conf
 
 Next Candidates: none safely executable. R4-411 is waiting on the `CS0184597` entitlement response, bounded secret injection, and its independent Human Gate. R4-422 is prepared to its independent Human Gate with zero-send local evidence; no provider call or notification send is authorized. R4-437 remains inactive.
 
+Latest synchronization before this checkpoint: ticket/evidence/control-plane
+commit `aab4aa4d16649e74fdef5bcb6c11bcb401355493` passed all five required jobs
+in real GitHub Actions run `33153739404`. R4-411 remains blocked pending the
+`CS0184597` response; R4-422 remains at its frozen zero-send Human Gate. No
+HERE call, API-key inspection, provider credential use, AWS account/resource
+change, or notification send occurred.
+
 Overnight reconciliation (2026-08-28) started from clean `HEAD`/`origin/main`
 at `e2a1b32f215594c471a917b53809e49286c9868f`; the tracked working tree was
 clean and only pre-existing untracked `.codex-tmp/` remained untouched. The

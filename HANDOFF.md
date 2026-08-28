@@ -34,6 +34,11 @@ validated in `evidence/gates/R4-422/notifications.md`. AWS SES email in
 `ap-northeast-1` remains only the unapproved candidate; real sends, credentials,
 account/resource changes, and provider claims remain forbidden.
 
+Latest synchronization before this checkpoint: commit `aab4aa4` passed real
+GitHub Actions CI run `33153739404` (all five required jobs). This confirms the
+ticket evidence, graph mirror, and R4-422 zero-send preparation are CI-backed;
+it does not authorize a provider call or notification send.
+
 Latest observed pre-synchronization control-plane checkpoint: commit `e2a1b32f215594c471a917b53809e49286c9868f`
 passed real GitHub Actions CI run `33086123655` (all five required jobs). The
 following documentation synchronization also passed real GitHub Actions CI run
