@@ -8,6 +8,18 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: R4-422 - PROVIDER-NEUTRAL NOTIFICATION PREPARATION / HUMAN GATE PENDING
 
+Science Readiness Audit (2026-08-28): verdict
+`SCIENCE_READY_WITH_NONBLOCKING_GAPS`; `CLAUDE_SCIENCE_CAN_START = YES` for
+bounded local exploratory discovery, hypothesis generation, experiment design,
+deterministic replay, and falsifiable studies. S1-S8 are all
+`PARTIAL_NONBLOCKING`; there is no blocking item for this scoped start. The
+full metric/ablation campaign, observed Twin/RADS outcomes, and remote
+high-scale Linux launcher/synchronization remain explicit follow-up work.
+Readiness evidence and handoff scaffold are in
+`evidence/gates/science-readiness/2026-08-28-science-readiness-audit.md` and
+`research/SCIENCE_READINESS.md` plus the five linked scaffold files. No task
+status or frozen scientific/external result changed.
+
 R4-422 local implementation checkpoint (2026-08-28): the frozen contract
 `contracts/product/r4-422-notification-human-gate-v1.json` remains unchanged at
 SHA-256 `0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb`.

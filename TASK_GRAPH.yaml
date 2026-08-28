@@ -2,6 +2,25 @@
   "schema_version": 1,
   "project": "RouteMind",
   "statuses": ["pending", "ready", "in_progress", "blocked", "implemented", "validating", "passed", "failed", "deferred_external"],
+  "science_readiness": {
+    "audit": "research/SCIENCE_READINESS.md",
+    "evidence": "evidence/gates/science-readiness/2026-08-28-science-readiness-audit.md",
+    "verdict": "SCIENCE_READY_WITH_NONBLOCKING_GAPS",
+    "claude_science_can_start": true,
+    "scope": "BOUNDED_LOCAL_EXPLORATORY_ONLY",
+    "entry_gates": {
+      "S1": "PARTIAL_NONBLOCKING",
+      "S2": "PARTIAL_NONBLOCKING",
+      "S3": "PARTIAL_NONBLOCKING",
+      "S4": "PARTIAL_NONBLOCKING",
+      "S5": "PARTIAL_NONBLOCKING",
+      "S6": "PARTIAL_NONBLOCKING",
+      "S7": "PARTIAL_NONBLOCKING",
+      "S8": "PARTIAL_NONBLOCKING"
+    },
+    "blocking_items": [],
+    "frozen_r3_325": "E-PASS / X-PASS / S-FAIL / C-NO-CLAIM"
+  },
   "replacement_provider_gates": [{"id":"R4-411B","parent_task":"R4-411","title":"Google Maps Routes active replacement-provider Human Gate","status":"failed","classification":"EXTERNAL_VALIDATION","external_gate":true,"human_approval":true,"contract":"contracts/provider/r4-411b-google-routes-live-validation-v1.json","evidence":["evidence/gates/R4-411B/provider-contract.md","evidence/gates/R4-411/2026-08-28-here-provider-retirement.md","evidence/gates/R4-411B/2026-08-28-google-live-validation-preflight.md","evidence/gates/R4-411B/google-live-validation-20260828T103154Z.json","evidence/gates/R4-411B/2026-08-28-google-live-validation-classification-correction.md","evidence/gates/R4-411B/google-live-validation-usage.json","evidence/gates/R4-411B/2026-08-28-google-matrix-partial-root-cause-audit.md"],"canonical_sha256":"a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1","live_calls_authorized":true,"provider_live_validated":false,"production_claim":false,"japan_matrix_entitlement_claim":false,"depends_on":["R4-410"],"execution_outcome":{"overall":"PARTIAL","compute_routes":"PASS","compute_route_matrix":"PARTIAL","point_requests":3,"matrix_requests":1,"matrix_elements":4,"elapsed_seconds":2.433,"observed_external_cost_usd":"NOT_AVAILABLE_WITHOUT_BILLING_READBACK","conservative_cost_upper_bound_usd":1.0,"japan_matrix":"OBSERVED_PROVIDER_RESULT_ONLY; NO_ENTITLEMENT_CLAIM","fallback_used":false},"notes":"Approved bounded live validation completed with ComputeRoutes PASS and a partial ComputeRouteMatrix response (one of four cells returned ROUTE_EXISTS error). Provider-live validation is not claimed; no production, Tokyo-pinned processing, or Japan Matrix entitlement claim. Historical HERE R4-411 contracts and evidence remain preserved; Round 4 denominator is unchanged."}],
   "tasks": [
     {
