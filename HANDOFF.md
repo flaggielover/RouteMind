@@ -12,6 +12,12 @@ Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest
 
 Next: no safe task is currently executable. R4-411 requires written HERE confirmation for Matrix Routing API v8 Japan access, process-scoped injection of `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through the external mechanism, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-422 `0cc9bc...4ffb` remains independent and unapproved. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
+R4-411 prerequisite revalidation checkpoint: commit `6da7c15` passed real GitHub
+Actions CI run `33151723573` (all five required jobs). The checkpoint records
+HERE account/application confirmation, presence-only User-scope API-key status,
+documented Routing Japan support, and the still-restricted Matrix Japan access;
+no HERE live call was made and the frozen contract digest is unchanged.
+
 Latest observed pre-synchronization control-plane checkpoint: commit `e2a1b32f215594c471a917b53809e49286c9868f`
 passed real GitHub Actions CI run `33086123655` (all five required jobs). The
 following documentation synchronization also passed real GitHub Actions CI run
