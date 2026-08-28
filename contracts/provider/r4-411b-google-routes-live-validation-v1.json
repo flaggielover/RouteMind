@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-411b-google-routes-live-validation-v1",
+  "taskId": "R4-411B",
+  "status": "HUMAN_GATE_PENDING",
+  "provider": {
+    "name": "GOOGLE_MAPS_PLATFORM",
+    "product": "GOOGLE_MAPS_ROUTES_API",
+    "operations": ["ComputeRoutes", "ComputeRouteMatrix"],
+    "endpointRegion": "GOOGLE_MANAGED_NOT_TOKYO_PINNED",
+    "validated": false
+  },
+  "prerequisites": {
+    "googleCloudProject": "CREATED",
+    "billing": "ENABLED",
+    "routesApi": "ENABLED",
+    "apiKey": "CREATED_AND_LOCALLY_CONFIGURED",
+    "japanRoutingCoverage": "DOCUMENTED_SUPPORTED",
+    "japanMatrixEntitlement": "NOT_ASSERTED"
+  },
+  "secretInjection": {
+    "environmentVariable": "ROUTEMIND_GOOGLE_ROUTES_API_KEY",
+    "presenceCheck": "SET_OR_MISSING_ONLY",
+    "source": "external_secret_store_or_process_environment",
+    "forbiddenDestinations": ["git", "history", "evidence", "logs", "snapshots", "ci_output", "frontend_bundle"]
+  },
+  "fixture": {
+    "scope": "synthetic_tokyo_coordinates_only",
+    "realPeopleOrBusinesses": false,
+    "durableBusinessIdentifiers": false,
+    "provenance": "committed_synthetic_fixture_v1"
+  },
+  "requestContract": {
+    "pointFields": ["origin.latLng", "destination.latLng", "departureTime", "travelMode", "routingPreference"],
+    "matrixFields": ["origins.latLng", "destinations.latLng", "departureTime", "travelMode", "routingPreference"],
+    "opaqueRequestIdAllowed": true,
+    "outboundForbidden": ["tenant_id", "customer_id", "courier_id", "merchant_id", "order_id", "phone", "email", "name", "textual_private_address", "durable_domain_serialization"]
+  },
+  "fallback": {
+    "provider": "deterministic-local",
+    "allowedWhen": ["timeout", "transport_error", "auth_or_entitlement", "rate_limited", "provider_4xx", "provider_5xx", "malformed_response", "budget_exceeded", "circuit_open"],
+    "silentSubstitution": false,
+    "durableTruthMutation": false,
+    "provenanceRequired": true
+  },
+  "boundedLiveValidation": {
+    "authorized": false,
+    "maximumPointRequests": 20,
+    "maximumMatrixRequests": 5,
+    "maximumMatrixElements": 100,
+    "maximumDurationMinutes": 30,
+    "maximumSpendUsdCents": 100,
+    "newExecutionApprovalRequired": true,
+    "accountOrResourceCreationAuthorized": false
+  },
+  "security": {
+    "secretRedaction": "required",
+    "keyRotationBeforeUse": "required",
+    "leakageScan": "required",
+    "frontendInjection": "forbidden",
+    "providerResponseLogging": "redacted_fields_only"
+  },
+  "evidenceContract": [
+    "contract_digest_and_manifest",
+    "google_cloud_prerequisite_presence_only",
+    "synthetic_fixture_provenance",
+    "point_request_and_normalized_response_provenance",
+    "matrix_request_and_partial_failure_provenance",
+    "timeout_retry_rate_limit_and_circuit_evidence",
+    "explicit_deterministic_fallback_reason",
+    "privacy_minimization_and_secret_leakage_scan",
+    "bounded_call_count_duration_and_cost_record",
+    "negative_and_unexpected_entitlement_or_quota_results"
+  ],
+  "claims": {
+    "providerSelected": false,
+    "providerLiveValidated": false,
+    "productionReady": false,
+    "japanMatrixEntitlement": false,
+    "realCallsExecuted": false
+  },
+  "humanGate": {
+    "approvalDoesNotAuthorizeLiveCalls": true,
+    "requiredApprovals": [
+      "EXACT_CONTRACT_DIGEST",
+      "GOOGLE_CLOUD_PROJECT_OWNER",
+      "KEY_ROTATION_CONFIRMED",
+      "SYNTHETIC_TOKYO_FIXTURE",
+      "NON_TOKYO_PINNED_PROCESSING_ACCEPTED",
+      "BOUNDED_LIVE_EXECUTION_CONTRACT_AND_BUDGET"
+    ]
+  }
+}

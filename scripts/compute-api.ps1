@@ -85,10 +85,12 @@ try {
         }
         "check" {
             Invoke-Uv @("sync", "--frozen", "--python", $pythonPath)
-            Invoke-Uv @("run", "--frozen", "ruff", "check", ".", "../../scripts/validate_contracts.py")
-            Invoke-Uv @("run", "--frozen", "ruff", "format", "--check", ".", "../../scripts/validate_contracts.py")
-            Invoke-Uv @("run", "--frozen", "mypy", "src", "tests", "../../scripts/validate_contracts.py")
+            Invoke-Uv @("run", "--frozen", "ruff", "check", ".", "../../scripts/validate_contracts.py", "../../scripts/google_routes_contract.py")
+            Invoke-Uv @("run", "--frozen", "ruff", "format", "--check", ".", "../../scripts/validate_contracts.py", "../../scripts/google_routes_contract.py")
+            Invoke-Uv @("run", "--frozen", "mypy", "src", "tests", "../../scripts/validate_contracts.py", "../../scripts/google_routes_contract.py")
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/validate_contracts.py")
+            Invoke-Uv @("run", "--frozen", "python", "../../scripts/google_routes_contract.py")
+            Invoke-Uv @("run", "--frozen", "python", "../../scripts/google_routes_contract_test.py")
             Invoke-Uv @("run", "--frozen", "pytest")
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/determinism_gate.py")
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/analytics_archive_gate.py")

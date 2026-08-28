@@ -149,12 +149,33 @@ class TravelTime:
     route_geometry: tuple[GeoPoint, ...] = ()
     edge_ids: tuple[str, ...] = ()
     zones: tuple[str, ...] = ()
+    distance_kilometres: float | None = None
+    traffic_seconds: float | None = None
+    request_id: str | None = None
+    status: str = "OK"
+    error_class: str | None = None
+    fallback_reason: str | None = None
+    provenance: tuple[tuple[str, str], ...] = ()
 
     def __post_init__(self) -> None:
         if not isfinite(self.seconds) or self.seconds < 0:
             raise ValueError("travel time seconds must be finite and non-negative")
         if not self.provider.strip():
             raise ValueError("travel provider must not be blank")
+        if self.distance_kilometres is not None and (
+            not isfinite(self.distance_kilometres) or self.distance_kilometres < 0
+        ):
+            raise ValueError("travel distance must be finite and non-negative")
+        if self.traffic_seconds is not None and (
+            not isfinite(self.traffic_seconds) or self.traffic_seconds < 0
+        ):
+            raise ValueError("traffic duration must be finite and non-negative")
+        if not self.status.strip():
+            raise ValueError("travel status must not be blank")
+        if self.request_id is not None and not self.request_id.strip():
+            raise ValueError("travel request id must not be blank")
+        if any(not key.strip() or not value.strip() for key, value in self.provenance):
+            raise ValueError("travel provenance entries must not be blank")
         if any(not edge_id.strip() for edge_id in self.edge_ids):
             raise ValueError("travel edge ids must not be blank")
         if any(not zone.strip() for zone in self.zones):
@@ -170,6 +191,13 @@ class TravelTime:
             ),
             "edge_ids": self.edge_ids,
             "zones": self.zones,
+            "distance_kilometres": self.distance_kilometres,
+            "traffic_seconds": self.traffic_seconds,
+            "request_id": self.request_id,
+            "status": self.status,
+            "error_class": self.error_class,
+            "fallback_reason": self.fallback_reason,
+            "provenance": self.provenance,
             **self.context.metadata,
         }
 
@@ -180,6 +208,7 @@ class TravelTimeMatrix:
     provider: str
     context: DynamicTravelContext = field(default_factory=DynamicTravelContext)
     fallback_used: bool = False
+    fallback_reason: str | None = None
 
     def __post_init__(self) -> None:
         width = len(self.values[0]) if self.values else 0
@@ -194,6 +223,7 @@ class TravelTimeMatrix:
         return {
             "provider": self.provider,
             "fallback_used": self.fallback_used,
+            "fallback_reason": self.fallback_reason,
             "rows": len(self.values),
             "columns": width,
             **self.context.metadata,
@@ -555,7 +585,7 @@ class FallbackTravelTimeProvider:
             if not isinstance(result, TravelTime):
                 raise TypeError("primary provider returned an invalid point result")
             return result
-        except (Exception, TimeoutError):
+        except (Exception, TimeoutError) as exc:
             result = _invoke_with_context(self.fallback.estimate, (origin, destination), context)
             if not isinstance(result, TravelTime):
                 raise TypeError("fallback provider returned an invalid point result") from None
@@ -567,6 +597,13 @@ class FallbackTravelTimeProvider:
                 route_geometry=result.route_geometry,
                 edge_ids=result.edge_ids,
                 zones=result.zones,
+                distance_kilometres=result.distance_kilometres,
+                traffic_seconds=result.traffic_seconds,
+                request_id=result.request_id,
+                status=result.status,
+                error_class=result.error_class,
+                fallback_reason=_fallback_reason(exc),
+                provenance=result.provenance,
             )
 
     def matrix(
@@ -582,7 +619,7 @@ class FallbackTravelTimeProvider:
             if not isinstance(result, TravelTimeMatrix):
                 raise TypeError("primary provider returned an invalid matrix result")
             return result
-        except (Exception, TimeoutError):
+        except (Exception, TimeoutError) as exc:
             raw_result = _invoke_with_context(
                 self.fallback.matrix, (origins, destinations), context
             )
@@ -599,6 +636,13 @@ class FallbackTravelTimeProvider:
                         route_geometry=item.route_geometry,
                         edge_ids=item.edge_ids,
                         zones=item.zones,
+                        distance_kilometres=item.distance_kilometres,
+                        traffic_seconds=item.traffic_seconds,
+                        request_id=item.request_id,
+                        status=item.status,
+                        error_class=item.error_class,
+                        fallback_reason=_fallback_reason(exc),
+                        provenance=item.provenance,
                     )
                     for item in row
                 )
@@ -609,4 +653,15 @@ class FallbackTravelTimeProvider:
                 result.provider,
                 result.context,
                 fallback_used=True,
+                fallback_reason=_fallback_reason(exc),
             )
+
+
+def _fallback_reason(error: Exception) -> str:
+    """Return a stable, non-sensitive classification for an external failure."""
+    classifier = getattr(error, "classification", None)
+    if isinstance(classifier, str) and classifier.strip():
+        return classifier
+    if isinstance(error, TimeoutError):
+        return "timeout"
+    return error.__class__.__name__.lower()

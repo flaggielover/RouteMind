@@ -6,11 +6,11 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: NONE - R4-422 NOTIFICATION PROVIDER HUMAN GATE
+Current Task: R4-411B - GOOGLE ROUTES HUMAN GATE
 
 Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE Technologies is the ratified candidate with separate Routing API v8 and Matrix Routing API v8 products; its original zero-account, zero-credential, zero-live-call, and zero-spend boundary remains unchanged. R4-411 is `BLOCKED / HUMAN_GATE_PENDING`; HERE account and application are confirmed and `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` is `SET` in Windows User scope by presence-only check. HERE Routing API v8 Japan car-routing is `DOCUMENTED_SUPPORTED`; Matrix Routing API v8 Japan remains `RESTRICTED / REQUIRES_HERE_CONFIRMATION`, so `JAPAN_SERVICE_ELIGIBILITY = PARTIAL_PENDING_CONFIRMATION`. HERE Support ticket `CS0184597` is `NEW` and is an entitlement inquiry only, not an access approval. The exact v1 live-validation contract remains frozen at SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`; no live/provider/production validation is claimed. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
 
-Next: no safe task is currently executable. R4-411 requires the HERE response to ticket `CS0184597`, process-scoped injection of `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through the external mechanism, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-422 is prepared to its independent Human Gate at `0cc9bc...4ffb`; provider-neutral Outbox/Inbox, consent, idempotency, retry/DLQ, privacy, budget, and zero-send evidence are locally validated, but no provider/channel/recipient is selected and no message was sent. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+Next: no safe task is currently executable. R4-411 requires the HERE response to ticket `CS0184597`, process-scoped injection of `ROUTEMIND_TRAVEL_PROVIDER_API_KEY` through the external mechanism, and a separate Human Gate for prepared contract SHA-256 `4eacaad0c0d8a71a73715b750b370d58a4439d70b1f9dd1cc97d119599da6d1c`. R4-411B is independently prepared to its Google Routes Human Gate at `a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1`; adapter and zero-live-call evidence are locally validated, but key rotation, exact approval, non-Tokyo-pinned processing acceptance, and bounded execution approval remain required. R4-422 is prepared to its independent Human Gate at `0cc9bc...4ffb`; provider-neutral Outbox/Inbox, consent, idempotency, retry/DLQ, privacy, budget, and zero-send evidence are locally validated, but no provider/channel/recipient is selected and no message was sent. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
 R4-411 prerequisite revalidation checkpoint: commit `6da7c15` passed real GitHub
 Actions CI run `33151723573` (all five required jobs). The checkpoint records
@@ -38,6 +38,17 @@ Latest synchronization before this checkpoint: commit `aab4aa4` passed real
 GitHub Actions CI run `33153739404` (all five required jobs). This confirms the
 ticket evidence, graph mirror, and R4-422 zero-send preparation are CI-backed;
 it does not authorize a provider call or notification send.
+
+R4-411B Google Routes replacement-provider checkpoint (2026-08-28): the
+provider-neutral adapter and zero-live-call contract are recorded in
+`contracts/provider/r4-411b-google-routes-live-validation-v1.json` and
+`evidence/gates/R4-411B/provider-contract.md`. Canonical SHA-256 is
+`a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1`. Google
+Cloud prerequisites are owner-reported as created/enabled/configured; the key is
+presence-only (`SET`/`MISSING`) and the previously exposed key must be rotated.
+Point Japan support is documented, Matrix entitlement is not asserted, and
+Google-managed processing is not claimed Tokyo-pinned. The fixed Round 4 graph
+represents R4-411B under R4-411 per ADR-0036; no HERE/Google live call occurred.
 
 Latest observed pre-synchronization control-plane checkpoint: commit `e2a1b32f215594c471a917b53809e49286c9868f`
 passed real GitHub Actions CI run `33086123655` (all five required jobs). The

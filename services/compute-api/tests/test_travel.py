@@ -88,6 +88,33 @@ def test_provider_rejects_invalid_configuration_and_matrix_shape() -> None:
         )
 
 
+def test_travel_result_metadata_fields_are_validated_and_preserved() -> None:
+    with pytest.raises(ValueError, match="distance"):
+        TravelTime(1, "test", distance_kilometres=-1)
+    with pytest.raises(ValueError, match="traffic duration"):
+        TravelTime(1, "test", traffic_seconds=-1)
+    with pytest.raises(ValueError, match="status"):
+        TravelTime(1, "test", status=" ")
+    with pytest.raises(ValueError, match="request id"):
+        TravelTime(1, "test", request_id=" ")
+    with pytest.raises(ValueError, match="provenance"):
+        TravelTime(1, "test", provenance=(("", "value"),))
+
+    result = TravelTime(
+        12,
+        "provider",
+        distance_kilometres=1.2,
+        traffic_seconds=15,
+        request_id="opaque",
+        status="OK",
+        provenance=(("operation", "ComputeRoutes"),),
+    )
+    assert result.metadata["distance_kilometres"] == 1.2
+    assert result.metadata["traffic_seconds"] == 15
+    assert result.metadata["request_id"] == "opaque"
+    assert result.metadata["provenance"] == (("operation", "ComputeRoutes"),)
+
+
 def test_fallback_provider_handles_errors_and_timeout() -> None:
     class BrokenProvider:
         name = "broken"
