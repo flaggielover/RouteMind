@@ -6,7 +6,19 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-411B - GOOGLE ROUTES HUMAN GATE
+Current Task: R4-411B - GOOGLE ROUTES LIVE VALIDATION CLOSED
+
+Authoritative R4-411B execution closure (2026-08-28): approved contract SHA-256
+`a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1` completed
+with `ComputeRoutes=PASS` and `ComputeRouteMatrix=PARTIAL`; one of four matrix
+cells returned a provider error. Final run usage was 1 point request and 1
+matrix request with 4 elements; append-only contract usage is 3 point requests,
+1 matrix request, and 4 elements after two prior bounded attempts. Final elapsed
+time was 2.433 seconds, no fallback was used, and billing readback was
+unavailable; conservative cost ceiling remains USD 1.00. Redacted evidence,
+prior attempts, usage ledger, and the classification correction are retained
+under `evidence/gates/R4-411B/`. No provider-live validation, production,
+Tokyo-pinned processing, or Japan Matrix entitlement claim is made.
 
 HERE retirement checkpoint (2026-08-28): contract
 `contracts/provider/r4-411-here-provider-retirement-v1.json` is validated at
@@ -30,9 +42,9 @@ represented only by the graph-root `replacement_provider_gates` entry, with
 contract SHA-256 `a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1`,
 live calls unauthorized, and no production or Matrix-entitlement claim.
 
-Task Status: R4-410 is `PASSED / HUMAN_APPROVED_CONTRACT_FROZEN` at exact digest `6d71059d...3ac5c`. HERE is retired and not selected: its historical contracts, support ticket `CS0184597`, diagnostics, costs, and teardown evidence are preserved, with no HERE live/provider/production claim. R4-411 is terminal `deferred_external` with `CLOSED_NOT_SELECTED / SUPERSEDED_BY_GOOGLE / NO_LIVE_CLAIM`; it is no longer an active blocker. R4-411B is the active Google Maps Routes replacement-provider Human Gate at exact contract SHA-256 `a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1`, with `authorized=false`, no live calls, no production claim, and Matrix Japan entitlement unclaimed. Active runtime composition is GoogleRoutesProvider primary plus explicit deterministic-local fallback; default transport is unconfigured and cannot make live I/O. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
+Task Status: R4-410 is passed and HERE is retired/not selected with historical evidence preserved. R4-411 is terminal deferred with no live claim. R4-411B is `FAILED / PARTIAL_NO_PRODUCTION_CLAIM` at exact contract SHA-256 `a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1`; ComputeRoutes passed and ComputeRouteMatrix was partial with one provider error cell. No fallback, production claim, or Matrix Japan entitlement claim is made. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
 
-Next: no safe task is currently executable. R4-411B is prepared to its active Google Routes Human Gate; key rotation, secure process-scoped injection of `ROUTEMIND_GOOGLE_ROUTES_API_KEY`, exact approval, non-Tokyo-pinned processing acceptance, and bounded execution approval remain required. R4-422 is prepared to its independent Human Gate at `0cc9bc...4ffb`; provider-neutral Outbox/Inbox, consent, idempotency, retry/DLQ, privacy, budget, and zero-send evidence are locally validated, but no provider/channel/recipient is selected and no message was sent. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+Next: no safe task is currently executable. R4-411B bounded execution is closed and no additional Google call is authorized by its consumed contract. R4-422 is prepared to its independent Human Gate at `0cc9bc...4ffb`; provider-neutral Outbox/Inbox, consent, idempotency, retry/DLQ, privacy, budget, and zero-send evidence are locally validated, but no provider/channel/recipient is selected and no message was sent. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
 R4-411 prerequisite revalidation checkpoint: commit `6da7c15` passed real GitHub
 Actions CI run `33151723573` (all five required jobs). The checkpoint records

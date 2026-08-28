@@ -37,7 +37,7 @@ class Round4GraphGateTests(unittest.TestCase):
 
     def test_replacement_provider_gate_representation_is_frozen(self) -> None:
         mutated = copy.deepcopy(self.graph)
-        mutated["replacement_provider_gates"][0]["live_calls_authorized"] = True
+        mutated["replacement_provider_gates"][0]["execution_outcome"]["overall"] = "PASS"
 
         with self.assertRaisesRegex(
             Round4GraphError, "replacement provider gate representation drifted"

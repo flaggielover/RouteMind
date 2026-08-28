@@ -1,0 +1,141 @@
+{
+  "budget": {
+    "conservative_cost_upper_bound_usd": 1.0,
+    "elapsed_seconds": 2.433,
+    "matrix_elements": 4,
+    "matrix_requests": 1,
+    "maximum_duration_seconds": 1800,
+    "maximum_matrix_elements": 100,
+    "maximum_matrix_requests": 5,
+    "maximum_point_requests": 20,
+    "maximum_spend_usd": 1.0,
+    "observed_external_cost_usd": "NOT_AVAILABLE_WITHOUT_BILLING_READBACK",
+    "point_requests": 3
+  },
+  "classification": {
+    "compute_route_matrix": "PASS",
+    "compute_routes": "PASS",
+    "japan_matrix": "OBSERVED_PROVIDER_RESULT_ONLY; NO_ENTITLEMENT_CLAIM",
+    "overall": "PASS",
+    "production_claim": false
+  },
+  "contract_sha256": "a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1",
+  "execution": {
+    "api_key_presence": "SET",
+    "finished_at": "2026-08-28T10:31:54.341573Z",
+    "fixture": "committed_synthetic_fixture_v1 / Tokyo coordinates",
+    "live_calls_authorized_by_owner": true,
+    "matrix": {
+      "cells": [
+        [
+          {
+            "distance_kilometres": 8.089,
+            "error_class": null,
+            "fallback_used": false,
+            "provenance": {
+              "operation": "ComputeRouteMatrix",
+              "provider": "google-maps-routes",
+              "provider_request_id": "none",
+              "request_digest": "6286e63d557f3c6aba6d122c66b2993dec85a9e12e6f2cf1e5d2bc4ca6957e41",
+              "request_id": "rm-google-1fd5b8bfb14d45e884a707b8f26101a8",
+              "response_status": "200"
+            },
+            "seconds": 1745.0,
+            "status": "OK"
+          },
+          {
+            "distance_kilometres": 9.044,
+            "error_class": null,
+            "fallback_used": false,
+            "provenance": {
+              "operation": "ComputeRouteMatrix",
+              "provider": "google-maps-routes",
+              "provider_request_id": "none",
+              "request_digest": "6286e63d557f3c6aba6d122c66b2993dec85a9e12e6f2cf1e5d2bc4ca6957e41",
+              "request_id": "rm-google-1fd5b8bfb14d45e884a707b8f26101a8",
+              "response_status": "200"
+            },
+            "seconds": 1690.0,
+            "status": "OK"
+          }
+        ],
+        [
+          {
+            "distance_kilometres": null,
+            "error_class": "ROUTE_EXISTS",
+            "fallback_used": false,
+            "provenance": {
+              "operation": "ComputeRouteMatrix",
+              "provider": "google-maps-routes",
+              "provider_request_id": "none",
+              "request_digest": "6286e63d557f3c6aba6d122c66b2993dec85a9e12e6f2cf1e5d2bc4ca6957e41",
+              "request_id": "rm-google-1fd5b8bfb14d45e884a707b8f26101a8",
+              "response_status": "200"
+            },
+            "seconds": 0.0,
+            "status": "ERROR"
+          },
+          {
+            "distance_kilometres": 4.49,
+            "error_class": null,
+            "fallback_used": false,
+            "provenance": {
+              "operation": "ComputeRouteMatrix",
+              "provider": "google-maps-routes",
+              "provider_request_id": "none",
+              "request_digest": "6286e63d557f3c6aba6d122c66b2993dec85a9e12e6f2cf1e5d2bc4ca6957e41",
+              "request_id": "rm-google-1fd5b8bfb14d45e884a707b8f26101a8",
+              "response_status": "200"
+            },
+            "seconds": 1335.0,
+            "status": "OK"
+          }
+        ]
+      ],
+      "classification": "provider_success",
+      "fallback_used": false,
+      "operation": "ComputeRouteMatrix",
+      "provenance": {
+        "operation": "ComputeRouteMatrix",
+        "provider": "google-maps-routes"
+      },
+      "provider": "google-routes",
+      "status": "OK"
+    },
+    "no_account_or_resource_mutation": true,
+    "point": {
+      "classification": "provider_success",
+      "distance_kilometres": 8.089,
+      "fallback_used": false,
+      "operation": "ComputeRoutes",
+      "provenance": {
+        "operation": "ComputeRoutes",
+        "provider": "google-maps-routes",
+        "provider_request_id": "none",
+        "request_digest": "0a33fe66c70380fa7c6bda078f36013d7f9183b5a9483f12a361ddfb51e5db3b",
+        "request_id": "rm-google-3625ebd19148459283e15c4b5d3ed5c5",
+        "response_status": "200"
+      },
+      "provider": "google-routes",
+      "seconds": 1745.0,
+      "status": "OK",
+      "traffic_seconds": 1745.0
+    },
+    "prior_usage": {
+      "matrix_elements": 0,
+      "matrix_requests": 0,
+      "point_requests": 2
+    },
+    "provider": "GOOGLE_MAPS_PLATFORM",
+    "region_claim": "GOOGLE_MANAGED_NOT_TOKYO_PINNED",
+    "started_at": "2026-08-28T10:31:51.908245Z"
+  },
+  "privacy": {
+    "forbidden_business_identifiers_sent": false,
+    "secret_in_evidence": false,
+    "secret_in_logs": false,
+    "synthetic_only": true
+  },
+  "schema_version": 1,
+  "task_id": "R4-411B"
+}

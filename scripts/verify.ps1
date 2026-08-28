@@ -267,6 +267,11 @@ try {
         throw "HERE provider retirement self-tests failed"
     }
 
+    python scripts/r4_411b_google_live_validation_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Google Routes bounded live-validation self-tests failed"
+    }
+
     python scripts/agent_policy.py
     if ($LASTEXITCODE -ne 0) {
         throw "Agent authority policy validation failed"
