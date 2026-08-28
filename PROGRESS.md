@@ -12,7 +12,19 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 166 / 196 tasks passed
 
-Current Task: R4-411B - GOOGLE ROUTES LIVE VALIDATION CLOSED
+Current Task: R4-422 - PROVIDER-NEUTRAL NOTIFICATION PREPARATION / HUMAN GATE PENDING
+
+R4-422 local implementation checkpoint (2026-08-28): the frozen contract
+`contracts/product/r4-422-notification-human-gate-v1.json` remains unchanged at
+SHA-256 `0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb`.
+Provider-neutral Java notification models, strict template/privacy rendering,
+redacted transactional Outbox payloads, consent rechecks, bounded retries,
+duplicate suppression, DLQ, authenticated-receipt semantics, and an offline
+failure-injection provider are implemented and covered by seven focused tests.
+No AWS SDK/client, credential reader, account/resource change, callback, or
+real notification send exists or was invoked. R4-422 remains
+`BLOCKED / PREPARED_NOTIFICATION_PROVIDER_HUMAN_GATE`; AWS SES in
+`ap-northeast-1` remains an unapproved candidate only.
 
 Authoritative R4-411B execution closure (2026-08-28): approved contract SHA-256
 `a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1` completed

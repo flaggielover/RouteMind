@@ -105,3 +105,32 @@ prove AWS account ownership, sender verification, recipient ownership, callback
 authentication in AWS, delivery, bounce, cost, or any real send. Those facts
 remain the independent Human Gate and later execution contract boundary. The
 contract JSON and canonical SHA-256 are unchanged.
+
+## Provider-neutral local implementation checkpoint - 2026-08-28
+
+The Java-only zero-send seam is now executable and covered by focused unit
+tests in `services/business-api/src/test/java/com/routemind/business/application/notification/NotificationDeliveryTests.java`.
+The implementation deliberately has no Spring bean, AWS SDK, network client,
+credential reader, or provider side effect:
+
+- `NotificationCommand`, `NotificationRequest`, and `NotificationResult` carry
+  tenant, correlation, trace, idempotency, attempt, and provenance metadata.
+- `NotificationTemplateRenderer` only renders declared variables from the
+  privacy allowlist and attaches the required
+  `EXTERNAL_NOTIFICATION_DATA_MINIMIZATION` marker.
+- `NotificationOutbox` emits a transaction-ready `notification.requested`
+  event containing endpoint digests, never recipient/sender addresses or
+  rendered content.
+- `NotificationDeliveryWorker` rechecks consent for every attempt, bounds
+  retries at five, separates provider acceptance from authenticated delivery,
+  and preserves the original idempotency owner when a duplicate is in flight.
+- `InMemoryNotificationDeliveryLedger` and `MockNotificationProvider` provide
+  deterministic local idempotency, DLQ, retry, timeout, rate-limit, malformed,
+  client, and server failure paths.
+
+The seven focused tests verify template/privacy rejection, redacted audit and
+Outbox payloads, authenticated-receipt requirements, retry-to-delivery,
+retry-exhaustion-to-DLQ, duplicate suppression, consent/quiet-hours behavior,
+and every offline mock outcome. They are local evidence only: no AWS account,
+sender, recipient, callback, credential, delivery, bounce, cost, or production
+claim is established by this checkpoint.
