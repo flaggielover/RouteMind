@@ -1392,6 +1392,25 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   eligible, while RM-230 is the active reliability sequence.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
 
+Gmail OAuth bootstrap V2 preparation (2026-08-29): independent contract
+`contracts/provider/r4-422-google-gmail-oauth-bootstrap-v2.json` is prepared
+with SHA-256
+`e6fc0dec19ea96c2eaee337694e7a0a19716e5491ea4b50d9be09892391ca22e`.
+It starts the Windows OAuth listener on loopback before emitting any URL and
+requires one operator-managed strict loopback SSH forward to
+`suzhe@10.10.1.27`. The operator runs SSH separately and enters the Mac
+password manually; RouteMind never starts SSH or reads password bytes. One Mac
+`/routemind-oauth-preflight` request must return
+`ROUTEMIND_GMAIL_OAUTH_TUNNEL_READY` before the single `gmail.send` OAuth URL
+is generated. The future stage permits one session, one callback, and one token
+exchange, with no Gmail message operation, email send, retry, fallback, or
+mutation. No SSH, preflight, OAuth, Google, Gmail, or mutation call occurred
+in preparation. State:
+`BLOCKED / OAUTH_BOOTSTRAP_V2_HUMAN_GATE_PENDING / NO_PRODUCTION_CLAIM`.
+Evidence is under
+`evidence/gates/R4-422/gmail-oauth-bootstrap-v2-preparation-20260829.*`.
+Historical contracts/evidence and R3-325 remain unchanged.
+
 ## Tokyo VM execution attempt 1 - 2026-08-27
 
 The exact approved VM contract `2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a` was applied once under execution

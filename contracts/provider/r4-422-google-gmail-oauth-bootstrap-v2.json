@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-422-google-gmail-oauth-bootstrap-v2",
+  "taskId": "R4-422",
+  "status": "PREPARED_GMAIL_OAUTH_BOOTSTRAP_V2_HUMAN_GATE",
+  "provider": "GOOGLE_GMAIL_API",
+  "operation": "oauth2.installed_app_bootstrap_v2",
+  "scope": "https://www.googleapis.com/auth/gmail.send",
+  "configuration": {
+    "clientCredentialEnvironmentVariable": "ROUTEMIND_GMAIL_OAUTH_CLIENT_FILE",
+    "tokenStoreEnvironmentVariable": "ROUTEMIND_GMAIL_TOKEN_STORE",
+    "oauthUserIdEnvironmentVariable": "ROUTEMIND_GMAIL_OAUTH_USER_ID",
+    "knownHostsEnvironmentVariable": "ROUTEMIND_GMAIL_OAUTH_MAC_KNOWN_HOSTS",
+    "macLoopbackPortEnvironmentVariable": "ROUTEMIND_GMAIL_OAUTH_MAC_PORT",
+    "repositoryExternalClientAndTokenStore": true,
+    "windowsOnlyTokenStore": true
+  },
+  "operatorManagedTunnel": {
+    "sshAutomation": 0,
+    "sshProcessStartedByRouteMind": false,
+    "sshHost": "10.10.1.27",
+    "sshUser": "suzhe",
+    "operatorEntersPasswordOutsideRouteMind": true,
+    "strictHostKeyVerification": true,
+    "knownHostsExternalPinnedFile": true,
+    "remoteForward": "127.0.0.1:<mac-port>:127.0.0.1:<windows-port>",
+    "windowsListenerBind": "127.0.0.1",
+    "publicIngress": false,
+    "remoteCommandCount": 0
+  },
+  "readinessGate": {
+    "preflightPath": "/routemind-oauth-preflight",
+    "preflightResponse": "ROUTEMIND_GMAIL_OAUTH_TUNNEL_READY",
+    "requiredValidPreflightRequests": 1,
+    "authorizationUrlBeforePreflight": false,
+    "listenerMustBeAlive": true,
+    "operatorConfirmsTunnelManually": true,
+    "preflightConsumesOAuthState": false,
+    "preflightContactsGoogle": false,
+    "preflightWritesTokenData": false
+  },
+  "authorization": {
+    "interactiveSessions": 1,
+    "callbackPath": "/oauth2callback",
+    "callbackConsumptions": 1,
+    "tokenExchange": 1,
+    "freshStatePerSession": true,
+    "stateMustMatch": true,
+    "operatorMustPerformLoginAndConsent": true,
+    "accessType": "offline",
+    "prompt": "consent"
+  },
+  "execution": {
+    "maximumGoogleApiMessageRequests": 0,
+    "maximumEmailSends": 0,
+    "maximumRetries": 0,
+    "maximumFallback": 0,
+    "maximumDurationMinutes": 15,
+    "maximumSpendUsd": 0.1,
+    "googleResourceMutations": 0,
+    "accountMutations": 0,
+    "oauthClientMutations": 0,
+    "automaticRetry": false,
+    "automaticFallback": false
+  },
+  "failureSemantics": {
+    "failClosed": true,
+    "noAuthorizationUrlBeforeTunnelPreflightPass": true,
+    "zeroSecondSession": true,
+    "zeroRetryAfterFailure": true,
+    "zeroCodePersistence": true,
+    "zeroTokenLogging": true,
+    "duplicateCallbackRejected": true,
+    "timeoutTeardownRequired": true
+  },
+  "forbiddenOperations": [
+    "automatic_ssh_launch",
+    "ssh_password_capture_or_automation",
+    "oauth_authorization_before_preflight",
+    "users.messages.send",
+    "broader_OAuth_scopes",
+    "credential_disclosure",
+    "authorization_code_logging_or_persistence",
+    "token_logging_or_persistence_in_repository",
+    "Google_account_or_cloud_resource_mutation",
+    "automatic_retry",
+    "automatic_fallback"
+  ],
+  "evidenceContract": [
+    "contract_identity_and_digest",
+    "loopback_listener_binding_and_ports",
+    "operator_command_template_without_password",
+    "single_preflight_request_and_fixed_response",
+    "authorization_url_emitted_only_after_preflight",
+    "single_callback_state_result",
+    "single_token_exchange_count",
+    "teardown_and_timeout_state",
+    "google_gmail_message_activity_zero_before_and_after_bootstrap",
+    "external_windows_token_store_assertion_without_contents",
+    "secret_and_query_leakage_scan",
+    "timestamps_versions_and_artifact_digests"
+  ],
+  "teardown": {
+    "windowsListenerStopped": true,
+    "operatorTunnelTeardownInstruction": true,
+    "tokenStoreRemainsExternal": true,
+    "googleResourcesCreated": 0,
+    "repositoryFilesCreatedWithSecrets": 0,
+    "retainRedactedEvidenceOnly": true
+  },
+  "claims": {
+    "contractPrepared": true,
+    "oauthExecuted": false,
+    "tokenExchangeExecuted": false,
+    "gmailMessageOperationExecuted": false,
+    "emailSent": false,
+    "productionValidated": false,
+    "humanGateRequired": true
+  },
+  "humanGate": {
+    "required": true,
+    "approvalAuthorizesOneFreshV2SessionOnly": true,
+    "approvalAuthorizesOperatorManagedSshOnly": true,
+    "approvalAuthorizesNoGmailMessageOrEmail": true,
+    "approvalStatementTemplate": "I approve R4-422 Gmail OAuth bootstrap V2 by exact SHA-256 digest <DIGEST>, authorize exactly one fresh operator-managed SSH remote-forward readiness session to suzhe@10.10.1.27 with strict external known_hosts verification and loopback-only binding, exactly one Desktop OAuth session using https://www.googleapis.com/auth/gmail.send, exactly one callback consumption, and exactly one token exchange on the Windows RouteMind host, authorize no RouteMind SSH launch, no password capture or automation, no Gmail message operation, no email send, no retry, no fallback, no broader scope, no Google resource mutation, and accept redacted evidence and fail-closed teardown semantics."
+  }
+}

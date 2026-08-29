@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "contractSha256": "e6fc0dec19ea96c2eaee337694e7a0a19716e5491ea4b50d9be09892391ca22e",
+  "status": "PASS_REDACTED_METADATA_ONLY",
+  "secretValuesObserved": false,
+  "authorizationCodeObserved": false,
+  "tokenValuesObserved": false,
+  "callbackQueryObserved": false,
+  "emailContentObserved": false,
+  "historicalEvidenceModified": false,
+  "networkCallsMade": 0,
+  "result": "PASS"
+}

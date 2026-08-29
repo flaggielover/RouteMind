@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "contract": "contracts/provider/r4-422-google-gmail-oauth-bootstrap-v2.json",
+  "contractSha256": "e6fc0dec19ea96c2eaee337694e7a0a19716e5491ea4b50d9be09892391ca22e",
+  "status": "PREPARED_GMAIL_OAUTH_BOOTSTRAP_V2_HUMAN_GATE",
+  "provider": "GOOGLE_GMAIL_API",
+  "scope": "https://www.googleapis.com/auth/gmail.send",
+  "operatorManagedTunnel": {
+    "target": "suzhe@10.10.1.27",
+    "sshAutomation": 0,
+    "strictHostKeyVerification": true,
+    "loopbackOnly": true,
+    "publicIngress": false
+  },
+  "readiness": {
+    "windowsListener": "127.0.0.1_EPHEMERAL_PORT",
+    "preflightPath": "/routemind-oauth-preflight",
+    "preflightResponse": "ROUTEMIND_GMAIL_OAUTH_TUNNEL_READY",
+    "requiredRequests": 1,
+    "authorizationUrlBeforePreflight": false,
+    "preflightConsumesOAuthState": false
+  },
+  "authorization": {
+    "maximumSessions": 1,
+    "maximumCallbackConsumptions": 1,
+    "maximumTokenExchanges": 1,
+    "maximumGmailMessageOperations": 0,
+    "maximumEmailSends": 0,
+    "maximumRetries": 0,
+    "maximumDurationMinutes": 15,
+    "maximumCostUsd": 0.1
+  },
+  "externalPaths": {
+    "clientFile": "EXTERNAL_PATH_REQUIRED",
+    "tokenStore": "EXTERNAL_WINDOWS_PATH_REQUIRED",
+    "knownHosts": "EXTERNAL_PINNED_PATH_REQUIRED"
+  },
+  "execution": {
+    "oauthSessions": 0,
+    "tokenExchanges": 0,
+    "googleRequests": 0,
+    "gmailMessageRequests": 0,
+    "emailSends": 0,
+    "resourceMutations": 0,
+    "networkCalls": 0,
+    "secretsLogged": false
+  },
+  "historicalContractsPreserved": true,
+  "productionClaim": false,
+  "humanGateRequired": true
+}

@@ -2224,3 +2224,21 @@ The task is now passed and RM-120 is the active implementation.
 - R3-316 closes `E-PASS / X-PASS / S-PASS / C-NO-CLAIM`. These deterministic
   descriptive results do not establish source-instance optimality, RouteMind
   superiority, or population behavior. R3-320 is active.
+
+Gmail OAuth bootstrap V2 preparation (2026-08-29): independent contract
+`contracts/provider/r4-422-google-gmail-oauth-bootstrap-v2.json` is prepared
+with canonical SHA-256
+`e6fc0dec19ea96c2eaee337694e7a0a19716e5491ea4b50d9be09892391ca22e`.
+The Windows listener binds only to `127.0.0.1` before any authorization URL is
+generated. The operator manually runs a strict loopback SSH `-R` command to
+`suzhe@10.10.1.27` in a separate terminal and enters the Mac password outside
+RouteMind. Exactly one Mac request to `/routemind-oauth-preflight` returning
+`ROUTEMIND_GMAIL_OAUTH_TUNNEL_READY` is required before URL emission. The
+future flow permits one fresh `gmail.send` OAuth session, one callback, and one
+token exchange; Gmail message operations, email sends, retries, fallback, and
+mutations are forbidden. Client, token, and known_hosts paths remain external;
+token persistence is Windows-only. Preparation made zero SSH, preflight,
+OAuth, Google, Gmail, or mutation calls. State is
+`BLOCKED / OAUTH_BOOTSTRAP_V2_HUMAN_GATE_PENDING / NO_PRODUCTION_CLAIM`.
+Evidence is under `evidence/gates/R4-422/gmail-oauth-bootstrap-v2-preparation-20260829.*`;
+historical contracts/evidence and R3-325 remain unchanged.

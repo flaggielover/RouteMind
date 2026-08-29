@@ -292,6 +292,21 @@ try {
         throw "Gmail OAuth bootstrap boundary self-tests failed"
     }
 
+    python scripts/r4_gmail_oauth_bootstrap_v2_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail OAuth bootstrap V2 contract validation failed"
+    }
+
+    python scripts/r4_gmail_oauth_bootstrap_v2_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail OAuth bootstrap V2 contract self-tests failed"
+    }
+
+    python scripts/gmail_oauth_bootstrap_v2_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail OAuth bootstrap V2 boundary self-tests failed"
+    }
+
     python scripts/r4_gmail_oauth_remote_forward_contract.py
     if ($LASTEXITCODE -ne 0) {
         throw "Gmail OAuth remote-forward contract validation failed"

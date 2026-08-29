@@ -55,6 +55,18 @@ or persists password bytes, and serves one Windows-loopback
 material or generate a Google authorization URL. The password probe contract is
 independent of the consumed key-based contract.
 
+The V2 operator-managed OAuth bootstrap is invoked only through
+`../../scripts/gmail-oauth-bootstrap-v2.ps1` after its own Human Gate. It starts
+the Windows loopback OAuth listener first and prints a sanitized manual SSH
+command; RouteMind never starts `ssh.exe` or handles the Mac password. The
+operator runs the exact loopback-only `-R` command in a separate terminal and
+opens the printed Mac preflight URL. Only after one valid
+`/routemind-oauth-preflight` request returns
+`ROUTEMIND_GMAIL_OAUTH_TUNNEL_READY` does the command emit the OAuth URL. The
+V2 flow validates one callback state, performs at most one token exchange, and
+stores credentials only in the external Windows token store. It uses only
+`gmail.send`, never sends a Gmail message, and fails closed with zero retry.
+
 ## Commands
 
 ```powershell
