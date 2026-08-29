@@ -22,6 +22,9 @@ class R4_422SesClientConstructionTests {
 		assertThatCode(() -> {
 			try (SesClient client = new AwsSesClientFactory(providerFactory).create(properties)) {
 				assertThat(client.serviceName()).isEqualTo("ses");
+				assertThat(client.serviceClientConfiguration().overrideConfiguration().retryStrategy())
+						.hasValueSatisfying(strategy -> assertThat(strategy.maxAttempts()).isEqualTo(1));
+				assertThat(client.serviceClientConfiguration().endpointOverride()).isEmpty();
 			}
 		}).doesNotThrowAnyException();
 

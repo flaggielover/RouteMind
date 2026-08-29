@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("test", "package", "run", "resilience", "ses-offline")]
+    [ValidateSet("test", "test-offline", "package", "run", "resilience", "ses-offline", "ses-context-audit")]
     [string] $Action = "test"
 )
 
@@ -68,6 +68,7 @@ Push-Location $serviceRoot
 try {
     switch ($Action) {
         "test" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "clean", "test") }
+        "test-offline" { Invoke-Maven -MavenArguments @("--offline", "-Dmaven.repo.local=$mavenRepository", "clean", "test") }
         "package" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "clean", "package") }
         "run" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "spring-boot:run") }
         "resilience" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "test", "-Dtest=BusinessApiApplicationTests") }
@@ -103,6 +104,31 @@ try {
             Write-Host "AWS_NETWORK_REQUESTS=0"
             Write-Host "SEND_EMAIL_REQUESTS=0"
             Write-Host "COST_USD=0.00"
+        }
+        "ses-context-audit" {
+            $senderPresent = -not [string]::IsNullOrWhiteSpace(
+                [Environment]::GetEnvironmentVariable("ROUTEMIND_NOTIFICATION_SENDER", "Process")
+            )
+            $recipientPresent = -not [string]::IsNullOrWhiteSpace(
+                [Environment]::GetEnvironmentVariable("ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT", "Process")
+            )
+            if (-not $senderPresent -or -not $recipientPresent) {
+                throw "Offline SES context audit requires both process-scoped notification endpoint variables"
+            }
+
+            Invoke-Maven -MavenArguments @(
+                "--offline",
+                "-Dmaven.repo.local=$mavenRepository",
+                "test",
+                "-Dtest=AwsSesRuntimeContextTests#currentProcessContextIsAuditedWithoutRevealingValues",
+                "-DfailIfNoTests=true"
+            )
+            if ($LASTEXITCODE -ne 0) {
+                throw "Offline SES context audit failed"
+            }
+            Write-Host "AWS_NETWORK_REQUESTS=0"
+            Write-Host "SEND_EMAIL_REQUESTS=0"
+            Write-Host "AWS_MUTATIONS=0"
         }
     }
     if ($LASTEXITCODE -ne 0) {

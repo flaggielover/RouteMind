@@ -1,0 +1,26 @@
+{
+  "scanId": "r4-422-aws-ses-runtime-context-observability-leakage-scan-20260829",
+  "scope": [
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification",
+    "services/business-api/src/test/java/com/routemind/business/infrastructure/notification",
+    "scripts/business-api.ps1",
+    "evidence/gates/R4-422/aws-ses-runtime-context-observability-offline-audit-20260829.md"
+  ],
+  "secretValuesInspected": false,
+  "credentialValuesRecorded": false,
+  "realEmailValuesPersisted": false,
+  "syntheticTestIdentitiesPresent": true,
+  "accountIdsPersisted": false,
+  "fullArnsPersisted": false,
+  "rawProviderMessagesPersisted": false,
+  "rawRequestsPersisted": false,
+  "requestIdsPersistedRaw": false,
+  "requestIdsPersistedAsPresenceOnly": true,
+  "messageBodiesPersisted": false,
+  "accessKeyPatternsPersisted": false,
+  "sessionTokensPersisted": false,
+  "awsNetworkRequests": 0,
+  "awsMutations": 0,
+  "result": "PASS",
+  "notes": "Only synthetic test identities occur in test source; runtime evidence contains boolean, count, enum, and safe error-code metadata."
+}

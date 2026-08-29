@@ -50,6 +50,25 @@
       "evidence/gates/R4-422/aws-ses-second-single-send-execution-closure-20260829.md"
     ]
   },
+  "notification_ses_offline_runtime_context_audit": {
+    "status": "PASSED_OFFLINE_RUNTIME_CONTEXT_AUDITED_OBSERVABILITY_HARDENED",
+    "runtime_context_classification": "COMPARISON_INPUT_UNAVAILABLE",
+    "historical_context_classification": "HISTORICAL_CONTEXT_NOT_RECONSTRUCTABLE",
+    "runtime_mismatch_found": false,
+    "root_cause": "INCONCLUSIVE",
+    "external_requests": 0,
+    "aws_mutations": 0,
+    "historical_contract_reused": false,
+    "historical_result_unchanged": true,
+    "real_adapter_enabled_by_default": false,
+    "sdk_retries": 0,
+    "another_sendemail_currently_justified": true,
+    "new_contract_created": false,
+    "evidence": [
+      "evidence/gates/R4-422/aws-ses-runtime-context-observability-offline-audit-20260829.md",
+      "evidence/gates/R4-422/aws-ses-runtime-context-observability-leakage-scan-20260829.json"
+    ]
+  },
   "architecture_invariants": [
     "Java owns durable business state, transactions, state machines, tenancy enforcement, and event production",
     "Python owns dispatch, optimization, simulation, RouteBench, RADS, experiments, analytics, and bounded agent intelligence",
@@ -177,7 +196,7 @@
     {
       "id": "R4-422", "title": "Implement consent-aware notification delivery and failure recovery", "workstream": "U", "priority": "high", "classification": "PRODUCT", "depends_on": ["R4-403", "R4-420"], "status": "blocked", "external_gate": true, "human_approval": true,
       "acceptance": ["Notification intent is transactional and delivery is asynchronous, idempotent, observable, and consent bounded", "Provider retries, bounces, duplicates, quiet hours, and opt-out are executable", "Real sends use approved recipients, credentials, and spend limits"],
-      "evidence": ["evidence/gates/R4-422/notifications.md", "evidence/gates/R4-422/aws-ses-single-send-contract.md", "evidence/gates/R4-422/aws-ses-single-send-execution-closure.md", "evidence/gates/R4-422/aws-ses-single-send-usage-20260829.json", "evidence/gates/R4-422/aws-ses-single-send-leakage-scan-20260829.json", "evidence/gates/R4-422/aws-ses-single-send-execution-20260829T025403Z.json", "evidence/gates/R4-422/aws-ses-single-send-execution-20260829T025403Z-correction.json", "evidence/gates/R4-422/aws-ses-single-send-execution-20260829T025550Z.json", "evidence/gates/R4-422/aws-ses-runtime-repair-20260829.md", "evidence/gates/R4-422/aws-ses-runtime-repair-execution-20260829.json", "evidence/gates/R4-422/aws-ses-runtime-repair-leakage-scan-20260829.json", "evidence/gates/R4-422/aws-sdk-ses-dependency-tree-20260829.txt", "contracts/provider/r4-422-aws-ses-second-single-send-validation-v1.json", "evidence/gates/R4-422/aws-ses-second-single-send-contract-20260829.md", "evidence/gates/R4-422/aws-ses-second-single-send-preparation-20260829.json", "evidence/gates/R4-422/aws-ses-second-single-send-leakage-scan-20260829.json", "evidence/gates/R4-422/aws-ses-second-single-send-execution-20260829T041801Z.json", "evidence/gates/R4-422/aws-ses-second-single-send-usage-20260829T041801Z.json", "evidence/gates/R4-422/aws-ses-second-single-send-leakage-scan-20260829T041801Z.json", "evidence/gates/R4-422/aws-ses-second-single-send-execution-closure-20260829.md"], "round3_lineage": ["ROUND_4_PRODUCT_RECLASSIFICATION"]
+      "evidence": ["evidence/gates/R4-422/notifications.md", "evidence/gates/R4-422/aws-ses-single-send-contract.md", "evidence/gates/R4-422/aws-ses-single-send-execution-closure.md", "evidence/gates/R4-422/aws-ses-single-send-usage-20260829.json", "evidence/gates/R4-422/aws-ses-single-send-leakage-scan-20260829.json", "evidence/gates/R4-422/aws-ses-single-send-execution-20260829T025403Z.json", "evidence/gates/R4-422/aws-ses-single-send-execution-20260829T025403Z-correction.json", "evidence/gates/R4-422/aws-ses-single-send-execution-20260829T025550Z.json", "evidence/gates/R4-422/aws-ses-runtime-repair-20260829.md", "evidence/gates/R4-422/aws-ses-runtime-repair-execution-20260829.json", "evidence/gates/R4-422/aws-ses-runtime-repair-leakage-scan-20260829.json", "evidence/gates/R4-422/aws-sdk-ses-dependency-tree-20260829.txt", "contracts/provider/r4-422-aws-ses-second-single-send-validation-v1.json", "evidence/gates/R4-422/aws-ses-second-single-send-contract-20260829.md", "evidence/gates/R4-422/aws-ses-second-single-send-preparation-20260829.json", "evidence/gates/R4-422/aws-ses-second-single-send-leakage-scan-20260829.json", "evidence/gates/R4-422/aws-ses-second-single-send-execution-20260829T041801Z.json", "evidence/gates/R4-422/aws-ses-second-single-send-usage-20260829T041801Z.json", "evidence/gates/R4-422/aws-ses-second-single-send-leakage-scan-20260829T041801Z.json", "evidence/gates/R4-422/aws-ses-second-single-send-execution-closure-20260829.md", "evidence/gates/R4-422/aws-ses-runtime-context-observability-offline-audit-20260829.md", "evidence/gates/R4-422/aws-ses-runtime-context-observability-leakage-scan-20260829.json"], "round3_lineage": ["ROUND_4_PRODUCT_RECLASSIFICATION"]
     },
     {
       "id": "R4-423", "title": "Make all role-aware surfaces tenant and identity aware", "workstream": "U", "priority": "high", "classification": "PRODUCT", "depends_on": ["R4-403", "R4-421"], "status": "passed", "external_gate": false, "human_approval": false,

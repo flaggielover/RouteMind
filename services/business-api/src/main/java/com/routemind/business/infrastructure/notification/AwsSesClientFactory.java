@@ -1,7 +1,9 @@
 package com.routemind.business.infrastructure.notification;
 
 import java.util.Objects;
+import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
 import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.retries.DefaultRetryStrategy;
 import software.amazon.awssdk.services.ses.SesClient;
 
 /** Creates a non-sending SES client; no bean invokes this factory by default. */
@@ -21,6 +23,9 @@ public final class AwsSesClientFactory {
 		return SesClient.builder()
 				.region(Region.of(properties.region()))
 				.credentialsProvider(credentials.create(properties))
+				.overrideConfiguration(ClientOverrideConfiguration.builder()
+						.retryStrategy(DefaultRetryStrategy.doNotRetry())
+						.build())
 				.build();
 	}
 }

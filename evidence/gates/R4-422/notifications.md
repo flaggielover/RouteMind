@@ -169,3 +169,26 @@ was made. Evidence path: this file plus the contract and design record at
 
 No AWS network request, credential resolution, account/resource mutation, or
 email send occurred during verification.
+
+## SES runtime-context and sanitized error-observability checkpoint - 2026-08-29
+
+The historical one-shot helper read raw process environment endpoint values and
+placed them directly into `SendEmailRequest`; it bypassed the domain endpoint
+normalization used by product notification code. The historical values and full
+exception are not retained, so that execution cannot be reconstructed.
+
+The production SES boundary now has one shared request factory used by both the
+offline auditor and future provider execution. It requires the EMAIL channel,
+exact bounded configured sender and recipient, one To recipient, and no CC/BCC
+or delegated optional fields. The SDK retry strategy is explicitly no-retry;
+RouteMind's existing worker remains the bounded retry authority. The adapter is
+still disabled by default.
+
+The current process values contain no structural whitespace, display-name,
+Unicode-normalization, case-normalization, cardinality, or optional-field anomaly.
+An independent approved comparator and the historical raw values are unavailable,
+so root cause remains inconclusive. Future AWS failures retain structured safe
+fields only; raw exception text, endpoints, content, ARNs, account IDs, credentials,
+headers, and request payloads are excluded. Full evidence is
+`aws-ses-runtime-context-observability-offline-audit-20260829.md`. No AWS request,
+mutation, contract creation, or historical evidence change occurred.

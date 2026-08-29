@@ -12,7 +12,29 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - SECOND SINGLE-SEND EXECUTION CLOSED / NEW CONTRACT REQUIRED
+Current Task: R4-422 - OFFLINE RUNTIME CONTEXT AUDITED / OBSERVABILITY HARDENED / NEW CONTRACT REQUIRED
+
+R4-422 offline runtime-context and error-observability checkpoint (2026-08-29):
+the current process sender/recipient are present and structurally equal to their
+domain-normalized values, with no boundary whitespace, display-name syntax,
+Unicode normalization difference, case-normalization change, extra recipient,
+CC/BCC, delegated authorization field, configuration set, tag, endpoint override,
+or region override. The exact independent approved-value comparator is unavailable
+and the historical helper retained neither raw values nor the full exception, so
+the classifications are `COMPARISON_INPUT_UNAVAILABLE` and
+`HISTORICAL_CONTEXT_NOT_RECONSTRUCTABLE`; root cause remains `INCONCLUSIVE`.
+The production request path now fails closed on configured sender/recipient
+mismatch, disables AWS SDK retries, and emits only structured sanitized failure
+metadata. External requests and AWS mutations were both zero. The consumed
+contract and historical `AccessDenied` evidence are unchanged; R4-422 remains
+`BLOCKED / FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM`. Evidence:
+`evidence/gates/R4-422/aws-ses-runtime-context-observability-offline-audit-20260829.md`.
+Focused SES tests pass 16/16, the broader Java suite passes 136/136, and the
+repository verify, control-plane, Round 4 graph, and security gates pass. The
+standalone contract validator remains locally unavailable only because the
+current Python environment lacks `jsonschema`; that tooling prerequisite is
+recorded separately from the SES result.
+Task counts remain 167/197 overall and 10/38 for Round 4.
 
 R4-422 second single-send contract preparation (2026-08-29): a new exact
 contract was prepared before approval and its subsequent single execution is
