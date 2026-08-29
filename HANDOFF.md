@@ -29,6 +29,8 @@ and the passing leakage scan. R3-325 remains frozen as
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`. Java 17 full tests (126), control
 plane gates, and `verify.ps1` pass locally; the Google HTTP JSON runtime is
 aligned at `google-http-client-jackson2:1.46.3`.
+Commit `c35306bc3fef51a0d624c55a36fa7a7fbc0b296a` passed real GitHub Actions
+run `33244023747` with all five required jobs green.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 read-only AWS Console and official-documentation audit completed with verdict

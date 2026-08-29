@@ -32,6 +32,8 @@ and its JSON/leakage companions; the leakage scan passes. Overall and Round 4 ta
 10/38. The Java 17 build uses the aligned Google HTTP JSON runtime dependency
 `google-http-client-jackson2:1.46.3`; the full Java suite (126 tests), control
 plane gates, and repository `verify.ps1` gate pass locally.
+The implementation commit `c35306bc3fef51a0d624c55a36fa7a7fbc0b296a` passed
+real GitHub Actions CI run `33244023747` with all five required jobs green.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 completed read-only Console/documentation/offline audit with verdict
