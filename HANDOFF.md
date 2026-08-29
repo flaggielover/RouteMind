@@ -1417,6 +1417,10 @@ V2 implementation checkpoint is commit
 fixture failure was repaired with a portable absolute temporary path; no
 production dependency or OAuth behavior changed.
 
+V2 execution evidence checkpoint is commit
+`e63df42706bd60298e83d6234b83acd32a394d03`; real GitHub Actions run
+`33255445994` is green across all five jobs.
+
 Gmail OAuth bootstrap V2 execution closure: contract
 `e6fc0dec19ea96c2eaee337694e7a0a19716e5491ea4b50d9be09892391ca22e` was
 consumed once. The strict operator-managed loopback SSH forward passed one

@@ -2249,6 +2249,9 @@ The first run failed only because a test fixture used a Windows-only literal
 path on the Linux runner; the fixture now uses a portable absolute temp path.
 No production dependency or OAuth behavior changed.
 
+V2 execution evidence checkpoint `e63df42706bd60298e83d6234b83acd32a394d03`
+passed real GitHub Actions run `33255445994` with all five jobs green.
+
 Gmail OAuth bootstrap V2 execution (2026-08-29): the approved contract
 `e6fc0dec19ea96c2eaee337694e7a0a19716e5491ea4b50d9be09892391ca22e` was
 consumed exactly once. The operator-managed SSH remote forward passed its

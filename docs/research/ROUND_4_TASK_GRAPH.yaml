@@ -350,8 +350,8 @@
       "evidence/gates/R4-422/gmail-oauth-bootstrap-v2-execution-leakage-scan-20260829.json"
     ],
     "historical_contracts_preserved": true,
-    "implementation_commit": "0e07cca472c7e1e03a185f780381fa3865952416",
-    "ci_run": "33254290292",
+    "implementation_commit": "e63df42706bd60298e83d6234b83acd32a394d03",
+    "ci_run": "33255445994",
     "ci_result": "success",
     "next_action": "NO_GMAIL_MESSAGE_OR_SEND; FUTURE_MESSAGE_OPERATION_REQUIRES_NEW_CONTRACT_AND_HUMAN_GATE"
   },
