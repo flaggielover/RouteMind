@@ -1,0 +1,20 @@
+{
+  "contractSha256": "e942a04b080da7cf42645d757fec61a1fb67428b59da29f90c93227b06c7d660",
+  "provider": "AWS_SES",
+  "region": "ap-northeast-1",
+  "localExecutionAttempts": 2,
+  "awsNetworkRequests": 0,
+  "sendEmailRequests": 0,
+  "emailsSent": 0,
+  "messagesConsumed": 0,
+  "recipientsConsumed": 0,
+  "automaticRetries": 0,
+  "externalCostUsd": 0.0,
+  "resourceMutations": 0,
+  "iamMutations": 0,
+  "fallbackUsed": false,
+  "result": "FAIL_LOCAL_RUNTIME_DEPENDENCY_BEFORE_SEND",
+  "credentialChainLocalResolution": "AVAILABLE",
+  "secretValuesRecorded": false,
+  "historicalArtifactsPreserved": true
+}

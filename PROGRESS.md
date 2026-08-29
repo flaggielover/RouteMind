@@ -12,7 +12,19 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 166 / 196 tasks passed
 
-Current Task: R4-422 - PROVIDER-NEUTRAL NOTIFICATION PREPARATION / HUMAN GATE PENDING
+Current Task: R4-422 - AWS SES SINGLE-SEND EXECUTION FAILED BEFORE SEND / NEW HUMAN GATE REQUIRED
+
+R4-422 single-send execution closure (2026-08-29): the exact approved
+contract `e942a04b080da7cf42645d757fec61a1fb67428b59da29f90c93227b06c7d660`
+was consumed fail-closed. The AWS SDK `DefaultCredentialsProvider` resolved
+the approved shared profile locally, but the isolated SES runtime could not
+construct the client because `org.reactivestreams.Publisher` was absent from
+the diagnostic classpath. Two local construction attempts produced zero AWS
+network requests, zero SES requests, zero emails, zero cost, and zero AWS/IAM
+mutations. Append-only raw artifacts and the correction record are retained
+under `evidence/gates/R4-422/`; no provider connectivity, acceptance, delivery,
+or production claim is made. No retry is authorized by the consumed contract;
+a new contract and Human Gate are required for any future attempt.
 
 Science Readiness Audit (2026-08-28): `SCIENCE_READY_WITH_NONBLOCKING_GAPS`.
 `CLAUDE_SCIENCE_CAN_START = YES` for bounded local exploratory discovery,
@@ -129,7 +141,7 @@ CI: R4-405 implementation `49680bd` passed all five jobs in run `32852309878`; V
 
 Regression: R4-410 v2 preparation passed eleven directed independent-gate tests. Approval closure adds exact digest/statement binding plus mutation coverage preventing account, credential, call, spend, region, eligibility, live-validation, or production-claim inflation. R4-411 v1 preparation adds four directed contract-boundary tests; the independent gate now passes 19 tests. Round 4 graph/mirror, secret isolation, supply-chain, Compose, PowerShell syntax, and the full repository `verify.ps1` gate remain required. R3-325 remains frozen at E-PASS / X-PASS / S-FAIL / C-NO-CLAIM and was not rerun.
 
-Progress Capsule: 166/196 passed; Round 4 is 10/38 formal tasks passed, with R4-411B independently closed as partial/failed. `Next eligible: NONE`. R4-411B total contract usage is 3 point requests, 1 matrix request, 4 elements; final elapsed 2.433 seconds, no fallback, conservative ceiling USD 1.00 without billing readback. Evidence, prior attempts, the classification correction, and the offline matrix root-cause audit are retained under `evidence/gates/R4-411B/`; the audit finds only inconclusive self-pair/response semantics and does not justify a retry. Google processing is not Tokyo-pinned, Matrix entitlement is not asserted, and production claim is false. HERE is retired with historical evidence preserved; R4-405/R4-406 remain target-pending/no-claim; R4-422 `0cc9bc...4ffb` remains an independent unapproved Human Gate.
+Progress Capsule: 166/196 passed; Round 4 is 10/38 formal tasks passed, with R4-411B independently closed as partial/failed. `Next eligible: NONE`. R4-411B total contract usage is 3 point requests, 1 matrix request, 4 elements; final elapsed 2.433 seconds, no fallback, conservative ceiling USD 1.00 without billing readback. Evidence, prior attempts, the classification correction, and the offline matrix root-cause audit are retained under `evidence/gates/R4-411B/`; the audit finds only inconclusive self-pair/response semantics and does not justify a retry. Google processing is not Tokyo-pinned, Matrix entitlement is not asserted, and production claim is false. HERE is retired with historical evidence preserved; R4-405/R4-406 remain target-pending/no-claim. R4-422's approved single-send contract `e942a04b...c7d660` failed before SendEmail during local client construction; zero AWS requests, zero emails, zero cost, and no delivery claim were recorded. A new contract and Human Gate are required for any future attempt.
 
 Round 3 Scientific Tasks: 43 / 45 passed; R3-313 and R3-355 are explicitly deferred/reclassified; no required task remains open.
 
@@ -137,9 +149,9 @@ Research Gate: R3-325 E-PASS / X-PASS / S-FAIL / C-NO-CLAIM; R3-327 E-PASS / X-P
 
 Blocked: R4-405/R4-406 remain frozen target-pending and VKE-specific properties remain deferred. R4-411 is not an active blocker: HERE is retired, not selected, and has no live claim. R4-411B bounded Google validation is complete with no production or Matrix-entitlement claim. R4-422 retains its independent provider/recipient gate; its provider-neutral zero-send preparation is locally validated, but the frozen Human Gate remains unapproved. R4-437 remains inactive.
 
-Human Action Required: R4-411B approved bounded validation is complete; no further Google call is authorized by the consumed contract. R4-422 independently requires ratification of frozen contract SHA-256 `0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb`, AWS SES email in `ap-northeast-1`, the AWS account owner, verified sender, synthetic recipient, authenticated event topology, and a separate bounded real-send execution approval.
+Human Action Required: R4-411B approved bounded validation is complete; no further Google call is authorized by the consumed contract. R4-422's single-send contract was approved and consumed without a provider request; any future SES attempt requires a new exact contract digest and Human Gate after fixing the local runtime dependency. The frozen provider-boundary contract SHA-256 remains `0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb`.
 
-Next Candidates: none safely executable. R4-411B bounded validation is closed; R4-422 is prepared to its independent Human Gate with zero-send local evidence; no notification send is authorized. R4-437 remains inactive.
+Next Candidates: none safely executable. R4-411B bounded validation is closed; R4-422's approved single-send attempt is closed as a pre-send local runtime failure with zero provider traffic. R4-437 remains inactive.
 
 R4-411B Google Routes replacement-provider checkpoint (2026-08-28): the
 provider-neutral adapter, synthetic Tokyo request boundary, explicit point/matrix

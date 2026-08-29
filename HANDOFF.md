@@ -6,7 +6,18 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - PROVIDER-NEUTRAL NOTIFICATION PREPARATION / HUMAN GATE PENDING
+Current Task: R4-422 - AWS SES SINGLE-SEND EXECUTION FAILED BEFORE SEND / NEW HUMAN GATE REQUIRED
+
+R4-422 single-send execution closure (2026-08-29): exact approved contract
+`e942a04b080da7cf42645d757fec61a1fb67428b59da29f90c93227b06c7d660` was
+consumed fail-closed. Local `DefaultCredentialsProvider` resolution was
+available, but the isolated SES client runtime lacked
+`org.reactivestreams.Publisher`, so no HTTP request was dispatched. Two local
+construction attempts yielded zero AWS/SES requests, zero emails, zero cost,
+and zero AWS/IAM mutations. Append-only artifacts, including the first
+class-path correction, are under `evidence/gates/R4-422/`; provider acceptance,
+delivery, connectivity, and production remain unclaimed. The contract permits
+no retry; any future attempt requires a new bounded contract and Human Gate.
 
 Science Readiness Audit (2026-08-28): verdict
 `SCIENCE_READY_WITH_NONBLOCKING_GAPS`; `CLAUDE_SCIENCE_CAN_START = YES` for
@@ -108,7 +119,7 @@ live calls unauthorized, and no production or Matrix-entitlement claim.
 
 Task Status: R4-410 is passed and HERE is retired/not selected with historical evidence preserved. R4-411 is terminal deferred with no live claim. R4-411B is `FAILED / PARTIAL_NO_PRODUCTION_CLAIM` at exact contract SHA-256 `a2d37bd79cc433e48fc76b5a1b4ba6518592bd5a1a8ac72bc38d1c000e3285d1`; ComputeRoutes passed and ComputeRouteMatrix was partial with one provider error cell. No fallback, production claim, or Matrix Japan entitlement claim is made. External VKE/VM evidence remains frozen inconclusive and R4-405/R4-406 remain target-pending/no-claim.
 
-Next: no safe task is currently executable. R4-411B bounded execution is closed and no additional Google call is authorized by its consumed contract. R4-422 is prepared to its independent Human Gate at `0cc9bc...4ffb`; provider-neutral Outbox/Inbox, consent, idempotency, retry/DLQ, privacy, budget, and zero-send evidence are locally validated, but no provider/channel/recipient is selected and no message was sent. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
+Next: no safe task is currently executable. R4-411B bounded execution is closed and no additional Google call is authorized by its consumed contract. R4-422's exact single-send contract `e942a04b...c7d660` was approved but failed before SendEmail during local SES client construction; zero provider traffic and zero emails were recorded. A new contract and Human Gate are required after fixing the local runtime dependency. VKE checks remain deferred, R4-437 inactive, and `.codex-tmp/` must remain untouched.
 
 R4-411 prerequisite revalidation checkpoint: commit `6da7c15` passed real GitHub
 Actions CI run `33151723573` (all five required jobs). The checkpoint records

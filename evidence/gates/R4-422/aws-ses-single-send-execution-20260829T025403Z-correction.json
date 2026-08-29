@@ -1,0 +1,17 @@
+{
+  "correctionFor": "evidence/gates/R4-422/aws-ses-single-send-execution-20260829T025403Z.json",
+  "originalArtifactSha256": "88e727fb661ec7fa3583886060c753949282bd7386348c073f9e19ec12defe38",
+  "correctionType": "APPEND_ONLY_INTERPRETATION_CORRECTION",
+  "correctedClassification": "LOCAL_RUNTIME_DEPENDENCY_FAILURE_BEFORE_SEND",
+  "rootCause": "AWS SDK SES client construction could not load org.reactivestreams.Publisher from the isolated diagnostic classpath",
+  "awsNetworkRequestMade": false,
+  "emailSent": false,
+  "messagesAttempted": 0,
+  "recipientsAttempted": 0,
+  "contractBudgetConsumed": false,
+  "automaticRetries": 0,
+  "historicalArtifactPreserved": true,
+  "credentialChainResolvedLocally": true,
+  "secretAndIdentityValues": "NOT_RECORDED",
+  "nextAction": "Rerun the single approved SendEmail only after adding the missing local runtime dependency"
+}
