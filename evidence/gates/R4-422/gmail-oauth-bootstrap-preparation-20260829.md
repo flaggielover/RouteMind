@@ -52,3 +52,6 @@ new environment-input test used a Windows-shaped `C:/...` path, which is
 relative under the Linux runner. The test was corrected to derive an absolute
 path from the runner temporary directory; no production or security behavior
 changed. Focused Java tests were rerun as `11/11 PASS` before the repair push.
+
+Repair commit `8e0af27c0843ad6417d73ffb75bddd40dd5da3e0` passed real GitHub
+Actions CI run `33245414841`; all five required jobs were green.

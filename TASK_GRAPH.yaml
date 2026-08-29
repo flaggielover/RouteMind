@@ -165,6 +165,9 @@
     "historical_ses_evidence_preserved": true,
     "production_claim": false,
     "human_gate_consumed": false,
+    "implementation_commit": "8e0af27c0843ad6417d73ffb75bddd40dd5da3e0",
+    "ci_run": "33245414841",
+    "ci_result": "GREEN_ALL_REQUIRED_JOBS",
     "next_action": "NEW_BOOTSTRAP_HUMAN_GATE_REQUIRED_BEFORE_OAUTH_CONSENT"
   },
   "tasks": [

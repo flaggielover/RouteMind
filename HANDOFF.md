@@ -52,6 +52,9 @@ independent of the existing Gmail send contract and remains
 `evidence/gates/R4-422/gmail-oauth-bootstrap-preparation-20260829.md` and its
 JSON/leakage companions. Counts remain 167/197 overall and 10/38 for Round 4.
 
+Repair commit `8e0af27c0843ad6417d73ffb75bddd40dd5da3e0` passed real GitHub
+Actions run `33245414841` with all five required jobs green.
+
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 read-only AWS Console and official-documentation audit completed with verdict
 `AUTHORIZATION_MODEL_VALID_NO_STATIC_CAUSE_FOUND` (medium confidence). The

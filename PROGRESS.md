@@ -53,6 +53,10 @@ state remains `HUMAN_GATE_PENDING`. Evidence:
 `evidence/gates/R4-422/gmail-oauth-bootstrap-preparation-20260829.md` and its
 JSON/leakage companions. Overall and Round 4 counts remain 167/197 and 10/38.
 
+Repair commit `8e0af27c0843ad6417d73ffb75bddd40dd5da3e0` passed real GitHub
+Actions run `33245414841` with all five required jobs green after correcting
+the cross-platform absolute-path test.
+
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 completed read-only Console/documentation/offline audit with verdict
 `AUTHORIZATION_MODEL_VALID_NO_STATIC_CAUSE_FOUND` at medium confidence. The
