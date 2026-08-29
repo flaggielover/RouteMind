@@ -12,7 +12,36 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - GMAIL SEND CONTRACT HUMAN GATE REQUIRED AFTER REFRESH
+Current Task: R4-422 - GMAIL V2 SEND CONTRACT HUMAN GATE REQUIRED
+
+R4-422 Gmail V2 exactly-one send contract preparation (2026-08-30): a new
+independent contract
+`contracts/provider/r4-422-google-gmail-single-send-validation-v2.json` is
+prepared with canonical SHA-256
+`033bd4e5e3c92b65d94191a30fcae7d852dc92ae7441ef18c8bf8f959cba371f`.
+The contract authorizes exactly one synthetic Gmail API v1
+`users.messages.send` request, one recipient, `gmail.send` only, zero
+credential refreshes, OAuth sessions, token exchanges, browser/SSH sessions,
+retries, fallback, reads, attachments, CC/BCC, batch operations, or Google
+account/resource mutations. It requires the repository-external Windows token
+store to load a current credential without refresh; otherwise execution must
+fail closed before any Gmail request. The adapter remains disabled by default.
+Preparation made zero Gmail/API/OAuth operations and incurred `USD 0.00`.
+Evidence is append-only and redacted under
+`evidence/gates/R4-422/google-gmail-single-send-v2-preparation-*`; leakage scan
+passes. Historical contracts and the successful refresh evidence remain
+unchanged, and no provider, delivery, or production claim is made.
+R4-422 is `BLOCKED / HUMAN_GATE_PENDING` at this new independent send gate.
+Exact approval required: “I approve R4-422 Google Gmail V2 exactly-one
+synthetic live send validation by exact SHA-256 digest
+033bd4e5e3c92b65d94191a30fcae7d852dc92ae7441ef18c8bf8f959cba371f,
+authorize exactly one users.messages.send request to one synthetic recipient
+with gmail.send only and the existing repository-external Windows token store
+after the approved credential refresh, zero credential refreshes/OAuth
+sessions/token exchanges/browser/SSH, zero retries/fallback, no
+attachments/CC/BCC/batch/reads, no Google/account/resource mutation, within
+15 minutes and USD 0.10, and accept sanitized evidence and fail-closed
+semantics without a production claim.”
 
 R4-422 Gmail credential refresh-only recovery execution (2026-08-30): the
 approved contract

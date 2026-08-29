@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "contract": "contracts/provider/r4-422-google-gmail-single-send-validation-v2.json",
+  "contractStatus": "PREPARED_GOOGLE_GMAIL_SINGLE_SEND_V2_HUMAN_GATE",
+  "contractSha256": "033bd4e5e3c92b65d94191a30fcae7d852dc92ae7441ef18c8bf8f959cba371f",
+  "observedAtUtc": "2026-08-29T17:51:33Z",
+  "preparationOnly": true,
+  "gmailApiRequests": 0,
+  "usersMessagesSendRequests": 0,
+  "emailSends": 0,
+  "credentialRefreshRequests": 0,
+  "oauthSessions": 0,
+  "tokenExchanges": 0,
+  "browserLogins": 0,
+  "sshSessions": 0,
+  "retries": 0,
+  "fallbacks": 0,
+  "googleResourceMutations": 0,
+  "accountMutations": 0,
+  "configuration": {
+    "adapterEnabledByDefault": false,
+    "tokenStore": "EXTERNAL_WINDOWS_ONLY",
+    "tokenStoreContentRead": false,
+    "tokenStoreRepositoryExternal": true,
+    "storedCredentialLoading": "AVAILABLE",
+    "storedCredentialRefreshRequired": false,
+    "approvedRefreshContractConsumed": true,
+    "senderPresent": "AVAILABLE_VIA_ENVIRONMENT_REFERENCE",
+    "recipientCount": 1,
+    "recipientSynthetic": true,
+    "rawAddressesRecorded": false
+  },
+  "offlineValidation": {
+    "mimeEncoding": "PASS",
+    "singleRecipientNoCcBccAttachments": "PASS",
+    "zeroRefreshAndRetryBoundary": "PASS",
+    "historicalContractReuseRejected": "PASS",
+    "oauthAndSshPathsDisabled": "PASS",
+    "historicalSesPathPreserved": "PASS",
+    "sanitizedEvidenceSchema": "PASS",
+    "leakageScan": "PASS"
+  },
+  "privacy": {
+    "syntheticOnly": true,
+    "credentialValuesLogged": false,
+    "tokenValuesLogged": false,
+    "rawEmailAddressesLogged": false,
+    "messageBodyPersisted": false,
+    "productionDataSent": false
+  },
+  "claims": {
+    "providerValidated": false,
+    "deliveryValidated": false,
+    "productionClaim": false,
+    "humanGateRequired": true
+  },
+  "nextAction": "STOP_AT_NEW_HUMAN_GATE_BEFORE_ANY_GMAIL_API_CALL"
+}

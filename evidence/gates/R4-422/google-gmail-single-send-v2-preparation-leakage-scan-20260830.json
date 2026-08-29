@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "artifact": "evidence/gates/R4-422/google-gmail-single-send-v2-preparation-20260830.json",
+  "contractSha256": "033bd4e5e3c92b65d94191a30fcae7d852dc92ae7441ef18c8bf8f959cba371f",
+  "scan": "PASS",
+  "scannedClasses": [
+    "credential_values",
+    "access_tokens",
+    "refresh_tokens",
+    "client_secrets",
+    "authorization_codes",
+    "raw_email_addresses",
+    "message_bodies",
+    "provider_response_bodies",
+    "authorization_headers",
+    "external_token_store_contents"
+  ],
+  "findings": 0,
+  "rawAddressesRecorded": false,
+  "historicalEvidenceModified": false,
+  "gmailApiRequests": 0,
+  "emailSends": 0
+}
