@@ -6,7 +6,30 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - THIRD SES DIAGNOSTIC CONTRACT PREPARED / HUMAN GATE PENDING
+Current Task: R4-422 - THIRD SES DIAGNOSTIC CONSUMED / PROVIDER REJECTED
+
+R4-422 third AWS SES single-send diagnostic execution (2026-08-29): exact
+Human Gate approval consumed contract
+`contracts/provider/r4-422-aws-ses-third-single-send-diagnostic-v1.json` at
+SHA-256
+`6c52a2457b4d136f17d11e66af15cf9a1a79a721bc8558cca68658f728ed4387`. The
+hardened `AwsSesRequestFactory` -> `AwsSesNotificationProvider` -> AWS SDK v2
+`SesClient.sendEmail` path passed all local preconditions and dispatched exactly
+one request. AWS returned sanitized `AccessDenied` with HTTP 403 and a redacted
+request-ID presence; this is classified `FAIL_PROVIDER_REJECTED` /
+`AUTHORIZATION_REJECTED`. Credential-chain resolution and client construction
+were available, retries and fallback were zero, no message ID or authenticated
+delivery receipt was returned, and no email, IAM, account, provider, or resource
+mutation occurred. Observed spend is USD 0.00 with a conservative USD 0.10
+bound; billing readback was not performed. R4-422 remains
+`BLOCKED / FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM`; another live attempt
+requires a new contract and Human Gate. Append-only redacted evidence:
+`evidence/gates/R4-422/aws-ses-third-single-send-execution-20260829T071645Z.json`,
+`evidence/gates/R4-422/aws-ses-third-single-send-usage-20260829T071645Z.json`,
+`evidence/gates/R4-422/aws-ses-third-single-send-leakage-scan-20260829T071645Z.json`,
+and `evidence/gates/R4-422/aws-ses-third-single-send-execution-closure-20260829T071645Z.md`.
+Historical first/second contracts and evidence are unchanged. R3-325 remains
+frozen as `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
 
 R4-422 third AWS SES single-send diagnostic preparation (2026-08-29): new
 independent contract

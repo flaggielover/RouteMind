@@ -1,0 +1,18 @@
+{
+  "scanId": "r4-422-aws-ses-third-single-send-leakage-scan-20260829T071645Z",
+  "scope": [
+    "execution evidence",
+    "usage evidence",
+    "closure evidence",
+    "temporary execution output"
+  ],
+  "credentialValues": "NOT_FOUND",
+  "credentialIdentifiers": "NOT_FOUND",
+  "senderAndRecipientValues": "NOT_FOUND",
+  "messageBody": "NOT_FOUND",
+  "rawProviderMessage": "NOT_FOUND",
+  "accountOrIdentityIdentifiers": "NOT_FOUND",
+  "forbiddenOperations": "NOT_FOUND",
+  "result": "PASS",
+  "timestamp": "2026-08-29T07:16:45Z"
+}

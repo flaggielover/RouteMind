@@ -12,7 +12,25 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - THIRD SES DIAGNOSTIC CONTRACT PREPARED / HUMAN GATE PENDING
+Current Task: R4-422 - THIRD SES DIAGNOSTIC CONSUMED / PROVIDER REJECTED
+
+R4-422 third AWS SES single-send diagnostic execution (2026-08-29): the exact
+approved contract
+`contracts/provider/r4-422-aws-ses-third-single-send-diagnostic-v1.json` with
+canonical SHA-256
+`6c52a2457b4d136f17d11e66af15cf9a1a79a721bc8558cca68658f728ed4387` was
+consumed through the hardened `AwsSesRequestFactory` /
+`AwsSesNotificationProvider` path. Local credential-chain resolution and SES
+client construction passed; exactly one `SendEmail` request was dispatched and
+AWS returned sanitized `AccessDenied` / HTTP 403 authorization-rejected
+semantics. Retries and fallback were zero, no email or delivery receipt was
+observed, no AWS/IAM/provider mutation occurred, and the conservative cost
+bound is USD 0.10 with observed spend USD 0.00. R4-422 remains
+`BLOCKED / FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM`; any future attempt
+requires a new contract and Human Gate. Redacted execution, usage, closure,
+and leakage evidence is recorded under `evidence/gates/R4-422/`; historical
+first/second contract evidence is unchanged. R3-325 remains frozen as
+`E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
 
 R4-422 third AWS SES single-send diagnostic preparation (2026-08-29): a new
 independent contract is prepared at
