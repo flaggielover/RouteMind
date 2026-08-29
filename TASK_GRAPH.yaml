@@ -259,8 +259,8 @@
       "evidence/gates/R4-422/gmail-oauth-password-remote-forward-execution-leakage-scan-20260829T115910Z.json"
     ],
     "historical_key_contract_preserved": true,
-    "implementation_commit": "24534592dc4d270460a8f7082747c512f0b32f7e",
-    "ci_run": "33250932373",
+    "implementation_commit": "86e706b93dfda010214c530943e32796200f03ee",
+    "ci_run": "33251548005",
     "ci_result": "GREEN_ALL_REQUIRED_JOBS",
     "execution_status": "SSH_EXITED_BEFORE_SYNTHETIC_PROBE",
     "synthetic_request_result": "NOT_RECEIVED",
