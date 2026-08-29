@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - GMAIL API PROVIDER REPLACEMENT OFFLINE / LIVE HUMAN GATE PENDING
+Current Task: R4-422 - GMAIL OAUTH BOOTSTRAP HUMAN GATE PENDING
 
 R4-422 active-provider replacement checkpoint (2026-08-29): the R4-422 domain
 task is provider-neutral, so AWS SES remains a preserved historical
@@ -31,6 +31,26 @@ plane gates, and `verify.ps1` pass locally; the Google HTTP JSON runtime is
 aligned at `google-http-client-jackson2:1.46.3`.
 Commit `c35306bc3fef51a0d624c55a36fa7a7fbc0b296a` passed real GitHub Actions
 run `33244023747` with all five required jobs green.
+
+Gmail OAuth bootstrap preparation (2026-08-29): an explicit
+`scripts/gmail-oauth-bootstrap.ps1` command and Java bootstrap boundary are
+prepared but not executed. The command requires the non-secret environment
+variables `ROUTEMIND_GMAIL_OAUTH_CLIENT_FILE`, `ROUTEMIND_GMAIL_TOKEN_STORE`,
+and `ROUTEMIND_GMAIL_OAUTH_USER_ID`; client JSON and token material remain in
+existing repository-external locations. Canonical absolute path validation
+rejects repository-contained files and redirecting links. The official OAuth
+flow is limited to `https://www.googleapis.com/auth/gmail.send`, a loopback
+`127.0.0.1` ephemeral redirect, one operator-controlled consent session, and
+one token exchange. The command is explicit, never runs at startup/CI/resume,
+and cannot send Gmail messages. No Google request, OAuth consent, token
+exchange, Gmail send, Google Cloud mutation, AWS request, or credential-store
+mutation occurred. New bootstrap contract:
+`contracts/provider/r4-422-google-gmail-oauth-bootstrap-v1.json`, SHA-256
+`ca3c1974b846f83846724091416f41bc431d51d9e26f1bfcdaac2b05c0ab9284`; it is
+independent of the existing Gmail send contract and remains
+`HUMAN_GATE_PENDING`. Evidence:
+`evidence/gates/R4-422/gmail-oauth-bootstrap-preparation-20260829.md` and its
+JSON/leakage companions. Counts remain 167/197 overall and 10/38 for Round 4.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 read-only AWS Console and official-documentation audit completed with verdict

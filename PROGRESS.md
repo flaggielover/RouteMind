@@ -12,7 +12,7 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - GMAIL API PROVIDER REPLACEMENT OFFLINE / LIVE HUMAN GATE PENDING
+Current Task: R4-422 - GMAIL OAUTH BOOTSTRAP HUMAN GATE PENDING
 
 R4-422 active-provider replacement checkpoint (2026-08-29): R4-422 is
 provider-neutral at the domain contract, so the historical AWS SES result stays
@@ -34,6 +34,24 @@ and its JSON/leakage companions; the leakage scan passes. Overall and Round 4 ta
 plane gates, and repository `verify.ps1` gate pass locally.
 The implementation commit `c35306bc3fef51a0d624c55a36fa7a7fbc0b296a` passed
 real GitHub Actions CI run `33244023747` with all five required jobs green.
+
+Gmail OAuth bootstrap preparation (2026-08-29): the active Gmail candidate now
+has an explicit operator-controlled Desktop OAuth path. The command reads only
+`ROUTEMIND_GMAIL_OAUTH_CLIENT_FILE`, `ROUTEMIND_GMAIL_TOKEN_STORE`, and
+`ROUTEMIND_GMAIL_OAUTH_USER_ID`; client credentials and tokens remain in
+repository-external locations. Canonical absolute paths must resolve outside
+the repository without symlink/junction redirects. The official Google OAuth
+client library enforces the single `gmail.send` scope, uses a loopback
+`127.0.0.1` redirect on an ephemeral port, and performs one token exchange only
+after operator login and consent. The command is never loaded by startup, CI,
+or `resume.ps1`, and it cannot invoke a Gmail message operation. No Google
+request, OAuth consent, token exchange, Gmail send, Google Cloud mutation, AWS
+request, or credential-store mutation occurred. Bootstrap contract:
+`contracts/provider/r4-422-google-gmail-oauth-bootstrap-v1.json`, canonical
+SHA-256 `ca3c1974b846f83846724091416f41bc431d51d9e26f1bfcdaac2b05c0ab9284`;
+state remains `HUMAN_GATE_PENDING`. Evidence:
+`evidence/gates/R4-422/gmail-oauth-bootstrap-preparation-20260829.md` and its
+JSON/leakage companions. Overall and Round 4 counts remain 167/197 and 10/38.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 completed read-only Console/documentation/offline audit with verdict

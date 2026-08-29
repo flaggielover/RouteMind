@@ -175,6 +175,38 @@
     "ci_result": "GREEN_ALL_REQUIRED_JOBS",
     "next_action": "NEW_HUMAN_GATE_REQUIRED_BEFORE_OAUTH_OR_SEND"
   },
+  "gmail_oauth_bootstrap": {
+    "parent_task": "R4-422",
+    "status": "PREPARED_OFFLINE / HUMAN_GATE_PENDING / NO_OAUTH_EXECUTED / NO_EMAIL_SENT",
+    "classification": "EXPLICIT_OPERATOR_BOOTSTRAP_BOUNDARY",
+    "provider": "GOOGLE_GMAIL_API",
+    "operation": "oauth2.installed_app_bootstrap",
+    "scope": "https://www.googleapis.com/auth/gmail.send",
+    "client_type": "DESKTOP_OAUTH_CLIENT",
+    "contract": "contracts/provider/r4-422-google-gmail-oauth-bootstrap-v1.json",
+    "canonical_sha256": "ca3c1974b846f83846724091416f41bc431d51d9e26f1bfcdaac2b05c0ab9284",
+    "evidence": [
+      "evidence/gates/R4-422/gmail-oauth-bootstrap-preparation-20260829.md",
+      "evidence/gates/R4-422/gmail-oauth-bootstrap-preparation-20260829.json",
+      "evidence/gates/R4-422/gmail-oauth-bootstrap-preparation-leakage-scan-20260829.json"
+    ],
+    "loopback_redirect": "127.0.0.1_ephemeral_port",
+    "external_paths_only": true,
+    "startup_execution": false,
+    "ci_execution": false,
+    "resume_execution": false,
+    "google_requests": 0,
+    "oauth_consent": 0,
+    "token_exchanges": 0,
+    "gmail_message_requests": 0,
+    "email_sends": 0,
+    "google_cloud_mutations": 0,
+    "aws_requests": 0,
+    "historical_ses_evidence_preserved": true,
+    "production_claim": false,
+    "human_gate_consumed": false,
+    "next_action": "NEW_BOOTSTRAP_HUMAN_GATE_REQUIRED_BEFORE_OAUTH_CONSENT"
+  },
   "architecture_invariants": [
     "Java owns durable business state, transactions, state machines, tenancy enforcement, and event production",
     "Python owns dispatch, optimization, simulation, RouteBench, RADS, experiments, analytics, and bounded agent intelligence",

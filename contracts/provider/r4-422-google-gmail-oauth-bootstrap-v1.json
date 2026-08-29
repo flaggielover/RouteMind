@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-422-google-gmail-oauth-bootstrap-v1",
+  "taskId": "R4-422",
+  "status": "PREPARED_GMAIL_OAUTH_BOOTSTRAP_HUMAN_GATE",
+  "provider": "GOOGLE_GMAIL_API",
+  "operation": "oauth2.installed_app_bootstrap",
+  "clientType": "DESKTOP_OAUTH_CLIENT",
+  "scope": "https://www.googleapis.com/auth/gmail.send",
+  "processingRegion": "GOOGLE_MANAGED_NOT_REGION_PINNED",
+  "configuration": {
+    "clientCredentialEnvironmentVariable": "ROUTEMIND_GMAIL_OAUTH_CLIENT_FILE",
+    "tokenStoreEnvironmentVariable": "ROUTEMIND_GMAIL_TOKEN_STORE",
+    "oauthUserIdEnvironmentVariable": "ROUTEMIND_GMAIL_OAUTH_USER_ID",
+    "repositoryRootEnvironmentVariable": "ROUTEMIND_REPOSITORY_ROOT",
+    "clientCredentialPath": "external_existing_regular_file_only",
+    "tokenStorePath": "external_existing_writable_directory_only",
+    "secretValuesInRepositoryLogsEvidenceChat": "forbidden"
+  },
+  "authorization": {
+    "interactiveSessions": 1,
+    "operatorMustPerformLoginAndConsent": true,
+    "loopbackRedirect": "http://127.0.0.1:<ephemeral-port>/oauth2callback",
+    "tokenExchange": 1,
+    "tokenPersistence": "EXTERNAL_TOKEN_STORE",
+    "browserAutomation": "operator_controlled_only",
+    "passwordMfaRecoveryCodeCollection": false
+  },
+  "forbiddenOperations": [
+    "users.messages.send",
+    "Gmail_read_or_modify",
+    "broader_OAuth_scopes",
+    "Google_account_or_cloud_resource_mutation",
+    "credential_disclosure",
+    "repository_secret_storage",
+    "production_recipient_use"
+  ],
+  "execution": {
+    "maximumDurationMinutes": 15,
+    "maximumGoogleApiMessageRequests": 0,
+    "maximumGoogleCloudMutations": 0,
+    "maximumEmailSends": 0,
+    "automaticRetry": false,
+    "automaticFallback": false,
+    "startupExecution": false,
+    "ciExecution": false,
+    "resumeExecution": false
+  },
+  "evidenceContract": [
+    "configuration_presence_without_values",
+    "canonical_external_path_validation_result",
+    "desktop_client_shape_validation_result",
+    "scope_allowlist_result",
+    "loopback_redirect_and_operator_consent_boundary",
+    "external_token_store_location_semantics_without_contents",
+    "google_message_requests_zero",
+    "email_sends_zero",
+    "secret_and_data_leakage_scan",
+    "timestamps_versions_and_artifact_digests"
+  ],
+  "teardown": {
+    "googleResourcesCreated": 0,
+    "repositoryFilesCreatedWithSecrets": 0,
+    "tokenStoreCleanup": "operator_managed_external_location",
+    "localArtifacts": "retain_redacted_evidence_only"
+  },
+  "claims": {
+    "contractPrepared": true,
+    "oauthExecuted": false,
+    "tokenExchangeExecuted": false,
+    "providerValidated": false,
+    "emailSent": false,
+    "productionValidated": false,
+    "humanGateRequired": true
+  },
+  "humanGate": {
+    "required": true,
+    "approvalAuthorizesOnlyBootstrap": true,
+    "approvalDoesNotAuthorizeMessageOperation": true,
+    "approvalDoesNotAuthorizeBroaderScopes": true,
+    "approvalDoesNotAuthorizeGoogleCloudMutation": true,
+    "requiredApprovals": [
+      "NEW_CONTRACT_DIGEST",
+      "ONE_DESKTOP_OAUTH_SESSION",
+      "ONE_OPERATOR_TEST_USER",
+      "GMAIL_SEND_SCOPE_ONLY",
+      "LOOPBACK_REDIRECT_ONLY",
+      "ONE_TOKEN_EXCHANGE",
+      "EXTERNAL_TOKEN_STORE",
+      "ZERO_GMAIL_MESSAGE_OPERATIONS",
+      "ZERO_ACCOUNT_OR_RESOURCE_MUTATION"
+    ],
+    "approvalStatementTemplate": "I approve R4-422 Gmail OAuth bootstrap by exact SHA-256 digest <DIGEST>, authorize exactly one operator-controlled Desktop OAuth session for the gmail.send scope using an external client file and token store with a loopback redirect and one token exchange, authorize no Gmail message operation or broader scope, authorize no Google account or resource mutation, and accept redacted evidence and fail-closed semantics."
+  }
+}

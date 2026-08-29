@@ -23,6 +23,15 @@ token loading are explicit operator steps; application startup performs no
 Gmail network call. AWS SES remains only in append-only historical evidence
 and is not active runtime wiring.
 
+The operator-controlled OAuth bootstrap is invoked only through
+`../../scripts/gmail-oauth-bootstrap.ps1` after its separate Human Gate. It
+accepts `ROUTEMIND_GMAIL_OAUTH_CLIENT_FILE`, `ROUTEMIND_GMAIL_TOKEN_STORE`, and
+`ROUTEMIND_GMAIL_OAUTH_USER_ID` as process environment variables. The first two
+paths must refer to an existing Desktop client file and writable token-store
+directory outside the repository. Client credentials and tokens are never
+printed or committed. The bootstrap uses one loopback redirect on
+`127.0.0.1`, the single `gmail.send` scope, and performs no message operation.
+
 ## Commands
 
 ```powershell

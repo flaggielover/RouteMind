@@ -109,8 +109,8 @@ routemind:
     gmail:
       enabled: ${ROUTEMIND_NOTIFICATION_GMAIL_ENABLED:false}
       region: ${ROUTEMIND_NOTIFICATION_GMAIL_REGION:global}
-      client-secrets-path: ${ROUTEMIND_GMAIL_CLIENT_SECRETS_PATH:}
-      token-store-path: ${ROUTEMIND_GMAIL_TOKEN_STORE_PATH:}
+      client-secrets-path: ${ROUTEMIND_GMAIL_OAUTH_CLIENT_FILE:${ROUTEMIND_GMAIL_CLIENT_SECRETS_PATH:}}
+      token-store-path: ${ROUTEMIND_GMAIL_TOKEN_STORE:${ROUTEMIND_GMAIL_TOKEN_STORE_PATH:}}
       oauth-user-id: ${ROUTEMIND_GMAIL_OAUTH_USER_ID:default}
       sender: ${ROUTEMIND_NOTIFICATION_SENDER:}
       synthetic-recipient: ${ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT:}

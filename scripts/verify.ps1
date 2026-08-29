@@ -277,6 +277,21 @@ try {
         throw "Gmail replacement contract self-tests failed"
     }
 
+    python scripts/r4_gmail_oauth_bootstrap_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail OAuth bootstrap contract validation failed"
+    }
+
+    python scripts/r4_gmail_oauth_bootstrap_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail OAuth bootstrap contract self-tests failed"
+    }
+
+    python scripts/gmail_oauth_bootstrap_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail OAuth bootstrap boundary self-tests failed"
+    }
+
     python scripts/here_provider_retirement.py
     if ($LASTEXITCODE -ne 0) {
         throw "HERE provider retirement boundary validation failed"

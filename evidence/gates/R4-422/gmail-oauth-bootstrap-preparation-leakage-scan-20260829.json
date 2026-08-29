@@ -1,0 +1,29 @@
+{
+  "scope": [
+    "evidence/gates/R4-422/gmail-oauth-bootstrap-preparation-20260829.md",
+    "evidence/gates/R4-422/gmail-oauth-bootstrap-preparation-20260829.json",
+    "contracts/provider/r4-422-google-gmail-oauth-bootstrap-v1.json",
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification/GmailOAuthBootstrapConfiguration.java",
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification/GmailOAuthPathPolicy.java",
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification/GoogleGmailOAuthBootstrap.java",
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification/GmailOAuthBootstrapCli.java"
+  ],
+  "result": "PASS",
+  "clientCredentialJsonDetected": false,
+  "oauthAuthorizationCodeDetected": false,
+  "googleAccessTokenDetected": false,
+  "googleRefreshTokenDetected": false,
+  "googleAccountIdentifierDetected": false,
+  "emailAddressDetected": false,
+  "rawOAuthUrlPersisted": false,
+  "rawProviderPayloadDetected": false,
+  "googleRequests": 0,
+  "oauthConsent": 0,
+  "tokenExchanges": 0,
+  "gmailMessageRequests": 0,
+  "emailSends": 0,
+  "awsRequests": 0,
+  "credentialStoreMutations": 0,
+  "googleCloudMutations": 0,
+  "historicalEvidenceModified": false
+}
