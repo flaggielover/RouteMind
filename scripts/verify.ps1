@@ -307,6 +307,21 @@ try {
         throw "Gmail OAuth remote-forward boundary self-tests failed"
     }
 
+    python scripts/r4_gmail_oauth_password_remote_forward_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail OAuth password remote-forward contract validation failed"
+    }
+
+    python scripts/r4_gmail_oauth_password_remote_forward_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail OAuth password remote-forward contract self-tests failed"
+    }
+
+    python scripts/gmail_oauth_password_remote_forward_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail OAuth password remote-forward boundary self-tests failed"
+    }
+
     python scripts/here_provider_retirement.py
     if ($LASTEXITCODE -ne 0) {
         throw "HERE provider retirement boundary validation failed"

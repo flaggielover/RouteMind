@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - GMAIL OAUTH CROSS-DEVICE BOOTSTRAP INCOMPLETE / CONSUMED
+Current Task: R4-422 - PASSWORD REMOTE-FORWARD SYNTHETIC HUMAN GATE PENDING
 
 R4-422 active-provider replacement checkpoint (2026-08-29): the R4-422 domain
 task is provider-neutral, so AWS SES remains a preserved historical
@@ -94,6 +94,24 @@ not read. The result is `INCOMPLETE_CONSUMED / DIAGNOSTIC_INCOMPLETE` with
 and `evidence/gates/R4-422/gmail-oauth-remote-forward-execution-closure-20260829T111824Z.md`.
 The execution checkpoint commit `0c09da62f873713f076b7b010ba34e0982b5df51`
 passed real GitHub Actions run `33250008179` with all five required jobs green.
+
+Password-authenticated remote-forward preparation (2026-08-29): the consumed
+key-based contract is preserved and not reused. A new independent contract is
+prepared at
+`contracts/provider/r4-422-google-gmail-oauth-password-remote-forward-v1.json`
+with SHA-256
+`3c8cb8104cad351b74620f68fa02129c516a46a458401ae78a909b3879aec215`.
+It fixes `suzhe@10.10.1.27`, strict external `known_hosts`, one loopback-only
+remote forward, and native Windows interactive password authentication with
+public-key/key-file options disabled. The operator types the password directly
+in the Windows terminal; Codex and Java never access or persist password bytes.
+Only one synthetic localhost probe is authorized in this stage; OAuth,
+authorization-code handling, token exchange, Gmail operations, and email sends
+are explicitly forbidden and remain zero. No SSH or synthetic traffic has been
+executed. Preparation evidence is under
+`evidence/gates/R4-422/gmail-oauth-password-remote-forward-preparation-20260829.*`
+with a passing leakage scan. State: `PREPARED_OFFLINE / HUMAN_GATE_PENDING /
+SYNTHETIC_ONLY / NO_OAUTH`.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 read-only AWS Console and official-documentation audit completed with verdict

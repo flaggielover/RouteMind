@@ -44,6 +44,17 @@ the token to the external token store. The remote path requires
 token transfer, Gmail message operations, and automatic retry, and remains a
 separate Human Gate from the original loopback-only bootstrap.
 
+The password-authenticated synthetic preflight is a different explicit command:
+`../../scripts/gmail-oauth-remote-forward-password-probe.ps1`. It requires only
+`ROUTEMIND_GMAIL_OAUTH_MAC_KNOWN_HOSTS` and
+`ROUTEMIND_GMAIL_OAUTH_MAC_PORT`. Native `ssh.exe` prompts in the Windows
+terminal with public-key authentication disabled; the operator types the
+password manually. The command inherits console input/error only, never reads
+or persists password bytes, and serves one Windows-loopback
+`/synthetic-probe` request before tearing down. It does not load OAuth client
+material or generate a Google authorization URL. The password probe contract is
+independent of the consumed key-based contract.
+
 ## Commands
 
 ```powershell

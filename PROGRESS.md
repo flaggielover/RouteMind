@@ -12,7 +12,7 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - GMAIL OAUTH CROSS-DEVICE BOOTSTRAP INCOMPLETE / CONSUMED
+Current Task: R4-422 - PASSWORD REMOTE-FORWARD SYNTHETIC HUMAN GATE PENDING
 
 R4-422 active-provider replacement checkpoint (2026-08-29): R4-422 is
 provider-neutral at the domain contract, so the historical AWS SES result stays
@@ -93,6 +93,25 @@ retry or second OAuth session is authorized. Evidence:
 and its closure markdown. Historical contracts and evidence remain unchanged;
 real GitHub Actions run `33250008179` passed all five required jobs. Overall and
 Round 4 counts remain 167/197 and 10/38.
+
+Password-authenticated remote-forward preparation (2026-08-29): a new
+independent contract replaces the consumed key-based requirement for the next
+synthetic-only check:
+`contracts/provider/r4-422-google-gmail-oauth-password-remote-forward-v1.json`,
+canonical SHA-256
+`3c8cb8104cad351b74620f68fa02129c516a46a458401ae78a909b3879aec215`.
+Windows will use native `ssh.exe` with strict pinned `known_hosts` verification,
+fixed target `suzhe@10.10.1.27`, and one loopback-only `ssh -R`. Public-key
+authentication and key-file options are disabled; the operator alone types one
+password into the inherited Windows terminal prompt. Codex/Java do not read,
+capture, echo, log, persist, or automate password bytes. The first stage serves
+one synthetic `GET /synthetic-probe` request and then stops before OAuth; Google
+requests, OAuth sessions, token exchanges, Gmail operations, and email sends are
+zero. The new path remains `HUMAN_GATE_PENDING`; no SSH or synthetic request has
+been executed. Evidence:
+`evidence/gates/R4-422/gmail-oauth-password-remote-forward-preparation-20260829.*`
+and the passing leakage scan. The historical key contract and its incomplete
+execution evidence remain immutable.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 completed read-only Console/documentation/offline audit with verdict
