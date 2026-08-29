@@ -6,7 +6,25 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - GMAIL CREDENTIAL REFRESH HUMAN GATE REQUIRED
+Current Task: R4-422 - GMAIL SEND CONTRACT HUMAN GATE REQUIRED AFTER REFRESH
+
+R4-422 Gmail credential refresh-only recovery execution (2026-08-30): the
+approved contract
+`contracts/provider/r4-422-google-gmail-token-refresh-recovery-v1.json` was
+consumed at SHA-256
+`6c2b454101787c72459b3a5a7f01c18b25cf09d19ffd8ed90aaf3044e8b4b39f`.
+The existing external credential refresh completed successfully with exactly
+one token refresh request and one token response. No Gmail API request, email,
+OAuth session, authorization-code exchange, browser, SSH, retry, fallback, or
+Google/account mutation occurred. Elapsed time was 1345 ms and observed cost
+was `USD 0.00`. Evidence is append-only under
+`evidence/gates/R4-422/google-gmail-token-refresh-recovery-execution-*` with a
+passing leakage scan. Credential refresh is validated, but Gmail connectivity,
+message operation, delivery, and production claims remain false. The consumed
+contract cannot be reused; a new independent Gmail send contract and Human
+Gate are required. R3-325 remains frozen as
+`E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`. Counts remain 167/197 overall and
+10/38 in Round 4.
 
 R4-422 Gmail credential refresh-only recovery preparation (2026-08-29): new
 contract `contracts/provider/r4-422-google-gmail-token-refresh-recovery-v1.json`

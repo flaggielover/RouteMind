@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "artifact": "google-gmail-token-refresh-recovery-execution-20260829T171843Z",
+  "result": "PASS",
+  "scopes": [
+    "repository-tracked-files",
+    "generated-redacted-evidence",
+    "execution-output-safe-fields"
+  ],
+  "credentialValuesDetected": false,
+  "tokenValuesDetected": false,
+  "clientSecretsDetected": false,
+  "authorizationHeadersDetected": false,
+  "rawTokenResponsesDetected": false,
+  "emailAddressesDetected": false,
+  "messageContentDetected": false,
+  "externalPathsDetected": false,
+  "historicalEvidenceModified": false
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "contract": "contracts/provider/r4-422-google-gmail-token-refresh-recovery-v1.json",
+  "contractSha256": "6c2b454101787c72459b3a5a7f01c18b25cf09d19ffd8ed90aaf3044e8b4b39f",
+  "contractStatus": "CONSUMED_REFRESH_ONLY",
+  "observedAtUtc": "2026-08-29T17:18:43Z",
+  "execution": {
+    "result": "REFRESH_SUCCEEDED",
+    "tokenRefreshRequests": 1,
+    "tokenResponses": 1,
+    "tokenErrorResponses": 0,
+    "authorizationCodeExchanges": 0,
+    "oauthSessions": 0,
+    "browserSessions": 0,
+    "sshSessions": 0,
+    "gmailApiRequests": 0,
+    "emailSends": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "googleResourceMutations": 0,
+    "accountMutations": 0,
+    "elapsedMillis": 1345,
+    "observedCostUsd": 0.0,
+    "tokenStoreUpdate": "DELEGATED_TO_STANDARD_LIBRARY"
+  },
+  "configuration": {
+    "tokenStoreRepositoryExternal": true,
+    "storedCredentialLoading": "AVAILABLE",
+    "refreshPrecondition": "PASS",
+    "zeroRetryInitializer": "PASS",
+    "gmailAdapterMessageOperations": "NOT_INVOKED"
+  },
+  "privacy": {
+    "credentialValuesLogged": false,
+    "tokenValuesLogged": false,
+    "rawTokenResponsesPersisted": false,
+    "authorizationHeadersLogged": false,
+    "clientSecretLogged": false,
+    "externalPathsPersisted": false,
+    "productionDataSent": false
+  },
+  "claims": {
+    "credentialRefreshValidated": true,
+    "gmailConnectivityValidated": false,
+    "gmailMessageOperationValidated": false,
+    "emailDeliveryValidated": false,
+    "productionClaim": false,
+    "nextSendRequiresNewContract": true
+  },
+  "leakageScan": "PASS",
+  "historicalEvidencePreserved": true,
+  "round3FrozenScience": "E-PASS / X-PASS / S-FAIL / C-NO-CLAIM"
+}

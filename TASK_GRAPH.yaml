@@ -367,7 +367,7 @@
   "notification_gmail_token_refresh_recovery": {
     "contract": "contracts/provider/r4-422-google-gmail-token-refresh-recovery-v1.json",
     "sha256": "6c2b454101787c72459b3a5a7f01c18b25cf09d19ffd8ed90aaf3044e8b4b39f",
-    "status": "PREPARED_OFFLINE / HUMAN_GATE_PENDING / NO_REFRESH_EXECUTED / NO_GMAIL_OPERATION",
+    "status": "CONSUMED / REFRESH_SUCCEEDED / NO_GMAIL_OPERATION / NEW_SEND_GATE_REQUIRED",
     "provider": "GOOGLE_OAUTH",
     "purpose": "GMAIL_CREDENTIAL_REFRESH_ONLY",
     "scope": "https://www.googleapis.com/auth/gmail.send",
@@ -383,8 +383,8 @@
     "maximum_fallbacks": 0,
     "maximum_duration_minutes": 10,
     "maximum_cost_usd": 0.1,
-    "live_calls_authorized": false,
-    "token_refresh_executed": false,
+    "live_calls_authorized": true,
+    "token_refresh_executed": true,
     "token_store": "EXTERNAL_WINDOWS_ONLY",
     "token_store_environment_process": "SET",
     "token_store_repository_external": true,
@@ -396,6 +396,10 @@
     "implementation_commit": "3f11bd3",
     "ci_run": "33262190380",
     "ci_result": "GREEN_ALL_REQUIRED_JOBS",
+    "token_refresh_requests": 1,
+    "token_responses": 1,
+    "token_error_responses": 0,
+    "refresh_result": "REFRESH_SUCCEEDED",
     "gmail_api_requests": 0,
     "email_sends": 0,
     "google_resource_mutations": 0,
@@ -405,9 +409,12 @@
       "contracts/provider/r4-422-google-gmail-token-refresh-recovery-v1.json",
       "evidence/gates/R4-422/google-gmail-token-refresh-recovery-preparation-20260830.md",
       "evidence/gates/R4-422/google-gmail-token-refresh-recovery-preparation-20260830.json",
-      "evidence/gates/R4-422/google-gmail-token-refresh-recovery-preparation-leakage-scan-20260830.json"
+      "evidence/gates/R4-422/google-gmail-token-refresh-recovery-preparation-leakage-scan-20260830.json",
+      "evidence/gates/R4-422/google-gmail-token-refresh-recovery-execution-20260829T171843Z.json",
+      "evidence/gates/R4-422/google-gmail-token-refresh-recovery-execution-closure-20260829T171843Z.md",
+      "evidence/gates/R4-422/google-gmail-token-refresh-recovery-execution-leakage-scan-20260829T171843Z.json"
     ],
-    "next_action": "STOP_AT_NEW_HUMAN_GATE; AUTHORIZE_AT_MOST_ONE_EXISTING_CREDENTIAL_REFRESH"
+    "next_action": "PREPARE_NEW_GMAIL_SEND_CONTRACT_AND_STOP_AT_HUMAN_GATE"
   },
   "tasks": [
     {
