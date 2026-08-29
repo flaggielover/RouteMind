@@ -2265,3 +2265,29 @@ USD 0.00; redacted execution and leakage evidence are under
 R4-422 remains blocked for any future Gmail message/send validation, which
 requires a new independent contract and Human Gate; historical SES, HERE,
 VKE, VM, SSH, and R3-325 evidence remain unchanged.
+
+Gmail exactly-one synthetic send preparation (2026-08-29): a new independent
+contract `contracts/provider/r4-422-google-gmail-single-send-validation-v1.json`
+is frozen with canonical SHA-256
+`16e6f9dd68fd261f28047b0e7ea8e2f19e186ba3c04dd68c7c8a7d3606dea663`.
+It authorizes no action by itself: a future Human Gate may authorize exactly one
+Gmail API v1 `users.messages.send` request to one synthetic recipient using the
+existing repository-external Windows OAuth token store. The contract permits
+only `gmail.send`, zero OAuth sessions/token exchanges/browser/SSH, zero retries
+or fallback, zero reads/batch/drafts/attachments/CC/BCC, and no Google/account/
+resource mutation. Google-managed processing remains explicitly not Tokyo-pinned;
+provider acceptance remains distinct from delivery and production claims.
+
+The known external token store is present, but both Process and User scope lack
+the non-secret `ROUTEMIND_GMAIL_TOKEN_STORE` reference in the current Codex
+environment. Stored-credential resolution is therefore a fail-closed execution
+precondition and has not been attempted or exposed.
+
+Preparation is offline-only. Gmail API requests, OAuth sessions, SSH sessions,
+email sends, resource mutations, and account mutations are all zero. The adapter
+remains disabled by default; MIME and one-recipient boundaries, local second-send
+rejection, historical SES preservation, sanitized evidence, and leakage controls
+are covered by the new contract gate plus existing Java tests. Evidence is under
+`evidence/gates/R4-422/google-gmail-single-send-*`; no raw address, token,
+credential, message body, or provider response is retained. R4-422 remains
+blocked at `HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT`.

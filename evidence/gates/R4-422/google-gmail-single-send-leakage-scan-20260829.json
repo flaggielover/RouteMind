@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "scanStatus": "PASS_REDACTED_METADATA_ONLY",
+  "contract": "contracts/provider/r4-422-google-gmail-single-send-validation-v1.json",
+  "artifactsScanned": [
+    "contracts/provider/r4-422-google-gmail-single-send-validation-v1.json",
+    "evidence/gates/R4-422/google-gmail-single-send-preparation-20260829.json",
+    "evidence/gates/R4-422/google-gmail-single-send-preparation-20260829.md"
+  ],
+  "rawEmailAddressesFound": 0,
+  "credentialValuesFound": 0,
+  "oauthTokenValuesFound": 0,
+  "messageBodiesFound": 0,
+  "gmailApiRequestsMade": 0,
+  "oauthSessionsMade": 0,
+  "sshSessionsMade": 0,
+  "historicalEvidenceModified": false
+}

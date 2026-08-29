@@ -1392,6 +1392,29 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   eligible, while RM-230 is the active reliability sequence.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
 
+Gmail exactly-one synthetic send Human Gate preparation (2026-08-29): the new
+independent contract
+`contracts/provider/r4-422-google-gmail-single-send-validation-v1.json` has
+canonical SHA-256
+`16e6f9dd68fd261f28047b0e7ea8e2f19e186ba3c04dd68c7c8a7d3606dea663`.
+It is `PREPARED_OFFLINE / HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT`.
+The future bounded operation is exactly one Gmail API v1
+`users.messages.send` request to one synthetic recipient with `gmail.send`
+only, the existing external Windows token store, a 15-minute window, and a
+USD 0.10 ceiling. OAuth/browser/SSH, retries, fallback, reads, batch, drafts,
+attachments, CC/BCC, account/resource mutation, and production claims are
+forbidden. Google-managed processing is not claimed Tokyo-pinned.
+
+The known repository-external token store is present, while the current Codex
+Process/User scopes do not expose `ROUTEMIND_GMAIL_TOKEN_STORE`; execution must
+set that non-secret path reference and re-run preflight before any Gmail call.
+
+Preparation made no Gmail, OAuth, browser, SSH, or mutation call. Existing
+Gmail OAuth V2 and all historical SES evidence remain unchanged. Redacted
+preparation and leakage evidence are under
+`evidence/gates/R4-422/google-gmail-single-send-*`. Exact next human action:
+approve the new contract digest before any Gmail API request.
+
 Gmail OAuth bootstrap V2 preparation (2026-08-29): independent contract
 `contracts/provider/r4-422-google-gmail-oauth-bootstrap-v2.json` is prepared
 with SHA-256

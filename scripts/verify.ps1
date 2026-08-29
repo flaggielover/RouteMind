@@ -277,6 +277,16 @@ try {
         throw "Gmail replacement contract self-tests failed"
     }
 
+    python scripts/r4_gmail_single_send_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail exactly-one synthetic send contract validation failed"
+    }
+
+    python scripts/r4_gmail_single_send_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail exactly-one synthetic send contract self-tests failed"
+    }
+
     python scripts/r4_gmail_oauth_bootstrap_contract.py
     if ($LASTEXITCODE -ne 0) {
         throw "Gmail OAuth bootstrap contract validation failed"
