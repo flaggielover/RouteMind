@@ -257,6 +257,16 @@ try {
         throw "Independent travel and notification Human Gate self-tests failed"
     }
 
+    python scripts/r4_ses_diagnostic_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Third SES diagnostic contract validation failed"
+    }
+
+    python scripts/r4_ses_diagnostic_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Third SES diagnostic contract self-tests failed"
+    }
+
     python scripts/here_provider_retirement.py
     if ($LASTEXITCODE -ne 0) {
         throw "HERE provider retirement boundary validation failed"

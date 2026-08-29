@@ -1,0 +1,23 @@
+{
+  "scanId": "r4-422-aws-ses-third-single-send-diagnostic-leakage-scan-20260829",
+  "scope": [
+    "contracts/provider/r4-422-aws-ses-third-single-send-diagnostic-v1.json",
+    "evidence/gates/R4-422/aws-ses-third-single-send-diagnostic-preparation-20260829.json",
+    "scripts/r4_ses_diagnostic_contract.py",
+    "scripts/r4_ses_diagnostic_contract_test.py"
+  ],
+  "secretValuesInspected": false,
+  "credentialValuesRecorded": false,
+  "senderRecipientValuesPersisted": false,
+  "accountIdsPersisted": false,
+  "fullArnsPersisted": false,
+  "rawProviderMessagesPersisted": false,
+  "rawRequestsPersisted": false,
+  "requestIdsPersistedRaw": false,
+  "requestIdsPersistedAsPresenceOnly": true,
+  "messageBodiesPersisted": false,
+  "awsNetworkRequests": 0,
+  "awsMutations": 0,
+  "result": "PASS",
+  "notes": "Contract and preparation evidence contain only symbolic environment-variable names, bounded non-sensitive metadata, and the new canonical digest. No AWS call, credential resolution, browser access, or external HTTP endpoint was used."
+}

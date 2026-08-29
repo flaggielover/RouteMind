@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-422-aws-ses-third-single-send-diagnostic-v1",
+  "taskId": "R4-422",
+  "status": "PREPARED_AWS_SES_THIRD_SINGLE_SEND_DIAGNOSTIC_HUMAN_GATE",
+  "contractPurpose": "One bounded synthetic AWS SES SendEmail diagnostic using the hardened RouteMind adapter; preparation only until this exact new digest is approved",
+  "independentContract": true,
+  "frozenDependencies": {
+    "providerBoundaryContract": "contracts/product/r4-422-notification-human-gate-v1.json",
+    "providerBoundarySha256": "0cc9bcf99a11e3a4f948693e818c1c497ea7e0e3314ce15cd76f0a973eda4ffb",
+    "priorConsumedContracts": [
+      {
+        "contract": "contracts/provider/r4-422-aws-ses-single-send-validation-v1.json",
+        "sha256": "e942a04b080da7cf42645d757fec61a1fb67428b59da29f90c93227b06c7d660",
+        "outcome": "FAIL_LOCAL_RUNTIME_DEPENDENCY_BEFORE_SEND"
+      },
+      {
+        "contract": "contracts/provider/r4-422-aws-ses-second-single-send-validation-v1.json",
+        "sha256": "9c32cc9df3ac34e2a85f722ec2bcce6c64e9e5057a2f9e85e0e14656c082feaa",
+        "outcome": "FAILED_PROVIDER_REJECTED_ACCESS_DENIED"
+      }
+    ],
+    "priorContractsMustRemainUnchanged": true,
+    "priorContractDigestReuse": false,
+    "historicalEvidenceMutation": false
+  },
+  "provider": {
+    "name": "AWS_SES",
+    "channel": "EMAIL",
+    "region": "ap-northeast-1",
+    "endpoint": "email.ap-northeast-1.amazonaws.com",
+    "operation": "SendEmail",
+    "forbiddenOperations": ["SendRawEmail", "SendBulkEmail", "SendBulkTemplatedEmail"],
+    "sdk": "AWS_SDK_FOR_JAVA_V2",
+    "credentialMechanism": "DefaultCredentialsProvider_only",
+    "expectedProfile": "routemind-ses"
+  },
+  "identities": {
+    "sender": {
+      "sourceEnvironmentVariable": "ROUTEMIND_NOTIFICATION_SENDER",
+      "binding": "resolve_current_process_environment_value_at_execution",
+      "valueInContract": "forbidden",
+      "valueInLogsEvidenceChat": "forbidden",
+      "mustBeVerifiedByProvider": true,
+      "syntheticOnly": true
+    },
+    "recipient": {
+      "sourceEnvironmentVariable": "ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT",
+      "binding": "resolve_current_process_environment_value_at_execution",
+      "valueInContract": "forbidden",
+      "valueInLogsEvidenceChat": "forbidden",
+      "mustBeSyntheticAndVerified": true,
+      "syntheticOnly": true
+    },
+    "productionRecipients": "forbidden"
+  },
+  "scope": {
+    "syntheticOnly": true,
+    "maximumSendEmailRequests": 1,
+    "maximumMessages": 1,
+    "maximumRecipients": 1,
+    "maximumCcRecipients": 0,
+    "maximumBccRecipients": 0,
+    "maximumAttachments": 0,
+    "maximumBulkOperations": 0,
+    "maximumRetries": 0,
+    "maximumDurationMinutes": 15,
+    "maximumSpendUsdCents": 10,
+    "accountCreationAuthorized": false,
+    "resourceMutationAuthorized": false,
+    "providerConfigurationMutationAuthorized": false,
+    "iamMutationAuthorized": false,
+    "productionAccessRequestAuthorized": false,
+    "liveCallAuthorizedOnlyAfterHumanGate": true,
+    "fallbackProvider": "forbidden",
+    "fallbackCannotRepresentAwsTruth": true
+  },
+  "executionPath": {
+    "configuration": "current RouteMind notification provider configuration",
+    "requestConstruction": "AwsSesRequestFactory",
+    "providerAdapter": "AwsSesNotificationProvider",
+    "transport": "AWS SDK for Java v2 SesClient.sendEmail",
+    "historicalAdHocHelperAllowed": false,
+    "adapterEnabledByDefault": false,
+    "sanitizedObservation": "AwsSesErrorObservation via AwsSesErrorObservationSink"
+  },
+  "messageContract": {
+    "content": "synthetic_non_personal_routemind_template_only",
+    "opaqueNotificationIdRequired": true,
+    "customerCourierMerchantOrderAddressPhoneTenantIdentifiers": "forbidden",
+    "paymentData": "forbidden",
+    "credentialValues": "forbidden",
+    "messageBodyPersistence": "redacted_digest_only",
+    "transport": "SES_EMAIL",
+    "oneAttemptOnly": true,
+    "deliveryConfirmation": "authenticated_receipt_or_bounce_only"
+  },
+  "runtimePreconditions": [
+    "Human approval matches this exact new contract SHA-256",
+    "Prior consumed contracts and all prior evidence remain unchanged",
+    "AWS_PROFILE is exactly routemind-ses in the execution process",
+    "AWS_REGION and AWS_DEFAULT_REGION are exactly ap-northeast-1 in the execution process",
+    "ROUTEMIND_NOTIFICATION_SENDER and ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT are present without persisting values",
+    "DefaultCredentialsProvider resolves locally before the send without a service call",
+    "No conflicting SDK profile override is present",
+    "Sender and synthetic recipient are provider-verified for the bounded test",
+    "Sender normalized-form match is true and sender boundary whitespace/display-name syntax are false",
+    "Recipient normalized-form match is true and recipient boundary whitespace/display-name syntax are false",
+    "Request shape is source=1, To=1, CC=0, BCC=0, duplicate recipients=false",
+    "Endpoint and region overrides are absent and SDK retry policy is zero",
+    "Consent-valid transactional Outbox intent and opaque notification identity are ready",
+    "Redacted evidence sink and leakage scan are ready before any request",
+    "No fallback result is substituted for an AWS result"
+  ],
+  "requestBoundary": {
+    "apiOperation": "SendEmail",
+    "sendEmailRequests": 1,
+    "recipients": 1,
+    "cc": 0,
+    "bcc": 0,
+    "sendRawEmail": "forbidden",
+    "attachments": 0,
+    "bulkOperations": 0,
+    "automaticRetries": 0,
+    "retryPolicy": "none",
+    "endpointOverride": "forbidden",
+    "regionOverride": "forbidden",
+    "configurationSet": "absent",
+    "tags": 0,
+    "delegatedSendingAuthorization": "forbidden",
+    "timeoutSeconds": 15,
+    "requestId": "opaque_notification_id_only",
+    "outboundAllowlist": [
+      "verified_synthetic_sender",
+      "verified_synthetic_recipient",
+      "reviewed_synthetic_routemind_template",
+      "opaque_notification_id"
+    ],
+    "outboundForbidden": [
+      "customer_identity",
+      "courier_identity",
+      "merchant_identity",
+      "order_identifier",
+      "tenant_identifier",
+      "address",
+      "phone",
+      "payment_data",
+      "credential_value",
+      "production_recipient",
+      "attachment",
+      "cc_recipient",
+      "bcc_recipient"
+    ]
+  },
+  "sanitizedErrorCapture": {
+    "required": true,
+    "fields": [
+      "provider",
+      "operation",
+      "region",
+      "exception_class",
+      "safe_service_error_code",
+      "http_status",
+      "request_id_presence_or_redacted_representation",
+      "normalized_provider_error_category",
+      "sanitized_provider_semantic",
+      "provider_acceptance",
+      "request_count",
+      "retry_count",
+      "fallback_usage",
+      "timestamp",
+      "safe_request_shape"
+    ],
+    "rawExceptionMessage": "forbidden",
+    "rawProviderPayload": "forbidden",
+    "rawRequest": "forbidden",
+    "identityAndCredentialValues": "forbidden"
+  },
+  "stopConditions": [
+    "Any contract digest, provider, operation, region, profile, identity source, request shape, or budget mismatch",
+    "Any missing or invalid non-secret configuration or local credential-chain failure",
+    "Any attempt to use the historical ad-hoc helper, SendRawEmail, batch, fallback, or retry",
+    "Any attempt to create or mutate an AWS account, IAM policy, SES configuration, or resource",
+    "Any sender, recipient, message content, business data, payment data, or credential leakage risk",
+    "Any second request, recipient, attachment, CC, BCC, or bulk operation",
+    "Any wall-clock deadline or USD 0.10 ceiling reached or plausibly exceeded",
+    "Unexpected authentication, quota, billing, endpoint, region, or provider response semantics",
+    "Provider acceptance without a trustworthy redacted artifact",
+    "Any fallback or local result that could be mistaken for AWS provider truth",
+    "Mailbox delivery cannot be independently confirmed after acceptance; classify partial and do not send again"
+  ],
+  "consumptionSemantics": {
+    "consumedBeforeProviderCall": "only if local terminal failure is recorded under repository execution semantics",
+    "consumedAfterSendEmailAttempt": true,
+    "consumedAfterProviderResponse": true,
+    "silentReuseAfterFailure": false,
+    "subsequentAttempt": "requires a new independent contract and Human Gate",
+    "historicalContractsMayBeReused": false
+  },
+  "evidenceContract": {
+    "preparationArtifact": "evidence/gates/R4-422/aws-ses-third-single-send-diagnostic-preparation-20260829.json",
+    "executionArtifacts": [
+      "evidence/gates/R4-422/aws-ses-third-single-send-diagnostic-execution-<timestamp>.json",
+      "evidence/gates/R4-422/aws-ses-third-single-send-diagnostic-usage-<timestamp>.json",
+      "evidence/gates/R4-422/aws-ses-third-single-send-diagnostic-leakage-scan-<timestamp>.json",
+      "evidence/gates/R4-422/aws-ses-third-single-send-diagnostic-closure-<timestamp>.md"
+    ],
+    "requiredFields": [
+      "contractSha256",
+      "providerAndRegion",
+      "configurationReadinessWithoutValues",
+      "credentialChainReadinessWithoutValues",
+      "hardenedAdapterAndRequestPath",
+      "outboxAndOpaqueNotificationIdentity",
+      "requestAndResponseTimestamps",
+      "requestCountAndNoRetryOutcome",
+      "providerAcceptanceMetadataRedactedOrDigested",
+      "providerMessageIdIfReturnedRedactedOrDigested",
+      "authenticatedDeliveryOrBounceOutcome",
+      "sanitizedErrorObservationIfFailure",
+      "privacyBoundaryAndSyntheticScope",
+      "actualOrConservativeCost",
+      "artifactSha256Digests",
+      "secretLeakageScan",
+      "negativeAndPartialResults"
+    ],
+    "secretHandling": "no credential, sender, recipient, message body, raw provider token, or browser material may be persisted",
+    "providerMetadata": "record only sanitized structured fields, redacted correlation, and digests"
+  },
+  "rollbackAndCleanup": {
+    "awsResourcesCreated": 0,
+    "awsResourcesToDelete": 0,
+    "iamOrProviderConfigurationRollback": "not_applicable_and_forbidden",
+    "sharedCredentialStoreMutation": "forbidden",
+    "localEphemeralSecrets": "discard_without_persistence",
+    "redactedEvidence": "retain_append_only",
+    "failedSend": "record_failure_without_retry_or_fallback_claim",
+    "acceptedButDeliveryUnconfirmed": "record_partial_without_second_request",
+    "cleanupVerification": "confirm_zero_resource_and_zero_mutation_delta"
+  },
+  "outcomeSemantics": {
+    "PASS": "Exactly one bounded SendEmail request is accepted, no boundary is violated, a valid provider success identifier is recorded in redacted form, and leakage scan passes; this is synthetic provider validation only, never production validation",
+    "PARTIAL": "The single request is accepted or partially observed but authenticated delivery/bounce, cost, or another required evidence item is missing; retain the result and make no delivery claim",
+    "FAIL": "The request is rejected, times out, violates a boundary, leaks data, or cannot produce a trustworthy redacted artifact; retain the failure and do not retry under this contract",
+    "LOCAL_PRECONDITION_FAILURE": "Abort before AWS with zero AWS requests, preserve the local blocker, and do not silently rerun",
+    "fallback": "Forbidden for this diagnostic; no local result may represent AWS provider truth"
+  },
+  "claims": {
+    "providerSelected": true,
+    "providerValidated": false,
+    "liveCallsExecuted": false,
+    "syntheticSendValidated": false,
+    "deliveryValidated": false,
+    "productionValidated": false,
+    "tokyoProcessingPinned": false,
+    "humanGateRequired": true
+  },
+  "humanGate": {
+    "approvalRequired": true,
+    "approvalAuthorizesNoActionBeforeExactDigestApproval": true,
+    "approvalAuthorizesExactlyOneSendEmailRequest": true,
+    "requiredApprovals": [
+      "EXACT_NEW_CONTRACT_SHA256",
+      "AWS_SES_PROVIDER_AND_AP_NORTHEAST_1_REGION",
+      "VERIFIED_SYNTHETIC_SENDER",
+      "VERIFIED_SYNTHETIC_RECIPIENT",
+      "HARDENED_ROUTE_MIND_ADAPTER_PATH",
+      "ONE_SENDEMAIL_REQUEST_MAXIMUM",
+      "ONE_SYNTHETIC_RECIPIENT_MAXIMUM",
+      "NO_CC_NO_BCC_NO_ATTACHMENTS_NO_BULK_NO_RAW_EMAIL",
+      "NO_AUTOMATIC_RETRY_AND_NO_FALLBACK",
+      "MAXIMUM_15_MINUTES",
+      "MAXIMUM_USD_0_10",
+      "NO_ACCOUNT_IAM_SES_CONFIGURATION_OR_RESOURCE_MUTATION",
+      "HISTORICAL_CONTRACTS_NOT_REUSED"
+    ],
+    "requiredNonSecretConfigurationNames": [
+      "AWS_PROFILE",
+      "AWS_REGION",
+      "AWS_DEFAULT_REGION",
+      "ROUTEMIND_NOTIFICATION_SENDER",
+      "ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT"
+    ],
+    "credentialMechanism": "AWS_SDK_DEFAULT_CREDENTIALS_PROVIDER_ONLY",
+    "approvalStatementTemplate": "I approve R4-422 AWS SES third single-send diagnostic contract contracts/provider/r4-422-aws-ses-third-single-send-diagnostic-v1.json by exact SHA-256 digest <DIGEST>, authorize exactly one synthetic SendEmail request in ap-northeast-1 through the hardened RouteMind AwsSesNotificationProvider/AwsSesRequestFactory path, with exactly one approved synthetic verified recipient, zero retries, zero fallback, a USD 0.10 ceiling, and a 15-minute execution window; I authorize no IAM, SES configuration, account, or resource mutation, accept sanitized evidence and fail-closed semantics, and confirm that historical R4-422 SES contracts are not reused."
+  }
+}

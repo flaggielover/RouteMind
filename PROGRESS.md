@@ -12,7 +12,26 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - OFFLINE RUNTIME CONTEXT AUDITED / OBSERVABILITY HARDENED / NEW CONTRACT REQUIRED
+Current Task: R4-422 - THIRD SES DIAGNOSTIC CONTRACT PREPARED / HUMAN GATE PENDING
+
+R4-422 third AWS SES single-send diagnostic preparation (2026-08-29): a new
+independent contract is prepared at
+`contracts/provider/r4-422-aws-ses-third-single-send-diagnostic-v1.json` with
+canonical SHA-256
+`6c52a2457b4d136f17d11e66af15cf9a1a79a721bc8558cca68658f728ed4387`. It binds
+exactly one synthetic `SendEmail` request in `ap-northeast-1`, one verified
+synthetic recipient, zero retries, zero fallback, a 15-minute window, and a
+USD 0.10 hard ceiling. The future run must use the hardened
+`AwsSesRequestFactory` / `AwsSesNotificationProvider` path and sanitized error
+observation; the historical ad-hoc helper is forbidden. Preparation made zero
+AWS/external requests, zero mutations, and incurred USD 0.00. The first and
+second consumed contracts and all historical evidence remain unchanged. R4-422
+remains `BLOCKED / FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM`; the exact
+new Human Gate is pending. Preparation evidence is under
+`evidence/gates/R4-422/aws-ses-third-single-send-diagnostic-preparation-20260829.md`
+and the linked JSON/leakage artifact. Dedicated contract validation and five
+regression tests pass locally; no credentials were resolved and no browser or
+network endpoint was used.
 
 R4-422 offline runtime-context and error-observability checkpoint (2026-08-29):
 the current process sender/recipient are present and structurally equal to their

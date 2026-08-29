@@ -1,0 +1,93 @@
+{
+  "evidenceId": "r4-422-aws-ses-third-single-send-diagnostic-preparation-20260829",
+  "taskId": "R4-422",
+  "status": "PREPARED_AWS_SES_THIRD_SINGLE_SEND_DIAGNOSTIC_HUMAN_GATE",
+  "preparationOnly": true,
+  "executionPerformed": false,
+  "contractPath": "contracts/provider/r4-422-aws-ses-third-single-send-diagnostic-v1.json",
+  "contractSha256": "6c52a2457b4d136f17d11e66af15cf9a1a79a721bc8558cca68658f728ed4387",
+  "provider": "AWS_SES",
+  "operation": "SendEmail",
+  "region": "ap-northeast-1",
+  "expectedProfile": "routemind-ses",
+  "externalRequests": 0,
+  "awsMutations": 0,
+  "emailsSent": 0,
+  "costUsd": 0.0,
+  "historicalContractsReused": false,
+  "historicalEvidenceChanged": false,
+  "bounds": {
+    "maximumSendEmailRequests": 1,
+    "maximumRecipients": 1,
+    "maximumCc": 0,
+    "maximumBcc": 0,
+    "maximumAttachments": 0,
+    "maximumBulkOperations": 0,
+    "maximumRetries": 0,
+    "maximumDurationMinutes": 15,
+    "maximumSpendUsd": 0.1,
+    "fallback": "forbidden"
+  },
+  "hardenedExecutionPath": {
+    "configuration": "current RouteMind notification provider configuration",
+    "requestFactory": "AwsSesRequestFactory",
+    "adapter": "AwsSesNotificationProvider",
+    "transport": "AWS SDK for Java v2 SesClient.sendEmail",
+    "sanitizedErrorSink": "AwsSesErrorObservationSink",
+    "historicalAdHocHelper": "forbidden",
+    "adapterEnabledByDefault": false
+  },
+  "runtimePreconditions": {
+    "configurationVariables": [
+      "AWS_PROFILE",
+      "AWS_REGION",
+      "AWS_DEFAULT_REGION",
+      "ROUTEMIND_NOTIFICATION_SENDER",
+      "ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT"
+    ],
+    "valuesPersisted": false,
+    "credentialProvider": "DefaultCredentialsProvider_only",
+    "senderAndRecipient": "verified_synthetic_only",
+    "requestShape": "source=1,to=1,cc=0,bcc=0,duplicates=false",
+    "overrides": "endpoint=absent,region=absent",
+    "retryPolicy": "zero",
+    "failedPreconditionBehavior": "abort_before_AWS_call"
+  },
+  "sanitizedErrorFields": [
+    "provider",
+    "operation",
+    "region",
+    "exception_class",
+    "safe_service_error_code",
+    "http_status",
+    "request_id_presence_or_redacted_representation",
+    "normalized_provider_error_category",
+    "sanitized_provider_semantic",
+    "provider_acceptance",
+    "request_count",
+    "retry_count",
+    "fallback_usage",
+    "timestamp",
+    "safe_request_shape"
+  ],
+  "successSemantics": "provider acceptance plus valid redacted provider success identifier and leakage PASS is synthetic provider validation only; mailbox delivery remains separate",
+  "failureSemantics": "reject, timeout, boundary violation, leakage, or untrustworthy artifact is terminal; preserve redacted failure and do not retry",
+  "consumptionSemantics": "one SendEmail attempt or provider response consumes the contract; subsequent attempt requires a new exact contract and Human Gate",
+  "validation": {
+    "jsonParse": "PASS",
+    "offlineContractValidator": "PASS",
+    "offlineContractRegressionTests": "5 passed",
+    "networkAccess": "NOT_USED",
+    "awsSdkCalls": 0,
+    "sendEmailCalls": 0,
+    "secretResolution": "NOT_PERFORMED",
+    "historicalDigestReuse": "REJECTED",
+    "prohibitedOperations": "REJECTED_BY_CONTRACT",
+    "leakageScan": "evidence/gates/R4-422/aws-ses-third-single-send-diagnostic-leakage-scan-20260829.json"
+  },
+  "humanGate": {
+    "approvalRequired": true,
+    "approvalStatement": "I approve R4-422 AWS SES third single-send diagnostic contract contracts/provider/r4-422-aws-ses-third-single-send-diagnostic-v1.json by exact SHA-256 digest 6c52a2457b4d136f17d11e66af15cf9a1a79a721bc8558cca68658f728ed4387, authorize exactly one synthetic SendEmail request in ap-northeast-1 through the hardened RouteMind AwsSesNotificationProvider/AwsSesRequestFactory path, with exactly one approved synthetic verified recipient, zero retries, zero fallback, a USD 0.10 ceiling, and a 15-minute execution window; I authorize no IAM, SES configuration, account, or resource mutation, accept sanitized evidence and fail-closed semantics, and confirm that historical R4-422 SES contracts are not reused.",
+    "approvalAuthorizesNoActionBeforeExactDigestApproval": true
+  }
+}
