@@ -91,7 +91,8 @@ The attempt is recorded as `INCOMPLETE_CONSUMED / DIAGNOSTIC_INCOMPLETE`; no
 retry or second OAuth session is authorized. Evidence:
 `evidence/gates/R4-422/gmail-oauth-remote-forward-execution-20260829T111824Z.json`
 and its closure markdown. Historical contracts and evidence remain unchanged;
-overall and Round 4 counts remain 167/197 and 10/38.
+real GitHub Actions run `33250008179` passed all five required jobs. Overall and
+Round 4 counts remain 167/197 and 10/38.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 completed read-only Console/documentation/offline audit with verdict

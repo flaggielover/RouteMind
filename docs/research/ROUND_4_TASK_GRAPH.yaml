@@ -256,6 +256,9 @@
     "implementation_commit": "cd7336b9590838cacc33a75a3681d32dc9acf6ca",
     "ci_run": "33249022500",
     "ci_result": "GREEN_ALL_REQUIRED_JOBS",
+    "execution_commit": "0c09da62f873713f076b7b010ba34e0982b5df51",
+    "execution_ci_run": "33250008179",
+    "execution_ci_result": "GREEN_ALL_REQUIRED_JOBS",
     "next_action": "NO_RETRY; NEW_CONTRACT_AND_HUMAN_GATE_REQUIRED_IF_BOOTSTRAP_REVISITED"
   },
   "architecture_invariants": [

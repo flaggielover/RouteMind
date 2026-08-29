@@ -92,6 +92,8 @@ not read. The result is `INCOMPLETE_CONSUMED / DIAGNOSTIC_INCOMPLETE` with
 `NO_RETRY`; any future bootstrap needs a new contract and Human Gate. Evidence:
 `evidence/gates/R4-422/gmail-oauth-remote-forward-execution-20260829T111824Z.json`
 and `evidence/gates/R4-422/gmail-oauth-remote-forward-execution-closure-20260829T111824Z.md`.
+The execution checkpoint commit `0c09da62f873713f076b7b010ba34e0982b5df51`
+passed real GitHub Actions run `33250008179` with all five required jobs green.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 read-only AWS Console and official-documentation audit completed with verdict
