@@ -22,7 +22,9 @@ contract/replay/control-plane/verify gates all pass locally. No empirical data,
 historical backfill, external API call, production claim, Human Gate change, or
 R3-325 mutation occurred. Evidence: `evidence/gates/RM-237/` and
 `research/observability/`. The existing R4-422 Human Gate remains the current
-external boundary and no safe next task is eligible.
+external boundary and no safe next task is eligible. Checkpoint commit
+`37bf50711057da9fa4f34f09af56838d951dc1ca` is pushed; GitHub Actions run
+`33230961979` passed all five required jobs.
 
 R4-422 single-send execution closure (2026-08-29): exact approved contract
 `e942a04b080da7cf42645d757fec61a1fb67428b59da29f90c93227b06c7d660` was

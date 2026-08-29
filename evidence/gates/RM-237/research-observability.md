@@ -41,10 +41,10 @@ Human Gate, call an external API, or create a paid resource.
   dependency, evidence, mirror, security, and repository gates. No eligible
   external action was created; the existing R4-422 Human Gate remains the
   active external boundary.
-- The tracked implementation is committed and pushed as the RM-237 checkpoint;
-  `.codex-tmp/` remains an untouched local untracked directory. The remote CI
-  result is recorded in the follow-up handoff once the pushed checkpoint run
-  completes.
+- The tracked implementation is committed and pushed as RM-237 checkpoint
+  `37bf50711057da9fa4f34f09af56838d951dc1ca`. GitHub Actions CI run
+  `33230961979` passed all five required jobs. `.codex-tmp/` remains an
+  untouched local untracked directory.
 
 ## Boundary and provenance
 

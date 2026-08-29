@@ -27,7 +27,8 @@ Local Compute (950 tests, 95.10% coverage), Java (124 tests), contract, replay,
 and repository verification gates passed. No empirical records were created,
 historical tick logs backfilled, external API called, production claim changed,
 or R3-325 artifact/verdict touched. See `evidence/gates/RM-237/` and
-`research/observability/`.
+`research/observability/`. Pushed checkpoint `37bf507` passed all five required
+GitHub Actions jobs in run `33230961979`.
 
 R4-422 single-send execution closure (2026-08-29): the exact approved
 contract `e942a04b080da7cf42645d757fec61a1fb67428b59da29f90c93227b06c7d660`
