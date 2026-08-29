@@ -22,7 +22,8 @@ full 125-test Java suite passes, and AWS/SES/email/mutation/cost counters remain
 zero. No production dependency changed and no live contract was prepared.
 Evidence is under `evidence/gates/R4-422/aws-ses-runtime-repair-20260829.md` and
 the linked JSON/dependency-tree artifacts. Any future send requires a new exact
-contract and a new Human Gate.
+contract and a new Human Gate. Real GitHub Actions CI run `33232296372` passed
+all five required jobs.
 
 RM-237 Research Observability checkpoint (2026-08-29): `PASSED /
 FUTURE_DATA_READY / OBSERVABILITY_READY`. It is a single independent

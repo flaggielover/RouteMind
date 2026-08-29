@@ -29,6 +29,7 @@ offline construction test with Maven's complete runtime classpath. Local
 No production dependency changed, no new live contract exists, and no provider
 connectivity, acceptance, delivery, or production claim is made. Evidence:
 `evidence/gates/R4-422/aws-ses-runtime-repair-20260829.md`.
+Real GitHub Actions CI run `33232296372` passed all five required jobs.
 
 RM-237 Research Observability checkpoint (2026-08-29): PASSED as
 `FUTURE_DATA_READY / OBSERVABILITY_READY`. This is one standalone,
