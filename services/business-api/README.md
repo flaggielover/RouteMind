@@ -13,6 +13,16 @@ research algorithms.
 
 ArchUnit tests enforce the dependency direction.
 
+## Notification provider
+
+The active email-provider candidate is the disabled-by-default
+`GoogleGmailNotificationProvider`. It uses the provider-neutral notification
+port and Gmail API `users.messages.send` with the narrow
+`https://www.googleapis.com/auth/gmail.send` OAuth scope. OAuth consent and
+token loading are explicit operator steps; application startup performs no
+Gmail network call. AWS SES remains only in append-only historical evidence
+and is not active runtime wiring.
+
 ## Commands
 
 ```powershell

@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet("test", "test-offline", "package", "run", "resilience", "ses-offline", "ses-context-audit")]
+    [ValidateSet("test", "test-offline", "package", "run", "resilience")]
     [string] $Action = "test"
 )
 
@@ -72,64 +72,6 @@ try {
         "package" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "clean", "package") }
         "run" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "spring-boot:run") }
         "resilience" { Invoke-Maven -MavenArguments @("-Dmaven.repo.local=$mavenRepository", "test", "-Dtest=BusinessApiApplicationTests") }
-        "ses-offline" {
-            $profile = [Environment]::GetEnvironmentVariable("AWS_PROFILE", "Process")
-            $region = [Environment]::GetEnvironmentVariable("AWS_REGION", "Process")
-            $defaultRegion = [Environment]::GetEnvironmentVariable("AWS_DEFAULT_REGION", "Process")
-            if ($profile -ne "routemind-ses" -or $region -ne "ap-northeast-1" -or $defaultRegion -ne "ap-northeast-1") {
-                throw "Offline SES construction requires the approved non-secret AWS profile and region configuration"
-            }
-
-            $previousMetadataDisabled = $env:AWS_EC2_METADATA_DISABLED
-            $env:AWS_EC2_METADATA_DISABLED = "true"
-            try {
-                Invoke-Maven -MavenArguments @(
-                    "-Dmaven.repo.local=$mavenRepository",
-                    "clean",
-                    "test",
-                    "-Dtest=R4_422SesClientConstructionTests",
-                    "-DfailIfNoTests=true",
-                    "-Droutemind.ses.resolveCredentials=true"
-                )
-            }
-            finally {
-                $env:AWS_EC2_METADATA_DISABLED = $previousMetadataDisabled
-            }
-
-            if ($LASTEXITCODE -ne 0) {
-                throw "Offline SES construction test failed"
-            }
-            Write-Host "AWS_SDK_DEFAULT_CREDENTIALS_PROVIDER=AVAILABLE"
-            Write-Host "SES_CLIENT_CONSTRUCTION=AVAILABLE"
-            Write-Host "AWS_NETWORK_REQUESTS=0"
-            Write-Host "SEND_EMAIL_REQUESTS=0"
-            Write-Host "COST_USD=0.00"
-        }
-        "ses-context-audit" {
-            $senderPresent = -not [string]::IsNullOrWhiteSpace(
-                [Environment]::GetEnvironmentVariable("ROUTEMIND_NOTIFICATION_SENDER", "Process")
-            )
-            $recipientPresent = -not [string]::IsNullOrWhiteSpace(
-                [Environment]::GetEnvironmentVariable("ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT", "Process")
-            )
-            if (-not $senderPresent -or -not $recipientPresent) {
-                throw "Offline SES context audit requires both process-scoped notification endpoint variables"
-            }
-
-            Invoke-Maven -MavenArguments @(
-                "--offline",
-                "-Dmaven.repo.local=$mavenRepository",
-                "test",
-                "-Dtest=AwsSesRuntimeContextTests#currentProcessContextIsAuditedWithoutRevealingValues",
-                "-DfailIfNoTests=true"
-            )
-            if ($LASTEXITCODE -ne 0) {
-                throw "Offline SES context audit failed"
-            }
-            Write-Host "AWS_NETWORK_REQUESTS=0"
-            Write-Host "SEND_EMAIL_REQUESTS=0"
-            Write-Host "AWS_MUTATIONS=0"
-        }
     }
     if ($LASTEXITCODE -ne 0) {
         throw "Business API $Action failed with exit code $LASTEXITCODE"

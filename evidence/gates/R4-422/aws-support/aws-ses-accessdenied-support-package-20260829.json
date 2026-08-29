@@ -1,0 +1,117 @@
+{
+  "task": "R4-422",
+  "package": "AWS_SES_ACCESSDENIED_SUPPORT_DIAGNOSTIC",
+  "date": "2026-08-29",
+  "preparation_verdict": "READY_FOR_OPERATOR_SUBMISSION",
+  "r4_422_state": "BLOCKED / FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM",
+  "aws_calls": 0,
+  "aws_api_or_cli_calls": 0,
+  "read_only_console_inspection": true,
+  "send_email_requests": 0,
+  "send_raw_email_requests": 0,
+  "aws_mutations": 0,
+  "another_sendemail_currently_justified": false,
+  "full_request_id_available": false,
+  "request_id_status": "ATTEMPT_3_PRESENCE_RETAINED_REDACTED",
+  "historical_evidence_changed": false,
+  "attempts": [
+    {
+      "attempt": 1,
+      "kind": "LOCAL_ONLY",
+      "start_utc": "2026-08-29T02:54:03.6582734Z",
+      "end_utc": "2026-08-29T02:54:08.3336049Z",
+      "operation": "LOCAL_SES_CLIENT_PATH",
+      "aws_requests": 0,
+      "classification": "LOCAL_RUNTIME_CLASSPATH_FAILURE"
+    },
+    {
+      "attempt": 2,
+      "kind": "REAL_PROVIDER",
+      "start_utc": "2026-08-29T04:18:01Z",
+      "end_utc": "2026-08-29T04:18:06Z",
+      "operation": "SendEmail",
+      "region": "ap-northeast-1",
+      "aws_requests": 1,
+      "provider_result": "AccessDenied",
+      "http_status": "NOT_RECORDED",
+      "request_id": "NOT_RETAINED",
+      "retries": 0,
+      "fallback": false
+    },
+    {
+      "attempt": 3,
+      "kind": "REAL_PROVIDER",
+      "start_utc": "2026-08-29T07:16:42Z",
+      "end_utc": "2026-08-29T07:16:45Z",
+      "operation": "SendEmail",
+      "region": "ap-northeast-1",
+      "aws_requests": 1,
+      "provider_result": "AccessDenied",
+      "http_status": 403,
+      "request_id": "PRESENT_REDACTED",
+      "retries": 0,
+      "fallback": false
+    }
+  ],
+  "iam": {
+    "principal": "REDACTED_VALIDATION_IAM_USER",
+    "console_access": "DISABLED",
+    "access_key_status": "ACTIVE_DURING_EXECUTION_NOT_RECORDED",
+    "groups": 0,
+    "permissions_boundary": "NOT_CONFIGURED",
+    "inline_policy_count": 1,
+    "effect": "Allow",
+    "actions": ["ses:SendEmail", "ses:SendRawEmail"],
+    "resource": "REDACTED_EXACT_VERIFIED_IDENTITY_ARN",
+    "conditions": {
+      "ses:FromAddress": "EXACT_VERIFIED_SENDER_REDACTED",
+      "ses:Recipients": ["EXACT_VERIFIED_SYNTHETIC_RECIPIENT_REDACTED"],
+      "operator": "ForAllValues:StringEquals",
+      "aws:SecureTransport": "true"
+    }
+  },
+  "policy_simulator": {
+    "action": "ses:SendEmail",
+    "resource": "EXACT_IDENTITY_RESOURCE_REDACTED",
+    "from_context": "EXACT_VERIFIED_SENDER_REDACTED",
+    "recipients_context": "ONE_VERIFIED_SYNTHETIC_RECIPIENT_REDACTED",
+    "secure_transport": true,
+    "result": "ALLOWED / EXPLICIT ALLOW",
+    "service_request_made": false,
+    "service_response_returned": false
+  },
+  "ses_console": {
+    "region": "ap-northeast-1",
+    "account_state": "SANDBOX_HEALTHY",
+    "verified_sender": true,
+    "verified_synthetic_recipient": true,
+    "sending_authorization_policy": "NONE_OBSERVED",
+    "suppression_list": "EMPTY",
+    "relevant_configuration_sets": 0,
+    "sending_pause_or_reputation_block": "NONE_OBSERVED",
+    "organizations_membership": "NONE_OBSERVED"
+  },
+  "audit": {
+    "classification": "AUTHORIZATION_MODEL_VALID_NO_STATIC_CAUSE_FOUND",
+    "root_cause": "INCONCLUSIVE",
+    "confidence": "MEDIUM",
+    "identity_resource_supported_for_send_email": true,
+    "delegated_sending_required": "NO_FOR_SAME_ACCOUNT_OWNED_IDENTITY",
+    "static_route_mind_policy_defect": false,
+    "static_adapter_defect": false
+  },
+  "support_questions": [
+    "Why can the same-account SendEmail request receive HTTP 403 AccessDenied when IAM Policy Simulator returns Explicit Allow for the exact modeled context?",
+    "Is there an SES authorization/account layer in ap-northeast-1 not represented by IAM Policy Simulator?",
+    "Does SES derive ses:FromAddress or ses:Recipients differently from Source/Destination?",
+    "Does same-account sending from an owned verified identity require additional identity authorization?",
+    "Can Support inspect service-side authorization records for the listed UTC window without a full request ID?",
+    "If a request ID is required, what minimum safe correlation metadata is needed for a future bounded diagnostic?"
+  ],
+  "recommended_category": "Amazon SES -> Sending -> AccessDenied / Authorization / API issue",
+  "support_case_body": "evidence/gates/R4-422/aws-support/aws-ses-accessdenied-support-case-20260829.md",
+  "technical_appendix": "evidence/gates/R4-422/aws-support/aws-ses-accessdenied-technical-appendix-20260829.md",
+  "leakage_scan": "evidence/gates/R4-422/aws-support/aws-ses-accessdenied-support-package-leakage-scan-20260829.json",
+  "secret_leakage": "PASS",
+  "operator_submission": "NOT_SUBMITTED"
+}

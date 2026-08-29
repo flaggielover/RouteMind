@@ -103,10 +103,14 @@ routemind:
     publisher:
       enabled: ${ROUTEMIND_RABBIT_PUBLISHER_ENABLED:true}
   notification:
-    ses:
-      # Disabled unless a separately approved live-send contract enables it.
-      enabled: ${ROUTEMIND_NOTIFICATION_SES_ENABLED:false}
-      profile: ${AWS_PROFILE:}
-      region: ${AWS_REGION:ap-northeast-1}
+    email:
+      # Gmail is the active provider candidate; live use remains disabled by default.
+      provider: ${ROUTEMIND_NOTIFICATION_EMAIL_PROVIDER:gmail}
+    gmail:
+      enabled: ${ROUTEMIND_NOTIFICATION_GMAIL_ENABLED:false}
+      region: ${ROUTEMIND_NOTIFICATION_GMAIL_REGION:global}
+      client-secrets-path: ${ROUTEMIND_GMAIL_CLIENT_SECRETS_PATH:}
+      token-store-path: ${ROUTEMIND_GMAIL_TOKEN_STORE_PATH:}
+      oauth-user-id: ${ROUTEMIND_GMAIL_OAUTH_USER_ID:default}
       sender: ${ROUTEMIND_NOTIFICATION_SENDER:}
       synthetic-recipient: ${ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT:}

@@ -6,7 +6,29 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - THIRD SES DIAGNOSTIC CONSUMED / PROVIDER REJECTED
+Current Task: R4-422 - GMAIL API PROVIDER REPLACEMENT OFFLINE / LIVE HUMAN GATE PENDING
+
+R4-422 active-provider replacement checkpoint (2026-08-29): the R4-422 domain
+task is provider-neutral, so AWS SES remains a preserved historical
+`BLOCKED / FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM` outcome and is not
+recast as a pass. AWS SES has been removed from active Java runtime wiring;
+`GoogleGmailNotificationProvider` is the active email-provider candidate behind
+the existing `NotificationProvider` port. The adapter is disabled by default,
+uses only OAuth scope `https://www.googleapis.com/auth/gmail.send`, separates
+bootstrap/token loading from invocation, creates UTF-8 RFC 2822 URL-safe
+Base64 messages, normalizes sanitized status/reason outcomes, and performs no
+automatic retry or fallback. The offline checkpoint made zero AWS calls, zero
+Google calls, zero OAuth consent actions, zero credential-store mutations, and
+zero email sends. Future Gmail validation is prepared in
+`contracts/provider/r4-422-google-gmail-live-validation-v1.json` with canonical
+SHA-256
+`bc05c17490bcf1be3bd444ead6a68e941b29b0a09d71842283b228f8c5a811f1`; it remains
+behind a new Human Gate and makes no Tokyo-processing claim. Evidence:
+`evidence/gates/R4-422/gmail-provider-replacement-20260829.md`, its JSON index,
+and the passing leakage scan. R3-325 remains frozen as
+`E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`. Java 17 full tests (126), control
+plane gates, and `verify.ps1` pass locally; the Google HTTP JSON runtime is
+aligned at `google-http-client-jackson2:1.46.3`.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 read-only AWS Console and official-documentation audit completed with verdict

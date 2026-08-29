@@ -1,0 +1,20 @@
+{
+  "task": "R4-422",
+  "scan_scope": [
+    "aws-ses-accessdenied-support-case-20260829.md",
+    "aws-ses-accessdenied-technical-appendix-20260829.md",
+    "aws-ses-accessdenied-support-package-20260829.json"
+  ],
+  "result": "PASS",
+  "secret_values_detected": false,
+  "access_key_ids_detected": false,
+  "account_ids_detected": false,
+  "full_addresses_detected": false,
+  "full_arns_detected": false,
+  "cookies_or_auth_material_detected": false,
+  "raw_provider_exception_detected": false,
+  "message_content_detected": false,
+  "aws_calls": 0,
+  "aws_mutations": 0,
+  "historical_evidence_modified": false
+}

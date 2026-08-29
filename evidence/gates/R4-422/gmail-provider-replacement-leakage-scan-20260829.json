@@ -1,0 +1,23 @@
+{
+  "task": "R4-422",
+  "scope": [
+    "evidence/gates/R4-422/gmail-provider-replacement-20260829.md",
+    "evidence/gates/R4-422/gmail-provider-replacement-20260829.json",
+    "contracts/provider/r4-422-google-gmail-live-validation-v1.json"
+  ],
+  "result": "PASS",
+  "google_client_secrets_detected": false,
+  "google_access_tokens_detected": false,
+  "google_refresh_tokens_detected": false,
+  "aws_credentials_detected": false,
+  "email_addresses_detected": false,
+  "account_identifiers_detected": false,
+  "mime_message_content_detected": false,
+  "raw_provider_payload_detected": false,
+  "aws_requests": 0,
+  "google_api_requests": 0,
+  "email_sends": 0,
+  "oauth_consent": 0,
+  "credential_store_mutations": 0,
+  "historical_evidence_modified": false
+}

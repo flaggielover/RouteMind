@@ -267,6 +267,16 @@ try {
         throw "Third SES diagnostic contract self-tests failed"
     }
 
+    python scripts/r4_gmail_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail replacement contract validation failed"
+    }
+
+    python scripts/r4_gmail_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail replacement contract self-tests failed"
+    }
+
     python scripts/here_provider_retirement.py
     if ($LASTEXITCODE -ne 0) {
         throw "HERE provider retirement boundary validation failed"

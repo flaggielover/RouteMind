@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-422-google-gmail-live-validation-v1",
+  "taskId": "R4-422",
+  "status": "PREPARED_GOOGLE_GMAIL_LIVE_EXECUTION_HUMAN_GATE",
+  "provider": "GOOGLE_GMAIL_API",
+  "operation": "users.messages.send",
+  "channel": "EMAIL",
+  "processingRegion": "GOOGLE_MANAGED_NOT_REGION_PINNED",
+  "authentication": {
+    "mechanism": "OAUTH2_USER_CREDENTIAL",
+    "scope": "https://www.googleapis.com/auth/gmail.send",
+    "credentialSource": "EXTERNAL_OAUTH_TOKEN_STORE",
+    "credentialEnvironmentVariable": "ROUTEMIND_GMAIL_TOKEN_STORE_PATH",
+    "clientSecretsEnvironmentVariable": "ROUTEMIND_GMAIL_CLIENT_SECRETS_PATH",
+    "oauthUserIdEnvironmentVariable": "ROUTEMIND_GMAIL_OAUTH_USER_ID",
+    "secretValuesInRepositoryLogsEvidenceChat": "forbidden",
+    "interactiveConsentAtStartup": false
+  },
+  "configuration": {
+    "providerEnvironmentVariable": "ROUTEMIND_NOTIFICATION_EMAIL_PROVIDER",
+    "enabledEnvironmentVariable": "ROUTEMIND_NOTIFICATION_GMAIL_ENABLED",
+    "senderEnvironmentVariable": "ROUTEMIND_NOTIFICATION_SENDER",
+    "syntheticRecipientEnvironmentVariable": "ROUTEMIND_NOTIFICATION_SYNTHETIC_RECIPIENT",
+    "expectedProvider": "gmail",
+    "senderAndRecipientValues": "external_only_redacted_digest_in_evidence",
+    "productionRecipients": "forbidden"
+  },
+  "scope": {
+    "syntheticOnly": true,
+    "maximumSendRequests": 1,
+    "maximumRecipients": 1,
+    "maximumCc": 0,
+    "maximumBcc": 0,
+    "maximumAttachments": 0,
+    "maximumBulkOperations": 0,
+    "maximumRetries": 0,
+    "maximumDurationMinutes": 15,
+    "maximumSpendUsd": 0.1,
+    "accountOrResourceMutationAuthorized": false,
+    "oauthConsentAuthorized": false,
+    "fallbackAuthorized": false
+  },
+  "dataBoundary": {
+    "allowed": ["synthetic_sender", "synthetic_recipient", "reviewed_synthetic_template", "opaque_notification_id"],
+    "forbidden": ["customer_identity", "courier_identity", "merchant_identity", "order_identifier", "address", "phone", "credential_value", "attachment"]
+  },
+  "execution": {
+    "requestConstruction": "GoogleGmailRequestFactory",
+    "providerAdapter": "GoogleGmailNotificationProvider",
+    "transport": "Gmail API v1 users.messages.send",
+    "mimeEncoding": "RFC2822_UTF8_URLSAFE_BASE64",
+    "retryPolicy": "ZERO_RETRIES",
+    "fallbackPolicy": "NO_AUTOMATIC_FALLBACK",
+    "stopAfterAuthorizedRequest": true,
+    "messageId": "presence_or_redacted_digest_only"
+  },
+  "evidenceContract": [
+    "configuration_and_oauth_readiness_without_values",
+    "single_request_count_and_elapsed_time",
+    "provider_acceptance_and_redacted_message_id_presence",
+    "sanitized_http_error_category_and_reason",
+    "provider_region_and_operation_provenance",
+    "fallback_and_retry_counters",
+    "privacy_boundary_and_template_digest",
+    "secret_and_data_leakage_scan",
+    "negative_or_partial_delivery_outcome",
+    "timestamps_versions_and_artifact_digests"
+  ],
+  "teardown": {
+    "googleResourcesCreated": 0,
+    "credentialStoreMutation": "forbidden",
+    "oauthConsentRevocation": "operator_managed_separate_action",
+    "localArtifacts": "retain_redacted_evidence_only",
+    "cleanupVerificationRequired": true
+  },
+  "claims": {
+    "contractPrepared": true,
+    "providerValidated": false,
+    "liveCallsExecuted": false,
+    "deliveryValidated": false,
+    "productionValidated": false,
+    "tokyoProcessingPinned": false,
+    "humanGateRequired": true
+  },
+  "humanGate": {
+    "required": true,
+    "approvalDoesNotAuthorizeOAuthConsent": true,
+    "approvalDoesNotAuthorizeCredentialAcquisition": true,
+    "approvalAuthorizesOnlyOneSyntheticSend": true,
+    "requiredApprovals": [
+      "NEW_CONTRACT_DIGEST",
+      "GOOGLE_GMAIL_API_PROVIDER",
+      "GMAIL_SEND_SCOPE_ONLY",
+      "SYNTHETIC_VERIFIED_SENDER",
+      "SYNTHETIC_VERIFIED_RECIPIENT",
+      "MAXIMUM_1_SEND_REQUEST",
+      "MAXIMUM_1_RECIPIENT",
+      "ZERO_RETRIES_AND_ZERO_FALLBACK",
+      "MAXIMUM_15_MINUTES",
+      "MAXIMUM_USD_0_10",
+      "NO_ACCOUNT_OR_RESOURCE_MUTATION"
+    ],
+    "approvalStatementTemplate": "I approve R4-422 Google Gmail live validation by exact SHA-256 digest <DIGEST>, authorize exactly one synthetic users.messages.send request with the gmail.send scope within the 15-minute and USD 0.10 limits, zero retries/fallback, no OAuth/account/resource mutation, and accept sanitized evidence and fail-closed semantics."
+  }
+}

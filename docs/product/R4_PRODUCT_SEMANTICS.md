@@ -66,5 +66,8 @@ This task freezes and locally validates semantics only. It does not create a
 preference database, send a notification, select a provider, authorize a
 recipient, supply credentials, approve spend, establish legal basis, or prove
 production accessibility. R4-421 implements preferences; R4-422 remains behind
-its external and human gates for real sends; R4-423 and R4-424 complete the role
-surfaces and end-to-end product evidence.
+its external and human gates for real sends; AWS SES is retired as an active
+provider after its preserved failed validation, and Google Gmail API is the
+active email-provider candidate pending a new bounded Human Gate. R4-423 and
+R4-424 complete the role surfaces and end-to-end product evidence. No Gmail
+live or production claim exists yet.

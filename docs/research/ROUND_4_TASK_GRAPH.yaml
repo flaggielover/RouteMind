@@ -130,6 +130,48 @@
     ],
     "next_action": "PRESERVE_INCONCLUSIVE_STATE; NO_FOURTH_SENDEMAIL_WITHOUT_NEW_EVIDENCE_AND_NEW_CONTRACT"
   },
+  "notification_ses_aws_support_diagnostic_package": {
+    "status": "READY_FOR_OPERATOR_SUBMISSION",
+    "preparation_only": true,
+    "aws_api_or_cli_calls": 0,
+    "send_email_requests": 0,
+    "aws_mutations": 0,
+    "historical_evidence_changed": false,
+    "another_sendemail_currently_justified": false,
+    "evidence": [
+      "evidence/gates/R4-422/aws-support/aws-ses-accessdenied-support-case-20260829.md",
+      "evidence/gates/R4-422/aws-support/aws-ses-accessdenied-technical-appendix-20260829.md",
+      "evidence/gates/R4-422/aws-support/aws-ses-accessdenied-support-package-20260829.json",
+      "evidence/gates/R4-422/aws-support/aws-ses-accessdenied-support-package-leakage-scan-20260829.json"
+    ],
+    "next_action": "OPERATOR_MAY_SUBMIT_SANITIZED_SUPPORT_CASE; NO_NEW_SEND"
+  },
+  "notification_provider_replacement": {
+    "parent_task": "R4-422",
+    "status": "IMPLEMENTED_OFFLINE / LIVE_VALIDATION_PENDING / NO_PRODUCTION_CLAIM",
+    "classification": "PROVIDER_NEUTRAL_TASK_WITH_ACTIVE_PROVIDER_REPLACEMENT",
+    "retired_provider": "AWS_SES",
+    "retired_provider_state": "BLOCKED / FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM",
+    "active_provider_candidate": "GOOGLE_GMAIL_API",
+    "operation": "users.messages.send",
+    "oauth_scope": "https://www.googleapis.com/auth/gmail.send",
+    "processing_region": "GOOGLE_MANAGED_NOT_REGION_PINNED",
+    "enabled_by_default": false,
+    "live_validation": "HUMAN_GATE_PENDING",
+    "contract": "contracts/provider/r4-422-google-gmail-live-validation-v1.json",
+    "canonical_sha256": "bc05c17490bcf1be3bd444ead6a68e941b29b0a09d71842283b228f8c5a811f1",
+    "evidence": [
+      "evidence/gates/R4-422/gmail-provider-replacement-20260829.md",
+      "evidence/gates/R4-422/gmail-provider-replacement-20260829.json",
+      "evidence/gates/R4-422/gmail-provider-replacement-leakage-scan-20260829.json"
+    ],
+    "aws_requests": 0,
+    "google_api_requests": 0,
+    "email_sends": 0,
+    "historical_ses_evidence_preserved": true,
+    "production_claim": false,
+    "next_action": "NEW_HUMAN_GATE_REQUIRED_BEFORE_OAUTH_OR_SEND"
+  },
   "architecture_invariants": [
     "Java owns durable business state, transactions, state machines, tenancy enforcement, and event production",
     "Python owns dispatch, optimization, simulation, RouteBench, RADS, experiments, analytics, and bounded agent intelligence",
