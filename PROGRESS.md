@@ -42,6 +42,8 @@ sessions/token exchanges/browser/SSH, zero retries/fallback, no
 attachments/CC/BCC/batch/reads, no Google/account/resource mutation, within
 15 minutes and USD 0.10, and accept sanitized evidence and fail-closed
 semantics without a production claim.”
+Preparation commit `b305df2` passed real GitHub Actions run `33266756073` with
+all five required jobs green.
 
 R4-422 Gmail credential refresh-only recovery execution (2026-08-30): the
 approved contract
