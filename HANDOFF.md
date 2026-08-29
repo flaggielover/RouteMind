@@ -6,7 +6,23 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - AWS SES SINGLE-SEND EXECUTION FAILED BEFORE SEND / NEW HUMAN GATE REQUIRED
+Current Task: R4-422 - LOCAL SES RUNTIME REPAIRED / NEW CONTRACT HUMAN GATE REQUIRED
+
+R4-422 local SES runtime repair (2026-08-29):
+`BLOCKED / LOCAL_RUNTIME_REPAIRED_AWAITING_NEW_CONTRACT`. The consumed digest
+`e942a04b080da7cf42645d757fec61a1fb67428b59da29f90c93227b06c7d660`
+and its prior fail-closed evidence are unchanged. The root cause was the
+diagnostic JShell launcher's manually assembled classpath omitting
+`org.reactivestreams.Publisher`; the production Maven graph was already complete
+and aligned at AWS SDK `2.31.77`, with `reactive-streams:1.0.4`, SLF4J `2.0.18`,
+and runtime HTTP clients present. `scripts/business-api.ps1 -Action ses-offline`
+now uses the repository Maven runtime and stops after local credential-chain
+resolution and `SesClient` construction/close. The focused test passes, the
+full 125-test Java suite passes, and AWS/SES/email/mutation/cost counters remain
+zero. No production dependency changed and no live contract was prepared.
+Evidence is under `evidence/gates/R4-422/aws-ses-runtime-repair-20260829.md` and
+the linked JSON/dependency-tree artifacts. Any future send requires a new exact
+contract and a new Human Gate.
 
 RM-237 Research Observability checkpoint (2026-08-29): `PASSED /
 FUTURE_DATA_READY / OBSERVABILITY_READY`. It is a single independent
@@ -17,7 +33,7 @@ redaction, and `ROUTEMIND_DATA_ROOT` JSONL export. Java owns optional metadata
 on the dispatch command, idempotency fingerprint, transactional Outbox
 provenance, and durable ledger columns. Schema/version is
 `routemind-policy-observation-v1`; missing measurements remain unavailable and
-no causal switch-cost claim is made. Compute 950 tests/95.10%, Java 124 tests,
+no causal switch-cost claim is made. Compute 950 tests/95.10%, Java 125 tests,
 contract/replay/control-plane/verify gates all pass locally. No empirical data,
 historical backfill, external API call, production claim, Human Gate change, or
 R3-325 mutation occurred. Evidence: `evidence/gates/RM-237/` and

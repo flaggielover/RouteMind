@@ -12,7 +12,23 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - AWS SES SINGLE-SEND EXECUTION FAILED BEFORE SEND / NEW HUMAN GATE REQUIRED
+Current Task: R4-422 - LOCAL SES RUNTIME REPAIRED / NEW CONTRACT HUMAN GATE REQUIRED
+
+R4-422 local SES runtime repair (2026-08-29): PASSED as
+`LOCAL_RUNTIME_REPAIRED_AWAITING_NEW_CONTRACT`. The historical consumed contract
+`e942a04b080da7cf42645d757fec61a1fb67428b59da29f90c93227b06c7d660`
+and its `FAIL_LOCAL_RUNTIME_DEPENDENCY_BEFORE_SEND` result remain immutable. The
+exact blocker was `java.lang.NoClassDefFoundError:
+org/reactivestreams/Publisher` in a manually assembled JShell classpath; Maven
+already supplied `org.reactivestreams:reactive-streams:1.0.4` through the
+aligned AWS SDK `2.31.77` graph. The repository helper now runs a focused
+offline construction test with Maven's complete runtime classpath. Local
+`DefaultCredentialsProvider` resolution and `SesClient` construction/close are
+`AVAILABLE`; the focused test and the 125-test Java suite pass. AWS network,
+`SendEmail`, email, mutation, retry, fallback, and cost counters remain zero.
+No production dependency changed, no new live contract exists, and no provider
+connectivity, acceptance, delivery, or production claim is made. Evidence:
+`evidence/gates/R4-422/aws-ses-runtime-repair-20260829.md`.
 
 RM-237 Research Observability checkpoint (2026-08-29): PASSED as
 `FUTURE_DATA_READY / OBSERVABILITY_READY`. This is one standalone,
@@ -23,7 +39,7 @@ durable ledger and Outbox provenance; Python records tick-level policy/switch
 observations, deterministic replay linkage, and a privacy-bounded
 `ROUTEMIND_DATA_ROOT` JSONL export. Schema/version is
 `routemind-policy-observation-v1`; unavailable outcomes remain explicit.
-Local Compute (950 tests, 95.10% coverage), Java (124 tests), contract, replay,
+Local Compute (950 tests, 95.10% coverage), Java (125 tests), contract, replay,
 and repository verification gates passed. No empirical records were created,
 historical tick logs backfilled, external API called, production claim changed,
 or R3-325 artifact/verdict touched. See `evidence/gates/RM-237/` and

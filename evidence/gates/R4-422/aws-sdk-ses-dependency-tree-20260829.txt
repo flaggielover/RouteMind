@@ -1,0 +1,35 @@
+com.routemind:business-api:jar:0.0.1-SNAPSHOT
++- software.amazon.awssdk:auth:jar:2.31.77:compile
+|  +- software.amazon.awssdk:annotations:jar:2.31.77:compile
+|  +- software.amazon.awssdk:utils:jar:2.31.77:compile
+|  |  +- org.reactivestreams:reactive-streams:jar:1.0.4:compile
+|  |  \- org.slf4j:slf4j-api:jar:2.0.18:compile
+|  +- software.amazon.awssdk:sdk-core:jar:2.31.77:compile
+|  |  +- software.amazon.awssdk:checksums-spi:jar:2.31.77:compile
+|  |  +- software.amazon.awssdk:checksums:jar:2.31.77:compile
+|  |  \- software.amazon.awssdk:retries:jar:2.31.77:compile
+|  +- software.amazon.awssdk:identity-spi:jar:2.31.77:compile
+|  +- software.amazon.awssdk:regions:jar:2.31.77:compile
+|  +- software.amazon.awssdk:profiles:jar:2.31.77:compile
+|  +- software.amazon.awssdk:http-client-spi:jar:2.31.77:compile
+|  +- software.amazon.awssdk:json-utils:jar:2.31.77:compile
+|  |  \- software.amazon.awssdk:third-party-jackson-core:jar:2.31.77:compile
+|  +- software.amazon.awssdk:http-auth-aws:jar:2.31.77:compile
+|  +- software.amazon.awssdk:http-auth-aws-eventstream:jar:2.31.77:compile
+|  +- software.amazon.awssdk:http-auth:jar:2.31.77:compile
+|  \- software.amazon.awssdk:http-auth-spi:jar:2.31.77:compile
++- software.amazon.awssdk:ses:jar:2.31.77:compile
+|  +- software.amazon.awssdk:aws-query-protocol:jar:2.31.77:compile
+|  +- software.amazon.awssdk:protocol-core:jar:2.31.77:compile
+|  +- software.amazon.awssdk:aws-core:jar:2.31.77:compile
+|  +- software.amazon.awssdk:metrics-spi:jar:2.31.77:compile
+|  +- software.amazon.awssdk:endpoints-spi:jar:2.31.77:compile
+|  +- software.amazon.awssdk:retries-spi:jar:2.31.77:compile
+|  +- software.amazon.awssdk:apache-client:jar:2.31.77:runtime
+|  |  +- org.apache.httpcomponents:httpclient:jar:4.5.13:runtime
+|  |  \- org.apache.httpcomponents:httpcore:jar:4.4.16:runtime
+|  \- software.amazon.awssdk:netty-nio-client:jar:2.31.77:runtime
+\- org.springframework.boot:spring-boot-starter-amqp:jar:4.1.1:compile
+   \- org.springframework.boot:spring-boot-starter:jar:4.1.1:compile
+      \- org.springframework.boot:spring-boot-starter-logging:jar:4.1.1:compile
+         \- org.slf4j:jul-to-slf4j:jar:2.0.18:compile
