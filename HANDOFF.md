@@ -22,6 +22,8 @@ Exact next human action: authorize a new independent bounded OAuth refresh or
 reauthorization contract; after credential readiness is restored, approve a
 new independent exactly-one Gmail send contract. Do not reuse this digest.
 Evidence: `evidence/gates/R4-422/google-gmail-single-send-preflight-failure-*`.
+Evidence checkpoint `20641e4e707a57b57877fec465e80d1e73f5ab22` passed real
+GitHub Actions run `33260439288` with all five required jobs green.
 
 R4-422 active-provider replacement checkpoint (2026-08-29): the R4-422 domain
 task is provider-neutral, so AWS SES remains a preserved historical

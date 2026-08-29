@@ -28,6 +28,8 @@ there is no provider, delivery, or production claim. A new OAuth refresh or
 reauthorization contract/Human Gate, followed by a new single-send contract/
 Human Gate, is required. Evidence is under
 `evidence/gates/R4-422/google-gmail-single-send-preflight-failure-*`.
+Evidence checkpoint `20641e4e707a57b57877fec465e80d1e73f5ab22` passed real
+GitHub Actions run `33260439288` with all five required jobs green.
 
 R4-422 active-provider replacement checkpoint (2026-08-29): R4-422 is
 provider-neutral at the domain contract, so the historical AWS SES result stays
