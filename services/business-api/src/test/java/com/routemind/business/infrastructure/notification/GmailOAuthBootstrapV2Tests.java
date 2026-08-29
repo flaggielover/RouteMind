@@ -15,10 +15,15 @@ class GmailOAuthBootstrapV2Tests {
 	@Test
 	void configurationRequiresExternalKnownHostsAndBoundedMacPort() {
 		Map<String, String> environment = new HashMap<>();
-		environment.put(GmailOAuthBootstrapConfiguration.CLIENT_FILE_ENV, "C:/operator/client.json");
-		environment.put(GmailOAuthBootstrapConfiguration.TOKEN_STORE_ENV, "C:/operator/tokens");
+		Path externalRoot = Path.of(System.getProperty("java.io.tmpdir"), "routemind-v2-config")
+				.toAbsolutePath().normalize();
+		environment.put(GmailOAuthBootstrapConfiguration.CLIENT_FILE_ENV,
+				externalRoot.resolve("client.json").toString());
+		environment.put(GmailOAuthBootstrapConfiguration.TOKEN_STORE_ENV,
+				externalRoot.resolve("tokens").toString());
 		environment.put(GmailOAuthBootstrapConfiguration.USER_ID_ENV, "operator");
-		environment.put(GmailOAuthBootstrapV2Configuration.KNOWN_HOSTS_ENV, "C:/operator/known_hosts");
+		environment.put(GmailOAuthBootstrapV2Configuration.KNOWN_HOSTS_ENV,
+				externalRoot.resolve("known_hosts").toString());
 		environment.put(GmailOAuthBootstrapV2Configuration.MAC_PORT_ENV, "52817");
 		GmailOAuthBootstrapV2Configuration configuration = GmailOAuthBootstrapV2Configuration
 				.fromEnvironment(environment);
