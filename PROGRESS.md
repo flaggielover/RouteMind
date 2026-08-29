@@ -31,6 +31,8 @@ contract cannot be reused; a new independent Gmail send contract and Human
 Gate are required. R3-325 remains frozen as
 `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`. Counts remain 167/197 overall and
 10/38 in Round 4.
+Execution checkpoint commit `c08f1e0` passed real GitHub Actions run
+`33265482119` with all five required jobs green.
 
 R4-422 credential refresh-only recovery preparation (2026-08-29): a new
 independent contract is prepared at

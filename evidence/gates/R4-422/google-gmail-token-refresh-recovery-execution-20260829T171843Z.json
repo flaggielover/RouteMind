@@ -5,6 +5,9 @@
   "contractSha256": "6c2b454101787c72459b3a5a7f01c18b25cf09d19ffd8ed90aaf3044e8b4b39f",
   "contractStatus": "CONSUMED_REFRESH_ONLY",
   "observedAtUtc": "2026-08-29T17:18:43Z",
+  "implementationCommit": "c08f1e0",
+  "ciRun": "33265482119",
+  "ciResult": "GREEN_ALL_REQUIRED_JOBS",
   "execution": {
     "result": "REFRESH_SUCCEEDED",
     "tokenRefreshRequests": 1,
