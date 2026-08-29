@@ -16,6 +16,7 @@ limited to one synthetic `SendEmail` request, one recipient, zero retries,
 15 minutes, and USD 0.10 in `ap-northeast-1`. No AWS call, email, mutation, or
 cost occurred during preparation. R4-422 remains `BLOCKED / HUMAN_GATE_PENDING`;
 the prior consumed contract and failure evidence are unchanged.
+Real GitHub Actions CI run `33233038421` passed all five required jobs.
 
 R4-422 local SES runtime repair (2026-08-29):
 `BLOCKED / LOCAL_RUNTIME_REPAIRED_AWAITING_NEW_CONTRACT`. The consumed digest
