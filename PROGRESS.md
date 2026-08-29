@@ -15,7 +15,8 @@ Repository Total: 167 / 197 tasks passed
 Current Task: R4-422 - SECOND SINGLE-SEND EXECUTION CLOSED / NEW CONTRACT REQUIRED
 
 R4-422 second single-send contract preparation (2026-08-29): a new exact
-contract is prepared but not approved or executed. Contract
+contract was prepared before approval and its subsequent single execution is
+recorded below. Contract
 `contracts/provider/r4-422-aws-ses-second-single-send-validation-v1.json` has
 canonical SHA-256
 `9c32cc9df3ac34e2a85f722ec2bcce6c64e9e5057a2f9e85e0e14656c082feaa` and allows
