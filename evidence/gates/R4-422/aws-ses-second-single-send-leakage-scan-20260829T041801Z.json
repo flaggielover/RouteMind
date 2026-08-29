@@ -1,0 +1,22 @@
+{
+  "scanId": "r4-422-aws-ses-second-single-send-execution-leakage-20260829T041801Z",
+  "status": "PASS",
+  "findings": 0,
+  "scope": [
+    "contracts/provider/r4-422-aws-ses-second-single-send-validation-v1.json",
+    "evidence/gates/R4-422/aws-ses-second-single-send-contract-20260829.md",
+    "evidence/gates/R4-422/aws-ses-second-single-send-preparation-20260829.json",
+    "evidence/gates/R4-422/aws-ses-second-single-send-execution-20260829T041801Z.json",
+    "evidence/gates/R4-422/aws-ses-second-single-send-usage-20260829T041801Z.json"
+  ],
+  "secretValuesRecorded": false,
+  "credentialIdentifiersRecorded": false,
+  "senderValueRecorded": false,
+  "recipientValueRecorded": false,
+  "providerMessageIdRecorded": false,
+  "rawProviderResponseRecorded": false,
+  "awsNetworkRequests": 1,
+  "sendEmailRequests": 1,
+  "emailsSent": 0,
+  "timestamp": "2026-08-29T04:18:06Z"
+}

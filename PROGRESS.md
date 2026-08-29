@@ -12,7 +12,7 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - SECOND SINGLE-SEND CONTRACT / HUMAN GATE PENDING
+Current Task: R4-422 - SECOND SINGLE-SEND EXECUTION CLOSED / NEW CONTRACT REQUIRED
 
 R4-422 second single-send contract preparation (2026-08-29): a new exact
 contract is prepared but not approved or executed. Contract
@@ -25,6 +25,20 @@ network calls, zero sends, zero mutations, and incurred USD 0.00. The prior
 consumed contract and failure evidence remain immutable. R4-422 stays
 `BLOCKED / HUMAN_GATE_PENDING`; a matching new Human Gate is required.
 Real GitHub Actions CI run `33233038421` passed all five required jobs.
+
+R4-422 second single-send execution (2026-08-29): the exact approved contract
+`9c32cc9df3ac34e2a85f722ec2bcce6c64e9e5057a2f9e85e0e14656c082feaa` was
+consumed with exactly one AWS SES `SendEmail` request. AWS returned normalized
+`AccessDenied` (`SesException`); no retry, fallback, second request, email
+delivery, message ID, or delivery receipt occurred. Local credential-chain
+resolution and SES client construction were available before the request.
+Observed cost is USD 0.00 with a conservative USD 0.10 contract bound; no AWS
+account, IAM, provider configuration, or resource mutation occurred. Evidence
+is redacted and append-only under `evidence/gates/R4-422/`; leakage scan passed.
+R4-422 remains `BLOCKED / FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM` and
+any subsequent attempt requires a new contract and Human Gate. Real GitHub
+Actions CI run `33233157325` passed all five required jobs for the preparation
+commit; this execution closure is now being synchronized.
 
 R4-422 local SES runtime repair (2026-08-29): PASSED as
 `LOCAL_RUNTIME_REPAIRED_AWAITING_NEW_CONTRACT`. The historical consumed contract
