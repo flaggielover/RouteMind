@@ -6,7 +6,8 @@ import java.util.regex.Pattern;
 
 public record DispatchAssignmentCommand(String requestId, String contractVersion, UUID courierId,
         String strategy, String strategyVersion, String inputDigest, String outputDigest,
-        boolean fallbackUsed, String fallbackReason, long expectedOrderVersion) {
+        boolean fallbackUsed, String fallbackReason, long expectedOrderVersion,
+        DispatchObservationMetadata observation) {
 
     private static final Pattern DIGEST = Pattern.compile("[0-9a-f]{64}");
 
@@ -20,6 +21,14 @@ public record DispatchAssignmentCommand(String requestId, String contractVersion
         requireDigest(outputDigest, "outputDigest");
         if (fallbackUsed) requireText(fallbackReason, "fallbackReason", 256);
         if (expectedOrderVersion < 0) throw new IllegalArgumentException("expectedOrderVersion must not be negative");
+        if (observation == null) observation = DispatchObservationMetadata.empty();
+    }
+
+    public DispatchAssignmentCommand(String requestId, String contractVersion, UUID courierId,
+            String strategy, String strategyVersion, String inputDigest, String outputDigest,
+            boolean fallbackUsed, String fallbackReason, long expectedOrderVersion) {
+        this(requestId, contractVersion, courierId, strategy, strategyVersion, inputDigest, outputDigest,
+                fallbackUsed, fallbackReason, expectedOrderVersion, DispatchObservationMetadata.empty());
     }
 
     private static void requireDigest(String value, String name) {

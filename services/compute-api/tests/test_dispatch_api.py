@@ -39,7 +39,11 @@ def test_dispatch_snapshot_is_live_and_uses_registry() -> None:
     assert metadata["travel_provider"] == "deterministic-local"
     assert metadata["travel_candidate_count"] == "2"
     assert metadata["travel_fallback_used"] == "true"
-    assert metadata["travel_fallback_reason"] in {"missing_credentials", "transport_error"}
+    assert metadata["travel_fallback_reason"] in {
+        "missing_credentials",
+        "transport_error",
+        "circuit_open",
+    }
     assert float(metadata["selected_travel_seconds"]) > 0
 
 

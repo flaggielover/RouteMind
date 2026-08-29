@@ -10,6 +10,11 @@ from time import perf_counter
 from routemind_compute.application.clock import SIMULATED_CLOCK, ClockDomain, validate_clock_domain
 from routemind_compute.application.parameters import Metadata
 from routemind_compute.application.registry import StrategyRegistry
+from routemind_compute.application.research_observability import (
+    PolicyObservation,
+    PolicyTrace,
+    canonical_digest,
+)
 from routemind_compute.application.travel import TravelTimeProvider
 from routemind_compute.domain.dispatch import CourierCandidate, DispatchProblem, GeoPoint
 
@@ -127,6 +132,7 @@ class ScenarioRun:
     simulated_end_tick: int = 0
     wall_clock_elapsed_seconds: float = field(default=0.0, compare=False)
     clock_domain: ClockDomain = SIMULATED_CLOCK
+    observations: tuple[PolicyObservation, ...] = ()
 
 
 class ScenarioKernel:
@@ -153,6 +159,15 @@ class ScenarioKernel:
         rng = random.Random(manifest.seed)
         decisions: list[ScenarioDecision] = []
         transitions: list[StateTransition] = []
+        policy_trace = PolicyTrace()
+        configuration_digest = canonical_digest(
+            {
+                "strategy": self.strategy,
+                "strategy_configuration": self.strategy_configuration,
+                "ticks_per_hour": self.ticks_per_hour,
+                "reference_data_id": manifest.reference_data_id,
+            }
+        )
         for event in sorted(manifest.demands, key=lambda item: (item.tick, item.request_id)):
             clock = clock.advance_to(event.tick)
             candidates = tuple(
@@ -165,11 +180,8 @@ class ScenarioKernel:
                 if self.registry.parameter_schema(self.strategy).parameters
                 else ()
             )
-            dispatch = self.registry.solve(
-                self.strategy,
-                DispatchProblem(event.request_id, event.pickup, candidates),
-                parameter_configuration,
-            )
+            problem = DispatchProblem(event.request_id, event.pickup, candidates)
+            dispatch = self.registry.solve(self.strategy, problem, parameter_configuration)
             decisions.append(
                 ScenarioDecision(
                     event.request_id,
@@ -178,6 +190,32 @@ class ScenarioKernel:
                     dispatch.strategy,
                     dispatch.strategy_version,
                 )
+            )
+            policy_trace.record(
+                run_id=f"twin:{manifest.scenario_id}:{manifest.seed}",
+                scenario_id=manifest.scenario_id,
+                decision_id=event.request_id,
+                request_id=event.request_id,
+                tick=event.tick,
+                selected_policy=dispatch.strategy,
+                policy_version=dispatch.strategy_version,
+                configuration_digest=configuration_digest,
+                deterministic_seed=manifest.seed,
+                clock_domain=manifest.clock_domain,
+                state={
+                    "active_order_count": len(decisions),
+                    "courier_candidate_count": len(candidates),
+                    "eligible_courier_count": len(problem.eligible_candidates()),
+                },
+                semantics={
+                    "active_order_count": "DERIVED",
+                    "courier_candidate_count": "OBSERVED",
+                    "eligible_courier_count": "DERIVED",
+                },
+                provenance={
+                    "reference_data_id": manifest.reference_data_id,
+                    "replay_source": "ScenarioKernel",
+                },
             )
             transitions.append(
                 StateTransition(
@@ -223,6 +261,10 @@ class ScenarioKernel:
                 }
                 for transition in transitions
             ],
+            "policy_observations": [
+                observation.as_dict(include_timestamp=False)
+                for observation in policy_trace.observations
+            ],
         }
         canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
         digest = hashlib.sha256(canonical.encode("utf-8")).hexdigest()
@@ -235,4 +277,5 @@ class ScenarioKernel:
             clock.tick,
             perf_counter() - wall_started,
             manifest.clock_domain,
+            policy_trace.observations,
         )

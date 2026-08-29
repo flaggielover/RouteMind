@@ -53,7 +53,15 @@ public class DispatchAssignmentCommandService {
                 command.courierId().toString(), command.strategy(), command.strategyVersion(), command.inputDigest(),
                 command.outputDigest(), Boolean.toString(command.fallbackUsed()),
                 command.fallbackReason() == null ? "" : command.fallbackReason(),
-                Long.toString(command.expectedOrderVersion()));
+                Long.toString(command.expectedOrderVersion()),
+                command.observation().schemaVersion(), command.observation().runId() == null ? "" : command.observation().runId(),
+                command.observation().scenarioId() == null ? "" : command.observation().scenarioId(),
+                command.observation().simulationTick() == null ? "" : Long.toString(command.observation().simulationTick()),
+                command.observation().decisionReason(), command.observation().policySelectionMode(),
+                command.observation().fallbackState(), command.observation().configurationDigest() == null ? "" : command.observation().configurationDigest(),
+                command.observation().deterministicSeed() == null ? "" : Long.toString(command.observation().deterministicSeed()),
+                command.observation().stateSnapshotReference() == null ? "" : command.observation().stateSnapshotReference(),
+                command.observation().decisionProvenanceReference() == null ? "" : command.observation().decisionProvenanceReference());
         DispatchAssignmentAudit existing = audits.findByIdempotencyKey(key).orElse(null);
         if (existing != null) {
             if (!existing.requestHash().equals(requestHash)) throw new DispatchAssignmentConflictException("idempotency_key_reused");
@@ -93,6 +101,18 @@ public class DispatchAssignmentCommandService {
         payload.put("leaseId", lease.leaseId().toString());
         payload.put("leaseGeneration", lease.generation());
         payload.put("fallbackUsed", command.fallbackUsed());
+        var observation = command.observation().effectiveFallback(command.fallbackUsed());
+        payload.put("observationSchemaVersion", observation.schemaVersion());
+        payload.put("observationDecisionReason", observation.decisionReason());
+        payload.put("observationPolicySelectionMode", observation.policySelectionMode());
+        payload.put("observationFallbackState", observation.fallbackState());
+        putIfPresent(payload, "observationRunId", observation.runId());
+        putIfPresent(payload, "observationScenarioId", observation.scenarioId());
+        putIfPresent(payload, "observationSimulationTick", observation.simulationTick());
+        putIfPresent(payload, "observationConfigurationDigest", observation.configurationDigest());
+        putIfPresent(payload, "observationDeterministicSeed", observation.deterministicSeed());
+        putIfPresent(payload, "observationStateSnapshotReference", observation.stateSnapshotReference());
+        putIfPresent(payload, "observationProvenanceReference", observation.decisionProvenanceReference());
         if (command.fallbackReason() != null && !command.fallbackReason().isBlank()) payload.put("fallbackReason", command.fallbackReason());
         outbox.save(OutboxMessage.pending(new EventEnvelope("1.0", UUID.randomUUID(),
                 "dispatch.assignment.applied", clock.instant(), "business-api", tenants.current().value(),
@@ -100,6 +120,10 @@ public class DispatchAssignmentCommandService {
                 correlationId, null, traceId, payload)));
         return new DispatchAssignmentResult(orderId.value(), command.courierId(), transition.status(),
                 transition.version(), transition.replayed(), audit);
+    }
+
+    private static void putIfPresent(Map<String, Object> payload, String key, Object value) {
+        if (value != null) payload.put(key, value);
     }
 
     private static String requireKey(String key) {

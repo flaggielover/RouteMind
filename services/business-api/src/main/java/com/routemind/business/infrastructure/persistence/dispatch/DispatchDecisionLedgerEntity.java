@@ -33,6 +33,17 @@ class DispatchDecisionLedgerEntity extends TenantScopedEntity {
     @Column(name = "input_snapshot_json", nullable = false, columnDefinition = "TEXT") private String inputSnapshotJson;
     @Column(name = "output_snapshot_json", nullable = false, columnDefinition = "TEXT") private String outputSnapshotJson;
     @Column(name = "created_at", nullable = false) private Instant createdAt;
+    @Column(name = "observation_schema_version", nullable = false, length = 128) private String observationSchemaVersion;
+    @Column(name = "observation_run_id", length = 256) private String observationRunId;
+    @Column(name = "observation_scenario_id", length = 256) private String observationScenarioId;
+    @Column(name = "observation_simulation_tick") private Long observationSimulationTick;
+    @Column(name = "observation_decision_reason", nullable = false, length = 128) private String observationDecisionReason;
+    @Column(name = "observation_policy_selection_mode", nullable = false, length = 128) private String observationPolicySelectionMode;
+    @Column(name = "observation_fallback_state", nullable = false, length = 64) private String observationFallbackState;
+    @Column(name = "observation_configuration_digest", length = 64) private String observationConfigurationDigest;
+    @Column(name = "observation_deterministic_seed") private Long observationDeterministicSeed;
+    @Column(name = "observation_state_snapshot_reference", length = 256) private String observationStateSnapshotReference;
+    @Column(name = "observation_provenance_reference", length = 256) private String observationProvenanceReference;
 
     protected DispatchDecisionLedgerEntity() {
     }
@@ -67,11 +78,29 @@ class DispatchDecisionLedgerEntity extends TenantScopedEntity {
         inputSnapshotJson = ledger.inputSnapshotJson();
         outputSnapshotJson = ledger.outputSnapshotJson();
         createdAt = ledger.createdAt();
+        var observation = ledger.observation();
+        observationSchemaVersion = observation.schemaVersion();
+        observationRunId = observation.runId();
+        observationScenarioId = observation.scenarioId();
+        observationSimulationTick = observation.simulationTick();
+        observationDecisionReason = observation.decisionReason();
+        observationPolicySelectionMode = observation.policySelectionMode();
+        observationFallbackState = observation.fallbackState();
+        observationConfigurationDigest = observation.configurationDigest();
+        observationDeterministicSeed = observation.deterministicSeed();
+        observationStateSnapshotReference = observation.stateSnapshotReference();
+        observationProvenanceReference = observation.decisionProvenanceReference();
     }
 
     DispatchDecisionLedger toDomain() {
         return new DispatchDecisionLedger(logicalDecisionId, requestId, logicalIdempotencyKey, orderId, courierId, strategy,
                 strategyVersion, referenceDataId, clockDomain, inputDigest, outputDigest, inputSnapshotDigest,
-                outputSnapshotDigest, inputSnapshotJson, outputSnapshotJson, createdAt);
+                outputSnapshotDigest, inputSnapshotJson, outputSnapshotJson, createdAt,
+                new com.routemind.business.domain.dispatch.DispatchObservationMetadata(
+                        observationSchemaVersion, observationRunId, observationScenarioId,
+                        observationSimulationTick, observationDecisionReason,
+                        observationPolicySelectionMode, observationFallbackState,
+                        observationConfigurationDigest, observationDeterministicSeed,
+                        observationStateSnapshotReference, observationProvenanceReference));
     }
 }

@@ -36,10 +36,11 @@ public class DispatchDecisionLedgerService {
             DispatchAssignmentLease lease, OrderCommandResult transition) {
         String inputSnapshot = snapshot(input(orderId, command));
         String outputSnapshot = snapshot(output(orderId, command, lease, transition));
+        var observation = command.observation().effectiveFallback(command.fallbackUsed());
         DispatchDecisionLedger candidate = new DispatchDecisionLedger(command.requestId(), command.requestId(),
                 idempotencyKey, orderId, command.courierId(), command.strategy(), command.strategyVersion(),
                 REFERENCE_DATA_ID, "WALL", command.inputDigest(), command.outputDigest(), digest(inputSnapshot),
-                digest(outputSnapshot), inputSnapshot, outputSnapshot, clock.instant());
+                digest(outputSnapshot), inputSnapshot, outputSnapshot, clock.instant(), observation);
         DispatchDecisionLedger existing = ledgers.findByDecisionId(candidate.decisionId()).orElse(null);
         if (existing != null) {
             if (!existing.inputDigest().equals(candidate.inputDigest())
@@ -66,6 +67,17 @@ public class DispatchDecisionLedgerService {
         values.put("request_id", command.requestId());
         values.put("strategy", command.strategy());
         values.put("strategy_version", command.strategyVersion());
+        values.put("observation_schema_version", command.observation().schemaVersion());
+        values.put("run_id", command.observation().runId());
+        values.put("scenario_id", command.observation().scenarioId());
+        values.put("simulation_tick", command.observation().simulationTick());
+        values.put("decision_reason", command.observation().decisionReason());
+        values.put("policy_selection_mode", command.observation().policySelectionMode());
+        values.put("fallback_state", command.observation().effectiveFallback(command.fallbackUsed()).fallbackState());
+        values.put("configuration_digest", command.observation().configurationDigest());
+        values.put("deterministic_seed", command.observation().deterministicSeed());
+        values.put("state_snapshot_reference", command.observation().stateSnapshotReference());
+        values.put("decision_provenance_reference", command.observation().decisionProvenanceReference());
         return values;
     }
 

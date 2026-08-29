@@ -1,0 +1,22 @@
+{
+  "schema_version": "routemind-policy-observation-v1",
+  "run_id": "fixture-run-1",
+  "decision_id": "decision-1",
+  "request_id": "request-1",
+  "tick": 4,
+  "clock_domain": "SIMULATED",
+  "previous_policy": "nearest",
+  "selected_policy": "nearest",
+  "switch_occurred": true,
+  "switch_reason": "invalid",
+  "selection_mode": "deterministic",
+  "policy_version": "1.0.0",
+  "configuration_digest": "not-a-digest",
+  "deterministic_seed": null,
+  "fallback_state": "NONE",
+  "state": {},
+  "semantics": {},
+  "consequences": [],
+  "provenance": {},
+  "observation_semantics": "observational_association; not causal_switch_cost"
+}

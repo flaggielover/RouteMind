@@ -8,6 +8,22 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: R4-422 - AWS SES SINGLE-SEND EXECUTION FAILED BEFORE SEND / NEW HUMAN GATE REQUIRED
 
+RM-237 Research Observability checkpoint (2026-08-29): `PASSED /
+FUTURE_DATA_READY / OBSERVABILITY_READY`. It is a single independent
+research-enabling task with dependencies RM-003, RM-205, RM-233, and RM-234;
+it is not attached to Round 4 external execution. Python owns versioned
+tick-level policy/switch observations, replay digests, semantic classes,
+redaction, and `ROUTEMIND_DATA_ROOT` JSONL export. Java owns optional metadata
+on the dispatch command, idempotency fingerprint, transactional Outbox
+provenance, and durable ledger columns. Schema/version is
+`routemind-policy-observation-v1`; missing measurements remain unavailable and
+no causal switch-cost claim is made. Compute 950 tests/95.10%, Java 124 tests,
+contract/replay/control-plane/verify gates all pass locally. No empirical data,
+historical backfill, external API call, production claim, Human Gate change, or
+R3-325 mutation occurred. Evidence: `evidence/gates/RM-237/` and
+`research/observability/`. The existing R4-422 Human Gate remains the current
+external boundary and no safe next task is eligible.
+
 R4-422 single-send execution closure (2026-08-29): exact approved contract
 `e942a04b080da7cf42645d757fec61a1fb67428b59da29f90c93227b06c7d660` was
 consumed fail-closed. Local `DefaultCredentialsProvider` resolution was

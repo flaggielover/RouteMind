@@ -8,7 +8,8 @@ import java.util.regex.Pattern;
 public record DispatchDecisionLedger(String decisionId, String requestId, String idempotencyKey,
         UUID orderId, UUID courierId, String strategy, String strategyVersion, String referenceDataId,
         String clockDomain, String inputDigest, String outputDigest, String inputSnapshotDigest,
-        String outputSnapshotDigest, String inputSnapshotJson, String outputSnapshotJson, Instant createdAt) {
+        String outputSnapshotDigest, String inputSnapshotJson, String outputSnapshotJson, Instant createdAt,
+        DispatchObservationMetadata observation) {
 
     private static final Pattern DIGEST = Pattern.compile("[0-9a-f]{64}");
 
@@ -29,6 +30,17 @@ public record DispatchDecisionLedger(String decisionId, String requestId, String
         requireSnapshot(inputSnapshotJson, "inputSnapshotJson");
         requireSnapshot(outputSnapshotJson, "outputSnapshotJson");
         Objects.requireNonNull(createdAt, "createdAt");
+        Objects.requireNonNull(observation, "observation");
+    }
+
+    public DispatchDecisionLedger(String decisionId, String requestId, String idempotencyKey,
+            UUID orderId, UUID courierId, String strategy, String strategyVersion, String referenceDataId,
+            String clockDomain, String inputDigest, String outputDigest, String inputSnapshotDigest,
+            String outputSnapshotDigest, String inputSnapshotJson, String outputSnapshotJson, Instant createdAt) {
+        this(decisionId, requestId, idempotencyKey, orderId, courierId, strategy, strategyVersion,
+                referenceDataId, clockDomain, inputDigest, outputDigest, inputSnapshotDigest,
+                outputSnapshotDigest, inputSnapshotJson, outputSnapshotJson, createdAt,
+                DispatchObservationMetadata.empty());
     }
 
     private static void requireDigest(String value, String name) {

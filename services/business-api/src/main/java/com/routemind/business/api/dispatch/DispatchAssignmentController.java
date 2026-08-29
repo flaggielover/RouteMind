@@ -7,6 +7,7 @@ import com.routemind.business.application.dispatch.DispatchAssignmentResult;
 import com.routemind.business.application.order.OrderCommandAuthorizationException;
 import com.routemind.business.application.order.OrderCommandConflictException;
 import com.routemind.business.domain.dispatch.DispatchAssignmentCommand;
+import com.routemind.business.domain.dispatch.DispatchObservationMetadata;
 import com.routemind.business.domain.order.OrderId;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -43,7 +44,8 @@ public final class DispatchAssignmentController {
         if (request == null) throw new IllegalArgumentException("dispatch assignment request is required");
         DispatchAssignmentCommand command = new DispatchAssignmentCommand(request.requestId(), request.contractVersion(),
                 request.courierId(), request.strategy(), request.strategyVersion(), request.inputDigest(),
-                request.outputDigest(), request.fallbackUsed(), request.fallbackReason(), request.expectedOrderVersion());
+                request.outputDigest(), request.fallbackUsed(), request.fallbackReason(), request.expectedOrderVersion(),
+                observation(request.observation()));
         DispatchAssignmentResult result = assignments.apply(new OrderId(orderId), command, correlation(correlationId),
                 traceId(), idempotencyKey);
         return DispatchAssignmentResponse.from(result, traceId());
@@ -94,7 +96,22 @@ public final class DispatchAssignmentController {
 
     public record DispatchAssignmentRequest(String requestId, String contractVersion, UUID courierId,
             String strategy, String strategyVersion, String inputDigest, String outputDigest,
-            boolean fallbackUsed, String fallbackReason, long expectedOrderVersion) {
+            boolean fallbackUsed, String fallbackReason, long expectedOrderVersion,
+            ObservationRequest observation) {
+    }
+
+    public record ObservationRequest(String schemaVersion, String runId, String scenarioId,
+            Long simulationTick, String decisionReason, String policySelectionMode, String fallbackState,
+            String configurationDigest, Long deterministicSeed, String stateSnapshotReference,
+            String decisionProvenanceReference) {
+    }
+
+    private static DispatchObservationMetadata observation(ObservationRequest request) {
+        if (request == null) return DispatchObservationMetadata.empty();
+        return new DispatchObservationMetadata(request.schemaVersion(), request.runId(), request.scenarioId(),
+                request.simulationTick(), request.decisionReason(), request.policySelectionMode(),
+                request.fallbackState(), request.configurationDigest(), request.deterministicSeed(),
+                request.stateSnapshotReference(), request.decisionProvenanceReference());
     }
 
     public record DispatchAssignmentResponse(UUID orderId, UUID courierId, String status, long version,

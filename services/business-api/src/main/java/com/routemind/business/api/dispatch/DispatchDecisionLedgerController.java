@@ -2,6 +2,7 @@ package com.routemind.business.api.dispatch;
 
 import com.routemind.business.application.dispatch.DispatchDecisionLedgerRepository;
 import com.routemind.business.domain.dispatch.DispatchDecisionLedger;
+import com.routemind.business.domain.dispatch.DispatchObservationMetadata;
 import java.time.Instant;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
@@ -34,14 +35,15 @@ public final class DispatchDecisionLedgerController {
     public record DecisionLedgerResponse(String decisionId, String requestId, String idempotencyKey,
             UUID orderId, UUID courierId, String strategy, String strategyVersion, String referenceDataId,
             String clockDomain, String inputDigest, String outputDigest, String inputSnapshotDigest,
-            String outputSnapshotDigest, String inputSnapshotJson, String outputSnapshotJson, Instant createdAt) {
+            String outputSnapshotDigest, String inputSnapshotJson, String outputSnapshotJson, Instant createdAt,
+            DispatchObservationMetadata observation) {
 
         static DecisionLedgerResponse from(DispatchDecisionLedger ledger) {
             return new DecisionLedgerResponse(ledger.decisionId(), ledger.requestId(), ledger.idempotencyKey(),
                     ledger.orderId(), ledger.courierId(), ledger.strategy(), ledger.strategyVersion(),
                     ledger.referenceDataId(), ledger.clockDomain(), ledger.inputDigest(), ledger.outputDigest(),
                     ledger.inputSnapshotDigest(), ledger.outputSnapshotDigest(), ledger.inputSnapshotJson(),
-                    ledger.outputSnapshotJson(), ledger.createdAt());
+                    ledger.outputSnapshotJson(), ledger.createdAt(), ledger.observation());
         }
     }
 }
