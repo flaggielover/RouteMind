@@ -1,0 +1,104 @@
+{
+  "task": "R4-422",
+  "artifact": "SES_IAM_AUTHORIZATION_SEMANTICS_DIFFERENTIAL_AUDIT",
+  "date": "2026-08-29",
+  "status": "COMPLETED_OFFLINE_INCONCLUSIVE",
+  "verdict": "AUTHORIZATION_MODEL_VALID_NO_STATIC_CAUSE_FOUND",
+  "confidence": "MEDIUM",
+  "historical_state_unchanged": true,
+  "historical_result": "FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM",
+  "frozen_r3_325": "E-PASS / X-PASS / S-FAIL / C-NO-CLAIM",
+  "external_sendemail_requests": 0,
+  "aws_mutations": 0,
+  "fourth_sendemail_currently_justified": false,
+  "policy": {
+    "effect": "Allow",
+    "actions": ["ses:SendEmail", "ses:SendRawEmail"],
+    "resource": "EXACT_VERIFIED_IDENTITY_ARN_REDACTED",
+    "resource_region": "ap-northeast-1",
+    "resource_identity_relationship": "same_account_verified_sender",
+    "conditions": {
+      "StringEquals:ses:FromAddress": "EXACT_VERIFIED_SENDER_REDACTED",
+      "ForAllValues:StringEquals:ses:Recipients": ["EXACT_VERIFIED_SYNTHETIC_RECIPIENT_REDACTED"],
+      "Bool:aws:SecureTransport": "true"
+    },
+    "permissions_boundary": "NOT_CONFIGURED"
+  },
+  "resource_semantics": {
+    "send_email_identity_resource_supported": "YES",
+    "identity_resource_required_by_service_authorization_reference": true,
+    "recipient_resources_evaluated": false,
+    "sandbox_verification_is_iam_substitute": false
+  },
+  "condition_semantics": {
+    "ses_from_address_type": "String",
+    "ses_recipients_type": "ArrayOfString",
+    "ses_recipients_members": ["To", "CC", "BCC"],
+    "string_equals_case_sensitive": true,
+    "for_all_values_requires_every_context_value_to_match": true,
+    "for_all_values_missing_or_empty_is_vacuously_true": true,
+    "ordinary_missing_condition_key_fails": true,
+    "if_exists_or_null_used": false
+  },
+  "delegated_sending": {
+    "required": "NO_FOR_SAME_ACCOUNT_OWN_IDENTITY",
+    "source_arn_present": false,
+    "from_arn_present": false,
+    "return_path_arn_present": false,
+    "identity_sending_authorization_policy_present": false
+  },
+  "simulator_limitations": {
+    "binary_iam_outcome_only": true,
+    "actual_service_request": false,
+    "service_response_returned": false,
+    "service_side_checks_proven": false,
+    "most_service_condition_values_supplied_by_simulator_input": true,
+    "live_results_can_differ": true
+  },
+  "console_findings": {
+    "iam_inline_policy_count": 1,
+    "inline_policy_name": "RouteMindSesBoundedSend",
+    "ses_region": "ap-northeast-1",
+    "ses_account_state": "SANDBOX_HEALTHY",
+    "verified_identity_count": 2,
+    "verified_identity_status": "ALL_DISPLAYED_VERIFIED"
+  },
+  "root_cause": {
+    "classification": "AUTHORIZATION_MODEL_VALID_NO_STATIC_CAUSE_FOUND",
+    "strongest_explanation": "SIMULATOR_EVALUATES_MODELED_IAM_CONTEXT_WHILE_REAL_SES_APPLIES_UNOBSERVED_SERVICE_OR_REQUEST_CONTEXT_AUTHORIZATION",
+    "adapter_defect": "NOT_DEMONSTRATED",
+    "fixture_defect": "NOT_APPLICABLE",
+    "provider_capability": "NOT_DISPROVEN",
+    "confidence": "MEDIUM",
+    "falsification": "A_RETAINED_PROVIDER_DENIAL_REASON_OR_READ_ONLY_SERVICE_DECISION_DETAIL_IDENTIFIES_AN_EXACT_MISMATCH"
+  },
+  "proposed_fix": {
+    "justified": false,
+    "aws_mutation_required": "NO_FIX_PROPOSED",
+    "route_mind_code_change": false,
+    "iam_change": false,
+    "ses_identity_authorization_change": false
+  },
+  "official_sources": [
+    "https://docs.aws.amazon.com/service-authorization/latest/reference/list_ses.html",
+    "https://docs.aws.amazon.com/ses/latest/dg/policy-anatomy.html",
+    "https://docs.aws.amazon.com/ses/latest/dg/sending-authorization-overview.html",
+    "https://docs.aws.amazon.com/ses/latest/APIReference/API_SendEmail.html",
+    "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_testing-policies.html",
+    "https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html"
+  ],
+  "offline_tests": {
+    "command": "python -m unittest scripts/ses_iam_policy_differential_model_test.py",
+    "result": "PASS",
+    "tests": 7
+  },
+  "security_leakage_scan": "PASS",
+  "leakage_scan_evidence": "evidence/gates/R4-422/aws-ses-iam-authorization-semantics-differential-audit-leakage-scan-20260829.json",
+  "evidence_paths": [
+    "evidence/gates/R4-422/aws-ses-iam-authorization-semantics-differential-audit-20260829.md",
+    "evidence/gates/R4-422/aws-ses-iam-authorization-semantics-differential-audit-20260829.json",
+    "scripts/ses_iam_policy_differential_model.py",
+    "scripts/ses_iam_policy_differential_model_test.py"
+  ],
+  "next_action": "PRESERVE_INCONCLUSIVE_STATE; NO_FOURTH_SENDEMAIL_WITHOUT_NEW_EVIDENCE_AND_NEW_CONTRACT"
+}

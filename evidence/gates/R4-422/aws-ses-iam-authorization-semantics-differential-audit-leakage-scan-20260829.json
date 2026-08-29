@@ -1,0 +1,20 @@
+{
+  "task": "R4-422",
+  "artifact": "SES_IAM_AUTHORIZATION_SEMANTICS_DIFFERENTIAL_AUDIT",
+  "scan_scope": [
+    "audit markdown",
+    "audit JSON",
+    "offline differential model",
+    "offline differential model tests"
+  ],
+  "result": "PASS",
+  "secrets_detected": false,
+  "credential_identifiers_detected": false,
+  "full_addresses_detected": false,
+  "account_identifiers_detected": false,
+  "raw_provider_messages_detected": false,
+  "aws_requests": 0,
+  "aws_mutations": 0,
+  "historical_evidence_modified": false,
+  "notes": "Only redacted semantic labels and documentation URLs are retained."
+}

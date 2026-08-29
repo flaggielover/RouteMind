@@ -62,7 +62,7 @@
     "historical_result_unchanged": true,
     "real_adapter_enabled_by_default": false,
     "sdk_retries": 0,
-    "another_sendemail_currently_justified": true,
+    "another_sendemail_currently_justified": false,
     "new_contract_created": false,
     "evidence": [
       "evidence/gates/R4-422/aws-ses-runtime-context-observability-offline-audit-20260829.md",
@@ -112,6 +112,23 @@
       "evidence/gates/R4-422/aws-ses-third-single-send-execution-closure-20260829T071645Z.md"
     ],
     "next_action": "NEW_EXACT_CONTRACT_AND_HUMAN_GATE_REQUIRED"
+  },
+  "notification_ses_iam_authorization_differential_audit": {
+    "status": "COMPLETED_OFFLINE_INCONCLUSIVE",
+    "verdict": "AUTHORIZATION_MODEL_VALID_NO_STATIC_CAUSE_FOUND",
+    "confidence": "MEDIUM",
+    "external_sendemail_requests": 0,
+    "aws_mutations": 0,
+    "fourth_sendemail_currently_justified": false,
+    "historical_state_unchanged": true,
+    "evidence": [
+      "evidence/gates/R4-422/aws-ses-iam-authorization-semantics-differential-audit-20260829.md",
+      "evidence/gates/R4-422/aws-ses-iam-authorization-semantics-differential-audit-20260829.json",
+      "evidence/gates/R4-422/aws-ses-iam-authorization-semantics-differential-audit-leakage-scan-20260829.json",
+      "scripts/ses_iam_policy_differential_model.py",
+      "scripts/ses_iam_policy_differential_model_test.py"
+    ],
+    "next_action": "PRESERVE_INCONCLUSIVE_STATE; NO_FOURTH_SENDEMAIL_WITHOUT_NEW_EVIDENCE_AND_NEW_CONTRACT"
   },
   "architecture_invariants": [
     "Java owns durable business state, transactions, state machines, tenancy enforcement, and event production",

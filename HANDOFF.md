@@ -8,6 +8,29 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: R4-422 - THIRD SES DIAGNOSTIC CONSUMED / PROVIDER REJECTED
 
+R4-422 SES IAM authorization semantics differential audit (2026-08-29):
+read-only AWS Console and official-documentation audit completed with verdict
+`AUTHORIZATION_MODEL_VALID_NO_STATIC_CAUSE_FOUND` (medium confidence). The
+current inline IAM policy semantically allows `ses:SendEmail` and
+`ses:SendRawEmail` on the exact verified identity ARN in `ap-northeast-1`, with
+case-sensitive `ses:FromAddress`, multivalued `ForAllValues:StringEquals
+ses:Recipients`, and `aws:SecureTransport=true`. SES's Service Authorization
+Reference supports the required identity resource and condition keys. The
+Console showed two Tokyo identities as verified, a healthy sandbox account,
+and no permissions boundary. Same-account sending does not require delegated
+`SourceArn`/`FromArn`/`ReturnPathArn` fields. AWS's IAM Policy Simulator only
+evaluates the policies and context supplied to it, returns a binary IAM
+decision, makes no service request, and returns no service response; AWS warns
+that simulator and live results can differ. The stable real SES `AccessDenied` /
+HTTP 403 therefore remains narrowed to an unobserved SES service-side or
+request-context authorization difference; no exact documented static cause,
+adapter defect, or policy defect was found. No IAM/SES/AWS mutation or SendEmail
+request occurred, and all historical R4-422 evidence remains unchanged.
+Offline analytical model tests pass 7/7. Evidence:
+`evidence/gates/R4-422/aws-ses-iam-authorization-semantics-differential-audit-20260829.md`
+and `evidence/gates/R4-422/aws-ses-iam-authorization-semantics-differential-audit-20260829.json`.
+`FOURTH_SENDEMAIL_CURRENTLY_JUSTIFIED = NO`.
+
 R4-422 third AWS SES single-send diagnostic execution (2026-08-29): exact
 Human Gate approval consumed contract
 `contracts/provider/r4-422-aws-ses-third-single-send-diagnostic-v1.json` at
