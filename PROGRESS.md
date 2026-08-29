@@ -113,6 +113,24 @@ been executed. Evidence:
 and the passing leakage scan. The historical key contract and its incomplete
 execution evidence remain immutable.
 
+Password-authenticated remote-forward synthetic execution (2026-08-29): the
+approved contract `3c8cb8104cad351b74620f68fa02129c516a46a458401ae78a909b3879aec215`
+was consumed for exactly one Windows native `ssh.exe` launch targeting
+`suzhe@10.10.1.27`. The process exited with code `1` before the single
+synthetic localhost request was observed; SSH connection and remote-forward
+establishment remain unconfirmed. No password bytes were read, captured,
+logged, persisted, echoed, or automated. Synthetic requests, OAuth sessions,
+token exchanges, Google requests, Gmail message requests, and email sends were
+all zero. The listener and SSH process were torn down, no resources or
+credential stores changed, and cost was USD `0.00`. Exact SSH diagnostics were
+not retained, so the root cause is `UNKNOWN_SSH_EXIT_WITHOUT_RETAINED_DIAGNOSTICS`.
+This is `INCOMPLETE_CONSUMED / DIAGNOSTIC_INCOMPLETE / NO_RETRY`; no second
+attempt or OAuth stage is authorized. Evidence:
+`evidence/gates/R4-422/gmail-oauth-password-remote-forward-execution-20260829T115910Z.json`,
+its closure markdown, and its redacted leakage scan. Historical key-based
+evidence remains unchanged. Overall and Round 4 counts remain `167/197` and
+`10/38`.
+
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 completed read-only Console/documentation/offline audit with verdict
 `AUTHORIZATION_MODEL_VALID_NO_STATIC_CAUSE_FOUND` at medium confidence. The

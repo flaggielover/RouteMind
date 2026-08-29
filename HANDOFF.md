@@ -113,6 +113,23 @@ executed. Preparation evidence is under
 with a passing leakage scan. State: `PREPARED_OFFLINE / HUMAN_GATE_PENDING /
 SYNTHETIC_ONLY / NO_OAUTH`.
 
+Password-authenticated remote-forward synthetic execution (2026-08-29): exact
+Human Gate contract `3c8cb8104cad351b74620f68fa02129c516a46a458401ae78a909b3879aec215`
+was consumed once. One Windows native `ssh.exe` process was launched for
+`suzhe@10.10.1.27` with strict external `known_hosts` and loopback-only
+forwarding, but it exited with code `1` before any synthetic request. SSH
+connection and forward establishment are unconfirmed and no detailed SSH
+diagnostics were retained. Password data was never read or captured by
+Codex/Java. No synthetic request, OAuth session, token exchange, Google/Gmail
+request, or email send occurred. Teardown stopped the listener and SSH process;
+no resources or credential stores changed; cost was USD `0.00`. The result is
+`INCOMPLETE_CONSUMED / DIAGNOSTIC_INCOMPLETE / NO_RETRY` with root cause
+`UNKNOWN_SSH_EXIT_WITHOUT_RETAINED_DIAGNOSTICS`; no retry or OAuth stage is
+authorized without a new contract and Human Gate. Evidence:
+`evidence/gates/R4-422/gmail-oauth-password-remote-forward-execution-20260829T115910Z.json`,
+its closure markdown, and its redacted leakage scan. Historical key-based
+contract/evidence remain unchanged.
+
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 read-only AWS Console and official-documentation audit completed with verdict
 `AUTHORIZATION_MODEL_VALID_NO_STATIC_CAUSE_FOUND` (medium confidence). The

@@ -223,7 +223,7 @@
   },
   "gmail_oauth_password_remote_forward": {
     "parent_task": "R4-422",
-    "status": "PREPARED_OFFLINE / HUMAN_GATE_PENDING / SYNTHETIC_ONLY / NO_OAUTH",
+    "status": "INCOMPLETE_CONSUMED / DIAGNOSTIC_INCOMPLETE / NO_RETRY / OAUTH_NOT_EXECUTED",
     "classification": "EXPLICIT_PASSWORD_AUTH_SYNTHETIC_FORWARD_BOUNDARY",
     "provider": "GOOGLE_GMAIL_API",
     "operation": "ssh_remote_forward.synthetic_probe",
@@ -240,7 +240,7 @@
     "public_ingress": false,
     "synthetic_request_limit": 1,
     "synthetic_requests": 0,
-    "ssh_connections": 0,
+    "ssh_connections": 1,
     "remote_forwards": 0,
     "google_requests": 0,
     "oauth_consent": 0,
@@ -249,17 +249,24 @@
     "email_sends": 0,
     "aws_requests": 0,
     "production_claim": false,
-    "human_gate_consumed": false,
+    "human_gate_consumed": true,
     "evidence": [
       "evidence/gates/R4-422/gmail-oauth-password-remote-forward-preparation-20260829.md",
       "evidence/gates/R4-422/gmail-oauth-password-remote-forward-preparation-20260829.json",
-      "evidence/gates/R4-422/gmail-oauth-password-remote-forward-leakage-scan-20260829.json"
+      "evidence/gates/R4-422/gmail-oauth-password-remote-forward-leakage-scan-20260829.json",
+      "evidence/gates/R4-422/gmail-oauth-password-remote-forward-execution-20260829T115910Z.json",
+      "evidence/gates/R4-422/gmail-oauth-password-remote-forward-execution-closure-20260829T115910Z.md",
+      "evidence/gates/R4-422/gmail-oauth-password-remote-forward-execution-leakage-scan-20260829T115910Z.json"
     ],
     "historical_key_contract_preserved": true,
     "implementation_commit": "24534592dc4d270460a8f7082747c512f0b32f7e",
     "ci_run": "33250932373",
     "ci_result": "GREEN_ALL_REQUIRED_JOBS",
-    "next_action": "NEW_PASSWORD_REMOTE_FORWARD_SYNTHETIC_HUMAN_GATE_REQUIRED"
+    "execution_status": "SSH_EXITED_BEFORE_SYNTHETIC_PROBE",
+    "synthetic_request_result": "NOT_RECEIVED",
+    "ssh_exit_code": 1,
+    "root_cause": "UNKNOWN_SSH_EXIT_WITHOUT_RETAINED_DIAGNOSTICS",
+    "next_action": "NO_RETRY; NEW_CONTRACT_AND_HUMAN_GATE_REQUIRED_IF_REVISITED"
   },
   "tasks": [
     {
