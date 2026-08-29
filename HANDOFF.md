@@ -1417,6 +1417,17 @@ V2 implementation checkpoint is commit
 fixture failure was repaired with a portable absolute temporary path; no
 production dependency or OAuth behavior changed.
 
+Gmail OAuth bootstrap V2 execution closure: contract
+`e6fc0dec19ea96c2eaee337694e7a0a19716e5491ea4b50d9be09892391ca22e` was
+consumed once. The strict operator-managed loopback SSH forward passed one
+preflight; one `gmail.send` OAuth session consumed one callback and completed
+one Windows token exchange. Credentials remain only in the external Windows
+token store. Listener and SSH tunnel teardown are complete. No Gmail message,
+email send, retry, fallback, mutation, or production claim occurred. Evidence:
+`evidence/gates/R4-422/gmail-oauth-bootstrap-v2-execution-20260829.json`,
+`.md`, and `-leakage-scan-20260829.json`. Observed cost is USD 0.00. Any
+future Gmail message/send operation requires a new contract and Human Gate.
+
 ## Tokyo VM execution attempt 1 - 2026-08-27
 
 The exact approved VM contract `2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a` was applied once under execution

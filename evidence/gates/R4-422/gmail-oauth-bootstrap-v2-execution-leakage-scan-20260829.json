@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "contractSha256": "e6fc0dec19ea96c2eaee337694e7a0a19716e5491ea4b50d9be09892391ca22e",
+  "status": "PASS_REDACTED_METADATA_ONLY",
+  "artifactsScanned": [
+    "evidence/gates/R4-422/gmail-oauth-bootstrap-v2-execution-20260829.json",
+    "evidence/gates/R4-422/gmail-oauth-bootstrap-v2-execution-20260829.md",
+    "contracts/provider/r4-422-google-gmail-oauth-bootstrap-v2.json",
+    "scripts/gmail-oauth-bootstrap-v2.ps1",
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification/GmailOAuthBootstrapV2Cli.java"
+  ],
+  "secretValuesObserved": false,
+  "passwordValuesObserved": false,
+  "authorizationCodeObserved": false,
+  "tokenValuesObserved": false,
+  "callbackQueryPersisted": false,
+  "emailContentObserved": false,
+  "gmailMessageRequests": 0,
+  "emailSends": 0,
+  "networkCallsMadeByPreparation": 0,
+  "historicalEvidenceModified": false,
+  "repositorySecretFilesCreated": 0,
+  "result": "PASS"
+}

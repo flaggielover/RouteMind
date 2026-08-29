@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "executionId": "r4-422-gmail-oauth-bootstrap-v2-20260829",
+  "contract": "contracts/provider/r4-422-google-gmail-oauth-bootstrap-v2.json",
+  "contractSha256": "e6fc0dec19ea96c2eaee337694e7a0a19716e5491ea4b50d9be09892391ca22e",
+  "status": "COMPLETED_OAUTH_BOOTSTRAP / NO_GMAIL_OPERATION / NO_PRODUCTION_CLAIM",
+  "observedAtUtc": "2026-08-29T13:26:36Z",
+  "teardownConfirmedAtUtc": "2026-08-29T13:29:46Z",
+  "execution": {
+    "approvedHumanGate": true,
+    "oauthSessions": 1,
+    "preflightRequests": 1,
+    "preflightResponse": "ROUTEMIND_GMAIL_OAUTH_TUNNEL_READY",
+    "windowsListenerBind": "127.0.0.1:54348",
+    "macLoopbackPort": 52817,
+    "operatorManagedTunnelEstablished": true,
+    "strictHostKeyVerification": true,
+    "authorizationUrlEmittedAfterPreflight": true,
+    "callbackConsumptions": 1,
+    "tokenExchanges": 1,
+    "gmailMessageRequests": 0,
+    "emailSends": 0,
+    "automaticRetries": 0,
+    "fallbackUsed": false,
+    "googleResourceMutations": 0,
+    "accountMutations": 0,
+    "oauthClientMutations": 0
+  },
+  "network": {
+    "operatorBrowserConsentSession": 1,
+    "routeMindGoogleTokenExchangeRequests": 1,
+    "localPreflightRequests": 1,
+    "gmailApiRequests": 0,
+    "sshTunnelTransport": "OPERATOR_MANAGED_LOOPBACK_ONLY"
+  },
+  "scope": {
+    "oauthScope": "https://www.googleapis.com/auth/gmail.send",
+    "broaderScopesRequested": false,
+    "gmailMessageOperationPermittedByContract": false
+  },
+  "persistence": {
+    "tokenStore": "EXTERNAL_WINDOWS_ONLY",
+    "tokenStoreDirectoryPresent": true,
+    "tokenStoreContentRead": false,
+    "authorizationCodeCaptured": false,
+    "authorizationCodeLogged": false,
+    "tokenValuesLogged": false,
+    "repositorySecretFilesCreated": 0
+  },
+  "teardown": {
+    "windowsListenerStopped": true,
+    "operatorTunnelClosed": true,
+    "googleResourcesCreated": 0,
+    "repositoryResourcesCreated": 0,
+    "externalTokenStoreRetainedAsApproved": true
+  },
+  "cost": {
+    "observedUsd": 0.0,
+    "billingReadbackPerformed": false,
+    "conservativeBoundUsd": 0.1
+  },
+  "security": {
+    "passwordCaptured": false,
+    "credentialValuesLogged": false,
+    "authorizationQueryPersisted": false,
+    "secretLeakageScan": "PASS_REDACTED_METADATA_ONLY",
+    "historicalContractsModified": false,
+    "historicalEvidenceModified": false
+  },
+  "claims": {
+    "oauthBootstrapCompleted": true,
+    "gmailMessageOperationValidated": false,
+    "emailDeliveryValidated": false,
+    "productionClaim": false,
+    "providerCapabilityClaim": false,
+    "futureMessageSendRequiresIndependentContract": true
+  },
+  "implementation": {
+    "codeCommit": "0e07cca472c7e1e03a185f780381fa3865952416",
+    "ciRun": "33254430749",
+    "ciResult": "success",
+    "runtimeJava": "17.0.1",
+    "artifactDigests": {
+      "contractSha256": "e6fc0dec19ea96c2eaee337694e7a0a19716e5491ea4b50d9be09892391ca22e"
+    }
+  }
+}
