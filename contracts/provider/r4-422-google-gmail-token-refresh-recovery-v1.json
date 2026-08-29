@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "contractId": "r4-422-google-gmail-token-refresh-recovery-v1",
+  "taskId": "R4-422",
+  "status": "PREPARED_GOOGLE_GMAIL_TOKEN_REFRESH_RECOVERY_HUMAN_GATE",
+  "provider": "GOOGLE_OAUTH",
+  "purpose": "GMAIL_CREDENTIAL_REFRESH_ONLY",
+  "api": "Google OAuth 2.0 token refresh",
+  "authentication": {
+    "mechanism": "EXISTING_STORED_REFRESH_CREDENTIAL",
+    "scope": "https://www.googleapis.com/auth/gmail.send",
+    "credentialSource": "EXTERNAL_WINDOWS_OAUTH_TOKEN_STORE",
+    "tokenStoreEnvironmentVariable": "ROUTEMIND_GMAIL_TOKEN_STORE",
+    "clientConfigurationEnvironmentVariable": "ROUTEMIND_GMAIL_OAUTH_CLIENT_FILE",
+    "oauthUserIdEnvironmentVariable": "ROUTEMIND_GMAIL_OAUTH_USER_ID",
+    "expectedOauthUserId": "default",
+    "credentialValuesInRepositoryLogsEvidenceChat": "forbidden"
+  },
+  "configuration": {
+    "adapterEnabledByDefault": false,
+    "gmailMessageOperations": "forbidden",
+    "approvedExistingCredentialOnly": true,
+    "standardGoogleCredentialAbstraction": "GoogleAuthorizationCodeFlow.loadCredential plus Credential.refreshToken",
+    "manualCredentialFileParsing": false
+  },
+  "scope": {
+    "maximumTokenRefreshRequests": 1,
+    "maximumAuthorizationCodeExchanges": 0,
+    "maximumOauthAuthorizationSessions": 0,
+    "maximumBrowserSessions": 0,
+    "maximumSshSessions": 0,
+    "maximumGmailApiRequests": 0,
+    "maximumUsersMessagesSendRequests": 0,
+    "maximumEmailSends": 0,
+    "maximumRetries": 0,
+    "maximumFallbacks": 0,
+    "maximumGoogleResourceMutations": 0,
+    "maximumAccountMutations": 0,
+    "maximumDurationMinutes": 10,
+    "maximumSpendUsd": 0.1,
+    "productionClaim": "forbidden"
+  },
+  "dataBoundary": {
+    "credentialValues": "forbidden",
+    "rawTokenResponses": "forbidden",
+    "authorizationHeaders": "forbidden",
+    "messageOperations": "forbidden",
+    "evidence": "sanitized_metadata_only"
+  },
+  "preconditions": [
+    "ROUTEMIND_GMAIL_TOKEN_STORE_PRESENT",
+    "TOKEN_STORE_PATH_EXTERNAL_TO_REPOSITORY",
+    "TOKEN_STORE_DIRECTORY_EXISTS_AND_IS_NOT_REDIRECTING",
+    "EXTERNAL_CLIENT_CONFIGURATION_PRESENT_AND_NOT_REDIRECTING",
+    "STORED_CREDENTIAL_LOADS_WITH_STANDARD_GOOGLE_LIBRARY",
+    "CREDENTIAL_METADATA_INDICATES_REFRESH_REQUIRED",
+    "REFRESH_CAPABILITY_AVAILABLE_THROUGH_EXISTING_CREDENTIAL_ABSTRACTION",
+    "NO_BROWSER_OR_AUTHORIZATION_CODE_FLOW_REQUIRED",
+    "NO_GMAIL_OPERATION_CAN_RUN_IN_THIS_CONTRACT",
+    "SANITIZED_EVIDENCE_SCHEMA_AND_LEAKAGE_SCAN_PASS",
+    "HISTORICAL_CONTRACT_DIGESTS_REJECTED"
+  ],
+  "execution": {
+    "operation": "Credential.refreshToken",
+    "transport": "existing Google OAuth credential transport",
+    "requestCount": "at_most_one",
+    "retryPolicy": "ZERO_RETRIES",
+    "fallbackPolicy": "NO_FALLBACK",
+    "stopImmediatelyAfterRefresh": true,
+    "tokenStoreUpdate": "existing_external_store_only_if_library_requires",
+    "providerResponse": "SANITIZED_STATUS_CATEGORY_ONLY",
+    "failureSemantics": "preserve_failure_and_stop"
+  },
+  "stopConditions": [
+    "ANY_PRECONDITION_MISMATCH",
+    "REFRESH_REQUEST_WOULD_EXCEED_ONE",
+    "ANY_AUTHORIZATION_CODE_OR_BROWSER_FLOW",
+    "ANY_GMAIL_API_OR_MESSAGE_OPERATION",
+    "ANY_RETRY_OR_FALLBACK",
+    "ANY_SECRET_LEAKAGE_RISK",
+    "ANY_GOOGLE_ACCOUNT_OR_RESOURCE_MUTATION",
+    "TIME_OR_COST_BOUNDARY_REACHED"
+  ],
+  "evidenceContract": [
+    "sanitized_configuration_and_path_readiness_status",
+    "stored_credential_load_status_without_values",
+    "refresh_required_and_refresh_capability_boolean_status",
+    "exact_refresh_request_count",
+    "authorization_code_exchange_and_oauth_session_counts",
+    "gmail_api_and_email_send_counts",
+    "retry_fallback_and_mutation_counts",
+    "token_store_updated_boolean_without_contents",
+    "elapsed_time_and_conservative_cost_bound",
+    "sanitized_error_category_if_failed",
+    "timestamps_versions_and_artifact_digests",
+    "secret_leakage_scan_result"
+  ],
+  "teardown": {
+    "googleResourcesCreated": 0,
+    "googleAccountMutation": "forbidden",
+    "gmailConfigurationMutation": "forbidden",
+    "tokenStoreContents": "retain_external_only",
+    "localArtifacts": "retain_redacted_evidence_only",
+    "cleanupVerificationRequired": true
+  },
+  "claims": {
+    "contractPrepared": true,
+    "credentialRefreshValidated": false,
+    "gmailConnectivityValidated": false,
+    "gmailMessageOperationValidated": false,
+    "emailDeliveryValidated": false,
+    "productionValidated": false,
+    "humanGateRequired": true,
+    "historicalContractsPreserved": true,
+    "round3FrozenSciencePreserved": true
+  },
+  "humanGate": {
+    "required": true,
+    "approvalAuthorizesOnlyOneExistingCredentialRefresh": true,
+    "approvalAuthorizesNoAuthorizationCodeExchange": true,
+    "approvalAuthorizesNoOauthBrowserOrSsh": true,
+    "approvalAuthorizesNoGmailApiOrEmail": true,
+    "approvalStatementTemplate": "I approve R4-422 Google Gmail credential refresh-only recovery by exact SHA-256 digest <DIGEST>, authorize exactly one token refresh using the existing repository-external Windows token store and standard Google credential chain, zero authorization-code exchanges, zero OAuth sessions/browser/SSH, zero Gmail API/message/email operations, zero retries/fallback, no Google/account/resource mutation, within 10 minutes and USD 0.10, and accept sanitized evidence and fail-closed semantics without a production claim."
+  }
+}

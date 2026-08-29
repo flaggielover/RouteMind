@@ -287,6 +287,16 @@ try {
         throw "Gmail exactly-one synthetic send contract self-tests failed"
     }
 
+    python scripts/r4_gmail_token_refresh_recovery_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail token refresh recovery contract validation failed"
+    }
+
+    python scripts/r4_gmail_token_refresh_recovery_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail token refresh recovery contract self-tests failed"
+    }
+
     python scripts/r4_gmail_oauth_bootstrap_contract.py
     if ($LASTEXITCODE -ne 0) {
         throw "Gmail OAuth bootstrap contract validation failed"

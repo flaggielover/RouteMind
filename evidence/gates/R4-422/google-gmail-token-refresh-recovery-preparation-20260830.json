@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "contract": "contracts/provider/r4-422-google-gmail-token-refresh-recovery-v1.json",
+  "contractSha256": "6c2b454101787c72459b3a5a7f01c18b25cf09d19ffd8ed90aaf3044e8b4b39f",
+  "contractStatus": "PREPARED_GOOGLE_GMAIL_TOKEN_REFRESH_RECOVERY_HUMAN_GATE",
+  "observedAtUtc": "2026-08-29T16:01:18Z",
+  "preparationOnly": true,
+  "offlineUsage": {
+    "tokenRefreshRequests": 0,
+    "authorizationCodeExchanges": 0,
+    "oauthSessions": 0,
+    "browserSessions": 0,
+    "sshSessions": 0,
+    "gmailApiRequests": 0,
+    "emailSends": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "googleResourceMutations": 0,
+    "accountMutations": 0,
+    "externalCostUsd": 0.0
+  },
+  "configuration": {
+    "tokenStoreEnvironmentProcess": "SET",
+    "tokenStoreRepositoryExternal": true,
+    "tokenStoreExists": true,
+    "tokenStoreRedirectingLink": false,
+    "storedCredentialLoading": "AVAILABLE",
+    "credentialMetadata": "REFRESH_REQUIRED",
+    "refreshCapability": "AVAILABLE",
+    "clientConfiguration": "AVAILABLE_EXTERNAL_REFERENCE",
+    "standardCredentialAbstraction": "AVAILABLE",
+    "manualCredentialFileParsing": false,
+    "gmailAdapterEnabledByDefault": false
+  },
+  "offlineValidation": {
+    "contractDigest": "PASS",
+    "refreshReadinessAssessment": "PASS_REFRESH_REQUIRED_AND_AVAILABLE",
+    "refreshNotInvoked": "PASS",
+    "gmailOperationBoundary": "PASS_ZERO_ALLOWED",
+    "zeroRetryFallbackBoundary": "PASS",
+    "historicalContractReuseRejected": "PASS",
+    "sanitizedEvidenceSchema": "PASS",
+    "leakageScan": "PASS"
+  },
+  "privacy": {
+    "credentialValuesLogged": false,
+    "tokenValuesLogged": false,
+    "rawTokenResponsePersisted": false,
+    "authorizationHeadersLogged": false,
+    "externalPathsPersisted": false,
+    "productionDataSent": false
+  },
+  "claims": {
+    "credentialRefreshValidated": false,
+    "gmailConnectivityValidated": false,
+    "gmailMessageOperationValidated": false,
+    "productionClaim": false,
+    "humanGateRequired": true
+  },
+  "nextAction": "STOP_AT_NEW_HUMAN_GATE_BEFORE_ONE_TOKEN_REFRESH"
+}

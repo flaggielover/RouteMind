@@ -8,6 +8,25 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: R4-422 - GMAIL CREDENTIAL REFRESH HUMAN GATE REQUIRED
 
+R4-422 Gmail credential refresh-only recovery preparation (2026-08-29): new
+contract `contracts/provider/r4-422-google-gmail-token-refresh-recovery-v1.json`
+has canonical SHA-256
+`6c2b454101787c72459b3a5a7f01c18b25cf09d19ffd8ed90aaf3044e8b4b39f` and is
+`PREPARED_OFFLINE / HUMAN_GATE_PENDING`. The existing repository-external
+Windows token store is present and available; the stored credential loads
+through the standard Google library, its metadata requires refresh, and the
+refresh capability is available. The preparation command did not invoke
+refresh, OAuth, authorization-code, browser, SSH, Gmail API, email, retry,
+fallback, or mutation (`0` each; cost `USD 0.00`). No token, client secret,
+authorization header, raw response, address, message body, or external path was
+persisted. The Gmail adapter remains disabled by default, historical contracts
+remain immutable, and R3-325 remains `E-PASS / X-PASS / S-FAIL / C-NO-CLAIM`.
+Evidence: `evidence/gates/R4-422/google-gmail-token-refresh-recovery-preparation-*`.
+Exact next human action: approve the new digest with one existing-credential
+refresh only; on success or failure stop and require a separate new Gmail send
+contract/Human Gate for any message operation. Counts remain 167/197 overall
+and 10/38 for Round 4.
+
 R4-422 Gmail single-send preflight closure (2026-08-29): exact contract digest
 `16e6f9dd68fd261f28047b0e7ea8e2f19e186ba3c04dd68c7c8a7d3606dea663`
 was approved and consumed fail-closed. The external Windows token-store path

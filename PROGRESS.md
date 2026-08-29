@@ -14,6 +14,24 @@ Repository Total: 167 / 197 tasks passed
 
 Current Task: R4-422 - GMAIL CREDENTIAL REFRESH HUMAN GATE REQUIRED
 
+R4-422 credential refresh-only recovery preparation (2026-08-29): a new
+independent contract is prepared at
+`contracts/provider/r4-422-google-gmail-token-refresh-recovery-v1.json` with
+canonical SHA-256
+`6c2b454101787c72459b3a5a7f01c18b25cf09d19ffd8ed90aaf3044e8b4b39f`.
+The offline-only readiness command confirmed the process token-store reference
+is present, the repository-external store exists, stored credential loading is
+available, refresh is required, and the existing standard credential
+abstraction can refresh. No refresh was invoked: token refresh, OAuth,
+authorization-code, browser, SSH, Gmail API, email, retry, fallback, and
+mutation counts remain zero; cost is `USD 0.00`. The adapter remains disabled
+by default and no production or provider claim is made. Evidence is under
+`evidence/gates/R4-422/google-gmail-token-refresh-recovery-preparation-*`.
+R4-422 remains `BLOCKED / HUMAN_GATE_PENDING`; completed task counts remain
+167/197 overall and 10/38 in Round 4. Exact next action: approve this new
+refresh-only contract, then perform at most one refresh and stop; any later
+Gmail send requires another independent contract and Human Gate.
+
 R4-422 Gmail exactly-one send attempt (2026-08-29): the approved contract
 `16e6f9dd68fd261f28047b0e7ea8e2f19e186ba3c04dd68c7c8a7d3606dea663`
 was consumed fail-closed during bounded preflight. The Process token-store

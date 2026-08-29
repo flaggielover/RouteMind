@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "artifact": "google-gmail-token-refresh-recovery-preparation",
+  "scannedAtUtc": "2026-08-29T16:01:18Z",
+  "credentialValuesDetected": false,
+  "tokenValuesDetected": false,
+  "authorizationHeadersDetected": false,
+  "rawTokenResponsesDetected": false,
+  "rawEmailAddressesDetected": false,
+  "messageBodiesDetected": false,
+  "externalPathsDetected": false,
+  "historicalEvidenceModified": false,
+  "result": "PASS_REDACTED_METADATA_ONLY"
+}
