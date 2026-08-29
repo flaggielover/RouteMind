@@ -38,7 +38,10 @@ is redacted and append-only under `evidence/gates/R4-422/`; leakage scan passed.
 R4-422 remains `BLOCKED / FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM` and
 any subsequent attempt requires a new contract and Human Gate. Real GitHub
 Actions CI run `33233157325` passed all five required jobs for the preparation
-commit; this execution closure is now being synchronized.
+commit. Execution closure commit `e5bed13` passed all five required jobs in
+real GitHub Actions run `33234378913`. The local `verify.ps1` run reached the
+Compose configuration check but Docker Desktop did not respond; this local
+environmental failure is not represented as a pass.
 
 R4-422 local SES runtime repair (2026-08-29): PASSED as
 `LOCAL_RUNTIME_REPAIRED_AWAITING_NEW_CONTRACT`. The historical consumed contract

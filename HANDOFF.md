@@ -30,8 +30,11 @@ append-only execution, usage, closure, and leakage evidence is under
 `evidence/gates/R4-422/`, and the execution leakage scan passed. R4-422 remains
 `BLOCKED / FAILED_PROVIDER_REJECTED / NO_PRODUCTION_CLAIM`; any subsequent
 attempt requires a new contract and Human Gate. Preparation CI run
-`33233157325` passed all five required jobs; execution closure synchronization
-is pending on this commit.
+`33233157325` passed all five required jobs, and execution closure commit
+`e5bed13` passed all five required jobs in real GitHub Actions run
+`33234378913`. The local `verify.ps1` run reached the Compose configuration
+check but Docker Desktop did not respond; that environmental failure is not
+represented as a pass.
 
 R4-422 local SES runtime repair (2026-08-29):
 `BLOCKED / LOCAL_RUNTIME_REPAIRED_AWAITING_NEW_CONTRACT`. The consumed digest
