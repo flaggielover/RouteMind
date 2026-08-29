@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "contract": "contracts/provider/r4-422-google-gmail-oauth-remote-forward-bootstrap-v1.json",
+  "contractSha256": "2ef914d10c541f800a61107bc521f3edbfcec05b608b8dc52c6c65bcd102c629",
+  "status": "INCOMPLETE_CONSUMED_CALLBACK_UNREACHABLE",
+  "execution": {
+    "approvedSessionCount": 1,
+    "bootstrapProcessLaunches": 1,
+    "sshProcessLaunches": 1,
+    "sshConnectionEstablished": "UNCONFIRMED",
+    "remoteForwardEstablished": "UNCONFIRMED",
+    "windowsListenerBind": "127.0.0.1_EPHEMERAL",
+    "macRemoteBind": "127.0.0.1:52817",
+    "windowsListenerAliveAtCallback": false,
+    "remoteForwardAliveAtCallback": false,
+    "callbackReachedWindowsListener": false,
+    "browserResult": "ERR_CONNECTION_REFUSED",
+    "authorizationCode": "NOT_CAPTURED_NOT_LOGGED_NOT_PERSISTED",
+    "oauthConsent": 1,
+    "tokenExchanges": 0,
+    "googleApiRequests": 0,
+    "gmailMessageRequests": 0,
+    "emailSends": 0,
+    "automaticRetries": 0,
+    "fallbackUsed": false
+  },
+  "localObservation": {
+    "observedAtUtc": "2026-08-29T11:18:24Z",
+    "listenerPort52817": "NOT_LISTENING",
+    "sshProcessAfterTeardown": "NOT_RUNNING",
+    "javaProcessAfterTeardown": "NOT_RUNNING",
+    "tokenStoreMetadataChangedDuringAttempt": false,
+    "tokenStoreContentsRead": false,
+    "sshDiagnosticsPersisted": false
+  },
+  "preflight": {
+    "initialRuntimeAttempt": "FAILED_BEFORE_SSH_JAVA8_MAVEN_PLUGIN_INCOMPATIBILITY",
+    "correctiveRuntimeSelection": "JAVA17_LOCAL_ONLY",
+    "externalClientFile": "PRESENT_PATH_ONLY",
+    "externalTokenStore": "PRESENT_DIRECTORY_ONLY",
+    "externalSshIdentity": "PRESENT_PATH_ONLY",
+    "externalKnownHosts": "PRESENT_PATH_ONLY",
+    "contractDigestValidated": true
+  },
+  "classification": {
+    "result": "DIAGNOSTIC_INCOMPLETE",
+    "reason": "callback_route_unavailable_at_browser_redirect_and_forward_liveness_unproven",
+    "providerTruthClaim": false,
+    "productionClaim": false,
+    "retryAuthorized": false,
+    "newContractRequiredForFutureAttempt": true
+  },
+  "security": {
+    "authorizationCodeCaptured": false,
+    "credentialValuesLogged": false,
+    "tokenValuesLogged": false,
+    "secretLeakageScan": "PASS_REDACTED_METADATA_ONLY",
+    "historicalEvidenceModified": false
+  },
+  "cost": {
+    "googleApiCostObservedUsd": 0.0,
+    "costReadbackPerformed": false,
+    "conservativeBoundUsd": 0.0
+  },
+  "teardown": {
+    "windowsListenerStopped": true,
+    "sshProcessStopped": true,
+    "tokenStoreCleanup": "NO_NEW_TOKEN_PERSISTED_OBSERVED",
+    "googleResourcesCreated": 0
+  }
+}

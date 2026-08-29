@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - GMAIL OAUTH CROSS-DEVICE BOOTSTRAP HUMAN GATE PENDING
+Current Task: R4-422 - GMAIL OAUTH CROSS-DEVICE BOOTSTRAP INCOMPLETE / CONSUMED
 
 R4-422 active-provider replacement checkpoint (2026-08-29): the R4-422 domain
 task is provider-neutral, so AWS SES remains a preserved historical
@@ -76,6 +76,22 @@ OAuth, Google, Gmail, or mutation operation occurred. Evidence:
 `evidence/gates/R4-422/gmail-oauth-remote-forward-bootstrap-preparation-20260829.md`
 with JSON and leakage companions. Counts remain 167/197 overall and 10/38 for
 Round 4.
+
+Cross-device Gmail OAuth execution (2026-08-29): the approved contract
+`contracts/provider/r4-422-google-gmail-oauth-remote-forward-bootstrap-v1.json`
+with SHA-256
+`2ef914d10c541f800a61107bc521f3edbfcec05b608b8dc52c6c65bcd102c629` was
+consumed for exactly one operator-controlled session. Mac consent completed,
+but the callback to `127.0.0.1:52817` returned `ERR_CONNECTION_REFUSED`.
+Read-only inspection found no listener on the Windows callback port and no
+active Java/SSH process; remote-forward establishment and liveness at callback
+time are therefore unconfirmed. No authorization code was captured or stored,
+and no token exchange, Google API request, Gmail message request, or email send
+occurred. Token-store metadata was unchanged during the attempt; contents were
+not read. The result is `INCOMPLETE_CONSUMED / DIAGNOSTIC_INCOMPLETE` with
+`NO_RETRY`; any future bootstrap needs a new contract and Human Gate. Evidence:
+`evidence/gates/R4-422/gmail-oauth-remote-forward-execution-20260829T111824Z.json`
+and `evidence/gates/R4-422/gmail-oauth-remote-forward-execution-closure-20260829T111824Z.md`.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 read-only AWS Console and official-documentation audit completed with verdict
