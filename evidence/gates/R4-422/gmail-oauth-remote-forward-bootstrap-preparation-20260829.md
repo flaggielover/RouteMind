@@ -36,3 +36,6 @@ fixed host/user, strict SSH options, loopback-only forwarding, forbidden
 wildcards/remote commands, exact `gmail.send` scope, and absence of Gmail
 message operations. No SSH connection, OAuth consent, Google request, token
 exchange, Gmail message request, email send, or resource mutation occurred.
+
+Implementation commit `cd7336b9590838cacc33a75a3681d32dc9acf6ca` passed real
+GitHub Actions run `33249022500`; all five required jobs were green.
