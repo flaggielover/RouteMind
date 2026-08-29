@@ -6,7 +6,7 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - GMAIL OAUTH BOOTSTRAP HUMAN GATE PENDING
+Current Task: R4-422 - GMAIL OAUTH CROSS-DEVICE BOOTSTRAP HUMAN GATE PENDING
 
 R4-422 active-provider replacement checkpoint (2026-08-29): the R4-422 domain
 task is provider-neutral, so AWS SES remains a preserved historical
@@ -54,6 +54,28 @@ JSON/leakage companions. Counts remain 167/197 overall and 10/38 for Round 4.
 
 Repair commit `8e0af27c0843ad6417d73ffb75bddd40dd5da3e0` passed real GitHub
 Actions run `33245414841` with all five required jobs green.
+
+Cross-device Gmail OAuth bootstrap preparation (2026-08-29): the existing
+loopback-only bootstrap contract remains immutable and does not cover a Mac
+browser or an SSH network boundary. A separate Windows-initiated `ssh -R`
+path is prepared for exactly one strict connection to `suzhe@10.10.1.27`.
+Windows listens only on `127.0.0.1:<windows-port>`; the Mac-side remote
+listener is only `127.0.0.1:<mac-port>` and forwards to the Windows loopback.
+The Mac performs login/consent, while Windows performs the sole token exchange
+and persists tokens only in the external Windows token store. Strict
+`known_hosts`, `StrictHostKeyChecking=yes`, `CheckHostIP=yes`,
+`IdentitiesOnly=yes`, `BatchMode=yes`, `ExitOnForwardFailure=yes`, and a
+`PermitRemoteOpen` loopback destination are required. Wildcards, `GatewayPorts`,
+`-g`, remote commands, extra forwards, token transfer, Gmail message
+operations, and email sends are forbidden. New contract:
+`contracts/provider/r4-422-google-gmail-oauth-remote-forward-bootstrap-v1.json`,
+SHA-256
+`2ef914d10c541f800a61107bc521f3edbfcec05b608b8dc52c6c65bcd102c629`; it is
+independent of the prior contract and remains `HUMAN_GATE_PENDING`. No SSH,
+OAuth, Google, Gmail, or mutation operation occurred. Evidence:
+`evidence/gates/R4-422/gmail-oauth-remote-forward-bootstrap-preparation-20260829.md`
+with JSON and leakage companions. Counts remain 167/197 overall and 10/38 for
+Round 4.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 read-only AWS Console and official-documentation audit completed with verdict

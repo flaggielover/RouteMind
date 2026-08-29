@@ -1,0 +1,29 @@
+{
+  "scope": [
+    "contracts/provider/r4-422-google-gmail-oauth-remote-forward-bootstrap-v1.json",
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification/GmailOAuthRemoteForwardConfiguration.java",
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification/GmailOAuthRemoteForwardPolicy.java",
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification/GmailOAuthRemoteForwardCommand.java",
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification/GmailOAuthRemoteBootstrapCli.java",
+    "scripts/gmail-oauth-bootstrap-remote.ps1"
+  ],
+  "result": "PASS",
+  "clientCredentialJsonDetected": false,
+  "sshPrivateKeyDetected": false,
+  "authorizationCodeDetected": false,
+  "googleAccessTokenDetected": false,
+  "googleRefreshTokenDetected": false,
+  "emailAddressDetected": false,
+  "rawOAuthUrlPersisted": false,
+  "sshDiagnosticsPersisted": false,
+  "googleRequests": 0,
+  "oauthConsent": 0,
+  "tokenExchanges": 0,
+  "gmailMessageRequests": 0,
+  "emailSends": 0,
+  "sshConnections": 0,
+  "remoteForwards": 0,
+  "credentialStoreMutations": 0,
+  "googleCloudMutations": 0,
+  "historicalEvidenceModified": false
+}

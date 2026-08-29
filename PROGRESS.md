@@ -12,7 +12,7 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - GMAIL OAUTH BOOTSTRAP HUMAN GATE PENDING
+Current Task: R4-422 - GMAIL OAUTH CROSS-DEVICE BOOTSTRAP HUMAN GATE PENDING
 
 R4-422 active-provider replacement checkpoint (2026-08-29): R4-422 is
 provider-neutral at the domain contract, so the historical AWS SES result stays
@@ -56,6 +56,26 @@ JSON/leakage companions. Overall and Round 4 counts remain 167/197 and 10/38.
 Repair commit `8e0af27c0843ad6417d73ffb75bddd40dd5da3e0` passed real GitHub
 Actions run `33245414841` with all five required jobs green after correcting
 the cross-platform absolute-path test.
+
+Cross-device Gmail OAuth bootstrap preparation (2026-08-29): the prior
+loopback-only contract does not cover a Mac browser or a second-host network
+boundary. A new explicit Windows-initiated SSH remote-forward path is prepared
+using one strict connection to `suzhe@10.10.1.27`, an external pinned
+`known_hosts` file, and exactly
+`127.0.0.1:<mac-port>:127.0.0.1:<windows-port>`. The Mac browser performs
+login/consent on its own loopback; callback bytes traverse the encrypted tunnel
+to the Windows loopback listener, where the single token exchange and
+Windows-only external token-store persistence occur. The path uses only the
+`gmail.send` scope, has no Gmail message operation, no remote command, no
+wildcard bind, and no automatic retry or fallback. New contract:
+`contracts/provider/r4-422-google-gmail-oauth-remote-forward-bootstrap-v1.json`,
+canonical SHA-256
+`2ef914d10c541f800a61107bc521f3edbfcec05b608b8dc52c6c65bcd102c629`.
+No SSH connection, OAuth consent, Google request, token exchange, Gmail send,
+or mutation occurred. Preparation evidence and leakage scan are under
+`evidence/gates/R4-422/gmail-oauth-remote-forward-bootstrap-preparation-20260829.*`.
+The new path remains `HUMAN_GATE_PENDING`; overall and Round 4 counts remain
+167/197 and 10/38.
 
 R4-422 SES IAM authorization semantics differential audit (2026-08-29):
 completed read-only Console/documentation/offline audit with verdict
