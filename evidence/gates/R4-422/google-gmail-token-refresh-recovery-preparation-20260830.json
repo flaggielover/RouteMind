@@ -6,6 +6,9 @@
   "contractStatus": "PREPARED_GOOGLE_GMAIL_TOKEN_REFRESH_RECOVERY_HUMAN_GATE",
   "observedAtUtc": "2026-08-29T16:01:18Z",
   "preparationOnly": true,
+  "implementationCommit": "3f11bd3",
+  "ciRun": "33262190380",
+  "ciResult": "GREEN_ALL_REQUIRED_JOBS",
   "offlineUsage": {
     "tokenRefreshRequests": 0,
     "authorizationCodeExchanges": 0,

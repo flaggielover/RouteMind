@@ -31,6 +31,8 @@ R4-422 remains `BLOCKED / HUMAN_GATE_PENDING`; completed task counts remain
 167/197 overall and 10/38 in Round 4. Exact next action: approve this new
 refresh-only contract, then perform at most one refresh and stop; any later
 Gmail send requires another independent contract and Human Gate.
+Preparation commit `3f11bd3` passed real GitHub Actions run `33262190380` with
+all five required jobs green.
 
 R4-422 Gmail exactly-one send attempt (2026-08-29): the approved contract
 `16e6f9dd68fd261f28047b0e7ea8e2f19e186ba3c04dd68c7c8a7d3606dea663`

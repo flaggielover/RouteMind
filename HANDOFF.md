@@ -26,6 +26,8 @@ Exact next human action: approve the new digest with one existing-credential
 refresh only; on success or failure stop and require a separate new Gmail send
 contract/Human Gate for any message operation. Counts remain 167/197 overall
 and 10/38 for Round 4.
+Preparation commit `3f11bd3` passed real GitHub Actions run `33262190380` with
+all five required jobs green.
 
 R4-422 Gmail single-send preflight closure (2026-08-29): exact contract digest
 `16e6f9dd68fd261f28047b0e7ea8e2f19e186ba3c04dd68c7c8a7d3606dea663`
