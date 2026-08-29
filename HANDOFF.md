@@ -6,7 +6,16 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - LOCAL SES RUNTIME REPAIRED / NEW CONTRACT HUMAN GATE REQUIRED
+Current Task: R4-422 - SECOND SINGLE-SEND CONTRACT / HUMAN GATE PENDING
+
+R4-422 second single-send contract preparation (2026-08-29): new contract
+`contracts/provider/r4-422-aws-ses-second-single-send-validation-v1.json` is
+prepared with canonical SHA-256
+`9c32cc9df3ac34e2a85f722ec2bcce6c64e9e5057a2f9e85e0e14656c082feaa`. It is
+limited to one synthetic `SendEmail` request, one recipient, zero retries,
+15 minutes, and USD 0.10 in `ap-northeast-1`. No AWS call, email, mutation, or
+cost occurred during preparation. R4-422 remains `BLOCKED / HUMAN_GATE_PENDING`;
+the prior consumed contract and failure evidence are unchanged.
 
 R4-422 local SES runtime repair (2026-08-29):
 `BLOCKED / LOCAL_RUNTIME_REPAIRED_AWAITING_NEW_CONTRACT`. The consumed digest
