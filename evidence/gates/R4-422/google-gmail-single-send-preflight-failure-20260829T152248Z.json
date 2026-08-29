@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "contract": "contracts/provider/r4-422-google-gmail-single-send-validation-v1.json",
+  "contractSha256": "16e6f9dd68fd261f28047b0e7ea8e2f19e186ba3c04dd68c7c8a7d3606dea663",
+  "contractApprovalMatched": true,
+  "humanGateConsumed": true,
+  "observedAtUtc": "2026-08-29T15:22:48Z",
+  "executionStatus": "PREFLIGHT_FAILED_NO_CALL",
+  "terminalClassification": "CREDENTIAL_REQUIRES_UNAUTHORIZED_TOKEN_REFRESH",
+  "provider": "GOOGLE_GMAIL_API",
+  "api": "Gmail API v1",
+  "operation": "users.messages.send",
+  "configuration": {
+    "tokenStoreEnvironmentProcess": "SET",
+    "tokenStorePathAbsolute": true,
+    "tokenStoreRepositoryExternal": true,
+    "tokenStoreDirectoryAvailable": true,
+    "tokenStoreRedirectingLink": false,
+    "storedCredentialLoading": "AVAILABLE",
+    "storedAccessCredentialUsability": "REQUIRES_TOKEN_REFRESH",
+    "senderPresent": true,
+    "syntheticRecipientPresent": true,
+    "configuredRecipientCount": 1,
+    "adapterEnabledByDefault": false
+  },
+  "authorizationBoundary": {
+    "oauthScope": "https://www.googleapis.com/auth/gmail.send",
+    "tokenRefreshAuthorized": false,
+    "oauthSessionsAuthorized": 0,
+    "tokenExchangesAuthorized": 0,
+    "browserSessionsAuthorized": 0,
+    "sshSessionsAuthorized": 0,
+    "automaticRetriesAuthorized": 0,
+    "fallbacksAuthorized": 0
+  },
+  "observedUsage": {
+    "gmailApiRequests": 0,
+    "usersMessagesSendRequests": 0,
+    "recipientsAttempted": 0,
+    "emailSends": 0,
+    "oauthSessions": 0,
+    "tokenExchanges": 0,
+    "browserSessions": 0,
+    "sshSessions": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "googleResourceMutations": 0,
+    "accountMutations": 0,
+    "externalCostUsd": 0.0,
+    "commandHarnessElapsedSecondsUpperBound": 4
+  },
+  "privacy": {
+    "tokenStoreContentsPersistedToEvidence": false,
+    "credentialValuesLogged": false,
+    "tokenValuesLogged": false,
+    "rawEmailAddressesLogged": false,
+    "messageBodySent": false,
+    "productionDataSent": false
+  },
+  "claims": {
+    "providerValidated": false,
+    "providerAcceptance": false,
+    "deliveryValidated": false,
+    "productionClaim": false
+  },
+  "nextAction": "NEW_OAUTH_REFRESH_OR_REAUTHORIZATION_CONTRACT_AND_HUMAN_GATE; THEN_NEW_SINGLE_SEND_CONTRACT_AND_HUMAN_GATE"
+}

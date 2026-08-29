@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "scanStatus": "PASS_REDACTED_METADATA_ONLY",
+  "artifactsScanned": [
+    "evidence/gates/R4-422/google-gmail-single-send-preflight-failure-20260829T152248Z.json",
+    "evidence/gates/R4-422/google-gmail-single-send-preflight-failure-closure-20260829.md"
+  ],
+  "rawEmailAddressesFound": 0,
+  "credentialValuesFound": 0,
+  "oauthTokenValuesFound": 0,
+  "messageBodiesFound": 0,
+  "externalSecretPathsFound": 0,
+  "gmailApiRequestsMadeByScan": 0,
+  "oauthSessionsMadeByScan": 0,
+  "historicalEvidenceModified": false
+}

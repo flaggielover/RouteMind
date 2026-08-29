@@ -12,7 +12,22 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - PASSWORD REMOTE-FORWARD SYNTHETIC HUMAN GATE PENDING
+Current Task: R4-422 - GMAIL CREDENTIAL REFRESH HUMAN GATE REQUIRED
+
+R4-422 Gmail exactly-one send attempt (2026-08-29): the approved contract
+`16e6f9dd68fd261f28047b0e7ea8e2f19e186ba3c04dd68c7c8a7d3606dea663`
+was consumed fail-closed during bounded preflight. The Process token-store
+reference, repository-external canonical path, directory availability, and
+local stored-credential loading passed without exposing secrets. The stored
+access credential required an OAuth token refresh, but the contract authorizes
+zero OAuth sessions and zero token exchanges. Execution stopped before any
+Gmail request: `users.messages.send=0`, recipients attempted `0`, email sends
+`0`, retries/fallback `0/0`, mutations `0`, and cost `USD 0.00`. The terminal
+state is `PREFLIGHT_FAILED_NO_CALL / CREDENTIAL_REQUIRES_UNAUTHORIZED_TOKEN_REFRESH`;
+there is no provider, delivery, or production claim. A new OAuth refresh or
+reauthorization contract/Human Gate, followed by a new single-send contract/
+Human Gate, is required. Evidence is under
+`evidence/gates/R4-422/google-gmail-single-send-preflight-failure-*`.
 
 R4-422 active-provider replacement checkpoint (2026-08-29): R4-422 is
 provider-neutral at the domain contract, so the historical AWS SES result stays

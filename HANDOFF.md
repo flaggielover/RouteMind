@@ -6,7 +6,22 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - PASSWORD REMOTE-FORWARD SYNTHETIC HUMAN GATE PENDING
+Current Task: R4-422 - GMAIL CREDENTIAL REFRESH HUMAN GATE REQUIRED
+
+R4-422 Gmail single-send preflight closure (2026-08-29): exact contract digest
+`16e6f9dd68fd261f28047b0e7ea8e2f19e186ba3c04dd68c7c8a7d3606dea663`
+was approved and consumed fail-closed. The external Windows token-store path
+and local credential load were available, but the stored access credential
+requires an OAuth token refresh. Refresh/token exchange was not authorized, so
+the executor stopped before any Gmail call. Gmail API and
+`users.messages.send` requests, recipients attempted, email sends, OAuth,
+token exchanges, browser, SSH, retries, fallback, mutations, and cost are all
+zero. No secret, raw address, message content, provider response, or external
+path was recorded. State is `PREFLIGHT_FAILED_NO_CALL / NO_PROVIDER_CLAIM`.
+Exact next human action: authorize a new independent bounded OAuth refresh or
+reauthorization contract; after credential readiness is restored, approve a
+new independent exactly-one Gmail send contract. Do not reuse this digest.
+Evidence: `evidence/gates/R4-422/google-gmail-single-send-preflight-failure-*`.
 
 R4-422 active-provider replacement checkpoint (2026-08-29): the R4-422 domain
 task is provider-neutral, so AWS SES remains a preserved historical
