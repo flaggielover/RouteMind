@@ -1411,6 +1411,12 @@ Evidence is under
 `evidence/gates/R4-422/gmail-oauth-bootstrap-v2-preparation-20260829.*`.
 Historical contracts/evidence and R3-325 remain unchanged.
 
+V2 implementation checkpoint is commit
+`371312058b64786b92a5c65db88d2dda0e446a75`; real GitHub Actions run
+`33254290292` is green across all five jobs. The prior run's Linux-only test
+fixture failure was repaired with a portable absolute temporary path; no
+production dependency or OAuth behavior changed.
+
 ## Tokyo VM execution attempt 1 - 2026-08-27
 
 The exact approved VM contract `2c6bd381ea8bdbf6a2c91864ec4bbf7589d434b19f043375322138ad7bfc608a` was applied once under execution

@@ -307,9 +307,9 @@
       "evidence/gates/R4-422/gmail-oauth-bootstrap-v2-preparation-leakage-scan-20260829.json"
     ],
     "historical_contracts_preserved": true,
-    "implementation_commit": "PENDING",
-    "ci_run": "PENDING",
-    "ci_result": "PENDING",
+    "implementation_commit": "371312058b64786b92a5c65db88d2dda0e446a75",
+    "ci_run": "33254290292",
+    "ci_result": "success",
     "next_action": "NEW_R4_422_V2_HUMAN_GATE_REQUIRED_BEFORE_TUNNEL_OR_OAUTH"
   },
   "tasks": [

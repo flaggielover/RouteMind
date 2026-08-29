@@ -2242,3 +2242,9 @@ OAuth, Google, Gmail, or mutation calls. State is
 `BLOCKED / OAUTH_BOOTSTRAP_V2_HUMAN_GATE_PENDING / NO_PRODUCTION_CLAIM`.
 Evidence is under `evidence/gates/R4-422/gmail-oauth-bootstrap-v2-preparation-20260829.*`;
 historical contracts/evidence and R3-325 remain unchanged.
+
+V2 implementation checkpoint: commit `371312058b64786b92a5c65db88d2dda0e446a75`
+is validated by real GitHub Actions run `33254290292` (all five jobs green).
+The first run failed only because a test fixture used a Windows-only literal
+path on the Linux runner; the fixture now uses a portable absolute temp path.
+No production dependency or OAuth behavior changed.
