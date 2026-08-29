@@ -1,0 +1,11 @@
+{
+  "scanId": "r4-422-single-send-20260829",
+  "scope": "new_single_send_contract_and_execution_artifacts",
+  "status": "PASS",
+  "findingsCount": 0,
+  "credentialValuesRecorded": false,
+  "senderRecipientValuesRecorded": false,
+  "providerMessageIdentifiersRecorded": false,
+  "scanMethod": "literal-file-pattern-scan",
+  "timestamp": "2026-08-29T03:09:14.4644509Z"
+}

@@ -44,6 +44,7 @@ as AWS truth.
 
 - Sender, recipient, message body, credential values, and provider identifiers:
   not persisted
+- Leakage scan: `evidence/gates/R4-422/aws-ses-single-send-leakage-scan-20260829.json`
 - No shared credential-store mutation occurred
 - No AWS cleanup action was required; zero provider resources exist from this
   attempt
@@ -53,4 +54,3 @@ as AWS truth.
 R4-422 is terminal for this consumed contract as
 `FAILED / NO_SEND_LOCAL_RUNTIME_BLOCKER`; a new bounded contract and Human Gate
 are required before any future attempt.
-
