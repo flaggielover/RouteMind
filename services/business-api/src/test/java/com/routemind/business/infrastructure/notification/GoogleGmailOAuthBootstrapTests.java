@@ -29,8 +29,10 @@ class GoogleGmailOAuthBootstrapTests {
 	@Test
 	void environmentInputsRequireOnlyNonSecretNames() {
 		Map<String, String> environment = new HashMap<>();
-		environment.put(GmailOAuthBootstrapConfiguration.CLIENT_FILE_ENV, "C:/operator/client.json");
-		environment.put(GmailOAuthBootstrapConfiguration.TOKEN_STORE_ENV, "C:/operator/tokens");
+		environment.put(GmailOAuthBootstrapConfiguration.CLIENT_FILE_ENV,
+				Path.of(System.getProperty("java.io.tmpdir"), "operator-client.json").toString());
+		environment.put(GmailOAuthBootstrapConfiguration.TOKEN_STORE_ENV,
+				Path.of(System.getProperty("java.io.tmpdir"), "operator-tokens").toString());
 		environment.put(GmailOAuthBootstrapConfiguration.USER_ID_ENV, "operator");
 		GmailOAuthBootstrapConfiguration configuration = GmailOAuthBootstrapConfiguration.fromEnvironment(environment);
 		assertThat(configuration.clientCredentialFile()).isAbsolute();

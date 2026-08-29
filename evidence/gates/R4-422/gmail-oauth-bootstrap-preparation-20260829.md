@@ -46,3 +46,9 @@ regression suite `PASS`, Gmail OAuth contract validator/tests `PASS`, control
 plane validation and Round 4 graph gate `PASS`, security/leakage gate `PASS`,
 and repository `verify.ps1` `PASS`. No new task denominator or production claim
 was created by this preparation checkpoint.
+
+The first pushed CI run `33245251106` failed only in the Java job because the
+new environment-input test used a Windows-shaped `C:/...` path, which is
+relative under the Linux runner. The test was corrected to derive an absolute
+path from the runner temporary directory; no production or security behavior
+changed. Focused Java tests were rerun as `11/11 PASS` before the repair push.
