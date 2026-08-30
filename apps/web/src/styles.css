@@ -5040,6 +5040,34 @@ button {
   min-height: 44px;
   padding: 0;
   border-radius: 4px;
+  position: relative;
+}
+
+.app-shell-operations .role-link::after {
+  position: absolute;
+  z-index: 80;
+  top: 50%;
+  left: calc(100% + 12px);
+  padding: 6px 9px;
+  border: 1px solid rgba(94, 147, 151, 0.42);
+  border-radius: 4px;
+  background: #eaf3f5;
+  color: #0b161b;
+  content: attr(data-label);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: opacity 120ms ease;
+  white-space: nowrap;
+}
+
+.app-shell-operations .role-link:hover::after,
+.app-shell-operations .role-link:focus-visible::after {
+  opacity: 1;
 }
 
 .app-shell-operations .role-link.active {
@@ -6072,6 +6100,10 @@ button {
     justify-items: stretch;
     min-height: 44px;
     padding: 0 12px;
+  }
+
+  .app-shell-operations .role-link::after {
+    display: none;
   }
 
   .app-shell-operations .topbar {

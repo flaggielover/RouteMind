@@ -14,9 +14,16 @@ PR-007 are implemented. The Docker Desktop engine was recovered without volume
 or durable-state deletion. Golden delivery, dependency loss/recovery, Java
 restart, authoritative snapshot recovery, SSE cursor resume/deduplication, and
 desktop/mobile browser reconnect gates pass. Evidence is under
-`evidence/gates/PR-007/resilience-reconnect.md`. PR-008 is the only eligible
-Product Readiness task. Preserve ignored/untracked `.codex-tmp/` and
-`.superpowers/` state.
+`evidence/gates/PR-007/resilience-reconnect.md`. PR-008 has passed its local UX
+closure gates and is `validating` pending published CI. The bounded change adds
+visible hover/focus labels to the compact Operations icon rail; the five primary
+routes, source/status language, explicit command boundaries, responsive layout,
+keyboard behavior, and Axe checks pass. Local evidence: formatting, lint,
+typecheck, 40 unit files / 112 tests, production build, and 36 Playwright passes
+with two intentional skips. Evidence is under
+`evidence/gates/PR-008/product-ux-closure.md`. Preserve unrelated untracked work,
+including `.codex-tmp/`, `.superpowers/`, and the concurrent RM-241 anomaly
+research files.
 
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 

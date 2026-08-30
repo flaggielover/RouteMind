@@ -186,7 +186,12 @@ to cursor `2` with two unique applied events. Stale and malformed events remain
 fail-closed under the realtime unit and browser gates. Evidence is under
 `evidence/gates/PR-007/resilience-reconnect.md`.
 
-PR-008 is now the only eligible Product Readiness task. Its scope remains the
-existing UX information-architecture, state-completeness, responsive, keyboard,
-contrast, and screen-reader closure criteria; it must not absorb the separate
-Immersive Operations implementation campaign.
+PR-008 has passed its bounded local implementation and acceptance gates and is
+validating in remote CI. The five primary routes retain one product shell and
+consistent source, freshness, availability, and command-authority language.
+Operations compact navigation now exposes visible hover/focus labels without
+changing the separately approved Immersive Operations composition. Loading,
+empty, error, degraded, stale, and unavailable behavior remains covered by the
+existing unit and browser fixtures. Desktop/mobile browser, focus, overflow,
+screen-reader naming, and Axe gates pass. Evidence is under
+`evidence/gates/PR-008/product-ux-closure.md`.

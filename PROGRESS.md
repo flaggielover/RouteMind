@@ -10,8 +10,13 @@ evidence. PR-001 through PR-007 are implemented. Docker Desktop was recovered
 without deleting volumes or durable state; the real golden journey,
 failure/degradation matrix, Java restart, authoritative snapshot recovery, SSE
 cursor resume/deduplication, and desktop/mobile browser reconnect gates pass.
-Evidence is under `evidence/gates/PR-007/resilience-reconnect.md`. PR-008 is the
-only eligible Product Readiness task.
+Evidence is under `evidence/gates/PR-007/resilience-reconnect.md`. PR-008 has
+passed local UX closure: one coherent five-route shell, explicit state/source
+language, visible labels for the compact Operations icon rail, 40 unit files / 112
+tests, production build, and 36 Playwright passes with two intentional skips
+across desktop/mobile and Axe. It remains `validating` until its published
+checkpoint is green in CI. Evidence is under
+`evidence/gates/PR-008/product-ux-closure.md`.
 
 Round 2 Progress: 48 / 48 tasks passed
 

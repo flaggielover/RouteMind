@@ -57,6 +57,14 @@ describe("role-aware application", () => {
     expect(screen.getByRole("heading", { name: "RM-2041 lifecycle" })).toBeInTheDocument();
     expect(screen.getByText("Delivered", { selector: ".status-pill span" })).toBeInTheDocument();
     expect(screen.getByRole("list", { name: "Lifecycle for RM-2041" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Operations" })).toHaveAttribute(
+      "data-label",
+      "Operations",
+    );
+    expect(screen.getByRole("link", { name: "Strategy lab" })).toHaveAttribute(
+      "title",
+      "Strategy lab",
+    );
   });
 
   it("mounts one persistent world across seven distinct operations chapters", async () => {

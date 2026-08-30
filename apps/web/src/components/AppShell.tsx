@@ -130,6 +130,8 @@ export function AppShell({
                 to={`/${role}`}
                 key={role}
                 aria-label={label}
+                data-label={label}
+                title={label}
                 onClick={() => setMobileNavOpen(false)}
               >
                 <Icon size={17} aria-hidden="true" />
