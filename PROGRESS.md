@@ -69,6 +69,25 @@ had one known unrelated desktop reconnect smoke failure in run `33319887670`
 (35 other browser tests and the mobile counterpart passed); the failed job
 rerun reproduced only that same pre-existing expectation.
 
+## RM-243 Operations Visual Correction
+
+RM-243 passed locally on 2026-08-31 as a focused product correction. The
+persistent Three.js world now leads with snapshot-derived district demand
+clusters, distinct order/courier/merchant/risk nodes, directional flows, SLA-risk
+surfaces, and a subordinate strategy anchor. The large unexplained polyhedral
+cluster and global decorative cursor were removed. Live Operations no longer
+overlaps Multi-city and City/Zone panels; analytical, flow, reliability, and
+detail surfaces recompose from their own available width.
+
+Browser inspection at 1280x720, 1024x768, and 760x800 found zero document or
+primary-panel horizontal overflow, zero City/Zone overlap, a nonblank ready
+reduced-motion WebGL frame, semantic strategy-anchor focus, natural seven-chapter
+handoff, and zero console warnings/errors. Format, lint, typecheck, 40 Vitest
+files/112 tests, production build, and Playwright 36 passed/2 device-conditional
+skips. Evidence is `evidence/gates/RM-243/operations-visual-correction.md`.
+RM-243 is excluded from Round 4 counts and makes no production spatial-data or
+calibrated Digital Twin claim.
+
 Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)

@@ -3,7 +3,10 @@ import {
   ACESFilmicToneMapping,
   BoxGeometry,
   CatmullRomCurve3,
+  CircleGeometry,
   Color,
+  ConeGeometry,
+  CylinderGeometry,
   DirectionalLight,
   DoubleSide,
   FogExp2,
@@ -16,6 +19,7 @@ import {
   MeshBasicMaterial,
   MeshStandardMaterial,
   Object3D,
+  OctahedronGeometry,
   PerspectiveCamera,
   PlaneGeometry,
   PointLight,
@@ -57,6 +61,7 @@ export interface UrbanFieldSceneController {
     nx: number;
     ny: number;
     intensity: number;
+    pressed?: boolean;
     targetType?: "scene" | "chart" | "hud" | "control" | null;
   }): void;
   clearFocus(): void;
@@ -72,12 +77,13 @@ interface SceneRefs {
   composer: EffectComposer | null;
   lensPass: ShaderPass | null;
   core: Mesh;
-  coreSatellites: Mesh[];
   coreGeometry: BufferGeometry;
   cells: InstancedMesh;
   cellHeights: number[];
+  cellIds: string[];
   cellWorldPositions: Vector3[];
   routes: Mesh[];
+  routeMarkers: Mesh[];
   nodes: Mesh[];
   riskZones: Mesh[];
   ambient: HemisphereLight;
@@ -97,6 +103,7 @@ interface SceneRefs {
   sectionIndex: number;
   focusStrength: number;
   pointerIntensity: number;
+  pointerPressed: boolean;
   lensPointer: Vector2;
   coreScaleTarget: Vector3;
   focusedEntityId: string | null;
@@ -191,7 +198,7 @@ export function UrbanFieldScene({
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.outputColorSpace = SRGBColorSpace;
       renderer.toneMapping = ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.08;
+      renderer.toneMappingExposure = 1.16;
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = 2;
       renderer.setClearColor(new Color("#0b1216"), 0);
@@ -205,16 +212,16 @@ export function UrbanFieldScene({
 
       const scene = new Scene();
       scene.background = new Color("#0b1216");
-      scene.fog = new FogExp2("#0b1216", 0.055);
+      scene.fog = new FogExp2("#0b1216", 0.034);
       const camera = new PerspectiveCamera(34, 1, 0.1, 100);
-      camera.position.set(8.4, 7.2, 11.6);
-      camera.lookAt(0, 1.15, 0);
+      camera.position.set(6.6, 8.8, 9.8);
+      camera.lookAt(0, 0.5, 0);
       const post = createComposer(renderer, scene, camera);
       const composer = post?.composer ?? null;
       const lensPass = post?.lensPass ?? null;
       const reducedMotion = reducedQuery?.matches ?? false;
 
-      const ambient = new HemisphereLight("#c8e2e0", "#11191e", 1.35);
+      const ambient = new HemisphereLight("#d4e7e3", "#18282d", 1.6);
       scene.add(ambient);
       const directional = new DirectionalLight("#e4f1ed", 3.4);
       directional.position.set(5.5, 10, 6);
@@ -232,7 +239,7 @@ export function UrbanFieldScene({
       const ground = new Mesh(
         new PlaneGeometry(18, 12),
         new MeshStandardMaterial({
-          color: "#101b20",
+          color: "#132127",
           roughness: 0.86,
           metalness: 0.12,
           side: DoubleSide,
@@ -250,21 +257,23 @@ export function UrbanFieldScene({
       scene.add(grid);
 
       const cellSource = stateRef.current.spatial?.cells ?? [];
-      const cellCount = Math.max(cellSource.length, 72);
-      const cellGeometry = new BoxGeometry(0.58, 1, 0.58);
+      const cellCount = cellSource.length || 42;
+      const cellGeometry = new CylinderGeometry(0.3, 0.3, 1, 6, 1, false);
       const cellMaterial = new MeshStandardMaterial({
-        color: SLATE,
+        color: "#d4e4df",
         vertexColors: true,
-        roughness: 0.7,
+        roughness: 0.54,
         metalness: 0.22,
-        emissive: "#122c31",
-        emissiveIntensity: 0.38,
+        emissive: "#193e42",
+        emissiveIntensity: 0.72,
+        flatShading: true,
         transparent: true,
       });
       const cells = new InstancedMesh(cellGeometry, cellMaterial, cellCount);
       cells.castShadow = true;
       cells.receiveShadow = true;
       const cellHeights: number[] = [];
+      const cellIds: string[] = [];
       const cellWorldPositions: Vector3[] = [];
       const cellMatrix = new Matrix4();
       const cellPosition = new Vector3();
@@ -281,18 +290,19 @@ export function UrbanFieldScene({
             risk: ((index * 11) % 32) / 100,
           }));
       sourceCells.slice(0, cellCount).forEach((cell, index) => {
-        const height = 0.24 + cell.intensity * 1.25 + stateRef.current.traffic * 0.35;
-        const x = (cell.center.x / 100 - 0.5) * 16.4;
-        const z = (cell.center.y / 100 - 0.5) * 9.3;
+        const height = 0.32 + cell.intensity * 1.6 + stateRef.current.traffic * 0.28;
+        const x = (cell.center.x / 100 - 0.5) * 12.6;
+        const z = (cell.center.y / 100 - 0.5) * 7.4;
         cellPosition.set(x, height / 2, z);
         cellHeights[index] = height;
+        cellIds[index] = cell.id;
         cellWorldPositions[index] = new Vector3(x, 0, z);
         cellScale.set(1, height, 1);
         cellMatrix.compose(cellPosition, cellQuaternion, cellScale);
         cells.setMatrixAt(index, cellMatrix);
-        cellColor
-          .set(cell.risk && cell.risk > 0.55 ? AMBER : SLATE)
-          .lerp(tealColor, Math.min(0.64, cell.intensity * 0.65));
+        if (cell.risk && cell.risk > 0.68) cellColor.set(RISK);
+        else if (cell.risk && cell.risk > 0.46) cellColor.set(AMBER);
+        else cellColor.set(SLATE).lerp(tealColor, Math.min(0.86, 0.28 + cell.intensity * 0.68));
         cells.setColorAt(index, cellColor);
       });
       cells.instanceMatrix.needsUpdate = true;
@@ -301,6 +311,7 @@ export function UrbanFieldScene({
 
       const routeGroup = new Object3D();
       const routes: Mesh[] = [];
+      const routeMarkers: Mesh[] = [];
       (stateRef.current.spatial?.flows ?? []).slice(0, 9).forEach((flow) => {
         const from = toWorldPoint(flow.from, 0.48);
         const to = toWorldPoint(flow.to, 0.58);
@@ -316,28 +327,55 @@ export function UrbanFieldScene({
         const routeMaterial = new MeshStandardMaterial({
           color: flow.risk && flow.risk > 0.6 ? AMBER : TEAL,
           emissive: flow.risk && flow.risk > 0.6 ? RISK : TEAL,
-          emissiveIntensity: flow.risk && flow.risk > 0.6 ? 0.72 : 0.42,
+          emissiveIntensity: flow.risk && flow.risk > 0.6 ? 0.58 : 0.32,
           roughness: 0.46,
           metalness: 0.34,
           transparent: true,
-          opacity: 0.68,
+          opacity: 0.56,
         });
         const route = new Mesh(
-          new TubeGeometry(curve, 34, 0.018 + flow.value * 0.034, 6, false),
+          new TubeGeometry(curve, 34, 0.014 + flow.value * 0.026, 6, false),
           routeMaterial,
         );
         route.userData = { id: flow.id, phase: routes.length * 0.8 };
         route.castShadow = true;
         routeGroup.add(route);
         routes.push(route);
+
+        const markerMaterial = routeMaterial.clone();
+        markerMaterial.opacity = 0.92;
+        const marker = new Mesh(new ConeGeometry(0.095, 0.34, 7), markerMaterial);
+        const markerPosition = curve.getPointAt(0.72);
+        const markerTangent = curve.getTangentAt(0.72).normalize();
+        marker.position.copy(markerPosition);
+        marker.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), markerTangent);
+        marker.userData = {
+          id: `${flow.id}-direction`,
+          phase: routeMarkers.length * 0.29,
+          curve,
+        };
+        routeGroup.add(marker);
+        routeMarkers.push(marker);
       });
       scene.add(routeGroup);
 
       const nodeGroup = new Object3D();
-      const nodeGeometry = new SphereGeometry(0.105, 14, 10);
+      const nodeGeometries = {
+        order: new CylinderGeometry(0.09, 0.09, 0.2, 12),
+        courier: new OctahedronGeometry(0.15, 0),
+        merchant: new BoxGeometry(0.18, 0.18, 0.18),
+        risk: new ConeGeometry(0.13, 0.34, 7),
+      };
       const nodes: Mesh[] = [];
       (stateRef.current.spatial?.nodes ?? []).slice(0, 30).forEach((node) => {
-        const nodeColor = node.kind === "risk" ? RISK : node.kind === "courier" ? AMBER : TEAL;
+        const nodeColor =
+          node.kind === "risk"
+            ? RISK
+            : node.kind === "courier"
+              ? AMBER
+              : node.kind === "merchant"
+                ? "#a7bdba"
+                : TEAL;
         const material = new MeshStandardMaterial({
           color: nodeColor,
           emissive: nodeColor,
@@ -345,7 +383,7 @@ export function UrbanFieldScene({
           roughness: 0.3,
           metalness: 0.5,
         });
-        const mesh = new Mesh(nodeGeometry, material);
+        const mesh = new Mesh(nodeGeometries[node.kind], material);
         const point = toWorldPoint(node.position, node.kind === "risk" ? 0.55 : 0.4);
         mesh.position.copy(point);
         mesh.userData = { id: node.id, kind: node.kind, baseY: point.y };
@@ -357,93 +395,71 @@ export function UrbanFieldScene({
 
       // IcosahedronGeometry is non-indexed in the current Three.js release, which
       // lets the deformation pass address each triangle face directly.
-      const coreGeometry = new IcosahedronGeometry(0.95, 2);
+      const coreGeometry = new IcosahedronGeometry(0.38, 1);
       const coreBasePositions = new Float32Array(
         coreGeometry.attributes.position.array as Float32Array,
       );
       const coreMaterial = new MeshStandardMaterial({
-        color: "#41636a",
+        color: "#5e8788",
         emissive: "#1b7f83",
-        emissiveIntensity: 0.58,
-        roughness: 0.29,
-        metalness: 0.54,
+        emissiveIntensity: 0.42,
+        roughness: 0.34,
+        metalness: 0.5,
         flatShading: true,
         transparent: true,
       });
       const core = new Mesh(coreGeometry, coreMaterial);
-      core.position.set(0, 1.72, 0);
+      core.position.set(0, 0.68, 0);
       core.castShadow = true;
+      core.userData = { id: "strategy-anchor", kind: "strategy" };
       scene.add(core);
 
-      const coreSatellites = [
-        { position: [-1.08, 2.08, 0.18] as const, scale: 0.42, tone: TEAL },
-        { position: [0.88, 2.34, -0.36] as const, scale: 0.32, tone: "#8fb7b3" },
-        { position: [0.94, 1.15, 0.44] as const, scale: 0.38, tone: AMBER },
-        { position: [-0.64, 0.98, -0.62] as const, scale: 0.26, tone: "#51757a" },
-        { position: [0.12, 2.92, 0.2] as const, scale: 0.22, tone: RISK },
-      ].map((item, index) => {
-        const geometry = new IcosahedronGeometry(item.scale, index % 2 ? 0 : 1);
-        const material = new MeshStandardMaterial({
-          color: item.tone,
-          emissive: item.tone,
-          emissiveIntensity: index === 4 ? 0.72 : 0.24,
-          roughness: 0.34 + index * 0.06,
-          metalness: 0.48,
-          flatShading: true,
-          transparent: true,
-        });
-        const satellite = new Mesh(geometry, material);
-        satellite.position.set(item.position[0], item.position[1], item.position[2]);
-        satellite.rotation.set(index * 0.36, index * 0.71, index * 0.22);
-        satellite.userData = { phase: index * 1.17, basePosition: satellite.position.clone() };
-        satellite.castShadow = true;
-        scene.add(satellite);
-        return satellite;
-      });
-
-      const coreWire = new Mesh(
-        new IcosahedronGeometry(1.17, 1),
-        new MeshBasicMaterial({ color: TEAL, wireframe: true, transparent: true, opacity: 0.14 }),
-      );
-      coreWire.position.copy(core.position);
-      scene.add(coreWire);
-      const halo = new Mesh(
-        new SphereGeometry(1.52, 24, 16),
-        new MeshBasicMaterial({
-          color: TEAL,
-          transparent: true,
-          opacity: 0.06,
-          blending: AdditiveBlending,
-          depthWrite: false,
-        }),
-      );
-      halo.position.copy(core.position);
-      scene.add(halo);
       const hitArea = new Mesh(
-        new SphereGeometry(1.4, 16, 12),
+        new SphereGeometry(0.62, 12, 8),
         new MeshBasicMaterial({ visible: false, side: DoubleSide }),
       );
       hitArea.position.copy(core.position);
+      hitArea.userData = { id: "strategy-anchor", kind: "strategy" };
       scene.add(hitArea);
 
-      const riskZones = (stateRef.current.spatial?.zones ?? []).map((zone, index) => {
+      const riskZones = (stateRef.current.spatial?.zones ?? []).flatMap((zone, index) => {
         const radius = Math.max(0.45, zone.radius * 0.07);
-        const zoneMesh = new Mesh(
-          new RingGeometry(radius * 0.72, radius, 42),
+        const color = zone.risk > 0.58 ? RISK : zone.risk > 0.32 ? AMBER : TEAL;
+        const zoneFill = new Mesh(
+          new CircleGeometry(radius * 0.9, 42),
           new MeshBasicMaterial({
-            color: index === 0 ? RISK : AMBER,
+            color,
             transparent: true,
-            opacity: 0.14 + zone.risk * 0.18,
+            opacity: 0.035 + zone.risk * 0.08,
+            side: DoubleSide,
+            depthWrite: false,
+          }),
+        );
+        const zoneRing = new Mesh(
+          new RingGeometry(radius * 0.82, radius, 42),
+          new MeshBasicMaterial({
+            color,
+            transparent: true,
+            opacity: zone.selected ? 0.44 : 0.2 + zone.risk * 0.16,
             side: DoubleSide,
             depthWrite: false,
             blending: AdditiveBlending,
           }),
         );
-        zoneMesh.rotation.x = -Math.PI / 2;
-        zoneMesh.position.copy(toWorldPoint(zone.center, 0.035));
-        zoneMesh.userData = { id: zone.id, risk: zone.risk, phase: index * 1.7 };
-        scene.add(zoneMesh);
-        return zoneMesh;
+        [zoneFill, zoneRing].forEach((zoneMesh, layerIndex) => {
+          zoneMesh.rotation.x = -Math.PI / 2;
+          zoneMesh.position.copy(toWorldPoint(zone.center, 0.025 + layerIndex * 0.008));
+          zoneMesh.userData = {
+            id: zone.id,
+            kind: "risk-zone",
+            risk: zone.risk,
+            phase: index * 1.7,
+            selected: zone.selected ?? false,
+            layer: layerIndex,
+          };
+          scene.add(zoneMesh);
+        });
+        return [zoneFill, zoneRing];
       });
 
       const rayPlane = new Mesh(
@@ -460,12 +476,13 @@ export function UrbanFieldScene({
         composer,
         lensPass,
         core,
-        coreSatellites,
         coreGeometry,
         cells,
         cellHeights,
+        cellIds,
         cellWorldPositions,
         routes,
+        routeMarkers,
         nodes: [hitArea, ...nodes],
         riskZones,
         ambient,
@@ -479,12 +496,13 @@ export function UrbanFieldScene({
         hasPointerWorld: false,
         cameraBase: camera.position.clone(),
         cameraTarget: camera.position.clone(),
-        cameraLookAt: new Vector3(0, 1.15, 0),
+        cameraLookAt: new Vector3(0, 0.3, 0),
         reducedMotion,
         scrollProgress: 0,
         sectionIndex: 0,
         focusStrength: 0,
         pointerIntensity: 0,
+        pointerPressed: false,
         lensPointer: new Vector2(0.5, 0.5),
         coreScaleTarget: new Vector3(1, 1, 1),
         focusedEntityId: null,
@@ -510,9 +528,11 @@ export function UrbanFieldScene({
             const targetType = frame.targetType ?? "scene";
             sceneRefs.pointerIntensity =
               targetType === "scene" ? Math.min(1, Math.max(0, frame.intensity)) : 0;
+            sceneRefs.pointerPressed = frame.pressed ?? false;
             if (targetType !== "scene") {
               sceneRefs.hasPointerWorld = false;
               sceneRefs.pointerIntensity = 0;
+              sceneRefs.pointerPressed = false;
               if (sceneRefs.focusedEntityId !== null) {
                 sceneRefs.focusedEntityId = null;
                 setHoveredEntity(null);
@@ -538,10 +558,17 @@ export function UrbanFieldScene({
               sceneRefs.pointerWorld.copy(worldHit.point);
               sceneRefs.hasPointerWorld = true;
             }
-            const hits = sceneRefs.raycaster.intersectObjects(sceneRefs.nodes, false);
-            const hit = hits[0]?.object;
-            const entityId =
-              hit?.userData.id === undefined ? (hit ? "intelligence-core" : null) : hit.userData.id;
+            const nodeHit = sceneRefs.raycaster.intersectObjects(sceneRefs.nodes, false)[0]?.object;
+            const zoneHit = sceneRefs.raycaster.intersectObjects(sceneRefs.riskZones, false)[0]
+              ?.object;
+            const cellHit = sceneRefs.raycaster.intersectObject(sceneRefs.cells, false)[0];
+            const entityId = nodeHit?.userData.id
+              ? String(nodeHit.userData.id)
+              : zoneHit?.userData.id
+                ? String(zoneHit.userData.id)
+                : cellHit?.instanceId !== undefined
+                  ? (sceneRefs.cellIds[cellHit.instanceId] ?? null)
+                  : null;
             if (sceneRefs.focusedEntityId !== entityId) {
               sceneRefs.focusedEntityId = entityId;
               setHoveredEntity(entityId);
@@ -552,6 +579,7 @@ export function UrbanFieldScene({
             if (!sceneRefs) return;
             sceneRefs.hasPointerWorld = false;
             sceneRefs.pointerIntensity = 0;
+            sceneRefs.pointerPressed = false;
             if (sceneRefs.focusedEntityId !== null) {
               sceneRefs.focusedEntityId = null;
               setHoveredEntity(null);
@@ -618,14 +646,13 @@ export function UrbanFieldScene({
         const worldFrame = refs.worldFrame;
         const coreMaterialRef = refs.core.material as MeshStandardMaterial;
         const pressure = current.pressure;
-        const spatialBeat = Math.max(0, 1 - Math.abs(refs.scrollProgress - 0.055) / 0.075);
         const riskBeat = Math.max(0, 1 - Math.abs(refs.scrollProgress - 0.13) / 0.075);
         const strategyBeat = Math.max(0, 1 - Math.abs(refs.scrollProgress - 0.215) / 0.1);
         const detailBeat = Math.min(1, Math.max(0, (refs.scrollProgress - 0.29) / 0.24));
         const inspection = refs.pointerIntensity;
         const deformation = motion
-          ? (0.045 + pressure * 0.16 + current.activityRate * 0.05) *
-            (0.7 + spatialBeat * 0.45 + riskBeat * 0.75 + inspection * 0.65)
+          ? (0.018 + pressure * 0.055 + current.activityRate * 0.018) *
+            (0.72 + strategyBeat * 0.38 + inspection * 0.24)
           : 0;
         const corePosition = refs.coreGeometry.attributes.position;
         const array = corePosition.array as Float32Array;
@@ -648,39 +675,18 @@ export function UrbanFieldScene({
         corePosition.needsUpdate = motion;
         if (motion) refs.coreGeometry.computeVertexNormals();
         coreMaterialRef.emissiveIntensity =
-          0.34 +
-          current.risk * 0.46 +
-          riskBeat * 0.34 +
-          strategyBeat * 0.12 +
-          inspection * 0.28 +
-          Math.sin(elapsed * 1.4) * (motion ? 0.08 : 0);
-        coreMaterialRef.opacity = 0.48 + worldFrame.layerVisibility.core * 0.52;
-        const coreScale = 1 + spatialBeat * 0.07 + riskBeat * 0.09 - strategyBeat * 0.08;
+          0.3 + strategyBeat * 0.38 + inspection * 0.18 + Math.sin(elapsed) * (motion ? 0.035 : 0);
+        coreMaterialRef.opacity = 0.36 + worldFrame.layerVisibility.core * 0.5;
+        const coreScale = 0.86 + strategyBeat * 0.18;
         refs.coreScaleTarget.set(coreScale, coreScale, coreScale);
         refs.core.scale.lerp(refs.coreScaleTarget, motion ? 0.08 : 1);
-        refs.core.rotation.y += motion ? delta * (0.11 + current.activityRate * 0.12) : 0;
-        refs.core.rotation.x = motion ? Math.sin(elapsed * 0.33) * 0.08 : 0;
-
-        refs.coreSatellites.forEach((satellite, index) => {
-          const material = satellite.material as MeshStandardMaterial;
-          const base = satellite.userData.basePosition as Vector3;
-          const energy = worldFrame.layerVisibility.core;
-          material.opacity = 0.34 + energy * 0.62;
-          satellite.visible = energy > 0.08;
-          satellite.position.set(
-            base.x + (motion ? Math.sin(elapsed * 0.31 + index) * 0.08 : 0),
-            base.y + (motion ? Math.sin(elapsed * 0.58 + index * 1.2) * 0.1 : 0),
-            base.z + (motion ? Math.cos(elapsed * 0.37 + index) * 0.07 : 0),
-          );
-          if (motion) {
-            satellite.rotation.x += delta * (0.08 + index * 0.014);
-            satellite.rotation.y -= delta * (0.11 + index * 0.018);
-          }
-        });
+        refs.core.rotation.y += motion ? delta * (0.04 + current.activityRate * 0.035) : 0;
+        refs.core.rotation.x = motion ? Math.sin(elapsed * 0.24) * 0.035 : 0;
 
         const wavePoint = refs.pointerWorld;
         refs.cellWorldPositions.forEach((position, index) => {
           const base = refs.cellHeights[index] ?? 0.6;
+          const focused = refs.cellIds[index] === hoveredEntity;
           const distance = refs.hasPointerWorld ? position.distanceTo(wavePoint) : 12;
           const wave =
             motion && refs.hasPointerWorld
@@ -689,7 +695,8 @@ export function UrbanFieldScene({
           const height = Math.max(
             0.12,
             base * (0.84 + riskBeat * 0.2 + strategyBeat * 0.1) +
-              wave * (0.18 + current.activityRate * 0.18 + inspection * 0.12),
+              wave * (0.11 + current.activityRate * 0.1 + inspection * 0.08) +
+              (focused ? 0.22 : 0),
           );
           cellPosition.set(position.x, height / 2, position.z);
           cellScale.set(1, height, 1);
@@ -698,7 +705,7 @@ export function UrbanFieldScene({
         });
         refs.cells.instanceMatrix.needsUpdate = !motion || refs.hasPointerWorld;
         (refs.cells.material as MeshStandardMaterial).opacity =
-          0.28 + worldFrame.layerVisibility.cells * 0.72;
+          0.46 + worldFrame.layerVisibility.cells * 0.54;
         refs.cells.visible = worldFrame.layerVisibility.cells > 0.04;
 
         refs.nodes.slice(1).forEach((node, index) => {
@@ -723,12 +730,29 @@ export function UrbanFieldScene({
               strategyBeat * 0.24 +
               riskBeat * 0.12 +
               (Math.sin(elapsed * 1.8 + index) + 1) * 0.08;
-          material.opacity = (0.28 + worldFrame.layerVisibility.flows * 0.62) * 0.82;
+          material.opacity = (0.24 + worldFrame.layerVisibility.flows * 0.5) * 0.72;
+        });
+        refs.routeMarkers.forEach((marker, index) => {
+          const material = marker.material as MeshStandardMaterial;
+          const curve = marker.userData.curve as CatmullRomCurve3;
+          const position = motion
+            ? (elapsed * (0.045 + current.activityRate * 0.04) + marker.userData.phase) % 1
+            : 0.72;
+          const point = curve.getPointAt(position);
+          const tangent = curve.getTangentAt(position).normalize();
+          marker.position.copy(point);
+          marker.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), tangent);
+          marker.visible = worldFrame.layerVisibility.flows > 0.08;
+          material.opacity = 0.34 + worldFrame.layerVisibility.flows * 0.58;
+          material.emissiveIntensity = 0.42 + strategyBeat * 0.24 + (index % 2) * 0.08;
         });
         refs.riskZones.forEach((zone, index) => {
           const material = zone.material as MeshBasicMaterial;
           material.opacity =
-            (0.08 + (zone.userData.risk as number) * 0.18) * worldFrame.layerVisibility.riskZones;
+            ((zone.userData.layer as number) === 0
+              ? 0.025 + (zone.userData.risk as number) * 0.07
+              : (zone.userData.selected ? 0.28 : 0.12) + (zone.userData.risk as number) * 0.18) *
+            worldFrame.layerVisibility.riskZones;
           zone.visible = worldFrame.layerVisibility.riskZones > 0.05;
           if (motion) {
             const pulse = 1 + Math.sin(elapsed * 1.2 + index * 1.7) * 0.06;
@@ -736,7 +760,7 @@ export function UrbanFieldScene({
           }
         });
 
-        refs.ambient.intensity = 0.72 + worldFrame.lighting.ambient * 0.86;
+        refs.ambient.intensity = 1.02 + worldFrame.lighting.ambient * 0.96;
         refs.directional.intensity = 2.1 + worldFrame.lighting.key * 1.5;
         refs.keyLight.intensity = 2.8 + worldFrame.lighting.key * 3.1;
         refs.riskLight.intensity = 1.1 + worldFrame.lighting.risk * 3.8;
@@ -744,8 +768,8 @@ export function UrbanFieldScene({
         const cameraFrame = cameraFrameFor(worldFrame.cameraMode);
         const pointerOffset = refs.pointerIntensity;
         refs.cameraTarget.set(
-          cameraFrame.position.x + refs.pointerNdc.x * 0.62 * pointerOffset,
-          cameraFrame.position.y - refs.pointerNdc.y * 0.34 * pointerOffset,
+          cameraFrame.position.x + refs.pointerNdc.x * 0.22 * pointerOffset,
+          cameraFrame.position.y - refs.pointerNdc.y * 0.14 * pointerOffset,
           cameraFrame.position.z + detailBeat * 0.16,
         );
         refs.cameraLookAt.copy(cameraFrame.target);
@@ -753,10 +777,11 @@ export function UrbanFieldScene({
           refs.lensPass.uniforms.uPointer.value.copy(refs.lensPointer);
           refs.lensPass.uniforms.uIntensity.value = refs.reducedMotion
             ? 0
-            : Math.min(0.55, refs.pointerIntensity * (0.56 + riskBeat * 0.22));
-          refs.lensPass.uniforms.uRgbShift.value = refs.reducedMotion
-            ? 0
-            : Math.min(0.0045, refs.pointerIntensity * 0.0028);
+            : Math.min(0.2, refs.pointerIntensity * (0.32 + riskBeat * 0.08));
+          refs.lensPass.uniforms.uRgbShift.value =
+            refs.reducedMotion || !refs.pointerPressed
+              ? 0
+              : Math.min(0.0008, refs.pointerIntensity * 0.0008);
         }
         if (motion) {
           camera.position.lerp(refs.cameraTarget, 1 - Math.pow(0.001, delta));
@@ -815,28 +840,57 @@ export function UrbanFieldScene({
       data-pointer-id="urban-field"
     >
       <div className="urban-field-hud" aria-hidden="true">
-        <span className="scene-kicker">Urban field / WebGL</span>
+        <span className="scene-kicker">City logistics field / WebGL</span>
         <span className="scene-mode">
           {state.mode.toUpperCase()} · {state.strategy}
         </span>
       </div>
+      <div className="urban-field-map-summary" aria-hidden="true">
+        <span>
+          <strong>{state.spatial?.zones?.length ?? 0}</strong> districts
+        </span>
+        <span>
+          <strong>{state.spatial?.flows?.length ?? 0}</strong> active flows
+        </span>
+      </div>
+      <div className="urban-field-zone-labels" aria-hidden="true">
+        {(state.spatial?.zones ?? []).slice(0, 4).map((zone) => (
+          <span
+            key={zone.id}
+            className={zone.selected ? "urban-field-zone-label selected" : "urban-field-zone-label"}
+          >
+            <b>{zone.label}</b>
+            <small>
+              demand {Math.round(zone.orderPressure * 100)} · supply{" "}
+              {Math.round(zone.courierSupply * 100)} · risk {Math.round(zone.risk * 100)}
+            </small>
+          </span>
+        ))}
+        <span className="urban-field-strategy-label">
+          <b>Dispatch strategy</b>
+          <small>{state.strategy}</small>
+        </span>
+      </div>
       <div className="urban-field-legend" aria-hidden="true">
         <span>
-          <i className="legend-swatch legend-demand" /> demand
+          <i className="legend-swatch legend-demand" /> demand density
         </span>
         <span>
-          <i className="legend-swatch legend-supply" /> supply
+          <i className="legend-swatch legend-supply" /> courier supply
         </span>
         <span>
-          <i className="legend-swatch legend-risk" /> risk
+          <i className="legend-swatch legend-route" /> route flow
+        </span>
+        <span>
+          <i className="legend-swatch legend-risk" /> SLA risk
         </span>
       </div>
       <div className="urban-field-context" aria-live="polite">
         {hoveredEntity
-          ? `Focused entity ${hoveredEntity}`
+          ? `Inspecting ${formatEntityLabel(hoveredEntity)}`
           : status === "loading"
             ? "Initializing spatial field"
-            : "Spatial field ready"}
+            : "City logistics field ready"}
       </div>
     </div>
   );
@@ -845,25 +899,34 @@ export function UrbanFieldScene({
 export default UrbanFieldScene;
 
 function toWorldPoint(point: { x: number; y: number }, elevation: number): Vector3 {
-  return new Vector3((point.x / 100 - 0.5) * 16.4, elevation, (point.y / 100 - 0.5) * 9.3);
+  return new Vector3((point.x / 100 - 0.5) * 12.6, elevation, (point.y / 100 - 0.5) * 7.4);
+}
+
+function formatEntityLabel(entityId: string): string {
+  if (entityId === "strategy-anchor") return "dispatch strategy anchor";
+  if (entityId.includes("-cell-"))
+    return `${entityId.split("-cell-")[0]?.replaceAll("-", " ")} demand cell`;
+  if (entityId.endsWith("-flow") || entityId.endsWith("-direction"))
+    return "directional order route";
+  return entityId.replaceAll("-", " ");
 }
 
 function cameraFrameFor(mode: OperationsCameraMode): { position: Vector3; target: Vector3 } {
   switch (mode) {
     case "pressure-close":
-      return { position: new Vector3(5.4, 4.8, 8.2), target: new Vector3(-0.9, 0.82, 0.3) };
+      return { position: new Vector3(4.2, 6.5, 7.1), target: new Vector3(-0.8, 0.42, 0.25) };
     case "risk-hotspot":
-      return { position: new Vector3(4.2, 3.7, 7.4), target: new Vector3(2.2, 0.62, -1.15) };
+      return { position: new Vector3(3.9, 6.2, 6.9), target: new Vector3(2.1, 0.4, -1.1) };
     case "strategy-pullback":
-      return { position: new Vector3(10.4, 8.6, 14.8), target: new Vector3(0, 1.3, 0) };
+      return { position: new Vector3(10.8, 11.4, 15.6), target: new Vector3(0, 0.34, 0) };
     case "live-inspection":
-      return { position: new Vector3(-7.4, 5.2, 10.4), target: new Vector3(-0.8, 0.55, 0.4) };
+      return { position: new Vector3(-6.6, 7.1, 10.2), target: new Vector3(-0.7, 0.32, 0.35) };
     case "replay-tracking":
-      return { position: new Vector3(2.2, 7.9, 13.2), target: new Vector3(0.6, 0.8, -0.6) };
+      return { position: new Vector3(2.4, 10.8, 14.2), target: new Vector3(0.6, 0.25, -0.55) };
     case "research-stable":
-      return { position: new Vector3(-8.5, 6.8, 12.9), target: new Vector3(0, 1.05, 0) };
+      return { position: new Vector3(-8.7, 10.2, 13.6), target: new Vector3(0, 0.3, 0) };
     default:
-      return { position: new Vector3(8.4, 7.2, 11.6), target: new Vector3(0, 1.15, 0) };
+      return { position: new Vector3(6.6, 8.8, 9.8), target: new Vector3(0, 0.5, 0) };
   }
 }
 
@@ -875,13 +938,13 @@ function createComposer(
   try {
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-    composer.addPass(new UnrealBloomPass(new Vector2(1, 1), 0.42, 0.48, 0.82));
+    composer.addPass(new UnrealBloomPass(new Vector2(1, 1), 0.24, 0.42, 0.9));
     const lensPass = new ShaderPass({
       uniforms: {
         tDiffuse: { value: null },
         uPointer: { value: new Vector2(0.5, 0.5) },
         uIntensity: { value: 0 },
-        uRadius: { value: 0.25 },
+        uRadius: { value: 0.16 },
         uRgbShift: { value: 0 },
       },
       vertexShader: `
@@ -904,7 +967,7 @@ function createComposer(
           float edge = smoothstep(uRadius, 0.0, distanceToPointer);
           float localEnergy = edge * uIntensity;
           vec2 direction = normalize(delta + vec2(0.0001));
-          float bulge = localEnergy * 0.038 * (1.0 - smoothstep(0.0, uRadius, distanceToPointer));
+          float bulge = localEnergy * 0.014 * (1.0 - smoothstep(0.0, uRadius, distanceToPointer));
           vec2 lensUv = clamp(vUv - direction * bulge, 0.001, 0.999);
           float shift = uRgbShift * localEnergy * smoothstep(0.0, uRadius, distanceToPointer);
           float red = texture2D(tDiffuse, clamp(lensUv + direction * shift, 0.001, 0.999)).r;

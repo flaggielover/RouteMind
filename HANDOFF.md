@@ -131,6 +131,27 @@ one pre-existing desktop reconnect smoke expectation (`Stream connected`) was
 the only failure, reproduced by the failed-job rerun. The mobile counterpart,
 the other 35 browser tests, and all RM-242 strategy/registry paths passed.
 
+## RM-243 Operations Visual Correction
+
+State: **PASSED LOCALLY** (2026-08-31)
+
+Operations keeps the React 19/native Three.js architecture but the persistent
+world now reads as an urban logistics field: deterministic district demand
+clusters, distinct operational nodes, directional order flows, bounded SLA-risk
+areas, and one small strategy anchor. The previous large abstract cluster and
+global cursor decoration are gone. Pointer inspection uses native cursor behavior,
+raycast entity focus, local clarity, and zero resting RGB separation.
+
+Responsive browser gates at 1280x720, 1024x768, and 760x800 report zero document
+and primary-panel horizontal overflow. City/Zone no longer overlaps Multi-city,
+its content uses responsive semantic reflow, reduced-motion retains a ready
+nonblank WebGL frame, and the continuous chapter sequence remains intact. Local
+gates: format/lint/typecheck, 40 Vitest files/112 tests, build, and Playwright 36
+passed/2 device-conditional skips. Evidence and five screenshots are under
+`evidence/gates/RM-243/`. The local app is available at
+`http://localhost:4173/operations`. RM-243 is excluded from Round 4 counts and
+does not claim H3, production spatial telemetry, or calibrated Digital Twin state.
+
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 
 R4-422 operator-observed delivery confirmation (2026-08-30): the operator

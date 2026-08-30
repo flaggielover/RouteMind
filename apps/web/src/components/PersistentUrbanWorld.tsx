@@ -32,7 +32,7 @@ export function PersistentUrbanWorld({
       aria-label="Persistent RouteMind urban operational world"
     >
       <div className="persistent-world-chrome" aria-hidden="true">
-        <span className="persistent-world-kicker">ROUTEMIND / INTELLIGENCE CORE</span>
+        <span className="persistent-world-kicker">ROUTEMIND / URBAN OPERATIONS FIELD</span>
         <span className="persistent-world-chapter">{worldFrame.chapter.replace("-", " ")}</span>
       </div>
       <Suspense fallback={<UrbanFieldFallback state={state} />}>
@@ -43,7 +43,7 @@ export function PersistentUrbanWorld({
         />
       </Suspense>
       <div className="persistent-world-readout" aria-live="polite">
-        <span className="persistent-world-readout-label">active lens</span>
+        <span className="persistent-world-readout-label">active view</span>
         <strong>{worldFrame.cameraMode.replaceAll("-", " ")}</strong>
         <span>
           {snapshot.dispatch.strategy} · {snapshot.dispatch.version}

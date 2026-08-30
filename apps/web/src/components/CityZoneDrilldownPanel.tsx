@@ -98,14 +98,14 @@ export function CityZoneDrilldownPanel({ snapshot }: CityZoneDrilldownPanelProps
               {projection.zones.map((zone) => (
                 <tr key={zone.zoneId}>
                   <th scope="row">{zone.zoneLabel}</th>
-                  <td>{zone.orderCount}</td>
-                  <td>{zone.merchantCount}</td>
-                  <td>
+                  <td data-label="Orders">{zone.orderCount}</td>
+                  <td data-label="Merchants">{zone.merchantCount}</td>
+                  <td data-label="Supply">
                     {zone.availableCourierCount}/{zone.courierCount}
                   </td>
-                  <td>{zone.densityPer100.toFixed(1)}</td>
-                  <td>{Math.round(zone.riskIndex * 100)}%</td>
-                  <td>{zone.routeCount}</td>
+                  <td data-label="Density / 100">{zone.densityPer100.toFixed(1)}</td>
+                  <td data-label="Risk">{Math.round(zone.riskIndex * 100)}%</td>
+                  <td data-label="Routes">{zone.routeCount}</td>
                 </tr>
               ))}
             </tbody>

@@ -14,10 +14,12 @@ describe("urban field state adapter", () => {
     expect(state.supply).toBeLessThanOrEqual(1);
     expect(state.risk).toBeGreaterThanOrEqual(0);
     expect(state.risk).toBeLessThanOrEqual(1);
-    expect(state.spatial?.cells).toHaveLength(72);
+    expect(state.spatial?.cells).toHaveLength((state.spatial?.zones?.length ?? 0) * 17);
     expect(state.spatial?.nodes?.some((node) => node.kind === "courier")).toBe(true);
     expect(state.spatial?.flows?.length).toBeGreaterThan(0);
-    expect(state.spatial?.zones).toHaveLength(2);
+    expect(state.spatial?.zones).toHaveLength(3);
+    expect(state.spatial?.zones?.filter((zone) => zone.selected)).toHaveLength(1);
+    expect(state.spatial?.zones?.every((zone) => zone.label.length > 0)).toBe(true);
   });
 
   it("preserves live provenance while handling an empty fleet", () => {
@@ -33,6 +35,7 @@ describe("urban field state adapter", () => {
     expect(state.provenance).toBe("snapshot-derived");
     expect(state.supply).toBe(0);
     expect(state.pressure).toBe(0);
-    expect(state.spatial?.cells).toHaveLength(72);
+    expect(state.spatial?.zones).toHaveLength(1);
+    expect(state.spatial?.cells).toHaveLength(17);
   });
 });

@@ -95,8 +95,6 @@ export function OperationsMotionCoordinator({
     let scrollVelocity = 0;
     const motionRoot = root;
     const stack = root.querySelector<HTMLElement>(".page-stack");
-    const lensLabel = root.querySelector<HTMLElement>(".operations-pointer-lens-label");
-
     const reducedQuery =
       typeof window.matchMedia === "function"
         ? window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -236,27 +234,16 @@ export function OperationsMotionCoordinator({
       const velocity = Math.min(1, Math.hypot(pointer.vx, pointer.vy) / 34);
       const targetEnergy = reducedMotion
         ? pointer.targetType === "scene" || pointer.targetType === "chart"
-          ? 0.35
+          ? 0.12
           : 0
         : pointer.targetType === "scene" || pointer.targetType === "chart"
-          ? Math.max(0.24, velocity)
+          ? Math.max(0.1, velocity * 0.42)
           : pointer.targetType === "hud"
-            ? Math.max(0.18, velocity * 0.7)
+            ? Math.max(0.08, velocity * 0.28)
             : 0;
       pointer.intensity = lerp(pointer.intensity, targetEnergy, reducedMotion ? 0.24 : 0.16);
       targetPointer.intensity = targetEnergy;
       motionRoot.dataset.pointerTarget = pointer.targetType ?? "none";
-      if (lensLabel) {
-        lensLabel.textContent =
-          pointer.targetType === "chart"
-            ? "inspect signal"
-            : pointer.targetType === "hud"
-              ? "inspect state"
-              : pointer.targetType === "scene"
-                ? "inspect field"
-                : "inspect";
-      }
-
       setVar("--rm-pointer-x", pointer.nx);
       setVar("--rm-pointer-y", pointer.ny);
       setVar("--rm-pointer-intensity", pointer.intensity);
@@ -360,10 +347,6 @@ export function OperationsMotionCoordinator({
 
   return (
     <div className="operations-motion-root" ref={rootRef}>
-      <div className="operations-pointer-lens" aria-hidden="true">
-        <span className="operations-pointer-lens-crosshair" />
-        <span className="operations-pointer-lens-label">inspect</span>
-      </div>
       {children}
     </div>
   );
