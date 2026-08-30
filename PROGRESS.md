@@ -9,6 +9,9 @@ and `docs/product/PRODUCT_READINESS_BACKLOG.md`. The separate `PR-*` namespace
 records local product work without changing Round 4 progress, frozen scientific
 results, Human Gates, or external-operation evidence. Audit verdict:
 `AUDITED / IMPLEMENTATION_READY`; first eligible task is `PR-001`.
+`PR-001` is implemented in checkpoint `e3c2c57`; local bounded lifecycle evidence
+is under `evidence/gates/PR-001/local-lifecycle.md`, and Actions run `33298506156`
+is green. The next eligible product task is `PR-002`.
 
 Round 2 Progress: 48 / 48 tasks passed
 

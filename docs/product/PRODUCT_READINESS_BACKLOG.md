@@ -12,8 +12,8 @@ or scientific status. Tasks are local-first and may reuse existing APIs/scripts.
 
 | ID | Priority | Status | Depends on | Focus |
 | --- | --- | --- | --- | --- |
-| PR-001 | P0 | in_progress | none | One bounded local lifecycle entrypoint |
-| PR-002 | P0 | pending | PR-001 | Verify dependency/readiness ordering and diagnostics |
+| PR-001 | P0 | implemented | none | One bounded local lifecycle entrypoint |
+| PR-002 | P0 | ready | PR-001 | Verify dependency/readiness ordering and diagnostics |
 | PR-003 | P1 | pending | PR-001, PR-002 | One-command deterministic scenario runner |
 | PR-004 | P1 | pending | PR-002 | Live projection joins assignment, ledger, route, and freshness |
 | PR-005 | P1 | pending | PR-002, PR-004 | Event/queue/projection observability summary |
