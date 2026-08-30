@@ -2,6 +2,7 @@ package com.routemind.business.api.operations;
 
 import com.routemind.business.application.operations.OperationsSnapshot;
 import com.routemind.business.application.operations.OperationsSnapshotService;
+import com.routemind.business.application.operations.OperationsOrderReadModel;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -44,7 +45,7 @@ public final class OperationsSnapshotController {
 				.toList();
 			return new OperationsSnapshotResponse("v1", "live", snapshot.generatedAt(),
 				snapshot.orders().stream().map(order -> new OrderResponse(order.id(), order.status(), order.version(),
-						order.createdAt(), order.updatedAt())).toList(), parties, merchants, locations,
+						order.createdAt(), order.updatedAt(), order.operational())).toList(), parties, merchants, locations,
 				locations.stream().map(location -> new CourierResponse(location.courierId(), location.latitude(),
 					location.longitude(), location.sequence(), location.observedAt(), location.ingestedAt(),
 					location.online())).toList(),
@@ -52,7 +53,8 @@ public final class OperationsSnapshotController {
 		}
 	}
 
-	public record OrderResponse(UUID id, String status, long version, Instant createdAt, Instant updatedAt) {
+	public record OrderResponse(UUID id, String status, long version, Instant createdAt, Instant updatedAt,
+			OperationsOrderReadModel operational) {
 	}
 
 	public record PartyResponse(UUID id, String type, String displayName, String status) {

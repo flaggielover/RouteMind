@@ -47,6 +47,53 @@ export interface ReliabilityCenterProjection {
   traceId: string | null;
 }
 
+export interface OperationalObservabilitySummary {
+  readiness: ReliabilityCheckStatus;
+  eventCursor: string;
+  eventAge: string;
+  publisher: ReliabilityCheckStatus;
+  queue: ReliabilityCheckStatus;
+  redisProjection: ReliabilityCheckStatus;
+  dispatchLatencyMs: number | null;
+  degradedReasons: readonly string[];
+}
+
+export function projectOperationalObservability(
+  snapshot: OperationsSnapshot,
+  health: readonly ServiceHealth[],
+  realtime: RealtimeConnectionState,
+): OperationalObservabilitySummary {
+  const staleOrders = snapshot.orders.filter(
+    (order) =>
+      order.operational?.orderFreshness.status === "STALE" ||
+      order.operational?.route.freshness.status === "STALE" ||
+      order.operational?.courier.freshness.status === "STALE",
+  ).length;
+  const reasons = [
+    snapshot.availability !== "ready" ? snapshot.sourceDetail : "",
+    realtime.staleReason ?? "",
+    staleOrders
+      ? `${staleOrders} order operational context${staleOrders === 1 ? "" : "s"} stale`
+      : "",
+  ].filter((value): value is string => value.length > 0);
+  return {
+    readiness: health.some((item) => item.status === "unavailable")
+      ? "unavailable"
+      : health.length
+        ? "passed"
+        : snapshot.source === "demo" || snapshot.source === "replay"
+          ? "fixture"
+          : "unavailable",
+    eventCursor: realtime.cursor,
+    eventAge: realtime.status === "connected" ? "current" : realtime.status,
+    publisher: "unavailable",
+    queue: "unavailable",
+    redisProjection: "unavailable",
+    dispatchLatencyMs: snapshot.dispatch.latencyMs,
+    degradedReasons: reasons.length ? reasons : ["No degraded reason recorded"],
+  };
+}
+
 export function projectReliabilityCenter(
   snapshot: OperationsSnapshot,
   health: readonly ServiceHealth[],

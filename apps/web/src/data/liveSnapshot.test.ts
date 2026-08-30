@@ -18,7 +18,7 @@ function response(body: unknown, ok = true): Response {
 }
 
 describe("live product data boundary", () => {
-  it("composes Java durable state and Python dispatch as live data", async () => {
+  it("composes the Java order-centric read model without a synthetic dispatch request", async () => {
     const requests: RequestInit[] = [];
     const snapshot = await loadLiveSnapshot(session, async (input, init) => {
       requests.push(init ?? {});
@@ -27,7 +27,64 @@ describe("live product data boundary", () => {
         return response({
           source: "live",
           generatedAt: "2026-08-22T10:00:00Z",
-          orders: [],
+          orders: [
+            {
+              id: "order-1",
+              status: "ASSIGNED",
+              version: 2,
+              createdAt: "2026-08-22T09:55:00Z",
+              updatedAt: "2026-08-22T10:00:00Z",
+              operational: {
+                decision: {
+                  status: "RECORDED",
+                  decisionId: "decision-1",
+                  requestId: "request-1",
+                  courierId: "courier-1",
+                  strategy: "nearest",
+                  strategyVersion: "1.0.0",
+                  referenceDataId: "dispatch-api:v1",
+                  decidedAt: "2026-08-22T09:59:50Z",
+                  fallbackState: "NONE",
+                  decisionReason: "lowest distance",
+                  policySelectionMode: "WALL",
+                  provenanceReference: "prov-1",
+                },
+                route: {
+                  status: "NO_ROUTE_ESTIMATE",
+                  provider: null,
+                  fallbackUsed: null,
+                  fallbackReason: null,
+                  travelSeconds: null,
+                  distanceKilometres: null,
+                  observedAt: null,
+                  freshness: { status: "UNAVAILABLE", observedAt: null, evaluatedAt: null },
+                },
+                courier: {
+                  status: "CURRENT",
+                  courierId: "courier-1",
+                  lifecycleStatus: "ONLINE",
+                  sequence: 7,
+                  observedAt: "2026-08-22T10:00:00Z",
+                  ingestedAt: "2026-08-22T10:00:01Z",
+                  freshness: {
+                    status: "CURRENT",
+                    observedAt: "2026-08-22T10:00:01Z",
+                    evaluatedAt: "2026-08-22T10:00:01Z",
+                  },
+                },
+                parties: {
+                  linkageStatus: "UNAVAILABLE",
+                  customerStatus: null,
+                  merchantStatus: null,
+                },
+                orderFreshness: {
+                  status: "CURRENT",
+                  observedAt: "2026-08-22T10:00:00Z",
+                  evaluatedAt: "2026-08-22T10:00:01Z",
+                },
+              },
+            },
+          ],
           parties: [
             { id: "merchant-1", type: "MERCHANT", displayName: "Local Merchant", status: "ACTIVE" },
           ],
@@ -44,16 +101,7 @@ describe("live product data boundary", () => {
           ],
         });
       }
-      return response({
-        source: "live",
-        strategy: "nearest",
-        strategy_version: "1.0.0",
-        selected_courier: "courier-1",
-        score: 1.2,
-        rationale: ["lowest distance"],
-        latency_millis: 2,
-        trace_id: "trace-1",
-      });
+      throw new Error(`unexpected request to ${url}`);
     });
 
     expect(snapshot.source).toBe("live");
@@ -63,10 +111,15 @@ describe("live product data boundary", () => {
     expect(snapshot.availability).toBe("ready");
     expect(snapshot.merchants[0]?.name).toBe("Local Merchant");
     expect(snapshot.dispatch.selectedCourier).toBe("courier-1");
+    expect(snapshot.dispatch.strategy).toBe("nearest");
+    expect(snapshot.dispatch.latencyMs).toBeNull();
+    expect(snapshot.orders[0]?.operational?.route.status).toBe("NO_ROUTE_ESTIMATE");
+    expect(snapshot.orders[0]?.customerName).toBe("Unavailable");
+    expect(requests).toHaveLength(1);
     expect(snapshot.couriers[0]).toMatchObject({ sequence: 7, online: true, stale: false });
     expect(new Headers(requests[0].headers).get("Authorization")).toBe("Bearer access-token");
     expect(new Headers(requests[0].headers).get("X-Actor")).toBe("operator");
-    expect(new Headers(requests[1].headers).get("Authorization")).toBe("Bearer access-token");
+    expect(snapshot.orders[0]?.operational?.decision.requestId).toBe("request-1");
   });
 
   it("keeps service failure explicit instead of falling back to demo", async () => {

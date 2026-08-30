@@ -392,7 +392,8 @@ function OperationsView({
   const supplyGap = snapshot.orders.length - availableCouriers;
   const zones = new Set(snapshot.couriers.map((courier) => courier.zone).filter(Boolean)).size;
   const openExceptions = countOpenExceptions(snapshot);
-  const hasDispatchLatency = snapshot.availability === "ready" && snapshot.dispatch.latencyMs > 0;
+  const hasDispatchLatency =
+    snapshot.availability === "ready" && snapshot.dispatch.latencyMs !== null;
   const urbanFieldState = useMemo(() => toUrbanFieldState(snapshot), [snapshot]);
   const sourceModeLabel =
     snapshot.source === "live" ? "LIVE" : `${snapshot.source.toUpperCase()} · NON-PRODUCTION`;
@@ -731,11 +732,19 @@ function OperationsView({
             </div>
             <div>
               <dt>Decision latency</dt>
-              <dd>{snapshot.dispatch.latencyMs} ms</dd>
+              <dd>
+                {snapshot.dispatch.latencyMs === null
+                  ? "Unavailable"
+                  : `${snapshot.dispatch.latencyMs} ms`}
+              </dd>
             </div>
             <div>
               <dt>Trace</dt>
-              <dd>dispatch-4d19</dd>
+              <dd>
+                {selectedOrder?.operational?.decision.requestId ??
+                  snapshot.decisionLedger?.requestId ??
+                  "Unavailable"}
+              </dd>
             </div>
           </dl>
           <ActivityStream snapshot={snapshot} realtime={realtime} />
@@ -800,6 +809,33 @@ function OperationsView({
                 <dd>
                   {snapshot.source} · {formatFreshness(snapshot.generatedAt)}
                 </dd>
+              </div>
+              <div>
+                <dt>Decision</dt>
+                <dd>{selectedOrder.operational?.decision.status ?? "Unavailable"}</dd>
+              </div>
+              <div>
+                <dt>Ledger request</dt>
+                <dd>{selectedOrder.operational?.decision.requestId ?? "Unavailable"}</dd>
+              </div>
+              <div>
+                <dt>Strategy</dt>
+                <dd>
+                  {selectedOrder.operational?.decision.strategy ?? "Unavailable"} · v
+                  {selectedOrder.operational?.decision.strategyVersion ?? "-"}
+                </dd>
+              </div>
+              <div>
+                <dt>Route / travel</dt>
+                <dd>{selectedOrder.operational?.route.status ?? "Unavailable"}</dd>
+              </div>
+              <div>
+                <dt>Courier freshness</dt>
+                <dd>{selectedOrder.operational?.courier.freshness.status ?? "Unavailable"}</dd>
+              </div>
+              <div>
+                <dt>Order freshness</dt>
+                <dd>{selectedOrder.operational?.orderFreshness.status ?? "Unavailable"}</dd>
               </div>
             </dl>
           ) : (

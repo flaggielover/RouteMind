@@ -4,6 +4,7 @@ import com.routemind.business.application.dispatch.DispatchDecisionLedgerReposit
 import com.routemind.business.application.security.TenantContext;
 import com.routemind.business.domain.dispatch.DispatchDecisionLedger;
 import com.routemind.business.infrastructure.persistence.TenantKey;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,5 +38,14 @@ public class JpaDispatchDecisionLedgerRepository implements DispatchDecisionLedg
         var tenantId = tenants.current().value();
         return repository.findByDecisionIdAndTenantId(TenantKey.encode(tenantId, decisionId), tenantId)
                 .map(DispatchDecisionLedgerEntity::toDomain);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DispatchDecisionLedger> findAll() {
+        var tenantId = tenants.current().value();
+        return repository.findAllByTenantIdOrderByCreatedAtDesc(tenantId).stream()
+                .map(DispatchDecisionLedgerEntity::toDomain)
+                .toList();
     }
 }

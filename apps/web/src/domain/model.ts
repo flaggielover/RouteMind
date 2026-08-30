@@ -51,6 +51,64 @@ export interface Order {
   destination: string;
   route: readonly GeoPoint[];
   events: readonly OrderEvent[];
+  operational?: OrderOperationalContext;
+}
+
+export type OperationalState =
+  | "RECORDED"
+  | "NO_DECISION_YET"
+  | "NO_ROUTE_ESTIMATE"
+  | "CURRENT"
+  | "STALE"
+  | "DEGRADED"
+  | "UNAVAILABLE";
+
+export interface OperationalFreshness {
+  status: "CURRENT" | "STALE" | "UNAVAILABLE";
+  observedAt: string | null;
+  evaluatedAt: string | null;
+}
+
+export interface OrderOperationalContext {
+  decision: {
+    status: "RECORDED" | "NO_DECISION_YET" | "UNAVAILABLE";
+    decisionId: string | null;
+    requestId: string | null;
+    courierId: string | null;
+    strategy: string | null;
+    strategyVersion: string | null;
+    referenceDataId: string | null;
+    decidedAt: string | null;
+    fallbackState: string | null;
+    decisionReason: string | null;
+    policySelectionMode: string | null;
+    provenanceReference: string | null;
+  };
+  route: {
+    status: "CURRENT" | "STALE" | "DEGRADED" | "NO_ROUTE_ESTIMATE" | "UNAVAILABLE";
+    provider: string | null;
+    fallbackUsed: boolean | null;
+    fallbackReason: string | null;
+    travelSeconds: number | null;
+    distanceKilometres: number | null;
+    observedAt: string | null;
+    freshness: OperationalFreshness;
+  };
+  courier: {
+    status: "CURRENT" | "STALE" | "UNAVAILABLE";
+    courierId: string | null;
+    lifecycleStatus: string | null;
+    sequence: number;
+    observedAt: string | null;
+    ingestedAt: string | null;
+    freshness: OperationalFreshness;
+  };
+  parties: {
+    linkageStatus: string;
+    customerStatus: string | null;
+    merchantStatus: string | null;
+  };
+  orderFreshness: OperationalFreshness;
 }
 
 export interface Courier {
@@ -79,7 +137,7 @@ export interface DispatchDecision {
   strategy: string;
   version: string;
   selectedCourier: string;
-  latencyMs: number;
+  latencyMs: number | null;
   rationale: string;
 }
 

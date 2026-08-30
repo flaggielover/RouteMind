@@ -113,11 +113,29 @@ export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
             </div>
             <div>
               <dt>Last decision</dt>
-              <dd>{strategyAvailable ? `${snapshot.dispatch.latencyMs} ms` : "Unavailable"}</dd>
+              <dd>
+                {strategyAvailable && snapshot.dispatch.latencyMs !== null
+                  ? `${snapshot.dispatch.latencyMs} ms`
+                  : "Unavailable"}
+              </dd>
             </div>
             <div>
               <dt>Shadow mode</dt>
-              <dd>Not recorded</dd>
+              <dd>
+                {snapshot.source === "simulation"
+                  ? "Unavailable for simulation source"
+                  : "Not recorded"}
+              </dd>
+            </div>
+            <div>
+              <dt>Replay artifact</dt>
+              <dd>
+                {snapshot.replay
+                  ? snapshot.replay.verified
+                    ? `Verified · ${snapshot.replay.artifactId}`
+                    : `Unavailable · ${snapshot.replay.verificationError ?? "verification pending"}`
+                  : "Unavailable for this source"}
+              </dd>
             </div>
           </dl>
         </section>

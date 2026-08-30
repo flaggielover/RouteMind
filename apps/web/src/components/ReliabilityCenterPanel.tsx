@@ -2,7 +2,10 @@ import { Activity, AlertTriangle, CheckCircle2, ShieldAlert } from "lucide-react
 import { useMemo } from "react";
 import type { RealtimeConnectionState } from "../data/realtime";
 import type { OperationsSnapshot, ServiceHealth } from "../domain/model";
-import { projectReliabilityCenter } from "../domain/reliabilityCenter";
+import {
+  projectOperationalObservability,
+  projectReliabilityCenter,
+} from "../domain/reliabilityCenter";
 
 export function ReliabilityCenterPanel({
   snapshot,
@@ -15,6 +18,10 @@ export function ReliabilityCenterPanel({
 }) {
   const projection = useMemo(
     () => projectReliabilityCenter(snapshot, health, realtime),
+    [snapshot, health, realtime],
+  );
+  const observability = useMemo(
+    () => projectOperationalObservability(snapshot, health, realtime),
     [snapshot, health, realtime],
   );
   const icon =
@@ -45,6 +52,48 @@ export function ReliabilityCenterPanel({
         <span>Checked {projection.generatedAt || "unavailable"}</span>
         <span>Trace {projection.traceId ?? "unavailable"}</span>
       </div>
+      <section
+        className="reliability-center-block"
+        aria-labelledby="reliability-observability-title"
+      >
+        <div className="decision-xray-block-heading">
+          <h3 id="reliability-observability-title">Operational observability</h3>
+          <span>source-scoped</span>
+        </div>
+        <dl className="detail-list">
+          <div>
+            <dt>Readiness</dt>
+            <dd>{observability.readiness}</dd>
+          </div>
+          <div>
+            <dt>Event cursor / age</dt>
+            <dd>
+              {observability.eventCursor} · {observability.eventAge}
+            </dd>
+          </div>
+          <div>
+            <dt>Publisher</dt>
+            <dd>{observability.publisher}</dd>
+          </div>
+          <div>
+            <dt>Queue activity</dt>
+            <dd>{observability.queue}</dd>
+          </div>
+          <div>
+            <dt>Redis projection</dt>
+            <dd>{observability.redisProjection}</dd>
+          </div>
+          <div>
+            <dt>Dispatch latency</dt>
+            <dd>
+              {observability.dispatchLatencyMs === null
+                ? "unavailable"
+                : `${observability.dispatchLatencyMs} ms`}
+            </dd>
+          </div>
+        </dl>
+        <p className="panel-subtitle">{observability.degradedReasons.join(" · ")}</p>
+      </section>
       <div className="reliability-center-grid">
         <section className="reliability-center-block" aria-labelledby="reliability-timeline-title">
           <div className="decision-xray-block-heading">

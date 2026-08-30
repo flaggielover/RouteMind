@@ -76,6 +76,30 @@ class BusinessApiApplicationTests {
 	}
 
 	@Test
+	void operationsSnapshotCarriesExplicitOrderOperationalAbsence() throws Exception {
+		String create = mockMvc.perform(post("/api/v1/orders")
+				.header("Idempotency-Key", "operational-read-model-create")
+				.header("X-Actor", "customer"))
+				.andExpect(status().isCreated())
+				.andReturn().getResponse().getContentAsString();
+		String orderId = com.fasterxml.jackson.databind.json.JsonMapper.builder().build()
+				.readTree(create).get("orderId").asText();
+		String snapshot = mockMvc.perform(get("/api/v1/operations/snapshot"))
+				.andExpect(status().isOk())
+				.andReturn().getResponse().getContentAsString();
+		var orders = com.fasterxml.jackson.databind.json.JsonMapper.builder().build()
+				.readTree(snapshot).get("orders");
+		var order = java.util.stream.StreamSupport.stream(orders.spliterator(), false)
+				.filter(item -> orderId.equals(item.get("id").asText())).findFirst().orElseThrow();
+		assertThat(order.get("operational").get("decision").get("status").asText())
+				.isEqualTo("NO_DECISION_YET");
+		assertThat(order.get("operational").get("route").get("status").asText())
+				.isEqualTo("NO_ROUTE_ESTIMATE");
+		assertThat(order.get("operational").get("courier").get("status").asText())
+				.isEqualTo("UNAVAILABLE");
+	}
+
+	@Test
 	void requestContextIsReturnedAndPrometheusIsExposed() throws Exception {
 		mockMvc.perform(get("/api/v1/system")
 				.header("X-Request-Id", "ops-42")

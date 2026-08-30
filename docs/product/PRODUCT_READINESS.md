@@ -146,3 +146,26 @@ verify a repeated replay digest, and retain `SIMULATION`/non-causal labels.
 Provider failure uses the existing bounded fallback provider; `RECOVERY` means
 replay recovery, not service-restart evidence. Focused catalog, lint, and runner
 tests pass. The next eligible task is `PR-004`.
+
+`PR-004` is implemented in the current campaign checkpoint. Java now exposes an
+order-centric `operational` aggregate on `GET /api/v1/operations/snapshot`, joined
+by tenant-scoped durable order ID to the latest dispatch decision ledger and its
+matching courier location. Decision, route, courier, party linkage, and freshness
+states are typed and explicit; route data is `NO_ROUTE_ESTIMATE` in the live path
+because no durable route estimate is present, while fallback/stale route fixtures
+are covered by focused tests. The web loader consumes this aggregate directly and
+does not issue a synthetic compute dispatch request. Evidence is under
+`evidence/gates/PR-004/authoritative-read-model.md`.
+
+`PR-005` is implemented in the same checkpoint. Reliability Center now presents a
+source-scoped observability summary for readiness, SSE cursor/age, dispatch
+latency, degraded reasons, and publisher/queue/Redis projection telemetry. The
+latter remain explicitly unavailable until an authoritative local telemetry source
+is attached; no values are inferred. Evidence is under
+`evidence/gates/PR-005/observability-coherence.md`.
+
+`PR-006` is implemented in the same checkpoint. Digital Twin controls use the
+frozen eight-entry scenario catalog, and Strategy Lab labels replay verification
+and shadow availability by source. Unsupported controls remain unavailable and
+all replay/what-if outputs retain their existing non-production authority labels.
+Evidence is under `evidence/gates/PR-006/strategy-replay-shadow.md`.

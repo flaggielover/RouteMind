@@ -4,8 +4,10 @@ import type {
   OperationsDataSource,
   OperationsSnapshot,
   Order,
+  OrderOperationalContext,
   OrderEvent,
   OrderStatus,
+  ServiceHealth,
 } from "../domain/model";
 import { authorizedHeaders, sessionScope, type TenantSession } from "./session";
 export { replayDataSource } from "./replay";
@@ -16,6 +18,7 @@ interface LiveOrder {
   version: number;
   createdAt: string;
   updatedAt: string;
+  operational?: OrderOperationalContext;
 }
 
 interface LiveParty {
@@ -41,21 +44,14 @@ interface LiveOperationsResponse {
   orders: LiveOrder[];
   parties: LiveParty[];
   courierLocations: LiveCourierLocation[];
-}
-
-interface LiveDispatchResponse {
-  source: "live";
-  strategy: string;
-  strategy_version: string;
-  selected_courier: string | null;
-  score: number | null;
-  rationale: string[];
-  latency_millis: number;
-  trace_id: string;
+  health?: {
+    status: string;
+    durableState: string;
+    courierProjection: string;
+  };
 }
 
 const businessApi = import.meta.env.VITE_BUSINESS_API_URL ?? "http://localhost:18080";
-const computeApi = import.meta.env.VITE_COMPUTE_API_URL ?? "http://localhost:18081";
 const timeoutMs = 2_000;
 
 function emptySnapshot(mode: DataSourceMode, detail: string): OperationsSnapshot {
@@ -72,7 +68,7 @@ function emptySnapshot(mode: DataSourceMode, detail: string): OperationsSnapshot
       strategy: "unavailable",
       version: "-",
       selectedCourier: "-",
-      latencyMs: 0,
+      latencyMs: null,
       rationale: detail,
     },
     health: [],
@@ -111,14 +107,14 @@ function orderEvents(order: LiveOrder): readonly OrderEvent[] {
   ];
 }
 
-function toOrder(order: LiveOrder, parties: readonly LiveParty[]): Order {
-  const customer = parties.find((party) => party.type === "CUSTOMER")?.displayName ?? "Customer";
-  const merchant = parties.find((party) => party.type === "MERCHANT")?.displayName ?? "Merchant";
+function toOrder(order: LiveOrder): Order {
+  const parties = order.operational?.parties;
+  const partyUnavailable = !parties || parties.linkageStatus === "UNAVAILABLE";
   return {
     id: order.id,
     shortId: order.id.slice(0, 8).toUpperCase(),
-    customerName: customer,
-    merchantName: merchant,
+    customerName: partyUnavailable ? "Unavailable" : "Customer",
+    merchantName: partyUnavailable ? "Unavailable" : "Merchant",
     status: orderStatus(order.status),
     eta: order.updatedAt,
     age: "live",
@@ -127,6 +123,31 @@ function toOrder(order: LiveOrder, parties: readonly LiveParty[]): Order {
     destination: "Durable order state",
     route: [],
     events: orderEvents(order),
+    operational: order.operational,
+  };
+}
+
+function dispatchFromOrders(orders: readonly LiveOrder[]): OperationsSnapshot["dispatch"] {
+  const decision = orders.find((order) => order.operational?.decision.status === "RECORDED")
+    ?.operational?.decision;
+  if (!decision) {
+    return {
+      strategy: "unavailable",
+      version: "-",
+      selectedCourier: "-",
+      latencyMs: null,
+      rationale: "No durable dispatch decision is recorded for the current orders",
+    };
+  }
+  const rationale = [decision.decisionReason, decision.policySelectionMode, decision.fallbackState]
+    .filter((value): value is string => Boolean(value))
+    .join("; ");
+  return {
+    strategy: decision.strategy ?? "unavailable",
+    version: decision.strategyVersion ?? "-",
+    selectedCourier: decision.courierId ?? "-",
+    latencyMs: null,
+    rationale: rationale || "Durable dispatch decision recorded",
   };
 }
 
@@ -179,28 +200,6 @@ export async function loadLiveSnapshot(
       { headers: { Accept: "application/json", ...authorizedHeaders(session, primaryRole) } },
       fetchImpl,
     );
-    const candidates = operations.courierLocations.map((location) => ({
-      courier_id: location.courierId,
-      location: { latitude: location.latitude, longitude: location.longitude },
-    }));
-    const dispatch = await fetchJson<LiveDispatchResponse>(
-      `${computeApi}/api/v1/dispatch/snapshot`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          ...authorizedHeaders(session),
-        },
-        body: JSON.stringify({
-          request_id: "operations-live-snapshot",
-          strategy: "weighted-greedy",
-          pickup: { latitude: 0, longitude: 0 },
-          candidates,
-        }),
-      },
-      fetchImpl,
-    );
     const reference = new Date(operations.generatedAt);
     const staleCourier = operations.courierLocations.some((location) => {
       const observedAt = new Date(location.observedAt);
@@ -210,15 +209,39 @@ export async function loadLiveSnapshot(
         reference.getTime() - observedAt.getTime() > 120_000
       );
     });
-    const orders = operations.orders.map((order) => toOrder(order, operations.parties));
+    const staleOperational = operations.orders.some((order) => {
+      const operational = order.operational;
+      return (
+        operational?.orderFreshness.status === "STALE" ||
+        operational?.route.freshness.status === "STALE" ||
+        operational?.courier.freshness.status === "STALE"
+      );
+    });
+    const degradedOperational = operations.orders.some(
+      (order) => order.operational?.route.status === "DEGRADED",
+    );
+    const orders = operations.orders.map((order) => toOrder(order));
+    const health: ServiceHealth[] = operations.health
+      ? [
+          {
+            service: "business-api",
+            label: "Business API",
+            status: operations.health.status === "UP" ? "healthy" : "unavailable",
+            endpoint: `${businessApi}/api/v1/operations/snapshot`,
+            checkedAt: operations.generatedAt,
+            detail: `durable state ${operations.health.durableState}; courier projection ${operations.health.courierProjection}`,
+          },
+        ]
+      : [];
     return {
       source: "live",
       identityScope: sessionScope(session),
       clockDomain: "WALL",
-      availability: staleCourier ? "degraded" : "ready",
-      sourceDetail: staleCourier
-        ? "Java durable snapshot + Python dispatch decision; courier location stale"
-        : "Java durable snapshot + Python dispatch decision",
+      availability: staleCourier || staleOperational || degradedOperational ? "degraded" : "ready",
+      sourceDetail:
+        staleCourier || staleOperational || degradedOperational
+          ? "Java durable snapshot + order-scoped decision ledger; operational freshness degraded"
+          : "Java durable snapshot + order-scoped decision ledger; route estimate unavailable",
       generatedAt: operations.generatedAt,
       orders,
       couriers: operations.courierLocations.map((location) => toCourier(location, reference)),
@@ -231,14 +254,8 @@ export async function loadLiveSnapshot(
           queue: 0,
           status: "open" as const,
         })),
-      dispatch: {
-        strategy: dispatch.strategy,
-        version: dispatch.strategy_version,
-        selectedCourier: dispatch.selected_courier ?? "-",
-        latencyMs: dispatch.latency_millis,
-        rationale: dispatch.rationale.join("; "),
-      },
-      health: [],
+      dispatch: dispatchFromOrders(operations.orders),
+      health,
     };
   } catch (error) {
     const detail = error instanceof Error ? error.message : "Live data unavailable";

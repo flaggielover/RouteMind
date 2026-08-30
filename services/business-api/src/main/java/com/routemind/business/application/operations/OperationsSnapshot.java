@@ -16,8 +16,13 @@ public record OperationsSnapshot(Instant generatedAt, List<OrderSummary> orders,
 		courierLocations = List.copyOf(courierLocations);
 	}
 
-	public record OrderSummary(UUID id, String status, long version, Instant createdAt, Instant updatedAt) {
-	}
+    public record OrderSummary(UUID id, String status, long version, Instant createdAt, Instant updatedAt,
+            OperationsOrderReadModel operational) {
+
+        public OrderSummary(UUID id, String status, long version, Instant createdAt, Instant updatedAt) {
+            this(id, status, version, createdAt, updatedAt, OperationsOrderReadModel.unavailable());
+        }
+    }
 
 	public record PartySummary(UUID id, String type, String displayName, String status) {
 	}

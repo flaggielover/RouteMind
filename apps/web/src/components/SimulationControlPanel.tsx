@@ -1,6 +1,7 @@
 import { Gauge, Pause, Play, RotateCcw, SkipForward, SlidersHorizontal } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { SimulationAction, SimulationCommand, SimulationSnapshot } from "../domain/model";
+import { scenarioCatalog } from "../data/scenarioCatalog";
 
 interface SimulationControlPanelProps {
   snapshot: SimulationSnapshot;
@@ -141,7 +142,20 @@ export function SimulationControlPanel({
       <div className="simulation-settings">
         <label>
           Scenario
-          <input value={scenarioId} onChange={(event) => setScenarioId(event.target.value)} />
+          <select
+            aria-label="Scenario"
+            value={scenarioId}
+            onChange={(event) => setScenarioId(event.target.value)}
+          >
+            {!scenarioCatalog.some((scenario) => scenario.id === scenarioId) && (
+              <option value={scenarioId}>{scenarioId} · current</option>
+            )}
+            {scenarioCatalog.map((scenario) => (
+              <option key={scenario.id} value={scenario.id}>
+                {scenario.label} · {scenario.authority}
+              </option>
+            ))}
+          </select>
           <button
             className="button button-quiet"
             type="button"

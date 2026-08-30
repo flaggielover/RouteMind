@@ -47,7 +47,7 @@ describe("SimulationControlPanel", () => {
     expect(screen.getByText("2 orders")).toBeInTheDocument();
     expect(screen.getByText("seeded 1.0x")).toBeInTheDocument();
     expect(screen.getByText("simulation.reset")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("control-default")).toBeInTheDocument();
+    expect(screen.getByRole("combobox", { name: "Scenario" })).toHaveValue("control-default");
   });
 
   it("sends bounded playback and parameter commands", async () => {
