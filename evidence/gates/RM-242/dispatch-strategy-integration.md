@@ -42,4 +42,6 @@ Final state: `PASSED / MULTI_STRATEGY_PRODUCT_READY`. RM-242 is a standalone
 product checkpoint and is excluded from Round 4 task counts. No RM-241 frozen
 artifact, research candidate, scientific result, cloud call, paid resource, or
 production claim changed. Remote GitHub Actions run `33319439637` passed all
-five repository jobs for checkpoint commit `23c25706b66c36a89b3b7a7ed8890ddd2761943c`.
+five repository jobs for implementation commit
+`23c25706b66c36a89b3b7a7ed8890ddd2761943c`; closure run `33319645285` passed
+all five jobs for final commit `906f5711dd672cb7aed7c8a066823380a9bb5e89`.
