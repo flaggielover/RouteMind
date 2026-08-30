@@ -104,11 +104,24 @@ try {
     Assert-Equal $dispatch.contract_version "v1" "dispatch contract"
     Assert-Equal $dispatch.selected_courier $courierId "dispatch selected courier"
 
+    $dispatchMetadata = @{}
+    foreach ($item in $dispatch.metadata) {
+        if ($item.Count -eq 2) { $dispatchMetadata[[string]$item[0]] = [string]$item[1] }
+    }
+    $fallbackReason = $null
+    if ($dispatch.fallback_used) {
+        $fallbackReason = $dispatchMetadata["travel_fallback_reason"]
+        if ([string]::IsNullOrWhiteSpace($fallbackReason) -or $fallbackReason -eq "none") {
+            throw "Dispatch used fallback without an inspectable travel fallback reason"
+        }
+        Write-Host "PASS: dispatch fallback reason = $fallbackReason"
+    }
+
     $assignmentHeaders = @{ "Idempotency-Key" = "$runId-assignment"; "X-Trace-Id" = $traceId; "X-Correlation-Id" = $correlationId }
     $assignment = Invoke-JsonPost "$businessUri/api/v1/orders/$orderId/dispatch-assignment" $assignmentHeaders @{
         requestId = $dispatch.request_id; contractVersion = $dispatch.contract_version; courierId = $dispatch.selected_courier
         strategy = $dispatch.strategy; strategyVersion = $dispatch.strategy_version; inputDigest = $dispatch.input_digest
-        outputDigest = $dispatch.output_digest; fallbackUsed = $dispatch.fallback_used; expectedOrderVersion = 1
+        outputDigest = $dispatch.output_digest; fallbackUsed = $dispatch.fallback_used; fallbackReason = $fallbackReason; expectedOrderVersion = 1
     }
     Assert-Equal $assignment.status "ASSIGNED" "durable dispatch assignment"
 

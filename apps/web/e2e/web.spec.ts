@@ -343,6 +343,85 @@ test.describe("role-aware web smoke", () => {
     expect(results.violations, "stale live accessibility violations").toEqual([]);
   });
 
+  test("reconnects after a backend interruption without duplicating live events", async ({
+    page,
+  }) => {
+    await installVerifiedLiveSession(page);
+    await page.route("**/api/v1/operations/snapshot", (route) =>
+      route.fulfill({
+        json: {
+          source: "live",
+          generatedAt: "2026-08-30T12:00:00.000Z",
+          orders: [],
+          parties: [],
+          courierLocations: [],
+        },
+      }),
+    );
+
+    const streamUrls: string[] = [];
+    let releaseRecovery!: () => void;
+    const backendRecovered = new Promise<void>((resolve) => {
+      releaseRecovery = resolve;
+    });
+    const streamItem = (cursor: string, eventId: string, status: "CREATED" | "CONFIRMED") => ({
+      schemaVersion: "v1",
+      cursor,
+      event: {
+        specVersion: "1.0",
+        eventId,
+        eventType: status === "CREATED" ? "order.created" : "order.status.changed",
+        occurredAt: `2026-08-30T12:00:0${cursor}.000Z`,
+        producer: "business-api",
+        tenantId: liveTenantId,
+        aggregateId: "order-reconnect",
+        aggregateVersion: Number(cursor),
+        correlationId: "correlation-reconnect",
+        causationId: null,
+        traceId: "0123456789abcdef0123456789abcdef",
+        payload: { orderId: "order-reconnect", status },
+      },
+      replay: false,
+      stale: false,
+      staleReason: null,
+    });
+    const created = streamItem("1", "event-created", "CREATED");
+    const confirmed = streamItem("2", "event-confirmed", "CONFIRMED");
+
+    await page.route("**/api/v1/events/stream**", async (route) => {
+      streamUrls.push(route.request().url());
+      if (streamUrls.length === 1) {
+        await route.fulfill({
+          status: 200,
+          contentType: "text/event-stream",
+          body: `event: order.created\ndata: ${JSON.stringify(created)}\n\n`,
+        });
+        return;
+      }
+      await backendRecovered;
+      await route.fulfill({
+        status: 200,
+        contentType: "text/event-stream",
+        body: `event: order.created\ndata: ${JSON.stringify(created)}\n\nevent: order.status.changed\ndata: ${JSON.stringify(confirmed)}\n\n`,
+      });
+    });
+
+    await page.goto("/operations");
+    await expect(page.getByText("Cursor 1", { exact: true })).toBeVisible();
+    await expect.poll(() => streamUrls.length).toBeGreaterThanOrEqual(2);
+    expect(streamUrls[0]).toContain("after=0");
+    expect(streamUrls[1]).toContain("after=1");
+    await expect(page.getByRole("status").filter({ hasText: "Stream reconnecting" })).toBeVisible();
+    await expect(page.locator(".source-status span:not(.source-dot)")).toHaveText("Live ready");
+
+    releaseRecovery();
+    await expect(page.getByText("Cursor 2", { exact: true })).toBeVisible();
+    await expect(page.getByRole("status").filter({ hasText: "Stream connected" })).toBeVisible();
+    await expect(
+      page.getByRole("list", { name: "Verified activity events" }).getByRole("listitem"),
+    ).toHaveCount(2);
+  });
+
   test("surfaces simulation control errors without losing the form state", async ({ page }) => {
     await page.route("**/api/v1/twin/state", (route) =>
       route.fulfill({

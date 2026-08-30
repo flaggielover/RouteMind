@@ -131,6 +131,26 @@ function Assert-ComputeUnavailable {
     Write-Host "PASS: $Label"
 }
 
+function Assert-BusinessUnavailable {
+    param([string] $Label)
+    $available = $false
+    try {
+        Invoke-RestMethod -Uri "$businessUri/actuator/health" -TimeoutSec 3 | Out-Null
+        $available = $true
+    }
+    catch { }
+    if ($available) { throw "$Label expected business health to be unavailable" }
+    Write-Host "PASS: $Label"
+}
+
+function Read-EventStreamItems {
+    param([string] $After)
+    $response = Invoke-WebRequest -Uri "$businessUri/api/v1/events/stream?after=$After" -TimeoutSec 10
+    return @($response.Content -split "`r?`n" | Where-Object { $_ -match '^data:' } | ForEach-Object {
+        ($_ -replace '^data:\s*', '') | ConvertFrom-Json
+    })
+}
+
 function Assert-RequestTimeout {
     param([string] $Uri, [string] $Label)
     $watch = [System.Diagnostics.Stopwatch]::StartNew()
@@ -172,14 +192,14 @@ try {
     $redisCourier = [guid]::NewGuid().ToString()
     $redisLocation = Invoke-JsonPost "$businessUri/api/v1/couriers/$redisCourier/location" `
         @{ "Idempotency-Key" = "$runId-redis-loss"; "X-Actor" = "courier"; "X-Trace-Id" = $traceId; "X-Correlation-Id" = $correlationId } `
-        @{ latitude = 31.2304; longitude = 121.4737; observedAt = "2026-08-23T09:10:00Z" }
+        @{ latitude = 31.2304; longitude = 121.4737; sequence = 1; observedAt = "2026-08-23T09:10:00Z" }
     Assert-Equal $redisLocation.status "DEGRADED" "Redis loss location response"
     Assert-Equal (Invoke-Psql "select count(*) from routemind.courier_locations where courier_id = '$redisCourier'") "1" "Redis loss durable location"
     & docker compose up -d redis | Out-Null
     & (Join-Path $PSScriptRoot "infra.ps1") -Action up -TimeoutSeconds 120 | Out-Null
     $redisRecovered = Invoke-JsonPost "$businessUri/api/v1/couriers/$redisCourier/location" `
         @{ "Idempotency-Key" = "$runId-redis-recovered"; "X-Actor" = "courier"; "X-Trace-Id" = $traceId; "X-Correlation-Id" = $correlationId } `
-        @{ latitude = 31.2305; longitude = 121.4738; observedAt = "2026-08-23T09:11:00Z" }
+        @{ latitude = 31.2305; longitude = 121.4738; sequence = 2; observedAt = "2026-08-23T09:11:00Z" }
     Assert-Equal $redisRecovered.status "PROJECTED" "Redis recovery location response"
 
     # Compute outage must not make Java durable creation look successful as dispatch.
@@ -216,6 +236,27 @@ try {
     Assert-Equal $second.orderId $first.orderId "duplicate command order identity"
     Assert-Equal (Invoke-Psql "select count(*) from routemind.order_command_idempotency where idempotency_key = '$duplicateKey'") "1" "duplicate idempotency row"
     Assert-Equal (Invoke-Psql "select count(*) from routemind.outbox_messages where event_type = 'order.created' and aggregate_id = '$($first.orderId)'") "1" "duplicate event count"
+
+    # Java restart preserves the authoritative snapshot and resumes SSE strictly after the durable cursor.
+    $beforeRestart = @(Read-EventStreamItems "0")
+    if ($beforeRestart.Count -eq 0) { throw "Event stream did not expose a durable cursor before restart" }
+    $restartCursor = [string]$beforeRestart[-1].cursor
+    Stop-Tree $business
+    Assert-BusinessUnavailable "Business API restart boundary"
+    $business = Start-Business
+    Wait-Health "$businessUri/actuator/health" "UP"
+    $snapshot = Invoke-RestMethod -Uri "$businessUri/api/v1/operations/snapshot" -TimeoutSec 10
+    if (@($snapshot.orders.id) -notcontains $first.orderId) {
+        throw "Authoritative operations snapshot lost order $($first.orderId) across restart"
+    }
+    Write-Host "PASS: authoritative operations snapshot recovered after Java restart"
+    $recoveryOrder = Invoke-JsonPost "$businessUri/api/v1/orders" `
+        @{ "Idempotency-Key" = "$runId-restart-order"; "X-Actor" = "customer"; "X-Trace-Id" = $traceId; "X-Correlation-Id" = $correlationId } @{}
+    $afterRestart = @(Read-EventStreamItems $restartCursor)
+    $recoveryEvents = @($afterRestart | Where-Object {
+        $_.event.aggregateId -eq $recoveryOrder.orderId -and $_.event.eventType -eq "order.created"
+    })
+    Assert-Equal $recoveryEvents.Count.ToString() "1" "SSE resume event count after Java restart"
 
     # Offline courier is explicit in both the Java shift state and Python rationale.
     $offlineCourier = [guid]::NewGuid().ToString()

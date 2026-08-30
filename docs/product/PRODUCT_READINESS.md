@@ -172,14 +172,21 @@ Evidence is under `evidence/gates/PR-006/strategy-replay-shadow.md`.
 
 ## PR-007 / PR-008 Closure Audit (2026-08-30)
 
-PR-007 remains pending for this run. A bounded prerequisite check confirmed that
-`docker compose config --quiet` passes, but the active Docker Desktop
-`desktop-linux` daemon did not answer `docker version` within 10 seconds. No
-containers or durable state were started, removed, or reset, and no resilience
-claim is made. Evidence is under
+PR-007 is implemented in the current campaign checkpoint. A bounded Docker
+Desktop recovery restored engine `29.6.2` without deleting containers, images,
+volumes, or durable RouteMind state. The repaired golden journey and expanded
+failure/degradation harness pass against PostgreSQL, RabbitMQ, Redis, Java, and
+Python. The latter now proves Java loss/restart, authoritative snapshot recovery,
+SSE resume from the last durable cursor, and exactly one new event after restart.
+
+The web recovery boundary is covered on desktop and mobile: the authenticated
+stream reconnects with `after=1`, retains the `Live ready` source label while the
+backend request is unavailable, suppresses a replayed cursor/event, and advances
+to cursor `2` with two unique applied events. Stale and malformed events remain
+fail-closed under the realtime unit and browser gates. Evidence is under
 `evidence/gates/PR-007/resilience-reconnect.md`.
 
-PR-008 is not eligible to bypass this block because the product-readiness
-backlog explicitly depends on PR-007. Its UX acceptance criteria and the
-user-owned `09a1fae` visual checkpoint remain unchanged for a future bounded
-closure run.
+PR-008 is now the only eligible Product Readiness task. Its scope remains the
+existing UX information-architecture, state-completeness, responsive, keyboard,
+contrast, and screen-reader closure criteria; it must not absorb the separate
+Immersive Operations implementation campaign.

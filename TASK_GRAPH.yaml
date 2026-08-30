@@ -2,6 +2,24 @@
   "schema_version": 1,
   "project": "RouteMind",
   "statuses": ["pending", "ready", "in_progress", "blocked", "implemented", "validating", "passed", "failed", "deferred_external"],
+  "product_readiness_campaign": {
+    "backlog": "docs/product/PRODUCT_READINESS_BACKLOG.md",
+    "status": "IN_PROGRESS",
+    "current_task": "PR-008",
+    "round4_progress_changed": false,
+    "scientific_claims_changed": false,
+    "tasks": {
+      "PR-001": "implemented",
+      "PR-002": "implemented",
+      "PR-003": "implemented",
+      "PR-004": "implemented",
+      "PR-005": "implemented",
+      "PR-006": "implemented",
+      "PR-007": "implemented",
+      "PR-008": "ready"
+    },
+    "evidence": ["evidence/gates/PR-007/resilience-reconnect.md"]
+  },
   "science_readiness": {
     "audit": "research/SCIENCE_READINESS.md",
     "evidence": "evidence/gates/science-readiness/2026-08-28-science-readiness-audit.md",

@@ -4,22 +4,14 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 ## Product & Demo Readiness Campaign
 
-Audit checkpoint created at `9e6a0ff` with `docs/product/PRODUCT_READINESS.md`
-and `docs/product/PRODUCT_READINESS_BACKLOG.md`. The separate `PR-*` namespace
-records local product work without changing Round 4 progress, frozen scientific
-results, Human Gates, or external-operation evidence. Audit verdict:
-`AUDITED / IMPLEMENTATION_READY`; first eligible task is `PR-001`.
-`PR-001` is implemented in checkpoint `e3c2c57`; local bounded lifecycle evidence
-is under `evidence/gates/PR-001/local-lifecycle.md`, and Actions run `33298506156`
-is green. `PR-002` is implemented in the current checkpoint with readiness,
-configuration, phase, and diagnostic evidence under
-`evidence/gates/PR-002/readiness-diagnostics.md`; its focused checks pass and the
-bounded Docker failure remains explicit. The next eligible product task is
-`PR-003`. `PR-003` is now implemented with the finite scenario catalog and
-deterministic runner; repeated digest, shortage, fallback, recovery, lint, and
-format checks pass under the pinned compute environment. Evidence is under
-`evidence/gates/PR-003/deterministic-scenarios.md`; the next eligible product task
-is `PR-004`.
+The separate `PR-*` namespace records local product work without changing Round
+4 progress, frozen scientific results, Human Gates, or external-operation
+evidence. PR-001 through PR-007 are implemented. Docker Desktop was recovered
+without deleting volumes or durable state; the real golden journey,
+failure/degradation matrix, Java restart, authoritative snapshot recovery, SSE
+cursor resume/deduplication, and desktop/mobile browser reconnect gates pass.
+Evidence is under `evidence/gates/PR-007/resilience-reconnect.md`. PR-008 is the
+only eligible Product Readiness task.
 
 Round 2 Progress: 48 / 48 tasks passed
 

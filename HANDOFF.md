@@ -8,22 +8,15 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 ## Product & Demo Readiness Campaign
 
-Audit checkpoint at `9e6a0ff` produced `docs/product/PRODUCT_READINESS.md` and
-`docs/product/PRODUCT_READINESS_BACKLOG.md`. This campaign uses the separate
-`PR-*` namespace and does not change Round 4 progress, frozen scientific
-results, Human Gates, or external-operation evidence. The audit is
-`AUDITED / IMPLEMENTATION_READY`; `PR-001` is the first eligible local task.
-The bounded audit observed Docker/Compose startup not returning, independent
-Python and web startup working, and the existing web Vitest run reporting three
-worker startup timeouts after 96 tests passed. Preserve `.codex-tmp/` as
-pre-existing untracked state. `PR-001` is implemented in `e3c2c57` with green
-Actions run `33298506156`. `PR-002` is implemented in the current checkpoint;
-its evidence is under `evidence/gates/PR-002/readiness-diagnostics.md`, and the
-next eligible task is `PR-003`. `PR-003` is implemented with the finite,
-simulation-only scenario catalog and runner; evidence is under
-`evidence/gates/PR-003/deterministic-scenarios.md`. The next eligible task is
-`PR-004`. Unrelated web package/visual worktree changes are user-owned and must
-be preserved.
+The separate `PR-*` namespace does not change Round 4 progress, frozen
+scientific results, Human Gates, or external-operation evidence. PR-001 through
+PR-007 are implemented. The Docker Desktop engine was recovered without volume
+or durable-state deletion. Golden delivery, dependency loss/recovery, Java
+restart, authoritative snapshot recovery, SSE cursor resume/deduplication, and
+desktop/mobile browser reconnect gates pass. Evidence is under
+`evidence/gates/PR-007/resilience-reconnect.md`. PR-008 is the only eligible
+Product Readiness task. Preserve ignored/untracked `.codex-tmp/` and
+`.superpowers/` state.
 
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 
