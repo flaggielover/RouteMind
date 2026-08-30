@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 
 interface OperationsAnalyticalStripProps {
   snapshot: OperationsSnapshot;
+  focus?: "all" | "pressure" | "risk" | "strategy";
 }
 
 interface SignalPoint {
@@ -15,7 +16,10 @@ interface SignalPoint {
 const chartWidth = 360;
 const chartHeight = 142;
 
-export function OperationsAnalyticalStrip({ snapshot }: OperationsAnalyticalStripProps) {
+export function OperationsAnalyticalStrip({
+  snapshot,
+  focus = "all",
+}: OperationsAnalyticalStripProps) {
   const state = toUrbanFieldState(snapshot);
   const throughput = buildThroughputSeries(snapshot.orders.length, state.pressure);
   const risk = buildRiskSeries(state.risk, state.traffic);
@@ -23,6 +27,115 @@ export function OperationsAnalyticalStrip({ snapshot }: OperationsAnalyticalStri
   const heatmap = buildHeatmap(state.pressure, state.traffic, state.risk);
   const provenance =
     snapshot.source === "live" ? "Snapshot-derived" : "Visual demo · non-production";
+
+  if (focus === "pressure") {
+    return (
+      <section
+        className="analytics-foundation analytics-focus-pressure"
+        aria-label="Urban pressure analytical surface"
+      >
+        <div className="analytics-foundation-heading">
+          <div>
+            <p className="eyebrow">Spatial pressure field</p>
+            <h2>Demand intensity across the operating area.</h2>
+          </div>
+          <span className="analytics-provenance">{provenance}</span>
+        </div>
+        <ChartFrame title="Zone pressure field" meta="pressure × traffic">
+          <Heatmap cells={heatmap} />
+          <div className="chart-footline">
+            <span>
+              <i className="chart-dot chart-dot-red" /> elevated risk
+            </span>
+            <strong>{Math.round(state.pressure * 100)}% network pressure</strong>
+          </div>
+        </ChartFrame>
+      </section>
+    );
+  }
+
+  if (focus === "risk") {
+    return (
+      <section
+        className="analytics-foundation analytics-focus-risk"
+        aria-label="SLA risk analytical surface"
+      >
+        <div className="analytics-foundation-heading">
+          <div>
+            <p className="eyebrow">Promise boundary</p>
+            <h2>SLA exposure over the last twelve operational ticks.</h2>
+          </div>
+          <span className="analytics-provenance">{provenance}</span>
+        </div>
+        <ChartFrame title="SLA / risk trend" meta="bounded risk index">
+          <LineChart
+            label="SLA risk trend"
+            points={risk}
+            color="var(--chart-amber)"
+            threshold={0.58}
+            suffix="%"
+            percentage
+          />
+          <div className="chart-footline">
+            <span>
+              <i className="chart-dot chart-dot-amber" /> current exposure
+            </span>
+            <strong className="chart-value-risk">{Math.round(state.risk * 100)}% risk</strong>
+          </div>
+        </ChartFrame>
+      </section>
+    );
+  }
+
+  if (focus === "strategy") {
+    return (
+      <section
+        className="analytics-foundation analytics-focus-strategy"
+        aria-label="Strategy analytical surface"
+      >
+        <div className="analytics-foundation-heading">
+          <div>
+            <p className="eyebrow">Decision instrumentation</p>
+            <h2>Active policy against capacity-aware alternatives.</h2>
+          </div>
+          <span className="analytics-provenance">{provenance}</span>
+        </div>
+        <div className="analytics-grid analytics-grid-strategy-focus">
+          <ChartFrame title="Strategy distribution" meta="comparison preview">
+            <StrategyBars entries={strategy} />
+            <div className="chart-footline">
+              <span>
+                <i className="chart-dot chart-dot-teal" /> selected strategy
+              </span>
+              <strong>{snapshot.dispatch.strategy}</strong>
+            </div>
+          </ChartFrame>
+          <ChartFrame title="Latency / throughput" meta="last decision">
+            <div
+              className="latency-throughput"
+              role="img"
+              aria-label="Latency and throughput compact comparison"
+            >
+              <CompactSignal
+                label="Latency"
+                value={snapshot.dispatch.latencyMs ?? 0}
+                max={180}
+                suffix="ms"
+                tone="amber"
+              />
+              <CompactSignal
+                label="Throughput"
+                value={Math.round((1 - state.pressure * 0.24) * 100)}
+                max={100}
+                suffix="%"
+                tone="teal"
+              />
+            </div>
+          </ChartFrame>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="analytics-foundation" aria-labelledby="analytics-foundation-title">

@@ -9,7 +9,7 @@ describe("urban field fallback", () => {
     render(<UrbanFieldFallback state={toUrbanFieldState(demoDataSource.getSnapshot())} />);
 
     expect(
-      screen.getByRole("img", { name: "RouteMind urban field fallback summary" }),
+      screen.getByRole("region", { name: "RouteMind urban field fallback summary" }),
     ).toBeInTheDocument();
     expect(screen.getByText("Demo · non-production")).toBeInTheDocument();
     expect(screen.getByText(/WebGL is unavailable in this environment/)).toBeInTheDocument();

@@ -19,6 +19,7 @@ import {
   PerspectiveCamera,
   PlaneGeometry,
   PointLight,
+  RingGeometry,
   Raycaster,
   Scene,
   SphereGeometry,
@@ -37,6 +38,7 @@ import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { useEffect, useRef, useState, type MutableRefObject } from "react";
 import type { UrbanFieldState } from "../visuals/urbanFieldState";
+import type { OperationsCameraMode, UrbanWorldFrame } from "../visuals/operationsChapterState";
 import { UrbanFieldFallback } from "./UrbanFieldFallback";
 
 export interface UrbanFieldSceneProps {
@@ -48,6 +50,7 @@ export interface UrbanFieldSceneProps {
 
 export interface UrbanFieldSceneController {
   setScrollFrame(frame: { progress: number; section: number; focus: number }): void;
+  setWorldFrame(frame: UrbanWorldFrame): void;
   setPointerFrame(frame: {
     x?: number;
     y?: number;
@@ -69,12 +72,18 @@ interface SceneRefs {
   composer: EffectComposer | null;
   lensPass: ShaderPass | null;
   core: Mesh;
+  coreSatellites: Mesh[];
   coreGeometry: BufferGeometry;
   cells: InstancedMesh;
   cellHeights: number[];
   cellWorldPositions: Vector3[];
   routes: Mesh[];
   nodes: Mesh[];
+  riskZones: Mesh[];
+  ambient: HemisphereLight;
+  directional: DirectionalLight;
+  keyLight: PointLight;
+  riskLight: PointLight;
   raycaster: Raycaster;
   rayPlane: Mesh;
   pointerNdc: Vector2;
@@ -82,6 +91,7 @@ interface SceneRefs {
   hasPointerWorld: boolean;
   cameraBase: Vector3;
   cameraTarget: Vector3;
+  cameraLookAt: Vector3;
   reducedMotion: boolean;
   scrollProgress: number;
   sectionIndex: number;
@@ -90,12 +100,24 @@ interface SceneRefs {
   lensPointer: Vector2;
   coreScaleTarget: Vector3;
   focusedEntityId: string | null;
+  worldFrame: UrbanWorldFrame;
 }
 
 const SLATE = "#273840";
 const TEAL = "#67c8c0";
 const AMBER = "#d6a261";
 const RISK = "#d86d6b";
+
+const DEFAULT_WORLD_FRAME: UrbanWorldFrame = {
+  chapter: "overview",
+  progress: 0,
+  cameraMode: "overview",
+  sceneRole: "hero",
+  instrumentation: "minimal",
+  focusStrength: 0.78,
+  layerVisibility: { core: 1, cells: 0.72, flows: 0.58, nodes: 0.42, riskZones: 0.28 },
+  lighting: { key: 1, ambient: 0.72, risk: 0.28 },
+};
 
 export function UrbanFieldScene({
   state,
@@ -119,6 +141,7 @@ export function UrbanFieldScene({
     if (!host || typeof window === "undefined") return;
 
     let sceneRefs: SceneRefs | null = null;
+    let requestStaticRender: (() => void) | null = null;
     let frame = 0;
     let destroyed = false;
     let hidden = document.visibilityState === "hidden";
@@ -161,6 +184,9 @@ export function UrbanFieldScene({
         antialias: true,
         alpha: true,
         powerPreference: "high-performance",
+        // Reduced-motion renders on demand, so its last semantic frame must survive
+        // browser compositing without a continuous RAF loop.
+        preserveDrawingBuffer: true,
       });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
       renderer.outputColorSpace = SRGBColorSpace;
@@ -233,6 +259,7 @@ export function UrbanFieldScene({
         metalness: 0.22,
         emissive: "#122c31",
         emissiveIntensity: 0.38,
+        transparent: true,
       });
       const cells = new InstancedMesh(cellGeometry, cellMaterial, cellCount);
       cells.castShadow = true;
@@ -341,11 +368,38 @@ export function UrbanFieldScene({
         roughness: 0.29,
         metalness: 0.54,
         flatShading: true,
+        transparent: true,
       });
       const core = new Mesh(coreGeometry, coreMaterial);
       core.position.set(0, 1.72, 0);
       core.castShadow = true;
       scene.add(core);
+
+      const coreSatellites = [
+        { position: [-1.08, 2.08, 0.18] as const, scale: 0.42, tone: TEAL },
+        { position: [0.88, 2.34, -0.36] as const, scale: 0.32, tone: "#8fb7b3" },
+        { position: [0.94, 1.15, 0.44] as const, scale: 0.38, tone: AMBER },
+        { position: [-0.64, 0.98, -0.62] as const, scale: 0.26, tone: "#51757a" },
+        { position: [0.12, 2.92, 0.2] as const, scale: 0.22, tone: RISK },
+      ].map((item, index) => {
+        const geometry = new IcosahedronGeometry(item.scale, index % 2 ? 0 : 1);
+        const material = new MeshStandardMaterial({
+          color: item.tone,
+          emissive: item.tone,
+          emissiveIntensity: index === 4 ? 0.72 : 0.24,
+          roughness: 0.34 + index * 0.06,
+          metalness: 0.48,
+          flatShading: true,
+          transparent: true,
+        });
+        const satellite = new Mesh(geometry, material);
+        satellite.position.set(item.position[0], item.position[1], item.position[2]);
+        satellite.rotation.set(index * 0.36, index * 0.71, index * 0.22);
+        satellite.userData = { phase: index * 1.17, basePosition: satellite.position.clone() };
+        satellite.castShadow = true;
+        scene.add(satellite);
+        return satellite;
+      });
 
       const coreWire = new Mesh(
         new IcosahedronGeometry(1.17, 1),
@@ -372,6 +426,26 @@ export function UrbanFieldScene({
       hitArea.position.copy(core.position);
       scene.add(hitArea);
 
+      const riskZones = (stateRef.current.spatial?.zones ?? []).map((zone, index) => {
+        const radius = Math.max(0.45, zone.radius * 0.07);
+        const zoneMesh = new Mesh(
+          new RingGeometry(radius * 0.72, radius, 42),
+          new MeshBasicMaterial({
+            color: index === 0 ? RISK : AMBER,
+            transparent: true,
+            opacity: 0.14 + zone.risk * 0.18,
+            side: DoubleSide,
+            depthWrite: false,
+            blending: AdditiveBlending,
+          }),
+        );
+        zoneMesh.rotation.x = -Math.PI / 2;
+        zoneMesh.position.copy(toWorldPoint(zone.center, 0.035));
+        zoneMesh.userData = { id: zone.id, risk: zone.risk, phase: index * 1.7 };
+        scene.add(zoneMesh);
+        return zoneMesh;
+      });
+
       const rayPlane = new Mesh(
         new PlaneGeometry(18, 12),
         new MeshBasicMaterial({ visible: false, side: DoubleSide }),
@@ -386,12 +460,18 @@ export function UrbanFieldScene({
         composer,
         lensPass,
         core,
+        coreSatellites,
         coreGeometry,
         cells,
         cellHeights,
         cellWorldPositions,
         routes,
         nodes: [hitArea, ...nodes],
+        riskZones,
+        ambient,
+        directional,
+        keyLight,
+        riskLight,
         raycaster: new Raycaster(),
         rayPlane,
         pointerNdc: new Vector2(),
@@ -399,6 +479,7 @@ export function UrbanFieldScene({
         hasPointerWorld: false,
         cameraBase: camera.position.clone(),
         cameraTarget: camera.position.clone(),
+        cameraLookAt: new Vector3(0, 1.15, 0),
         reducedMotion,
         scrollProgress: 0,
         sectionIndex: 0,
@@ -407,6 +488,7 @@ export function UrbanFieldScene({
         lensPointer: new Vector2(0.5, 0.5),
         coreScaleTarget: new Vector3(1, 1, 1),
         focusedEntityId: null,
+        worldFrame: DEFAULT_WORLD_FRAME,
       };
       sceneRefs = sceneState;
       if (controllerRef) {
@@ -416,6 +498,12 @@ export function UrbanFieldScene({
             sceneRefs.scrollProgress = Math.min(1, Math.max(0, frame.progress));
             sceneRefs.sectionIndex = frame.section;
             sceneRefs.focusStrength = Math.min(1, Math.max(0, frame.focus));
+            requestStaticRender?.();
+          },
+          setWorldFrame: (worldFrame) => {
+            if (!sceneRefs) return;
+            sceneRefs.worldFrame = worldFrame;
+            requestStaticRender?.();
           },
           setPointerFrame: (frame) => {
             if (!sceneRefs) return;
@@ -482,6 +570,7 @@ export function UrbanFieldScene({
         sceneRefs.camera.updateProjectionMatrix();
         sceneRefs.renderer.setSize(width, height, false);
         sceneRefs.composer?.setSize(width, height);
+        requestStaticRender?.();
       };
       const resizeObserver = new ResizeObserver(resize);
       resizeObserver.observe(host);
@@ -489,7 +578,12 @@ export function UrbanFieldScene({
 
       const updateReducedMotion = () => {
         if (sceneRefs) sceneRefs.reducedMotion = reducedQuery?.matches ?? false;
-        if (sceneRefs?.reducedMotion) renderFrame(performance.now());
+        if (sceneRefs?.reducedMotion) {
+          stopLoop();
+          renderFrame(performance.now());
+        } else {
+          startLoop();
+        }
       };
       reducedQuery?.addEventListener?.("change", updateReducedMotion);
 
@@ -513,6 +607,7 @@ export function UrbanFieldScene({
       let previous = performance.now();
       const frameMatrix = new Matrix4();
       const renderFrame = (now: number) => {
+        frame = 0;
         if (destroyed || !sceneRefs) return;
         const refs = sceneRefs;
         const delta = Math.min(0.05, Math.max(0, (now - previous) / 1000));
@@ -520,6 +615,7 @@ export function UrbanFieldScene({
         const elapsed = now / 1000;
         const current = stateRef.current;
         const motion = !refs.reducedMotion;
+        const worldFrame = refs.worldFrame;
         const coreMaterialRef = refs.core.material as MeshStandardMaterial;
         const pressure = current.pressure;
         const spatialBeat = Math.max(0, 1 - Math.abs(refs.scrollProgress - 0.055) / 0.075);
@@ -558,11 +654,29 @@ export function UrbanFieldScene({
           strategyBeat * 0.12 +
           inspection * 0.28 +
           Math.sin(elapsed * 1.4) * (motion ? 0.08 : 0);
+        coreMaterialRef.opacity = 0.48 + worldFrame.layerVisibility.core * 0.52;
         const coreScale = 1 + spatialBeat * 0.07 + riskBeat * 0.09 - strategyBeat * 0.08;
         refs.coreScaleTarget.set(coreScale, coreScale, coreScale);
         refs.core.scale.lerp(refs.coreScaleTarget, motion ? 0.08 : 1);
         refs.core.rotation.y += motion ? delta * (0.11 + current.activityRate * 0.12) : 0;
         refs.core.rotation.x = motion ? Math.sin(elapsed * 0.33) * 0.08 : 0;
+
+        refs.coreSatellites.forEach((satellite, index) => {
+          const material = satellite.material as MeshStandardMaterial;
+          const base = satellite.userData.basePosition as Vector3;
+          const energy = worldFrame.layerVisibility.core;
+          material.opacity = 0.34 + energy * 0.62;
+          satellite.visible = energy > 0.08;
+          satellite.position.set(
+            base.x + (motion ? Math.sin(elapsed * 0.31 + index) * 0.08 : 0),
+            base.y + (motion ? Math.sin(elapsed * 0.58 + index * 1.2) * 0.1 : 0),
+            base.z + (motion ? Math.cos(elapsed * 0.37 + index) * 0.07 : 0),
+          );
+          if (motion) {
+            satellite.rotation.x += delta * (0.08 + index * 0.014);
+            satellite.rotation.y -= delta * (0.11 + index * 0.018);
+          }
+        });
 
         const wavePoint = refs.pointerWorld;
         refs.cellWorldPositions.forEach((position, index) => {
@@ -582,7 +696,10 @@ export function UrbanFieldScene({
           frameMatrix.compose(cellPosition, cellQuaternion, cellScale);
           refs.cells.setMatrixAt(index, frameMatrix);
         });
-        refs.cells.instanceMatrix.needsUpdate = motion && refs.hasPointerWorld;
+        refs.cells.instanceMatrix.needsUpdate = !motion || refs.hasPointerWorld;
+        (refs.cells.material as MeshStandardMaterial).opacity =
+          0.28 + worldFrame.layerVisibility.cells * 0.72;
+        refs.cells.visible = worldFrame.layerVisibility.cells > 0.04;
 
         refs.nodes.slice(1).forEach((node, index) => {
           const focused = node.userData.id === hoveredEntity;
@@ -592,6 +709,9 @@ export function UrbanFieldScene({
             ? 1.25 + inspection * 0.45
             : 0.38 + pulse + riskBeat * 0.18;
           node.scale.setScalar(focused ? 1.55 + inspection * 0.18 : 1 + strategyBeat * 0.05);
+          material.opacity = 0.22 + worldFrame.layerVisibility.nodes * 0.78;
+          material.transparent = true;
+          node.visible = worldFrame.layerVisibility.nodes > 0.05;
           if (motion)
             node.position.y = node.userData.baseY + Math.sin(elapsed * 1.2 + index) * 0.04;
         });
@@ -603,22 +723,32 @@ export function UrbanFieldScene({
               strategyBeat * 0.24 +
               riskBeat * 0.12 +
               (Math.sin(elapsed * 1.8 + index) + 1) * 0.08;
+          material.opacity = (0.28 + worldFrame.layerVisibility.flows * 0.62) * 0.82;
         });
+        refs.riskZones.forEach((zone, index) => {
+          const material = zone.material as MeshBasicMaterial;
+          material.opacity =
+            (0.08 + (zone.userData.risk as number) * 0.18) * worldFrame.layerVisibility.riskZones;
+          zone.visible = worldFrame.layerVisibility.riskZones > 0.05;
+          if (motion) {
+            const pulse = 1 + Math.sin(elapsed * 1.2 + index * 1.7) * 0.06;
+            zone.scale.setScalar(pulse);
+          }
+        });
+
+        refs.ambient.intensity = 0.72 + worldFrame.lighting.ambient * 0.86;
+        refs.directional.intensity = 2.1 + worldFrame.lighting.key * 1.5;
+        refs.keyLight.intensity = 2.8 + worldFrame.lighting.key * 3.1;
+        refs.riskLight.intensity = 1.1 + worldFrame.lighting.risk * 3.8;
+
+        const cameraFrame = cameraFrameFor(worldFrame.cameraMode);
         const pointerOffset = refs.pointerIntensity;
         refs.cameraTarget.set(
-          refs.cameraBase.x +
-            (refs.scrollProgress - 0.5) * 0.95 +
-            refs.pointerNdc.x * 0.62 * pointerOffset,
-          refs.cameraBase.y +
-            spatialBeat * 0.26 -
-            riskBeat * 0.18 -
-            refs.pointerNdc.y * 0.34 * pointerOffset,
-          refs.cameraBase.z +
-            spatialBeat * 0.55 -
-            riskBeat * 0.4 +
-            strategyBeat * 1.15 +
-            detailBeat * 0.35,
+          cameraFrame.position.x + refs.pointerNdc.x * 0.62 * pointerOffset,
+          cameraFrame.position.y - refs.pointerNdc.y * 0.34 * pointerOffset,
+          cameraFrame.position.z + detailBeat * 0.16,
         );
+        refs.cameraLookAt.copy(cameraFrame.target);
         if (refs.lensPass) {
           refs.lensPass.uniforms.uPointer.value.copy(refs.lensPointer);
           refs.lensPass.uniforms.uIntensity.value = refs.reducedMotion
@@ -630,10 +760,10 @@ export function UrbanFieldScene({
         }
         if (motion) {
           camera.position.lerp(refs.cameraTarget, 1 - Math.pow(0.001, delta));
-          camera.lookAt(0, 1.15 + riskBeat * 0.24 - strategyBeat * 0.12, 0);
-        } else if (!camera.position.equals(refs.cameraBase)) {
-          camera.position.copy(refs.cameraBase);
-          camera.lookAt(0, 1.15, 0);
+          camera.lookAt(refs.cameraLookAt);
+        } else if (!camera.position.equals(refs.cameraTarget)) {
+          camera.position.copy(refs.cameraTarget);
+          camera.lookAt(refs.cameraLookAt);
         }
         if (!hidden && inViewport) refs.composer?.render(delta);
         if (!hidden && inViewport && !refs.composer) refs.renderer.render(scene, camera);
@@ -643,6 +773,9 @@ export function UrbanFieldScene({
         if (!sceneRefs || sceneRefs.reducedMotion || frame || hidden || !inViewport) return;
         previous = performance.now();
         frame = requestAnimationFrame(renderFrame);
+      };
+      requestStaticRender = () => {
+        if (sceneRefs?.reducedMotion && !hidden && inViewport) renderFrame(performance.now());
       };
 
       if (!reducedMotion) startLoop();
@@ -661,6 +794,7 @@ export function UrbanFieldScene({
         composer?.dispose();
         renderer.dispose();
         renderer.domElement.remove();
+        requestStaticRender = null;
         sceneRefs = null;
         if (controllerRef) controllerRef.current = null;
       };
@@ -712,6 +846,25 @@ export default UrbanFieldScene;
 
 function toWorldPoint(point: { x: number; y: number }, elevation: number): Vector3 {
   return new Vector3((point.x / 100 - 0.5) * 16.4, elevation, (point.y / 100 - 0.5) * 9.3);
+}
+
+function cameraFrameFor(mode: OperationsCameraMode): { position: Vector3; target: Vector3 } {
+  switch (mode) {
+    case "pressure-close":
+      return { position: new Vector3(5.4, 4.8, 8.2), target: new Vector3(-0.9, 0.82, 0.3) };
+    case "risk-hotspot":
+      return { position: new Vector3(4.2, 3.7, 7.4), target: new Vector3(2.2, 0.62, -1.15) };
+    case "strategy-pullback":
+      return { position: new Vector3(10.4, 8.6, 14.8), target: new Vector3(0, 1.3, 0) };
+    case "live-inspection":
+      return { position: new Vector3(-7.4, 5.2, 10.4), target: new Vector3(-0.8, 0.55, 0.4) };
+    case "replay-tracking":
+      return { position: new Vector3(2.2, 7.9, 13.2), target: new Vector3(0.6, 0.8, -0.6) };
+    case "research-stable":
+      return { position: new Vector3(-8.5, 6.8, 12.9), target: new Vector3(0, 1.05, 0) };
+    default:
+      return { position: new Vector3(8.4, 7.2, 11.6), target: new Vector3(0, 1.15, 0) };
+  }
 }
 
 function createComposer(

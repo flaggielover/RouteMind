@@ -59,6 +59,22 @@ describe("role-aware application", () => {
     expect(screen.getByRole("list", { name: "Lifecycle for RM-2041" })).toBeInTheDocument();
   });
 
+  it("mounts one persistent world across seven distinct operations chapters", async () => {
+    const { container } = renderApp();
+
+    expect(await screen.findByText("Demo snapshot")).toBeInTheDocument();
+    expect(container.querySelectorAll(".persistent-urban-world")).toHaveLength(1);
+    expect(container.querySelectorAll("[data-chapter]")).toHaveLength(7);
+    expect(container.querySelectorAll(".operations-hero")).toHaveLength(0);
+    expect(screen.getByRole("navigation", { name: "Operations chapters" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Read the pressure before it becomes a queue." }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Find the edge of the promise." }),
+    ).toBeInTheDocument();
+  });
+
   it("switches role routes without duplicating the application shell", async () => {
     const user = userEvent.setup();
     renderApp();

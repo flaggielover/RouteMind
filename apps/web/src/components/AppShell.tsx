@@ -129,6 +129,7 @@ export function AppShell({
                 className={({ isActive }) => `role-link ${isActive ? "active" : ""}`}
                 to={`/${role}`}
                 key={role}
+                aria-label={label}
                 onClick={() => setMobileNavOpen(false)}
               >
                 <Icon size={17} aria-hidden="true" />

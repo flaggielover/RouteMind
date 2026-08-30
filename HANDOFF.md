@@ -1615,6 +1615,36 @@ connection failures in live/degraded fixtures; no motion assertion failed.
 The standalone implementation checkpoint is ready for review. Keep the local
 dev server at `http://127.0.0.1:4173/operations` available for visual follow-up.
 
+## RM-240 Seven-Chapter Persistent Spatial World (2026-08-30)
+
+Operations now uses one `PersistentUrbanWorld` beside a seven-chapter experience
+track. `operationsChapterState` is the renderer-neutral contract for camera,
+lighting, scene role, layer visibility, instrumentation, semantic focus, and
+future spatial cells/nodes/flows/zones. The native Three.js renderer remains
+lazy, single-mount, DPR-bounded, visibility-aware, disposable, and capable of a
+semantic static fallback.
+
+The chapters are intentionally different compositions rather than copies of one
+viewport template. Overview centers network signal, Pressure closes on the core
+and heatmap, Risk pushes the core off-frame toward promise exposure, Strategy
+uses a pullback with edge instrumentation, Live becomes a geo inspection bay,
+Replay becomes a temporal dock, and Research becomes an evidence wall. Existing
+operational controls and source boundaries remain functional and accessible.
+
+Reduced motion keeps WebGL and now preserves/repaints the final semantic frame;
+the discovered blank-buffer defect and runtime RAF restart defect were fixed
+before approval. Browser evidence covers Gates A/B/C, continuous seven-chapter
+scroll, pointer inspection, 1280/1024/760 widths, reduced motion, canvas pixels,
+and zero console warnings/errors. Full local gates pass lint, typecheck, 40
+Vitest files/112 tests, build, and Playwright 34 passed/2 device-conditional
+skips with desktop/mobile Axe smoke.
+
+Evidence is `evidence/gates/RM-240/immersive-operations-world.md`. The local
+browser is left at `http://localhost:4173/operations#operations-chapter-overview`
+with Demo selected. This is snapshot-derived visual infrastructure only; H3,
+production spatial telemetry, national globe, Decision X-Ray expansion, and
+Presentation Mode remain out of scope.
+
 ### R4-422 V2 closure and credential lifecycle audit - 2026-08-30
 
 The consumed V2 fail-closed execution was closed in checkpoint `1b7c41021f914bd2f1eb367fd3d417345729304d`, whose first remote CI run was `33290111559`. That run passed Python, Web, Resilience, and Java, but the control-plane security gate rejected a local token variable name lexically; no provider or credential operation occurred. The smallest source-only naming repair was committed separately as `3752f205d5d5e5cb5670ed03d86801dca0eb21e8` and passed all five jobs in remote CI run `33290659144`.

@@ -2502,3 +2502,24 @@ blocked at `HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT`.
   browser continuous-scroll/pointer inspection passed. A concurrent full e2e run
   retained eight unrelated strict-selector/connection failures in live/degraded
   fixtures; no motion assertion failed.
+
+### RM-240 seven-chapter persistent spatial world - 2026-08-30
+
+- Replaced the dashboard-first Operations composition with one persistent
+  Three.js world and seven distinct operational scenes: Overview, Urban
+  Pressure, SLA/Risk, Strategy, Live Operations, Simulation/Replay, and
+  Reliability/Research. Each chapter changes camera framing, scene role,
+  analytical hierarchy, typography, depth, and HUD placement.
+- Added the renderer-neutral chapter/world contract and kept optional spatial
+  cells, nodes, flows, and zones compatible with future Digital Twin data.
+  Reduced motion now retains a nonblank event-driven WebGL frame, including
+  resize/scroll/world-state redraw and correct runtime RAF restart behavior.
+- Browser Gates A/B/C, continuous scrolling, semantic pointer inspection,
+  desktop 1280px, laptop 1024px, mobile 760px, reduced motion, canvas pixels,
+  and console inspection passed. The old hero skeleton is absent, one canvas is
+  retained, and there is no horizontal overflow or internal scroll trap.
+- Evidence: `evidence/gates/RM-240/immersive-operations-world.md`. Final local
+  gates pass lint, typecheck, 40 Vitest files/112 tests, build, and 34 Playwright
+  passes with two device-conditional skips, including desktop/mobile Axe smoke.
+  This remains deterministic snapshot-derived visualization, not production
+  telemetry or a completed Digital Twin.

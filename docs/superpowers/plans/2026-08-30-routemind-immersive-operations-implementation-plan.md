@@ -15,6 +15,37 @@ The first implementation checkpoint should be reviewable after the chapter
 shell and persistent world are in place. The final checkpoint requires browser
 continuous-scroll evidence and a static-composition review with motion disabled.
 
+## Approved Execution Amendments
+
+The controlling execution order is:
+
+1. renderer-neutral contracts;
+2. minimal `OperationsExperience` and chapter shell;
+3. persistent world mount, stacking model, sticky stage, and controller boundary;
+4. seven distinct static chapter compositions;
+5. analytical surface recomposition;
+6. scroll and semantic pointer choreography;
+7. responsive and reduced-motion behavior;
+8. final automated and browser gates.
+
+Three browser gates run before the final gate:
+
+- Gate A, after the shell and persistent world: the old dashboard skeleton must
+  be absent, the world must mount once, and the sticky spatial composition must
+  remain usable.
+- Gate B, after Overview, Urban Pressure, and SLA/Risk: inspect all three in a
+  real browser with motion enabled and disabled. Repeated viewport composition
+  is a blocking implementation failure.
+- Gate C, after all seven static compositions: disable GSAP and pointer effects.
+  The frozen route must already be an immersive redesign before choreography is
+  finalized.
+
+After RM-240 passes every automated and browser visual gate, create one coherent
+standalone commit. If the configured GitHub remote is authorized and healthy,
+push that checkpoint automatically. If access or authorization fails, preserve
+the local commit and record the exact blocker. Never push a partially verified
+or visually failed checkpoint.
+
 ## Phase 1: Freeze Baseline and Add Semantic Contracts
 
 Files:
@@ -207,7 +238,7 @@ Tasks:
    explicit in every affected chapter.
 
 Verification: 1280x720, 1024x768, and 760x800 screenshots show no overlap that
-   harms content, no horizontal overflow, and usable controls.
+harms content, no horizontal overflow, and usable controls.
 
 ## Phase 8: Test and Browser Visual Quality Gate
 

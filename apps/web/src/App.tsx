@@ -8,7 +8,7 @@ import {
   PackageCheck,
   Route,
 } from "lucide-react";
-import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route as RouterRoute, Routes } from "react-router-dom";
 import { demoDataSource } from "./data/demoSnapshot";
@@ -54,14 +54,15 @@ import { ReplayPlaybackPanel } from "./components/ReplayPlaybackPanel";
 import { StatusPill } from "./components/StatusPill";
 import { OperationsAnalyticalStrip } from "./components/AnalyticalVisualizationFoundation";
 import { OperationsMotionCoordinator } from "./components/OperationsMotionCoordinator";
-import { UrbanFieldFallback } from "./components/UrbanFieldFallback";
+import { OperationsExperience } from "./components/OperationsExperience";
 import type { UrbanFieldSceneController } from "./components/UrbanFieldScene";
 import { CourierView, CustomerView, MerchantView, StrategyView } from "./routes/RoleViews";
 import type { Order, OperationsSnapshot } from "./domain/model";
-import { toUrbanFieldState } from "./visuals/urbanFieldState";
+import {
+  interpolateUrbanWorldFrame,
+  toOperationsChapterState,
+} from "./visuals/operationsChapterState";
 import "./styles.css";
-
-const LazyUrbanFieldScene = lazy(() => import("./components/UrbanFieldScene"));
 
 interface AppProps {
   dataSource?: OperationsDataSource;
@@ -396,8 +397,28 @@ function OperationsView({
   const openExceptions = countOpenExceptions(snapshot);
   const hasDispatchLatency =
     snapshot.availability === "ready" && snapshot.dispatch.latencyMs !== null;
-  const urbanFieldState = useMemo(() => toUrbanFieldState(snapshot), [snapshot]);
   const sceneControllerRef = useRef<UrbanFieldSceneController | null>(null);
+  const chapterStates = useMemo(
+    () => toOperationsChapterState(snapshot, selectedOrderId || null),
+    [selectedOrderId, snapshot],
+  );
+  const [activeChapterIndex, setActiveChapterIndex] = useState(0);
+  const lastChapterIndexRef = useRef(0);
+  const activeWorldFrame = useMemo(
+    () => chapterStates[activeChapterIndex]?.world ?? interpolateUrbanWorldFrame(chapterStates, 0),
+    [activeChapterIndex, chapterStates],
+  );
+  const urbanFieldState = chapterStates[0]?.urbanField;
+  const handleMotionFrame = useCallback(
+    (frame: { progress: number; section: number; focus: number }) => {
+      const chapterIndex = Math.min(chapterStates.length - 1, Math.max(0, frame.section));
+      if (chapterIndex !== lastChapterIndexRef.current) {
+        lastChapterIndexRef.current = chapterIndex;
+        setActiveChapterIndex(chapterIndex);
+      }
+    },
+    [chapterStates.length],
+  );
   const sourceModeLabel =
     snapshot.source === "live" ? "LIVE" : `${snapshot.source.toUpperCase()} · NON-PRODUCTION`;
   const filtersActive =
@@ -409,539 +430,696 @@ function OperationsView({
     setFreshOnly(false);
   };
   return (
-    <OperationsMotionCoordinator sceneControllerRef={sceneControllerRef}>
-      <div className="page-stack">
-        <section className="page-intro" data-motion-section="overview">
-          <div>
-            <p className="eyebrow">Operations / live board</p>
-            <h2>Keep the city moving.</h2>
-            <p className="lede">
-              A single view of demand, supply, and the decisions connecting them.
+    <OperationsMotionCoordinator
+      sceneControllerRef={sceneControllerRef}
+      onFrame={handleMotionFrame}
+    >
+      <OperationsExperience
+        snapshot={snapshot}
+        worldFrame={activeWorldFrame}
+        controllerRef={sceneControllerRef}
+      >
+        <section
+          id="operations-chapter-overview"
+          className="operations-chapter chapter-overview"
+          data-motion-section="chapter-overview"
+          data-chapter="overview"
+          aria-labelledby="operations-overview-title"
+        >
+          <div className="chapter-overview-copy">
+            <p className="eyebrow">01 / Network overview</p>
+            <h2 id="operations-overview-title">Keep the city moving.</h2>
+            <p className="chapter-lede">
+              A single operational field for demand, supply, and the decisions connecting them.
             </p>
-          </div>
-          <div className="intro-actions">
-            <span className="last-updated">
-              <CircleDot size={13} /> Snapshot {formatFreshness(snapshot.generatedAt)}
-            </span>
-            <button
-              className="button button-primary"
-              type="button"
-              aria-expanded={filtersOpen}
-              onClick={() => setFiltersOpen((open) => !open)}
-            >
-              <ListFilter size={15} /> Filter board
-            </button>
-          </div>
-        </section>
-        {filtersOpen && (
-          <section
-            className="operations-filters"
-            data-motion-section="filters"
-            aria-label="Operations filters"
-          >
-            <label>
-              Zone
-              <select value={zoneFilter} onChange={(event) => setZoneFilter(event.target.value)}>
-                <option value="all">All zones</option>
-                {[...new Set(snapshot.couriers.map((courier) => courier.zone))].map((zone) => (
-                  <option key={zone} value={zone}>
-                    {zone}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label>
-              Lifecycle
-              <select
-                value={lifecycleFilter}
-                onChange={(event) => setLifecycleFilter(event.target.value)}
+            <div className="chapter-overview-actions">
+              <span className="last-updated">
+                <CircleDot size={13} /> Snapshot {formatFreshness(snapshot.generatedAt)}
+              </span>
+              <button
+                className="button button-primary"
+                type="button"
+                aria-expanded={filtersOpen}
+                onClick={() => setFiltersOpen((open) => !open)}
               >
-                <option value="all">All lifecycle states</option>
-                {Object.entries(orderStatusLabel).map(([status, label]) => (
-                  <option key={status} value={status}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="filter-check">
-              <input
-                type="checkbox"
-                checked={exceptionsOnly}
-                onChange={(event) => setExceptionsOnly(event.target.checked)}
-              />
-              Exceptions only
-            </label>
-            <label className="filter-check">
-              <input
-                type="checkbox"
-                checked={freshOnly}
-                onChange={(event) => setFreshOnly(event.target.checked)}
-              />
-              Has freshness
-            </label>
-            <span className="filter-result">
-              Showing {filteredOrders.length} of {snapshot.orders.length}
-            </span>
-          </section>
-        )}
-        {snapshot.availability !== "ready" && (
-          <section
-            className={`projection-state projection-${snapshot.availability}`}
-            data-motion-section="projection"
-            role="status"
-          >
-            <strong>
-              {snapshot.availability === "loading"
-                ? "Loading operational projections"
-                : snapshot.availability === "degraded"
-                  ? "Operational projections degraded"
-                  : "Operational projections unavailable"}
-            </strong>
-            <span>{snapshot.sourceDetail}</span>
-          </section>
-        )}
-        {snapshot.source === "simulation" && snapshot.simulation && onSimulationControl && (
-          <div data-motion-section="simulation">
-            <SimulationControlPanel
-              snapshot={snapshot.simulation}
-              demandCount={snapshot.orders.length}
-              supplyCount={snapshot.couriers.length}
-              trafficLabel="seeded 1.0x"
-              onControl={onSimulationControl}
-            />
-          </div>
-        )}
-        {snapshot.source === "replay" && snapshot.replay && onReplayControl && (
-          <div data-motion-section="replay">
-            <ReplayPlaybackPanel snapshot={snapshot.replay} onControl={onReplayControl} />
-          </div>
-        )}
-        {(snapshot.source === "simulation" || snapshot.source === "replay") && (
-          <TwinVisualizationPanel snapshot={snapshot} />
-        )}
-        <div className="operations-spatial-story">
-          <section
-            className="operations-hero"
-            data-motion-section="spatial"
-            aria-labelledby="urban-field-title"
-          >
-            <div
-              className="operations-hero-stage"
-              data-pointer-target="scene"
-              data-pointer-id="urban-field"
-            >
-              <div className="operations-hero-heading">
-                <div>
-                  <p className="eyebrow">Urban operational field</p>
-                  <h2 id="urban-field-title">City pressure, rendered as a living system.</h2>
-                </div>
-                <span className={`hero-mode-badge hero-mode-${snapshot.source}`}>
-                  {sourceModeLabel}
-                </span>
-              </div>
-              <Suspense fallback={<UrbanFieldFallback state={urbanFieldState} />}>
-                <LazyUrbanFieldScene state={urbanFieldState} controllerRef={sceneControllerRef} />
-              </Suspense>
-              <p className="hero-provenance">
-                {urbanFieldState.provenance === "snapshot-derived"
-                  ? "Derived from the selected operational snapshot."
-                  : "Deterministic visual demo state; not a production telemetry claim."}
-              </p>
+                <ListFilter size={15} /> Filter board
+              </button>
             </div>
-            <aside className="operations-hero-rail" aria-label="Urban field semantic state">
-              <div className="hero-rail-heading">
-                <p className="eyebrow">System readout</p>
-                <strong>{snapshot.dispatch.strategy}</strong>
-                <span>strategy active</span>
-              </div>
-              <HeroMeter label="Order pressure" value={urbanFieldState.pressure} tone="teal" />
-              <HeroMeter label="Courier supply" value={urbanFieldState.supply} tone="amber" />
-              <HeroMeter label="SLA risk" value={urbanFieldState.risk} tone="risk" />
-              <HeroMeter label="Traffic load" value={urbanFieldState.traffic} tone="slate" />
-              <HeroMeter label="Twin fidelity" value={urbanFieldState.twinFidelity} tone="teal" />
-              <div className="hero-rail-footnote">
-                <span className="hero-status-dot" />
-                <span>Signal mapping ready for live spatial state</span>
-              </div>
-            </aside>
-          </section>
-          <div className="operations-analytics" data-motion-section="analytics">
-            <OperationsAnalyticalStrip snapshot={snapshot} />
-          </div>
-        </div>
-        <section
-          className="operations-health"
-          data-motion-section="health"
-          aria-label="Operations projection health"
-        >
-          <div>
-            <p className="eyebrow">Projection health</p>
-            <strong>{health.length ? "Service checks" : "Checking service health"}</strong>
-          </div>
-          <div className="operations-health-items">
-            {(health.length
-              ? health
-              : [{ service: "business-api", label: "Business API", status: "checking" as const }]
-            ).map((item) => (
-              <StatusPill key={item.service} status={item.status} label={item.label} />
-            ))}
-            <span className="health-freshness">
-              {snapshot.generatedAt
-                ? `Snapshot ${formatFreshness(snapshot.generatedAt)}`
-                : "Snapshot freshness pending"}
-            </span>
-          </div>
-        </section>
-        <section
-          className="metric-grid"
-          data-motion-section="metrics"
-          aria-label="Operational metrics"
-        >
-          <MetricCell
-            label="Active orders"
-            value={`${snapshot.orders.length}`}
-            detail={openExceptions ? `${openExceptions} need attention` : "No recorded exceptions"}
-            icon={PackageCheck}
-            tone="accent"
-          />
-          <MetricCell
-            label="Available couriers"
-            value={`${availableCouriers}`}
-            detail={zones ? `Across ${zones} zone${zones === 1 ? "" : "s"}` : "Zone data pending"}
-            icon={Bike}
-            tone="success"
-          />
-          <MetricCell
-            label="Assignment latency"
-            value={hasDispatchLatency ? `${snapshot.dispatch.latencyMs} ms` : "-"}
-            detail={hasDispatchLatency ? "Last decision" : "Decision latency unavailable"}
-            icon={Gauge}
-          />
-          <MetricCell
-            label="Exceptions"
-            value={`${openExceptions}`}
-            detail="Priority queue"
-            icon={AlertTriangle}
-            tone="warning"
-          />
-        </section>
-        <div data-motion-section="detail">
-          <MultiCityGeoPanel />
-        </div>
-        <div data-motion-section="detail">
-          <CityZoneDrilldownPanel snapshot={snapshot} />
-        </div>
-        <div data-motion-section="detail">
-          <FlowVisualizationPanel snapshot={snapshot} />
-        </div>
-        <div data-motion-section="research">
-          <GeoAnalyticalLayersPanel snapshot={snapshot} />
-        </div>
-        <div data-motion-section="research">
-          <DecisionXrayPanel snapshot={snapshot} />
-        </div>
-        <div data-motion-section="reliability">
-          <ReliabilityCenterPanel snapshot={snapshot} health={health} realtime={realtime} />
-        </div>
-        {openExceptions > 0 && (
-          <div className="exception-banner" role="alert">
-            <AlertTriangle size={16} aria-hidden="true" />
-            <strong>{openExceptions} priority exception needs attention</strong>
-            <span>Review the selected order before assigning another route.</span>
-          </div>
-        )}
-        <section
-          className="operations-alerts"
-          data-motion-section="alerts"
-          aria-label="Operations alerts and imbalance"
-        >
-          <section className="panel alert-panel">
-            <div className="panel-heading">
-              <div>
-                <p className="eyebrow">Exception queue</p>
-                <h2>
-                  {exceptionOrders.length} recorded alert{exceptionOrders.length === 1 ? "" : "s"}
-                </h2>
-              </div>
-              <AlertTriangle size={17} className="heading-icon" />
-            </div>
-            {exceptionOrders.length ? (
-              <div className="alert-list">
-                {exceptionOrders.map((order) => (
-                  <button
-                    key={order.id}
-                    className="alert-item"
-                    type="button"
-                    onClick={() => setSelectedOrderId(order.id)}
+            {filtersOpen && (
+              <section className="operations-filters" aria-label="Operations filters">
+                <label>
+                  Zone
+                  <select
+                    value={zoneFilter}
+                    onChange={(event) => setZoneFilter(event.target.value)}
                   >
-                    <span>
-                      <strong>{order.shortId}</strong>
-                      <small>{order.destination}</small>
-                    </span>
-                    <span className="alert-link">
-                      Inspect <ArrowUpRight size={13} />
-                    </span>
-                  </button>
-                ))}
-              </div>
-            ) : (
-              <p className="empty-state">No recorded exceptions in this snapshot.</p>
+                    <option value="all">All zones</option>
+                    {[...new Set(snapshot.couriers.map((courier) => courier.zone))].map((zone) => (
+                      <option key={zone} value={zone}>
+                        {zone}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Lifecycle
+                  <select
+                    value={lifecycleFilter}
+                    onChange={(event) => setLifecycleFilter(event.target.value)}
+                  >
+                    <option value="all">All lifecycle states</option>
+                    {Object.entries(orderStatusLabel).map(([status, label]) => (
+                      <option key={status} value={status}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="filter-check">
+                  <input
+                    type="checkbox"
+                    checked={exceptionsOnly}
+                    onChange={(event) => setExceptionsOnly(event.target.checked)}
+                  />
+                  Exceptions only
+                </label>
+                <label className="filter-check">
+                  <input
+                    type="checkbox"
+                    checked={freshOnly}
+                    onChange={(event) => setFreshOnly(event.target.checked)}
+                  />
+                  Has freshness
+                </label>
+                <span className="filter-result">
+                  Showing {filteredOrders.length} of {snapshot.orders.length}
+                </span>
+              </section>
             )}
-          </section>
-          <section className="panel alert-panel">
-            <div className="panel-heading">
-              <div>
-                <p className="eyebrow">Supply / demand</p>
-                <h2>{supplyGap > 0 ? `${supplyGap} order gap` : "Covered"}</h2>
+            {snapshot.availability !== "ready" && (
+              <div className={`projection-state projection-${snapshot.availability}`} role="status">
+                <strong>
+                  {snapshot.availability === "loading"
+                    ? "Loading operational projections"
+                    : snapshot.availability === "degraded"
+                      ? "Operational projections degraded"
+                      : "Operational projections unavailable"}
+                </strong>
+                <span>{snapshot.sourceDetail}</span>
               </div>
-              <Gauge size={17} className="heading-icon" />
+            )}
+          </div>
+          <div
+            className="chapter-overview-orbit"
+            data-pointer-target="hud"
+            data-pointer-id="overview-readout"
+          >
+            <span className="orbit-label">network signal</span>
+            <strong>{Math.round((urbanFieldState?.pressure ?? 0) * 100)}%</strong>
+            <span>pressure index</span>
+            <div className="overview-meter-stack">
+              <HeroMeter
+                label="Order pressure"
+                value={urbanFieldState?.pressure ?? 0}
+                tone="teal"
+              />
+              <HeroMeter label="Courier supply" value={urbanFieldState?.supply ?? 0} tone="amber" />
+              <HeroMeter label="SLA risk" value={urbanFieldState?.risk ?? 0} tone="risk" />
+              <HeroMeter
+                label="Twin fidelity"
+                value={urbanFieldState?.twinFidelity ?? 0}
+                tone="slate"
+              />
             </div>
-            <dl className="detail-list">
-              <div>
-                <dt>Orders in snapshot</dt>
-                <dd>{snapshot.orders.length}</dd>
-              </div>
-              <div>
-                <dt>Available couriers</dt>
-                <dd>{availableCouriers}</dd>
-              </div>
-              <div>
-                <dt>Overtime risk</dt>
-                <dd className="muted-label">Unavailable from source</dd>
-              </div>
-            </dl>
-          </section>
+          </div>
+          <div className="chapter-overview-stamp" aria-hidden="true">
+            <span>ROUTEMIND</span>
+            <strong>OP / 01</strong>
+          </div>
         </section>
-        <section className="primary-grid" data-motion-section="detail">
-          <OperationsMap
-            orders={filteredOrders}
-            couriers={filteredCouriers}
-            selectedOrderId={selectedOrderId}
-            onSelectOrder={setSelectedOrderId}
-            availability={snapshot.availability}
-            source={snapshot.source}
-            generatedAt={snapshot.generatedAt}
-          />
-          <OrderQueue
-            orders={filteredOrders}
-            selectedOrderId={selectedOrderId}
-            onSelectOrder={setSelectedOrderId}
-            availability={snapshot.availability}
-            filtersActive={filtersActive}
-            onClearFilters={clearFilters}
-          />
+        <section
+          id="operations-chapter-pressure"
+          className="operations-chapter chapter-pressure"
+          data-motion-section="chapter-pressure"
+          data-chapter="pressure"
+          aria-labelledby="pressure-title"
+        >
+          <div className="chapter-pressure-copy">
+            <p className="eyebrow">02 / Urban pressure</p>
+            <h2 id="pressure-title">Read the pressure before it becomes a queue.</h2>
+            <p>Demand, courier supply, traffic, and risk are mapped as a field with local depth.</p>
+            <div className="pressure-facts">
+              <span>
+                <small>active orders</small>
+                <strong>{snapshot.orders.length}</strong>
+              </span>
+              <span>
+                <small>available couriers</small>
+                <strong>{availableCouriers}</strong>
+              </span>
+              <span>
+                <small>zones in view</small>
+                <strong>{zones}</strong>
+              </span>
+            </div>
+          </div>
+          <div className="chapter-pressure-surface">
+            <OperationsAnalyticalStrip snapshot={snapshot} focus="pressure" />
+          </div>
         </section>
-        <section className="secondary-grid" data-motion-section="detail">
-          <section className="panel lifecycle-panel" aria-labelledby="lifecycle-title">
-            <div className="panel-heading">
+        <section
+          id="operations-chapter-risk"
+          className="operations-chapter chapter-risk"
+          data-motion-section="chapter-risk"
+          data-chapter="risk"
+          aria-labelledby="risk-title"
+        >
+          <div className="chapter-risk-surface">
+            <OperationsAnalyticalStrip snapshot={snapshot} focus="risk" />
+          </div>
+          <div className="chapter-risk-copy">
+            <p className="eyebrow">03 / SLA risk</p>
+            <h2 id="risk-title">Find the edge of the promise.</h2>
+            <p>
+              Risk annotations stay adjacent to the zones and routes that can still absorb them.
+            </p>
+            <div className="risk-flag">
+              <AlertTriangle size={16} />
+              <span>
+                <strong>{openExceptions}</strong> priority exception
+                {openExceptions === 1 ? "" : "s"} recorded
+              </span>
+            </div>
+          </div>
+        </section>
+        <section
+          id="operations-chapter-strategy"
+          className="operations-chapter chapter-strategy"
+          data-motion-section="chapter-strategy"
+          data-chapter="strategy"
+          aria-labelledby="strategy-title"
+        >
+          <div className="chapter-strategy-copy">
+            <p className="eyebrow">04 / Strategy</p>
+            <h2 id="strategy-title">Make the next decision inspectable.</h2>
+            <p>{snapshot.dispatch.rationale}</p>
+            <div className="strategy-signal-line">
+              <span>active strategy</span>
+              <strong>{snapshot.dispatch.strategy}</strong>
+              <small>
+                v{snapshot.dispatch.version} · {snapshot.dispatch.latencyMs ?? "-"} ms
+              </small>
+            </div>
+          </div>
+          <div className="chapter-strategy-surface">
+            <OperationsAnalyticalStrip snapshot={snapshot} focus="strategy" />
+          </div>
+        </section>
+        <section
+          id="operations-chapter-live"
+          className="operations-chapter chapter-live"
+          data-motion-section="chapter-live"
+          data-chapter="live"
+          aria-labelledby="live-title"
+        >
+          <div className="chapter-live-heading">
+            <div>
+              <p className="eyebrow">05 / Live operations</p>
+              <h2 id="live-title">Stay close to the handoff.</h2>
+            </div>
+            <span className="chapter-live-status">
+              <span className="live-dot" /> {sourceModeLabel}
+            </span>
+          </div>
+          <div className="operations-legacy-stack">
+            <section
+              className="operations-health"
+              data-motion-section="health"
+              aria-label="Operations projection health"
+            >
               <div>
-                <p className="eyebrow">Selected order</p>
-                <h2 id="lifecycle-title">{selectedOrder?.shortId ?? "No order"} lifecycle</h2>
-                <span className="entity-freshness">
-                  {snapshot.source} source ·{" "}
+                <p className="eyebrow">Projection health</p>
+                <strong>{health.length ? "Service checks" : "Checking service health"}</strong>
+              </div>
+              <div className="operations-health-items">
+                {(health.length
+                  ? health
+                  : [
+                      {
+                        service: "business-api",
+                        label: "Business API",
+                        status: "checking" as const,
+                      },
+                    ]
+                ).map((item) => (
+                  <StatusPill key={item.service} status={item.status} label={item.label} />
+                ))}
+                <span className="health-freshness">
                   {snapshot.generatedAt
-                    ? formatFreshness(snapshot.generatedAt)
-                    : "freshness pending"}
+                    ? `Snapshot ${formatFreshness(snapshot.generatedAt)}`
+                    : "Snapshot freshness pending"}
                 </span>
               </div>
-              {selectedOrder ? (
-                <StatusPill
-                  status={statusTone(selectedOrder.status) === "success" ? "healthy" : "checking"}
-                  label={orderStatusLabel[selectedOrder.status]}
-                />
-              ) : (
-                <StatusPill status="checking" label="No live orders" />
-              )}
-            </div>
-            {selectedOrder ? (
-              <LifecycleTimeline order={selectedOrder} />
-            ) : (
-              <p className="empty-state">No orders are present in the selected source.</p>
-            )}
-          </section>
-          <section className="panel activity-panel" aria-labelledby="activity-title">
-            <div className="panel-heading">
-              <div>
-                <p className="eyebrow">Decision trace</p>
-                <h2 id="activity-title">Dispatch activity</h2>
-              </div>
-              <Route size={17} className="heading-icon" />
-            </div>
-            <div className="decision-callout">
-              <div className="decision-icon">
-                <Route size={17} />
-              </div>
-              <div>
-                <strong>
-                  {snapshot.dispatch.strategy} <span>v{snapshot.dispatch.version}</span>
-                </strong>
-                <p>{snapshot.dispatch.rationale}</p>
-              </div>
-            </div>
-            <dl className="detail-list">
-              <div>
-                <dt>Selected courier</dt>
-                <dd>{snapshot.dispatch.selectedCourier}</dd>
-              </div>
-              <div>
-                <dt>Decision latency</dt>
-                <dd>
-                  {snapshot.dispatch.latencyMs === null
-                    ? "Unavailable"
-                    : `${snapshot.dispatch.latencyMs} ms`}
-                </dd>
-              </div>
-              <div>
-                <dt>Trace</dt>
-                <dd>
-                  {selectedOrder?.operational?.decision.requestId ??
-                    snapshot.decisionLedger?.requestId ??
-                    "Unavailable"}
-                </dd>
-              </div>
-            </dl>
-            <ActivityStream snapshot={snapshot} realtime={realtime} />
-            <button
-              className="text-button"
-              type="button"
-              aria-expanded={decisionDetailsOpen}
-              aria-controls="decision-details"
-              onClick={() => setDecisionDetailsOpen((open) => !open)}
+            </section>
+            <section
+              className="metric-grid"
+              data-motion-section="metrics"
+              aria-label="Operational metrics"
             >
-              {decisionDetailsOpen ? "Hide decision details" : "Open decision details"}{" "}
-              <ArrowUpRight size={14} />
-            </button>
-            {decisionDetailsOpen && (
-              <div
-                className="decision-details"
-                id="decision-details"
-                role="region"
-                aria-label="Decision details"
-              >
+              <MetricCell
+                label="Active orders"
+                value={`${snapshot.orders.length}`}
+                detail={
+                  openExceptions ? `${openExceptions} need attention` : "No recorded exceptions"
+                }
+                icon={PackageCheck}
+                tone="accent"
+              />
+              <MetricCell
+                label="Available couriers"
+                value={`${availableCouriers}`}
+                detail={
+                  zones ? `Across ${zones} zone${zones === 1 ? "" : "s"}` : "Zone data pending"
+                }
+                icon={Bike}
+                tone="success"
+              />
+              <MetricCell
+                label="Assignment latency"
+                value={hasDispatchLatency ? `${snapshot.dispatch.latencyMs} ms` : "-"}
+                detail={hasDispatchLatency ? "Last decision" : "Decision latency unavailable"}
+                icon={Gauge}
+              />
+              <MetricCell
+                label="Exceptions"
+                value={`${openExceptions}`}
+                detail="Priority queue"
+                icon={AlertTriangle}
+                tone="warning"
+              />
+            </section>
+            <div className="live-geo-overview" data-motion-section="detail">
+              <MultiCityGeoPanel />
+            </div>
+            <div className="live-zone-inspection" data-motion-section="detail">
+              <CityZoneDrilldownPanel snapshot={snapshot} />
+            </div>
+            <div className="live-flow-inspection" data-motion-section="detail">
+              <FlowVisualizationPanel snapshot={snapshot} />
+            </div>
+            <div data-motion-section="research">
+              <GeoAnalyticalLayersPanel snapshot={snapshot} />
+            </div>
+            <div data-motion-section="research">
+              <DecisionXrayPanel snapshot={snapshot} />
+            </div>
+            <div data-motion-section="reliability">
+              <ReliabilityCenterPanel snapshot={snapshot} health={health} realtime={realtime} />
+            </div>
+            {openExceptions > 0 && (
+              <div className="exception-banner" role="alert">
+                <AlertTriangle size={16} aria-hidden="true" />
+                <strong>{openExceptions} priority exception needs attention</strong>
+                <span>Review the selected order before assigning another route.</span>
+              </div>
+            )}
+            <section
+              className="operations-alerts"
+              data-motion-section="alerts"
+              aria-label="Operations alerts and imbalance"
+            >
+              <section className="panel alert-panel">
+                <div className="panel-heading">
+                  <div>
+                    <p className="eyebrow">Exception queue</p>
+                    <h2>
+                      {exceptionOrders.length} recorded alert
+                      {exceptionOrders.length === 1 ? "" : "s"}
+                    </h2>
+                  </div>
+                  <AlertTriangle size={17} className="heading-icon" />
+                </div>
+                {exceptionOrders.length ? (
+                  <div className="alert-list">
+                    {exceptionOrders.map((order) => (
+                      <button
+                        key={order.id}
+                        className="alert-item"
+                        type="button"
+                        onClick={() => setSelectedOrderId(order.id)}
+                      >
+                        <span>
+                          <strong>{order.shortId}</strong>
+                          <small>{order.destination}</small>
+                        </span>
+                        <span className="alert-link">
+                          Inspect <ArrowUpRight size={13} />
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="empty-state">No recorded exceptions in this snapshot.</p>
+                )}
+              </section>
+              <section className="panel alert-panel">
+                <div className="panel-heading">
+                  <div>
+                    <p className="eyebrow">Supply / demand</p>
+                    <h2>{supplyGap > 0 ? `${supplyGap} order gap` : "Covered"}</h2>
+                  </div>
+                  <Gauge size={17} className="heading-icon" />
+                </div>
                 <dl className="detail-list">
                   <div>
-                    <dt>Strategy version</dt>
-                    <dd>{snapshot.dispatch.version}</dd>
+                    <dt>Orders in snapshot</dt>
+                    <dd>{snapshot.orders.length}</dd>
                   </div>
                   <div>
-                    <dt>Decision source</dt>
+                    <dt>Available couriers</dt>
+                    <dd>{availableCouriers}</dd>
+                  </div>
+                  <div>
+                    <dt>Overtime risk</dt>
+                    <dd className="muted-label">Unavailable from source</dd>
+                  </div>
+                </dl>
+              </section>
+            </section>
+            <section className="primary-grid" data-motion-section="detail">
+              <OperationsMap
+                orders={filteredOrders}
+                couriers={filteredCouriers}
+                selectedOrderId={selectedOrderId}
+                onSelectOrder={setSelectedOrderId}
+                availability={snapshot.availability}
+                source={snapshot.source}
+                generatedAt={snapshot.generatedAt}
+              />
+              <OrderQueue
+                orders={filteredOrders}
+                selectedOrderId={selectedOrderId}
+                onSelectOrder={setSelectedOrderId}
+                availability={snapshot.availability}
+                filtersActive={filtersActive}
+                onClearFilters={clearFilters}
+              />
+            </section>
+            <section className="secondary-grid" data-motion-section="detail">
+              <section className="panel lifecycle-panel" aria-labelledby="lifecycle-title">
+                <div className="panel-heading">
+                  <div>
+                    <p className="eyebrow">Selected order</p>
+                    <h2 id="lifecycle-title">{selectedOrder?.shortId ?? "No order"} lifecycle</h2>
+                    <span className="entity-freshness">
+                      {snapshot.source} source ·{" "}
+                      {snapshot.generatedAt
+                        ? formatFreshness(snapshot.generatedAt)
+                        : "freshness pending"}
+                    </span>
+                  </div>
+                  {selectedOrder ? (
+                    <StatusPill
+                      status={
+                        statusTone(selectedOrder.status) === "success" ? "healthy" : "checking"
+                      }
+                      label={orderStatusLabel[selectedOrder.status]}
+                    />
+                  ) : (
+                    <StatusPill status="checking" label="No live orders" />
+                  )}
+                </div>
+                {selectedOrder ? (
+                  <LifecycleTimeline order={selectedOrder} />
+                ) : (
+                  <p className="empty-state">No orders are present in the selected source.</p>
+                )}
+              </section>
+              <section className="panel activity-panel" aria-labelledby="activity-title">
+                <div className="panel-heading">
+                  <div>
+                    <p className="eyebrow">Decision trace</p>
+                    <h2 id="activity-title">Dispatch activity</h2>
+                  </div>
+                  <Route size={17} className="heading-icon" />
+                </div>
+                <div className="decision-callout">
+                  <div className="decision-icon">
+                    <Route size={17} />
+                  </div>
+                  <div>
+                    <strong>
+                      {snapshot.dispatch.strategy} <span>v{snapshot.dispatch.version}</span>
+                    </strong>
+                    <p>{snapshot.dispatch.rationale}</p>
+                  </div>
+                </div>
+                <dl className="detail-list">
+                  <div>
+                    <dt>Selected courier</dt>
+                    <dd>{snapshot.dispatch.selectedCourier}</dd>
+                  </div>
+                  <div>
+                    <dt>Decision latency</dt>
                     <dd>
-                      {snapshot.source} · {formatFreshness(snapshot.generatedAt)}
+                      {snapshot.dispatch.latencyMs === null
+                        ? "Unavailable"
+                        : `${snapshot.dispatch.latencyMs} ms`}
                     </dd>
                   </div>
                   <div>
-                    <dt>Rationale</dt>
-                    <dd>{snapshot.dispatch.rationale}</dd>
+                    <dt>Trace</dt>
+                    <dd>
+                      {selectedOrder?.operational?.decision.requestId ??
+                        snapshot.decisionLedger?.requestId ??
+                        "Unavailable"}
+                    </dd>
                   </div>
                 </dl>
-              </div>
-            )}
-          </section>
-        </section>
-        <section
-          className="entity-drawers"
-          data-motion-section="detail"
-          aria-label="Selected entity details"
-        >
-          <section className="panel entity-drawer">
-            <div className="panel-heading">
-              <div>
-                <p className="eyebrow">Order detail</p>
-                <h2>{selectedOrder?.shortId ?? "No order selected"}</h2>
-              </div>
-              <PackageCheck size={17} className="heading-icon" />
-            </div>
-            {selectedOrder ? (
-              <dl className="detail-list">
-                <div>
-                  <dt>Route points</dt>
-                  <dd>{selectedOrder.route.length || "Unavailable"}</dd>
-                </div>
-                <div>
-                  <dt>Order version</dt>
-                  <dd>{selectedOrder.version ?? "Not supplied"}</dd>
-                </div>
-                <div>
-                  <dt>Source</dt>
-                  <dd>
-                    {snapshot.source} · {formatFreshness(snapshot.generatedAt)}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Decision</dt>
-                  <dd>{selectedOrder.operational?.decision.status ?? "Unavailable"}</dd>
-                </div>
-                <div>
-                  <dt>Ledger request</dt>
-                  <dd>{selectedOrder.operational?.decision.requestId ?? "Unavailable"}</dd>
-                </div>
-                <div>
-                  <dt>Strategy</dt>
-                  <dd>
-                    {selectedOrder.operational?.decision.strategy ?? "Unavailable"} · v
-                    {selectedOrder.operational?.decision.strategyVersion ?? "-"}
-                  </dd>
-                </div>
-                <div>
-                  <dt>Route / travel</dt>
-                  <dd>{selectedOrder.operational?.route.status ?? "Unavailable"}</dd>
-                </div>
-                <div>
-                  <dt>Courier freshness</dt>
-                  <dd>{selectedOrder.operational?.courier.freshness.status ?? "Unavailable"}</dd>
-                </div>
-                <div>
-                  <dt>Order freshness</dt>
-                  <dd>{selectedOrder.operational?.orderFreshness.status ?? "Unavailable"}</dd>
-                </div>
-              </dl>
-            ) : (
-              <p className="empty-state">Select an order to inspect its state.</p>
-            )}
-          </section>
-          <section className="panel entity-drawer">
-            <div className="panel-heading">
-              <div>
-                <p className="eyebrow">Courier detail</p>
-                <h2>{snapshot.dispatch.selectedCourier}</h2>
-              </div>
-              <Bike size={17} className="heading-icon" />
-            </div>
-            {snapshot.couriers.find(
-              (courier) => courier.id === snapshot.dispatch.selectedCourier,
-            ) ? (
-              <dl className="detail-list">
-                {(() => {
-                  const courier = snapshot.couriers.find(
-                    (item) => item.id === snapshot.dispatch.selectedCourier,
-                  )!;
-                  return (
-                    <>
+                <ActivityStream snapshot={snapshot} realtime={realtime} />
+                <button
+                  className="text-button"
+                  type="button"
+                  aria-expanded={decisionDetailsOpen}
+                  aria-controls="decision-details"
+                  onClick={() => setDecisionDetailsOpen((open) => !open)}
+                >
+                  {decisionDetailsOpen ? "Hide decision details" : "Open decision details"}{" "}
+                  <ArrowUpRight size={14} />
+                </button>
+                {decisionDetailsOpen && (
+                  <div
+                    className="decision-details"
+                    id="decision-details"
+                    role="region"
+                    aria-label="Decision details"
+                  >
+                    <dl className="detail-list">
                       <div>
-                        <dt>Zone</dt>
-                        <dd>{courier.zone}</dd>
+                        <dt>Strategy version</dt>
+                        <dd>{snapshot.dispatch.version}</dd>
                       </div>
                       <div>
-                        <dt>Status</dt>
-                        <dd>{courier.status.replace("_", " ")}</dd>
-                      </div>
-                      <div>
-                        <dt>Position</dt>
+                        <dt>Decision source</dt>
                         <dd>
-                          {courier.position.x}, {courier.position.y}
+                          {snapshot.source} · {formatFreshness(snapshot.generatedAt)}
                         </dd>
                       </div>
-                    </>
-                  );
-                })()}
-              </dl>
-            ) : (
-              <p className="empty-state">Courier detail unavailable from this source.</p>
-            )}
-          </section>
+                      <div>
+                        <dt>Rationale</dt>
+                        <dd>{snapshot.dispatch.rationale}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                )}
+              </section>
+            </section>
+            <section
+              className="entity-drawers"
+              data-motion-section="detail"
+              aria-label="Selected entity details"
+            >
+              <section className="panel entity-drawer">
+                <div className="panel-heading">
+                  <div>
+                    <p className="eyebrow">Order detail</p>
+                    <h2>{selectedOrder?.shortId ?? "No order selected"}</h2>
+                  </div>
+                  <PackageCheck size={17} className="heading-icon" />
+                </div>
+                {selectedOrder ? (
+                  <dl className="detail-list">
+                    <div>
+                      <dt>Route points</dt>
+                      <dd>{selectedOrder.route.length || "Unavailable"}</dd>
+                    </div>
+                    <div>
+                      <dt>Order version</dt>
+                      <dd>{selectedOrder.version ?? "Not supplied"}</dd>
+                    </div>
+                    <div>
+                      <dt>Source</dt>
+                      <dd>
+                        {snapshot.source} · {formatFreshness(snapshot.generatedAt)}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Decision</dt>
+                      <dd>{selectedOrder.operational?.decision.status ?? "Unavailable"}</dd>
+                    </div>
+                    <div>
+                      <dt>Ledger request</dt>
+                      <dd>{selectedOrder.operational?.decision.requestId ?? "Unavailable"}</dd>
+                    </div>
+                    <div>
+                      <dt>Strategy</dt>
+                      <dd>
+                        {selectedOrder.operational?.decision.strategy ?? "Unavailable"} · v
+                        {selectedOrder.operational?.decision.strategyVersion ?? "-"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Route / travel</dt>
+                      <dd>{selectedOrder.operational?.route.status ?? "Unavailable"}</dd>
+                    </div>
+                    <div>
+                      <dt>Courier freshness</dt>
+                      <dd>
+                        {selectedOrder.operational?.courier.freshness.status ?? "Unavailable"}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Order freshness</dt>
+                      <dd>{selectedOrder.operational?.orderFreshness.status ?? "Unavailable"}</dd>
+                    </div>
+                  </dl>
+                ) : (
+                  <p className="empty-state">Select an order to inspect its state.</p>
+                )}
+              </section>
+              <section className="panel entity-drawer">
+                <div className="panel-heading">
+                  <div>
+                    <p className="eyebrow">Courier detail</p>
+                    <h2>{snapshot.dispatch.selectedCourier}</h2>
+                  </div>
+                  <Bike size={17} className="heading-icon" />
+                </div>
+                {snapshot.couriers.find(
+                  (courier) => courier.id === snapshot.dispatch.selectedCourier,
+                ) ? (
+                  <dl className="detail-list">
+                    {(() => {
+                      const courier = snapshot.couriers.find(
+                        (item) => item.id === snapshot.dispatch.selectedCourier,
+                      )!;
+                      return (
+                        <>
+                          <div>
+                            <dt>Zone</dt>
+                            <dd>{courier.zone}</dd>
+                          </div>
+                          <div>
+                            <dt>Status</dt>
+                            <dd>{courier.status.replace("_", " ")}</dd>
+                          </div>
+                          <div>
+                            <dt>Position</dt>
+                            <dd>
+                              {courier.position.x}, {courier.position.y}
+                            </dd>
+                          </div>
+                        </>
+                      );
+                    })()}
+                  </dl>
+                ) : (
+                  <p className="empty-state">Courier detail unavailable from this source.</p>
+                )}
+              </section>
+            </section>
+          </div>
         </section>
-      </div>
+        <section
+          id="operations-chapter-replay"
+          className="operations-chapter chapter-replay"
+          data-motion-section="chapter-replay"
+          data-chapter="replay"
+          aria-labelledby="replay-title"
+        >
+          <div className="chapter-replay-copy">
+            <p className="eyebrow">06 / Simulation + replay</p>
+            <h2 id="replay-title">Move through what happened and what could happen.</h2>
+            <p>
+              Recorded and simulated time become a navigable layer around the same operational
+              world.
+            </p>
+            <div className="replay-clock" data-pointer-target="hud" data-pointer-id="replay-clock">
+              <span>clock domain</span>
+              <strong>{snapshot.clockDomain}</strong>
+              <small>
+                {snapshot.replay?.verified
+                  ? "digest verified"
+                  : snapshot.simulation
+                    ? `tick ${snapshot.simulation.tick}`
+                    : "snapshot ready"}
+              </small>
+            </div>
+          </div>
+          <div className="chapter-replay-dock">
+            {snapshot.source === "simulation" && snapshot.simulation && onSimulationControl ? (
+              <SimulationControlPanel
+                snapshot={snapshot.simulation}
+                demandCount={snapshot.orders.length}
+                supplyCount={snapshot.couriers.length}
+                trafficLabel="seeded 1.0x"
+                onControl={onSimulationControl}
+              />
+            ) : snapshot.source === "replay" && snapshot.replay && onReplayControl ? (
+              <ReplayPlaybackPanel snapshot={snapshot.replay} onControl={onReplayControl} />
+            ) : (
+              <div className="replay-dock-empty">
+                <span className="eyebrow">Replay dock</span>
+                <strong>Choose Replay or Simulation from the source selector.</strong>
+                <span>Controls remain disabled until Replay or Simulation is selected.</span>
+              </div>
+            )}
+            {(snapshot.source === "simulation" || snapshot.source === "replay") && (
+              <TwinVisualizationPanel snapshot={snapshot} />
+            )}
+          </div>
+        </section>
+        <section
+          id="operations-chapter-research"
+          className="operations-chapter chapter-research"
+          data-motion-section="chapter-research"
+          data-chapter="research"
+          aria-labelledby="research-title"
+        >
+          <div className="chapter-research-heading">
+            <p className="eyebrow">07 / Reliability + research</p>
+            <h2 id="research-title">Leave an evidence trail behind every route.</h2>
+            <p>
+              Reliability, lineage, and twin fidelity stay visible without breaking the spatial
+              frame.
+            </p>
+          </div>
+          <div className="chapter-research-wall">
+            <details className="evidence-module evidence-module-primary" open>
+              <summary>Spatial evidence layers</summary>
+              <GeoAnalyticalLayersPanel snapshot={snapshot} />
+            </details>
+            <details className="evidence-module">
+              <summary>Decision lineage and constraints</summary>
+              <DecisionXrayPanel snapshot={snapshot} />
+            </details>
+            <details className="evidence-module evidence-module-wide">
+              <summary>Reliability invariants and recovery evidence</summary>
+              <ReliabilityCenterPanel snapshot={snapshot} health={health} realtime={realtime} />
+            </details>
+          </div>
+        </section>
+      </OperationsExperience>
     </OperationsMotionCoordinator>
   );
 }

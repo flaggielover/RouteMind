@@ -6,11 +6,7 @@ export function UrbanFieldFallback({ state }: { state: UrbanFieldState }) {
       ? "Live"
       : `${state.mode[0].toUpperCase()}${state.mode.slice(1)} · non-production`;
   return (
-    <section
-      className="urban-field-fallback"
-      role="img"
-      aria-label="RouteMind urban field fallback summary"
-    >
+    <section className="urban-field-fallback" aria-label="RouteMind urban field fallback summary">
       <div className="urban-fallback-header">
         <span className="scene-kicker">Urban field / static capability fallback</span>
         <strong>{modeLabel}</strong>
