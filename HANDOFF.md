@@ -1589,6 +1589,32 @@ The worktree also contains unrelated concurrent PR-001 files and ignored local
 `.codex-tmp/`, `.superpowers/`, and Playwright artifacts; these were preserved
 and are not part of the visual checkpoint.
 
+## RM-239 Operations Scroll and Pointer Narrative (2026-08-30)
+
+Implemented in the existing React 19 Operations route. A single motion
+coordinator now samples native scroll and pointer input, classifies semantic
+inspection targets, publishes CSS progress variables, and hands focus across
+the full Operations page. The first overview/spatial/risk/strategy sequence
+uses a bounded sticky stage with perceptible camera/depth and scene-layer
+changes; map, queue, timeline, activity, simulation/replay, analytical,
+research, and reliability surfaces remain in the same graphite/slate language
+with restrained detail transitions.
+
+`UrbanFieldSceneController` receives the shared frame and drives camera target,
+core deformation/scale, pressure-field waves, route/node emphasis, and a local
+composer lens. RGB shift is transient and capped. Controls are excluded from
+the lens, reduced motion keeps WebGL but freezes nonessential motion, and the
+existing renderer disposal/fallback lifecycle remains authoritative.
+
+Evidence is `evidence/gates/RM-239/operations-scroll-pointer.md`. Format, lint,
+typecheck, 39 Vitest files/108 tests, production build, targeted Playwright
+smoke, and browser desktop/laptop/mobile continuous-scroll plus pointer review
+passed. A concurrent full e2e run retained eight unrelated strict-selector or
+connection failures in live/degraded fixtures; no motion assertion failed.
+
+The standalone implementation checkpoint is ready for review. Keep the local
+dev server at `http://127.0.0.1:4173/operations` available for visual follow-up.
+
 ### R4-422 V2 closure and credential lifecycle audit - 2026-08-30
 
 The consumed V2 fail-closed execution was closed in checkpoint `1b7c41021f914bd2f1eb367fd3d417345729304d`, whose first remote CI run was `33290111559`. That run passed Python, Web, Resilience, and Java, but the control-plane security gate rejected a local token variable name lexically; no provider or credential operation occurred. The smallest source-only naming repair was committed separately as `3752f205d5d5e5cb5670ed03d86801dca0eb21e8` and passed all five jobs in remote CI run `33290659144`.

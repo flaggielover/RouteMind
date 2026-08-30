@@ -4599,3 +4599,340 @@ button {
     transition: none;
   }
 }
+
+/* Carry the graphite operational language through the legacy detail surfaces. */
+.app-shell-operations {
+  --ink: #e5eeee;
+  --muted: #92a7aa;
+  --subtle: #71878c;
+  --line: #29434b;
+  --surface: #102027;
+  --surface-muted: #162b32;
+  --shadow: 0 18px 44px rgba(0, 0, 0, 0.18);
+}
+
+.app-shell-operations .projection-state,
+.app-shell-operations .operations-health,
+.app-shell-operations .metric-cell,
+.app-shell-operations .panel,
+.app-shell-operations .alert-panel,
+.app-shell-operations .queue-panel,
+.app-shell-operations .map-panel,
+.app-shell-operations .entity-drawer,
+.app-shell-operations .operations-alerts,
+.app-shell-operations .primary-grid,
+.app-shell-operations .secondary-grid,
+.app-shell-operations .entity-drawers {
+  border-color: #29434b;
+}
+
+.app-shell-operations .projection-state,
+.app-shell-operations .operations-health,
+.app-shell-operations .metric-cell,
+.app-shell-operations .panel {
+  background: #102027;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.16);
+}
+
+.app-shell-operations .projection-state strong,
+.app-shell-operations .operations-health strong,
+.app-shell-operations .panel-heading h2,
+.app-shell-operations .metric-value,
+.app-shell-operations .panel strong,
+.app-shell-operations .panel dt,
+.app-shell-operations .panel dd {
+  color: #e1ecec;
+}
+
+.app-shell-operations .panel p,
+.app-shell-operations .panel span,
+.app-shell-operations .panel small,
+.app-shell-operations .panel th,
+.app-shell-operations .panel td,
+.app-shell-operations .metric-detail {
+  color: #92a7aa;
+}
+
+.app-shell-operations .metric-icon {
+  background: #19353d;
+  color: #79d3cb;
+}
+
+.app-shell-operations .simulation-metrics > div,
+.app-shell-operations .simulation-settings,
+.app-shell-operations .replay-timeline,
+.app-shell-operations .detail-list,
+.app-shell-operations .decision-details,
+.app-shell-operations .queue-item,
+.app-shell-operations .order-card,
+.app-shell-operations .table-wrap {
+  background: #142a31;
+  border-color: #29434b;
+}
+
+.app-shell-operations .exception-banner {
+  background: #2b2520;
+  border-color: #6d5030;
+  color: #e3c38f;
+}
+
+.app-shell-operations .operations-health {
+  position: relative;
+  overflow: hidden;
+}
+
+.app-shell-operations .operations-health::after {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgba(103, 200, 192, 0.42), transparent);
+}
+
+/* Operations motion layer: a shared spatial stage above the existing business surfaces. */
+.app-shell-operations .operations-motion-root {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  perspective: 1400px;
+  --rm-pointer-x: 0.5;
+  --rm-pointer-y: 0.5;
+  --rm-pointer-intensity: 0;
+  --rm-scroll-progress: 0;
+  --rm-section-progress: 0;
+  --rm-scroll-velocity: 0;
+  --rm-focus-strength: 0;
+}
+
+.app-shell-operations .operations-motion-root::before {
+  position: absolute;
+  z-index: -1;
+  inset: -28px -32px -48px;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(19, 43, 48, 0.24), transparent 30%, rgba(18, 39, 43, 0.12)),
+    repeating-linear-gradient(90deg, rgba(126, 177, 179, 0.026) 0 1px, transparent 1px 84px);
+  opacity: 0.78;
+}
+
+.operations-motion-root .page-stack {
+  position: relative;
+  z-index: 1;
+}
+
+.operations-motion-root [data-motion-section] {
+  position: relative;
+  transform-origin: center top;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.operations-spatial-story {
+  position: relative;
+  display: grid;
+  gap: 20px;
+  min-height: calc(100vh + 700px);
+}
+
+.operations-spatial-story > .operations-hero {
+  position: sticky;
+  z-index: 2;
+  top: 116px;
+  align-self: start;
+  min-height: calc(100vh - 148px);
+}
+
+.operations-spatial-story .operations-hero-stage {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-height: calc(100vh - 148px);
+  transform-style: preserve-3d;
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(104, 192, 190, 0.04);
+}
+
+.operations-spatial-story .urban-field-scene,
+.operations-spatial-story .urban-field-fallback {
+  min-height: clamp(390px, calc(100vh - 320px), 560px);
+}
+
+.operations-spatial-story .urban-field-canvas {
+  height: clamp(390px, calc(100vh - 320px), 560px);
+}
+
+.operations-analytics {
+  position: relative;
+  z-index: 4;
+  margin-top: 8vh;
+  padding: 22px 0 10px;
+}
+
+.operations-analytics .analytics-foundation {
+  padding: 18px;
+  border: 1px solid rgba(72, 117, 123, 0.58);
+  background: linear-gradient(180deg, rgba(15, 35, 41, 0.98), rgba(10, 24, 30, 0.98)), #0d1c22;
+  box-shadow:
+    0 30px 68px rgba(0, 0, 0, 0.32),
+    0 -16px 42px rgba(22, 71, 74, 0.12);
+}
+
+.operations-motion-root[data-motion-focus="spatial"] .operations-hero-stage {
+  border-color: rgba(99, 200, 193, 0.64);
+}
+
+.operations-motion-root[data-motion-focus="analytics"] .operations-hero-stage {
+  border-color: rgba(92, 144, 148, 0.5);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.34);
+}
+
+.operations-motion-root[data-motion-focus="analytics"] .operations-hero-rail {
+  opacity: 0.78;
+  transform: translateZ(-18px) scale(0.98);
+}
+
+.operations-motion-root[data-motion-focus="analytics"] .urban-field-hud {
+  opacity: 0.58;
+}
+
+.operations-motion-root[data-motion-focus="detail"] .operations-analytics,
+.operations-motion-root[data-motion-focus="research"] .operations-analytics,
+.operations-motion-root[data-motion-focus="reliability"] .operations-analytics {
+  opacity: 0.86;
+}
+
+.operations-motion-root [data-motion-section="detail"] > *,
+.operations-motion-root [data-motion-section="research"] > *,
+.operations-motion-root [data-motion-section="reliability"] > * {
+  transition:
+    box-shadow 360ms ease,
+    border-color 360ms ease,
+    opacity 360ms ease;
+}
+
+.operations-motion-root[data-motion-focus="detail"] [data-motion-section="detail"] > *,
+.operations-motion-root[data-motion-focus="research"] [data-motion-section="research"] > *,
+.operations-motion-root[data-motion-focus="reliability"] [data-motion-section="reliability"] > * {
+  border-color: rgba(41, 115, 122, 0.54);
+  box-shadow:
+    0 20px 44px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(99, 200, 193, 0.08);
+}
+
+.operations-pointer-lens {
+  position: fixed;
+  z-index: 40;
+  top: var(--rm-pointer-py, -200px);
+  left: var(--rm-pointer-px, -200px);
+  width: 156px;
+  aspect-ratio: 1;
+  border: 1px solid rgba(103, 200, 192, 0.58);
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: var(--rm-pointer-intensity);
+  transform: translate3d(-50%, -50%, 0);
+  background:
+    radial-gradient(circle at center, rgba(103, 200, 192, 0.11), transparent 54%),
+    radial-gradient(
+      circle at center,
+      transparent 60%,
+      rgba(103, 200, 192, 0.08) 61%,
+      transparent 64%
+    );
+  box-shadow:
+    0 0 0 1px rgba(103, 200, 192, 0.08),
+    0 0 28px rgba(73, 174, 172, 0.16);
+  mix-blend-mode: screen;
+  transition:
+    opacity 180ms ease,
+    border-color 180ms ease;
+}
+
+.operations-pointer-lens::before,
+.operations-pointer-lens::after {
+  position: absolute;
+  content: "";
+  background: rgba(103, 200, 192, 0.44);
+}
+
+.operations-pointer-lens::before {
+  top: 50%;
+  right: 10px;
+  left: 10px;
+  height: 1px;
+}
+
+.operations-pointer-lens::after {
+  top: 10px;
+  bottom: 10px;
+  left: 50%;
+  width: 1px;
+}
+
+.operations-pointer-lens-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  border: 1px solid #d8efea;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.operations-pointer-lens-label {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  color: rgba(211, 239, 235, 0.82);
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.operations-motion-root[data-pointer-target="chart"] .operations-pointer-lens {
+  border-color: rgba(214, 162, 97, 0.58);
+  box-shadow: 0 0 28px rgba(214, 162, 97, 0.14);
+}
+
+@media (pointer: coarse), (max-width: 760px) {
+  .operations-pointer-lens {
+    display: none;
+  }
+
+  .operations-spatial-story {
+    min-height: 0;
+  }
+
+  .operations-spatial-story > .operations-hero {
+    position: relative;
+    top: auto;
+    min-height: 0;
+  }
+
+  .operations-spatial-story .operations-hero-stage {
+    min-height: 0;
+  }
+
+  .operations-analytics {
+    margin-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .operations-spatial-story > .operations-hero {
+    position: relative;
+    top: auto;
+  }
+
+  .operations-pointer-lens {
+    display: none;
+  }
+
+  .operations-motion-root [data-motion-section] {
+    will-change: auto;
+  }
+}

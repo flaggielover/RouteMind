@@ -138,7 +138,7 @@ function ChartFrame({
   children: ReactNode;
 }) {
   return (
-    <article className="chart-frame">
+    <article className="chart-frame" data-pointer-target="chart" data-pointer-id={title}>
       <header className="chart-frame-heading">
         <h3>{title}</h3>
         <span>{meta}</span>

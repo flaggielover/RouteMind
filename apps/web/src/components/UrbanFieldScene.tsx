@@ -33,8 +33,9 @@ import type { BufferGeometry, LineBasicMaterial } from "three";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type MutableRefObject } from "react";
 import type { UrbanFieldState } from "../visuals/urbanFieldState";
 import { UrbanFieldFallback } from "./UrbanFieldFallback";
 
@@ -42,6 +43,21 @@ export interface UrbanFieldSceneProps {
   state: UrbanFieldState;
   onFocusEntity?: (entityId: string | null) => void;
   onSceneReady?: () => void;
+  controllerRef?: MutableRefObject<UrbanFieldSceneController | null>;
+}
+
+export interface UrbanFieldSceneController {
+  setScrollFrame(frame: { progress: number; section: number; focus: number }): void;
+  setPointerFrame(frame: {
+    x?: number;
+    y?: number;
+    nx: number;
+    ny: number;
+    intensity: number;
+    targetType?: "scene" | "chart" | "hud" | "control" | null;
+  }): void;
+  clearFocus(): void;
+  dispose(): void;
 }
 
 type SceneStatus = "loading" | "ready" | "fallback";
@@ -51,6 +67,7 @@ interface SceneRefs {
   camera: PerspectiveCamera;
   renderer: WebGLRenderer;
   composer: EffectComposer | null;
+  lensPass: ShaderPass | null;
   core: Mesh;
   coreGeometry: BufferGeometry;
   cells: InstancedMesh;
@@ -66,6 +83,13 @@ interface SceneRefs {
   cameraBase: Vector3;
   cameraTarget: Vector3;
   reducedMotion: boolean;
+  scrollProgress: number;
+  sectionIndex: number;
+  focusStrength: number;
+  pointerIntensity: number;
+  lensPointer: Vector2;
+  coreScaleTarget: Vector3;
+  focusedEntityId: string | null;
 }
 
 const SLATE = "#273840";
@@ -73,7 +97,12 @@ const TEAL = "#67c8c0";
 const AMBER = "#d6a261";
 const RISK = "#d86d6b";
 
-export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFieldSceneProps) {
+export function UrbanFieldScene({
+  state,
+  onFocusEntity,
+  onSceneReady,
+  controllerRef,
+}: UrbanFieldSceneProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef(state);
   const focusRef = useRef(onFocusEntity);
@@ -94,6 +123,7 @@ export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFie
     let destroyed = false;
     let hidden = document.visibilityState === "hidden";
     let inViewport = true;
+    if (controllerRef) controllerRef.current = null;
     const reducedQuery =
       typeof window.matchMedia === "function"
         ? window.matchMedia("(prefers-reduced-motion: reduce)")
@@ -153,7 +183,9 @@ export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFie
       const camera = new PerspectiveCamera(34, 1, 0.1, 100);
       camera.position.set(8.4, 7.2, 11.6);
       camera.lookAt(0, 1.15, 0);
-      const composer = createComposer(renderer, scene, camera);
+      const post = createComposer(renderer, scene, camera);
+      const composer = post?.composer ?? null;
+      const lensPass = post?.lensPass ?? null;
       const reducedMotion = reducedQuery?.matches ?? false;
 
       const ambient = new HemisphereLight("#c8e2e0", "#11191e", 1.35);
@@ -352,6 +384,7 @@ export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFie
         camera,
         renderer,
         composer,
+        lensPass,
         core,
         coreGeometry,
         cells,
@@ -367,8 +400,79 @@ export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFie
         cameraBase: camera.position.clone(),
         cameraTarget: camera.position.clone(),
         reducedMotion,
+        scrollProgress: 0,
+        sectionIndex: 0,
+        focusStrength: 0,
+        pointerIntensity: 0,
+        lensPointer: new Vector2(0.5, 0.5),
+        coreScaleTarget: new Vector3(1, 1, 1),
+        focusedEntityId: null,
       };
       sceneRefs = sceneState;
+      if (controllerRef) {
+        controllerRef.current = {
+          setScrollFrame: (frame) => {
+            if (!sceneRefs) return;
+            sceneRefs.scrollProgress = Math.min(1, Math.max(0, frame.progress));
+            sceneRefs.sectionIndex = frame.section;
+            sceneRefs.focusStrength = Math.min(1, Math.max(0, frame.focus));
+          },
+          setPointerFrame: (frame) => {
+            if (!sceneRefs) return;
+            const targetType = frame.targetType ?? "scene";
+            sceneRefs.pointerIntensity =
+              targetType === "scene" ? Math.min(1, Math.max(0, frame.intensity)) : 0;
+            if (targetType !== "scene") {
+              sceneRefs.hasPointerWorld = false;
+              sceneRefs.pointerIntensity = 0;
+              if (sceneRefs.focusedEntityId !== null) {
+                sceneRefs.focusedEntityId = null;
+                setHoveredEntity(null);
+                focusRef.current?.(null);
+              }
+              if (sceneRefs.lensPass) {
+                sceneRefs.lensPass.uniforms.uIntensity.value = 0;
+                sceneRefs.lensPass.uniforms.uRgbShift.value = 0;
+              }
+              return;
+            }
+            const rect = renderer.domElement.getBoundingClientRect();
+            const localX = frame.x === undefined ? frame.nx : (frame.x - rect.left) / rect.width;
+            const localY = frame.y === undefined ? frame.ny : (frame.y - rect.top) / rect.height;
+            sceneRefs.pointerNdc.set(
+              Math.min(1, Math.max(-1, localX * 2 - 1)),
+              Math.min(1, Math.max(-1, -(localY * 2 - 1))),
+            );
+            sceneRefs.lensPointer.set(localX, 1 - localY);
+            sceneRefs.raycaster.setFromCamera(sceneRefs.pointerNdc, sceneRefs.camera);
+            const worldHit = sceneRefs.raycaster.intersectObject(sceneRefs.rayPlane, false)[0];
+            if (worldHit) {
+              sceneRefs.pointerWorld.copy(worldHit.point);
+              sceneRefs.hasPointerWorld = true;
+            }
+            const hits = sceneRefs.raycaster.intersectObjects(sceneRefs.nodes, false);
+            const hit = hits[0]?.object;
+            const entityId =
+              hit?.userData.id === undefined ? (hit ? "intelligence-core" : null) : hit.userData.id;
+            if (sceneRefs.focusedEntityId !== entityId) {
+              sceneRefs.focusedEntityId = entityId;
+              setHoveredEntity(entityId);
+              focusRef.current?.(entityId);
+            }
+          },
+          clearFocus: () => {
+            if (!sceneRefs) return;
+            sceneRefs.hasPointerWorld = false;
+            sceneRefs.pointerIntensity = 0;
+            if (sceneRefs.focusedEntityId !== null) {
+              sceneRefs.focusedEntityId = null;
+              setHoveredEntity(null);
+              focusRef.current?.(null);
+            }
+          },
+          dispose: () => undefined,
+        };
+      }
 
       const resize = () => {
         if (!sceneRefs || !host.clientWidth || !host.clientHeight) return;
@@ -382,41 +486,6 @@ export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFie
       const resizeObserver = new ResizeObserver(resize);
       resizeObserver.observe(host);
       resize();
-
-      const updatePointer = (event: PointerEvent) => {
-        if (!sceneRefs) return;
-        const rect = renderer.domElement.getBoundingClientRect();
-        sceneRefs.pointerNdc.set(
-          ((event.clientX - rect.left) / rect.width) * 2 - 1,
-          -((event.clientY - rect.top) / rect.height) * 2 + 1,
-        );
-        sceneRefs.raycaster.setFromCamera(sceneRefs.pointerNdc, sceneRefs.camera);
-        const worldHit = sceneRefs.raycaster.intersectObject(sceneRefs.rayPlane, false)[0];
-        if (worldHit) {
-          sceneRefs.pointerWorld.copy(worldHit.point);
-          sceneRefs.hasPointerWorld = true;
-        }
-        sceneRefs.cameraTarget.set(
-          sceneRefs.cameraBase.x + sceneRefs.pointerNdc.x * 0.52,
-          sceneRefs.cameraBase.y + sceneRefs.pointerNdc.y * -0.28,
-          sceneRefs.cameraBase.z,
-        );
-        const hits = sceneRefs.raycaster.intersectObjects(sceneRefs.nodes, false);
-        const hit = hits[0]?.object;
-        const entityId =
-          hit?.userData.id === undefined ? (hit ? "intelligence-core" : null) : hit.userData.id;
-        setHoveredEntity(entityId);
-        focusRef.current?.(entityId);
-      };
-      const clearPointer = () => {
-        if (!sceneRefs) return;
-        sceneRefs.hasPointerWorld = false;
-        sceneRefs.cameraTarget.copy(sceneRefs.cameraBase);
-        setHoveredEntity(null);
-        focusRef.current?.(null);
-      };
-      renderer.domElement.addEventListener("pointermove", updatePointer);
-      renderer.domElement.addEventListener("pointerleave", clearPointer);
 
       const updateReducedMotion = () => {
         if (sceneRefs) sceneRefs.reducedMotion = reducedQuery?.matches ?? false;
@@ -453,7 +522,15 @@ export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFie
         const motion = !refs.reducedMotion;
         const coreMaterialRef = refs.core.material as MeshStandardMaterial;
         const pressure = current.pressure;
-        const deformation = motion ? 0.08 + pressure * 0.22 + current.activityRate * 0.06 : 0;
+        const spatialBeat = Math.max(0, 1 - Math.abs(refs.scrollProgress - 0.055) / 0.075);
+        const riskBeat = Math.max(0, 1 - Math.abs(refs.scrollProgress - 0.13) / 0.075);
+        const strategyBeat = Math.max(0, 1 - Math.abs(refs.scrollProgress - 0.215) / 0.1);
+        const detailBeat = Math.min(1, Math.max(0, (refs.scrollProgress - 0.29) / 0.24));
+        const inspection = refs.pointerIntensity;
+        const deformation = motion
+          ? (0.045 + pressure * 0.16 + current.activityRate * 0.05) *
+            (0.7 + spatialBeat * 0.45 + riskBeat * 0.75 + inspection * 0.65)
+          : 0;
         const corePosition = refs.coreGeometry.attributes.position;
         const array = corePosition.array as Float32Array;
         for (let index = 0; index < array.length; index += 9) {
@@ -475,7 +552,15 @@ export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFie
         corePosition.needsUpdate = motion;
         if (motion) refs.coreGeometry.computeVertexNormals();
         coreMaterialRef.emissiveIntensity =
-          0.48 + current.risk * 0.55 + Math.sin(elapsed * 1.4) * (motion ? 0.08 : 0);
+          0.34 +
+          current.risk * 0.46 +
+          riskBeat * 0.34 +
+          strategyBeat * 0.12 +
+          inspection * 0.28 +
+          Math.sin(elapsed * 1.4) * (motion ? 0.08 : 0);
+        const coreScale = 1 + spatialBeat * 0.07 + riskBeat * 0.09 - strategyBeat * 0.08;
+        refs.coreScaleTarget.set(coreScale, coreScale, coreScale);
+        refs.core.scale.lerp(refs.coreScaleTarget, motion ? 0.08 : 1);
         refs.core.rotation.y += motion ? delta * (0.11 + current.activityRate * 0.12) : 0;
         refs.core.rotation.x = motion ? Math.sin(elapsed * 0.33) * 0.08 : 0;
 
@@ -487,7 +572,11 @@ export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFie
             motion && refs.hasPointerWorld
               ? Math.sin(elapsed * 3.4 - distance * 2.2) * Math.exp(-distance * 0.54)
               : 0;
-          const height = Math.max(0.12, base + wave * (0.18 + current.activityRate * 0.18));
+          const height = Math.max(
+            0.12,
+            base * (0.84 + riskBeat * 0.2 + strategyBeat * 0.1) +
+              wave * (0.18 + current.activityRate * 0.18 + inspection * 0.12),
+          );
           cellPosition.set(position.x, height / 2, position.z);
           cellScale.set(1, height, 1);
           frameMatrix.compose(cellPosition, cellQuaternion, cellScale);
@@ -499,20 +588,49 @@ export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFie
           const focused = node.userData.id === hoveredEntity;
           const material = node.material as MeshStandardMaterial;
           const pulse = motion ? (Math.sin(elapsed * 2.4 + index * 0.67) + 1) * 0.08 : 0;
-          material.emissiveIntensity = focused ? 1.25 : 0.46 + pulse;
-          node.scale.setScalar(focused ? 1.55 : 1);
+          material.emissiveIntensity = focused
+            ? 1.25 + inspection * 0.45
+            : 0.38 + pulse + riskBeat * 0.18;
+          node.scale.setScalar(focused ? 1.55 + inspection * 0.18 : 1 + strategyBeat * 0.05);
           if (motion)
             node.position.y = node.userData.baseY + Math.sin(elapsed * 1.2 + index) * 0.04;
         });
         refs.routes.forEach((route, index) => {
           const material = route.material as MeshStandardMaterial;
           material.emissiveIntensity = refs.reducedMotion
-            ? 0.38
-            : 0.42 + (Math.sin(elapsed * 1.8 + index) + 1) * 0.08;
+            ? 0.34 + strategyBeat * 0.12
+            : 0.34 +
+              strategyBeat * 0.24 +
+              riskBeat * 0.12 +
+              (Math.sin(elapsed * 1.8 + index) + 1) * 0.08;
         });
+        const pointerOffset = refs.pointerIntensity;
+        refs.cameraTarget.set(
+          refs.cameraBase.x +
+            (refs.scrollProgress - 0.5) * 0.95 +
+            refs.pointerNdc.x * 0.62 * pointerOffset,
+          refs.cameraBase.y +
+            spatialBeat * 0.26 -
+            riskBeat * 0.18 -
+            refs.pointerNdc.y * 0.34 * pointerOffset,
+          refs.cameraBase.z +
+            spatialBeat * 0.55 -
+            riskBeat * 0.4 +
+            strategyBeat * 1.15 +
+            detailBeat * 0.35,
+        );
+        if (refs.lensPass) {
+          refs.lensPass.uniforms.uPointer.value.copy(refs.lensPointer);
+          refs.lensPass.uniforms.uIntensity.value = refs.reducedMotion
+            ? 0
+            : Math.min(0.55, refs.pointerIntensity * (0.56 + riskBeat * 0.22));
+          refs.lensPass.uniforms.uRgbShift.value = refs.reducedMotion
+            ? 0
+            : Math.min(0.0045, refs.pointerIntensity * 0.0028);
+        }
         if (motion) {
           camera.position.lerp(refs.cameraTarget, 1 - Math.pow(0.001, delta));
-          camera.lookAt(0, 1.15, 0);
+          camera.lookAt(0, 1.15 + riskBeat * 0.24 - strategyBeat * 0.12, 0);
         } else if (!camera.position.equals(refs.cameraBase)) {
           camera.position.copy(refs.cameraBase);
           camera.lookAt(0, 1.15, 0);
@@ -539,24 +657,29 @@ export function UrbanFieldScene({ state, onFocusEntity, onSceneReady }: UrbanFie
         intersectionObserver.disconnect();
         reducedQuery?.removeEventListener?.("change", updateReducedMotion);
         document.removeEventListener("visibilitychange", visibilityChange);
-        renderer.domElement.removeEventListener("pointermove", updatePointer);
-        renderer.domElement.removeEventListener("pointerleave", clearPointer);
         disposeObject(scene);
         composer?.dispose();
         renderer.dispose();
         renderer.domElement.remove();
         sceneRefs = null;
+        if (controllerRef) controllerRef.current = null;
       };
     } catch {
       fallback();
       return () => undefined;
     }
-  }, []);
+  }, [controllerRef]);
 
   return status === "fallback" ? (
     <UrbanFieldFallback state={state} />
   ) : (
-    <div className="urban-field-scene" ref={hostRef} data-scene-status={status}>
+    <div
+      className="urban-field-scene"
+      ref={hostRef}
+      data-scene-status={status}
+      data-pointer-target="scene"
+      data-pointer-id="urban-field"
+    >
       <div className="urban-field-hud" aria-hidden="true">
         <span className="scene-kicker">Urban field / WebGL</span>
         <span className="scene-mode">
@@ -595,13 +718,53 @@ function createComposer(
   renderer: WebGLRenderer,
   scene: Scene,
   camera: PerspectiveCamera,
-): EffectComposer | null {
+): { composer: EffectComposer; lensPass: ShaderPass } | null {
   try {
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
     composer.addPass(new UnrealBloomPass(new Vector2(1, 1), 0.42, 0.48, 0.82));
+    const lensPass = new ShaderPass({
+      uniforms: {
+        tDiffuse: { value: null },
+        uPointer: { value: new Vector2(0.5, 0.5) },
+        uIntensity: { value: 0 },
+        uRadius: { value: 0.25 },
+        uRgbShift: { value: 0 },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D tDiffuse;
+        uniform vec2 uPointer;
+        uniform float uIntensity;
+        uniform float uRadius;
+        uniform float uRgbShift;
+        varying vec2 vUv;
+        void main() {
+          vec2 delta = vUv - uPointer;
+          float distanceToPointer = length(delta);
+          float edge = smoothstep(uRadius, 0.0, distanceToPointer);
+          float localEnergy = edge * uIntensity;
+          vec2 direction = normalize(delta + vec2(0.0001));
+          float bulge = localEnergy * 0.038 * (1.0 - smoothstep(0.0, uRadius, distanceToPointer));
+          vec2 lensUv = clamp(vUv - direction * bulge, 0.001, 0.999);
+          float shift = uRgbShift * localEnergy * smoothstep(0.0, uRadius, distanceToPointer);
+          float red = texture2D(tDiffuse, clamp(lensUv + direction * shift, 0.001, 0.999)).r;
+          float green = texture2D(tDiffuse, lensUv).g;
+          float blue = texture2D(tDiffuse, clamp(lensUv - direction * shift, 0.001, 0.999)).b;
+          vec4 base = texture2D(tDiffuse, lensUv);
+          gl_FragColor = vec4(red, green, blue, base.a);
+        }
+      `,
+    });
+    composer.addPass(lensPass);
     composer.addPass(new OutputPass());
-    return composer;
+    return { composer, lensPass };
   } catch {
     return null;
   }

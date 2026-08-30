@@ -2482,3 +2482,23 @@ blocked at `HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT`.
   existing skips; desktop, 1024px, and 760px browser review found no overflow
   and a nonblank WebGL canvas. This is deterministic demo/snapshot-derived
   visualization only and introduces no backend or production claim.
+
+### RM-239 Operations scroll narrative and pointer inspection - 2026-08-30
+
+- Operations now owns one scroll/pointer motion coordinator across the full page.
+  Section focus hand-off covers overview, spatial, analytics, health, metrics,
+  detail, research, reliability, and alerts; simulation/replay stages join when
+  their source is active. The first spatial sequence uses a bounded sticky stage
+  and perceptible camera/depth/scene emphasis changes rather than fade-only panel
+  animation.
+- `UrbanFieldSceneController` consumes shared frames for camera target/depth,
+  core facet deformation, pressure-field wave propagation, route/node emphasis,
+  and a local composer lens. Pointer targets classify scene/chart/control
+  inspection, with transient capped RGB shift and no second WebGL context.
+- Legacy detail surfaces are carried into the graphite/slate operational token
+  language so continuous scrolling does not fall back to white dashboard cards.
+- Evidence: `evidence/gates/RM-239/operations-scroll-pointer.md`. Format, lint,
+  typecheck, 39 Vitest files/108 tests, build, targeted Playwright smoke, and
+  browser continuous-scroll/pointer inspection passed. A concurrent full e2e run
+  retained eight unrelated strict-selector/connection failures in live/degraded
+  fixtures; no motion assertion failed.
