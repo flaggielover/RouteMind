@@ -8,6 +8,24 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: R4-422 - GMAIL V2 SEND PREFLIGHT FAILED (CREDENTIAL REFRESH REQUIRED)
 
+R4-422 Gmail refresh-if-required single-send preparation (2026-08-30): a new
+independent contract
+`contracts/provider/r4-422-google-gmail-refresh-if-required-single-send-v1.json`
+is frozen at canonical SHA-256
+`35702d6d6698b78f08757b2560deb2bfee50503d0b8cc90b8fd2fcdf9431535f`.
+Preparation is offline-only and made zero Gmail API requests, zero
+`users.messages.send` requests, zero token refresh requests, zero OAuth,
+browser, SSH, email, retry, fallback, read, recipient, and mutation
+operations. The Java executor uses one loaded credential object, refreshes at
+most once only when readiness requires it, reassesses that same object, then
+uses a fixed post-refresh token snapshot for at most one synthetic send. Any
+refresh or send failure stops closed. Historical Gmail contracts and evidence
+are explicitly preserved, immutable, and non-reusable. Contract, Java focused
+tests, security, and leakage checks passed; no provider, delivery, or
+production claim is made. Evidence:
+`evidence/gates/R4-422/google-gmail-refresh-if-required-single-send-preparation-20260830.*`.
+R4-422 remains `BLOCKED / HUMAN_GATE_PENDING`; no execution command was run.
+
 R4-422 Gmail V2 approved execution (2026-08-30): contract
 `contracts/provider/r4-422-google-gmail-single-send-validation-v2.json` at exact
 SHA-256 `033bd4e5e3c92b65d94191a30fcae7d852dc92ae7441ef18c8bf8f959cba371f` was

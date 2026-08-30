@@ -14,6 +14,22 @@ Repository Total: 167 / 197 tasks passed
 
 Current Task: R4-422 - GMAIL V2 SEND PREFLIGHT FAILED (CREDENTIAL REFRESH REQUIRED)
 
+R4-422 Gmail refresh-if-required single-send preparation (2026-08-30): the
+independent contract
+`contracts/provider/r4-422-google-gmail-refresh-if-required-single-send-v1.json`
+is frozen at canonical SHA-256
+`35702d6d6698b78f08757b2560deb2bfee50503d0b8cc90b8fd2fcdf9431535f`.
+Offline preparation and bounded fake-adapter tests passed. All preparation
+external-operation counters are zero, including Gmail API, send, refresh,
+OAuth, browser, SSH, email, reads, retries, fallback, recipients, and
+mutations; cost is `USD 0.00`. The future Human Gate permits only one standard
+refresh when readiness requires it and at most one synthetic send using the
+same credential object, with fail-closed behavior. Historical Gmail contracts
+and evidence remain immutable and non-reusable. No provider, delivery, or
+production claim is made; R4-422 remains `BLOCKED / HUMAN_GATE_PENDING`.
+Evidence is under
+`evidence/gates/R4-422/google-gmail-refresh-if-required-single-send-preparation-20260830.*`.
+
 R4-422 Gmail V2 approved single-send execution (2026-08-30): the exact
 contract digest `033bd4e5e3c92b65d94191a30fcae7d852dc92ae7441ef18c8bf8f959cba371f`
 was validated, but the repository-external stored credential required refresh.

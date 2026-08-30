@@ -1,0 +1,27 @@
+{
+  "scanId": "r4-422-google-gmail-refresh-if-required-single-send-preparation-20260830",
+  "scope": [
+    "contracts/provider/r4-422-google-gmail-refresh-if-required-single-send-v1.json",
+    "services/business-api/src/main/java/com/routemind/business/infrastructure/notification/GoogleGmailRefreshIfRequiredSingleSendCli.java",
+    "services/business-api/src/test/java/com/routemind/business/infrastructure/notification/GoogleGmailRefreshIfRequiredSingleSendCliTests.java",
+    "evidence/gates/R4-422/google-gmail-refresh-if-required-single-send-preparation-20260830.md",
+    "evidence/gates/R4-422/google-gmail-refresh-if-required-single-send-preparation-20260830.json"
+  ],
+  "secretValuesInspected": false,
+  "credentialValuesRecorded": false,
+  "tokenValuesRecorded": false,
+  "clientSecretValuesRecorded": false,
+  "authorizationHeadersRecorded": false,
+  "authorizationCodesRecorded": false,
+  "rawAddressesRecorded": false,
+  "externalPathsRecorded": false,
+  "rawProviderResponsesRecorded": false,
+  "rawRequestsRecorded": false,
+  "googleNetworkRequests": 0,
+  "gmailNetworkRequests": 0,
+  "oauthRequests": 0,
+  "tokenRefreshRequests": 0,
+  "emailSends": 0,
+  "result": "PASS",
+  "notes": "Preparation artifacts contain contract metadata, sanitized booleans, bounded zero counts, and no secret, token, address, path, MIME, or raw response values."
+}

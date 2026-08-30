@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "evidenceType": "OFFLINE_PREPARATION",
+  "taskId": "R4-422",
+  "contract": "contracts/provider/r4-422-google-gmail-refresh-if-required-single-send-v1.json",
+  "canonicalSha256": "35702d6d6698b78f08757b2560deb2bfee50503d0b8cc90b8fd2fcdf9431535f",
+  "executionStatus": "PREPARED_OFFLINE_HUMAN_GATE_PENDING",
+  "preparationOnly": true,
+  "liveCallsAuthorized": false,
+  "credential": {
+    "loadAttempted": false,
+    "loaded": "NOT_EXECUTED",
+    "readiness": "NOT_EXECUTED",
+    "refreshRequired": "NOT_EXECUTED",
+    "refreshAttempted": false,
+    "refreshAccepted": false,
+    "postRefreshUsable": "NOT_EXECUTED"
+  },
+  "send": {
+    "sendAttempted": false,
+    "providerAcceptance": "NOT_EXECUTED",
+    "safeHttpStatus": 0,
+    "messageIdPresent": false,
+    "deliveryConfirmed": false
+  },
+  "counts": {
+    "googleRequests": 0,
+    "gmailApiRequests": 0,
+    "usersMessagesSendRequests": 0,
+    "emailSends": 0,
+    "tokenRefreshRequests": 0,
+    "oauthSessions": 0,
+    "tokenExchanges": 0,
+    "browserSessions": 0,
+    "sshSessions": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "recipients": 0,
+    "attachments": 0,
+    "cc": 0,
+    "bcc": 0,
+    "batchOperations": 0,
+    "messageReads": 0,
+    "googleResourceMutations": 0,
+    "accountMutations": 0
+  },
+  "safeObservation": {
+    "provider": "GOOGLE_GMAIL",
+    "operation": "users.messages.send",
+    "region": "NOT_EXECUTED",
+    "safeReason": "PREPARATION_ONLY",
+    "rawProviderResponseRecorded": false,
+    "rawRequestRecorded": false,
+    "rawAddressesRecorded": false,
+    "credentialValuesRecorded": false,
+    "externalPathsRecorded": false
+  },
+  "validation": {
+    "contractValidator": "PASS",
+    "contractSelfTests": "PASS",
+    "focusedJavaTests": "PASS",
+    "securityGate": "PASS",
+    "leakageScan": "PASS"
+  },
+  "elapsedMillis": 0,
+  "costUsd": 0.0,
+  "productionClaim": false,
+  "providerClaim": false,
+  "deliveryClaim": false,
+  "historicalContractsPreserved": true,
+  "historicalContractsReusable": false,
+  "notes": "Preparation assembled and tested locally; no credential store, OAuth endpoint, Gmail API, browser, SSH, or provider request was invoked."
+}

@@ -297,6 +297,16 @@ try {
         throw "Gmail V2 exactly-one synthetic send contract self-tests failed"
     }
 
+    python scripts/r4_gmail_refresh_if_required_single_send_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail refresh-if-required single-send contract validation failed"
+    }
+
+    python scripts/r4_gmail_refresh_if_required_single_send_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Gmail refresh-if-required single-send contract self-tests failed"
+    }
+
     python scripts/r4_gmail_token_refresh_recovery_contract.py
     if ($LASTEXITCODE -ne 0) {
         throw "Gmail token refresh recovery contract validation failed"
