@@ -144,6 +144,21 @@ const REGISTRY_METADATA: Readonly<Record<string, Omit<StrategyMetadata, "name" |
       detail: "DispatchDecision is checked by the independent compute verifier",
     },
   },
+  "local-search": {
+    maturity: "ENGINEERING",
+    capabilities: ["dispatch", "batch-assignment", "local-search"],
+    parameters: [{ key: "max_iterations", defaultValue: "32", constraint: "integer 1..256" }],
+    constraints: ["bounded first-improvement pair swaps", "no global-optimality claim"],
+    fallback: {
+      strategy: "none",
+      available: false,
+      detail: "Failures remain explicit; comparison does not substitute a solver",
+    },
+    verification: {
+      status: "boundary-verified",
+      detail: "DispatchDecision is checked by the independent compute verifier",
+    },
+  },
   vrptw: {
     maturity: "BASELINE",
     capabilities: ["dispatch", "time-window"],

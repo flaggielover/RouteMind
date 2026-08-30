@@ -1,10 +1,12 @@
 import { AlertTriangle, GitCompareArrows, LoaderCircle, Play, RotateCcw } from "lucide-react";
 import { useState } from "react";
 import type { WhatIfComparison, WhatIfVariantInput } from "../domain/model";
+import { fallbackStrategyRegistry } from "../data/strategies";
 import { projectWhatIfDeltas } from "../domain/whatIfDelta";
 
 interface WhatIfComparisonPanelProps {
   onRun: (variant: WhatIfVariantInput) => Promise<WhatIfComparison>;
+  strategies?: readonly string[];
 }
 
 const initialVariant: WhatIfVariantInput = {
@@ -31,7 +33,10 @@ function formatDelta(value: number, suffix = ""): string {
   return `${sign}${value.toFixed(2)}${suffix}`;
 }
 
-export function WhatIfComparisonPanel({ onRun }: WhatIfComparisonPanelProps) {
+export function WhatIfComparisonPanel({
+  onRun,
+  strategies = fallbackStrategyRegistry.map((descriptor) => descriptor.name),
+}: WhatIfComparisonPanelProps) {
   const [variant, setVariant] = useState(initialVariant);
   const [comparison, setComparison] = useState<WhatIfComparison | null>(null);
   const [running, setRunning] = useState(false);
@@ -85,8 +90,11 @@ export function WhatIfComparisonPanel({ onRun }: WhatIfComparisonPanelProps) {
             value={variant.strategy}
             onChange={(event) => update("strategy", event.target.value)}
           >
-            <option value="nearest">nearest</option>
-            <option value="weighted-greedy">weighted-greedy</option>
+            {strategies.map((strategy) => (
+              <option key={strategy} value={strategy}>
+                {strategy}
+              </option>
+            ))}
           </select>
         </label>
         <label>

@@ -12,7 +12,12 @@ import {
   Store,
   UserRound,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  fallbackStrategyRegistry,
+  loadStrategyRegistry,
+  type StrategyDescriptor,
+} from "../data/strategies";
 import { whatIfDataSource } from "../data/whatIf";
 import {
   createCustomerOrder,
@@ -67,12 +72,23 @@ function RolePage({
 
 export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
   const [registryOpen, setRegistryOpen] = useState(false);
+  const [registry, setRegistry] = useState<readonly StrategyDescriptor[]>(fallbackStrategyRegistry);
   const [comparison, setComparison] = useState<Awaited<
     ReturnType<typeof whatIfDataSource.run>
   > | null>(null);
   const strategyAvailable =
     snapshot.availability === "ready" && snapshot.dispatch.strategy !== "unavailable";
   const activeStrategy = snapshot.dispatch.strategy;
+  useEffect(() => {
+    let mounted = true;
+    void loadStrategyRegistry().then((descriptors) => {
+      if (mounted) setRegistry(descriptors);
+    });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+  const strategyNames = registry.map((descriptor) => descriptor.name);
   const assignedOrders = snapshot.orders.filter((candidate) =>
     ["ASSIGNED", "ACCEPTED", "ARRIVED", "PICKED_UP", "OUT_FOR_DELIVERY", "DELIVERED"].includes(
       candidate.status,
@@ -147,27 +163,26 @@ export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
             </div>
             <ShieldCheck size={17} className="heading-icon" />
           </div>
-          <div className="strategy-row active">
-            <span>
-              <strong>{activeStrategy}</strong>
-              <small>{snapshot.dispatch.version} · active policy</small>
-            </span>
-            <span className="muted-label">
-              {strategyAvailable ? "Current policy" : "No active policy"}
-            </span>
-            <StatusPill
-              status={strategyAvailable ? "healthy" : "unavailable"}
-              label={strategyAvailable ? "Registered" : "Not available"}
-            />
-          </div>
-          <div className="strategy-row">
-            <span>
-              <strong>nearest</strong>
-              <small>v1.0.0 · baseline</small>
-            </span>
-            <span className="muted-label">No recorded run</span>
-            <StatusPill status="checking" label="Reference only" />
-          </div>
+          {registry.map((descriptor) => {
+            const active = descriptor.name === activeStrategy;
+            return (
+              <div className={`strategy-row${active ? " active" : ""}`} key={descriptor.name}>
+                <span>
+                  <strong>{descriptor.name}</strong>
+                  <small>
+                    v{descriptor.version} · {descriptor.maturity.toLowerCase()}
+                  </small>
+                </span>
+                <span className="muted-label">
+                  {active ? "Current policy" : descriptor.capabilities.join(" · ")}
+                </span>
+                <StatusPill
+                  status={active && strategyAvailable ? "healthy" : "checking"}
+                  label={active && strategyAvailable ? "Registered" : "Available"}
+                />
+              </div>
+            );
+          })}
           <button
             className="text-button"
             type="button"
@@ -185,23 +200,32 @@ export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
               role="region"
               aria-label="Strategy registry"
             >
-              <p className="panel-subtitle">Registered locally for this control surface.</p>
+              <p className="panel-subtitle">Registry/API descriptors for this control surface.</p>
               <ul>
-                <li>
-                  <strong>weighted-greedy</strong>
-                  <span>v1.0.0 · active</span>
-                </li>
-                <li>
-                  <strong>nearest</strong>
-                  <span>v1.0.0 · baseline</span>
-                </li>
+                {registry.map((descriptor) => (
+                  <li key={descriptor.name}>
+                    <strong>{descriptor.name}</strong>
+                    <span>
+                      v{descriptor.version} · {descriptor.maturity} ·{" "}
+                      {descriptor.parameters.length
+                        ? descriptor.parameters
+                            .map((parameter) => `${parameter.key}=${parameter.default}`)
+                            .join(", ")
+                        : "no configurable parameters"}
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
           )}
         </section>
       </section>
-      <WhatIfComparisonPanel onRun={(variant) => whatIfDataSource.run(variant)} />
+      <WhatIfComparisonPanel
+        strategies={strategyNames}
+        onRun={(variant) => whatIfDataSource.run(variant)}
+      />
       <StrategyComparisonPanel
+        strategies={strategyNames}
         onRun={(variants) => whatIfDataSource.runMany(variants)}
         onComparisonChange={setComparison}
       />

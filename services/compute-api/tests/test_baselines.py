@@ -21,6 +21,7 @@ def test_baselines_conform_to_registry_and_are_versioned() -> None:
     registry = default_registry()
     assert registry.names() == (
         "hungarian",
+        "local-search",
         "minimum-cost-flow",
         "nearest",
         "partitioned-assignment",

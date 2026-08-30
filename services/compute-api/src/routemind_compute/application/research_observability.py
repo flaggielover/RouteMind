@@ -225,6 +225,11 @@ class PolicyTrace:
     def observations(self) -> tuple[PolicyObservation, ...]:
         return tuple(self._observations)
 
+    def extend(self, observations: tuple[PolicyObservation, ...]) -> None:
+        """Attach an already validated trace for bounded metric projection."""
+
+        self._observations.extend(observations)
+
     def record(
         self,
         *,

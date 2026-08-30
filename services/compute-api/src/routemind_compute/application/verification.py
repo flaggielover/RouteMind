@@ -132,7 +132,13 @@ def _expected_dispatch_score(
         candidate.location.latitude,
         candidate.location.longitude,
     )
-    if decision.strategy in {"nearest", "hungarian", "minimum-cost-flow", "partitioned-assignment"}:
+    if decision.strategy in {
+        "nearest",
+        "hungarian",
+        "minimum-cost-flow",
+        "partitioned-assignment",
+        "local-search",
+    }:
         return distance
     if decision.strategy == "weighted-greedy":
         weight = getattr(strategy, "distance_weight", 1.0)

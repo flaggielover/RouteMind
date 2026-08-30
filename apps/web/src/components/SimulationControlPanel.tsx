@@ -2,6 +2,7 @@ import { Gauge, Pause, Play, RotateCcw, SkipForward, SlidersHorizontal } from "l
 import { useEffect, useRef, useState } from "react";
 import type { SimulationAction, SimulationCommand, SimulationSnapshot } from "../domain/model";
 import { scenarioCatalog } from "../data/scenarioCatalog";
+import { fallbackStrategyRegistry } from "../data/strategies";
 
 interface SimulationControlPanelProps {
   snapshot: SimulationSnapshot;
@@ -186,10 +187,11 @@ export function SimulationControlPanel({
         <label>
           Strategy
           <select value={strategy} onChange={(event) => setStrategy(event.target.value)}>
-            <option value="nearest">nearest</option>
-            <option value="weighted-greedy">weighted-greedy</option>
-            <option value="risk-aware">risk-aware</option>
-            <option value="vrptw">vrptw</option>
+            {fallbackStrategyRegistry.map((descriptor) => (
+              <option key={descriptor.name} value={descriptor.name}>
+                {descriptor.name}
+              </option>
+            ))}
           </select>
           <button
             className="button button-quiet"

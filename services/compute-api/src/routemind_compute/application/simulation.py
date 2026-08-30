@@ -135,6 +135,67 @@ class ScenarioRun:
     observations: tuple[PolicyObservation, ...] = ()
 
 
+@dataclass(frozen=True, slots=True)
+class ScenarioComparison:
+    """Independent fixed-strategy runs over one immutable scenario manifest."""
+
+    scenario_id: str
+    seed: int
+    results: tuple[ScenarioRun, ...]
+    incompatible: tuple[tuple[str, str], ...] = ()
+
+    def __post_init__(self) -> None:
+        if not self.scenario_id.strip() or self.seed < 0:
+            raise ValueError("comparison scenario identity is invalid")
+        names = [run.decisions[0].strategy for run in self.results if run.decisions]
+        if len(names) != len(set(names)):
+            raise ValueError("comparison strategy names must be unique")
+        if tuple(sorted(self.incompatible)) != self.incompatible:
+            raise ValueError("comparison incompatibilities must be sorted")
+
+
+def compare_strategies(
+    registry: StrategyRegistry,
+    travel_provider: TravelTimeProvider,
+    manifest: ScenarioManifest,
+    strategies: tuple[str, ...],
+    *,
+    ticks_per_hour: int = 60,
+    strategy_configuration: Metadata = (),
+) -> ScenarioComparison:
+    """Run each selected strategy independently; never synthesize switches."""
+
+    selected = tuple(dict.fromkeys(strategies))
+    if not selected or any(not name.strip() for name in selected):
+        raise ValueError("comparison requires at least one non-blank strategy")
+    if len(selected) > 16:
+        raise ValueError("comparison strategy count must not exceed 16")
+    results: list[ScenarioRun] = []
+    incompatible: list[tuple[str, str]] = []
+    for name in selected:
+        try:
+            registry.get(name)
+            results.append(
+                ScenarioKernel(
+                    registry,
+                    travel_provider,
+                    strategy=name,
+                    ticks_per_hour=ticks_per_hour,
+                    strategy_configuration=strategy_configuration,
+                ).run(manifest)
+            )
+        except KeyError as error:
+            incompatible.append((name, str(error)))
+        except (TypeError, ValueError, RuntimeError, TimeoutError) as error:
+            incompatible.append((name, f"execution_failed:{type(error).__name__}:{error}"))
+    return ScenarioComparison(
+        manifest.scenario_id,
+        manifest.seed,
+        tuple(results),
+        tuple(sorted(incompatible)),
+    )
+
+
 class ScenarioKernel:
     def __init__(
         self,
@@ -143,6 +204,7 @@ class ScenarioKernel:
         strategy: str = "nearest",
         ticks_per_hour: int = 60,
         strategy_configuration: Metadata = (),
+        propagate_travel_fallback: bool = True,
     ) -> None:
         if ticks_per_hour <= 0:
             raise ValueError("ticks_per_hour must be positive")
@@ -151,6 +213,7 @@ class ScenarioKernel:
         self.strategy = strategy
         self.ticks_per_hour = ticks_per_hour
         self.strategy_configuration = tuple(sorted(strategy_configuration))
+        self.propagate_travel_fallback = propagate_travel_fallback
 
     def run(self, manifest: ScenarioManifest) -> ScenarioRun:
         wall_started = perf_counter()
@@ -182,6 +245,16 @@ class ScenarioKernel:
             )
             problem = DispatchProblem(event.request_id, event.pickup, candidates)
             dispatch = self.registry.solve(self.strategy, problem, parameter_configuration)
+            selected_travel = None
+            fallback_state = "NONE"
+            if dispatch.courier_id is not None:
+                courier = available[dispatch.courier_id]
+                selected_travel = self.travel_provider.estimate(courier.location, event.pickup)
+                fallback_state = (
+                    "FALLBACK_USED"
+                    if bool(getattr(selected_travel, "fallback_used", False))
+                    else "NONE"
+                )
             decisions.append(
                 ScenarioDecision(
                     event.request_id,
@@ -191,6 +264,21 @@ class ScenarioKernel:
                     dispatch.strategy_version,
                 )
             )
+            provenance = {
+                "reference_data_id": manifest.reference_data_id,
+                "replay_source": "ScenarioKernel",
+            }
+            if self.propagate_travel_fallback:
+                provenance.update(
+                    {
+                        "travel_provider": str(
+                            getattr(selected_travel, "provider", "not_required")
+                        ),
+                        "travel_fallback_reason": str(
+                            getattr(selected_travel, "fallback_reason", None) or "none"
+                        ),
+                    }
+                )
             policy_trace.record(
                 run_id=f"twin:{manifest.scenario_id}:{manifest.seed}",
                 scenario_id=manifest.scenario_id,
@@ -212,10 +300,8 @@ class ScenarioKernel:
                     "courier_candidate_count": "OBSERVED",
                     "eligible_courier_count": "DERIVED",
                 },
-                provenance={
-                    "reference_data_id": manifest.reference_data_id,
-                    "replay_source": "ScenarioKernel",
-                },
+                provenance=provenance,
+                fallback_state=fallback_state if self.propagate_travel_fallback else "NONE",
             )
             transitions.append(
                 StateTransition(
@@ -228,7 +314,9 @@ class ScenarioKernel:
             )
             if dispatch.courier_id:
                 courier = available[dispatch.courier_id]
-                travel = self.travel_provider.estimate(courier.location, event.pickup)
+                if selected_travel is None:
+                    raise RuntimeError("selected courier travel estimate is unavailable")
+                travel = selected_travel
                 traffic_seconds = travel.seconds * manifest.traffic_multiplier
                 travel_ticks = ceil(traffic_seconds / (3600 / self.ticks_per_hour))
                 delay = manifest.delay_ticks[rng.randrange(len(manifest.delay_ticks))]

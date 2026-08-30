@@ -152,6 +152,8 @@ def _minimum_cost_flow(
 class MinimumCostFlowStrategy:
     name = "minimum-cost-flow"
     version = "1.0.0"
+    capabilities: tuple[str, ...] = ("dispatch", "batch-assignment")
+    maturity = "ENGINEERING"
 
     def assign_batch(self, problem: BatchDispatchProblem) -> BatchDispatchDecision:
         started = perf_counter()
@@ -245,6 +247,7 @@ class MinimumCostFlowStrategy:
 class PartitionedAssignmentStrategy(MinimumCostFlowStrategy):
     name = "partitioned-assignment"
     version = "1.0.0"
+    capabilities: tuple[str, ...] = ("dispatch", "batch-assignment", "partitioned-assignment")
 
     def assign_batch(self, problem: BatchDispatchProblem) -> BatchDispatchDecision:
         started = perf_counter()

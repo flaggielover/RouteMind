@@ -5,7 +5,7 @@ from math import isfinite
 from typing import Literal
 
 Metadata = tuple[tuple[str, str], ...]
-ParameterType = Literal["float"]
+ParameterType = Literal["float", "integer"]
 
 
 @dataclass(frozen=True, slots=True)
@@ -19,9 +19,14 @@ class ParameterDefinition:
     def __post_init__(self) -> None:
         if not self.key.strip() or not self.default.strip():
             raise ValueError("parameter definition identity must not be blank")
-        value = float(self.default)
+        try:
+            value = float(self.default)
+        except (TypeError, ValueError) as error:
+            raise ValueError("parameter default must be numeric") from error
         if not isfinite(value):
             raise ValueError("parameter default must be finite")
+        if self.value_type == "integer" and not value.is_integer():
+            raise ValueError("integer parameter default must be integral")
         if self.minimum is not None and value < self.minimum:
             raise ValueError("parameter default is below minimum")
         if self.maximum is not None and value > self.maximum:
@@ -75,11 +80,18 @@ class StrategyParameterSchema:
                 raise ValueError(f"parameter {definition.key} must be a finite float") from error
             if not isfinite(value):
                 raise ValueError(f"parameter {definition.key} must be a finite float")
+            if definition.value_type == "integer" and not value.is_integer():
+                raise ValueError(f"parameter {definition.key} must be an integer")
             if definition.minimum is not None and value < definition.minimum:
                 raise ValueError(f"parameter {definition.key} is below minimum")
             if definition.maximum is not None and value > definition.maximum:
                 raise ValueError(f"parameter {definition.key} is above maximum")
-            normalized.append((definition.key, f"{value:.12g}"))
+            normalized.append(
+                (
+                    definition.key,
+                    str(int(value)) if definition.value_type == "integer" else f"{value:.12g}",
+                )
+            )
         return tuple(normalized)
 
 
@@ -99,6 +111,8 @@ def schema_for(strategy: str, version: str) -> StrategyParameterSchema:
                 ("balance", "0.5"),
             )
         )
+    elif strategy == "local-search":
+        parameters = (ParameterDefinition("max_iterations", "integer", "32", 1, 256),)
     else:
         parameters = ()
     return StrategyParameterSchema(strategy, version, parameters)

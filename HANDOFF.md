@@ -98,6 +98,30 @@ The research line remains frozen. Compact campaign artifacts are under
 `ROUTEMIND_DATA_ROOT/research-observations/` with SHA-256
 `bee86ff2d804dc6ae99d54d6b27a2539bdd17736aba68085d9982c8f8619192b`.
 
+## RM-242 Dispatch Strategy Completion & Integration
+
+State: **PASSED / MULTI_STRATEGY_PRODUCT_READY** (2026-08-30)
+
+RM-242 is a standalone P30 product checkpoint and is explicitly excluded from
+Round 4 counts. The registry/API now exposes eight versioned strategies,
+including bounded `local-search@1.0.0` with validated parameters and
+independent verification. Fixed-strategy scenario comparison records
+compatibility, provenance, replay, latency, feasibility, fallback, and
+observational metrics without synthesizing policy switches. Dynamic insertion
+and replanning remain explicit route-state/trigger-policy capabilities with
+prior-plan and replay metadata; Java durable authority is unchanged.
+
+The product path propagates travel-provider fallback into RM-237 observations;
+RM-241's 128 runs, 640 observations, raw external artifact, AD-001/AD-002
+verdicts, and `NO_RESEARCH_TRIGGER` remain unchanged. Strategy Lab discovers
+backend registry descriptors and retains a full offline snapshot.
+
+Validation: compute 963 tests / 95.02% coverage plus determinism, contracts,
+analytics, semantic metrics, and solver gates; Java 167 Maven tests; web
+format/lint/typecheck, 40 unit files / 112 tests, and build; Playwright 36
+passes with two intentional skips; control-plane, deterministic runner, replay,
+and diff checks pass. No cloud or paid provider calls were used.
+
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 
 R4-422 operator-observed delivery confirmation (2026-08-30): the operator

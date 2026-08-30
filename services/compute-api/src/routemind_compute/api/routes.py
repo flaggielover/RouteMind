@@ -14,8 +14,13 @@ from routemind_compute.api.schemas import (
     DelayAccountingRecordResponse,
     DelayAccountingRequest,
     DelayAccountingResponse,
+    DispatchCapabilityResponse,
     DispatchSnapshotRequest,
     DispatchSnapshotResponse,
+    DynamicInsertionRequest,
+    DynamicInsertionResponse,
+    DynamicReplanRequest,
+    DynamicReplanResponse,
     EtaCalibrationRequest,
     EtaCalibrationResponse,
     EtaComponentResponse,
@@ -50,6 +55,9 @@ from routemind_compute.api.schemas import (
     TwinEventResponse,
     TwinStateResponse,
     UpcastedEventResponse,
+    VrpRouteResponse,
+    VrpStopRequest,
+    VrpVehicleRequest,
     WhatIfExperimentRequest,
     WhatIfExperimentResponse,
     WhatIfMetricResponse,
@@ -71,6 +79,12 @@ from routemind_compute.application.event_upcasting import (
     default_event_upcaster_registry,
 )
 from routemind_compute.application.execution import execution_provenance
+from routemind_compute.application.insertion import (
+    DynamicInsertionRequest as InsertionDomainRequest,
+)
+from routemind_compute.application.insertion import (
+    insert_order,
+)
 from routemind_compute.application.location_integrity import (
     LocationObservation,
     assess_location,
@@ -78,6 +92,13 @@ from routemind_compute.application.location_integrity import (
 )
 from routemind_compute.application.parameters import Metadata
 from routemind_compute.application.registry import StrategyRegistry
+from routemind_compute.application.replanning import (
+    DynamicReplanningPolicy,
+    ReplanMetrics,
+    ReplanningPolicyConfig,
+    ReplanRequest,
+    ReplanTrigger,
+)
 from routemind_compute.application.routebench import BenchmarkManifest, RouteBenchRunner
 from routemind_compute.application.semantic_metrics import MetricConsumer, metric_catalog
 from routemind_compute.application.shadow import (
@@ -94,6 +115,12 @@ from routemind_compute.application.twin_control import (
     TwinControlState,
 )
 from routemind_compute.application.verification import SolverOutputInvalidError
+from routemind_compute.application.vrptw import (
+    VrpProblem,
+    VrpRoute,
+    VrpStop,
+    VrpVehicle,
+)
 from routemind_compute.application.what_if import WhatIfVariant
 from routemind_compute.domain.dispatch import (
     CourierCandidate,
@@ -493,17 +520,218 @@ def replay_upcast(payload: ReplayUpcastRequest, request: Request) -> ReplayUpcas
     )
 
 
+def _vrp_stop(item: VrpStopRequest) -> VrpStop:
+    return VrpStop(
+        item.stop_id,
+        GeoPoint(item.location.latitude, item.location.longitude),
+        demand_units=item.demand_units,
+        service_seconds=item.service_seconds,
+        time_window=(
+            TimeWindow(item.time_window.start_seconds, item.time_window.end_seconds)
+            if item.time_window is not None
+            else None
+        ),
+    )
+
+
+def _vrp_vehicle(item: VrpVehicleRequest) -> VrpVehicle:
+    return VrpVehicle(
+        item.vehicle_id,
+        GeoPoint(item.start_location.latitude, item.start_location.longitude),
+        item.capacity_units,
+        item.available_from_seconds,
+        item.available_until_seconds,
+    )
+
+
+def _vrp_route_response(route: VrpRoute | None) -> VrpRouteResponse | None:
+    if route is None:
+        return None
+    return VrpRouteResponse(
+        vehicle_id=route.vehicle_id,
+        stop_ids=route.stop_ids,
+        arrival_seconds=route.arrival_seconds,
+        service_start_seconds=route.service_start_seconds,
+        departure_seconds=route.departure_seconds,
+        load_units=route.load_units,
+        travel_seconds=route.travel_seconds,
+        completion_seconds=route.completion_seconds,
+    )
+
+
+@router.post("/api/v1/dispatch/insertion", response_model=DynamicInsertionResponse)
+def dispatch_insertion(
+    payload: DynamicInsertionRequest, request: Request
+) -> DynamicInsertionResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        problem = VrpProblem(
+            payload.problem_id,
+            GeoPoint(payload.depot.latitude, payload.depot.longitude),
+            tuple(_vrp_stop(item) for item in payload.stops),
+            tuple(_vrp_vehicle(item) for item in payload.vehicles),
+            payload.return_to_depot,
+        )
+        active_route = VrpRoute(
+            payload.active_route.vehicle_id,
+            payload.active_route.stop_ids,
+            (),
+            (),
+            (),
+            0.0,
+            0.0,
+            0.0,
+        )
+        result = insert_order(
+            InsertionDomainRequest(
+                payload.scenario_id,
+                payload.seed,
+                payload.previous_plan_reference,
+                payload.selected_strategy,
+                problem,
+                active_route,
+                _vrp_stop(payload.new_stop),
+            ),
+            planner=None,
+        )
+    except (TypeError, ValueError, KeyError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    decision = result.decision
+    return DynamicInsertionResponse(
+        source="compute",
+        strategy="dynamic-insertion",
+        strategy_version="1.0.0",
+        accepted=decision.accepted,
+        insertion_position=decision.insertion_position,
+        incremental_travel_seconds=decision.incremental_travel_seconds,
+        reason=decision.reason,
+        route=_vrp_route_response(decision.route),
+        previous_plan_reference=payload.previous_plan_reference,
+        resulting_plan_reference=result.resulting_plan_reference,
+        scenario_id=payload.scenario_id,
+        seed=payload.seed,
+        input_digest=result.input_digest,
+        output_digest=result.output_digest,
+        replay_digest=result.replay_digest,
+        trace_id=trace_id,
+    )
+
+
+@router.post("/api/v1/dispatch/replan", response_model=DynamicReplanResponse)
+def dispatch_replan(payload: DynamicReplanRequest, request: Request) -> DynamicReplanResponse:
+    trace_id = getattr(request.state, "trace_id", "unavailable")
+    try:
+        evaluation = DynamicReplanningPolicy(
+            ReplanningPolicyConfig(payload.debounce_seconds, payload.cooldown_seconds)
+        ).evaluate(
+            ReplanRequest(
+                ReplanTrigger(
+                    payload.event_id,
+                    payload.kind,
+                    payload.observed_at_seconds,
+                    payload.trace_id,
+                    payload.detail,
+                    payload.courier_id,
+                ),
+                ReplanMetrics(**payload.before.model_dump()),
+                ReplanMetrics(**payload.after.model_dump()),
+                payload.previous_plan_reference,
+                payload.selected_strategy,
+                tuple(sorted(payload.triggering_state)),
+                payload.resulting_plan_reference,
+            )
+        )
+    except (TypeError, ValueError, KeyError) as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    decision = evaluation.decision
+    return DynamicReplanResponse(
+        source="compute",
+        strategy="dynamic-replanning",
+        strategy_version=DynamicReplanningPolicy.version,
+        action=decision.action,
+        reason=decision.reason,
+        trigger_kind=decision.trigger_kind,
+        trace_id=decision.trace_id or trace_id,
+        generation=decision.generation,
+        authority=decision.authority,
+        requires_java_validation=decision.requires_java_validation,
+        previous_plan_reference=decision.previous_plan_reference,
+        selected_strategy=decision.selected_strategy,
+        triggering_state=decision.triggering_state,
+        resulting_plan_reference=decision.resulting_plan_reference,
+        replay_digest=decision.replay_digest or "0" * 64,
+    )
+
+
 @router.get("/api/v1/strategies", response_model=tuple[StrategyDescriptorResponse, ...])
 def strategy_catalog(request: Request) -> tuple[StrategyDescriptorResponse, ...]:
+    registry = _registry(request)
     return tuple(
         StrategyDescriptorResponse(
             name=descriptor.name,
             version=descriptor.version,
             capabilities=descriptor.capabilities,
+            parameters=tuple(
+                ParameterDefinitionResponse(
+                    key=item.key,
+                    type=item.value_type,
+                    default=item.default,
+                    minimum=item.minimum,
+                    maximum=item.maximum,
+                )
+                for item in registry.parameter_schema(descriptor.name).parameters
+            ),
             status="available",
             maturity=descriptor.maturity,
         )
-        for descriptor in _registry(request).descriptors()
+        for descriptor in registry.descriptors()
+    )
+
+
+@router.get(
+    "/api/v1/dispatch/capabilities",
+    response_model=tuple[DispatchCapabilityResponse, ...],
+)
+def dispatch_capabilities() -> tuple[DispatchCapabilityResponse, ...]:
+    return (
+        DispatchCapabilityResponse(
+            name="dynamic-insertion",
+            version="1.0.0",
+            capabilities=("route-insertion", "vrptw-feasibility"),
+            execution_mode="route-state",
+            registry_selectable=False,
+            maturity="ENGINEERING",
+            detail=(
+                "Requires an explicit immutable active route; no historical route is fabricated."
+            ),
+        ),
+        DispatchCapabilityResponse(
+            name="dynamic-replanning",
+            version="1.0.0",
+            capabilities=("trigger-gating", "provenance-preserving"),
+            execution_mode="trigger-policy",
+            registry_selectable=False,
+            maturity="ENGINEERING",
+            detail="Produces a compute proposal; Java validates and applies durable state.",
+        ),
+        DispatchCapabilityResponse(
+            name="batch-zone-orchestration",
+            version="1.0.0",
+            capabilities=("batch-assignment", "partitioned-assignment"),
+            execution_mode="batch-orchestration",
+            registry_selectable=True,
+            maturity="ENGINEERING",
+            detail="Partitioned-assignment reuses the bounded assignment solvers without aliases.",
+        ),
+        DispatchCapabilityResponse(
+            name="generic-vrp",
+            version="1.0.0",
+            capabilities=("vrp", "vrptw"),
+            execution_mode="batch-orchestration",
+            registry_selectable=True,
+            maturity="BASELINE",
+            detail="Provided by the existing bounded VRPTW planner and verifier.",
+        ),
     )
 
 
@@ -570,9 +798,18 @@ def execute_strategy(
     trace_id = getattr(request.state, "trace_id", "unavailable")
     try:
         problem = _dispatch_problem(payload)
-        decision = _registry(request).solve(payload.strategy, problem)
+        registry = _registry(request)
+        schema = registry.parameter_schema(payload.strategy)
     except KeyError as error:
         raise HTTPException(status_code=400, detail=str(error)) from error
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    try:
+        normalized_configuration = schema.validate(tuple(sorted(payload.configuration)))
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    try:
+        decision = registry.solve(payload.strategy, problem, normalized_configuration)
     except SolverOutputInvalidError as error:
         raise HTTPException(
             status_code=503,
@@ -704,6 +941,22 @@ def run_routebench_experiment(
                 assignment_rate=result.assignment_rate,
                 runtime_millis=result.runtime_millis,
                 replay_digest=result.replay_digest,
+                selected_couriers=tuple(
+                    item.courier_id for item in result.run.decisions if item.courier_id is not None
+                ),
+                objective_scores=(),
+                feasible=all(item.courier_id is not None for item in result.run.decisions),
+                fallback_states=tuple(
+                    sorted({item.fallback_state for item in result.run.observations})
+                ),
+                degradation_state="UNAVAILABLE",
+                route_estimate_available=None,
+                decision_provenance=tuple(
+                    sorted({entry for item in result.run.observations for entry in item.provenance})
+                ),
+                selection_modes=tuple(
+                    sorted({item.selection_mode for item in result.run.observations})
+                ),
             )
             for result in run.results
         ),

@@ -325,6 +325,142 @@ class DispatchSnapshotResponse(BaseModel):
     trace_id: str
 
 
+class VrpStopRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    stop_id: str = Field(min_length=1, max_length=128)
+    location: GeoPointRequest
+    demand_units: float = Field(default=1.0, gt=0)
+    service_seconds: float = Field(default=0.0, ge=0)
+    time_window: TimeWindowRequest | None = None
+
+
+class VrpVehicleRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    vehicle_id: str = Field(min_length=1, max_length=128)
+    start_location: GeoPointRequest
+    capacity_units: float = Field(ge=0)
+    available_from_seconds: float = Field(default=0.0, ge=0)
+    available_until_seconds: float | None = Field(default=None, ge=0)
+
+
+class VrpActiveRouteRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    vehicle_id: str = Field(min_length=1, max_length=128)
+    stop_ids: tuple[str, ...] = Field(default=(), max_length=32)
+
+
+class DynamicInsertionRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    scenario_id: str = Field(min_length=1, max_length=128)
+    seed: int = Field(ge=0, le=2_147_483_647)
+    previous_plan_reference: str = Field(min_length=1, max_length=256)
+    selected_strategy: str = Field(min_length=1, max_length=64)
+    problem_id: str = Field(min_length=1, max_length=128)
+    depot: GeoPointRequest
+    stops: tuple[VrpStopRequest, ...] = Field(max_length=32)
+    vehicles: tuple[VrpVehicleRequest, ...] = Field(max_length=32)
+    return_to_depot: bool = True
+    active_route: VrpActiveRouteRequest
+    new_stop: VrpStopRequest
+
+
+class VrpRouteResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    vehicle_id: str
+    stop_ids: tuple[str, ...]
+    arrival_seconds: tuple[float, ...]
+    service_start_seconds: tuple[float, ...]
+    departure_seconds: tuple[float, ...]
+    load_units: float
+    travel_seconds: float
+    completion_seconds: float
+
+
+class DynamicInsertionResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["compute"]
+    strategy: Literal["dynamic-insertion"]
+    strategy_version: str
+    accepted: bool
+    insertion_position: int | None
+    incremental_travel_seconds: float | None
+    reason: str | None
+    route: VrpRouteResponse | None
+    previous_plan_reference: str
+    resulting_plan_reference: str | None
+    scenario_id: str
+    seed: int
+    input_digest: str
+    output_digest: str
+    replay_digest: str
+    trace_id: str
+
+
+class ReplanMetricsRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    assigned_count: int = Field(ge=0)
+    unassigned_count: int = Field(ge=0)
+    late_count: int = Field(ge=0)
+    total_travel_seconds: float = Field(ge=0)
+    active_route_count: int = Field(ge=0)
+
+
+class DynamicReplanRequest(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    event_id: str = Field(min_length=1, max_length=128)
+    kind: Literal[
+        "arrival",
+        "lateness",
+        "incident",
+        "courier_loss",
+        "material_change",
+        "traffic_degradation",
+        "provider_fallback",
+        "merchant_delay",
+        "route_feasibility_change",
+    ]
+    observed_at_seconds: float = Field(ge=0)
+    trace_id: str = Field(min_length=1, max_length=128)
+    detail: str = Field(default="", max_length=256)
+    courier_id: str | None = Field(default=None, min_length=1, max_length=128)
+    before: ReplanMetricsRequest
+    after: ReplanMetricsRequest
+    previous_plan_reference: str = Field(min_length=1, max_length=256)
+    selected_strategy: str = Field(min_length=1, max_length=64)
+    triggering_state: tuple[tuple[str, str], ...] = Field(default=(), max_length=32)
+    resulting_plan_reference: str | None = Field(default=None, max_length=256)
+    debounce_seconds: float = Field(default=30.0, ge=0, le=86_400)
+    cooldown_seconds: float = Field(default=120.0, ge=0, le=86_400)
+
+
+class DynamicReplanResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    source: Literal["compute"]
+    strategy: Literal["dynamic-replanning"]
+    strategy_version: str
+    action: Literal["replan", "hold"]
+    reason: str
+    trigger_kind: str
+    trace_id: str
+    generation: int
+    authority: str
+    requires_java_validation: bool
+    previous_plan_reference: str | None
+    selected_strategy: str | None
+    triggering_state: tuple[tuple[str, str], ...]
+    resulting_plan_reference: str | None
+    replay_digest: str
+
+
 class StrategyExecutionRequest(DispatchSnapshotRequest):
     scenario_id: str = Field(min_length=1, max_length=128)
     seed: int = Field(ge=0, le=2_147_483_647)
@@ -337,10 +473,23 @@ class StrategyDescriptorResponse(BaseModel):
     name: str
     version: str
     capabilities: tuple[str, ...]
+    parameters: tuple[ParameterDefinitionResponse, ...] = ()
     status: Literal["available"]
     maturity: Literal[
         "BASELINE", "ENGINEERING", "PRODUCTION-CANDIDATE", "RESEARCH", "EXTERNAL-VALIDATED"
     ]
+
+
+class DispatchCapabilityResponse(BaseModel):
+    model_config = ConfigDict(frozen=True)
+
+    name: str
+    version: str
+    capabilities: tuple[str, ...]
+    execution_mode: Literal["route-state", "trigger-policy", "batch-orchestration"]
+    registry_selectable: bool
+    maturity: Literal["BASELINE", "ENGINEERING"]
+    detail: str
 
 
 class StrategyExecutionMetrics(BaseModel):
@@ -382,7 +531,7 @@ class ParameterDefinitionResponse(BaseModel):
     model_config = ConfigDict(frozen=True)
 
     key: str
-    type: Literal["float"]
+    type: Literal["float", "integer"]
     default: str
     minimum: float | None
     maximum: float | None
@@ -425,7 +574,7 @@ class RouteBenchExperimentRequest(BaseModel):
     load_profile: str = Field(min_length=1, max_length=128)
     city_state: str = Field(min_length=1, max_length=128)
     dataset_provenance: str = Field(min_length=1, max_length=256)
-    strategies: tuple[str, ...] = Field(min_length=1, max_length=6)
+    strategies: tuple[str, ...] = Field(min_length=1, max_length=16)
     configuration: tuple[tuple[str, str], ...] = Field(default=(), max_length=16)
     parameter_configuration: tuple[tuple[str, str], ...] = Field(default=(), max_length=16)
     demands: tuple[ExperimentDemandRequest, ...] = Field(min_length=1, max_length=64)
@@ -444,6 +593,14 @@ class ExperimentMetricResponse(BaseModel):
     assignment_rate: float
     runtime_millis: float
     replay_digest: str
+    selected_couriers: tuple[str, ...] = ()
+    objective_scores: tuple[float, ...] = ()
+    feasible: bool
+    fallback_states: tuple[str, ...] = ()
+    degradation_state: str = "UNAVAILABLE"
+    route_estimate_available: bool | None = None
+    decision_provenance: tuple[tuple[str, str], ...] = ()
+    selection_modes: tuple[str, ...] = ()
 
 
 class ExperimentResponse(BaseModel):

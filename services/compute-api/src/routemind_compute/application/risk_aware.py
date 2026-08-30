@@ -35,6 +35,8 @@ class RiskAwareWeights:
 class RiskAwareScoringStrategy:
     name = "risk-aware"
     version = "1.0.0"
+    capabilities = ("dispatch", "risk-scoring")
+    maturity = "BASELINE"
 
     def __init__(self, weights: RiskAwareWeights | None = None) -> None:
         self.weights = weights or RiskAwareWeights()

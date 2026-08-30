@@ -27,6 +27,8 @@ def _ranked_candidates(problem: DispatchProblem, weight: float) -> list[tuple[fl
 class WeightedGreedyStrategy:
     name = "weighted-greedy"
     version = "1.0.0"
+    capabilities = ("dispatch",)
+    maturity = "BASELINE"
 
     def __init__(self, distance_weight: float = 1.0) -> None:
         self.distance_weight = distance_weight
@@ -60,6 +62,8 @@ class WeightedGreedyStrategy:
 class HungarianStrategy:
     name = "hungarian"
     version = "1.0.0"
+    capabilities = ("dispatch", "batch-assignment")
+    maturity = "BASELINE"
 
     @staticmethod
     def assign(costs: tuple[tuple[float, ...], ...]) -> tuple[tuple[int, int], ...]:

@@ -11,7 +11,7 @@ def payload() -> dict[str, object]:
     return {
         "scenario_id": "scenario-1",
         "seed": 42,
-        "configuration": [["objective", "distance"], ["region", "east"]],
+        "configuration": [],
         "request_id": "request-1",
         "strategy": "nearest",
         "pickup": {"latitude": 31.2304, "longitude": 121.4737},
@@ -49,7 +49,8 @@ def test_execution_digest_changes_with_seed_and_configuration() -> None:
     changed_seed = payload()
     changed_seed["seed"] = 43
     changed_configuration = payload()
-    changed_configuration["configuration"] = [["objective", "risk"]]
+    changed_configuration["strategy"] = "weighted-greedy"
+    changed_configuration["configuration"] = [["distance_weight", "2.0"]]
     digests = {
         client.post("/api/v1/strategies/execute", json=value).json()["provenance"]["input_digest"]
         for value in (payload(), changed_seed, changed_configuration)

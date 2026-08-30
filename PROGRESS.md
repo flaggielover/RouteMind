@@ -41,6 +41,27 @@ the final research trigger is `NO_RESEARCH_TRIGGER`. Frozen R3-325 and all prior
 scientific results remain unchanged. Evidence and compact artifacts are under
 `evidence/gates/RM-241/` and `research/anomaly_discovery/`.
 
+## RM-242 Dispatch Strategy Completion & Integration
+
+RM-242 passed on 2026-08-30 as the standalone product checkpoint
+`PASSED / MULTI_STRATEGY_PRODUCT_READY`. The compute surface now exposes the
+versioned, bounded `local-search@1.0.0` strategy alongside the seven existing
+strategies, with parameter schemas, independent verification, explicit
+incompatibility handling, deterministic fixed-strategy comparison, and
+RM-237-compatible provenance/replay metrics. Dynamic insertion and replanning
+are explicit capability paths carrying prior-plan, trigger, resulting-plan,
+and replay metadata; Java remains the durable authority. Strategy Lab consumes
+the backend registry with a complete offline descriptor fallback. Product-path
+travel fallback is now visible as `FALLBACK_USED`; the historical RM-241
+campaign artifacts and conclusions remain frozen.
+
+Local closure evidence: compute 963 tests at 95.02% coverage with determinism,
+contracts, analytics, semantic metrics, and solver verification; Java 167 Maven
+tests; web 40 unit files/112 tests plus build; Playwright 36 passes with two
+intentional skips; control-plane, contract, deterministic-runner, replay, and
+diff checks pass. RM-242 is explicitly excluded from Round 4 progress and does
+not reopen research candidates or add a scientific claim.
+
 Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
@@ -49,7 +70,7 @@ Enhancement Progress: 32 / 32 tasks passed (RM-210 through RM-241)
 
 Round 4 Progress: 10 / 38 tasks passed
 
-Repository Total: 171 / 201 tasks passed
+Repository Total: 172 / 202 tasks passed
 
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 

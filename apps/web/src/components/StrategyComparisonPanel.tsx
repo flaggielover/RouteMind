@@ -1,10 +1,12 @@
 import { BarChart3, LoaderCircle, Play, RotateCcw, TriangleAlert } from "lucide-react";
 import { useState } from "react";
 import type { WhatIfComparison, WhatIfMetric, WhatIfVariantInput } from "../domain/model";
+import { fallbackStrategyRegistry } from "../data/strategies";
 
 interface StrategyComparisonPanelProps {
   onRun: (variants: readonly WhatIfVariantInput[]) => Promise<WhatIfComparison>;
   onComparisonChange?: (comparison: WhatIfComparison | null) => void;
+  strategies?: readonly string[];
 }
 
 const unavailableMetrics = [
@@ -46,6 +48,7 @@ function formatMetric(value: number, key: "assignment" | "duration" | "runtime" 
 export function StrategyComparisonPanel({
   onRun,
   onComparisonChange,
+  strategies = fallbackStrategyRegistry.map((descriptor) => descriptor.name),
 }: StrategyComparisonPanelProps) {
   const [candidate, setCandidate] = useState("weighted-greedy");
   const [comparison, setComparison] = useState<WhatIfComparison | null>(null);
@@ -103,8 +106,11 @@ export function StrategyComparisonPanel({
             value={candidate}
             onChange={(event) => setCandidate(event.target.value)}
           >
-            <option value="weighted-greedy">weighted-greedy</option>
-            <option value="nearest">nearest</option>
+            {strategies.map((strategy) => (
+              <option key={strategy} value={strategy}>
+                {strategy}
+              </option>
+            ))}
           </select>
         </label>
         <button

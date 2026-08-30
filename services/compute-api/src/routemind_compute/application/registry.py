@@ -20,6 +20,7 @@ _MATURITY_BY_STRATEGY: dict[str, StrategyMaturity] = {
     "hungarian": "BASELINE",
     "minimum-cost-flow": "ENGINEERING",
     "partitioned-assignment": "ENGINEERING",
+    "local-search": "ENGINEERING",
     # This is a bounded deterministic insertion heuristic for small instances.
     "vrptw": "BASELINE",
 }
@@ -186,6 +187,15 @@ class StrategyRegistry:
                     float(values["balance"]),
                 )
             )
+        if name == "local-search":
+            from routemind_compute.application.local_search import (
+                LocalSearchConfig,
+                LocalSearchStrategy,
+            )
+
+            return LocalSearchStrategy(
+                LocalSearchConfig(max_iterations=int(values["max_iterations"]))
+            )
         raise ValueError(f"strategy does not expose configurable parameters: {name}")
 
 
@@ -195,6 +205,7 @@ def default_registry(*, tracer: Tracer | None = None) -> StrategyRegistry:
         MinimumCostFlowStrategy,
         PartitionedAssignmentStrategy,
     )
+    from routemind_compute.application.local_search import LocalSearchStrategy
     from routemind_compute.application.nearest import NearestStrategy
     from routemind_compute.application.risk_aware import RiskAwareScoringStrategy
     from routemind_compute.application.vrptw import VrptwStrategy
@@ -208,6 +219,7 @@ def default_registry(*, tracer: Tracer | None = None) -> StrategyRegistry:
             MinimumCostFlowStrategy(),
             PartitionedAssignmentStrategy(),
             VrptwStrategy(),
+            LocalSearchStrategy(),
         ),
         tracer=tracer,
     )

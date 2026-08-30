@@ -237,7 +237,14 @@ def _quality_errors(
 
 def _run_once(record: dict[str, Any], seed: int) -> tuple[Any, Any]:
     manifest = build_manifest(record, seed)
-    kernel = ScenarioKernel(default_registry(), _provider(record), strategy="nearest")
+    # RM-241 is a frozen historical campaign. Keep its pre-fix observation
+    # semantics immutable while product runs use the corrected default path.
+    kernel = ScenarioKernel(
+        default_registry(),
+        _provider(record),
+        strategy="nearest",
+        propagate_travel_fallback=False,
+    )
     return manifest, kernel.run(manifest)
 
 

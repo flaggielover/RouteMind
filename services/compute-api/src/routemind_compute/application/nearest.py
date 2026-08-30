@@ -21,6 +21,8 @@ def great_circle_distance_kilometres(
 class NearestStrategy:
     name = "nearest"
     version = "1.0.0"
+    capabilities = ("dispatch",)
+    maturity = "BASELINE"
 
     def solve(self, problem: DispatchProblem) -> DispatchDecision:
         eligible = problem.eligible_candidates()
