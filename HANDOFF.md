@@ -8,6 +8,27 @@ Current Phase: Round 4 Final Closure - ACTIVE
 
 Current Task: R4-422 - GMAIL V2 SEND PREFLIGHT FAILED (CREDENTIAL REFRESH REQUIRED)
 
+R4-422 Gmail refresh-if-required single-send execution (2026-08-30): the
+approved independent contract
+`contracts/provider/r4-422-google-gmail-refresh-if-required-single-send-v1.json`
+was consumed exactly once at SHA-256
+`35702d6d6698b78f08757b2560deb2bfee50503d0b8cc90b8fd2fcdf9431535f`.
+The existing external Windows credential loaded as refresh-required, accepted
+one standard refresh on the same credential object, and then produced one
+sanitized HTTP 200 provider acceptance for one Gmail API v1
+`users.messages.send` request to the configured synthetic recipient. Counts:
+Gmail API/send `1/1`, refresh `1`, recipient `1`, retries/fallback `0/0`,
+OAuth/token exchange `0/0`, browser/SSH `0/0`, reads/attachments/CC/BCC/batch
+`0/0/0/0/0`, mutations `0/0`, elapsed `5419 ms`, cost `USD 0.00`. Message-id
+presence was observed, but delivery, provider-wide validation, and production
+claims remain false. No secret, token, authorization header, raw response,
+address, message body, or external path was recorded. Evidence and leakage
+scan:
+`evidence/gates/R4-422/google-gmail-refresh-if-required-single-send-execution-20260830.*`.
+The contract is consumed and cannot be retried or reused; stop and require a
+new independent contract and Human Gate for any future operation. Historical
+Gmail/SES evidence and R3-325 remain unchanged.
+
 R4-422 Gmail refresh-if-required single-send preparation (2026-08-30): a new
 independent contract
 `contracts/provider/r4-422-google-gmail-refresh-if-required-single-send-v1.json`
