@@ -126,6 +126,22 @@ spatial nodes, flows, or risk zones arrive later.
 
 ## WebGL Scene Design
 
+### Reference Pattern Adaptation
+
+The scene implementation will directly study and adapt three primary Codrops
+technique references, while rewriting the geometry, data mapping, interaction,
+and presentation for RouteMind:
+
+- [Interactive 3D Cluster](https://tympanus.net/codrops/2026/08/12/creating-an-interactive-3d-cluster-with-three-js-tsl-and-three-start/): faceted/extruded faces, local deformation, noise-driven motion, raycast hover focus, physically based response, and selective post-processing.
+- [Interactive Wave Propagation Cube Grid](https://tympanus.net/codrops/2026/07/09/building-an-interactive-wave-propagation-cube-grid-with-three-js/): bounded instanced grid, world-space pointer projection, attenuated wave propagation, deterministic jitter, and depth-synchronized shadows.
+- [Cinematic 3D Scroll Experiences](https://tympanus.net/codrops/2025/11/19/how-to-build-cinematic-3d-scroll-experiences-with-gsap/): eased camera/parallax language and restrained focus transitions, without importing full Presentation Mode or persistent scroll choreography.
+
+These references are technique and architecture inputs only. RouteMind will not
+copy their branding, text, assets, unique artwork, or scene composition. The
+adapted equivalents are pressure-driven field heights, risk-aware route and
+node emphasis, supply/traffic activity, strategy-linked focus state, and
+twin-fidelity cues.
+
 The scene is intentionally a spatial system, not a generic rotating object:
 
 - A low-poly isometric city field provides a readable ground plane with layered
