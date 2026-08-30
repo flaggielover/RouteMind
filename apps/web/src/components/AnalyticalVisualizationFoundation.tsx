@@ -74,7 +74,7 @@ export function OperationsAnalyticalStrip({ snapshot }: OperationsAnalyticalStri
           >
             <CompactSignal
               label="Latency"
-              value={snapshot.dispatch.latencyMs}
+              value={snapshot.dispatch.latencyMs ?? 0}
               max={180}
               suffix="ms"
               tone="amber"
@@ -96,7 +96,11 @@ export function OperationsAnalyticalStrip({ snapshot }: OperationsAnalyticalStri
             <span>
               <i className="chart-dot chart-dot-slate" /> solver response
             </span>
-            <strong>{snapshot.dispatch.latencyMs} ms</strong>
+            <strong>
+              {snapshot.dispatch.latencyMs === null
+                ? "Unavailable"
+                : `${snapshot.dispatch.latencyMs} ms`}
+            </strong>
           </div>
         </ChartFrame>
       </div>

@@ -143,8 +143,9 @@ export function toUrbanFieldState(snapshot: OperationsSnapshot): UrbanFieldState
     (priorityOrders / Math.max(1, orderCount)) * 0.7 +
       (offlineCouriers / Math.max(1, courierCount)) * 0.3,
   );
-  const traffic = clamp(0.22 + pressure * 0.36 + (snapshot.dispatch.latencyMs > 80 ? 0.18 : 0));
-  const activityRate = clamp(0.28 + orderCount * 0.06 + snapshot.dispatch.latencyMs / 280);
+  const dispatchLatency = snapshot.dispatch.latencyMs ?? 0;
+  const traffic = clamp(0.22 + pressure * 0.36 + (dispatchLatency > 80 ? 0.18 : 0));
+  const activityRate = clamp(0.28 + orderCount * 0.06 + dispatchLatency / 280);
   const provenance = snapshot.source === "live" ? "snapshot-derived" : "visual-demo";
 
   return {
