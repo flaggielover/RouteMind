@@ -15,3 +15,6 @@ production strategy claim or scientific claim changed.
 
 Verification: scenario control and live-boundary focused tests passed; full web
 lint/typecheck/build and serial Vitest 39 files / 108 tests passed.
+
+Terminal CI evidence: GitHub Actions run `33305890726` completed successfully;
+the role-aware browser smoke gate passed with 34 tests and 2 intentional skips.

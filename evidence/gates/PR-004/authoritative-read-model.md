@@ -26,3 +26,7 @@ Route/travel metadata is structurally supported (`provider`, fallback state,
 duration, distance, observed time, freshness). The live source returns
 `NO_ROUTE_ESTIMATE` because no durable route observation is currently available;
 tests prove degraded/fallback/stale serialization without fabricating geometry.
+
+Terminal CI evidence: GitHub Actions run `33305890726` completed successfully;
+all five required jobs passed, including the role-aware browser smoke gate
+(34 passed, 2 intentionally skipped).

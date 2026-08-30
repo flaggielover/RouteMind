@@ -13,3 +13,6 @@ is inferred from UI state.
 Verification: Java 17 integration 17/17; web lint/typecheck/build green; serial
 Vitest 39 files / 108 tests green. Existing WebGL jsdom `getContext` notices are
 environment output only. No external collector, broker, or provider was contacted.
+
+Terminal CI evidence: GitHub Actions run `33305890726` completed successfully;
+the Java, Python, control-plane, resilience, and role-aware web jobs all passed.
