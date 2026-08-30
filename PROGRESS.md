@@ -10,13 +10,16 @@ evidence. PR-001 through PR-007 are implemented. Docker Desktop was recovered
 without deleting volumes or durable state; the real golden journey,
 failure/degradation matrix, Java restart, authoritative snapshot recovery, SSE
 cursor resume/deduplication, and desktop/mobile browser reconnect gates pass.
-Evidence is under `evidence/gates/PR-007/resilience-reconnect.md`. PR-008 has
-passed local UX closure: one coherent five-route shell, explicit state/source
-language, visible labels for the compact Operations icon rail, 40 unit files / 112
-tests, production build, and 36 Playwright passes with two intentional skips
-across desktop/mobile and Axe. It remains `validating` until its published
-checkpoint is green in CI. Evidence is under
-`evidence/gates/PR-008/product-ux-closure.md`.
+Evidence is under `evidence/gates/PR-007/resilience-reconnect.md`. PR-008 passed
+local UX closure and all five jobs in Actions run `33315720755`: one coherent
+five-route shell, explicit state/source language, visible labels for the compact
+Operations icon rail, 40 unit files / 112 tests, production build, and 36
+Playwright passes with two intentional skips across desktop/mobile and Axe. All
+PR-001 through PR-008 tasks are implemented; remaining Product Readiness backlog
+counts are P0 `0`, P1 `0`, and P2 `0`. Campaign classification:
+`PRODUCT_READINESS_LOCAL_CLOSED`. Evidence is under
+`evidence/gates/PR-008/product-ux-closure.md` and
+`evidence/gates/product-readiness/final-closure.md`.
 
 ## Synthetic Observation & Anomaly Discovery Campaign
 

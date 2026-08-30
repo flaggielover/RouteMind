@@ -19,7 +19,7 @@ or scientific status. Tasks are local-first and may reuse existing APIs/scripts.
 | PR-005 | P1 | implemented | PR-002, PR-004 | Event/queue/projection observability summary |
 | PR-006 | P1 | implemented | PR-003, PR-004 | Scenario/replay catalog and operator controls |
 | PR-007 | P2 | implemented | PR-004, PR-005 | Resilience/reconnect/stale-state product closure |
-| PR-008 | P2 | validating | PR-005, PR-006, PR-007 | UX information architecture and visual polish closure |
+| PR-008 | P2 | implemented | PR-005, PR-006, PR-007 | UX information architecture and visual polish closure |
 
 ## Task Definitions
 

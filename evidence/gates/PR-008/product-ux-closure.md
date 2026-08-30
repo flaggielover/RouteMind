@@ -2,7 +2,7 @@
 
 Date: 2026-08-30
 
-Status: `VALIDATING_REMOTE_CI`
+Status: `IMPLEMENTED_REMOTE_GREEN`
 
 ## Scope
 
@@ -64,11 +64,17 @@ mobile `390x844` viewports:
   backend reconnect and event deduplication, simulation errors, and Axe scans on
   every primary route.
 
+## Remote gate
+
+Implementation commit `fb3629d504c54aed9a153c5b0c6d93b6d00f459c`
+passed all five jobs in GitHub Actions run `33315720755`: Java business runtime,
+Python compute/contracts, bounded degradation/resilience, role-aware web, and
+control-plane/Compose.
+
 ## Claim boundary
 
 - External operations: `NONE`.
 - External cost: `USD 0.00`.
 - Round 4 progress changed: `NO`.
 - Scientific claims changed: `NO`.
-- Final task status remains `validating` until the normal non-force publication
-  is green in GitHub Actions.
+- Final task status: `implemented`.

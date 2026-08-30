@@ -14,15 +14,20 @@ PR-007 are implemented. The Docker Desktop engine was recovered without volume
 or durable-state deletion. Golden delivery, dependency loss/recovery, Java
 restart, authoritative snapshot recovery, SSE cursor resume/deduplication, and
 desktop/mobile browser reconnect gates pass. Evidence is under
-`evidence/gates/PR-007/resilience-reconnect.md`. PR-008 has passed its local UX
-closure gates and is `validating` pending published CI. The bounded change adds
-visible hover/focus labels to the compact Operations icon rail; the five primary
-routes, source/status language, explicit command boundaries, responsive layout,
+`evidence/gates/PR-007/resilience-reconnect.md`. PR-008 passed its local UX gates
+and all five jobs in Actions run `33315720755`. The bounded change adds visible
+hover/focus labels to the compact Operations icon rail; the five primary routes,
+source/status language, explicit command boundaries, responsive layout,
 keyboard behavior, and Axe checks pass. Local evidence: formatting, lint,
 typecheck, 40 unit files / 112 tests, production build, and 36 Playwright passes
-with two intentional skips. Evidence is under
-`evidence/gates/PR-008/product-ux-closure.md`. Preserve unrelated untracked work,
-including `.codex-tmp/` and `.superpowers/`.
+with two intentional skips. PR-001 through PR-008 are implemented with P0 `0`,
+P1 `0`, and P2 `0` remaining. Campaign classification:
+`PRODUCT_READINESS_LOCAL_CLOSED`. Evidence is under
+`evidence/gates/PR-008/product-ux-closure.md` and
+`evidence/gates/product-readiness/final-closure.md`. No further local PR task is
+eligible; the next safe action is to preserve this closure while Round 4
+external/Human Gates remain separately governed. Preserve unrelated untracked
+work, including `.codex-tmp/` and `.superpowers/`.
 
 ## RM-241 Synthetic Observation & Anomaly Discovery
 

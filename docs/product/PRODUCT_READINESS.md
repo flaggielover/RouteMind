@@ -186,8 +186,8 @@ to cursor `2` with two unique applied events. Stale and malformed events remain
 fail-closed under the realtime unit and browser gates. Evidence is under
 `evidence/gates/PR-007/resilience-reconnect.md`.
 
-PR-008 has passed its bounded local implementation and acceptance gates and is
-validating in remote CI. The five primary routes retain one product shell and
+PR-008 has passed its bounded local implementation, acceptance, and remote CI
+gates. The five primary routes retain one product shell and
 consistent source, freshness, availability, and command-authority language.
 Operations compact navigation now exposes visible hover/focus labels without
 changing the separately approved Immersive Operations composition. Loading,
@@ -195,3 +195,19 @@ empty, error, degraded, stale, and unavailable behavior remains covered by the
 existing unit and browser fixtures. Desktop/mobile browser, focus, overflow,
 screen-reader naming, and Axe gates pass. Evidence is under
 `evidence/gates/PR-008/product-ux-closure.md`.
+
+## Final Product Readiness Closure (2026-08-30)
+
+All eight tasks in the finite local `PR-*` backlog are implemented. The final
+priority inventory is P0 `0`, P1 `0`, and P2 `0`. PR-008 implementation commit
+`fb3629d504c54aed9a153c5b0c6d93b6d00f459c` passed all five jobs in GitHub
+Actions run `33315720755`; PR-007 commit
+`3b06dd637437ecaefaf7c7f89ea2469f6cb8c252` passed run `33314804685`.
+
+The closure classification is `PRODUCT_READINESS_LOCAL_CLOSED`. It means the
+bounded local product/demo backlog, its deterministic journeys, and its
+desktop/mobile presentation gates are green. It is not a production-readiness,
+external-provider, performance-at-scale, resilience-at-scale, or scientific
+claim. Round 4 counts, external and Human Gates, frozen Round 3/RADS outcomes,
+and scientific dispositions are unchanged. Final evidence is under
+`evidence/gates/product-readiness/final-closure.md`.
