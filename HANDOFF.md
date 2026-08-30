@@ -19,7 +19,11 @@ worker startup timeouts after 96 tests passed. Preserve `.codex-tmp/` as
 pre-existing untracked state. `PR-001` is implemented in `e3c2c57` with green
 Actions run `33298506156`. `PR-002` is implemented in the current checkpoint;
 its evidence is under `evidence/gates/PR-002/readiness-diagnostics.md`, and the
-next eligible task is `PR-003`.
+next eligible task is `PR-003`. `PR-003` is implemented with the finite,
+simulation-only scenario catalog and runner; evidence is under
+`evidence/gates/PR-003/deterministic-scenarios.md`. The next eligible task is
+`PR-004`. Unrelated web package/visual worktree changes are user-owned and must
+be preserved.
 
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 

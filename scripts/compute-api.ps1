@@ -93,6 +93,8 @@ try {
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/google_routes_contract_test.py")
             Invoke-Uv @("run", "--frozen", "pytest")
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/determinism_gate.py")
+            Invoke-Uv @("run", "--frozen", "python", "../../scripts/deterministic_scenarios.py", "--list")
+            Invoke-Uv @("run", "--frozen", "python", "../../scripts/deterministic_scenarios_test.py")
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/analytics_archive_gate.py")
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/analytics_mart_gate.py")
             Invoke-Uv @("run", "--frozen", "python", "../../scripts/semantic_metrics_gate.py")

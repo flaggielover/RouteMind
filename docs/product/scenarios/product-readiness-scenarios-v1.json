@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "catalog_id": "product-readiness-scenarios-v1",
+  "source": "SIMULATION",
+  "claim_label": "deterministic scenario observation; not a causal production claim",
+  "scenarios": [
+    {"id": "NORMAL_BASELINE", "description": "Steady demand and supply", "demand_count": 3, "demand_ticks": [0, 1, 2], "courier_count": 3, "delay_ticks": [0, 1], "traffic_multiplier": 1.0, "provider_mode": "local"},
+    {"id": "DINNER_RUSH", "description": "Demand surge across the dinner window", "demand_count": 8, "demand_ticks": [0, 0, 1, 1, 2, 2, 3, 3], "courier_count": 3, "delay_ticks": [0, 1], "traffic_multiplier": 1.2, "provider_mode": "local"},
+    {"id": "COURIER_SHORTAGE", "description": "Demand exceeds available couriers", "demand_count": 4, "demand_ticks": [0, 0, 0, 1], "courier_count": 1, "delay_ticks": [0, 1], "traffic_multiplier": 1.0, "provider_mode": "local"},
+    {"id": "MERCHANT_DELAY", "description": "Preparation delay is represented as service delay ticks", "demand_count": 3, "demand_ticks": [0, 1, 2], "courier_count": 3, "delay_ticks": [3, 5], "traffic_multiplier": 1.0, "provider_mode": "local"},
+    {"id": "TRAFFIC_DEGRADATION", "description": "Deterministic traffic multiplier increases travel time", "demand_count": 3, "demand_ticks": [0, 1, 2], "courier_count": 3, "delay_ticks": [0, 1], "traffic_multiplier": 2.0, "provider_mode": "local"},
+    {"id": "ROUTING_PROVIDER_FAILURE", "description": "Primary route provider fails and the local fallback is used", "demand_count": 3, "demand_ticks": [0, 1, 2], "courier_count": 3, "delay_ticks": [0, 1], "traffic_multiplier": 1.0, "provider_mode": "fallback"},
+    {"id": "DISPATCH_PRESSURE", "description": "Many same-tick requests compete for a small fleet", "demand_count": 12, "demand_ticks": [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1], "courier_count": 2, "delay_ticks": [0, 1], "traffic_multiplier": 1.3, "provider_mode": "local"},
+    {"id": "RECOVERY", "description": "A deterministic run is repeated to verify replay recovery", "demand_count": 4, "demand_ticks": [0, 1, 2, 3], "courier_count": 2, "delay_ticks": [0, 1, 2], "traffic_multiplier": 1.3, "provider_mode": "local", "recovery_replay": true}
+  ]
+}

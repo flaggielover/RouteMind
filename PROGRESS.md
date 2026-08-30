@@ -15,7 +15,11 @@ is green. `PR-002` is implemented in the current checkpoint with readiness,
 configuration, phase, and diagnostic evidence under
 `evidence/gates/PR-002/readiness-diagnostics.md`; its focused checks pass and the
 bounded Docker failure remains explicit. The next eligible product task is
-`PR-003`.
+`PR-003`. `PR-003` is now implemented with the finite scenario catalog and
+deterministic runner; repeated digest, shortage, fallback, recovery, lint, and
+format checks pass under the pinned compute environment. Evidence is under
+`evidence/gates/PR-003/deterministic-scenarios.md`; the next eligible product task
+is `PR-004`.
 
 Round 2 Progress: 48 / 48 tasks passed
 
