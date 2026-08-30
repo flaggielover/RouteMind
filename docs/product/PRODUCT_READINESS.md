@@ -169,3 +169,17 @@ frozen eight-entry scenario catalog, and Strategy Lab labels replay verification
 and shadow availability by source. Unsupported controls remain unavailable and
 all replay/what-if outputs retain their existing non-production authority labels.
 Evidence is under `evidence/gates/PR-006/strategy-replay-shadow.md`.
+
+## PR-007 / PR-008 Closure Audit (2026-08-30)
+
+PR-007 remains pending for this run. A bounded prerequisite check confirmed that
+`docker compose config --quiet` passes, but the active Docker Desktop
+`desktop-linux` daemon did not answer `docker version` within 10 seconds. No
+containers or durable state were started, removed, or reset, and no resilience
+claim is made. Evidence is under
+`evidence/gates/PR-007/resilience-reconnect.md`.
+
+PR-008 is not eligible to bypass this block because the product-readiness
+backlog explicitly depends on PR-007. Its UX acceptance criteria and the
+user-owned `09a1fae` visual checkpoint remain unchanged for a future bounded
+closure run.
