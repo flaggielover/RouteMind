@@ -104,8 +104,9 @@ Browser: Codex in-app Chromium, Demo source, local Vite server at
 - `./scripts/resume.ps1`: PASS, including task-graph schema/dependency/state,
   tracked-secret isolation, dependency/workflow/IaC checks, and the fast
   repository gate.
-- Playwright workers are capped at four because the suite now creates real WebGL
-  contexts; this prevents GPU-context contention without weakening assertions.
+- Playwright workers are capped at four locally and two on CI because the suite
+  now creates real WebGL contexts; this prevents GPU-context contention without
+  weakening assertions or extending test timeouts.
 
 ## Visual artifacts
 
