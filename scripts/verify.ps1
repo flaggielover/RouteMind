@@ -417,6 +417,16 @@ try {
         throw "Release contract self-tests failed"
     }
 
+    python scripts/dev_lifecycle_contract.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Local lifecycle contract validation failed"
+    }
+
+    python scripts/dev_lifecycle_contract_test.py
+    if ($LASTEXITCODE -ne 0) {
+        throw "Local lifecycle contract self-tests failed"
+    }
+
     python scripts/staged_release_test.py
     if ($LASTEXITCODE -ne 0) {
         throw "Staged release self-tests failed"

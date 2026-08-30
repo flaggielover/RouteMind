@@ -34,6 +34,27 @@ Start the local platform dependencies:
 ./scripts/infra.ps1 up
 ```
 
+Start the complete local runtime with bounded readiness checks:
+
+```powershell
+./scripts/dev-up.ps1 -Action up
+```
+
+The lifecycle command validates prerequisites and Compose, starts PostgreSQL,
+RabbitMQ, Redis, Java, Python, and the web server, waits for API/web readiness,
+captures per-process logs under the system temporary directory, and prints local
+endpoints. Inspect or stop the tracked runtime with:
+
+```powershell
+./scripts/dev-up.ps1 -Action status
+./scripts/dev-up.ps1 -Action down
+```
+
+`down` stops only the tracked RouteMind processes and the RouteMind Compose
+project; persistent development volumes are preserved. Use `-SkipWeb` when only
+the backend runtime is needed. A failed startup reports the failing phase and
+retains the referenced log paths; it does not silently continue.
+
 Build or run the durable Java business service:
 
 ```powershell
