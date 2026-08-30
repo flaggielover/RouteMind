@@ -40,7 +40,6 @@ import { countOpenExceptions, findOrder, orderStatusLabel, statusTone } from "./
 import { AppShell } from "./components/AppShell";
 import { LifecycleTimeline } from "./components/LifecycleTimeline";
 import { MetricCell } from "./components/MetricCell";
-import { OperationsMap } from "./components/OperationsMap";
 import { MultiCityGeoPanel } from "./components/MultiCityGeoPanel";
 import { CityZoneDrilldownPanel } from "./components/CityZoneDrilldownPanel";
 import { FlowVisualizationPanel } from "./components/FlowVisualizationPanel";
@@ -55,7 +54,8 @@ import { StatusPill } from "./components/StatusPill";
 import { OperationsAnalyticalStrip } from "./components/AnalyticalVisualizationFoundation";
 import { OperationsMotionCoordinator } from "./components/OperationsMotionCoordinator";
 import { OperationsExperience } from "./components/OperationsExperience";
-import type { UrbanFieldSceneController } from "./components/UrbanFieldScene";
+import type { GeoWorldController } from "./visuals/geoWorldController";
+import type { CityId } from "./visuals/cityGeo";
 import { CourierView, CustomerView, MerchantView, StrategyView } from "./routes/RoleViews";
 import type { Order, OperationsSnapshot } from "./domain/model";
 import {
@@ -70,6 +70,23 @@ interface AppProps {
   sessionProvider?: TenantSessionProvider;
 }
 
+function dataSourceForMode(mode: DataSourceMode): OperationsDataSource {
+  return mode === "live"
+    ? liveDataSource
+    : mode === "demo"
+      ? demoDataSource
+      : mode === "replay"
+        ? replayDataSource
+        : simulationDataSource;
+}
+
+function configuredDefaultDataSource(): OperationsDataSource {
+  const configured = import.meta.env.VITE_DEFAULT_DATA_SOURCE;
+  return configured === "demo" || configured === "replay" || configured === "simulation"
+    ? dataSourceForMode(configured)
+    : liveDataSource;
+}
+
 export default function App({
   dataSource,
   healthProbe = probeServices,
@@ -77,7 +94,7 @@ export default function App({
 }: AppProps) {
   const suppliedDataSource = dataSource;
   const [activeDataSource, setActiveDataSource] = useState<OperationsDataSource>(
-    suppliedDataSource ?? liveDataSource,
+    suppliedDataSource ?? configuredDefaultDataSource(),
   );
   const initialSnapshot = useMemo(() => activeDataSource.getSnapshot(), [activeDataSource]);
   const [snapshot, setSnapshot] = useState(initialSnapshot);
@@ -194,15 +211,7 @@ export default function App({
   const changeSource = useCallback(
     (mode: DataSourceMode) => {
       if (suppliedDataSource) return;
-      setActiveDataSource(
-        mode === "live"
-          ? liveDataSource
-          : mode === "demo"
-            ? demoDataSource
-            : mode === "replay"
-              ? replayDataSource
-              : simulationDataSource,
-      );
+      setActiveDataSource(dataSourceForMode(mode));
     },
     [suppliedDataSource],
   );
@@ -365,6 +374,8 @@ function OperationsView({
   onReplayControl?: (command: ReplayCommand) => Promise<void>;
 }) {
   const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0]?.id ?? "");
+  const [selectedCityId, setSelectedCityId] = useState<CityId>("shanghai");
+  const [selectedTrajectoryId, setSelectedTrajectoryId] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [zoneFilter, setZoneFilter] = useState("all");
   const [lifecycleFilter, setLifecycleFilter] = useState("all");
@@ -383,9 +394,6 @@ function OperationsView({
     const freshnessMatches = !freshOnly || Boolean(snapshot.generatedAt);
     return zoneMatches && lifecycleMatches && exceptionMatches && freshnessMatches;
   });
-  const filteredCouriers = snapshot.couriers.filter(
-    (courier) => zoneFilter === "all" || courier.zone === zoneFilter,
-  );
   const exceptionOrders = snapshot.orders.filter(
     (order) => order.priority === "priority" && order.status !== "DELIVERED",
   );
@@ -397,7 +405,7 @@ function OperationsView({
   const openExceptions = countOpenExceptions(snapshot);
   const hasDispatchLatency =
     snapshot.availability === "ready" && snapshot.dispatch.latencyMs !== null;
-  const sceneControllerRef = useRef<UrbanFieldSceneController | null>(null);
+  const sceneControllerRef = useRef<GeoWorldController | null>(null);
   const chapterStates = useMemo(
     () => toOperationsChapterState(snapshot, selectedOrderId || null),
     [selectedOrderId, snapshot],
@@ -429,6 +437,10 @@ function OperationsView({
     setExceptionsOnly(false);
     setFreshOnly(false);
   };
+  const handleCityChange = (cityId: CityId) => {
+    setSelectedCityId(cityId);
+    setSelectedTrajectoryId(null);
+  };
   return (
     <OperationsMotionCoordinator
       sceneControllerRef={sceneControllerRef}
@@ -437,6 +449,10 @@ function OperationsView({
       <OperationsExperience
         snapshot={snapshot}
         worldFrame={activeWorldFrame}
+        cityId={selectedCityId}
+        onCityChange={handleCityChange}
+        selectedTrajectoryId={selectedTrajectoryId}
+        onSelectTrajectory={setSelectedTrajectoryId}
         controllerRef={sceneControllerRef}
       >
         <section
@@ -806,16 +822,7 @@ function OperationsView({
                 </dl>
               </section>
             </section>
-            <section className="primary-grid" data-motion-section="detail">
-              <OperationsMap
-                orders={filteredOrders}
-                couriers={filteredCouriers}
-                selectedOrderId={selectedOrderId}
-                onSelectOrder={setSelectedOrderId}
-                availability={snapshot.availability}
-                source={snapshot.source}
-                generatedAt={snapshot.generatedAt}
-              />
+            <section className="primary-grid operations-queue-grid" data-motion-section="detail">
               <OrderQueue
                 orders={filteredOrders}
                 selectedOrderId={selectedOrderId}
@@ -1186,6 +1193,7 @@ function OrderQueue({
               key={order.id}
               onClick={() => onSelectOrder(order.id)}
               type="button"
+              aria-label={`Select order ${order.shortId}`}
             >
               <span
                 className={`queue-status status-tone-${statusTone(order.status)}`}

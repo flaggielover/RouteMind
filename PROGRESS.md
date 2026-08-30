@@ -88,6 +88,25 @@ skips. Evidence is `evidence/gates/RM-243/operations-visual-correction.md`.
 RM-243 is excluded from Round 4 counts and makes no production spatial-data or
 calibrated Digital Twin claim.
 
+## RM-244 Multi-City Real Map
+
+RM-244 passed locally on 2026-08-31. Operations now lazy-loads one MapLibre GL
+JS map with an interleaved Deck.gl operational layer across Shanghai, Shenzhen,
+and Chengdu. OpenFreeMap/OpenMapTiles supplies real geographic context; courier
+routes, orders, hotspots, flows, and SLA-risk areas remain deterministic Demo
+fixtures with explicit provenance. Seven chapters recompose camera and layer
+emphasis around the same map, and city switching preserves chapter focus while
+clearing invalid trajectory selection.
+
+Browser review covered continuous top-to-bottom scrolling, all three cities,
+semantic risk-zone inspection, fallback, reduced motion, and 1280x720,
+1024x768, and 760x800 without horizontal overflow or console errors. Local
+gates pass repository verification, zero production dependency vulnerabilities,
+43 Vitest files/118 tests, production build, and Playwright 36 passed/2
+device-conditional skips. Evidence is
+`evidence/gates/RM-244/multi-city-real-map.md`. RM-244 is excluded from Round 4
+counts and makes no production rider, calibrated twin, or provider claim.
+
 Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
@@ -96,7 +115,7 @@ Enhancement Progress: 32 / 32 tasks passed (RM-210 through RM-241)
 
 Round 4 Progress: 10 / 38 tasks passed
 
-Repository Total: 172 / 202 tasks passed
+Repository Total: 174 / 204 tasks passed
 
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 

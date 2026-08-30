@@ -1,7 +1,7 @@
 import { useEffect, useRef, type MutableRefObject, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import type { UrbanFieldSceneController } from "./UrbanFieldScene";
+import type { GeoWorldController } from "../visuals/geoWorldController";
 
 export type PointerTargetType = "scene" | "chart" | "hud" | "control" | null;
 
@@ -20,7 +20,7 @@ export interface RouteMindPointerState {
 
 export interface OperationsMotionCoordinatorProps {
   children: ReactNode;
-  sceneControllerRef?: MutableRefObject<UrbanFieldSceneController | null>;
+  sceneControllerRef?: MutableRefObject<GeoWorldController | null>;
   onFrame?: (frame: { progress: number; section: number; focus: number }) => void;
 }
 

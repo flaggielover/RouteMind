@@ -7,7 +7,7 @@ import {
 } from "../domain/multiCityGeo";
 
 const scopes: readonly { value: GeoOperationsScope; label: string }[] = [
-  { value: "national", label: "National" },
+  { value: "national", label: "Network" },
   { value: "multi-city", label: "Multi-city" },
   { value: "city", label: "City detail" },
 ];

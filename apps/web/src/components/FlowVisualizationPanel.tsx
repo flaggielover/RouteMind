@@ -72,13 +72,14 @@ export function FlowVisualizationPanel({ snapshot, now }: FlowVisualizationPanel
                 <defs>
                   <marker
                     id="flow-arrow"
-                    markerWidth="7"
-                    markerHeight="7"
-                    refX="6"
-                    refY="3.5"
+                    markerWidth="4"
+                    markerHeight="4"
+                    refX="4"
+                    refY="2"
                     orient="auto"
+                    markerUnits="userSpaceOnUse"
                   >
-                    <path d="M0,0 L7,3.5 L0,7 z" fill="currentColor" />
+                    <path d="M0,0 L4,2 L0,4 z" fill="currentColor" />
                   </marker>
                 </defs>
                 <rect className="flow-map-background" x="0" y="0" width="100" height="100" rx="3" />

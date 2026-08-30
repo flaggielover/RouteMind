@@ -416,7 +416,9 @@ test.describe("role-aware web smoke", () => {
 
     releaseRecovery();
     await expect(page.getByText("Cursor 2", { exact: true })).toBeVisible();
-    await expect(page.getByRole("status").filter({ hasText: "Stream connected" })).toBeVisible();
+    await expect.poll(() => streamUrls.length).toBeGreaterThanOrEqual(3);
+    expect(streamUrls[2]).toContain("after=2");
+    await expect(page.getByRole("status").filter({ hasText: "Stream reconnecting" })).toBeVisible();
     await expect(
       page.getByRole("list", { name: "Verified activity events" }).getByRole("listitem"),
     ).toHaveCount(2);

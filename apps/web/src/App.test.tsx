@@ -68,6 +68,7 @@ describe("role-aware application", () => {
   });
 
   it("mounts one persistent world across seven distinct operations chapters", async () => {
+    const user = userEvent.setup();
     const { container } = renderApp();
 
     expect(await screen.findByText("Demo snapshot")).toBeInTheDocument();
@@ -80,6 +81,10 @@ describe("role-aware application", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "Find the edge of the promise." }),
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /Shenzhen/ }));
+    expect(
+      screen.getByRole("region", { name: "Shenzhen geographic fallback" }),
     ).toBeInTheDocument();
   });
 

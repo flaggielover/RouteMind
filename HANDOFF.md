@@ -152,6 +152,33 @@ passed/2 device-conditional skips. Evidence and five screenshots are under
 `http://localhost:4173/operations`. RM-243 is excluded from Round 4 counts and
 does not claim H3, production spatial telemetry, or calibrated Digital Twin state.
 
+## RM-244 Multi-City Real Map
+
+State: **PASSED LOCALLY** (2026-08-31)
+
+Operations keeps React 19 and now owns one persistent MapLibre 5.24 map with an
+interleaved Deck.gl 9.3 operational overlay. Shanghai, Shenzhen, and Chengdu use
+real OpenFreeMap/OpenMapTiles geographic context plus deterministic Demo courier
+routes, moving riders, pickup/destination nodes, hotspots, flows, and SLA-risk
+zones. The seven chapters change camera and operational emphasis without
+remounting the map. City changes preserve chapter focus and clear invalid route
+selection.
+
+The map bundle is lazy and guarded before import when WebGL2 is unavailable.
+DPR, visibility, reduced motion, initialization failure, load timeout, static
+fallback, overlay finalization, map disposal, and animation cancellation are
+explicit. Local validation passes `./scripts/verify.ps1`, zero production npm
+vulnerabilities, 43 Vitest files/118 tests, production build, and Playwright 36
+passed/2 device-conditional skips. Browser inspection passed all three cities,
+continuous seven-chapter scroll, semantic risk-zone hover, fallback,
+reduced-motion, 1280/1024/760 layouts, and zero console warnings/errors.
+Evidence: `evidence/gates/RM-244/multi-city-real-map.md`.
+
+The local Demo server is available at `http://127.0.0.1:4174/operations`.
+RM-244 is excluded from Round 4 counts and does not authorize a production
+spatial-data, rider-telemetry, provider-qualification, or calibrated Digital
+Twin claim.
+
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 
 R4-422 operator-observed delivery confirmation (2026-08-30): the operator
