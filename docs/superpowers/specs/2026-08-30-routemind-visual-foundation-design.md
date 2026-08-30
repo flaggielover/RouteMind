@@ -48,6 +48,37 @@ will be composed as a dense command workspace:
    in the shell and hero context. Live source availability remains truthful; no
    fabricated production state is introduced.
 
+## Analytical Visualization Foundation
+
+RouteMind is not a 3D-only operations page. Alongside the WebGL scene, Phase 1
+establishes a small, reusable analytical visualization layer for the existing
+React surface. The audit found no ECharts, Recharts, D3, or other general-purpose
+chart dependency in `apps/web`; current visuals are bespoke CSS/SVG primitives.
+The first implementation will therefore extend those local primitives with a
+shared SVG-based chart toolkit rather than add a second chart library solely for
+generic defaults.
+
+The toolkit will provide tokenized wrappers and primitives for axes, gridlines,
+legends, labels, tooltips, focus states, and empty/unavailable states. It will
+demonstrate representative Operations views next to `UrbanFieldScene`:
+
+- a live operational throughput/latency time-series;
+- an SLA/risk trend with explicit risk thresholds;
+- a strategy comparison/distribution view;
+- a compact latency-versus-throughput readout;
+- one richer zone-by-metric heatmap surface.
+
+Charts share the graphite/slate surfaces, typography, state colors, motion
+timings, tooltip behavior, and information hierarchy of the Three.js layer. They
+must not use default ECharts/BI styling. Their renderer-neutral data contracts
+are deliberately compatible with future Pareto frontiers, Strategy x Scenario
+heatmaps, RADS/RADS-H switching timelines, Twin calibration, What-if deltas,
+Reliability Invariant matrices, research lineage DAGs, VRPTW windows, replay
+timelines, migration/resource flows, and operational SLA/risk/throughput/
+latency series. Phase 1 only wires the representative Operations examples and
+keeps their values clearly sourced from the existing snapshot or isolated demo
+state.
+
 ## UrbanFieldScene API
 
 The reusable component will accept a small, renderer-neutral view model:
@@ -62,6 +93,24 @@ interface UrbanFieldState {
   strategy: string;
   twinFidelity: number;   // 0..1, when available
   activityRate: number;   // event/solver activity, normalized 0..1
+  spatial?: {
+    cells?: readonly { id: string; center: GeoPoint; intensity: number; risk?: number }[];
+    nodes?: readonly {
+      id: string;
+      kind: "order" | "courier" | "merchant" | "risk";
+      position: GeoPoint;
+      value?: number;
+      risk?: number;
+    }[];
+    flows?: readonly {
+      id: string;
+      from: GeoPoint;
+      to: GeoPoint;
+      value: number;
+      risk?: number;
+    }[];
+    zones?: readonly { id: string; center: GeoPoint; radius: number; risk: number }[];
+  };
 }
 ```
 
@@ -70,7 +119,10 @@ renderer. It may use deterministic demo values when a source does not provide a
 field, and must label those values as visual demo state. The component exposes
 optional `onFocusEntity` and `onSceneReady` hooks for future drawers, decision
 x-ray links, and Digital Twin controls; Phase 1 does not invent new backend
-endpoints.
+endpoints. The optional spatial collections follow existing `GeoPoint` and
+readonly-array conventions. They remain absent for Phase 1 demo data, but their
+presence does not require replacing the component API when H3/geohash cells,
+spatial nodes, flows, or risk zones arrive later.
 
 ## WebGL Scene Design
 
@@ -95,10 +147,13 @@ The scene is intentionally a spatial system, not a generic rotating object:
   context region; it does not communicate essential information only through
   motion.
 
-The visual palette uses dark operational surfaces with teal/cyan data accents,
-amber warnings, and red risk states balanced by neutral blue-green structure. CSS
-variables define colors, surfaces, elevation, blur, spacing, radii, and motion
-timings so the scene and surrounding panels share one language.
+The visual palette uses graphite, charcoal, and slate operational surfaces with
+restrained teal/cyan active-data accents, amber warnings, and red risk states.
+Teal/cyan never becomes the dominant field color. CSS variables define colors,
+surfaces, elevation, blur, spacing, radii, and motion timings so the scene and
+analytical panels share one language. Bloom/glow is selective and signal-driven:
+it is applied only to active routes, focused nodes, or risk pulses, never as a
+global dashboard treatment.
 
 ## React and Three.js Lifecycle
 
@@ -112,13 +167,14 @@ node, and releases references so route changes cannot leak WebGL contexts.
 
 The heavy scene is lazy-loaded at the Operations hero boundary. Import or
 initialization failures render `GpuSceneFallback`, a static semantic spatial
-summary using the same `UrbanFieldState` values. The fallback is also selected
-when WebGL is unavailable or when reduced motion is requested. The fallback keeps
-the scene legend, key metrics, and keyboard focus path intact.
+summary using the same `UrbanFieldState` values. The fallback is selected when
+WebGL is unavailable or an equivalent capability fails; it is not selected merely
+because reduced motion is requested. The fallback keeps the scene legend, key
+metrics, and keyboard focus path intact.
 
 `prefers-reduced-motion` disables camera drift, deformation, route flow, and
-continuous pulses while retaining a stable, inspectable scene. Users can still
-focus entities and read state descriptions.
+continuous pulses while retaining the WebGL scene in a stable, inspectable
+configuration. Users can still focus entities and read state descriptions.
 
 ## Performance and Responsiveness
 
@@ -158,6 +214,18 @@ production build. The existing Playwright suite will inspect a desktop and a
 narrower laptop/mobile viewport, including console errors, source-mode labels,
 fallback behavior, and visible scene composition. Infrastructure lifecycle
 processes owned by PR-001 will not be restarted or terminated for this work.
+
+## Visual Quality Gate
+
+This checkpoint is not complete when tests and builds are green alone. After the
+browser implementation, the visual review must capture evidence at a standard
+desktop viewport and a narrower laptop viewport, then compare the actual result
+against the supplied Codrops Interactive 3D Cluster reference direction. The
+review explicitly evaluates spatial depth, composition, lighting, material
+response, motion restraint, hover interaction, analytical information density,
+and overall polish. If the result reads as a flat mock, generic rotating object,
+basic Three.js sample, or conventional dark admin dashboard, implementation must
+iterate before the checkpoint can be declared passed.
 
 ## Future Integration Points
 
