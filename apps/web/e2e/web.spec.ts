@@ -303,21 +303,6 @@ test.describe("role-aware web smoke", () => {
       expect(route.request().headers()["x-actor"]).toBe("operator");
       await route.fulfill({ json: operations });
     });
-    await page.route("**/api/v1/dispatch/snapshot", async (route) => {
-      expect(route.request().headers().authorization).toBe(`Bearer ${liveAccessToken}`);
-      await route.fulfill({
-        json: {
-          source: "live",
-          strategy: "weighted-greedy",
-          strategy_version: "1.0.0",
-          selected_courier: null,
-          score: null,
-          rationale: ["No fresh courier candidates"],
-          latency_millis: 4,
-          trace_id: "trace-stale",
-        },
-      });
-    });
     await page.route("**/api/v1/events/stream**", async (route) => {
       expect(route.request().headers().authorization).toBe(`Bearer ${liveAccessToken}`);
       expect(route.request().url()).not.toContain(liveAccessToken);
@@ -349,7 +334,7 @@ test.describe("role-aware web smoke", () => {
     });
     await page.goto("/operations");
     await expect(page.getByText("Operational projections degraded")).toBeVisible();
-    await expect(page.getByText(/courier location stale/)).toBeVisible();
+    await expect(page.getByText(/operational freshness degraded/)).toBeVisible();
     await expect(page.getByRole("status").filter({ hasText: "Stream stale" })).toBeVisible();
     await expect(page.getByText("Retention boundary reached")).toBeVisible();
     const results = await new AxeBuilder({ page }).analyze();
