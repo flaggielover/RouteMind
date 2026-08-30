@@ -6,6 +6,18 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
+## Product & Demo Readiness Campaign
+
+Audit checkpoint at `9e6a0ff` produced `docs/product/PRODUCT_READINESS.md` and
+`docs/product/PRODUCT_READINESS_BACKLOG.md`. This campaign uses the separate
+`PR-*` namespace and does not change Round 4 progress, frozen scientific
+results, Human Gates, or external-operation evidence. The audit is
+`AUDITED / IMPLEMENTATION_READY`; `PR-001` is the first eligible local task.
+The bounded audit observed Docker/Compose startup not returning, independent
+Python and web startup working, and the existing web Vitest run reporting three
+worker startup timeouts after 96 tests passed. Preserve `.codex-tmp/` as
+pre-existing untracked state.
+
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 
 R4-422 operator-observed delivery confirmation (2026-08-30): the operator

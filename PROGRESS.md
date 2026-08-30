@@ -2,6 +2,14 @@
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
+## Product & Demo Readiness Campaign
+
+Audit checkpoint created at `9e6a0ff` with `docs/product/PRODUCT_READINESS.md`
+and `docs/product/PRODUCT_READINESS_BACKLOG.md`. The separate `PR-*` namespace
+records local product work without changing Round 4 progress, frozen scientific
+results, Human Gates, or external-operation evidence. Audit verdict:
+`AUDITED / IMPLEMENTATION_READY`; first eligible task is `PR-001`.
+
 Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
