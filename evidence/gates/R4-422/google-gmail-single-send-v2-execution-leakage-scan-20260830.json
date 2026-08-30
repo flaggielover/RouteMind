@@ -1,0 +1,16 @@
+{
+  "taskId": "R4-422",
+  "artifact": "google-gmail-single-send-v2-execution-preflight-20260830",
+  "scan": "PASS",
+  "scannedFor": [
+    "access_token",
+    "refresh_token",
+    "client_secret",
+    "credential_value",
+    "raw_address",
+    "message_body",
+    "raw_provider_response"
+  ],
+  "rawSecretsRecorded": false,
+  "historicalEvidenceModified": false
+}

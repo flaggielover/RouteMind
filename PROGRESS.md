@@ -12,7 +12,20 @@ Round 4 Progress: 10 / 38 tasks passed
 
 Repository Total: 167 / 197 tasks passed
 
-Current Task: R4-422 - GMAIL V2 SEND CONTRACT HUMAN GATE REQUIRED
+Current Task: R4-422 - GMAIL V2 SEND PREFLIGHT FAILED (CREDENTIAL REFRESH REQUIRED)
+
+R4-422 Gmail V2 approved single-send execution (2026-08-30): the exact
+contract digest `033bd4e5e3c92b65d94191a30fcae7d852dc92ae7441ef18c8bf8f959cba371f`
+was validated, but the repository-external stored credential required refresh.
+Because the contract forbids credential refresh, the executor failed closed before
+any Gmail request. Gmail API requests, `users.messages.send` requests, refreshes,
+OAuth sessions, token exchanges, browser/SSH sessions, retries, fallback, email
+sends, mutations, and cost were all zero. No provider, delivery, or production
+claim is made. Redacted execution and leakage evidence is under
+`evidence/gates/R4-422/google-gmail-single-send-v2-execution-preflight-20260830.*`.
+The consumed contract cannot be retried or reused; a new independent refresh or
+send contract and Human Gate is required. Historical evidence and R3-325 remain
+unchanged.
 
 R4-422 Gmail V2 exactly-one send contract preparation (2026-08-30): a new
 independent contract

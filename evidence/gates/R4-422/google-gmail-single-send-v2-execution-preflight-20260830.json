@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "contract": "contracts/provider/r4-422-google-gmail-single-send-validation-v2.json",
+  "contractSha256": "033bd4e5e3c92b65d94191a30fcae7d852dc92ae7441ef18c8bf8f959cba371f",
+  "executionStatus": "PREFLIGHT_FAILED",
+  "failureReason": "CREDENTIAL_REFRESH_REQUIRED",
+  "observedAt": "2026-08-30T10:20:00+08:00",
+  "preflight": {
+    "contractDigestValidated": true,
+    "tokenStoreExternal": true,
+    "storedCredentialLoading": "AVAILABLE",
+    "credentialRefreshRequired": true,
+    "credentialRefreshCapability": "AVAILABLE",
+    "credentialRefreshPolicy": "FAIL_IF_REQUIRED",
+    "senderSynthetic": true,
+    "recipientCount": 0,
+    "recipientSynthetic": true,
+    "adapterEnabledOnlyForExecution": true
+  },
+  "operations": {
+    "gmailApiRequests": 0,
+    "usersMessagesSendRequests": 0,
+    "credentialRefreshRequests": 0,
+    "oauthSessions": 0,
+    "tokenExchanges": 0,
+    "browserSessions": 0,
+    "sshSessions": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "googleResourceMutations": 0,
+    "accountMutations": 0,
+    "emailSends": 0
+  },
+  "claims": {
+    "providerValidated": false,
+    "deliveryValidated": false,
+    "productionValidated": false,
+    "targetClaim": "NONE"
+  },
+  "security": {
+    "rawAddressesRecorded": false,
+    "credentialValuesRecorded": false,
+    "rawProviderResponseRecorded": false,
+    "leakageScan": "PASS"
+  },
+  "historicalEvidencePreserved": true,
+  "r3_325Frozen": "E-PASS / X-PASS / S-FAIL / C-NO-CLAIM"
+}
