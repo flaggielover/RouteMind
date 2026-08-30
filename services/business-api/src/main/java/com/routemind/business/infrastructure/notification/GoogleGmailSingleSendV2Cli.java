@@ -100,13 +100,13 @@ public final class GoogleGmailSingleSendV2Cli {
 		if (readiness.status() != GoogleGmailCredentialRefreshReadiness.Status.READY_WITHOUT_REFRESH) {
 			throw new PreflightFailure("CREDENTIAL_REFRESH_REQUIRED");
 		}
-		String accessToken = credential.getAccessToken();
-		if (accessToken == null || accessToken.isBlank()) {
+		String authorizationToken = credential.getAccessToken();
+		if (authorizationToken == null || authorizationToken.isBlank()) {
 			throw new PreflightFailure("ACCESS_TOKEN_UNAVAILABLE");
 		}
 
 		AtomicReference<GoogleGmailErrorObservation> observation = new AtomicReference<>();
-		HttpRequestInitializer initializer = request -> configureRequest(request, accessToken);
+		HttpRequestInitializer initializer = request -> configureRequest(request, authorizationToken);
 		Gmail client = new GoogleGmailClientFactory().create(properties, initializer);
 		GoogleGmailNotificationProvider provider = new GoogleGmailNotificationProvider(client, properties,
 				new GoogleGmailRequestFactory(), observation::set);
@@ -121,7 +121,7 @@ public final class GoogleGmailSingleSendV2Cli {
 		printOutcome(outcome, recorded, startedAt);
 	}
 
-	static void configureRequest(HttpRequest request, String accessToken) {
+	static void configureRequest(HttpRequest request, String authorizationToken) {
 		request.setNumberOfRetries(0);
 		request.setFollowRedirects(false);
 		request.setIOExceptionHandler(null);
@@ -129,7 +129,7 @@ public final class GoogleGmailSingleSendV2Cli {
 		request.setConnectTimeout(10_000);
 		request.setReadTimeout(30_000);
 		HttpHeaders headers = request.getHeaders();
-		headers.setAuthorization("Bearer " + accessToken);
+		headers.setAuthorization("Bearer " + authorizationToken);
 	}
 
 	private static NotificationRequest syntheticRequest(String sender, String recipient) {
