@@ -129,8 +129,10 @@ cross-service setup do not.
 ## Implementation Checkpoint
 
 `PR-001` is implemented in `e3c2c57` and passed Actions run `33298506156`.
-`scripts/dev-up.ps1` now provides bounded `check`, `up`, `status`, and `down`
-operations, tracks only processes it starts, waits for Java/Python/web health,
-captures logs, and preserves Compose volumes. On the audit machine Docker startup
-timed out after the requested 15-second bound; the failure was explicit and
-cleanup left no tracked application state. The next eligible task is `PR-002`.
+`PR-002` is implemented in the current checkpoint and adds `.env` validation,
+explicit PostgreSQL/RabbitMQ/Redis health probing, phase checkpoints, process
+early-exit detection, and bounded log-tail diagnostics. Focused local checks pass;
+the bounded startup observation still times out explicitly when Docker Desktop is
+unresponsive and leaves no tracked application state. Evidence is under
+`evidence/gates/PR-002/readiness-diagnostics.md`. The next eligible task is
+`PR-003`.

@@ -17,7 +17,9 @@ The bounded audit observed Docker/Compose startup not returning, independent
 Python and web startup working, and the existing web Vitest run reporting three
 worker startup timeouts after 96 tests passed. Preserve `.codex-tmp/` as
 pre-existing untracked state. `PR-001` is implemented in `e3c2c57` with green
-Actions run `33298506156`; continue with `PR-002` dependency/readiness diagnostics.
+Actions run `33298506156`. `PR-002` is implemented in the current checkpoint;
+its evidence is under `evidence/gates/PR-002/readiness-diagnostics.md`, and the
+next eligible task is `PR-003`.
 
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 

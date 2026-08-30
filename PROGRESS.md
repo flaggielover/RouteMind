@@ -11,7 +11,11 @@ results, Human Gates, or external-operation evidence. Audit verdict:
 `AUDITED / IMPLEMENTATION_READY`; first eligible task is `PR-001`.
 `PR-001` is implemented in checkpoint `e3c2c57`; local bounded lifecycle evidence
 is under `evidence/gates/PR-001/local-lifecycle.md`, and Actions run `33298506156`
-is green. The next eligible product task is `PR-002`.
+is green. `PR-002` is implemented in the current checkpoint with readiness,
+configuration, phase, and diagnostic evidence under
+`evidence/gates/PR-002/readiness-diagnostics.md`; its focused checks pass and the
+bounded Docker failure remains explicit. The next eligible product task is
+`PR-003`.
 
 Round 2 Progress: 48 / 48 tasks passed
 

@@ -49,6 +49,32 @@ function Get-LogPath([string] $Service, [string] $Stream) {
     return Join-Path $runtimeRoot "$Service.$Stream.log"
 }
 
+function Ensure-EnvironmentFile {
+    $envFile = Join-Path $root ".env"
+    $example = Join-Path $root ".env.example"
+    if (-not (Test-Path -LiteralPath $envFile -PathType Leaf)) {
+        Copy-Item -LiteralPath $example -Destination $envFile
+        Write-Host "Created .env from .env.example"
+    }
+    $required = @(
+        "POSTGRES_DB", "POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_PORT",
+        "RABBITMQ_DEFAULT_USER", "RABBITMQ_DEFAULT_PASS", "RABBITMQ_AMQP_PORT",
+        "RABBITMQ_MANAGEMENT_PORT", "REDIS_PASSWORD", "REDIS_PORT",
+        "BUSINESS_API_PORT", "COMPUTE_API_PORT"
+    )
+    $values = @{}
+    foreach ($line in Get-Content -LiteralPath $envFile) {
+        if ($line -match '^\s*([A-Za-z_][A-Za-z0-9_]*)=(.*)$') {
+            $values[$Matches[1]] = $Matches[2].Trim()
+        }
+    }
+    $missing = @($required | Where-Object { -not $values.ContainsKey($_) -or [string]::IsNullOrWhiteSpace($values[$_]) })
+    if ($missing.Count -gt 0) {
+        throw "Local configuration is missing values for: $($missing -join ', '). Edit .env using .env.example placeholders."
+    }
+    Write-Host "Configuration: .env values present ($envFile)"
+}
+
 function Read-State {
     if (-not (Test-Path -LiteralPath $statePath -PathType Leaf)) {
         return $null
@@ -105,9 +131,9 @@ function Invoke-BoundedCommand {
     return [pscustomobject]@{ stdout = $stdout; stderr = $stderr }
 }
 
-function Invoke-Compose([string[]] $Arguments, [string] $Label) {
+function Invoke-Compose([string[]] $Arguments, [string] $Label, [int] $CommandTimeout = $TimeoutSeconds) {
     $docker = (Get-Command docker -ErrorAction Stop).Source
-    Invoke-BoundedCommand -FilePath $docker -ArgumentList (@("compose") + $Arguments) -Label $Label -Timeout $TimeoutSeconds | Out-Null
+    return Invoke-BoundedCommand -FilePath $docker -ArgumentList (@("compose") + $Arguments) -Label $Label -Timeout $CommandTimeout
 }
 
 function Start-TrackedService {
@@ -172,26 +198,91 @@ function Stop-TrackedState($State) {
     }
 }
 
+function Get-LogTail($Service) {
+    $parts = @()
+    foreach ($path in @($Service.stdout, $Service.stderr)) {
+        if (Test-Path -LiteralPath $path -PathType Leaf) {
+            $parts += "--- $path ---"
+            $parts += Get-Content -LiteralPath $path -Tail 20
+        }
+    }
+    return ($parts -join "`n")
+}
+
 function Test-Endpoint([string] $Endpoint) {
     try {
-        $response = Invoke-RestMethod -Uri $Endpoint -TimeoutSec 5
-        if ($response.status -eq "UP" -or $response.status -eq "healthy") { return "healthy" }
-        return "responded:$($response.status)"
+        $response = Invoke-WebRequest -Uri $Endpoint -TimeoutSec 5
+        if ($response.StatusCode -lt 200 -or $response.StatusCode -ge 300) {
+            return "http:$($response.StatusCode)"
+        }
+        try {
+            $body = $response.Content | ConvertFrom-Json
+            if ($body.status -eq "UP" -or $body.status -eq "healthy") { return "healthy" }
+            if ($null -ne $body.status) { return "responded:$($body.status)" }
+        }
+        catch { }
+        return "healthy"
     }
     catch {
         return "unavailable"
     }
 }
 
-function Wait-Endpoint([string] $Name, [string] $Endpoint, [int] $Timeout) {
+function Wait-Endpoint([string] $Name, [string] $Endpoint, [int] $Timeout, $Service) {
     $deadline = (Get-Date).AddSeconds($Timeout)
     do {
+        if ($Service) {
+            try {
+                Get-Process -Id ([int]$Service.pid) -ErrorAction Stop | Out-Null
+            }
+            catch {
+                throw "$Name exited before readiness at $Endpoint.`n$(Get-LogTail $Service)"
+            }
+        }
         $status = Test-Endpoint $Endpoint
         Write-Host "Readiness: $Name=$status"
         if ($status -eq "healthy") { return }
         Start-Sleep -Seconds 2
     } while ((Get-Date) -lt $deadline)
-    throw "$Name did not become ready at $Endpoint within $Timeout seconds"
+    $tail = if ($Service) { Get-LogTail $Service } else { "" }
+    throw "$Name did not become ready at $Endpoint within $Timeout seconds.`n$tail"
+}
+
+function Wait-ComposeHealthy([int] $Timeout) {
+    $services = @("postgres", "rabbitmq", "redis")
+    $deadline = (Get-Date).AddSeconds($Timeout)
+    $probeTimeout = [Math]::Min(15, $Timeout)
+    do {
+        $states = @{}
+        foreach ($service in $services) {
+            try {
+                $query = Invoke-Compose -Arguments @("ps", "-q", $service) -Label "Inspect $service container" -CommandTimeout $probeTimeout
+                $containerId = ((Get-Content -Raw -LiteralPath $query.stdout) -split "\s+")[0].Trim()
+                if (-not $containerId) {
+                    $states[$service] = "missing"
+                    continue
+                }
+                $inspect = Invoke-BoundedCommand -FilePath ((Get-Command docker).Source) `
+                    -ArgumentList @("inspect", "--format", "{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}", $containerId) `
+                    -Label "Inspect $service health" -Timeout $probeTimeout
+                $states[$service] = (Get-Content -Raw -LiteralPath $inspect.stdout).Trim()
+            }
+            catch {
+                $states[$service] = "probe-timeout"
+            }
+        }
+        $summary = ($services | ForEach-Object { "$_=$($states[$_])" }) -join ", "
+        Write-Host "Infrastructure readiness: $summary"
+        if (@($states.Values | Where-Object { $_ -ne "healthy" }).Count -eq 0) {
+            Write-Host "PASS: PostgreSQL, RabbitMQ, and Redis are healthy"
+            return
+        }
+        if (@($states.Values | Where-Object { $_ -eq "unhealthy" }).Count -gt 0) {
+            throw "Infrastructure reported unhealthy state: $summary"
+        }
+        Start-Sleep -Seconds 2
+    } while ((Get-Date) -lt $deadline)
+    throw "Infrastructure did not become healthy within $Timeout seconds"
 }
 
 function Invoke-Check {
@@ -205,6 +296,7 @@ function Invoke-Check {
     if (-not (Test-Path -LiteralPath (Join-Path $root "compose.yaml") -PathType Leaf)) {
         throw "compose.yaml is missing"
     }
+    Ensure-EnvironmentFile
     Invoke-Compose -Arguments @("config", "--quiet") -Label "Compose configuration validation"
     Write-Host "PASS: local lifecycle prerequisites and Compose configuration"
 }
@@ -264,10 +356,15 @@ function Invoke-Up {
     }
 
     Invoke-Check
-    $state = [pscustomobject]@{ schema = "routemind-local-runtime.v1"; startedAtUtc = [DateTime]::UtcNow.ToString("o"); services = @() }
+    $state = [pscustomobject]@{ schema = "routemind-local-runtime.v1"; startedAtUtc = [DateTime]::UtcNow.ToString("o"); phase = "starting"; services = @() }
     try {
+        $state.phase = "infrastructure"
+        Write-State $state
         Invoke-Compose -Arguments @("up", "-d", "--pull", "missing") -Label "Infrastructure startup"
+        Wait-ComposeHealthy $TimeoutSeconds
 
+        $state.phase = "application-services"
+        Write-State $state
         $business = Start-TrackedService -Name "business-api" -ScriptPath (Join-Path $PSScriptRoot "business-api.ps1") `
             -ActionName "run" -Environment @{ ROUTEMIND_REDIS_PROJECTION_ENABLED = "true" } -Endpoint "$businessUri/actuator/health"
         $compute = Start-TrackedService -Name "compute-api" -ScriptPath (Join-Path $PSScriptRoot "compute-api.ps1") `
@@ -275,15 +372,21 @@ function Invoke-Up {
         $state.services = @($business, $compute)
         Write-State $state
 
-        Wait-Endpoint "business-api" $business.endpoint $TimeoutSeconds
-        Wait-Endpoint "compute-api" $compute.endpoint $TimeoutSeconds
+        $state.phase = "api-readiness"
+        Write-State $state
+        Wait-Endpoint "business-api" $business.endpoint $TimeoutSeconds $business
+        Wait-Endpoint "compute-api" $compute.endpoint $TimeoutSeconds $compute
 
         if (-not $SkipWeb) {
+            $state.phase = "web-startup"
+            Write-State $state
             $web = Start-TrackedService -Name "web" -ScriptPath (Join-Path $PSScriptRoot "web-dev.ps1") `
                 -ActionName "run" -Endpoint $webUri
             $state.services = @($business, $compute, $web)
             Write-State $state
-            Wait-Endpoint "web" $web.endpoint 60
+            $state.phase = "web-readiness"
+            Write-State $state
+            Wait-Endpoint "web" $web.endpoint 60 $web
         }
 
         Write-Host "RouteMind local runtime is ready"
