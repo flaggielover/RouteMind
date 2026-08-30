@@ -277,7 +277,9 @@ test.describe("role-aware web smoke", () => {
       page.getByRole("status").filter({ hasText: "Loading operational projections" }),
     ).toBeVisible();
     releaseOperations();
-    await expect(page.getByText("Live unavailable: HTTP 503")).toBeVisible();
+    await expect(
+      page.getByRole("status").filter({ hasText: "Live unavailable: HTTP 503" }),
+    ).toBeVisible();
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations, "live unavailable accessibility violations").toEqual([]);
   });
@@ -334,9 +336,9 @@ test.describe("role-aware web smoke", () => {
     });
     await page.goto("/operations");
     await expect(page.getByText("Operational projections degraded")).toBeVisible();
-    await expect(page.getByText(/operational freshness degraded/)).toBeVisible();
+    await expect(page.getByText(/operational freshness degraded/).first()).toBeVisible();
     await expect(page.getByRole("status").filter({ hasText: "Stream stale" })).toBeVisible();
-    await expect(page.getByText("Retention boundary reached")).toBeVisible();
+    await expect(page.getByText("Retention boundary reached", { exact: true })).toBeVisible();
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations, "stale live accessibility violations").toEqual([]);
   });
