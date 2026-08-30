@@ -22,8 +22,74 @@ keyboard behavior, and Axe checks pass. Local evidence: formatting, lint,
 typecheck, 40 unit files / 112 tests, production build, and 36 Playwright passes
 with two intentional skips. Evidence is under
 `evidence/gates/PR-008/product-ux-closure.md`. Preserve unrelated untracked work,
-including `.codex-tmp/`, `.superpowers/`, and the concurrent RM-241 anomaly
-research files.
+including `.codex-tmp/` and `.superpowers/`.
+
+## RM-241 Synthetic Observation & Anomaly Discovery
+
+Repository: `F:\Projects\RouteMind`
+
+Branch: `main`
+
+HEAD / origin: implementation checkpoint is ahead of `origin/main` until this
+handoff commit is pushed.
+
+Checkpoint: `RM-241` (RM-238 is already the frontend visual-foundation task)
+
+Scenario catalog: `product-readiness-scenarios-v1`, eight frozen scenarios
+
+Scenarios executed: `NORMAL_BASELINE`, `DINNER_RUSH`, `COURIER_SHORTAGE`,
+`MERCHANT_DELAY`, `TRAFFIC_DEGRADATION`, `ROUTING_PROVIDER_FAILURE`,
+`DISPATCH_PRESSURE`, `RECOVERY`
+
+Seeds per scenario: 16
+
+Total runs: 128
+
+Raw artifact root: `ROUTEMIND_DATA_ROOT`
+
+Raw data committed to Git: **NO**
+
+Observation schema: `routemind-policy-observation-v1`
+
+Replay consistency: **PASS**
+
+Observation quality: **PASS**
+
+Candidate anomalies detected: **2**
+
+Candidate table:
+
+- `AD-001` | all eight scenarios | 128/128 runs, 16 seeds each | fixed
+  `nearest` strategy explains the zero-switch/single-policy occupancy pattern |
+  `EXPLAINED`
+- `AD-002` | `ROUTING_PROVIDER_FAILURE` | 16/16 runs, 16 seeds | fallback is
+  exercised in the travel layer but not copied into policy observation state |
+  `MEASUREMENT_ARTIFACT`
+
+Unexplained residues: **0**
+
+Historical scientific results modified: **NO**
+
+R3-325: **UNCHANGED**
+
+Prior killed candidates reopened: **NO**
+
+Scientific claims promoted: **NONE**
+
+Cloud/API resources used: **NONE**
+
+Cost: **USD 0.00**
+
+Tests: focused campaign tests 5/5; runner formatting, lint, and mypy pass.
+
+CI: pending for the final handoff commit; no external validation was used.
+
+Final research trigger: **NO_RESEARCH_TRIGGER**
+
+The research line remains frozen. Compact campaign artifacts are under
+`research/anomaly_discovery/`; raw JSONL and its manifest are under
+`ROUTEMIND_DATA_ROOT/research-observations/` with SHA-256
+`bee86ff2d804dc6ae99d54d6b27a2539bdd17736aba68085d9982c8f8619192b`.
 
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 

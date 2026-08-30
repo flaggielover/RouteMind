@@ -18,15 +18,35 @@ across desktop/mobile and Axe. It remains `validating` until its published
 checkpoint is green in CI. Evidence is under
 `evidence/gates/PR-008/product-ux-closure.md`.
 
+## Synthetic Observation & Anomaly Discovery Campaign
+
+RM-241 completed on 2026-08-30 as a bounded local observation campaign. The
+frozen eight-scenario `product-readiness-scenarios-v1` catalog was executed with
+16 seeds per scenario (128 runs, 640 policy observations) through the existing
+`ScenarioKernel` and RM-237 exporter. Replay, schema, ordering, provenance,
+digest, redaction, and `ROUTEMIND_DATA_ROOT` checks passed. Raw JSONL remains
+external with SHA-256
+`bee86ff2d804dc6ae99d54d6b27a2539bdd17736aba68085d9982c8f8619192b`; no raw
+data is committed to Git.
+
+Two reproducible candidates were recorded: zero switching/single-policy
+occupancy across all scenarios (`EXPLAINED` by the fixed `nearest` runner), and
+missing non-`NONE` fallback state in the provider-failure trace
+(`MEASUREMENT_ARTIFACT` because travel fallback is not copied into policy
+observations). No `UNEXPLAINED_RESIDUE` survived the simple explanation attack;
+the final research trigger is `NO_RESEARCH_TRIGGER`. Frozen R3-325 and all prior
+scientific results remain unchanged. Evidence and compact artifacts are under
+`evidence/gates/RM-241/` and `research/anomaly_discovery/`.
+
 Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
 
-Enhancement Progress: 27 / 27 tasks passed (RM-210 through RM-236)
+Enhancement Progress: 32 / 32 tasks passed (RM-210 through RM-241)
 
 Round 4 Progress: 10 / 38 tasks passed
 
-Repository Total: 167 / 197 tasks passed
+Repository Total: 171 / 201 tasks passed
 
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 
