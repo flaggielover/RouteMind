@@ -33,6 +33,8 @@ Scope: local simulation/replay only; no external operation or scientific claim.
 
 - PR-002 implementation `9671126b1e983a9b6ddeaa3ce075041d677de84c`:
   Actions run `33299312559`, all five jobs successful.
+- PR-003 implementation `539b2a24c42731b2af451cba9e6c2cb9af11d6e9`:
+  Actions run `33299831918`, all five jobs successful.
 
 This evidence qualifies deterministic local scenario setup and replay only. It is
 not a production, external-provider, performance, or scientific claim.

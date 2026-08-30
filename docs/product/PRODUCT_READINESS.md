@@ -137,7 +137,8 @@ unresponsive and leaves no tracked application state. Evidence is under
 `evidence/gates/PR-002/readiness-diagnostics.md`. The next eligible task is
 `PR-003`.
 
-`PR-003` is implemented in the current checkpoint with the finite catalog
+`PR-003` is implemented in checkpoint `539b2a2` and passed Actions run
+`33299831918`. It adds the finite catalog
 `docs/product/scenarios/product-readiness-scenarios-v1.json` and the deterministic
 runner `scripts/deterministic_scenarios.py`. All eight named scenarios derive
 inputs from `(scenario_id, seed)`, run through the existing `ScenarioKernel`,
