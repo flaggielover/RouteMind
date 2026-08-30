@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "evidenceType": "OPERATOR_OBSERVED_DELIVERY",
+  "taskId": "R4-422",
+  "contract": "contracts/provider/r4-422-google-gmail-refresh-if-required-single-send-v1.json",
+  "contractSha256": "35702d6d6698b78f08757b2560deb2bfee50503d0b8cc90b8fd2fcdf9431535f",
+  "linkedExecutionEvidence": [
+    "evidence/gates/R4-422/google-gmail-refresh-if-required-single-send-execution-20260830.json",
+    "evidence/gates/R4-422/google-gmail-refresh-if-required-single-send-execution-20260830.md",
+    "evidence/gates/R4-422/google-gmail-refresh-if-required-single-send-execution-20260830-leakage-scan.json"
+  ],
+  "observedAtUtc": "2026-08-30T05:27:05.495Z",
+  "operatorConfirmation": {
+    "OPERATOR_OBSERVED_DELIVERY": true,
+    "scope": "ONE_SYNTHETIC_MESSAGE_FROM_COMPLETED_EXECUTION",
+    "source": "OPERATOR_CONFIRMATION_IN_CURRENT_TASK",
+    "receivedInIntendedGoogleMailbox": true,
+    "mailboxAddressRecorded": false,
+    "messageIdentifierRecorded": false,
+    "agentMailboxAccessPerformed": false
+  },
+  "distinctions": {
+    "providerAcceptanceObserved": true,
+    "providerAcceptanceSource": "LINKED_EXECUTION_HTTP_200",
+    "singleMessageDeliveryObserved": true,
+    "deliveryVerificationMethod": "OPERATOR_OBSERVED_CONFIRMATION_ONLY",
+    "providerWideValidationClaim": false,
+    "productionClaim": false,
+    "slaClaim": false
+  },
+  "postExecutionOperations": {
+    "gmailApiRequests": 0,
+    "usersMessagesSendRequests": 0,
+    "tokenRefreshRequests": 0,
+    "oauthSessions": 0,
+    "tokenExchanges": 0,
+    "browserSessions": 0,
+    "sshSessions": 0,
+    "emailOperations": 0,
+    "reads": 0,
+    "retries": 0,
+    "fallbacks": 0,
+    "googleResourceMutations": 0,
+    "accountMutations": 0
+  },
+  "privacy": {
+    "credentialValuesRecorded": false,
+    "tokenValuesRecorded": false,
+    "authorizationHeadersRecorded": false,
+    "rawProviderResponseRecorded": false,
+    "rawAddressesRecorded": false,
+    "messageContentRecorded": false,
+    "externalPathsRecorded": false
+  },
+  "contractConsumed": true,
+  "historicalEvidencePreserved": true,
+  "historicalContractsReusable": false,
+  "status": "LIVE_VALIDATED / PROVIDER_ACCEPTED / DELIVERY_OBSERVED / NO_PRODUCTION_CLAIM",
+  "leakageScan": "PASS",
+  "nextAction": "STOP; NEW_CONTRACT_AND_HUMAN_GATE_REQUIRED_FOR_ANY_FUTURE_OPERATION"
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "taskId": "R4-422",
+  "artifact": "google-gmail-refresh-if-required-single-send-delivery-observation-20260830",
+  "contractSha256": "35702d6d6698b78f08757b2560deb2bfee50503d0b8cc90b8fd2fcdf9431535f",
+  "result": "PASS_REDACTED_OPERATOR_ASSERTION_ONLY",
+  "scopes": [
+    "repository-tracked-files",
+    "operator-confirmation-metadata",
+    "linked-execution-evidence"
+  ],
+  "credentialValuesDetected": false,
+  "tokenValuesDetected": false,
+  "clientSecretsDetected": false,
+  "authorizationHeadersDetected": false,
+  "rawTokenResponsesDetected": false,
+  "emailAddressesDetected": false,
+  "messageContentDetected": false,
+  "externalPathsDetected": false,
+  "mailboxReadPerformed": false,
+  "postExecutionExternalOperations": 0,
+  "historicalEvidenceModified": false
+}

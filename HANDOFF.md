@@ -6,7 +6,22 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
-Current Task: R4-422 - GMAIL V2 SEND PREFLIGHT FAILED (CREDENTIAL REFRESH REQUIRED)
+Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
+
+R4-422 operator-observed delivery confirmation (2026-08-30): the operator
+confirms that the one synthetic message from the already consumed live contract
+was received in the intended Google mailbox. This is recorded as
+`OPERATOR_OBSERVED_DELIVERY = TRUE` in a separate sanitized artifact linked to
+the exact contract SHA-256 and completed execution evidence. The execution
+artifact remains an immutable provider-call snapshot with `deliveryConfirmed:
+false`; the operator observation is intentionally kept distinct from provider
+acceptance, provider-wide validation, and any production or SLA claim. No Gmail
+API, OAuth, refresh, browser, SSH, mailbox read, retry, fallback, or email
+operation was performed for this confirmation. Final bounded state is
+`LIVE_VALIDATED / PROVIDER_ACCEPTED / DELIVERY_OBSERVED / NO_PRODUCTION_CLAIM`.
+Evidence and leakage scan:
+`evidence/gates/R4-422/google-gmail-refresh-if-required-single-send-delivery-observation-20260830.*`.
+The consumed contract remains unchanged and non-reusable.
 
 R4-422 Gmail refresh-if-required single-send execution (2026-08-30): the
 approved independent contract
