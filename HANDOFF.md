@@ -1568,6 +1568,27 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   eligible, while RM-230 is the active reliability sequence.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
 
+## RM-238 Frontend Visual Foundation (2026-08-30)
+
+Implemented and validated in the existing React 19 web app. Operations now has
+a lazy native Three.js spatial field plus a shared analytical visualization
+foundation. `UrbanFieldState` preserves normalized semantic metrics and optional
+future spatial cells/nodes/flows/zones; reduced motion freezes WebGL motion
+instead of replacing it with fallback. WebGL capability/init failure still
+falls back to an accessible static summary.
+
+Evidence is `evidence/gates/RM-238/frontend-visual-foundation.md`. Focused and
+full unit gates pass (39 files/108 tests), production build passes, and
+`npx playwright test --workers=4` passes 34 tests with two existing skips,
+including desktop/mobile Axe and overflow checks. Manual browser review covered
+desktop, 1024px, and 760px Demo views. The current visual data is deterministic
+demo or selected-snapshot derived; no production telemetry, H3, backend/API,
+Digital Twin calibration, or infrastructure lifecycle behavior is claimed.
+
+The worktree also contains unrelated concurrent PR-001 files and ignored local
+`.codex-tmp/`, `.superpowers/`, and Playwright artifacts; these were preserved
+and are not part of the visual checkpoint.
+
 ### R4-422 V2 closure and credential lifecycle audit - 2026-08-30
 
 The consumed V2 fail-closed execution was closed in checkpoint `1b7c41021f914bd2f1eb367fd3d417345729304d`, whose first remote CI run was `33290111559`. That run passed Python, Web, Resilience, and Java, but the control-plane security gate rejected a local token variable name lexically; no provider or credential operation occurred. The smallest source-only naming repair was committed separately as `3752f205d5d5e5cb5670ed03d86801dca0eb21e8` and passed all five jobs in remote CI run `33290659144`.

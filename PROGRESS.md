@@ -2466,3 +2466,19 @@ blocked at `HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT`.
 - Source-only naming repair checkpoint `3752f205d5d5e5cb5670ed03d86801dca0eb21e8` passed local full and resilience gates and all five jobs in CI run `33290659144`.
 - Offline audit evidence: `evidence/gates/R4-422/google-gmail-credential-lifecycle-offline-audit-20260830.json` plus its Markdown and leakage scan. Classification is `EXTERNAL_CREDENTIAL_BEHAVIOR_REQUIRES_FURTHER_EVIDENCE`, confidence is low for the historical cause, `localDefectConfirmed=false`, and no Phase 3 credential repair was made. Historical contracts and evidence remain unchanged.
 - Next safe action: stop. Do not retry or reuse V2; require a new independent credential/send contract and Human Gate for any future external operation.
+
+### RM-238 frontend visual foundation - 2026-08-30
+- React 19 Operations now lazy-loads a native Three.js UrbanFieldScene with a
+  deterministic OperationsSnapshot adapter, faceted intelligence core,
+  instanced pressure field, route ribbons, pointer wave/parallax, selective
+  bloom, reduced-motion freeze, DPR/resize/visibility controls, disposal, and
+  semantic WebGL fallback.
+- The Operations hero is paired with a reusable tokenized analytical strip for
+  throughput, SLA/risk, latency/throughput, strategy distribution, and zone
+  pressure heatmap. Optional spatial cells, nodes, flows, and zones preserve a
+  renderer-neutral Digital Twin extension point.
+- Evidence: `evidence/gates/RM-238/frontend-visual-foundation.md`. Local gates
+  pass 39 Vitest files/108 tests, build, and 34 Playwright passes with two
+  existing skips; desktop, 1024px, and 760px browser review found no overflow
+  and a nonblank WebGL canvas. This is deterministic demo/snapshot-derived
+  visualization only and introduces no backend or production claim.

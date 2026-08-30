@@ -90,7 +90,7 @@ export function AppShell({
   }, [mobileNavOpen]);
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell app-shell-${activeRole}`}>
       <aside className="sidebar" aria-label="RouteMind sidebar">
         <div className="sidebar-header">
           <div className="brand-lockup">

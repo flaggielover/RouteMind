@@ -120,9 +120,9 @@ field, and must label those values as visual demo state. The component exposes
 optional `onFocusEntity` and `onSceneReady` hooks for future drawers, decision
 x-ray links, and Digital Twin controls; Phase 1 does not invent new backend
 endpoints. The optional spatial collections follow existing `GeoPoint` and
-readonly-array conventions. They remain absent for Phase 1 demo data, but their
-presence does not require replacing the component API when H3/geohash cells,
-spatial nodes, flows, or risk zones arrive later.
+readonly-array conventions. Phase 1 populates them with deterministic demo
+cells, nodes, flows, and zones; live adapters can replace those collections with
+H3/geohash-backed state later without replacing the component API.
 
 ## WebGL Scene Design
 

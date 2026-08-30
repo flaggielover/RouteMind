@@ -8,7 +8,7 @@ import {
   PackageCheck,
   Route,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { BrowserRouter, Navigate, Route as RouterRoute, Routes } from "react-router-dom";
 import { demoDataSource } from "./data/demoSnapshot";
@@ -52,9 +52,14 @@ import { ActivityStream } from "./components/ActivityStream";
 import { SimulationControlPanel } from "./components/SimulationControlPanel";
 import { ReplayPlaybackPanel } from "./components/ReplayPlaybackPanel";
 import { StatusPill } from "./components/StatusPill";
+import { OperationsAnalyticalStrip } from "./components/AnalyticalVisualizationFoundation";
+import { UrbanFieldFallback } from "./components/UrbanFieldFallback";
 import { CourierView, CustomerView, MerchantView, StrategyView } from "./routes/RoleViews";
 import type { Order, OperationsSnapshot } from "./domain/model";
+import { toUrbanFieldState } from "./visuals/urbanFieldState";
 import "./styles.css";
+
+const LazyUrbanFieldScene = lazy(() => import("./components/UrbanFieldScene"));
 
 interface AppProps {
   dataSource?: OperationsDataSource;
@@ -388,6 +393,9 @@ function OperationsView({
   const zones = new Set(snapshot.couriers.map((courier) => courier.zone).filter(Boolean)).size;
   const openExceptions = countOpenExceptions(snapshot);
   const hasDispatchLatency = snapshot.availability === "ready" && snapshot.dispatch.latencyMs > 0;
+  const urbanFieldState = useMemo(() => toUrbanFieldState(snapshot), [snapshot]);
+  const sourceModeLabel =
+    snapshot.source === "live" ? "LIVE" : `${snapshot.source.toUpperCase()} · NON-PRODUCTION`;
   const filtersActive =
     zoneFilter !== "all" || lifecycleFilter !== "all" || exceptionsOnly || freshOnly;
   const clearFilters = () => {
@@ -495,6 +503,44 @@ function OperationsView({
       {(snapshot.source === "simulation" || snapshot.source === "replay") && (
         <TwinVisualizationPanel snapshot={snapshot} />
       )}
+      <section className="operations-hero" aria-labelledby="urban-field-title">
+        <div className="operations-hero-stage">
+          <div className="operations-hero-heading">
+            <div>
+              <p className="eyebrow">Urban operational field</p>
+              <h2 id="urban-field-title">City pressure, rendered as a living system.</h2>
+            </div>
+            <span className={`hero-mode-badge hero-mode-${snapshot.source}`}>
+              {sourceModeLabel}
+            </span>
+          </div>
+          <Suspense fallback={<UrbanFieldFallback state={urbanFieldState} />}>
+            <LazyUrbanFieldScene state={urbanFieldState} />
+          </Suspense>
+          <p className="hero-provenance">
+            {urbanFieldState.provenance === "snapshot-derived"
+              ? "Derived from the selected operational snapshot."
+              : "Deterministic visual demo state; not a production telemetry claim."}
+          </p>
+        </div>
+        <aside className="operations-hero-rail" aria-label="Urban field semantic state">
+          <div className="hero-rail-heading">
+            <p className="eyebrow">System readout</p>
+            <strong>{snapshot.dispatch.strategy}</strong>
+            <span>strategy active</span>
+          </div>
+          <HeroMeter label="Order pressure" value={urbanFieldState.pressure} tone="teal" />
+          <HeroMeter label="Courier supply" value={urbanFieldState.supply} tone="amber" />
+          <HeroMeter label="SLA risk" value={urbanFieldState.risk} tone="risk" />
+          <HeroMeter label="Traffic load" value={urbanFieldState.traffic} tone="slate" />
+          <HeroMeter label="Twin fidelity" value={urbanFieldState.twinFidelity} tone="teal" />
+          <div className="hero-rail-footnote">
+            <span className="hero-status-dot" />
+            <span>Signal mapping ready for live spatial state</span>
+          </div>
+        </aside>
+      </section>
+      <OperationsAnalyticalStrip snapshot={snapshot} />
       <section className="operations-health" aria-label="Operations projection health">
         <div>
           <p className="eyebrow">Projection health</p>
@@ -799,6 +845,28 @@ function OperationsView({
           )}
         </section>
       </section>
+    </div>
+  );
+}
+
+function HeroMeter({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: number;
+  tone: "teal" | "amber" | "risk" | "slate";
+}) {
+  return (
+    <div className="hero-meter">
+      <div className="hero-meter-label">
+        <span>{label}</span>
+        <strong>{Math.round(value * 100)}%</strong>
+      </div>
+      <div className={`hero-meter-track hero-meter-${tone}`} aria-hidden="true">
+        <span style={{ width: `${Math.round(value * 100)}%` }} />
+      </div>
     </div>
   );
 }
