@@ -64,6 +64,10 @@ not reopen research candidates or add a scientific claim. Remote GitHub Actions
 run `33319439637` passed all five jobs for implementation commit
 `23c25706b66c36a89b3b7a7ed8890ddd2761943c`; closure run `33319645285` passed
 all five jobs for final commit `906f5711dd672cb7aed7c8a066823380a9bb5e89`.
+The later documentation-only correction commit `3b8d4f3a02ae38cf720d1de36d5af6a8ab1b3d32`
+had one known unrelated desktop reconnect smoke failure in run `33319887670`
+(35 other browser tests and the mobile counterpart passed); the failed job
+rerun reproduced only that same pre-existing expectation.
 
 Round 2 Progress: 48 / 48 tasks passed
 

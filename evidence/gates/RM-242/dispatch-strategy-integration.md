@@ -45,3 +45,8 @@ production claim changed. Remote GitHub Actions run `33319439637` passed all
 five repository jobs for implementation commit
 `23c25706b66c36a89b3b7a7ed8890ddd2761943c`; closure run `33319645285` passed
 all five jobs for final commit `906f5711dd672cb7aed7c8a066823380a9bb5e89`.
+The later documentation-only correction commit `3b8d4f3a02ae38cf720d1de36d5af6a8ab1b3d32`
+was checked by run `33319887670`; its only failure was the pre-existing desktop
+reconnect smoke expectation for `Stream connected` (the mobile counterpart and
+all 35 other browser tests passed). A failed-job rerun reproduced that same
+unrelated test; no RM-242 strategy or registry test failed.
