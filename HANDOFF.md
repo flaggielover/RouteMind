@@ -1495,6 +1495,12 @@ dispatch integration and audit; RM-170 remains blocked by RM-136.
   eligible, while RM-230 is the active reliability sequence.
 - Human action required: NONE. Keep `.codex-tmp/` untouched and untracked.
 
+### R4-422 V2 closure and credential lifecycle audit - 2026-08-30
+
+The consumed V2 fail-closed execution was closed in checkpoint `1b7c41021f914bd2f1eb367fd3d417345729304d`, whose first remote CI run was `33290111559`. That run passed Python, Web, Resilience, and Java, but the control-plane security gate rejected a local token variable name lexically; no provider or credential operation occurred. The smallest source-only naming repair was committed separately as `3752f205d5d5e5cb5670ed03d86801dca0eb21e8` and passed all five jobs in remote CI run `33290659144`.
+
+The strictly offline lifecycle audit is recorded in `evidence/gates/R4-422/google-gmail-credential-lifecycle-offline-audit-20260830.*`. Source and cached Google OAuth bytecode show the refresh and V2 processes use the same external-store path policy, user-key loading algorithm, and automatic DataStore refresh listener. The historical evidence does not retain path identity or post-refresh store metadata, so the historical cause is classified as `EXTERNAL_CREDENTIAL_BEHAVIOR_REQUIRES_FURTHER_EVIDENCE` with low root-cause confidence. No local credential defect was confirmed and no Phase 3 credential repair was performed. All new external-operation counters remain zero. Do not reuse the consumed V2 contract; any future credential or send operation requires a new independent contract and Human Gate.
+
 Gmail exactly-one synthetic send Human Gate preparation (2026-08-29): the new
 independent contract
 `contracts/provider/r4-422-google-gmail-single-send-validation-v1.json` has

@@ -458,7 +458,7 @@
     "parent_task": "R4-422",
     "contract": "contracts/provider/r4-422-google-gmail-single-send-validation-v2.json",
     "canonical_sha256": "033bd4e5e3c92b65d94191a30fcae7d852dc92ae7441ef18c8bf8f959cba371f",
-    "status": "PREPARED_OFFLINE / HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT",
+    "status": "FAILED_PREFLIGHT_CREDENTIAL_REFRESH_REQUIRED / NO_GMAIL_API_CALL / NO_EMAIL_SENT",
     "provider": "GOOGLE_GMAIL",
     "api": "Gmail API v1",
     "operation": "users.messages.send",
@@ -494,14 +494,24 @@
       "evidence/gates/R4-422/google-gmail-single-send-v2-preparation-leakage-scan-20260830.json",
       "evidence/gates/R4-422/google-gmail-single-send-v2-execution-preflight-20260830.json",
       "evidence/gates/R4-422/google-gmail-single-send-v2-execution-preflight-20260830.md",
-      "evidence/gates/R4-422/google-gmail-single-send-v2-execution-leakage-scan-20260830.json"
+      "evidence/gates/R4-422/google-gmail-single-send-v2-execution-leakage-scan-20260830.json",
+      "evidence/gates/R4-422/google-gmail-credential-lifecycle-offline-audit-20260830.json",
+      "evidence/gates/R4-422/google-gmail-credential-lifecycle-offline-audit-20260830.md",
+      "evidence/gates/R4-422/google-gmail-credential-lifecycle-offline-audit-20260830-leakage-scan.json"
     ],
     "execution_status": "CONSUMED_FAIL_CLOSED_BEFORE_GMAIL_REQUEST",
     "gmail_api_requests": 0,
     "users_messages_send_requests": 0,
     "credential_refresh_requests": 0,
     "email_sends": 0,
-    "next_action": "NEW_CREDENTIAL_REFRESH_OR_SEND_CONTRACT_AND_HUMAN_GATE_REQUIRED"
+    "next_action": "NEW_CREDENTIAL_REFRESH_OR_SEND_CONTRACT_AND_HUMAN_GATE_REQUIRED",
+    "credential_lifecycle_audit": {
+      "classification": "EXTERNAL_CREDENTIAL_BEHAVIOR_REQUIRES_FURTHER_EVIDENCE",
+      "confidence": "LOW_FOR_HISTORICAL_ROOT_CAUSE",
+      "local_defect_confirmed": false,
+      "local_repair_performed": false,
+      "external_operations": 0
+    }
   },
   "architecture_invariants": [
     "Java owns durable business state, transactions, state machines, tenancy enforcement, and event production",

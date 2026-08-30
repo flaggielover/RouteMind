@@ -2392,3 +2392,10 @@ are covered by the new contract gate plus existing Java tests. Evidence is under
 `evidence/gates/R4-422/google-gmail-single-send-*`; no raw address, token,
 credential, message body, or provider response is retained. R4-422 remains
 blocked at `HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT`.
+
+### R4-422 V2 closure and offline audit - 2026-08-30
+
+- Closure checkpoint `1b7c41021f914bd2f1eb367fd3d417345729304d` recorded the consumed V2 preflight failure (`CREDENTIAL_REFRESH_REQUIRED`) with zero Gmail, refresh, OAuth, browser, SSH, retry, fallback, or mutation operations. Its first CI run `33290111559` failed only on the control-plane lexical security scan; the other four jobs passed.
+- Source-only naming repair checkpoint `3752f205d5d5e5cb5670ed03d86801dca0eb21e8` passed local full and resilience gates and all five jobs in CI run `33290659144`.
+- Offline audit evidence: `evidence/gates/R4-422/google-gmail-credential-lifecycle-offline-audit-20260830.json` plus its Markdown and leakage scan. Classification is `EXTERNAL_CREDENTIAL_BEHAVIOR_REQUIRES_FURTHER_EVIDENCE`, confidence is low for the historical cause, `localDefectConfirmed=false`, and no Phase 3 credential repair was made. Historical contracts and evidence remain unchanged.
+- Next safe action: stop. Do not retry or reuse V2; require a new independent credential/send contract and Human Gate for any future external operation.
