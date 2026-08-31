@@ -109,6 +109,13 @@ nonessential transition motion.
 - Dependency audit: 0 production vulnerabilities.
 - `git diff --check`: passed (line-ending notices only).
 
+The first two-worker GitHub browser run exhausted the 90-second total timeout in
+the full geographic interaction test; a rerun reached the final wheel assertion
+before repeating the timeout. The constrained CI runner was loading two complete
+WebGL/111-layer map worlds concurrently. CI Playwright execution is therefore
+serialized to one worker while local execution retains four workers. No visual,
+interaction, density, or accessibility assertion was removed or relaxed.
+
 ## Claim boundary
 
 This checkpoint proves a higher-detail legitimate MapLibre-compatible basemap,
