@@ -2655,3 +2655,25 @@ blocked at `HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT`.
   intentional skips, dependency audit with zero vulnerabilities, and repository
   verification. The MIT source notice is retained; no reference media or artwork
   was copied and no backend/production claim changed.
+
+### RM-247 Deterministic courier density and LOD - 2026-08-31
+
+- Operations Demo data now separates the full synthetic courier-agent population
+  from emphasized semantic trajectories: Shanghai 120/32, Shenzhen 90/26, and
+  Chengdu 104/28. Stable city seeds generate positions, velocities, risk, route
+  variants, states, and courier-to-trajectory relationships without wall time or
+  random APIs.
+- Deck.gl renders the full low-emphasis population at city overview, a bounded
+  12-16 route district projection, and a selected-courier projection capped at five
+  contextual routes/22 nearby agents. Movement stays in render-loop state and no
+  React per-frame state updates were introduced.
+- HUD now exposes total couriers, emphasized routes, visible LOD, and explicit
+  `DEMO / SYNTHETIC` provenance. Selected courier inspection retains order, ETA,
+  risk, strategy, and merchant-to-customer handoff semantics. The Codrops square
+  lens was reduced to the approved 29%/170-240px size range and retained.
+- Browser inspection covered all three city overviews, Chengdu district focus and
+  selected courier, with no visual spaghetti or lens regression. Evidence:
+  `evidence/gates/RM-247/deterministic-courier-density-lod.md`.
+- Local Web gates pass 44 Vitest files/124 tests, typecheck, lint, format, build,
+  and the focused real-map Playwright gate. No production telemetry, H3, provider,
+  Digital Twin, or scientific claim is introduced.

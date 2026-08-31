@@ -59,7 +59,7 @@ export function resolveMapOpticalLensTarget(
   const scaleX = drawingBufferWidth / viewportWidth;
   const scaleY = drawingBufferHeight / viewportHeight;
   const pixelScale = Math.min(scaleX, scaleY);
-  const cssLensSize = clamp(Math.min(viewportWidth, viewportHeight) * 0.39, 220, 330);
+  const cssLensSize = clamp(Math.min(viewportWidth, viewportHeight) * 0.29, 170, 240);
   const speed = Math.hypot(frame.vx, frame.vy);
   const velocityResponse = smoothstep(0.4, 24, speed);
 

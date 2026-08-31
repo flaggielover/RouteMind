@@ -11,10 +11,13 @@ import {
   cityGeoCatalog,
   cityIds,
   createCityOperationalDataset,
+  projectCityOperationalLod,
   type CityId,
   type CityOperationalDataset,
+  type CourierAgent,
   type CourierTrajectory,
   type LngLat,
+  type OperationalLodMode,
 } from "../visuals/cityGeo";
 import type { GeoWorldController } from "../visuals/geoWorldController";
 import { MAP_OPTICAL_LENS_LAYER_ID, MapOpticalLensLayer } from "../visuals/mapOpticalLens";
@@ -228,12 +231,13 @@ interface PersistentGeoWorldProps {
 
 interface MovingCourier {
   id: string;
-  trajectoryId: string;
+  trajectoryId?: string;
   entityType: "courier";
   label: string;
   coordinate: LngLat;
   risk: number;
   heading: number;
+  state: CourierAgent["state"];
 }
 
 interface LayerObject {
@@ -272,25 +276,36 @@ function routeColor(route: CourierTrajectory): readonly [number, number, number,
 }
 
 function movingCouriers(
-  dataset: CityOperationalDataset,
+  agents: readonly CourierAgent[],
   time: number,
   reducedMotion: boolean,
 ): MovingCourier[] {
-  return dataset.trajectories
-    .filter((route) => route.state === "active")
-    .map((route, index) => {
-      const movement = reducedMotion ? 0 : (time / 18000 + index * 0.11) % 0.28;
-      const progress = Math.min(0.96, route.currentProgress + movement);
-      return {
-        id: route.courierId,
-        trajectoryId: route.id,
-        entityType: "courier",
-        label: `Courier ${route.courierId}`,
-        coordinate: mixPoint(route.points, progress),
-        risk: route.slaRisk,
-        heading: routeHeading(route.points, progress),
-      };
-    });
+  return agents.map((agent) => {
+    const movement = reducedMotion ? 0 : (time / 1000) * agent.velocity;
+    const progress = (agent.baseProgress + movement) % 1;
+    return {
+      id: agent.id,
+      ...(agent.trajectoryId ? { trajectoryId: agent.trajectoryId } : {}),
+      entityType: "courier",
+      label: `Courier ${agent.id}`,
+      coordinate: mixPoint(agent.path, progress),
+      risk: agent.risk,
+      heading: routeHeading(agent.path, progress),
+      state: agent.state,
+    };
+  });
+}
+
+function operationalLodMode(frame: UrbanWorldFrame, selectedId: string | null): OperationalLodMode {
+  if (selectedId) return "selected";
+  if (
+    frame.chapter === "overview" ||
+    frame.chapter === "strategy" ||
+    frame.chapter === "research"
+  ) {
+    return "city";
+  }
+  return "district";
 }
 
 function chapterCamera(
@@ -431,7 +446,7 @@ function aggregateFlowOpacity(chapter: UrbanWorldFrame["chapter"]): number {
 }
 
 function chapterAnimatesCouriers(chapter: UrbanWorldFrame["chapter"]): boolean {
-  return chapter === "live" || chapter === "replay";
+  return chapter !== "research";
 }
 
 function createOperationalLayers(
@@ -443,9 +458,15 @@ function createOperationalLayers(
   reducedMotion: boolean,
 ) {
   const selected = dataset.trajectories.find((route) => route.id === selectedId) ?? null;
+  const camera = chapterCamera(dataset, frame, selectedId);
+  const lod = projectCityOperationalLod(dataset, {
+    mode: operationalLodMode(frame, selectedId),
+    focusCoordinate: camera.center,
+    selectedTrajectoryId: selectedId,
+  });
   const relatedId = selectedId ?? relatedTrajectoryId(dataset, hovered);
   const relatedRoute = dataset.trajectories.find((route) => route.id === relatedId) ?? null;
-  const routes = dataset.trajectories.map((route) => ({ ...route, entityType: "trajectory" }));
+  const routes = lod.trajectories.map((route) => ({ ...route, entityType: "trajectory" }));
   const nodes = dataset.nodes
     .filter((node) => node.kind !== "courier")
     .map((node) => ({ ...node, entityType: node.kind }));
@@ -453,10 +474,12 @@ function createOperationalLayers(
   const riskZones = dataset.riskZones.map((zone) => ({ ...zone, entityType: "risk-zone" }));
   const flows = dataset.flows.map((flow) => ({ ...flow, entityType: "aggregate-flow" }));
   const couriers = movingCouriers(
-    dataset,
+    lod.courierAgents,
     time,
     reducedMotion || !chapterAnimatesCouriers(frame.chapter),
   );
+  const emphasizedCourierIds = new Set(lod.trajectories.map((route) => route.courierId));
+  const emphasizedCouriers = couriers.filter((courier) => emphasizedCourierIds.has(courier.id));
   const routeOpacity = individualRouteOpacity(frame.chapter) * frame.layerVisibility.flows;
   const flowOpacity = aggregateFlowOpacity(frame.chapter) * frame.layerVisibility.flows;
   const riskExtruded = frame.chapter === "pressure" || frame.chapter === "risk";
@@ -582,8 +605,30 @@ function createOperationalLayers(
       pickable: true,
     }),
     new ScatterplotLayer({
-      id: `courier-focus-rings-${dataset.city.id}`,
+      id: `courier-population-${dataset.city.id}-${lod.mode}`,
       data: couriers,
+      getPosition: (courier) => courier.coordinate,
+      getRadius: (courier) =>
+        lod.mode === "city" ? (courier.state === "available" ? 42 : 32) : 44,
+      getFillColor: (courier) =>
+        courier.state === "available"
+          ? [88, 203, 195, 146]
+          : courier.state === "rebalancing"
+            ? [184, 153, 101, 104]
+            : [151, 183, 179, 118],
+      getLineColor: [7, 16, 20, 155],
+      getLineWidth: 0.55,
+      radiusUnits: "meters",
+      lineWidthUnits: "pixels",
+      stroked: true,
+      opacity:
+        frame.layerVisibility.nodes *
+        (lod.mode === "city" ? 0.66 : lod.mode === "district" ? 0.8 : 0.9),
+      pickable: false,
+    }),
+    new ScatterplotLayer({
+      id: `courier-focus-rings-${dataset.city.id}`,
+      data: emphasizedCouriers,
       getPosition: (courier) => courier.coordinate,
       getRadius: (courier) => (relatedId === courier.trajectoryId ? 104 : 58),
       getFillColor: [7, 16, 20, 42],
@@ -597,7 +642,7 @@ function createOperationalLayers(
     }),
     new TextLayer({
       id: `moving-couriers-${dataset.city.id}`,
-      data: couriers,
+      data: emphasizedCouriers,
       getPosition: (courier) => courier.coordinate,
       getText: () => ">",
       getColor: (courier) => (courier.risk > 0.62 ? RED : AMBER),
@@ -903,6 +948,18 @@ export default function PersistentGeoWorld({
   }, [controllerRef, onSelectTrajectory]);
 
   const selected = dataset.trajectories.find((route) => route.id === selectedTrajectoryId) ?? null;
+  const lodMode = operationalLodMode(worldFrame, selectedTrajectoryId);
+  const lod = projectCityOperationalLod(dataset, {
+    mode: lodMode,
+    focusCoordinate: chapterCamera(dataset, worldFrame, selectedTrajectoryId).center,
+    selectedTrajectoryId,
+  });
+  const selectedMerchant = selected
+    ? (dataset.nodes.find((node) => node.id === selected.merchantId) ?? null)
+    : null;
+  const selectedCustomer = selected
+    ? (dataset.nodes.find((node) => node.id === selected.customerId) ?? null)
+    : null;
   return (
     <aside
       ref={worldRef}
@@ -911,6 +968,11 @@ export default function PersistentGeoWorld({
       data-world-role={worldFrame.sceneRole}
       data-map-status={mapStatus}
       data-city={cityId}
+      data-courier-population={dataset.courierAgents.length}
+      data-emphasized-trajectories={dataset.trajectories.length}
+      data-visible-couriers={lod.courierAgents.length}
+      data-visible-trajectories={lod.trajectories.length}
+      data-map-lod={lodMode}
       data-lens-mode={lensMode}
       data-pointer-target="scene"
       data-pointer-id="persistent-geo-world"
@@ -928,7 +990,7 @@ export default function PersistentGeoWorld({
         data-pointer-target="hud"
         data-pointer-id="geo-world-chrome"
       >
-        <span className="persistent-world-kicker">ROUTEMIND / REAL CITY COURIER NETWORK</span>
+        <span className="persistent-world-kicker">ROUTEMIND / SYNTHETIC CITY COURIER FIELD</span>
         <span className="persistent-world-chapter">{worldFrame.chapter.replace("-", " ")}</span>
       </div>
       <div className="geo-city-selector" role="group" aria-label="Select operations city">
@@ -950,7 +1012,7 @@ export default function PersistentGeoWorld({
         data-pointer-target="hud"
         data-pointer-id="geo-source-badge"
       >
-        <strong>DEMO / SIMULATED</strong>
+        <strong>DEMO / SYNTHETIC</strong>
         <span>real geography · synthetic operations · {snapshot.source} page context</span>
       </div>
       <div
@@ -964,8 +1026,16 @@ export default function PersistentGeoWorld({
           <strong>{dataset.city.name}</strong>
         </span>
         <span>
-          <small>Active riders</small>
-          <strong>{dataset.trajectories.filter((route) => route.state === "active").length}</strong>
+          <small>Couriers</small>
+          <strong>{dataset.courierAgents.length}</strong>
+        </span>
+        <span>
+          <small>Focus routes</small>
+          <strong>{dataset.trajectories.length}</strong>
+        </span>
+        <span>
+          <small>LOD</small>
+          <strong>{lodMode.toUpperCase()}</strong>
         </span>
         <span>
           <small>Risk zones</small>
@@ -1014,6 +1084,13 @@ export default function PersistentGeoWorld({
               <dt>Strategy</dt>
               <dd>{selected.strategy}</dd>
             </div>
+            <div>
+              <dt>Handoff</dt>
+              <dd>
+                {selectedMerchant?.label ?? selected.merchantId} →{" "}
+                {selectedCustomer?.label ?? selected.customerId}
+              </dd>
+            </div>
           </dl>
         </div>
       )}
@@ -1024,10 +1101,13 @@ export default function PersistentGeoWorld({
         aria-label="Operational map legend"
       >
         <span>
-          <i className="geo-legend-line active" /> active courier
+          <i className="geo-legend-line active" /> emphasized route
         </span>
         <span>
           <i className="geo-legend-line recent" /> recent route
+        </span>
+        <span>
+          <i className="geo-legend-dot courier" /> synthetic courier
         </span>
         <span>
           <i className="geo-legend-dot merchant" /> pickup

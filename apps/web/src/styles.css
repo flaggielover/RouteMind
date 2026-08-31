@@ -5707,7 +5707,7 @@ button {
 }
 
 .geo-source-badge {
-  top: 111px;
+  top: 170px;
   left: 20px;
   display: grid;
   gap: 3px;
@@ -5726,7 +5726,8 @@ button {
 }
 
 .geo-map-summary {
-  top: 50px;
+  top: 111px;
+  left: 20px;
   right: 20px;
   display: flex;
   border-top: 1px solid rgba(103, 200, 192, 0.45);
@@ -5737,7 +5738,8 @@ button {
 .geo-map-summary > span {
   display: grid;
   gap: 4px;
-  min-width: 82px;
+  min-width: 0;
+  flex: 1 1 0;
   padding: 9px 12px;
   border-right: 1px solid rgba(103, 200, 192, 0.16);
 }
@@ -6969,6 +6971,7 @@ button {
 
   .geo-map-summary {
     top: 108px;
+    left: 20px;
   }
 
   .geo-map-summary > span:first-child {

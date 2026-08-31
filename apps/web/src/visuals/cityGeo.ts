@@ -1,6 +1,8 @@
 export type CityId = "shanghai" | "shenzhen" | "chengdu";
 export type LngLat = readonly [longitude: number, latitude: number];
 export type TrajectoryState = "active" | "recent" | "selected";
+export type CourierAgentState = "on-route" | "available" | "rebalancing";
+export type OperationalLodMode = "city" | "district" | "selected";
 
 export interface CityGeoContext {
   id: CityId;
@@ -38,6 +40,18 @@ export interface CourierTrajectory {
   slaRisk: number;
   strategy: string;
   currentProgress: number;
+}
+
+export interface CourierAgent {
+  id: string;
+  cityId: CityId;
+  state: CourierAgentState;
+  path: readonly LngLat[];
+  position: LngLat;
+  baseProgress: number;
+  velocity: number;
+  risk: number;
+  trajectoryId?: string;
 }
 
 export interface OperationalNode {
@@ -82,6 +96,7 @@ export interface AggregateFlow {
 
 export interface CityOperationalDataset {
   city: CityGeoContext;
+  courierAgents: readonly CourierAgent[];
   trajectories: readonly CourierTrajectory[];
   nodes: readonly OperationalNode[];
   hotspots: readonly SpatialHotspot[];
@@ -90,6 +105,31 @@ export interface CityOperationalDataset {
   provenance: "deterministic-demo";
   generatedAt: string;
 }
+
+export interface CityOperationalLod {
+  mode: OperationalLodMode;
+  courierAgents: readonly CourierAgent[];
+  trajectories: readonly CourierTrajectory[];
+  focusCoordinate: LngLat;
+}
+
+export interface CityOperationalLodOptions {
+  mode: OperationalLodMode;
+  focusCoordinate?: LngLat;
+  selectedTrajectoryId?: string | null;
+}
+
+export interface CityDemoDensity {
+  courierCount: number;
+  emphasizedTrajectoryCount: number;
+  districtTrajectoryCount: number;
+}
+
+export const CITY_DEMO_DENSITY: Readonly<Record<CityId, CityDemoDensity>> = Object.freeze({
+  shanghai: { courierCount: 120, emphasizedTrajectoryCount: 32, districtTrajectoryCount: 16 },
+  shenzhen: { courierCount: 90, emphasizedTrajectoryCount: 26, districtTrajectoryCount: 12 },
+  chengdu: { courierCount: 104, emphasizedTrajectoryCount: 28, districtTrajectoryCount: 14 },
+});
 
 const SHANGHAI_ANCHORS: readonly CityAnchor[] = [
   {
@@ -596,6 +636,66 @@ function seededUnit(seed: number, index: number): number {
   return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
 }
 
+function clamp(value: number, minimum: number, maximum: number): number {
+  return Math.min(maximum, Math.max(minimum, value));
+}
+
+function pointAlongPath(path: readonly LngLat[], progress: number): LngLat {
+  if (path.length < 2) return path[0] ?? [0, 0];
+  const bounded = clamp(progress, 0, 0.999999);
+  const scaled = bounded * (path.length - 1);
+  const index = Math.floor(scaled);
+  const local = scaled - index;
+  const from = path[index] ?? path[0]!;
+  const to = path[index + 1] ?? from;
+  return [from[0] + (to[0] - from[0]) * local, from[1] + (to[1] - from[1]) * local];
+}
+
+function routeVariant(
+  city: CityGeoContext,
+  corridor: RoadCorridor,
+  variantIndex: number,
+): readonly LngLat[] {
+  const [[west, south], [east, north]] = city.bounds;
+  const maximumOffset = city.id === "shenzhen" ? 0.00135 : 0.0009;
+  const direction = seededUnit(city.seed, variantIndex + 2_000) * 2 - 1;
+  const amplitude = maximumOffset * (0.28 + seededUnit(city.seed, variantIndex + 2_100) * 0.72);
+  return corridor.points.map((point, pointIndex, points): LngLat => {
+    if (pointIndex === 0 || pointIndex === points.length - 1) return point;
+    const previous = points[pointIndex - 1] ?? point;
+    const next = points[pointIndex + 1] ?? point;
+    const dx = next[0] - previous[0];
+    const dy = next[1] - previous[1];
+    const magnitude = Math.hypot(dx, dy) || 1;
+    const taper = Math.sin((Math.PI * pointIndex) / (points.length - 1));
+    const localNoise = 0.72 + seededUnit(city.seed, variantIndex * 37 + pointIndex + 2_200) * 0.28;
+    return [
+      clamp(point[0] + (-dy / magnitude) * amplitude * direction * taper * localNoise, west, east),
+      clamp(point[1] + (dx / magnitude) * amplitude * direction * taper * localNoise, south, north),
+    ];
+  });
+}
+
+const CITY_COURIER_PREFIX: Readonly<Record<CityId, string>> = {
+  shanghai: "SH",
+  shenzhen: "SZ",
+  chengdu: "CD",
+};
+
+function courierId(cityId: CityId, index: number): string {
+  return `${CITY_COURIER_PREFIX[cityId]}-C${String(index + 1).padStart(3, "0")}`;
+}
+
+function normalizedDistance(city: CityGeoContext, first: LngLat, second: LngLat): number {
+  const longitudeSpan = city.bounds[1][0] - city.bounds[0][0];
+  const latitudeSpan = city.bounds[1][1] - city.bounds[0][1];
+  return Math.hypot((first[0] - second[0]) / longitudeSpan, (first[1] - second[1]) / latitudeSpan);
+}
+
+function routeFocus(route: CourierTrajectory): LngLat {
+  return pointAlongPath(route.points, 0.5);
+}
+
 function hexCell(
   center: LngLat,
   radiusLongitude: number,
@@ -613,17 +713,19 @@ function hexCell(
 export function createCityOperationalDataset(cityId: CityId): CityOperationalDataset {
   const city = cityGeoCatalog[cityId];
   const corridors = CITY_ROAD_CORRIDORS[cityId];
-  const routeCount = corridors.length;
+  const density = CITY_DEMO_DENSITY[cityId];
+  const routeCount = density.emphasizedTrajectoryCount;
   const trajectories = Array.from({ length: routeCount }, (_, index): CourierTrajectory => {
     const risk = 0.12 + seededUnit(city.seed, index) * 0.64;
-    const corridor = corridors[index]!;
+    const corridor = corridors[index % corridors.length]!;
+    const points = routeVariant(city, corridor, index);
     return {
       id: `${city.id}-trajectory-${index + 1}`,
       cityId: city.id,
-      courierId: `${city.id.slice(0, 2).toUpperCase()}-C${String(index + 11).padStart(2, "0")}`,
-      orderId: `${city.id.slice(0, 2).toUpperCase()}-O${2040 + index}`,
-      state: index < 6 ? "active" : "recent",
-      points: corridor.points,
+      courierId: courierId(city.id, index),
+      orderId: `${CITY_COURIER_PREFIX[city.id]}-O${2040 + index}`,
+      state: index % 5 === 4 ? "recent" : "active",
+      points,
       merchantId: city.anchors[corridor.fromAnchor]!.id,
       customerId: city.anchors[corridor.toAnchor]!.id,
       etaMinutes: 5 + Math.round(seededUnit(city.seed, index + 30) * 18),
@@ -631,6 +733,34 @@ export function createCityOperationalDataset(cityId: CityId): CityOperationalDat
       slaRisk: Number(risk.toFixed(2)),
       strategy: index % 3 === 0 ? "risk-aware" : "weighted-greedy",
       currentProgress: Number((0.22 + seededUnit(city.seed, index + 90) * 0.62).toFixed(2)),
+    };
+  });
+  const courierAgents = Array.from({ length: density.courierCount }, (_, index): CourierAgent => {
+    const emphasized = trajectories[index];
+    const corridor = corridors[index % corridors.length]!;
+    const path = emphasized?.points ?? routeVariant(city, corridor, index + routeCount);
+    const baseProgress = Number((0.04 + seededUnit(city.seed, index + 320) * 0.9).toFixed(4));
+    const state: CourierAgentState = emphasized
+      ? emphasized.state === "recent"
+        ? "rebalancing"
+        : "on-route"
+      : index % 7 === 0
+        ? "available"
+        : index % 5 === 0
+          ? "rebalancing"
+          : "on-route";
+    return {
+      id: courierId(city.id, index),
+      cityId,
+      state,
+      path,
+      position: pointAlongPath(path, baseProgress),
+      baseProgress,
+      velocity: Number((0.0035 + seededUnit(city.seed, index + 420) * 0.0075).toFixed(5)),
+      risk:
+        emphasized?.slaRisk ??
+        Number((0.08 + seededUnit(city.seed, index + 520) * 0.78).toFixed(2)),
+      ...(emphasized ? { trajectoryId: emphasized.id } : {}),
     };
   });
   const nodes: OperationalNode[] = city.anchors.map((anchor) => ({
@@ -646,23 +776,6 @@ export function createCityOperationalDataset(cityId: CityId): CityOperationalDat
           ? "delivery destination"
           : "dispatch hub",
   }));
-  trajectories
-    .filter((trajectory) => trajectory.state === "active")
-    .forEach((trajectory) => {
-      const routeIndex = Math.min(
-        trajectory.points.length - 1,
-        Math.floor(trajectory.currentProgress * trajectory.points.length),
-      );
-      nodes.push({
-        id: trajectory.courierId,
-        cityId,
-        kind: "courier",
-        label: `Courier ${trajectory.courierId}`,
-        coordinate: trajectory.points[routeIndex]!,
-        status: "on route",
-        trajectoryId: trajectory.id,
-      });
-    });
   const hotspots = city.anchors.slice(0, 5).map((anchor, index): SpatialHotspot => ({
     id: `${city.id}-hotspot-${index + 1}`,
     cityId,
@@ -708,6 +821,7 @@ export function createCityOperationalDataset(cityId: CityId): CityOperationalDat
   }));
   return {
     city,
+    courierAgents,
     trajectories,
     nodes,
     hotspots,
@@ -715,6 +829,64 @@ export function createCityOperationalDataset(cityId: CityId): CityOperationalDat
     flows,
     provenance: "deterministic-demo",
     generatedAt: "2026-08-31T08:00:00Z",
+  };
+}
+
+export function projectCityOperationalLod(
+  dataset: CityOperationalDataset,
+  options: CityOperationalLodOptions,
+): CityOperationalLod {
+  const focusCoordinate = options.focusCoordinate ?? dataset.city.center;
+  if (options.mode === "city") {
+    return {
+      mode: "city",
+      courierAgents: dataset.courierAgents,
+      trajectories: dataset.trajectories,
+      focusCoordinate,
+    };
+  }
+
+  const selected = options.selectedTrajectoryId
+    ? (dataset.trajectories.find((route) => route.id === options.selectedTrajectoryId) ?? null)
+    : null;
+  const routeFocusCoordinate = selected ? routeFocus(selected) : focusCoordinate;
+  const rankedRoutes = [...dataset.trajectories].sort((first, second) => {
+    if (selected && first.id === selected.id) return -1;
+    if (selected && second.id === selected.id) return 1;
+    const distanceDifference =
+      normalizedDistance(dataset.city, routeFocus(first), routeFocusCoordinate) -
+      normalizedDistance(dataset.city, routeFocus(second), routeFocusCoordinate);
+    if (Math.abs(distanceDifference) > 0.000001) return distanceDifference;
+    const riskDifference = second.slaRisk - first.slaRisk;
+    if (Math.abs(riskDifference) > 0.000001) return riskDifference;
+    return first.id.localeCompare(second.id);
+  });
+  const trajectoryLimit =
+    options.mode === "selected"
+      ? Math.min(5, rankedRoutes.length)
+      : CITY_DEMO_DENSITY[dataset.city.id].districtTrajectoryCount;
+  const trajectories = rankedRoutes.slice(0, trajectoryLimit);
+  const requiredCourierIds = new Set(trajectories.map((route) => route.courierId));
+  const courierLimit =
+    options.mode === "selected"
+      ? Math.min(22, dataset.courierAgents.length)
+      : Math.round(dataset.courierAgents.length * 0.42);
+  const rankedCouriers = [...dataset.courierAgents].sort((first, second) => {
+    if (selected && first.id === selected.courierId) return -1;
+    if (selected && second.id === selected.courierId) return 1;
+    const distanceDifference =
+      normalizedDistance(dataset.city, first.position, routeFocusCoordinate) -
+      normalizedDistance(dataset.city, second.position, routeFocusCoordinate);
+    if (Math.abs(distanceDifference) > 0.000001) return distanceDifference;
+    return first.id.localeCompare(second.id);
+  });
+  const visibleCourierIds = new Set(rankedCouriers.slice(0, courierLimit).map((agent) => agent.id));
+  requiredCourierIds.forEach((id) => visibleCourierIds.add(id));
+  return {
+    mode: options.mode,
+    courierAgents: dataset.courierAgents.filter((agent) => visibleCourierIds.has(agent.id)),
+    trajectories,
+    focusCoordinate: routeFocusCoordinate,
   };
 }
 

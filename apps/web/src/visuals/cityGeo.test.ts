@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { cityGeoCatalog, cityIds, createCityOperationalDataset, selectionExists } from "./cityGeo";
+import {
+  CITY_DEMO_DENSITY,
+  cityGeoCatalog,
+  cityIds,
+  createCityOperationalDataset,
+  projectCityOperationalLod,
+  selectionExists,
+} from "./cityGeo";
 
 describe("three-city geographic operations data", () => {
   it("defines unique real WGS84 contexts for the approved cities", () => {
@@ -22,9 +29,10 @@ describe("three-city geographic operations data", () => {
     expect(shanghai.trajectories[0]?.points).not.toEqual(shenzhen.trajectories[0]?.points);
     expect(shenzhen.trajectories[0]?.points).not.toEqual(chengdu.trajectories[0]?.points);
     expect(chengdu.trajectories[0]?.points.length).toBeGreaterThanOrEqual(7);
-    expect(shenzhen.trajectories).toHaveLength(8);
     cityIds.forEach((id) => {
       const dataset = createCityOperationalDataset(id);
+      expect(dataset.courierAgents).toHaveLength(CITY_DEMO_DENSITY[id].courierCount);
+      expect(dataset.trajectories).toHaveLength(CITY_DEMO_DENSITY[id].emphasizedTrajectoryCount);
       expect(dataset.trajectories.every((route) => route.points.length >= 5)).toBe(true);
       expect(dataset.riskZones).toHaveLength(10);
       expect(dataset.riskZones.every((zone) => zone.polygon.length === 7)).toBe(true);
@@ -62,6 +70,71 @@ describe("three-city geographic operations data", () => {
           expect(latitude).toBeGreaterThanOrEqual(south);
           expect(latitude).toBeLessThanOrEqual(north);
         });
+      dataset.courierAgents.forEach((agent) => {
+        expect(agent.position[0]).toBeGreaterThanOrEqual(west);
+        expect(agent.position[0]).toBeLessThanOrEqual(east);
+        expect(agent.position[1]).toBeGreaterThanOrEqual(south);
+        expect(agent.position[1]).toBeLessThanOrEqual(north);
+        agent.path.forEach(([longitude, latitude]) => {
+          expect(longitude).toBeGreaterThanOrEqual(west);
+          expect(longitude).toBeLessThanOrEqual(east);
+          expect(latitude).toBeGreaterThanOrEqual(south);
+          expect(latitude).toBeLessThanOrEqual(north);
+        });
+      });
+    });
+  });
+
+  it("binds every emphasized semantic route to one member of the full courier population", () => {
+    cityIds.forEach((id) => {
+      const dataset = createCityOperationalDataset(id);
+      expect(new Set(dataset.courierAgents.map((agent) => agent.id)).size).toBe(
+        CITY_DEMO_DENSITY[id].courierCount,
+      );
+      dataset.trajectories.forEach((route) => {
+        const agent = dataset.courierAgents.find((candidate) => candidate.id === route.courierId);
+        expect(agent?.trajectoryId).toBe(route.id);
+        expect(agent?.path).toEqual(route.points);
+        expect(route.points[0]).toEqual(
+          dataset.city.anchors.find((anchor) => anchor.id === route.merchantId)?.coordinate,
+        );
+        expect(route.points.at(-1)).toEqual(
+          dataset.city.anchors.find((anchor) => anchor.id === route.customerId)?.coordinate,
+        );
+      });
+    });
+  });
+
+  it("projects stable city, district, and selected-courier LOD membership", () => {
+    cityIds.forEach((id) => {
+      const dataset = createCityOperationalDataset(id);
+      const city = projectCityOperationalLod(dataset, { mode: "city" });
+      const district = projectCityOperationalLod(dataset, {
+        mode: "district",
+        focusCoordinate: dataset.hotspots[0]!.coordinate,
+      });
+      const selectedRoute = dataset.trajectories[3]!;
+      const selected = projectCityOperationalLod(dataset, {
+        mode: "selected",
+        selectedTrajectoryId: selectedRoute.id,
+      });
+
+      expect(city.courierAgents).toHaveLength(CITY_DEMO_DENSITY[id].courierCount);
+      expect(city.trajectories).toHaveLength(CITY_DEMO_DENSITY[id].emphasizedTrajectoryCount);
+      expect(district.trajectories).toHaveLength(CITY_DEMO_DENSITY[id].districtTrajectoryCount);
+      expect(district.courierAgents.length).toBeLessThan(city.courierAgents.length);
+      expect(selected.trajectories).toHaveLength(5);
+      expect(selected.trajectories[0]?.id).toBe(selectedRoute.id);
+      expect(selected.courierAgents.some((agent) => agent.id === selectedRoute.courierId)).toBe(
+        true,
+      );
+      expect(selected.courierAgents.length).toBeLessThan(district.courierAgents.length);
+      expect(
+        projectCityOperationalLod(dataset, {
+          mode: "selected",
+          selectedTrajectoryId: selectedRoute.id,
+        }),
+      ).toEqual(selected);
     });
   });
 

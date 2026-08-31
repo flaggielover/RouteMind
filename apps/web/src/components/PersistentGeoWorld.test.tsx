@@ -147,7 +147,10 @@ describe("persistent geographic world", () => {
       targetType: "control",
     });
     expect(world).toHaveAttribute("data-lens-active", "false");
-    expect(screen.getByText("DEMO / SIMULATED")).toBeInTheDocument();
+    expect(screen.getByText("DEMO / SYNTHETIC")).toBeInTheDocument();
+    expect(world).toHaveAttribute("data-courier-population", "120");
+    expect(world).toHaveAttribute("data-emphasized-trajectories", "32");
+    expect(world).toHaveAttribute("data-map-lod", "city");
     fireEvent.click(screen.getByRole("button", { name: /Shenzhen/ }));
     expect(onCityChange).toHaveBeenCalledWith("shenzhen");
     expect(controllerRef.current).not.toBeNull();

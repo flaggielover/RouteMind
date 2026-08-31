@@ -120,6 +120,47 @@ test.describe("role-aware web smoke", () => {
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(before + 300);
   });
 
+  test("exposes deterministic synthetic density and bounded district LOD for every city", async ({
+    page,
+  }) => {
+    if (test.info().project.name === "mobile") test.skip();
+    await page.goto("/operations");
+    await selectDemo(page);
+    const cityExpectations = [
+      ["Shanghai", "120", "32"],
+      ["Shenzhen", "90", "26"],
+      ["Chengdu", "104", "28"],
+    ] as const;
+    for (const [city, population, routes] of cityExpectations) {
+      const world = page.getByRole("complementary", {
+        name: new RegExp(`Persistent ${city}`),
+      });
+      await expect(world).toHaveAttribute("data-map-status", "ready", { timeout: 15_000 });
+      await expect(world).toHaveAttribute("data-courier-population", population);
+      await expect(world).toHaveAttribute("data-emphasized-trajectories", routes);
+      await expect(world).toHaveAttribute("data-map-lod", "city");
+      if (city !== "Chengdu") {
+        await world
+          .getByRole("button", {
+            name: new RegExp(cityExpectations[city === "Shanghai" ? 1 : 2]![0]),
+          })
+          .click();
+      }
+      await page.waitForTimeout(700);
+    }
+    const world = page.getByRole("complementary", {
+      name: "Persistent Chengdu courier operations map",
+    });
+    await page.getByRole("link", { name: "02 Urban pressure" }).click();
+    await expect(world).toHaveAttribute("data-map-lod", "district");
+    await expect
+      .poll(async () => Number(await world.getAttribute("data-visible-trajectories")))
+      .toBeGreaterThanOrEqual(10);
+    await expect
+      .poll(async () => Number(await world.getAttribute("data-visible-trajectories")))
+      .toBeLessThanOrEqual(16);
+  });
+
   test("controls a simulation source and surfaces replay events", async ({ page }) => {
     let simulatedTime = 0;
     const state = () => ({

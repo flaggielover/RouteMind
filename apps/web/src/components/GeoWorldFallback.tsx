@@ -21,7 +21,6 @@ export function GeoWorldFallback({
   dataset,
   reason = "Map capability unavailable",
 }: GeoWorldFallbackProps) {
-  const active = dataset.trajectories.filter((route) => route.state === "active");
   return (
     <section className="geo-world-fallback" aria-label={`${dataset.city.name} geographic fallback`}>
       <svg
@@ -65,6 +64,14 @@ export function GeoWorldFallback({
             />
           );
         })}
+        {dataset.courierAgents
+          .filter((_, index) => index % 5 === 0)
+          .map((agent) => {
+            const [x, y] = project(dataset, agent.position);
+            return (
+              <circle key={agent.id} cx={x} cy={y} r={0.55} className="geo-fallback-node courier" />
+            );
+          })}
       </svg>
       <div className="geo-fallback-copy">
         <span>GEOGRAPHIC FALLBACK / DEMO</span>
@@ -75,8 +82,8 @@ export function GeoWorldFallback({
       </div>
       <dl className="geo-fallback-metrics">
         <div>
-          <dt>Active couriers</dt>
-          <dd>{active.length}</dd>
+          <dt>Synthetic couriers</dt>
+          <dd>{dataset.courierAgents.length}</dd>
         </div>
         <div>
           <dt>Routes</dt>

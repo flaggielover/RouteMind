@@ -52,6 +52,21 @@ device skips, dependency audit with zero vulnerabilities, and full repository
 verify. This remains deterministic demo visualization and introduces no production
 telemetry, provider validation, H3, calibrated Digital Twin, or scientific claim.
 
+## RM-247 Deterministic Courier Density + LOD
+
+State: **PASSED / LOCAL VISUAL CHECKPOINT** (2026-08-31)
+
+The real-city Operations map now separates a fixed synthetic courier population from
+the smaller emphasized route set: Shanghai `120 / 32`, Shenzhen `90 / 26`, and
+Chengdu `104 / 28` (couriers / trajectories). Stable city seeds generate all agent
+position, velocity, risk, state, route-offset, and semantic relationship fields.
+
+City overview renders the complete low-emphasis agent field with aggregate flows and+restrained route bundles. District focus projects deterministic local memberships+(12-16 routes, 42% population context), while selected courier focus retains the+selected route plus up to four contextual routes and at most 22 nearby agents. The+underlying population is never reduced. Movement remains in Deck.gl render-loop+state; React receives no per-frame updates.
+
+HUD truthfully exposes total couriers, focus routes, visible LOD, risk zones, and+`DEMO / SYNTHETIC` provenance. Selected inspection retains courier/order/ETA/SLA/+strategy and merchant-to-customer handoff semantics. The existing Codrops square+optical lens is preserved and reduced to the approved 29% short-edge, 170-240px+range.
+
+Evidence: `evidence/gates/RM-247/deterministic-courier-density-lod.md` and five+screenshots under `evidence/gates/RM-247/`. Local Web validation passes 44 Vitest+files / 124 tests, format, lint, typecheck, build, and focused real-map Playwright.+This remains deterministic Demo visualization only; no production telemetry, H3,+provider, calibrated Digital Twin, or scientific claim is made.
+
 ## RM-241 Synthetic Observation & Anomaly Discovery
 
 Repository: `F:\Projects\RouteMind`

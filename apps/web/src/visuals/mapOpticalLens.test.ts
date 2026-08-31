@@ -18,7 +18,7 @@ describe("map optical lens target", () => {
 
     expect(target.pointer[0]).toBeCloseTo(450);
     expect(target.pointer[1]).toBeCloseTo(630);
-    expect(target.lensSize).toBeCloseTo(351);
+    expect(target.lensSize).toBeCloseTo(261);
     expect(target.opacity).toBe(1);
   });
 
