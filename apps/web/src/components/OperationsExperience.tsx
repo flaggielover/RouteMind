@@ -16,11 +16,13 @@ const PersistentGeoWorld = lazy(() => import("./PersistentGeoWorld"));
 function CapabilityFallbackWorld({
   cityId,
   onCityChange,
+  worldFrame,
   status,
   reason,
 }: {
   cityId: CityId;
   onCityChange: (cityId: CityId) => void;
+  worldFrame: UrbanWorldFrame;
   status: "loading" | "fallback";
   reason: string;
 }) {
@@ -29,6 +31,8 @@ function CapabilityFallbackWorld({
       className="persistent-urban-world persistent-geo-world"
       data-city={cityId}
       data-map-status={status}
+      data-world-chapter={worldFrame.chapter}
+      data-world-role={worldFrame.sceneRole}
       aria-label="Persistent courier operations map fallback"
     >
       <GeoWorldFallback dataset={createCityOperationalDataset(cityId)} reason={reason} />
@@ -84,6 +88,7 @@ export function OperationsExperience({
               <CapabilityFallbackWorld
                 cityId={cityId}
                 onCityChange={onCityChange}
+                worldFrame={worldFrame}
                 status="loading"
                 reason="Map bundle loading"
               />
@@ -103,6 +108,7 @@ export function OperationsExperience({
           <CapabilityFallbackWorld
             cityId={cityId}
             onCityChange={onCityChange}
+            worldFrame={worldFrame}
             status="fallback"
             reason="WebGL2 unavailable"
           />
