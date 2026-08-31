@@ -67,6 +67,15 @@ test.describe("role-aware web smoke", () => {
       name: "Persistent Shanghai courier operations map",
     });
     await expect(world).toHaveAttribute("data-map-status", "ready", { timeout: 15_000 });
+    await expect(world).toHaveAttribute("data-basemap-provider", "openfreemap-liberty");
+    await expect(world).toHaveAttribute("data-basemap-quality", "full-vector");
+    await expect(world).toHaveAttribute("data-basemap-theme", "routemind-graphite");
+    await expect
+      .poll(async () => Number(await world.getAttribute("data-basemap-layers")))
+      .toBeGreaterThanOrEqual(100);
+    await expect
+      .poll(async () => Number(await world.getAttribute("data-basemap-theme-mutations")))
+      .toBeGreaterThan(200);
     await expect(world.locator("canvas")).toHaveCount(1);
     await expect(world.getByText("10", { exact: true })).toBeVisible();
     const zoomBefore = Number(await world.getAttribute("data-map-zoom"));

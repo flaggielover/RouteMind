@@ -2,7 +2,7 @@ import { ArcLayer, PathLayer, PolygonLayer, ScatterplotLayer, TextLayer } from "
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import type { PickingInfo } from "@deck.gl/core";
 import * as maplibregl from "maplibre-gl";
-import type { Map as MapLibreMap, StyleSpecification } from "maplibre-gl";
+import type { Map as MapLibreMap } from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import mapLibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-csp-worker.js?url";
 import { useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
@@ -22,198 +22,9 @@ import {
 import type { GeoWorldController } from "../visuals/geoWorldController";
 import { MAP_OPTICAL_LENS_LAYER_ID, MapOpticalLensLayer } from "../visuals/mapOpticalLens";
 import type { UrbanWorldFrame } from "../visuals/operationsChapterState";
+import { applyRouteMindBasemapTheme, resolveBasemapProvider } from "../visuals/basemapProvider";
 import { GeoWorldFallback } from "./GeoWorldFallback";
 
-const DEFAULT_MAP_STYLE: StyleSpecification = {
-  version: 8,
-  glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
-  sources: {
-    openmaptiles: {
-      type: "vector",
-      url: "https://tiles.openfreemap.org/planet",
-    },
-  },
-  layers: [
-    {
-      id: "background",
-      type: "background",
-      paint: { "background-color": "#081116" },
-    },
-    {
-      id: "landuse",
-      type: "fill",
-      source: "openmaptiles",
-      "source-layer": "landuse",
-      paint: { "fill-color": "#111d21", "fill-opacity": 0.68 },
-    },
-    {
-      id: "park",
-      type: "fill",
-      source: "openmaptiles",
-      "source-layer": "park",
-      paint: { "fill-color": "#142723", "fill-opacity": 0.8 },
-    },
-    {
-      id: "water",
-      type: "fill",
-      source: "openmaptiles",
-      "source-layer": "water",
-      paint: { "fill-color": "#0b2730", "fill-opacity": 0.96 },
-    },
-    {
-      id: "waterway",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "waterway",
-      paint: { "line-color": "#28606b", "line-opacity": 0.62, "line-width": 1 },
-    },
-    {
-      id: "administrative-boundary",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "boundary",
-      paint: { "line-color": "#26383d", "line-opacity": 0.38, "line-width": 1 },
-    },
-    {
-      id: "road-minor-casing",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "transportation",
-      filter: ["match", ["get", "class"], ["minor", "service", "path", "track"], true, false],
-      paint: {
-        "line-color": "#071014",
-        "line-opacity": 0.52,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.3, 13, 1.15, 17, 3.2],
-      },
-    },
-    {
-      id: "road-minor",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "transportation",
-      filter: ["match", ["get", "class"], ["minor", "service", "path", "track"], true, false],
-      paint: {
-        "line-color": "#1e2c30",
-        "line-opacity": ["interpolate", ["linear"], ["zoom"], 9, 0.1, 14, 0.34, 17, 0.58],
-        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.08, 13, 0.34, 17, 1.1],
-      },
-    },
-    {
-      id: "road-secondary-casing",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "transportation",
-      filter: ["match", ["get", "class"], ["secondary", "tertiary"], true, false],
-      paint: {
-        "line-color": "#071014",
-        "line-opacity": 0.82,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 8, 0.7, 13, 2, 17, 5],
-      },
-    },
-    {
-      id: "road-secondary",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "transportation",
-      filter: ["match", ["get", "class"], ["secondary", "tertiary"], true, false],
-      paint: {
-        "line-color": "#314347",
-        "line-opacity": 0.48,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 8, 0.28, 13, 0.82, 17, 2.35],
-      },
-    },
-    {
-      id: "road-primary-casing",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "transportation",
-      filter: ["match", ["get", "class"], ["motorway", "trunk", "primary"], true, false],
-      paint: {
-        "line-color": "#071014",
-        "line-opacity": 0.94,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 7, 1.25, 12, 3.2, 17, 7.2],
-      },
-    },
-    {
-      id: "road-primary",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "transportation",
-      filter: ["match", ["get", "class"], ["motorway", "trunk", "primary"], true, false],
-      paint: {
-        "line-color": "#42565a",
-        "line-opacity": 0.68,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.48, 12, 1.3, 17, 3.5],
-      },
-    },
-    {
-      id: "rail-context",
-      type: "line",
-      source: "openmaptiles",
-      "source-layer": "transportation",
-      filter: ["==", ["get", "class"], "rail"],
-      paint: {
-        "line-color": "#556b6d",
-        "line-dasharray": [1.2, 1.8],
-        "line-opacity": 0.34,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.3, 15, 1.2],
-      },
-    },
-    {
-      id: "building",
-      type: "fill-extrusion",
-      source: "openmaptiles",
-      "source-layer": "building",
-      minzoom: 11.4,
-      paint: {
-        "fill-extrusion-color": "#1b292d",
-        "fill-extrusion-height": ["coalesce", ["get", "render_height"], 7],
-        "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
-        "fill-extrusion-opacity": 0.52,
-      },
-    },
-    {
-      id: "road-label",
-      type: "symbol",
-      source: "openmaptiles",
-      "source-layer": "transportation_name",
-      minzoom: 12,
-      layout: {
-        "symbol-placement": "line",
-        "text-field": ["coalesce", ["get", "name:latin"], ["get", "name:en"], ["get", "name"]],
-        "text-font": ["Noto Sans Regular"],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 12, 8, 16, 11],
-        "text-letter-spacing": 0,
-      },
-      paint: {
-        "text-color": "#718486",
-        "text-halo-color": "#081116",
-        "text-halo-width": 1.2,
-        "text-opacity": 0.68,
-      },
-    },
-    {
-      id: "place-label",
-      type: "symbol",
-      source: "openmaptiles",
-      "source-layer": "place",
-      minzoom: 9,
-      filter: ["match", ["get", "class"], ["city", "town"], true, false],
-      layout: {
-        "text-field": ["coalesce", ["get", "name:latin"], ["get", "name:en"], ["get", "name"]],
-        "text-font": ["Noto Sans Regular"],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 9, 9, 14, 12],
-        "text-letter-spacing": 0,
-      },
-      paint: {
-        "text-color": "#8ea0a0",
-        "text-halo-color": "#081116",
-        "text-halo-width": 1.4,
-        "text-opacity": 0.52,
-      },
-    },
-  ],
-};
 const TEAL: readonly [number, number, number, number] = [88, 203, 195, 228];
 const AMBER: readonly [number, number, number, number] = [222, 170, 96, 232];
 const RED: readonly [number, number, number, number] = [222, 103, 99, 232];
@@ -351,64 +162,6 @@ function chapterCamera(
   return { center, zoom, pitch, bearing };
 }
 
-function applyOperationalStyle(map: MapLibreMap): void {
-  for (const layer of map.getStyle().layers ?? []) {
-    const id = layer.id.toLowerCase();
-    try {
-      if (layer.type === "background")
-        map.setPaintProperty(layer.id, "background-color", "#081116");
-      if (layer.type === "fill") {
-        map.setPaintProperty(
-          layer.id,
-          "fill-color",
-          id.includes("water") ? "#0b2730" : id.includes("building") ? "#1b292d" : "#111d21",
-        );
-        map.setPaintProperty(layer.id, "fill-opacity", id.includes("building") ? 0.62 : 0.9);
-      }
-      if (layer.type === "line") {
-        const lineColor = id.includes("casing")
-          ? "#071014"
-          : id.includes("water")
-            ? "#28606b"
-            : id.includes("road-primary")
-              ? "#42565a"
-              : id.includes("road-secondary")
-                ? "#314347"
-                : id.includes("road-minor")
-                  ? "#1e2c30"
-                  : id.includes("rail")
-                    ? "#556b6d"
-                    : id.includes("road") || id.includes("transport")
-                      ? "#34484d"
-                      : "#26383d";
-        map.setPaintProperty(layer.id, "line-color", lineColor);
-        if (!id.includes("casing")) {
-          const opacity = id.includes("road-primary")
-            ? 0.68
-            : id.includes("road-secondary")
-              ? 0.48
-              : id.includes("road-minor")
-                ? 0.32
-                : id.includes("rail")
-                  ? 0.34
-                  : id.includes("road")
-                    ? 0.68
-                    : 0.52;
-          map.setPaintProperty(layer.id, "line-opacity", opacity);
-        }
-      }
-      if (layer.type === "symbol") {
-        map.setPaintProperty(layer.id, "text-color", "#8ea4a5");
-        map.setPaintProperty(layer.id, "text-halo-color", "#081116");
-        map.setPaintProperty(layer.id, "text-halo-width", 1.2);
-        map.setPaintProperty(layer.id, "icon-opacity", 0.42);
-      }
-    } catch {
-      // Style schemas differ; unsupported paint properties keep their source value.
-    }
-  }
-}
-
 function relatedTrajectoryId(
   dataset: CityOperationalDataset,
   object: LayerObject | null,
@@ -449,7 +202,7 @@ function chapterAnimatesCouriers(chapter: UrbanWorldFrame["chapter"]): boolean {
   return chapter !== "research";
 }
 
-function createOperationalLayers(
+export function createOperationalLayers(
   dataset: CityOperationalDataset,
   frame: UrbanWorldFrame,
   selectedId: string | null,
@@ -619,6 +372,8 @@ function createOperationalLayers(
       getLineColor: [7, 16, 20, 155],
       getLineWidth: 0.55,
       radiusUnits: "meters",
+      radiusMinPixels: lod.mode === "city" ? 1.15 : 1.4,
+      radiusMaxPixels: 3.6,
       lineWidthUnits: "pixels",
       stroked: true,
       opacity:
@@ -684,6 +439,15 @@ export default function PersistentGeoWorld({
   onSelectTrajectory,
   controllerRef,
 }: PersistentGeoWorldProps) {
+  const basemapProvider = useMemo(
+    () =>
+      resolveBasemapProvider({
+        styleUrl: import.meta.env.VITE_MAP_STYLE_URL,
+        attribution: import.meta.env.VITE_MAP_ATTRIBUTION,
+        label: import.meta.env.VITE_MAP_PROVIDER_LABEL,
+      }),
+    [],
+  );
   const worldRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
@@ -767,7 +531,7 @@ export default function PersistentGeoWorld({
       maplibregl.setWorkerUrl(mapLibreWorkerUrl);
       const map = new maplibregl.Map({
         container,
-        style: import.meta.env.VITE_MAP_STYLE_URL || DEFAULT_MAP_STYLE,
+        style: basemapProvider.styleUrl,
         center: datasetRef.current.city.center as [number, number],
         zoom: datasetRef.current.city.zoom - 0.42,
         pitch: 26,
@@ -794,7 +558,7 @@ export default function PersistentGeoWorld({
       map.addControl(
         new maplibregl.AttributionControl({
           compact: true,
-          customAttribution: "RouteMind DEMO operations · © OpenStreetMap · © OpenMapTiles",
+          customAttribution: [...basemapProvider.customAttribution],
         }),
         "bottom-right",
       );
@@ -805,7 +569,14 @@ export default function PersistentGeoWorld({
       map.on("load", () => {
         if (destroyed) return;
         window.clearTimeout(loadTimeout);
-        applyOperationalStyle(map);
+        const themeMutationCount =
+          basemapProvider.themePolicy === "routemind-graphite"
+            ? applyRouteMindBasemapTheme(map)
+            : 0;
+        if (worldRef.current) {
+          worldRef.current.dataset.basemapLayers = String(map.getStyle().layers?.length ?? 0);
+          worldRef.current.dataset.basemapThemeMutations = String(themeMutationCount);
+        }
         const overlay = new MapboxOverlay({
           interleaved: true,
           layers: createOperationalLayers(
@@ -954,7 +725,7 @@ export default function PersistentGeoWorld({
       mapRef.current = null;
       controllerRef.current = null;
     };
-  }, [controllerRef, onSelectTrajectory]);
+  }, [basemapProvider, controllerRef, onSelectTrajectory]);
 
   const selected = dataset.trajectories.find((route) => route.id === selectedTrajectoryId) ?? null;
   const lodMode = operationalLodMode(worldFrame, selectedTrajectoryId);
@@ -976,6 +747,9 @@ export default function PersistentGeoWorld({
       data-world-chapter={worldFrame.chapter}
       data-world-role={worldFrame.sceneRole}
       data-map-status={mapStatus}
+      data-basemap-provider={basemapProvider.id}
+      data-basemap-quality={basemapProvider.qualityTier}
+      data-basemap-theme={basemapProvider.themePolicy}
       data-city={cityId}
       data-courier-population={dataset.courierAgents.length}
       data-emphasized-trajectories={dataset.trajectories.length}
@@ -1022,7 +796,9 @@ export default function PersistentGeoWorld({
         data-pointer-id="geo-source-badge"
       >
         <strong>DEMO / SYNTHETIC</strong>
-        <span>real geography · synthetic operations · {snapshot.source} page context</span>
+        <span>
+          {basemapProvider.label} · synthetic operations · {snapshot.source} page context
+        </span>
       </div>
       <div
         className="geo-map-summary"

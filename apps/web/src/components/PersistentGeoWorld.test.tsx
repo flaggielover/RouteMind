@@ -8,6 +8,7 @@ import PersistentGeoWorld from "./PersistentGeoWorld";
 
 const mocks = vi.hoisted(() => ({
   addedLayers: new Map<string, unknown>(),
+  mapOptions: null as Record<string, unknown> | null,
   mapRemove: vi.fn(),
   layerRemove: vi.fn(),
   overlayFinalize: vi.fn(),
@@ -17,6 +18,9 @@ const mocks = vi.hoisted(() => ({
 vi.mock("maplibre-gl", () => {
   class Map {
     scrollZoom = { disable: vi.fn() };
+    constructor(options: Record<string, unknown>) {
+      mocks.mapOptions = options;
+    }
     addControl() {
       return this;
     }
@@ -86,6 +90,7 @@ vi.mock("@deck.gl/layers", () => {
 
 beforeEach(() => {
   mocks.addedLayers.clear();
+  mocks.mapOptions = null;
   vi.stubGlobal("WebGL2RenderingContext", class WebGL2RenderingContext {});
 });
 
@@ -115,6 +120,10 @@ describe("persistent geographic world", () => {
     const world = screen.getByLabelText("Persistent Shanghai courier operations map");
     expect(world).toHaveAttribute("data-map-status", "ready");
     expect(world).toHaveAttribute("data-lens-mode", "webgl-cc-lens");
+    expect(world).toHaveAttribute("data-basemap-provider", "openfreemap-liberty");
+    expect(world).toHaveAttribute("data-basemap-quality", "full-vector");
+    expect(world).toHaveAttribute("data-basemap-theme", "routemind-graphite");
+    expect(mocks.mapOptions?.style).toBe("https://tiles.openfreemap.org/styles/liberty");
     vi.spyOn(world, "getBoundingClientRect").mockReturnValue({
       bottom: 600,
       height: 600,
@@ -151,6 +160,7 @@ describe("persistent geographic world", () => {
     });
     expect(world).toHaveAttribute("data-lens-active", "false");
     expect(screen.getByText("DEMO / SYNTHETIC")).toBeInTheDocument();
+    expect(screen.getByText(/OpenFreeMap Liberty/)).toBeInTheDocument();
     expect(world).toHaveAttribute("data-courier-population", "120");
     expect(world).toHaveAttribute("data-emphasized-trajectories", "32");
     expect(world).toHaveAttribute("data-map-lod", "city");

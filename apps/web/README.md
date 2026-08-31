@@ -19,3 +19,23 @@ npm run test:e2e
 The production surface is intentionally not an owner of durable business state.
 Future command flows must call the Java business API or an explicitly justified
 BFF, while Python remains the owner of dispatch and simulation computation.
+
+## Operations basemap
+
+Operations uses MapLibre with the complete OpenFreeMap Liberty vector style by
+default. The style is backed by OpenStreetMap data in the OpenMapTiles schema and
+requires the attribution rendered by the map source. The default provider does not
+require an API key; its public instance does not provide an application SLA.
+
+An explicitly configured MapLibre style can be supplied without changing Deck.gl
+operational layers:
+
+```text
+VITE_MAP_STYLE_URL=https://provider.example/styles/operations
+VITE_MAP_PROVIDER_LABEL=Example Maps
+VITE_MAP_ATTRIBUTION=Example Maps attribution
+```
+
+Configured providers retain their own style instead of receiving the RouteMind
+OpenFreeMap theme transform. Their source style or `VITE_MAP_ATTRIBUTION` must carry
+the provider's legally required attribution.

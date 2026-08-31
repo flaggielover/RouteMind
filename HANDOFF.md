@@ -6,6 +6,31 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
+## RM-249 Full-detail MapLibre basemap
+
+State: **PASSED / LOCAL VISUAL CHECKPOINT** (2026-08-31)
+
+Operations keeps MapLibre + Deck.gl and now uses the complete 111-layer
+OpenFreeMap Liberty style instead of the former 16-layer inline reduction. A
+semantic graphite transform makes 277 bounded paint changes while retaining road,
+bridge, tunnel, rail, water, land-use, building, district, place, and label
+hierarchy. The provider contract isolates style, attribution, credentials,
+quality, and theme from exported Deck.gl operational layer construction, leaving
+Google as a future comparison/host path without adding an SDK, key, or billing.
+
+All three city overviews, Chengdu district/Live/Research, direct zoom, compact
+Codrops optical lens, and a continuous 34-step seven-chapter browser scroll pass.
+Option B density remains Shanghai 120/32, Shenzhen 90/26, and Chengdu 104/28.
+Local gates pass 45 Vitest files/130 tests, production build, focused Playwright
+2/2, full Playwright 38 passed/4 intentional skips, and zero production dependency
+vulnerabilities. Evidence is
+`evidence/gates/RM-249/full-detail-maplibre-basemap.md` with six browser captures.
+
+The public OpenFreeMap endpoint has no application SLA; intermittent parallel-test
+glyph fetch warnings fell back to local rendering. This remains real geography
+plus deterministic Demo operations and makes no live telemetry, production route,
+calibrated twin, provider SLA, or Google superiority claim.
+
 ## Product & Demo Readiness Campaign
 
 The separate `PR-*` namespace does not change Round 4 progress, frozen

@@ -5560,6 +5560,15 @@ button {
   z-index: 1;
 }
 
+.geo-map-container {
+  opacity: 1;
+  transition: opacity 360ms ease;
+}
+
+.persistent-geo-world[data-map-status="loading"] .geo-map-container {
+  opacity: 0;
+}
+
 .geo-map-container::after {
   position: absolute;
   inset: 0;
@@ -5567,17 +5576,17 @@ button {
   background:
     linear-gradient(
       180deg,
-      rgba(5, 12, 15, 0.18),
+      rgba(5, 12, 15, 0.08),
       transparent 24%,
       transparent 70%,
-      rgba(5, 12, 15, 0.58)
+      rgba(5, 12, 15, 0.34)
     ),
     linear-gradient(
       90deg,
-      rgba(5, 12, 15, 0.3),
+      rgba(5, 12, 15, 0.14),
       transparent 22%,
       transparent 78%,
-      rgba(5, 12, 15, 0.22)
+      rgba(5, 12, 15, 0.1)
     );
   content: "";
   pointer-events: none;
@@ -7369,6 +7378,10 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .geo-map-container {
+    transition: none;
+  }
+
   .operations-chapter,
   .persistent-urban-world,
   .chapter-pressure-surface,

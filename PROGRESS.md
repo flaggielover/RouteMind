@@ -2691,3 +2691,30 @@ blocked at `HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT`.
   and back, while the premium geographic test and all focused static gates pass.
 - Evidence: `evidence/gates/RM-248/map-lens-zoom-correction.md`. Scope remains
   deterministic Demo/Synthetic visualization with no production telemetry claim.
+
+### RM-249 Full-detail MapLibre basemap - 2026-08-31
+
+- Audited the existing map pipeline and found that the real OpenFreeMap/
+  OpenMapTiles source was reduced to 16 handwritten layers, then flattened again
+  by global type-based paint overrides. The failure was presentation hierarchy,
+  not evidence that MapLibre lacked geographic detail.
+- Operations now loads the complete 111-layer OpenFreeMap Liberty vector style.
+  A semantic graphite transform applies 277 bounded paint mutations while
+  preserving upstream filters, zoom ranges, widths, labels, collisions, and layer
+  order. Roads, bridges, tunnels, rail, water, land use, buildings, districts,
+  places, and labels retain distinct hierarchy.
+- Added a basemap-provider contract for identity, style, attribution, credentials,
+  quality, and theming. Deck.gl operational layers remain provider-independent;
+  no Google SDK, key, or billing dependency was introduced.
+- Browser review covered three city overviews, Chengdu district/Live/Research,
+  direct zoom, the compact WebGL optical lens, and a 34-step continuous seven-
+  chapter scroll. The map stayed ready and Option B counts remained Shanghai
+  120/32, Shenzhen 90/26, and Chengdu 104/28.
+- Local gates pass format, lint, typecheck, 45 Vitest files/130 tests, production
+  build, focused Playwright 2/2, full Playwright 38 passed/4 intentional skips,
+  and zero production dependency vulnerabilities. Evidence:
+  `evidence/gates/RM-249/full-detail-maplibre-basemap.md`.
+- OpenFreeMap's public endpoint has no application SLA. This remains real
+  geography plus explicitly synthetic operations; no production telemetry,
+  production route geometry, calibrated twin, or provider-availability claim is
+  made.
