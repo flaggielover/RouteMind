@@ -69,6 +69,15 @@ test.describe("role-aware web smoke", () => {
     await expect(world).toHaveAttribute("data-map-status", "ready", { timeout: 15_000 });
     await expect(world.locator("canvas")).toHaveCount(1);
     await expect(world.getByText("10", { exact: true })).toBeVisible();
+    const zoomBefore = Number(await world.getAttribute("data-map-zoom"));
+    await world.getByRole("button", { name: "Zoom in" }).click();
+    await expect
+      .poll(async () => Number(await world.getAttribute("data-map-zoom")))
+      .toBeGreaterThan(zoomBefore);
+    await world.getByRole("button", { name: "Zoom out" }).click();
+    await expect
+      .poll(async () => Number(await world.getAttribute("data-map-zoom")))
+      .toBeCloseTo(zoomBefore, 1);
 
     const bounds = await world.boundingBox();
     expect(bounds).not.toBeNull();

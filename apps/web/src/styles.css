@@ -5867,9 +5867,13 @@ button {
 .geo-source-badge,
 .geo-map-summary,
 .geo-inspection,
-.geo-selected-route,
-.geo-map-legend {
+.geo-selected-route {
   pointer-events: auto;
+}
+
+.geo-map-legend {
+  /* Keep the cartographic key from intercepting MapLibre navigation controls. */
+  pointer-events: none;
 }
 
 .geo-map-legend i[data-tone="risk"] {

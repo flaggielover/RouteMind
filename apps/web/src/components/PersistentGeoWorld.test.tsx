@@ -20,6 +20,9 @@ vi.mock("maplibre-gl", () => {
     addControl() {
       return this;
     }
+    getZoom() {
+      return 10;
+    }
     addLayer(layer: { id: string }) {
       mocks.addedLayers.set(layer.id, layer);
       return this;

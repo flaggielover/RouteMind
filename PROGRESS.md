@@ -2677,3 +2677,17 @@ blocked at `HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT`.
 - Local Web gates pass 44 Vitest files/124 tests, typecheck, lint, format, build,
   and the focused real-map Playwright gate. No production telemetry, H3, provider,
   Digital Twin, or scientific claim is introduced.
+
+### RM-248 Map lens and zoom correction - 2026-08-31
+
+- Reduced the square optical lens to a compact 5.8% short-edge window with a
+  34-48px CSS clamp, preserving the WebGL CC Lens and velocity RGB behavior.
+- Enabled MapLibre cooperative gestures so plain wheel input scrolls the page,
+  Ctrl/Cmd + wheel zooms the map, and the existing Zoom in/Zoom out controls
+  remain usable.
+- Exposed `data-map-zoom` for browser verification and made the map legend
+  presentation-only so it cannot intercept navigation controls.
+- Focused browser verification changed Shanghai from zoom `11.13` to `12.13`
+  and back, while the premium geographic test and all focused static gates pass.
+- Evidence: `evidence/gates/RM-248/map-lens-zoom-correction.md`. Scope remains
+  deterministic Demo/Synthetic visualization with no production telemetry claim.

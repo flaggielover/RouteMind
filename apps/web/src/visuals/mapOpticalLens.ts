@@ -59,7 +59,9 @@ export function resolveMapOpticalLensTarget(
   const scaleX = drawingBufferWidth / viewportWidth;
   const scaleY = drawingBufferHeight / viewportHeight;
   const pixelScale = Math.min(scaleX, scaleY);
-  const cssLensSize = clamp(Math.min(viewportWidth, viewportHeight) * 0.29, 170, 240);
+  // Keep the square inspection window compact: it is a local optical probe,
+  // not a second viewport over the operational world.
+  const cssLensSize = clamp(Math.min(viewportWidth, viewportHeight) * 0.058, 34, 48);
   const speed = Math.hypot(frame.vx, frame.vy);
   const velocityResponse = smoothstep(0.4, 24, speed);
 

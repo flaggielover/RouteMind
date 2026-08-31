@@ -779,9 +779,18 @@ export default function PersistentGeoWorld({
         },
         pixelRatio: Math.min(window.devicePixelRatio || 1, 1.5),
         maxPitch: 65,
+        // Plain wheel scrolling continues the page; hold Ctrl/Cmd for map zoom.
+        cooperativeGestures: true,
       });
       mapRef.current = map;
-      map.scrollZoom.disable();
+      const updateMapZoom = () => {
+        const world = worldRef.current;
+        if (world) world.dataset.mapZoom = map.getZoom().toFixed(2);
+      };
+      map.on("zoom", updateMapZoom);
+      map.on("move", updateMapZoom);
+      map.on("zoomend", updateMapZoom);
+      updateMapZoom();
       map.addControl(
         new maplibregl.AttributionControl({
           compact: true,

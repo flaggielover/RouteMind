@@ -67,6 +67,15 @@ HUD truthfully exposes total couriers, focus routes, visible LOD, risk zones, an
 
 Evidence: `evidence/gates/RM-247/deterministic-courier-density-lod.md` and five+screenshots under `evidence/gates/RM-247/`. Local Web validation passes 44 Vitest+files / 124 tests, format, lint, typecheck, build, and focused real-map Playwright.+This remains deterministic Demo visualization only; no production telemetry, H3,+provider, calibrated Digital Twin, or scientific claim is made.
 
+## RM-248 Map lens + zoom correction
+
+The square optical lens is now one fifth of its previous effective size (5.8%
+short-edge, 34-48px CSS clamp). MapLibre cooperative gestures preserve page
+scroll while Ctrl/Cmd + wheel and the visible Zoom in/Zoom out controls change
+the map camera. The cartographic legend no longer intercepts the navigation
+controls. Browser evidence and focused gates are recorded in
+`evidence/gates/RM-248/map-lens-zoom-correction.md`.
+
 ## RM-241 Synthetic Observation & Anomaly Discovery
 
 Repository: `F:\Projects\RouteMind`
