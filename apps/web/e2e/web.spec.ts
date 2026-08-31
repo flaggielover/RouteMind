@@ -100,7 +100,6 @@ test.describe("role-aware web smoke", () => {
     await expect(world).toHaveAttribute("data-lens-active", "true");
     await expect(world).toHaveAttribute("data-lens-rgb-shift", "0.00000");
     await expect(world.locator("canvas")).toHaveCount(1);
-    await page.emulateMedia({ reducedMotion: "no-preference" });
 
     await page.getByRole("link", { name: "05 Live operations" }).click();
     await expect(world).toHaveAttribute("data-world-chapter", "live");
