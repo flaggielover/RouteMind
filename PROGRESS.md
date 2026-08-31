@@ -107,6 +107,29 @@ device-conditional skips. Evidence is
 `evidence/gates/RM-244/multi-city-real-map.md`. RM-244 is excluded from Round 4
 counts and makes no production rider, calibrated twin, or provider claim.
 
+## RM-245 Geospatial Quality & Pointer Inspection
+
+RM-245 passed locally on 2026-08-31 as a focused RM-244 quality continuation.
+MapLibre now exposes restrained minor/secondary/primary road hierarchy, clearer
+water, rail, blocks, buildings, and labels. Deterministic Demo paths follow
+city-specific multi-turn corridors instead of free-space Bezier arcs; ten compact
+hex risk cells replace arbitrary rectangles in each city. Courier headings,
+pickup/destination glyphs, aggregate versus individual route LOD, selected-route
+emphasis, and semantic hover relations make the network inspectable without giant
+glow tubes.
+
+The pointer lens reuses the persistent map and normalized pointer controller, adds
+no canvas, avoids React updates per pointer frame, excludes controls, and returns
+chromatic motion to zero at rest. Browser review passed Shanghai Overview/Pressure/
+Live, selected courier, Shenzhen, Chengdu, reduced motion, continuous scroll,
+1024x768, and 760x800 with zero overflow or console errors. A failed initial
+performance sample led to freezing non-temporal chapter animation and limiting
+Live/Replay updates; post-fix headed-Chrome samples averaged about 62 FPS in Live
+and about 41 FPS under synthetic continuous pointer stress. Repository verification,
+zero npm vulnerabilities, 43 Vitest files/119 tests, production build, and
+Playwright 37 passed/3 intentional skips all pass. Evidence is
+`evidence/gates/RM-245/geospatial-quality-pointer-lens.md`.
+
 Round 2 Progress: 48 / 48 tasks passed
 
 Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204, RM-205, RM-206, RM-207, RM-208, RM-209)
@@ -115,7 +138,7 @@ Enhancement Progress: 32 / 32 tasks passed (RM-210 through RM-241)
 
 Round 4 Progress: 10 / 38 tasks passed
 
-Repository Total: 174 / 204 tasks passed
+Repository Total: 175 / 205 tasks passed
 
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 

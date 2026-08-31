@@ -1,4 +1,4 @@
-import { ArcLayer, PathLayer, PolygonLayer, ScatterplotLayer } from "@deck.gl/layers";
+import { ArcLayer, PathLayer, PolygonLayer, ScatterplotLayer, TextLayer } from "@deck.gl/layers";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import type { PickingInfo } from "@deck.gl/core";
 import * as maplibregl from "maplibre-gl";
@@ -22,6 +22,7 @@ import { GeoWorldFallback } from "./GeoWorldFallback";
 
 const DEFAULT_MAP_STYLE: StyleSpecification = {
   version: 8,
+  glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
   sources: {
     openmaptiles: {
       type: "vector",
@@ -70,14 +71,88 @@ const DEFAULT_MAP_STYLE: StyleSpecification = {
       paint: { "line-color": "#26383d", "line-opacity": 0.38, "line-width": 1 },
     },
     {
-      id: "transportation",
+      id: "road-minor-casing",
       type: "line",
       source: "openmaptiles",
       "source-layer": "transportation",
+      filter: ["match", ["get", "class"], ["minor", "service", "path", "track"], true, false],
       paint: {
-        "line-color": "#34484d",
-        "line-opacity": 0.72,
-        "line-width": ["interpolate", ["linear"], ["zoom"], 8, 0.25, 13, 0.7, 17, 2.2],
+        "line-color": "#071014",
+        "line-opacity": 0.52,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.3, 13, 1.15, 17, 3.2],
+      },
+    },
+    {
+      id: "road-minor",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "transportation",
+      filter: ["match", ["get", "class"], ["minor", "service", "path", "track"], true, false],
+      paint: {
+        "line-color": "#1e2c30",
+        "line-opacity": ["interpolate", ["linear"], ["zoom"], 9, 0.1, 14, 0.34, 17, 0.58],
+        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.08, 13, 0.34, 17, 1.1],
+      },
+    },
+    {
+      id: "road-secondary-casing",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "transportation",
+      filter: ["match", ["get", "class"], ["secondary", "tertiary"], true, false],
+      paint: {
+        "line-color": "#071014",
+        "line-opacity": 0.82,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 8, 0.7, 13, 2, 17, 5],
+      },
+    },
+    {
+      id: "road-secondary",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "transportation",
+      filter: ["match", ["get", "class"], ["secondary", "tertiary"], true, false],
+      paint: {
+        "line-color": "#314347",
+        "line-opacity": 0.48,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 8, 0.28, 13, 0.82, 17, 2.35],
+      },
+    },
+    {
+      id: "road-primary-casing",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "transportation",
+      filter: ["match", ["get", "class"], ["motorway", "trunk", "primary"], true, false],
+      paint: {
+        "line-color": "#071014",
+        "line-opacity": 0.94,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 7, 1.25, 12, 3.2, 17, 7.2],
+      },
+    },
+    {
+      id: "road-primary",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "transportation",
+      filter: ["match", ["get", "class"], ["motorway", "trunk", "primary"], true, false],
+      paint: {
+        "line-color": "#42565a",
+        "line-opacity": 0.68,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 7, 0.48, 12, 1.3, 17, 3.5],
+      },
+    },
+    {
+      id: "rail-context",
+      type: "line",
+      source: "openmaptiles",
+      "source-layer": "transportation",
+      filter: ["==", ["get", "class"], "rail"],
+      paint: {
+        "line-color": "#556b6d",
+        "line-dasharray": [1.2, 1.8],
+        "line-opacity": 0.34,
+        "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.3, 15, 1.2],
       },
     },
     {
@@ -85,12 +160,52 @@ const DEFAULT_MAP_STYLE: StyleSpecification = {
       type: "fill-extrusion",
       source: "openmaptiles",
       "source-layer": "building",
-      minzoom: 12,
+      minzoom: 11.4,
       paint: {
         "fill-extrusion-color": "#1b292d",
         "fill-extrusion-height": ["coalesce", ["get", "render_height"], 7],
         "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
         "fill-extrusion-opacity": 0.52,
+      },
+    },
+    {
+      id: "road-label",
+      type: "symbol",
+      source: "openmaptiles",
+      "source-layer": "transportation_name",
+      minzoom: 12,
+      layout: {
+        "symbol-placement": "line",
+        "text-field": ["coalesce", ["get", "name:latin"], ["get", "name:en"], ["get", "name"]],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 12, 8, 16, 11],
+        "text-letter-spacing": 0,
+      },
+      paint: {
+        "text-color": "#718486",
+        "text-halo-color": "#081116",
+        "text-halo-width": 1.2,
+        "text-opacity": 0.68,
+      },
+    },
+    {
+      id: "place-label",
+      type: "symbol",
+      source: "openmaptiles",
+      "source-layer": "place",
+      minzoom: 9,
+      filter: ["match", ["get", "class"], ["city", "town"], true, false],
+      layout: {
+        "text-field": ["coalesce", ["get", "name:latin"], ["get", "name:en"], ["get", "name"]],
+        "text-font": ["Noto Sans Regular"],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 9, 9, 14, 12],
+        "text-letter-spacing": 0,
+      },
+      paint: {
+        "text-color": "#8ea0a0",
+        "text-halo-color": "#081116",
+        "text-halo-width": 1.4,
+        "text-opacity": 0.52,
       },
     },
   ],
@@ -117,6 +232,7 @@ interface MovingCourier {
   label: string;
   coordinate: LngLat;
   risk: number;
+  heading: number;
 }
 
 interface LayerObject {
@@ -125,6 +241,8 @@ interface LayerObject {
   trajectoryId?: string;
   courierId?: string;
   entityType?: string;
+  kind?: string;
+  risk?: number;
 }
 
 function mixPoint(path: readonly LngLat[], progress: number): LngLat {
@@ -135,6 +253,15 @@ function mixPoint(path: readonly LngLat[], progress: number): LngLat {
   const from = path[index] ?? path[0]!;
   const to = path[index + 1] ?? from;
   return [from[0] + (to[0] - from[0]) * local, from[1] + (to[1] - from[1]) * local];
+}
+
+function routeHeading(path: readonly LngLat[], progress: number): number {
+  if (path.length < 2) return 0;
+  const scaled = Math.max(0, Math.min(0.999, progress)) * (path.length - 1);
+  const index = Math.floor(scaled);
+  const from = path[index] ?? path[0]!;
+  const to = path[index + 1] ?? from;
+  return (Math.atan2(to[0] - from[0], to[1] - from[1]) * 180) / Math.PI;
 }
 
 function routeColor(route: CourierTrajectory): readonly [number, number, number, number] {
@@ -152,13 +279,15 @@ function movingCouriers(
     .filter((route) => route.state === "active")
     .map((route, index) => {
       const movement = reducedMotion ? 0 : (time / 18000 + index * 0.11) % 0.28;
+      const progress = Math.min(0.96, route.currentProgress + movement);
       return {
         id: route.courierId,
         trajectoryId: route.id,
         entityType: "courier",
         label: `Courier ${route.courierId}`,
-        coordinate: mixPoint(route.points, Math.min(0.96, route.currentProgress + movement)),
+        coordinate: mixPoint(route.points, progress),
         risk: route.slaRisk,
+        heading: routeHeading(route.points, progress),
       };
     });
 }
@@ -221,16 +350,36 @@ function applyOperationalStyle(map: MapLibreMap): void {
         map.setPaintProperty(layer.id, "fill-opacity", id.includes("building") ? 0.62 : 0.9);
       }
       if (layer.type === "line") {
-        map.setPaintProperty(
-          layer.id,
-          "line-color",
-          id.includes("water")
+        const lineColor = id.includes("casing")
+          ? "#071014"
+          : id.includes("water")
             ? "#28606b"
-            : id.includes("road") || id.includes("transport")
-              ? "#34484d"
-              : "#26383d",
-        );
-        map.setPaintProperty(layer.id, "line-opacity", id.includes("road") ? 0.72 : 0.52);
+            : id.includes("road-primary")
+              ? "#42565a"
+              : id.includes("road-secondary")
+                ? "#314347"
+                : id.includes("road-minor")
+                  ? "#1e2c30"
+                  : id.includes("rail")
+                    ? "#556b6d"
+                    : id.includes("road") || id.includes("transport")
+                      ? "#34484d"
+                      : "#26383d";
+        map.setPaintProperty(layer.id, "line-color", lineColor);
+        if (!id.includes("casing")) {
+          const opacity = id.includes("road-primary")
+            ? 0.68
+            : id.includes("road-secondary")
+              ? 0.48
+              : id.includes("road-minor")
+                ? 0.32
+                : id.includes("rail")
+                  ? 0.34
+                  : id.includes("road")
+                    ? 0.68
+                    : 0.52;
+          map.setPaintProperty(layer.id, "line-opacity", opacity);
+        }
       }
       if (layer.type === "symbol") {
         map.setPaintProperty(layer.id, "text-color", "#8ea4a5");
@@ -244,48 +393,108 @@ function applyOperationalStyle(map: MapLibreMap): void {
   }
 }
 
+function relatedTrajectoryId(
+  dataset: CityOperationalDataset,
+  object: LayerObject | null,
+): string | null {
+  if (!object) return null;
+  if (object.entityType === "trajectory") return object.id ?? null;
+  if (object.entityType === "courier") return object.trajectoryId ?? null;
+  if (object.kind === "merchant" || object.kind === "customer") {
+    return (
+      dataset.trajectories.find(
+        (route) => route.merchantId === object.id || route.customerId === object.id,
+      )?.id ?? null
+    );
+  }
+  return null;
+}
+
+function individualRouteOpacity(chapter: UrbanWorldFrame["chapter"]): number {
+  if (chapter === "live") return 0.92;
+  if (chapter === "replay") return 0.72;
+  if (chapter === "risk") return 0.62;
+  if (chapter === "pressure") return 0.24;
+  if (chapter === "strategy") return 0.18;
+  if (chapter === "research") return 0.2;
+  return 0.1;
+}
+
+function aggregateFlowOpacity(chapter: UrbanWorldFrame["chapter"]): number {
+  if (chapter === "overview") return 0.88;
+  if (chapter === "strategy") return 0.66;
+  if (chapter === "pressure") return 0.26;
+  if (chapter === "risk") return 0.18;
+  if (chapter === "replay") return 0.16;
+  return 0.08;
+}
+
+function chapterAnimatesCouriers(chapter: UrbanWorldFrame["chapter"]): boolean {
+  return chapter === "live" || chapter === "replay";
+}
+
 function createOperationalLayers(
   dataset: CityOperationalDataset,
   frame: UrbanWorldFrame,
   selectedId: string | null,
+  hovered: LayerObject | null,
   time: number,
   reducedMotion: boolean,
 ) {
   const selected = dataset.trajectories.find((route) => route.id === selectedId) ?? null;
+  const relatedId = selectedId ?? relatedTrajectoryId(dataset, hovered);
+  const relatedRoute = dataset.trajectories.find((route) => route.id === relatedId) ?? null;
   const routes = dataset.trajectories.map((route) => ({ ...route, entityType: "trajectory" }));
-  const nodes = dataset.nodes.map((node) => ({ ...node, entityType: node.kind }));
+  const nodes = dataset.nodes
+    .filter((node) => node.kind !== "courier")
+    .map((node) => ({ ...node, entityType: node.kind }));
   const hotspots = dataset.hotspots.map((hotspot) => ({ ...hotspot, entityType: "hotspot" }));
   const riskZones = dataset.riskZones.map((zone) => ({ ...zone, entityType: "risk-zone" }));
   const flows = dataset.flows.map((flow) => ({ ...flow, entityType: "aggregate-flow" }));
-  const routeOpacity = 0.52 + frame.layerVisibility.flows * 0.38;
-  const detailRoutes =
-    frame.chapter === "live" || frame.chapter === "risk" || frame.chapter === "replay";
+  const couriers = movingCouriers(
+    dataset,
+    time,
+    reducedMotion || !chapterAnimatesCouriers(frame.chapter),
+  );
+  const routeOpacity = individualRouteOpacity(frame.chapter) * frame.layerVisibility.flows;
+  const flowOpacity = aggregateFlowOpacity(frame.chapter) * frame.layerVisibility.flows;
+  const riskExtruded = frame.chapter === "pressure" || frame.chapter === "risk";
   return [
     new PolygonLayer({
-      id: `risk-zones-${dataset.city.id}`,
+      id: `risk-cells-${dataset.city.id}`,
       data: riskZones,
       getPolygon: (item) => item.polygon,
-      getFillColor: (item) => (item.risk > 0.62 ? [185, 62, 62, 66] : [194, 129, 61, 40]),
-      getLineColor: (item) => (item.risk > 0.62 ? RED : AMBER),
-      getLineWidth: 1.5,
+      getFillColor: (item) => {
+        const highlighted = hovered?.id === item.id;
+        if (item.risk > 0.62) return [188, 70, 65, highlighted ? 118 : 68];
+        return [194, 137, 72, highlighted ? 96 : 42];
+      },
+      getLineColor: (item) => {
+        const color = item.risk > 0.62 ? RED : AMBER;
+        return [color[0], color[1], color[2], hovered?.id === item.id ? 245 : 126];
+      },
+      getLineWidth: (item) => (hovered?.id === item.id ? 2 : 0.8),
+      getElevation: (item) => 12 + (frame.chapter === "pressure" ? item.pressure : item.risk) * 96,
       lineWidthUnits: "pixels",
+      extruded: riskExtruded,
       filled: true,
       stroked: true,
-      opacity: frame.layerVisibility.riskZones,
+      opacity: frame.layerVisibility.riskZones * (frame.chapter === "overview" ? 0.42 : 0.82),
       pickable: true,
+      material: { ambient: 0.42, diffuse: 0.58, shininess: 18, specularColor: [58, 68, 66] },
     }),
     new ScatterplotLayer({
       id: `demand-hotspots-${dataset.city.id}`,
       data: hotspots,
       getPosition: (item) => item.coordinate,
-      getRadius: (item) => 180 + item.pressure * 520,
-      getFillColor: (item) => (item.risk > 0.58 ? [222, 103, 99, 58] : [88, 203, 195, 46]),
-      getLineColor: (item) => (item.risk > 0.58 ? RED : TEAL),
-      getLineWidth: 1,
+      getRadius: (item) => 110 + item.pressure * 280,
+      getFillColor: (item) => (item.risk > 0.58 ? [222, 103, 99, 30] : [88, 203, 195, 24]),
+      getLineColor: (item) => (item.risk > 0.58 ? [222, 103, 99, 112] : [88, 203, 195, 96]),
+      getLineWidth: 0.75,
       radiusUnits: "meters",
       lineWidthUnits: "pixels",
       stroked: true,
-      opacity: frame.layerVisibility.cells,
+      opacity: frame.layerVisibility.cells * (frame.chapter === "pressure" ? 0.86 : 0.38),
       pickable: true,
     }),
     new ArcLayer({
@@ -295,25 +504,25 @@ function createOperationalLayers(
       getTargetPosition: (item) => item.to,
       getSourceColor: TEAL,
       getTargetColor: (item) => (item.risk > 0.55 ? RED : AMBER),
-      getWidth: (item) => 1.2 + item.courierCount / 24,
+      getWidth: (item) => 0.7 + item.courierCount / 46,
+      getHeight: 0.12,
       widthUnits: "pixels",
       greatCircle: false,
-      opacity: detailRoutes
-        ? frame.layerVisibility.flows * 0.22
-        : frame.layerVisibility.flows * 0.72,
+      opacity: flowOpacity,
       pickable: true,
     }),
     new PathLayer({
-      id: `courier-trajectory-glow-${dataset.city.id}`,
+      id: `courier-trajectory-underlay-${dataset.city.id}`,
       data: routes,
       getPath: (route) => route.points,
       getColor: (route) => {
         const color = routeColor(route);
-        return [color[0], color[1], color[2], route.state === "active" ? 54 : 24];
+        const focused = relatedId === route.id;
+        return [color[0], color[1], color[2], focused ? 82 : route.state === "active" ? 30 : 14];
       },
-      getWidth: (route) => (selectedId === route.id ? 13 : route.state === "active" ? 7 : 3.5),
+      getWidth: (route) => (relatedId === route.id ? 7 : route.state === "active" ? 3.4 : 2),
       widthUnits: "pixels",
-      widthMinPixels: 2,
+      widthMinPixels: 1,
       capRounded: true,
       jointRounded: true,
       opacity: routeOpacity,
@@ -323,10 +532,19 @@ function createOperationalLayers(
       id: `courier-trajectories-${dataset.city.id}`,
       data: routes,
       getPath: (route) => route.points,
-      getColor: (route) => routeColor(route),
-      getWidth: (route) => (selectedId === route.id ? 5.4 : route.state === "active" ? 3.1 : 1.4),
+      getColor: (route) => {
+        const color = routeColor(route);
+        const dimmed = relatedId !== null && relatedId !== route.id;
+        return [
+          color[0],
+          color[1],
+          color[2],
+          dimmed ? 54 : relatedId === route.id ? 255 : color[3],
+        ];
+      },
+      getWidth: (route) => (relatedId === route.id ? 3.8 : route.state === "active" ? 1.65 : 0.85),
       widthUnits: "pixels",
-      widthMinPixels: 1,
+      widthMinPixels: 0.75,
       capRounded: true,
       jointRounded: true,
       opacity: routeOpacity,
@@ -338,7 +556,7 @@ function createOperationalLayers(
           data: [{ ...selected, entityType: "trajectory" }],
           getPath: (route) => route.points,
           getColor: routeColor(selected),
-          getWidth: 6.5,
+          getWidth: 4.2,
           widthUnits: "pixels",
           capRounded: true,
           jointRounded: true,
@@ -346,32 +564,48 @@ function createOperationalLayers(
           pickable: true,
         })
       : null,
-    new ScatterplotLayer({
-      id: `operational-nodes-${dataset.city.id}`,
+    new TextLayer({
+      id: `operational-entity-glyphs-${dataset.city.id}`,
       data: nodes,
       getPosition: (node) => node.coordinate,
-      getRadius: (node) => (node.kind === "courier" ? 78 : node.kind === "merchant" ? 62 : 54),
-      getFillColor: (node) =>
-        node.kind === "courier" ? AMBER : node.kind === "merchant" ? TEAL : SLATE,
-      getLineColor: [232, 244, 241, 210],
-      getLineWidth: 1,
-      radiusUnits: "meters",
-      lineWidthUnits: "pixels",
-      stroked: true,
+      getText: (node) => (node.kind === "merchant" ? "M" : "D"),
+      getColor: (node) => (node.kind === "merchant" ? TEAL : [190, 205, 205, 220]),
+      getSize: (node) =>
+        relatedRoute && (node.id === relatedRoute.merchantId || node.id === relatedRoute.customerId)
+          ? 17
+          : 11,
+      sizeUnits: "pixels",
+      fontFamily: "Arial, sans-serif",
+      fontWeight: 700,
       opacity: frame.layerVisibility.nodes,
       pickable: true,
     }),
     new ScatterplotLayer({
-      id: `moving-couriers-${dataset.city.id}`,
-      data: movingCouriers(dataset, time, reducedMotion),
+      id: `courier-focus-rings-${dataset.city.id}`,
+      data: couriers,
       getPosition: (courier) => courier.coordinate,
-      getRadius: 118,
-      getFillColor: (courier) => (courier.risk > 0.62 ? RED : AMBER),
-      getLineColor: [247, 247, 235, 245],
-      getLineWidth: 2,
+      getRadius: (courier) => (relatedId === courier.trajectoryId ? 104 : 58),
+      getFillColor: [7, 16, 20, 42],
+      getLineColor: (courier) => (courier.risk > 0.62 ? [222, 103, 99, 205] : [214, 162, 97, 205]),
+      getLineWidth: (courier) => (relatedId === courier.trajectoryId ? 2 : 0.8),
       radiusUnits: "meters",
       lineWidthUnits: "pixels",
       stroked: true,
+      opacity: frame.layerVisibility.nodes,
+      pickable: false,
+    }),
+    new TextLayer({
+      id: `moving-couriers-${dataset.city.id}`,
+      data: couriers,
+      getPosition: (courier) => courier.coordinate,
+      getText: () => ">",
+      getColor: (courier) => (courier.risk > 0.62 ? RED : AMBER),
+      getSize: (courier) => (relatedId === courier.trajectoryId ? 17 : 12),
+      getAngle: (courier) => courier.heading,
+      sizeUnits: "pixels",
+      fontFamily: "Arial, sans-serif",
+      fontWeight: 700,
+      billboard: true,
       opacity: frame.layerVisibility.nodes,
       pickable: true,
     }),
@@ -404,6 +638,7 @@ export default function PersistentGeoWorld({
   onSelectTrajectory,
   controllerRef,
 }: PersistentGeoWorldProps) {
+  const worldRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
@@ -415,6 +650,7 @@ export default function PersistentGeoWorld({
   const visibleRef = useRef(true);
   const animationRef = useRef(0);
   const lastLayerFrameRef = useRef(0);
+  const hoveredRef = useRef<LayerObject | null>(null);
   const [mapStatus, setMapStatus] = useState<"loading" | "ready" | "fallback">("loading");
   const [fallbackReason, setFallbackReason] = useState("Map initialization pending");
   const [hovered, setHovered] = useState<LayerObject | null>(null);
@@ -425,6 +661,7 @@ export default function PersistentGeoWorld({
         datasetRef.current,
         frameRef.current,
         selectedRef.current,
+        hoveredRef.current,
         time,
         reducedRef.current,
       ),
@@ -496,6 +733,7 @@ export default function PersistentGeoWorld({
         maxPitch: 65,
       });
       mapRef.current = map;
+      map.scrollZoom.disable();
       map.addControl(
         new maplibregl.AttributionControl({
           compact: true,
@@ -517,12 +755,24 @@ export default function PersistentGeoWorld({
             datasetRef.current,
             frameRef.current,
             selectedRef.current,
+            hoveredRef.current,
             performance.now(),
             reducedRef.current,
           ),
           pickingRadius: 7,
-          getCursor: ({ isHovering }) => (isHovering ? "pointer" : "grab"),
-          onHover: (info: PickingInfo) => setHovered((info.object as LayerObject | null) ?? null),
+          getCursor: ({ isHovering }) => (isHovering ? "pointer" : "crosshair"),
+          onHover: (info: PickingInfo) => {
+            const next = (info.object as LayerObject | null) ?? null;
+            if (
+              next?.id === hoveredRef.current?.id &&
+              next?.entityType === hoveredRef.current?.entityType
+            ) {
+              return;
+            }
+            hoveredRef.current = next;
+            setHovered(next);
+            updateLayers(performance.now());
+          },
           onClick: (info: PickingInfo) => {
             const object = info.object as LayerObject | null;
             const trajectoryId =
@@ -561,7 +811,8 @@ export default function PersistentGeoWorld({
         !destroyed &&
         visibleRef.current &&
         !reducedRef.current &&
-        time - lastLayerFrameRef.current > 66
+        chapterAnimatesCouriers(frameRef.current.chapter) &&
+        time - lastLayerFrameRef.current > 180
       ) {
         lastLayerFrameRef.current = time;
         updateLayers(time);
@@ -577,9 +828,30 @@ export default function PersistentGeoWorld({
         applyCamera(true);
       },
       setScrollFrame() {},
-      setPointerFrame() {},
+      setPointerFrame(pointer) {
+        const world = worldRef.current;
+        if (!world) return;
+        const rect = world.getBoundingClientRect();
+        const x = pointer.nx * window.innerWidth - rect.left;
+        const y = pointer.ny * window.innerHeight - rect.top;
+        const inside = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
+        const active = inside && pointer.targetType === "scene";
+        const motion = reducedRef.current ? 0 : Math.max(0, (pointer.intensity - 0.11) / 0.31);
+        world.style.setProperty("--geo-lens-x", `${x.toFixed(1)}px`);
+        world.style.setProperty("--geo-lens-y", `${y.toFixed(1)}px`);
+        world.style.setProperty("--geo-lens-strength", active ? "1" : "0");
+        world.style.setProperty("--geo-lens-motion", active ? motion.toFixed(3) : "0");
+        world.dataset.lensActive = String(active);
+      },
       clearFocus() {
+        hoveredRef.current = null;
         setHovered(null);
+        const world = worldRef.current;
+        if (world) {
+          world.dataset.lensActive = "false";
+          world.style.setProperty("--geo-lens-strength", "0");
+          world.style.setProperty("--geo-lens-motion", "0");
+        }
       },
     };
     return () => {
@@ -599,6 +871,7 @@ export default function PersistentGeoWorld({
   const selected = dataset.trajectories.find((route) => route.id === selectedTrajectoryId) ?? null;
   return (
     <aside
+      ref={worldRef}
       className="persistent-urban-world persistent-geo-world"
       data-world-chapter={worldFrame.chapter}
       data-world-role={worldFrame.sceneRole}
@@ -609,6 +882,7 @@ export default function PersistentGeoWorld({
       aria-label={`Persistent ${dataset.city.name} courier operations map`}
     >
       <div className="geo-map-container" ref={containerRef} />
+      <div className="geo-pointer-lens" aria-hidden="true" />
       {mapStatus === "fallback" && <GeoWorldFallback dataset={dataset} reason={fallbackReason} />}
       {mapStatus === "loading" && (
         <div className="geo-map-loading" role="status">

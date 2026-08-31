@@ -63,7 +63,10 @@ export interface SpatialRiskZone {
   id: string;
   cityId: CityId;
   label: string;
+  coordinate: LngLat;
   polygon: readonly LngLat[];
+  pressure: number;
+  courierSupply: number;
   risk: number;
 }
 
@@ -235,6 +238,353 @@ export const cityGeoCatalog: Readonly<Record<CityId, CityGeoContext>> = Object.f
 
 export const cityIds = Object.freeze(Object.keys(cityGeoCatalog) as CityId[]);
 
+interface RoadCorridor {
+  fromAnchor: number;
+  toAnchor: number;
+  points: readonly LngLat[];
+}
+
+const CITY_ROAD_CORRIDORS: Readonly<Record<CityId, readonly RoadCorridor[]>> = {
+  shanghai: [
+    {
+      fromAnchor: 1,
+      toAnchor: 2,
+      points: [
+        [121.4492, 31.2296],
+        [121.458, 31.2302],
+        [121.4678, 31.231],
+        [121.4737, 31.2304],
+        [121.4818, 31.233],
+        [121.4894, 31.2358],
+        [121.4968, 31.2372],
+        [121.5052, 31.2397],
+      ],
+    },
+    {
+      fromAnchor: 3,
+      toAnchor: 4,
+      points: [
+        [121.4374, 31.1884],
+        [121.4458, 31.197],
+        [121.4536, 31.207],
+        [121.465, 31.2168],
+        [121.4772, 31.225],
+        [121.4896, 31.234],
+        [121.4994, 31.244],
+        [121.5106, 31.253],
+        [121.5265, 31.2638],
+      ],
+    },
+    {
+      fromAnchor: 1,
+      toAnchor: 4,
+      points: [
+        [121.4492, 31.2296],
+        [121.454, 31.237],
+        [121.463, 31.244],
+        [121.474, 31.2485],
+        [121.484, 31.252],
+        [121.4934, 31.2576],
+        [121.506, 31.2605],
+        [121.518, 31.262],
+        [121.5265, 31.2638],
+      ],
+    },
+    {
+      fromAnchor: 3,
+      toAnchor: 2,
+      points: [
+        [121.4374, 31.1884],
+        [121.449, 31.192],
+        [121.459, 31.198],
+        [121.469, 31.206],
+        [121.479, 31.213],
+        [121.489, 31.219],
+        [121.497, 31.227],
+        [121.501, 31.234],
+        [121.5052, 31.2397],
+      ],
+    },
+    {
+      fromAnchor: 0,
+      toAnchor: 4,
+      points: [
+        [121.4737, 31.2304],
+        [121.476, 31.239],
+        [121.481, 31.247],
+        [121.489, 31.253],
+        [121.4934, 31.2576],
+        [121.503, 31.259],
+        [121.514, 31.261],
+        [121.5265, 31.2638],
+      ],
+    },
+    {
+      fromAnchor: 1,
+      toAnchor: 2,
+      points: [
+        [121.4492, 31.2296],
+        [121.451, 31.221],
+        [121.46, 31.216],
+        [121.471, 31.2165],
+        [121.482, 31.22],
+        [121.492, 31.226],
+        [121.499, 31.232],
+        [121.5052, 31.2397],
+      ],
+    },
+    {
+      fromAnchor: 3,
+      toAnchor: 4,
+      points: [
+        [121.4374, 31.1884],
+        [121.448, 31.184],
+        [121.46, 31.186],
+        [121.472, 31.194],
+        [121.484, 31.205],
+        [121.495, 31.219],
+        [121.505, 31.235],
+        [121.514, 31.249],
+        [121.5265, 31.2638],
+      ],
+    },
+    {
+      fromAnchor: 5,
+      toAnchor: 2,
+      points: [
+        [121.4934, 31.2576],
+        [121.496, 31.252],
+        [121.498, 31.247],
+        [121.5, 31.243],
+        [121.5052, 31.2397],
+      ],
+    },
+  ],
+  shenzhen: [
+    {
+      fromAnchor: 1,
+      toAnchor: 2,
+      points: [
+        [113.9304, 22.5329],
+        [113.923, 22.529],
+        [113.913, 22.525],
+        [113.903, 22.521],
+        [113.8955, 22.5153],
+      ],
+    },
+    {
+      fromAnchor: 1,
+      toAnchor: 4,
+      points: [
+        [113.9304, 22.5329],
+        [113.952, 22.535],
+        [113.978, 22.536],
+        [114.004, 22.539],
+        [114.028, 22.542],
+        [114.0579, 22.5431],
+        [114.083, 22.548],
+        [114.104, 22.562],
+        [114.116, 22.581],
+        [114.1219, 22.6028],
+      ],
+    },
+    {
+      fromAnchor: 3,
+      toAnchor: 2,
+      points: [
+        [114.1178, 22.5487],
+        [114.098, 22.547],
+        [114.078, 22.545],
+        [114.0579, 22.5431],
+        [114.032, 22.541],
+        [114.006, 22.537],
+        [113.979, 22.532],
+        [113.951, 22.525],
+        [113.925, 22.52],
+        [113.8955, 22.5153],
+      ],
+    },
+    {
+      fromAnchor: 3,
+      toAnchor: 4,
+      points: [
+        [114.1178, 22.5487],
+        [114.119, 22.559],
+        [114.118, 22.573],
+        [114.119, 22.588],
+        [114.1219, 22.6028],
+      ],
+    },
+    {
+      fromAnchor: 5,
+      toAnchor: 0,
+      points: [
+        [114.0328, 22.6567],
+        [114.034, 22.637],
+        [114.039, 22.619],
+        [114.044, 22.598],
+        [114.049, 22.578],
+        [114.053, 22.56],
+        [114.0579, 22.5431],
+      ],
+    },
+    {
+      fromAnchor: 1,
+      toAnchor: 3,
+      points: [
+        [113.9304, 22.5329],
+        [113.953, 22.535],
+        [113.979, 22.537],
+        [114.006, 22.54],
+        [114.033, 22.542],
+        [114.0579, 22.5431],
+        [114.083, 22.545],
+        [114.101, 22.547],
+        [114.1178, 22.5487],
+      ],
+    },
+    {
+      fromAnchor: 5,
+      toAnchor: 2,
+      points: [
+        [114.0328, 22.6567],
+        [114.017, 22.638],
+        [114.001, 22.619],
+        [113.984, 22.599],
+        [113.965, 22.579],
+        [113.945, 22.56],
+        [113.925, 22.543],
+        [113.91, 22.529],
+        [113.8955, 22.5153],
+      ],
+    },
+    {
+      fromAnchor: 0,
+      toAnchor: 4,
+      points: [
+        [114.0579, 22.5431],
+        [114.073, 22.548],
+        [114.088, 22.555],
+        [114.101, 22.566],
+        [114.11, 22.578],
+        [114.116, 22.591],
+        [114.1219, 22.6028],
+      ],
+    },
+  ],
+  chengdu: [
+    {
+      fromAnchor: 1,
+      toAnchor: 2,
+      points: [
+        [104.0431, 30.6384],
+        [104.052, 30.642],
+        [104.061, 30.648],
+        [104.0668, 30.657],
+        [104.075, 30.663],
+        [104.086, 30.668],
+        [104.1016, 30.6719],
+      ],
+    },
+    {
+      fromAnchor: 3,
+      toAnchor: 4,
+      points: [
+        [104.0392, 30.6813],
+        [104.047, 30.673],
+        [104.056, 30.665],
+        [104.0668, 30.657],
+        [104.079, 30.648],
+        [104.093, 30.638],
+        [104.105, 30.628],
+        [104.1172, 30.6221],
+      ],
+    },
+    {
+      fromAnchor: 1,
+      toAnchor: 4,
+      points: [
+        [104.0431, 30.6384],
+        [104.051, 30.631],
+        [104.062, 30.626],
+        [104.075, 30.622],
+        [104.09, 30.619],
+        [104.104, 30.619],
+        [104.1172, 30.6221],
+      ],
+    },
+    {
+      fromAnchor: 3,
+      toAnchor: 2,
+      points: [
+        [104.0392, 30.6813],
+        [104.05, 30.688],
+        [104.064, 30.691],
+        [104.078, 30.689],
+        [104.091, 30.682],
+        [104.1016, 30.6719],
+      ],
+    },
+    {
+      fromAnchor: 5,
+      toAnchor: 2,
+      points: [
+        [104.0655, 30.5708],
+        [104.066, 30.587],
+        [104.068, 30.603],
+        [104.072, 30.619],
+        [104.08, 30.637],
+        [104.09, 30.654],
+        [104.1016, 30.6719],
+      ],
+    },
+    {
+      fromAnchor: 1,
+      toAnchor: 4,
+      points: [
+        [104.0431, 30.6384],
+        [104.039, 30.624],
+        [104.043, 30.609],
+        [104.053, 30.596],
+        [104.066, 30.589],
+        [104.081, 30.59],
+        [104.096, 30.598],
+        [104.108, 30.609],
+        [104.1172, 30.6221],
+      ],
+    },
+    {
+      fromAnchor: 3,
+      toAnchor: 4,
+      points: [
+        [104.0392, 30.6813],
+        [104.047, 30.696],
+        [104.061, 30.705],
+        [104.078, 30.707],
+        [104.095, 30.701],
+        [104.108, 30.689],
+        [104.116, 30.674],
+        [104.12, 30.657],
+        [104.1172, 30.6221],
+      ],
+    },
+    {
+      fromAnchor: 5,
+      toAnchor: 2,
+      points: [
+        [104.0655, 30.5708],
+        [104.079, 30.579],
+        [104.092, 30.591],
+        [104.101, 30.606],
+        [104.106, 30.624],
+        [104.107, 30.643],
+        [104.104, 30.659],
+        [104.1016, 30.6719],
+      ],
+    },
+  ],
+};
+
 export function isCityId(value: string): value is CityId {
   return cityIds.includes(value as CityId);
 }
@@ -246,62 +596,36 @@ function seededUnit(seed: number, index: number): number {
   return ((value ^ (value >>> 14)) >>> 0) / 4294967296;
 }
 
-function curveBetween(from: LngLat, to: LngLat, bend: number): readonly LngLat[] {
+function hexCell(
+  center: LngLat,
+  radiusLongitude: number,
+  radiusLatitude: number,
+): readonly LngLat[] {
   return Array.from({ length: 7 }, (_, index) => {
-    const t = index / 6;
-    const arch = Math.sin(t * Math.PI) * bend;
+    const angle = (Math.PI / 3) * (index % 6) + Math.PI / 6;
     return [
-      from[0] + (to[0] - from[0]) * t + arch * (to[1] - from[1]),
-      from[1] + (to[1] - from[1]) * t - arch * (to[0] - from[0]),
+      center[0] + Math.cos(angle) * radiusLongitude,
+      center[1] + Math.sin(angle) * radiusLatitude,
     ] as const;
   });
-}
-
-function ringRoute(city: CityGeoContext, index: number): readonly LngLat[] {
-  const radiusLng = 0.021 + (index % 3) * 0.009;
-  const radiusLat = 0.017 + (index % 2) * 0.008;
-  const start = (index * Math.PI) / 4;
-  return Array.from({ length: 9 }, (_, pointIndex) => {
-    const angle = start + (pointIndex / 8) * Math.PI * 1.32;
-    return [
-      city.center[0] + Math.cos(angle) * radiusLng,
-      city.center[1] + Math.sin(angle) * radiusLat,
-    ] as const;
-  });
-}
-
-function routePoints(city: CityGeoContext, index: number): readonly LngLat[] {
-  if (city.id === "chengdu" && index % 2 === 0) return ringRoute(city, index);
-  const from = city.anchors[index % city.anchors.length]!.coordinate;
-  const to = city.anchors[(index * 2 + 3) % city.anchors.length]!.coordinate;
-  const direction = index % 2 === 0 ? 1 : -1;
-  const bend = city.id === "shanghai" ? 0.12 * direction : 0.055 * direction;
-  return curveBetween(from, to, bend);
-}
-
-function zonePolygon(center: LngLat, width: number, height: number): readonly LngLat[] {
-  return [
-    [center[0] - width, center[1] - height],
-    [center[0] + width, center[1] - height * 0.72],
-    [center[0] + width * 0.82, center[1] + height],
-    [center[0] - width * 0.9, center[1] + height * 0.78],
-  ];
 }
 
 export function createCityOperationalDataset(cityId: CityId): CityOperationalDataset {
   const city = cityGeoCatalog[cityId];
-  const routeCount = cityId === "shenzhen" ? 11 : 10;
+  const corridors = CITY_ROAD_CORRIDORS[cityId];
+  const routeCount = corridors.length;
   const trajectories = Array.from({ length: routeCount }, (_, index): CourierTrajectory => {
     const risk = 0.12 + seededUnit(city.seed, index) * 0.64;
+    const corridor = corridors[index]!;
     return {
       id: `${city.id}-trajectory-${index + 1}`,
       cityId: city.id,
       courierId: `${city.id.slice(0, 2).toUpperCase()}-C${String(index + 11).padStart(2, "0")}`,
       orderId: `${city.id.slice(0, 2).toUpperCase()}-O${2040 + index}`,
       state: index < 6 ? "active" : "recent",
-      points: routePoints(city, index),
-      merchantId: city.anchors[index % city.anchors.length]!.id,
-      customerId: city.anchors[(index * 2 + 3) % city.anchors.length]!.id,
+      points: corridor.points,
+      merchantId: city.anchors[corridor.fromAnchor]!.id,
+      customerId: city.anchors[corridor.toAnchor]!.id,
       etaMinutes: 5 + Math.round(seededUnit(city.seed, index + 30) * 18),
       distanceKilometres: Number((1.8 + seededUnit(city.seed, index + 60) * 8.4).toFixed(1)),
       slaRisk: Number(risk.toFixed(2)),
@@ -347,13 +671,32 @@ export function createCityOperationalDataset(cityId: CityId): CityOperationalDat
     courierSupply: Number((0.28 + seededUnit(city.seed, index + 140) * 0.62).toFixed(2)),
     risk: Number((0.14 + seededUnit(city.seed, index + 160) * 0.72).toFixed(2)),
   }));
-  const riskZones = hotspots.slice(0, 3).map((hotspot, index): SpatialRiskZone => ({
-    id: `${city.id}-risk-zone-${index + 1}`,
-    cityId,
-    label: `${city.anchors[index]!.label} SLA zone`,
-    polygon: zonePolygon(hotspot.coordinate, city.id === "shenzhen" ? 0.018 : 0.012, 0.009),
-    risk: hotspot.risk,
-  }));
+  const riskZones = hotspots.flatMap((hotspot, hotspotIndex) =>
+    [0, 1].map((cellIndex): SpatialRiskZone => {
+      const radiusLongitude =
+        city.id === "shenzhen" ? 0.0084 : city.id === "chengdu" ? 0.0062 : 0.0054;
+      const radiusLatitude = city.id === "shenzhen" ? 0.0052 : 0.0044;
+      const direction = hotspotIndex % 2 === 0 ? 1 : -1;
+      const coordinate: LngLat =
+        cellIndex === 0
+          ? hotspot.coordinate
+          : [
+              hotspot.coordinate[0] + radiusLongitude * 1.45 * direction,
+              hotspot.coordinate[1] + radiusLatitude * 1.05,
+            ];
+      const localRisk = Math.min(0.96, hotspot.risk * (cellIndex === 0 ? 1 : 0.78));
+      return {
+        id: `${city.id}-risk-cell-${hotspotIndex + 1}-${cellIndex + 1}`,
+        cityId,
+        label: `${city.anchors[hotspotIndex]!.label} SLA cell`,
+        coordinate,
+        polygon: hexCell(coordinate, radiusLongitude, radiusLatitude),
+        pressure: hotspot.pressure,
+        courierSupply: hotspot.courierSupply,
+        risk: Number(localRisk.toFixed(2)),
+      };
+    }),
+  );
   const flows = [0, 1, 2].map((index): AggregateFlow => ({
     id: `${city.id}-flow-${index + 1}`,
     cityId,

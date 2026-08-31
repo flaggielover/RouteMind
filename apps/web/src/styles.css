@@ -5217,6 +5217,23 @@ button {
   .operations-motion-root [data-motion-section] {
     will-change: auto;
   }
+
+  .geo-pointer-lens {
+    transition: none;
+    backdrop-filter: contrast(1.16) brightness(1.06);
+  }
+
+  .geo-pointer-lens::before,
+  .geo-pointer-lens::after {
+    opacity: 0;
+    transform: none;
+  }
+}
+
+@media (pointer: coarse) {
+  .geo-pointer-lens {
+    display: none;
+  }
 }
 
 /* Immersive Operations world: the route is a spatial stage with a compact rail,
@@ -5544,8 +5561,17 @@ button {
 }
 
 .persistent-geo-world {
+  --geo-lens-motion: 0;
+  --geo-lens-strength: 0;
+  --geo-lens-x: 50%;
+  --geo-lens-y: 50%;
   color: #d9ebe7;
+  border: 0;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
   background: #071014;
+  box-shadow:
+    0 34px 96px rgba(0, 0, 0, 0.48),
+    inset 0 1px rgba(125, 181, 179, 0.16);
 }
 
 .geo-map-container,
@@ -5576,6 +5602,67 @@ button {
     );
   content: "";
   pointer-events: none;
+}
+
+.geo-pointer-lens {
+  position: absolute;
+  z-index: 6;
+  top: 0;
+  left: 0;
+  width: clamp(128px, 13vw, 174px);
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid rgba(166, 221, 215, 0.52);
+  border-radius: 6px;
+  background:
+    linear-gradient(90deg, rgba(198, 241, 234, 0.045) 1px, transparent 1px),
+    linear-gradient(rgba(198, 241, 234, 0.035) 1px, transparent 1px), rgba(70, 132, 130, 0.025);
+  background-size: 22px 22px;
+  box-shadow:
+    0 0 0 1px rgba(5, 13, 16, 0.78),
+    0 16px 42px rgba(0, 0, 0, 0.25),
+    inset 0 0 28px rgba(103, 200, 192, 0.08);
+  opacity: calc(var(--geo-lens-strength) * 0.92);
+  pointer-events: none;
+  transform: translate3d(calc(var(--geo-lens-x) - 50%), calc(var(--geo-lens-y) - 50%), 0)
+    scale(calc(0.92 + var(--geo-lens-strength) * 0.08));
+  transition:
+    opacity 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+  backdrop-filter: contrast(1.24) brightness(1.09) saturate(1.1);
+  will-change: transform, opacity;
+}
+
+.geo-pointer-lens::before,
+.geo-pointer-lens::after {
+  position: absolute;
+  inset: 9px;
+  border-radius: 3px;
+  content: "";
+}
+
+.geo-pointer-lens::before {
+  border-top: 1px solid rgba(94, 229, 216, calc(var(--geo-lens-motion) * 0.48));
+  border-left: 1px solid rgba(94, 229, 216, calc(var(--geo-lens-motion) * 0.3));
+  transform: translateX(calc(var(--geo-lens-motion) * -2px));
+}
+
+.geo-pointer-lens::after {
+  border-right: 1px solid rgba(222, 103, 99, calc(var(--geo-lens-motion) * 0.42));
+  border-bottom: 1px solid rgba(222, 103, 99, calc(var(--geo-lens-motion) * 0.28));
+  transform: translateX(calc(var(--geo-lens-motion) * 2px));
+}
+
+.persistent-geo-world[data-lens-active="true"] .geo-pointer-lens {
+  box-shadow:
+    0 0 0 1px rgba(5, 13, 16, 0.86),
+    0 18px 48px rgba(0, 0, 0, 0.3),
+    inset 0 0 32px rgba(103, 200, 192, 0.12);
+}
+
+.persistent-geo-world[data-world-chapter="live"] .geo-pointer-lens {
+  width: clamp(144px, 15vw, 192px);
 }
 
 .geo-map-container .maplibregl-map,
@@ -5641,8 +5728,12 @@ button {
   left: 20px;
   display: flex;
   overflow: hidden;
-  border: 1px solid rgba(123, 157, 158, 0.32);
-  background: rgba(7, 16, 20, 0.82);
+  padding: 3px;
+  border-top: 1px solid rgba(103, 200, 192, 0.34);
+  border-right: 0;
+  border-bottom: 1px solid rgba(103, 200, 192, 0.16);
+  border-left: 0;
+  background: linear-gradient(90deg, rgba(7, 16, 20, 0.92), rgba(7, 16, 20, 0.5));
   box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
   backdrop-filter: blur(14px);
 }
@@ -5652,8 +5743,8 @@ button {
   min-height: 45px;
   padding: 7px 11px;
   border: 0;
-  border-right: 1px solid rgba(123, 157, 158, 0.2);
-  border-radius: 0;
+  border-right: 1px solid rgba(103, 200, 192, 0.1);
+  border-radius: 2px;
   color: #8ea4a5;
   background: transparent;
   cursor: pointer;
@@ -5674,8 +5765,10 @@ button {
 
 .geo-city-selector button.active {
   color: #eff8f6;
-  background: rgba(68, 138, 137, 0.24);
-  box-shadow: inset 0 -2px #67c8c0;
+  background: linear-gradient(180deg, rgba(82, 157, 153, 0.24), rgba(39, 81, 82, 0.18));
+  box-shadow:
+    inset 2px 0 #67c8c0,
+    inset 0 0 0 1px rgba(103, 200, 192, 0.08);
 }
 
 .geo-city-selector span,

@@ -56,6 +56,44 @@ test.describe("role-aware web smoke", () => {
     await expect(page.getByText("Demo snapshot")).toBeVisible();
   });
 
+  test("keeps the premium geographic world inspectable without trapping page scroll", async ({
+    page,
+  }) => {
+    if (test.info().project.name === "mobile") test.skip();
+    await page.goto("/operations");
+    await selectDemo(page);
+    const world = page.getByRole("complementary", {
+      name: "Persistent Shanghai courier operations map",
+    });
+    await expect(world).toHaveAttribute("data-map-status", "ready");
+    await expect(world.locator("canvas")).toHaveCount(1);
+    await expect(world.getByText("10", { exact: true })).toBeVisible();
+
+    const bounds = await world.boundingBox();
+    expect(bounds).not.toBeNull();
+    await page.mouse.move(bounds!.x + bounds!.width * 0.55, bounds!.y + bounds!.height * 0.48);
+    await expect(world).toHaveAttribute("data-lens-active", "true");
+    await expect(world.locator(".geo-pointer-lens")).toHaveCSS("opacity", "0.92");
+
+    await page.getByRole("link", { name: "05 Live operations" }).click();
+    await expect(world).toHaveAttribute("data-world-chapter", "live");
+    await world.getByRole("button", { name: /Shenzhen/ }).click();
+    await expect(
+      page.getByRole("complementary", { name: "Persistent Shenzhen courier operations map" }),
+    ).toHaveAttribute("data-world-chapter", "live");
+    await expect(page.locator(".geo-selected-route")).toHaveCount(0);
+
+    await page.getByRole("link", { name: "01 Network overview" }).click();
+    await expect(page.locator(".persistent-geo-world")).toHaveAttribute(
+      "data-world-chapter",
+      "overview",
+    );
+    const before = await page.evaluate(() => window.scrollY);
+    await page.mouse.move(bounds!.x + bounds!.width * 0.5, bounds!.y + bounds!.height * 0.55);
+    await page.mouse.wheel(0, 700);
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(before + 300);
+  });
+
   test("controls a simulation source and surfaces replay events", async ({ page }) => {
     let simulatedTime = 0;
     const state = () => ({

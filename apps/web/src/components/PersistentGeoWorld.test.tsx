@@ -14,6 +14,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("maplibre-gl", () => {
   class Map {
+    scrollZoom = { disable: vi.fn() };
     addControl() {
       return this;
     }
@@ -62,6 +63,7 @@ vi.mock("@deck.gl/layers", () => {
     PathLayer: Layer,
     PolygonLayer: Layer,
     ScatterplotLayer: Layer,
+    TextLayer: Layer,
   };
 });
 
@@ -92,10 +94,34 @@ describe("persistent geographic world", () => {
       />,
     );
 
-    expect(screen.getByLabelText("Persistent Shanghai courier operations map")).toHaveAttribute(
-      "data-map-status",
-      "ready",
-    );
+    const world = screen.getByLabelText("Persistent Shanghai courier operations map");
+    expect(world).toHaveAttribute("data-map-status", "ready");
+    vi.spyOn(world, "getBoundingClientRect").mockReturnValue({
+      bottom: 600,
+      height: 600,
+      left: 0,
+      right: 1000,
+      top: 0,
+      width: 1000,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+    controllerRef.current?.setPointerFrame({
+      nx: 0.3,
+      ny: 0.3,
+      intensity: 0.32,
+      targetType: "scene",
+    });
+    expect(world).toHaveAttribute("data-lens-active", "true");
+    expect(world).toHaveStyle({ "--geo-lens-strength": "1" });
+    controllerRef.current?.setPointerFrame({
+      nx: 0.3,
+      ny: 0.3,
+      intensity: 0.32,
+      targetType: "control",
+    });
+    expect(world).toHaveAttribute("data-lens-active", "false");
     expect(screen.getByText("DEMO / SIMULATED")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /Shenzhen/ }));
     expect(onCityChange).toHaveBeenCalledWith("shenzhen");

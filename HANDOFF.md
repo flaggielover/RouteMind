@@ -179,6 +179,31 @@ RM-244 is excluded from Round 4 counts and does not authorize a production
 spatial-data, rider-telemetry, provider-qualification, or calibrated Digital
 Twin claim.
 
+## RM-245 Geospatial Quality & Pointer Inspection
+
+State: **PASSED LOCALLY** (2026-08-31)
+
+The passed RM-244 map now has a premium cartographic hierarchy, deterministic
+city-specific road-corridor paths, chapter LOD, compact heading-aware couriers,
+pickup/destination glyphs, ten distributed hex risk cells per city, semantic
+route relationships, and selected-courier inspection. The pointer-following lens
+uses the existing map/controller and one canvas, remains static under reduced
+motion, excludes controls, and returns transient chromatic response to zero at
+rest. Map wheel zoom is disabled so the seven-chapter page scroll is not trapped.
+
+Browser gates passed Shanghai Overview/Pressure/Live, selected courier, Shenzhen,
+Chengdu, reduced motion, continuous scroll, 1024x768, and 760x800 with no overflow
+or console errors. After correcting an initial continuous Deck-redraw performance
+failure, headed Chrome averaged about 62 FPS in Live and about 41 FPS under a
+synthetic continuous-pointer stress sample. Local gates pass repository verification,
+zero production npm vulnerabilities, 43 Vitest files/119 tests, build, and
+Playwright 37 passed/3 intentional skips. Evidence and ten screenshots are under
+`evidence/gates/RM-245/`.
+
+The latest local Demo server is `http://127.0.0.1:4175/operations`. RM-245 is
+excluded from Round 4 counts and makes no production route, rider-telemetry, H3,
+provider, calibrated Digital Twin, or scientific claim.
+
 Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
 
 R4-422 operator-observed delivery confirmation (2026-08-30): the operator
