@@ -243,8 +243,8 @@ export function OperationsMotionCoordinator({
       const nextY = lerp(pointer.y, targetPointer.y, pointerEase);
       pointer.vx = lerp(pointer.vx, targetPointer.vx, reducedMotion ? 0.4 : 0.68);
       pointer.vy = lerp(pointer.vy, targetPointer.vy, reducedMotion ? 0.4 : 0.68);
-      targetPointer.vx = lerp(targetPointer.vx, 0, reducedMotion ? 0.52 : 0.11);
-      targetPointer.vy = lerp(targetPointer.vy, 0, reducedMotion ? 0.52 : 0.11);
+      targetPointer.vx = lerp(targetPointer.vx, 0, reducedMotion ? 0.52 : 0.28);
+      targetPointer.vy = lerp(targetPointer.vy, 0, reducedMotion ? 0.52 : 0.28);
       pointer.x = nextX;
       pointer.y = nextY;
       pointer.nx = lerp(pointer.nx, targetPointer.nx, pointerEase);

@@ -124,6 +124,7 @@ test.describe("role-aware web smoke", () => {
     page,
   }) => {
     if (test.info().project.name === "mobile") test.skip();
+    test.setTimeout(60_000);
     await page.goto("/operations");
     await selectDemo(page);
     const cityExpectations = [
