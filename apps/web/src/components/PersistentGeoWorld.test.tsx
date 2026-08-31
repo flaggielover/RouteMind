@@ -7,7 +7,9 @@ import { toOperationsChapterState } from "../visuals/operationsChapterState";
 import PersistentGeoWorld from "./PersistentGeoWorld";
 
 const mocks = vi.hoisted(() => ({
+  addedLayers: new Map<string, unknown>(),
   mapRemove: vi.fn(),
+  layerRemove: vi.fn(),
   overlayFinalize: vi.fn(),
   overlaySetProps: vi.fn(),
 }));
@@ -16,6 +18,18 @@ vi.mock("maplibre-gl", () => {
   class Map {
     scrollZoom = { disable: vi.fn() };
     addControl() {
+      return this;
+    }
+    addLayer(layer: { id: string }) {
+      mocks.addedLayers.set(layer.id, layer);
+      return this;
+    }
+    getLayer(id: string) {
+      return mocks.addedLayers.get(id);
+    }
+    removeLayer(id: string) {
+      mocks.addedLayers.delete(id);
+      mocks.layerRemove(id);
       return this;
     }
     on(event: string, callback: () => void) {
@@ -68,6 +82,7 @@ vi.mock("@deck.gl/layers", () => {
 });
 
 beforeEach(() => {
+  mocks.addedLayers.clear();
   vi.stubGlobal("WebGL2RenderingContext", class WebGL2RenderingContext {});
 });
 
@@ -96,6 +111,7 @@ describe("persistent geographic world", () => {
 
     const world = screen.getByLabelText("Persistent Shanghai courier operations map");
     expect(world).toHaveAttribute("data-map-status", "ready");
+    expect(world).toHaveAttribute("data-lens-mode", "webgl-cc-lens");
     vi.spyOn(world, "getBoundingClientRect").mockReturnValue({
       bottom: 600,
       height: 600,
@@ -108,16 +124,25 @@ describe("persistent geographic world", () => {
       toJSON: () => ({}),
     });
     controllerRef.current?.setPointerFrame({
+      x: 300,
+      y: 180,
       nx: 0.3,
       ny: 0.3,
+      vx: 12,
+      vy: 0,
       intensity: 0.32,
       targetType: "scene",
     });
     expect(world).toHaveAttribute("data-lens-active", "true");
-    expect(world).toHaveStyle({ "--geo-lens-strength": "1" });
+    expect(world).toHaveAttribute("data-lens-distortion", "1.50");
+    expect(world).toHaveAttribute("data-lens-rgb-shift", "0.00000");
     controllerRef.current?.setPointerFrame({
+      x: 300,
+      y: 180,
       nx: 0.3,
       ny: 0.3,
+      vx: 12,
+      vy: 0,
       intensity: 0.32,
       targetType: "control",
     });
@@ -128,6 +153,7 @@ describe("persistent geographic world", () => {
     expect(controllerRef.current).not.toBeNull();
 
     unmount();
+    expect(mocks.layerRemove).toHaveBeenCalledWith("routemind-map-optical-lens");
     expect(mocks.overlayFinalize).toHaveBeenCalledOnce();
     expect(mocks.mapRemove).toHaveBeenCalledOnce();
     expect(controllerRef.current).toBeNull();

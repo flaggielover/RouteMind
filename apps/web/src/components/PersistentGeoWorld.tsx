@@ -17,6 +17,7 @@ import {
   type LngLat,
 } from "../visuals/cityGeo";
 import type { GeoWorldController } from "../visuals/geoWorldController";
+import { MAP_OPTICAL_LENS_LAYER_ID, MapOpticalLensLayer } from "../visuals/mapOpticalLens";
 import type { UrbanWorldFrame } from "../visuals/operationsChapterState";
 import { GeoWorldFallback } from "./GeoWorldFallback";
 
@@ -642,6 +643,7 @@ export default function PersistentGeoWorld({
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapLibreMap | null>(null);
   const overlayRef = useRef<MapboxOverlay | null>(null);
+  const opticalLensRef = useRef<MapOpticalLensLayer | null>(null);
   const dataset = useMemo(() => createCityOperationalDataset(cityId), [cityId]);
   const datasetRef = useRef(dataset);
   const frameRef = useRef(worldFrame);
@@ -652,6 +654,7 @@ export default function PersistentGeoWorld({
   const lastLayerFrameRef = useRef(0);
   const hoveredRef = useRef<LayerObject | null>(null);
   const [mapStatus, setMapStatus] = useState<"loading" | "ready" | "fallback">("loading");
+  const [lensMode, setLensMode] = useState<"pending" | "webgl-cc-lens" | "unavailable">("pending");
   const [fallbackReason, setFallbackReason] = useState("Map initialization pending");
   const [hovered, setHovered] = useState<LayerObject | null>(null);
 
@@ -782,6 +785,15 @@ export default function PersistentGeoWorld({
         });
         map.addControl(overlay);
         overlayRef.current = overlay;
+        try {
+          const opticalLens = new MapOpticalLensLayer();
+          map.addLayer(opticalLens);
+          opticalLensRef.current = opticalLens;
+          setLensMode("webgl-cc-lens");
+        } catch {
+          opticalLensRef.current = null;
+          setLensMode("unavailable");
+        }
         setMapStatus("ready");
         applyCamera(false);
       });
@@ -832,25 +844,43 @@ export default function PersistentGeoWorld({
         const world = worldRef.current;
         if (!world) return;
         const rect = world.getBoundingClientRect();
-        const x = pointer.nx * window.innerWidth - rect.left;
-        const y = pointer.ny * window.innerHeight - rect.top;
+        const x = pointer.x - rect.left;
+        const y = pointer.y - rect.top;
         const inside = x >= 0 && x <= rect.width && y >= 0 && y <= rect.height;
         const active = inside && pointer.targetType === "scene";
-        const motion = reducedRef.current ? 0 : Math.max(0, (pointer.intensity - 0.11) / 0.31);
-        world.style.setProperty("--geo-lens-x", `${x.toFixed(1)}px`);
-        world.style.setProperty("--geo-lens-y", `${y.toFixed(1)}px`);
-        world.style.setProperty("--geo-lens-strength", active ? "1" : "0");
-        world.style.setProperty("--geo-lens-motion", active ? motion.toFixed(3) : "0");
+        opticalLensRef.current?.setPointerFrame({
+          x,
+          y,
+          vx: pointer.vx,
+          vy: pointer.vy,
+          viewportWidth: rect.width,
+          viewportHeight: rect.height,
+          active,
+          reducedMotion: reducedRef.current,
+        });
+        const lensDebug = opticalLensRef.current?.getDebugState();
         world.dataset.lensActive = String(active);
+        world.dataset.lensDistortion = lensDebug?.distortion.toFixed(2) ?? "0";
+        world.dataset.lensRgbShift = lensDebug?.rgbShift.toFixed(5) ?? "0";
       },
       clearFocus() {
         hoveredRef.current = null;
         setHovered(null);
         const world = worldRef.current;
+        const rect = world?.getBoundingClientRect();
+        opticalLensRef.current?.setPointerFrame({
+          x: 0,
+          y: 0,
+          vx: 0,
+          vy: 0,
+          viewportWidth: rect?.width ?? 1,
+          viewportHeight: rect?.height ?? 1,
+          active: false,
+          reducedMotion: reducedRef.current,
+        });
         if (world) {
           world.dataset.lensActive = "false";
-          world.style.setProperty("--geo-lens-strength", "0");
-          world.style.setProperty("--geo-lens-motion", "0");
+          world.dataset.lensRgbShift = "0";
         }
       },
     };
@@ -860,6 +890,10 @@ export default function PersistentGeoWorld({
       if (animationRef.current) window.cancelAnimationFrame(animationRef.current);
       document.removeEventListener("visibilitychange", onVisibility);
       reducedQuery?.removeEventListener?.("change", onReduced);
+      if (mapRef.current?.getLayer(MAP_OPTICAL_LENS_LAYER_ID)) {
+        mapRef.current.removeLayer(MAP_OPTICAL_LENS_LAYER_ID);
+      }
+      opticalLensRef.current = null;
       overlayRef.current?.finalize();
       overlayRef.current = null;
       mapRef.current?.remove();
@@ -877,19 +911,23 @@ export default function PersistentGeoWorld({
       data-world-role={worldFrame.sceneRole}
       data-map-status={mapStatus}
       data-city={cityId}
+      data-lens-mode={lensMode}
       data-pointer-target="scene"
       data-pointer-id="persistent-geo-world"
       aria-label={`Persistent ${dataset.city.name} courier operations map`}
     >
       <div className="geo-map-container" ref={containerRef} />
-      <div className="geo-pointer-lens" aria-hidden="true" />
       {mapStatus === "fallback" && <GeoWorldFallback dataset={dataset} reason={fallbackReason} />}
       {mapStatus === "loading" && (
         <div className="geo-map-loading" role="status">
           Loading {dataset.city.name} real geography
         </div>
       )}
-      <div className="persistent-world-chrome">
+      <div
+        className="persistent-world-chrome"
+        data-pointer-target="hud"
+        data-pointer-id="geo-world-chrome"
+      >
         <span className="persistent-world-kicker">ROUTEMIND / REAL CITY COURIER NETWORK</span>
         <span className="persistent-world-chapter">{worldFrame.chapter.replace("-", " ")}</span>
       </div>
@@ -907,11 +945,20 @@ export default function PersistentGeoWorld({
           </button>
         ))}
       </div>
-      <div className="geo-source-badge">
+      <div
+        className="geo-source-badge"
+        data-pointer-target="hud"
+        data-pointer-id="geo-source-badge"
+      >
         <strong>DEMO / SIMULATED</strong>
         <span>real geography · synthetic operations · {snapshot.source} page context</span>
       </div>
-      <div className="geo-map-summary" aria-live="polite">
+      <div
+        className="geo-map-summary"
+        data-pointer-target="hud"
+        data-pointer-id="geo-map-summary"
+        aria-live="polite"
+      >
         <span>
           <small>City</small>
           <strong>{dataset.city.name}</strong>
@@ -925,12 +972,17 @@ export default function PersistentGeoWorld({
           <strong>{dataset.riskZones.length}</strong>
         </span>
       </div>
-      <div className="geo-inspection" data-pointer-target="hud">
+      <div className="geo-inspection" data-pointer-target="hud" data-pointer-id="geo-inspection">
         <span>local inspection</span>
         <strong>{inspectionText(hovered, dataset)}</strong>
       </div>
       {selected && (
-        <div className="geo-selected-route" aria-live="polite">
+        <div
+          className="geo-selected-route"
+          data-pointer-target="hud"
+          data-pointer-id="geo-selected-route"
+          aria-live="polite"
+        >
           <button
             type="button"
             aria-label="Clear selected courier"
@@ -965,7 +1017,12 @@ export default function PersistentGeoWorld({
           </dl>
         </div>
       )}
-      <div className="geo-map-legend" aria-label="Operational map legend">
+      <div
+        className="geo-map-legend"
+        data-pointer-target="hud"
+        data-pointer-id="geo-map-legend"
+        aria-label="Operational map legend"
+      >
         <span>
           <i className="geo-legend-line active" /> active courier
         </span>

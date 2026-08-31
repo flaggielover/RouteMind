@@ -93,6 +93,10 @@ export function OperationsMotionCoordinator({
     const sections: SectionMetric[] = [];
     let lastScrollY = window.scrollY;
     let scrollVelocity = 0;
+    let hasPointerSample = false;
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let lastPointerTime = 0;
     const motionRoot = root;
     const stack = root.querySelector<HTMLElement>(".page-stack");
     const reducedQuery =
@@ -172,6 +176,20 @@ export function OperationsMotionCoordinator({
     };
 
     const updateTargetPointer = (event: PointerEvent) => {
+      const eventTime = event.timeStamp || performance.now();
+      if (hasPointerSample) {
+        const elapsed = clamp(eventTime - lastPointerTime, 4, 80);
+        const frameScale = 1000 / 60 / elapsed;
+        targetPointer.vx = (event.clientX - lastPointerX) * frameScale;
+        targetPointer.vy = (event.clientY - lastPointerY) * frameScale;
+      } else {
+        targetPointer.vx = 0;
+        targetPointer.vy = 0;
+        hasPointerSample = true;
+      }
+      lastPointerX = event.clientX;
+      lastPointerY = event.clientY;
+      lastPointerTime = eventTime;
       targetPointer.x = event.clientX;
       targetPointer.y = event.clientY;
       targetPointer.nx = clamp(event.clientX / Math.max(window.innerWidth, 1));
@@ -187,6 +205,9 @@ export function OperationsMotionCoordinator({
       targetPointer.targetType = null;
       targetPointer.pressed = false;
       targetPointer.intensity = 0;
+      targetPointer.vx = 0;
+      targetPointer.vy = 0;
+      hasPointerSample = false;
     };
 
     const onPointerMove = (event: PointerEvent) => updateTargetPointer(event);
@@ -220,10 +241,10 @@ export function OperationsMotionCoordinator({
       const pointerEase = reducedMotion ? 0.2 : 0.13;
       const nextX = lerp(pointer.x, targetPointer.x, pointerEase);
       const nextY = lerp(pointer.y, targetPointer.y, pointerEase);
-      const dx = nextX - pointer.x;
-      const dy = nextY - pointer.y;
-      pointer.vx = lerp(pointer.vx, dx, reducedMotion ? 0.28 : 0.18);
-      pointer.vy = lerp(pointer.vy, dy, reducedMotion ? 0.28 : 0.18);
+      pointer.vx = lerp(pointer.vx, targetPointer.vx, reducedMotion ? 0.4 : 0.68);
+      pointer.vy = lerp(pointer.vy, targetPointer.vy, reducedMotion ? 0.4 : 0.68);
+      targetPointer.vx = lerp(targetPointer.vx, 0, reducedMotion ? 0.52 : 0.11);
+      targetPointer.vy = lerp(targetPointer.vy, 0, reducedMotion ? 0.52 : 0.11);
       pointer.x = nextX;
       pointer.y = nextY;
       pointer.nx = lerp(pointer.nx, targetPointer.nx, pointerEase);

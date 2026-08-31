@@ -29,6 +29,29 @@ eligible; the next safe action is to preserve this closure while Round 4
 external/Human Gates remain separately governed. Preserve unrelated untracked
 work, including `.codex-tmp/` and `.superpowers/`.
 
+## RM-246 Codrops Optical Pointer Lens
+
+State: **PASSED / LOCAL VISUAL CHECKPOINT** (2026-08-31)
+
+The Operations real-city map now owns one same-context MapLibre custom WebGL2
+optical layer instead of the prior CSS backdrop lens. It refracts the complete
+MapLibre and Deck.gl geographic frame through a Codrops-derived square CC Lens
+transform and adds velocity-sensitive radial RGB sampling. The implementation is
+MIT-attributed in `apps/web/THIRD_PARTY_NOTICES.md`; it does not copy reference
+branding, text, media, or artwork.
+
+Direct in-app-browser comparison against Codrops plus 1280/1024/760, moving/rest,
+HUD exclusion, single-canvas, runtime reduced-motion, and console gates pass. Fast
+pointer acceleration measured `0.00647` RGB shift; stationary and reduced-motion
+states return to zero. WebGL resources are explicitly disposed, stable frames are
+demand-rendered, and established map fallback behavior remains.
+
+Evidence: `evidence/gates/RM-246/codrops-optical-pointer-lens.md`. Validation:
+44 Vitest files / 122 tests, production build, 37 Playwright passes / 3 intentional
+device skips, dependency audit with zero vulnerabilities, and full repository
+verify. This remains deterministic demo visualization and introduces no production
+telemetry, provider validation, H3, calibrated Digital Twin, or scientific claim.
+
 ## RM-241 Synthetic Observation & Anomaly Discovery
 
 Repository: `F:\Projects\RouteMind`

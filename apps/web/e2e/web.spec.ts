@@ -65,15 +65,41 @@ test.describe("role-aware web smoke", () => {
     const world = page.getByRole("complementary", {
       name: "Persistent Shanghai courier operations map",
     });
-    await expect(world).toHaveAttribute("data-map-status", "ready");
+    await expect(world).toHaveAttribute("data-map-status", "ready", { timeout: 15_000 });
     await expect(world.locator("canvas")).toHaveCount(1);
     await expect(world.getByText("10", { exact: true })).toBeVisible();
 
     const bounds = await world.boundingBox();
     expect(bounds).not.toBeNull();
-    await page.mouse.move(bounds!.x + bounds!.width * 0.55, bounds!.y + bounds!.height * 0.48);
+    await page.mouse.move(bounds!.x + bounds!.width * 0.24, bounds!.y + bounds!.height * 0.42);
+    await page.mouse.move(bounds!.x + bounds!.width * 0.62, bounds!.y + bounds!.height * 0.48, {
+      steps: 2,
+    });
     await expect(world).toHaveAttribute("data-lens-active", "true");
-    await expect(world.locator(".geo-pointer-lens")).toHaveCSS("opacity", "0.92");
+    await expect(world).toHaveAttribute("data-lens-mode", "webgl-cc-lens");
+    await expect(world).toHaveAttribute("data-lens-distortion", "1.50");
+    await expect
+      .poll(async () => Number(await world.getAttribute("data-lens-rgb-shift")))
+      .toBeGreaterThan(0);
+    await page.waitForTimeout(700);
+    await expect
+      .poll(async () => Number(await world.getAttribute("data-lens-rgb-shift")))
+      .toBeLessThan(0.001);
+
+    await world.locator(".geo-map-summary").hover();
+    await expect(world).toHaveAttribute("data-lens-active", "false");
+    await world.getByRole("button", { name: /Shanghai/ }).hover();
+    await expect(world).toHaveAttribute("data-lens-active", "false");
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.mouse.move(bounds!.x + bounds!.width * 0.2, bounds!.y + bounds!.height * 0.36);
+    await page.mouse.move(bounds!.x + bounds!.width * 0.68, bounds!.y + bounds!.height * 0.54, {
+      steps: 2,
+    });
+    await expect(world).toHaveAttribute("data-lens-active", "true");
+    await expect(world).toHaveAttribute("data-lens-rgb-shift", "0.00000");
+    await expect(world.locator("canvas")).toHaveCount(1);
+    await page.emulateMedia({ reducedMotion: "no-preference" });
 
     await page.getByRole("link", { name: "05 Live operations" }).click();
     await expect(world).toHaveAttribute("data-world-chapter", "live");

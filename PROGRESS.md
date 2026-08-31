@@ -2632,3 +2632,26 @@ blocked at `HUMAN_GATE_PENDING / NO_GMAIL_API_CALL / NO_EMAIL_SENT`.
   passes with two device-conditional skips, including desktop/mobile Axe smoke.
   This remains deterministic snapshot-derived visualization, not production
   telemetry or a completed Digital Twin.
+
+### RM-246 Codrops optical pointer lens - 2026-08-31
+
+- Replaced the RM-245 CSS backdrop/outline lens with one MapLibre custom WebGL2
+  layer in the existing map context. The layer samples the final MapLibre plus
+  interleaved Deck.gl framebuffer and applies a square CC Lens UV transform with
+  radial RGB channel sampling; no second canvas or renderer was added.
+- Pointer position remains smoothly eased while event velocity drives a separate
+  transient chromatic envelope. A final browser probe reached `0.00647` during
+  fast acceleration and returned to `0.00000` at rest. Reduced motion preserves
+  static distortion and forces RGB separation to zero.
+- Critical map HUD, city controls, buttons, forms, charts, and accessibility
+  controls suppress the effect. The native cursor remains, and stable stationary
+  frames no longer request continuous map repaint.
+- Codrops and RouteMind were compared in separate real in-app browser tabs.
+  Desktop 1280x720, laptop 1024x768, narrow 760x800, moving/resting, selected
+  route, UI exclusion, and reduced-motion visual gates pass with one canvas and
+  no application console errors.
+- Evidence: `evidence/gates/RM-246/codrops-optical-pointer-lens.md`. Local gates
+  pass 44 Vitest files/122 tests, production build, Playwright 37 passed/3
+  intentional skips, dependency audit with zero vulnerabilities, and repository
+  verification. The MIT source notice is retained; no reference media or artwork
+  was copied and no backend/production claim changed.
