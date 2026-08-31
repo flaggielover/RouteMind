@@ -2,6 +2,30 @@
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
+## RM-250 Operations Motion Language + Bilingual UI
+
+RM-250 passed locally on 2026-09-01 as a frontend visual and localization
+checkpoint. The Operations route now uses seven distinct spatial chapter
+compositions with shared motion-role tokens, a persistent real-city MapLibre +
+Deck.gl world, and analytical surfaces that hand focus to and from the map.
+The Live chapter was explicitly corrected so its operational evidence remains a
+layered full-width inspection surface rather than a collapsed legacy grid.
+
+The shell, chapter copy, map/HUD, analytical chart labels, controls, loading and
+accessibility copy support zh-CN and en-US through a typed React locale runtime
+with persisted selection and Intl number/date formatting. Reduced motion keeps
+the WebGL scene and static spatial recomposition while disabling continuous
+drift, route animation, pulses, and chromatic response. Option B density and the
+Codrops-derived square optical lens remain unchanged.
+
+Clean browser evidence is under `evidence/gates/RM-250/operations-motion-bilingual.md`
+with desktop chapter captures and a Chinese overview. Gates pass 47 Vitest
+files/133 tests, TypeScript, lint, formatting, production build, desktop locale
+and composition Playwright 2/2, mobile reduced-motion 1 pass/1 intentional
+locale-control skip, and existing lifecycle/density Playwright 2/2. This remains
+DEMO / SYNTHETIC visualization only and makes no production telemetry, Google
+provider, or Digital Twin claim.
+
 ## Product & Demo Readiness Campaign
 
 The separate `PR-*` namespace records local product work without changing Round

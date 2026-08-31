@@ -6,6 +6,27 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
+## RM-250 Operations Motion Language + Bilingual UI
+
+State: **PASSED / LOCAL VISUAL CHECKPOINT** (2026-09-01)
+
+Seven Operations chapters now have distinct spatial compositions and shared
+motion roles around one persistent MapLibre + Deck.gl world. The typed locale
+runtime supports persisted zh-CN/en-US rendering and Intl formatting without
+entering the WebGL render loop. Reduced motion retains the spatial/WebGL scene
+and freezes nonessential animation. The Live inspection stack has final
+full-width overrides so flow, queue, activity, and entity evidence remain
+legible.
+
+Clean MapLibre-ready browser captures and the visual decision record are in
+`evidence/gates/RM-250/operations-motion-bilingual.md`; design and self-review
+are in `docs/superpowers/specs/2026-08-31-operations-motion-language-bilingual-design.md`.
+Local validation: 47 Vitest files / 133 tests, typecheck, lint, format check,
+build, desktop locale 2/2, mobile reduced-motion 1 pass plus one intentional
+locale-control skip, and existing lifecycle/density desktop 2/2. Preserve
+unrelated untracked `.codex-tmp/` and `.superpowers/` work. Scope remains
+deterministic Demo operations; no production telemetry or provider claim.
+
 ## RM-249 Full-detail MapLibre basemap
 
 State: **PASSED / LOCAL VISUAL CHECKPOINT** (2026-08-31)

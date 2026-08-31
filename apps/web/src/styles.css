@@ -5219,6 +5219,199 @@ button {
   }
 }
 
+/* RM-245 motion language: chapter roles share a small, explicit vocabulary so
+   scroll changes composition and hierarchy instead of only revealing cards. */
+:root {
+  --rm-motion-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --rm-motion-ease-precise: cubic-bezier(0.16, 1, 0.3, 1);
+  --rm-motion-reveal: 520ms;
+  --rm-motion-handoff: 760ms;
+  --rm-motion-focus: 900ms;
+  --rm-surface-graphite: #0b1114;
+  --rm-surface-slate: #121d21;
+  --rm-accent-cool: #79c7c0;
+}
+
+.operations-motion-root {
+  --rm-chapter-depth: 0;
+  --rm-chapter-focus: 0.78;
+  perspective: 1400px;
+  perspective-origin: 54% 46%;
+}
+
+.operations-motion-root[data-motion-focus="chapter-overview"] .persistent-geo-world {
+  filter: saturate(0.88) contrast(1.04);
+}
+
+.operations-motion-root[data-motion-focus="chapter-pressure"] .persistent-geo-world {
+  transform: translate3d(-1.8vw, 1.4vh, 0) scale(0.97);
+  filter: saturate(1.06) contrast(1.08);
+}
+
+.operations-motion-root[data-motion-focus="chapter-risk"] .persistent-geo-world {
+  transform: translate3d(2.4vw, 2vh, 0) scale(0.94);
+  filter: saturate(0.82) contrast(1.12);
+}
+
+.operations-motion-root[data-motion-focus="chapter-strategy"] .persistent-geo-world {
+  transform: translate3d(-2vw, -1.4vh, 0) scale(0.95) rotate(-0.35deg);
+}
+
+.persistent-geo-world {
+  transition:
+    transform var(--rm-motion-handoff) var(--rm-motion-ease),
+    filter var(--rm-motion-focus) var(--rm-motion-ease);
+  will-change: transform, filter;
+}
+
+.chapter-pressure-surface,
+.chapter-risk-surface,
+.chapter-strategy-surface,
+.chapter-replay-dock,
+.chapter-research-wall {
+  transition:
+    transform var(--rm-motion-handoff) var(--rm-motion-ease),
+    opacity var(--rm-motion-focus) var(--rm-motion-ease),
+    box-shadow var(--rm-motion-focus) var(--rm-motion-ease);
+}
+
+.chapter-pressure-surface {
+  transform-origin: 72% 50%;
+}
+
+.chapter-risk-surface {
+  transform-origin: 20% 50%;
+}
+
+.chapter-strategy-surface {
+  transform-origin: 75% 50%;
+}
+
+.chapter-live .metric-grid {
+  display: flex;
+  align-items: baseline;
+  gap: 24px;
+  padding: 12px 0;
+  border-block: 1px solid rgba(121, 199, 192, 0.18);
+  background: transparent;
+}
+
+.chapter-live .metric-cell {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 8px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.chapter-live .metric-cell .metric-icon {
+  display: none;
+}
+.chapter-live .metric-cell .metric-value {
+  font-size: 22px;
+}
+
+.chapter-replay {
+  grid-template-columns: minmax(220px, 0.55fr) minmax(0, 1.45fr);
+  gap: 6vw;
+  align-items: end;
+  min-height: 110vh;
+}
+
+.chapter-replay::before {
+  inset: 18% 0 16% 8%;
+  border-top: 1px solid rgba(121, 199, 192, 0.26);
+  border-bottom: 1px solid rgba(214, 162, 97, 0.18);
+  transform: skewY(-5deg);
+}
+
+.chapter-replay-copy {
+  padding-bottom: 10vh;
+}
+.chapter-replay-dock {
+  transform: translateY(-3vh) rotate(0.7deg);
+}
+
+.chapter-research {
+  grid-template-columns: minmax(230px, 0.66fr) minmax(0, 1.34fr);
+  gap: 5vw;
+  align-items: start;
+  min-height: 112vh;
+  padding-top: 13vh;
+}
+
+.chapter-research-wall {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 32px;
+  padding-top: 10vh;
+}
+
+.chapter-research-wall .evidence-module-primary {
+  grid-column: 1 / -1;
+}
+
+.operations-motion-root[data-motion-reduced="true"] .persistent-geo-world,
+.operations-motion-root[data-motion-reduced="true"] .chapter-pressure-surface,
+.operations-motion-root[data-motion-reduced="true"] .chapter-risk-surface,
+.operations-motion-root[data-motion-reduced="true"] .chapter-strategy-surface,
+.operations-motion-root[data-motion-reduced="true"] .chapter-replay-dock {
+  transition: none;
+}
+
+.locale-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border: 1px solid rgba(121, 199, 192, 0.24);
+  background: rgba(10, 20, 24, 0.74);
+}
+
+.locale-switcher button {
+  min-width: 30px;
+  min-height: 26px;
+  padding: 3px 7px;
+  color: #779092;
+  border: 0;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.locale-switcher button:hover,
+.locale-switcher button:focus-visible,
+.locale-switcher button.active {
+  color: #d5e9e5;
+  background: rgba(121, 199, 192, 0.16);
+}
+
+@media (max-width: 900px) {
+  .chapter-live .metric-grid {
+    overflow-x: auto;
+  }
+  .chapter-replay,
+  .chapter-research {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .chapter-replay-copy,
+  .chapter-research-wall {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .chapter-research-wall {
+    grid-template-columns: 1fr;
+  }
+  .chapter-research-wall .evidence-module-primary {
+    grid-column: auto;
+  }
+}
+
 /* Immersive Operations world: the route is a spatial stage with a compact rail,
    one persistent field, and chapter-specific compositions. */
 .app-shell-operations {
@@ -7411,5 +7604,48 @@ button {
 
   .operations-motion-root [data-motion-section] {
     will-change: auto;
+  }
+}
+
+/* Final chapter composition overrides live after legacy responsive rules so
+   the Live inspection surface cannot collapse into the former 12-column grid. */
+.chapter-live .operations-legacy-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.chapter-live .operations-legacy-stack > * {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.chapter-live .operations-legacy-stack > .operations-health,
+.chapter-live .operations-legacy-stack > .metric-grid {
+  display: flex;
+}
+
+.chapter-live .operations-legacy-stack > .operations-alerts,
+.chapter-live .operations-legacy-stack > .primary-grid,
+.chapter-live .operations-legacy-stack > .secondary-grid,
+.chapter-live .operations-legacy-stack > .entity-drawers {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.chapter-live .flow-visual-grid {
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+}
+
+.chapter-live .flow-evidence-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+@media (max-width: 760px) {
+  .chapter-live .flow-visual-grid,
+  .chapter-live .flow-evidence-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

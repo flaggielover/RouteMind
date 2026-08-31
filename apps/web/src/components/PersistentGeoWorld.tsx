@@ -24,6 +24,7 @@ import { MAP_OPTICAL_LENS_LAYER_ID, MapOpticalLensLayer } from "../visuals/mapOp
 import type { UrbanWorldFrame } from "../visuals/operationsChapterState";
 import { applyRouteMindBasemapTheme, resolveBasemapProvider } from "../visuals/basemapProvider";
 import { GeoWorldFallback } from "./GeoWorldFallback";
+import { useLocale } from "../i18n";
 
 const TEAL: readonly [number, number, number, number] = [88, 203, 195, 228];
 const AMBER: readonly [number, number, number, number] = [222, 170, 96, 232];
@@ -439,6 +440,7 @@ export default function PersistentGeoWorld({
   onSelectTrajectory,
   controllerRef,
 }: PersistentGeoWorldProps) {
+  const { t, formatNumber } = useLocale();
   const basemapProvider = useMemo(
     () =>
       resolveBasemapProvider({
@@ -760,12 +762,13 @@ export default function PersistentGeoWorld({
       data-pointer-target="scene"
       data-pointer-id="persistent-geo-world"
       aria-label={`Persistent ${dataset.city.name} courier operations map`}
+      aria-roledescription={t("chapter.live")}
     >
       <div className="geo-map-container" ref={containerRef} />
       {mapStatus === "fallback" && <GeoWorldFallback dataset={dataset} reason={fallbackReason} />}
       {mapStatus === "loading" && (
         <div className="geo-map-loading" role="status">
-          Loading {dataset.city.name} real geography
+          {dataset.city.name} {t("ops.loadingProjections")}
         </div>
       )}
       <div
@@ -773,10 +776,12 @@ export default function PersistentGeoWorld({
         data-pointer-target="hud"
         data-pointer-id="geo-world-chrome"
       >
-        <span className="persistent-world-kicker">ROUTEMIND / SYNTHETIC CITY COURIER FIELD</span>
+        <span className="persistent-world-kicker">
+          ROUTEMIND / {t("ops.syntheticCourierField")}
+        </span>
         <span className="persistent-world-chapter">{worldFrame.chapter.replace("-", " ")}</span>
       </div>
-      <div className="geo-city-selector" role="group" aria-label="Select operations city">
+      <div className="geo-city-selector" role="group" aria-label={t("ops.selectCity")}>
         {cityIds.map((id) => (
           <button
             key={id}
@@ -795,9 +800,9 @@ export default function PersistentGeoWorld({
         data-pointer-target="hud"
         data-pointer-id="geo-source-badge"
       >
-        <strong>DEMO / SYNTHETIC</strong>
+        <strong>{t("ops.demoSynthetic")}</strong>
         <span>
-          {basemapProvider.label} · synthetic operations · {snapshot.source} page context
+          {basemapProvider.label} · {t("ops.syntheticOperations")} · {snapshot.source} page context
         </span>
       </div>
       <div
@@ -807,28 +812,28 @@ export default function PersistentGeoWorld({
         aria-live="polite"
       >
         <span>
-          <small>City</small>
+          <small>{t("ops.city")}</small>
           <strong>{dataset.city.name}</strong>
         </span>
         <span>
-          <small>Couriers</small>
-          <strong>{dataset.courierAgents.length}</strong>
+          <small>{t("ops.couriers")}</small>
+          <strong>{formatNumber(dataset.courierAgents.length)}</strong>
         </span>
         <span>
-          <small>Focus routes</small>
-          <strong>{dataset.trajectories.length}</strong>
+          <small>{t("ops.focusRoutes")}</small>
+          <strong>{formatNumber(dataset.trajectories.length)}</strong>
         </span>
         <span>
-          <small>LOD</small>
+          <small>{t("ops.lod")}</small>
           <strong>{lodMode.toUpperCase()}</strong>
         </span>
         <span>
-          <small>Risk zones</small>
-          <strong>{dataset.riskZones.length}</strong>
+          <small>{t("ops.riskZones")}</small>
+          <strong>{formatNumber(dataset.riskZones.length)}</strong>
         </span>
       </div>
       <div className="geo-inspection" data-pointer-target="hud" data-pointer-id="geo-inspection">
-        <span>local inspection</span>
+        <span>{t("ops.localInspection")}</span>
         <strong>{inspectionText(hovered, dataset)}</strong>
       </div>
       {selected && (
@@ -840,37 +845,37 @@ export default function PersistentGeoWorld({
         >
           <button
             type="button"
-            aria-label="Clear selected courier"
-            title="Clear selected courier"
+            aria-label={t("ops.clearSelectedCourier")}
+            title={t("ops.clearSelectedCourier")}
             onClick={() => onSelectTrajectory(null)}
           >
             ×
           </button>
-          <span>SELECTED COURIER</span>
+          <span>{t("ops.selectedCourier")}</span>
           <strong>{selected.courierId}</strong>
           <dl>
             <div>
-              <dt>Order</dt>
+              <dt>{t("ops.order")}</dt>
               <dd>{selected.orderId}</dd>
             </div>
             <div>
-              <dt>ETA</dt>
+              <dt>{t("ops.eta")}</dt>
               <dd>{selected.etaMinutes} min</dd>
             </div>
             <div>
-              <dt>Distance</dt>
+              <dt>{t("ops.distance")}</dt>
               <dd>{selected.distanceKilometres} km</dd>
             </div>
             <div>
-              <dt>SLA risk</dt>
+              <dt>{t("ops.slaRisk")}</dt>
               <dd>{Math.round(selected.slaRisk * 100)}%</dd>
             </div>
             <div>
-              <dt>Strategy</dt>
+              <dt>{t("chapter.strategy")}</dt>
               <dd>{selected.strategy}</dd>
             </div>
             <div>
-              <dt>Handoff</dt>
+              <dt>{t("ops.handoff")}</dt>
               <dd>
                 {selectedMerchant?.label ?? selected.merchantId} →{" "}
                 {selectedCustomer?.label ?? selected.customerId}
@@ -883,22 +888,22 @@ export default function PersistentGeoWorld({
         className="geo-map-legend"
         data-pointer-target="hud"
         data-pointer-id="geo-map-legend"
-        aria-label="Operational map legend"
+        aria-label={t("ops.mapLegend")}
       >
         <span>
-          <i className="geo-legend-line active" /> emphasized route
+          <i className="geo-legend-line active" /> {t("ops.emphasizedRoute")}
         </span>
         <span>
-          <i className="geo-legend-line recent" /> recent route
+          <i className="geo-legend-line recent" /> {t("ops.recentRoute")}
         </span>
         <span>
-          <i className="geo-legend-dot courier" /> synthetic courier
+          <i className="geo-legend-dot courier" /> {t("ops.syntheticCourier")}
         </span>
         <span>
-          <i className="geo-legend-dot merchant" /> pickup
+          <i className="geo-legend-dot merchant" /> {t("ops.pickup")}
         </span>
         <span>
-          <i className="geo-legend-dot risk" /> SLA risk
+          <i className="geo-legend-dot risk" /> {t("ops.slaRisk")}
         </span>
       </div>
       <div className="persistent-world-rule" aria-hidden="true" />

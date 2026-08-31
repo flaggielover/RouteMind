@@ -1,6 +1,7 @@
 import type { OperationsSnapshot } from "../domain/model";
 import { toUrbanFieldState } from "../visuals/urbanFieldState";
 import type { ReactNode } from "react";
+import { useLocale } from "../i18n";
 
 interface OperationsAnalyticalStripProps {
   snapshot: OperationsSnapshot;
@@ -20,6 +21,7 @@ export function OperationsAnalyticalStrip({
   snapshot,
   focus = "all",
 }: OperationsAnalyticalStripProps) {
+  const { t, formatNumber } = useLocale();
   const state = toUrbanFieldState(snapshot);
   const throughput = buildThroughputSeries(snapshot.orders.length, state.pressure);
   const risk = buildRiskSeries(state.risk, state.traffic);
@@ -32,22 +34,24 @@ export function OperationsAnalyticalStrip({
     return (
       <section
         className="analytics-foundation analytics-focus-pressure"
-        aria-label="Urban pressure analytical surface"
+        aria-label={t("analytics.pressureSurface")}
       >
         <div className="analytics-foundation-heading">
           <div>
-            <p className="eyebrow">Spatial pressure field</p>
-            <h2>Demand intensity across the operating area.</h2>
+            <p className="eyebrow">{t("analytics.spatialPressureField")}</p>
+            <h2>{t("analytics.demandIntensity")}</h2>
           </div>
           <span className="analytics-provenance">{provenance}</span>
         </div>
-        <ChartFrame title="Zone pressure field" meta="pressure × traffic">
+        <ChartFrame title={t("analytics.zonePressureField")} meta={t("analytics.pressureTraffic")}>
           <Heatmap cells={heatmap} />
           <div className="chart-footline">
             <span>
-              <i className="chart-dot chart-dot-red" /> elevated risk
+              <i className="chart-dot chart-dot-red" /> {t("analytics.elevatedRisk")}
             </span>
-            <strong>{Math.round(state.pressure * 100)}% network pressure</strong>
+            <strong>
+              {formatNumber(Math.round(state.pressure * 100))}% {t("analytics.networkPressure")}
+            </strong>
           </div>
         </ChartFrame>
       </section>
@@ -58,18 +62,18 @@ export function OperationsAnalyticalStrip({
     return (
       <section
         className="analytics-foundation analytics-focus-risk"
-        aria-label="SLA risk analytical surface"
+        aria-label={t("analytics.riskSurface")}
       >
         <div className="analytics-foundation-heading">
           <div>
-            <p className="eyebrow">Promise boundary</p>
-            <h2>SLA exposure over the last twelve operational ticks.</h2>
+            <p className="eyebrow">{t("analytics.promiseBoundary")}</p>
+            <h2>{t("analytics.slaExposure")}</h2>
           </div>
           <span className="analytics-provenance">{provenance}</span>
         </div>
-        <ChartFrame title="SLA / risk trend" meta="bounded risk index">
+        <ChartFrame title={t("analytics.slaRiskTrend")} meta={t("analytics.boundedRiskIndex")}>
           <LineChart
-            label="SLA risk trend"
+            label={t("analytics.slaRiskTrend")}
             points={risk}
             color="var(--chart-amber)"
             threshold={0.58}
@@ -78,7 +82,7 @@ export function OperationsAnalyticalStrip({
           />
           <div className="chart-footline">
             <span>
-              <i className="chart-dot chart-dot-amber" /> current exposure
+              <i className="chart-dot chart-dot-amber" /> {t("analytics.currentExposure")}
             </span>
             <strong className="chart-value-risk">{Math.round(state.risk * 100)}% risk</strong>
           </div>
@@ -91,40 +95,43 @@ export function OperationsAnalyticalStrip({
     return (
       <section
         className="analytics-foundation analytics-focus-strategy"
-        aria-label="Strategy analytical surface"
+        aria-label={t("analytics.strategySurface")}
       >
         <div className="analytics-foundation-heading">
           <div>
-            <p className="eyebrow">Decision instrumentation</p>
-            <h2>Active policy against capacity-aware alternatives.</h2>
+            <p className="eyebrow">{t("analytics.decisionInstrumentation")}</p>
+            <h2>{t("analytics.activePolicy")}</h2>
           </div>
           <span className="analytics-provenance">{provenance}</span>
         </div>
         <div className="analytics-grid analytics-grid-strategy-focus">
-          <ChartFrame title="Strategy distribution" meta="comparison preview">
+          <ChartFrame
+            title={t("analytics.strategyDistribution")}
+            meta={t("analytics.comparisonPreview")}
+          >
             <StrategyBars entries={strategy} />
             <div className="chart-footline">
               <span>
-                <i className="chart-dot chart-dot-teal" /> selected strategy
+                <i className="chart-dot chart-dot-teal" /> {t("analytics.selectedStrategy")}
               </span>
               <strong>{snapshot.dispatch.strategy}</strong>
             </div>
           </ChartFrame>
-          <ChartFrame title="Latency / throughput" meta="last decision">
+          <ChartFrame title={t("analytics.latencyThroughput")} meta={t("analytics.lastDecision")}>
             <div
               className="latency-throughput"
               role="img"
               aria-label="Latency and throughput compact comparison"
             >
               <CompactSignal
-                label="Latency"
+                label={t("analytics.latency")}
                 value={snapshot.dispatch.latencyMs ?? 0}
                 max={180}
                 suffix="ms"
                 tone="amber"
               />
               <CompactSignal
-                label="Throughput"
+                label={t("analytics.throughput")}
                 value={Math.round((1 - state.pressure * 0.24) * 100)}
                 max={100}
                 suffix="%"
@@ -141,31 +148,29 @@ export function OperationsAnalyticalStrip({
     <section className="analytics-foundation" aria-labelledby="analytics-foundation-title">
       <div className="analytics-foundation-heading">
         <div>
-          <p className="eyebrow">Analytical visualization foundation</p>
-          <h2 id="analytics-foundation-title">
-            Operational signals, rendered with one visual language.
-          </h2>
+          <p className="eyebrow">{t("analytics.foundation")}</p>
+          <h2 id="analytics-foundation-title">{t("analytics.foundationTitle")}</h2>
         </div>
         <span className="analytics-provenance">{provenance}</span>
       </div>
       <div className="analytics-grid analytics-grid-primary">
-        <ChartFrame title="Network throughput" meta="orders / 12 ticks">
+        <ChartFrame title={t("analytics.networkThroughput")} meta={t("analytics.orders12Ticks")}>
           <LineChart
-            label="Operational throughput trend"
+            label={t("analytics.operationalThroughputTrend")}
             points={throughput}
             color="var(--chart-teal)"
             suffix=" orders"
           />
           <div className="chart-footline">
             <span>
-              <i className="chart-dot chart-dot-teal" /> throughput
+              <i className="chart-dot chart-dot-teal" /> {t("analytics.throughput")}
             </span>
             <strong>{throughput.at(-1)?.value ?? 0} orders / tick</strong>
           </div>
         </ChartFrame>
-        <ChartFrame title="SLA / risk trend" meta="risk index / bounded">
+        <ChartFrame title={t("analytics.slaRiskTrend")} meta={t("analytics.riskIndexBounded")}>
           <LineChart
-            label="SLA risk trend"
+            label={t("analytics.slaRiskTrend")}
             points={risk}
             color="var(--chart-amber)"
             threshold={0.58}
@@ -174,26 +179,26 @@ export function OperationsAnalyticalStrip({
           />
           <div className="chart-footline">
             <span>
-              <i className="chart-dot chart-dot-amber" /> risk index
+              <i className="chart-dot chart-dot-amber" /> {t("analytics.riskIndex")}
             </span>
             <strong className="chart-value-risk">{Math.round(state.risk * 100)}% current</strong>
           </div>
         </ChartFrame>
-        <ChartFrame title="Latency / throughput" meta="last decision">
+        <ChartFrame title={t("analytics.latencyThroughput")} meta={t("analytics.lastDecision")}>
           <div
             className="latency-throughput"
             role="img"
-            aria-label="Latency and throughput compact comparison"
+            aria-label={t("analytics.latencyThroughput")}
           >
             <CompactSignal
-              label="Latency"
+              label={t("analytics.latency")}
               value={snapshot.dispatch.latencyMs ?? 0}
               max={180}
               suffix="ms"
               tone="amber"
             />
             <CompactSignal
-              label="Throughput"
+              label={t("analytics.throughput")}
               value={Math.round((1 - state.pressure * 0.24) * 100)}
               max={100}
               suffix="%"
@@ -201,39 +206,42 @@ export function OperationsAnalyticalStrip({
             />
             <div className="latency-axis" aria-hidden="true">
               <span>0</span>
-              <span>target</span>
-              <span>limit</span>
+              <span>{t("analytics.target")}</span>
+              <span>{t("analytics.limit")}</span>
             </div>
           </div>
           <div className="chart-footline">
             <span>
-              <i className="chart-dot chart-dot-slate" /> solver response
+              <i className="chart-dot chart-dot-slate" /> {t("analytics.solverResponse")}
             </span>
             <strong>
               {snapshot.dispatch.latencyMs === null
-                ? "Unavailable"
+                ? t("analytics.unavailable")
                 : `${snapshot.dispatch.latencyMs} ms`}
             </strong>
           </div>
         </ChartFrame>
       </div>
       <div className="analytics-grid analytics-grid-secondary">
-        <ChartFrame title="Strategy distribution" meta="comparison preview">
+        <ChartFrame
+          title={t("analytics.strategyDistribution")}
+          meta={t("analytics.comparisonPreview")}
+        >
           <StrategyBars entries={strategy} />
           <div className="chart-footline">
             <span>
-              <i className="chart-dot chart-dot-teal" /> selected strategy
+              <i className="chart-dot chart-dot-teal" /> {t("analytics.selectedStrategy")}
             </span>
             <strong>{snapshot.dispatch.strategy}</strong>
           </div>
         </ChartFrame>
-        <ChartFrame title="Zone pressure field" meta="spatial heatmap">
+        <ChartFrame title={t("analytics.zonePressureField")} meta={t("analytics.spatialHeatmap")}>
           <Heatmap cells={heatmap} />
           <div className="chart-footline">
             <span>
-              <i className="chart-dot chart-dot-red" /> elevated risk
+              <i className="chart-dot chart-dot-red" /> {t("analytics.elevatedRisk")}
             </span>
-            <strong>pressure × traffic</strong>
+            <strong>{t("analytics.pressureTraffic")}</strong>
           </div>
         </ChartFrame>
       </div>

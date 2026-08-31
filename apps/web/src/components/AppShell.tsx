@@ -16,13 +16,14 @@ import type { RealtimeConnectionState } from "../data/realtime";
 import type { TenantSession } from "../data/session";
 import { StatusPill } from "./StatusPill";
 import { PreferencesPanel } from "./PreferencesPanel";
+import { useLocale } from "../i18n";
 
-const navigation: Array<{ role: Role; label: string; icon: typeof LayoutDashboard }> = [
-  { role: "operations", label: "Operations", icon: LayoutDashboard },
-  { role: "strategy", label: "Strategy lab", icon: FlaskConical },
-  { role: "customer", label: "Customer", icon: UserRound },
-  { role: "merchant", label: "Merchant", icon: Store },
-  { role: "courier", label: "Courier", icon: Bike },
+const navigation: Array<{ role: Role; labelKey: string; icon: typeof LayoutDashboard }> = [
+  { role: "operations", labelKey: "nav.operations", icon: LayoutDashboard },
+  { role: "strategy", labelKey: "nav.strategy", icon: FlaskConical },
+  { role: "customer", labelKey: "nav.customer", icon: UserRound },
+  { role: "merchant", labelKey: "nav.merchant", icon: Store },
+  { role: "courier", labelKey: "nav.courier", icon: Bike },
 ];
 
 interface AppShellProps {
@@ -52,6 +53,7 @@ export function AppShell({
   allowedRoles,
   children,
 }: AppShellProps) {
+  const { locale, setLocale, t } = useLocale();
   const location = useLocation();
   const activeRole = (location.pathname.split("/")[1] || "operations") as Role;
   const unavailable = health.filter((item) => item.status === "unavailable").length;
@@ -91,7 +93,7 @@ export function AppShell({
 
   return (
     <div className={`app-shell app-shell-${activeRole}`}>
-      <aside className="sidebar" aria-label="RouteMind sidebar">
+      <aside className="sidebar" aria-label={t("shell.sidebar")}>
         <div className="sidebar-header">
           <div className="brand-lockup">
             <div className="brand-mark" aria-hidden="true">
@@ -99,7 +101,7 @@ export function AppShell({
             </div>
             <div>
               <strong>RouteMind</strong>
-              <span>delivery control</span>
+              <span>{t("shell.deliveryControl")}</span>
             </div>
           </div>
           <button
@@ -108,50 +110,50 @@ export function AppShell({
             type="button"
             aria-expanded={mobileNavOpen}
             aria-controls="role-navigation"
-            aria-label={mobileNavOpen ? "Close workspace navigation" : "Open workspace navigation"}
+            aria-label={mobileNavOpen ? t("shell.closeNavigation") : t("shell.openNavigation")}
             onClick={() => setMobileNavOpen((open) => !open)}
           >
             <Menu size={17} aria-hidden="true" />
-            <span>{mobileNavOpen ? "Close" : "Menu"}</span>
+            <span>{mobileNavOpen ? t("shell.close") : t("shell.menu")}</span>
           </button>
         </div>
-        <div className="sidebar-section-label">Workspace</div>
+        <div className="sidebar-section-label">{t("shell.workspace")}</div>
         <nav
           className={`role-nav ${mobileNavOpen ? "mobile-nav-open" : ""}`}
           ref={mobileNavRef}
           id="role-navigation"
-          aria-label="RouteMind navigation"
+          aria-label={t("shell.navigation")}
         >
           {navigation
             .filter(({ role }) => allowedRoles.includes(role))
-            .map(({ role, label, icon: Icon }) => (
+            .map(({ role, labelKey, icon: Icon }) => (
               <NavLink
                 className={({ isActive }) => `role-link ${isActive ? "active" : ""}`}
                 to={`/${role}`}
                 key={role}
-                aria-label={label}
-                data-label={label}
-                title={label}
+                aria-label={t(labelKey)}
+                data-label={t(labelKey)}
+                title={t(labelKey)}
                 onClick={() => setMobileNavOpen(false)}
               >
                 <Icon size={17} aria-hidden="true" />
-                <span>{label}</span>
+                <span>{t(labelKey)}</span>
                 <ChevronRight className="nav-chevron" size={15} aria-hidden="true" />
               </NavLink>
             ))}
         </nav>
         <div className="sidebar-footer">
-          <div className="sidebar-section-label">Environment</div>
+          <div className="sidebar-section-label">{t("shell.environment")}</div>
           <div className="environment-chip">
-            <span className="live-dot" /> local control plane
+            <span className="live-dot" /> {t("shell.localControlPlane")}
           </div>
         </div>
       </aside>
       <main className="main-column">
         <header className="topbar">
           <div className="topbar-title">
-            <p className="eyebrow">RouteMind / workspace</p>
-            <h1>Delivery control center</h1>
+            <p className="eyebrow">{t("shell.routeMindWorkspace")}</p>
+            <h1>{t("shell.deliveryControlCenter")}</h1>
           </div>
           <div className="topbar-actions">
             <div className="identity-status" role="status" title={sessionDetail}>
@@ -159,27 +161,27 @@ export function AppShell({
                 {session
                   ? session.subject
                   : source === "live"
-                    ? "Identity unavailable"
-                    : "Isolated source"}
+                    ? t("shell.identityUnavailable")
+                    : t("shell.isolatedSource")}
               </span>
               <small>
                 {session
                   ? `Tenant ${session.tenantId.slice(0, 8)}`
                   : source === "live"
-                    ? "Fail closed"
-                    : "No production identity"}
+                    ? t("shell.failClosed")
+                    : t("shell.noProductionIdentity")}
               </small>
             </div>
             <div className="source-status" title={sourceDetail}>
               <span className={`source-dot source-${source}`} />
               <span>
                 {source === "demo"
-                  ? "Demo snapshot"
+                  ? t("shell.demoSnapshot")
                   : source === "replay"
-                    ? "Replay"
+                    ? t("shell.replay")
                     : source === "simulation"
-                      ? "Simulation"
-                      : `Live ${availability}`}
+                      ? t("shell.simulation")
+                      : t("shell.live", { availability })}
               </span>
             </div>
             {source === "live" && (
@@ -189,27 +191,27 @@ export function AppShell({
                 title={realtime.staleReason ?? realtime.detail}
               >
                 {realtime.status === "connected"
-                  ? "Stream connected"
+                  ? t("shell.streamConnected")
                   : realtime.status === "reconnecting"
-                    ? "Stream reconnecting"
+                    ? t("shell.streamReconnecting")
                     : realtime.status === "stale"
-                      ? "Stream stale"
+                      ? t("shell.streamStale")
                       : realtime.status === "degraded"
-                        ? "Stream degraded"
-                        : "Stream connecting"}
+                        ? t("shell.streamDegraded")
+                        : t("shell.streamConnecting")}
               </span>
             )}
             <label className="source-selector">
-              <span className="sr-only">Data source mode</span>
+              <span className="sr-only">{t("shell.dataSourceMode")}</span>
               <select
-                aria-label="Data source mode"
+                aria-label={t("shell.dataSourceMode")}
                 value={source}
                 onChange={(event) => onSourceChange(event.target.value as DataSourceMode)}
               >
-                <option value="live">Live</option>
-                <option value="demo">Demo</option>
-                <option value="replay">Replay</option>
-                <option value="simulation">Simulation</option>
+                <option value="live">{t("shell.dataSourceLive")}</option>
+                <option value="demo">{t("shell.dataSourceDemo")}</option>
+                <option value="replay">{t("shell.dataSourceReplay")}</option>
+                <option value="simulation">{t("shell.dataSourceSimulation")}</option>
               </select>
             </label>
             <PreferencesPanel
@@ -223,18 +225,46 @@ export function AppShell({
               availability={availability}
               session={session}
             />
-            <div className="health-summary" role="status" aria-label="Service health summary">
+            <div className="locale-switcher" role="group" aria-label={t("shell.locale")}>
+              <button
+                type="button"
+                className={locale === "zh-CN" ? "active" : ""}
+                aria-pressed={locale === "zh-CN"}
+                aria-label={t("shell.switchToChinese")}
+                onClick={() => setLocale("zh-CN")}
+              >
+                中
+              </button>
+              <button
+                type="button"
+                className={locale === "en-US" ? "active" : ""}
+                aria-pressed={locale === "en-US"}
+                aria-label={t("shell.switchToEnglish")}
+                onClick={() => setLocale("en-US")}
+              >
+                EN
+              </button>
+            </div>
+            <div
+              className="health-summary"
+              role="status"
+              aria-label={t("shell.serviceHealthSummary")}
+            >
               {health.map((item) => (
                 <StatusPill key={item.service} status={item.status} label={item.label} />
               ))}
-              {unavailable > 0 && <span className="health-note">{unavailable} unavailable</span>}
+              {unavailable > 0 && (
+                <span className="health-note">
+                  {t("shell.unavailable", { count: unavailable })}
+                </span>
+              )}
             </div>
             <button
               className="icon-button"
               type="button"
               onClick={onRefreshHealth}
-              title="Refresh service health"
-              aria-label="Refresh service health"
+              title={t("shell.refreshServiceHealth")}
+              aria-label={t("shell.refreshServiceHealth")}
             >
               <ClipboardList size={17} />
             </button>

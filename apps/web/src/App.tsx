@@ -54,6 +54,7 @@ import { StatusPill } from "./components/StatusPill";
 import { OperationsAnalyticalStrip } from "./components/AnalyticalVisualizationFoundation";
 import { OperationsMotionCoordinator } from "./components/OperationsMotionCoordinator";
 import { OperationsExperience } from "./components/OperationsExperience";
+import { LocaleProvider, useLocale } from "./i18n";
 import type { GeoWorldController } from "./visuals/geoWorldController";
 import type { CityId } from "./visuals/cityGeo";
 import { CourierView, CustomerView, MerchantView, StrategyView } from "./routes/RoleViews";
@@ -247,36 +248,42 @@ export default function App({
   );
 
   return (
-    <BrowserRouter>
-      <AppShell
-        health={health}
-        source={snapshot.source}
-        availability={snapshot.availability}
-        sourceDetail={snapshot.sourceDetail}
-        realtime={realtime}
-        session={session}
-        sessionDetail={sessionDetail}
-        allowedRoles={allowedRoles}
-        onSourceChange={changeSource}
-        onRefreshHealth={() => void refreshHealth()}
-      >
-        <AppRoutes
-          snapshot={snapshot}
-          realtime={realtime}
+    <LocaleProvider>
+      <BrowserRouter>
+        <AppShell
           health={health}
-          onSimulationControl={controlSimulation}
-          onReplayControl={controlReplay}
+          source={snapshot.source}
+          availability={snapshot.availability}
+          sourceDetail={snapshot.sourceDetail}
+          realtime={realtime}
           session={session}
+          sessionDetail={sessionDetail}
           allowedRoles={allowedRoles}
-        />
-      </AppShell>
-      {isRefreshing && (
-        <span className="sr-only" role="status">
-          Refreshing service health
-        </span>
-      )}
-    </BrowserRouter>
+          onSourceChange={changeSource}
+          onRefreshHealth={() => void refreshHealth()}
+        >
+          <AppRoutes
+            snapshot={snapshot}
+            realtime={realtime}
+            health={health}
+            onSimulationControl={controlSimulation}
+            onReplayControl={controlReplay}
+            session={session}
+            allowedRoles={allowedRoles}
+          />
+        </AppShell>
+        {isRefreshing && (
+          <span className="sr-only" role="status">
+            <RefreshingServiceHealthLabel />
+          </span>
+        )}
+      </BrowserRouter>
+    </LocaleProvider>
   );
+}
+
+function RefreshingServiceHealthLabel() {
+  return <>{useLocale().t("a11y.refreshingServiceHealth")}</>;
 }
 
 export function AppRoutes({
@@ -373,6 +380,7 @@ function OperationsView({
   onSimulationControl?: (command: SimulationCommand) => Promise<void>;
   onReplayControl?: (command: ReplayCommand) => Promise<void>;
 }) {
+  const { locale, t, formatNumber, formatDateTime } = useLocale();
   const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0]?.id ?? "");
   const [selectedCityId, setSelectedCityId] = useState<CityId>("shanghai");
   const [selectedTrajectoryId, setSelectedTrajectoryId] = useState<string | null>(null);
@@ -428,7 +436,9 @@ function OperationsView({
     [chapterStates.length],
   );
   const sourceModeLabel =
-    snapshot.source === "live" ? "LIVE" : `${snapshot.source.toUpperCase()} · NON-PRODUCTION`;
+    snapshot.source === "live"
+      ? "LIVE"
+      : t("ops.sourceMode", { mode: snapshot.source.toUpperCase() });
   const filtersActive =
     zoneFilter !== "all" || lifecycleFilter !== "all" || exceptionsOnly || freshOnly;
   const clearFilters = () => {
@@ -463,14 +473,19 @@ function OperationsView({
           aria-labelledby="operations-overview-title"
         >
           <div className="chapter-overview-copy">
-            <p className="eyebrow">01 / Network overview</p>
-            <h2 id="operations-overview-title">Keep the city moving.</h2>
-            <p className="chapter-lede">
-              A single operational field for demand, supply, and the decisions connecting them.
-            </p>
+            <p className="eyebrow">01 / {t("chapter.overview")}</p>
+            <h2 id="operations-overview-title">{t("chapter.overview.title")}</h2>
+            <p className="chapter-lede">{t("chapter.overview.description")}</p>
             <div className="chapter-overview-actions">
               <span className="last-updated">
-                <CircleDot size={13} /> Snapshot {formatFreshness(snapshot.generatedAt)}
+                <CircleDot size={13} />{" "}
+                {t("ops.snapshot", {
+                  value: snapshot.generatedAt
+                    ? t("ops.updatedAt", {
+                        value: formatFreshness(snapshot.generatedAt, formatDateTime),
+                      })
+                    : t("ops.snapshotFreshnessPending"),
+                })}
               </span>
               <button
                 className="button button-primary"
@@ -478,18 +493,18 @@ function OperationsView({
                 aria-expanded={filtersOpen}
                 onClick={() => setFiltersOpen((open) => !open)}
               >
-                <ListFilter size={15} /> Filter board
+                <ListFilter size={15} /> {t("ops.filterBoard")}
               </button>
             </div>
             {filtersOpen && (
-              <section className="operations-filters" aria-label="Operations filters">
+              <section className="operations-filters" aria-label={t("ops.operationsFilters")}>
                 <label>
-                  Zone
+                  {t("ops.zone")}
                   <select
                     value={zoneFilter}
                     onChange={(event) => setZoneFilter(event.target.value)}
                   >
-                    <option value="all">All zones</option>
+                    <option value="all">{t("ops.allZones")}</option>
                     {[...new Set(snapshot.couriers.map((courier) => courier.zone))].map((zone) => (
                       <option key={zone} value={zone}>
                         {zone}
@@ -498,12 +513,12 @@ function OperationsView({
                   </select>
                 </label>
                 <label>
-                  Lifecycle
+                  {t("ops.lifecycle")}
                   <select
                     value={lifecycleFilter}
                     onChange={(event) => setLifecycleFilter(event.target.value)}
                   >
-                    <option value="all">All lifecycle states</option>
+                    <option value="all">{t("ops.allLifecycle")}</option>
                     {Object.entries(orderStatusLabel).map(([status, label]) => (
                       <option key={status} value={status}>
                         {label}
@@ -517,7 +532,7 @@ function OperationsView({
                     checked={exceptionsOnly}
                     onChange={(event) => setExceptionsOnly(event.target.checked)}
                   />
-                  Exceptions only
+                  {t("ops.exceptionsOnly")}
                 </label>
                 <label className="filter-check">
                   <input
@@ -525,10 +540,13 @@ function OperationsView({
                     checked={freshOnly}
                     onChange={(event) => setFreshOnly(event.target.checked)}
                   />
-                  Has freshness
+                  {t("ops.hasFreshness")}
                 </label>
                 <span className="filter-result">
-                  Showing {filteredOrders.length} of {snapshot.orders.length}
+                  {t("ops.showing", {
+                    shown: filteredOrders.length,
+                    total: snapshot.orders.length,
+                  })}
                 </span>
               </section>
             )}
@@ -536,10 +554,10 @@ function OperationsView({
               <div className={`projection-state projection-${snapshot.availability}`} role="status">
                 <strong>
                   {snapshot.availability === "loading"
-                    ? "Loading operational projections"
+                    ? t("ops.loadingProjections")
                     : snapshot.availability === "degraded"
-                      ? "Operational projections degraded"
-                      : "Operational projections unavailable"}
+                      ? t("ops.degradedProjections")
+                      : t("ops.unavailableProjections")}
                 </strong>
                 <span>{snapshot.sourceDetail}</span>
               </div>
@@ -550,19 +568,23 @@ function OperationsView({
             data-pointer-target="hud"
             data-pointer-id="overview-readout"
           >
-            <span className="orbit-label">network signal</span>
-            <strong>{Math.round((urbanFieldState?.pressure ?? 0) * 100)}%</strong>
-            <span>pressure index</span>
+            <span className="orbit-label">{t("ops.networkSignal")}</span>
+            <strong>{formatNumber(Math.round((urbanFieldState?.pressure ?? 0) * 100))}%</strong>
+            <span>{t("ops.pressureIndex")}</span>
             <div className="overview-meter-stack">
               <HeroMeter
-                label="Order pressure"
+                label={t("ops.orderPressure")}
                 value={urbanFieldState?.pressure ?? 0}
                 tone="teal"
               />
-              <HeroMeter label="Courier supply" value={urbanFieldState?.supply ?? 0} tone="amber" />
-              <HeroMeter label="SLA risk" value={urbanFieldState?.risk ?? 0} tone="risk" />
               <HeroMeter
-                label="Twin fidelity"
+                label={t("ops.courierSupply")}
+                value={urbanFieldState?.supply ?? 0}
+                tone="amber"
+              />
+              <HeroMeter label={t("ops.slaRisk")} value={urbanFieldState?.risk ?? 0} tone="risk" />
+              <HeroMeter
+                label={t("ops.twinFidelity")}
                 value={urbanFieldState?.twinFidelity ?? 0}
                 tone="slate"
               />
@@ -581,21 +603,21 @@ function OperationsView({
           aria-labelledby="pressure-title"
         >
           <div className="chapter-pressure-copy">
-            <p className="eyebrow">02 / Urban pressure</p>
-            <h2 id="pressure-title">Read the pressure before it becomes a queue.</h2>
-            <p>Demand, courier supply, traffic, and risk are mapped as a field with local depth.</p>
+            <p className="eyebrow">02 / {t("chapter.pressure")}</p>
+            <h2 id="pressure-title">{t("chapter.pressure.title")}</h2>
+            <p>{t("chapter.pressure.description")}</p>
             <div className="pressure-facts">
               <span>
-                <small>active orders</small>
-                <strong>{snapshot.orders.length}</strong>
+                <small>{t("ops.activeOrders")}</small>
+                <strong>{formatNumber(snapshot.orders.length)}</strong>
               </span>
               <span>
-                <small>available couriers</small>
-                <strong>{availableCouriers}</strong>
+                <small>{t("ops.availableCouriers")}</small>
+                <strong>{formatNumber(availableCouriers)}</strong>
               </span>
               <span>
-                <small>zones in view</small>
-                <strong>{zones}</strong>
+                <small>{t("ops.zonesInView")}</small>
+                <strong>{formatNumber(zones)}</strong>
               </span>
             </div>
           </div>
@@ -614,16 +636,15 @@ function OperationsView({
             <OperationsAnalyticalStrip snapshot={snapshot} focus="risk" />
           </div>
           <div className="chapter-risk-copy">
-            <p className="eyebrow">03 / SLA risk</p>
-            <h2 id="risk-title">Find the edge of the promise.</h2>
-            <p>
-              Risk annotations stay adjacent to the zones and routes that can still absorb them.
-            </p>
+            <p className="eyebrow">03 / {t("chapter.risk")}</p>
+            <h2 id="risk-title">{t("chapter.risk.title")}</h2>
+            <p>{t("chapter.risk.description")}</p>
             <div className="risk-flag">
               <AlertTriangle size={16} />
               <span>
-                <strong>{openExceptions}</strong> priority exception
-                {openExceptions === 1 ? "" : "s"} recorded
+                <strong>{formatNumber(openExceptions)}</strong>{" "}
+                {openExceptions === 1 ? t("ops.priorityException") : t("ops.priorityExceptions")}{" "}
+                {t("ops.recorded")}
               </span>
             </div>
           </div>
@@ -636,11 +657,11 @@ function OperationsView({
           aria-labelledby="strategy-title"
         >
           <div className="chapter-strategy-copy">
-            <p className="eyebrow">04 / Strategy</p>
-            <h2 id="strategy-title">Make the next decision inspectable.</h2>
+            <p className="eyebrow">04 / {t("chapter.strategy")}</p>
+            <h2 id="strategy-title">{t("chapter.strategy.title")}</h2>
             <p>{snapshot.dispatch.rationale}</p>
             <div className="strategy-signal-line">
-              <span>active strategy</span>
+              <span>{t("ops.activeStrategy")}</span>
               <strong>{snapshot.dispatch.strategy}</strong>
               <small>
                 v{snapshot.dispatch.version} · {snapshot.dispatch.latencyMs ?? "-"} ms
@@ -660,8 +681,8 @@ function OperationsView({
         >
           <div className="chapter-live-heading">
             <div>
-              <p className="eyebrow">05 / Live operations</p>
-              <h2 id="live-title">Stay close to the handoff.</h2>
+              <p className="eyebrow">05 / {t("chapter.live")}</p>
+              <h2 id="live-title">{t("chapter.live.title")}</h2>
             </div>
             <span className="chapter-live-status">
               <span className="live-dot" /> {sourceModeLabel}
@@ -674,8 +695,10 @@ function OperationsView({
               aria-label="Operations projection health"
             >
               <div>
-                <p className="eyebrow">Projection health</p>
-                <strong>{health.length ? "Service checks" : "Checking service health"}</strong>
+                <p className="eyebrow">{t("ops.projectionHealth")}</p>
+                <strong>
+                  {health.length ? t("ops.serviceChecks") : t("ops.checkingServiceHealth")}
+                </strong>
               </div>
               <div className="operations-health-items">
                 {(health.length
@@ -692,8 +715,12 @@ function OperationsView({
                 ))}
                 <span className="health-freshness">
                   {snapshot.generatedAt
-                    ? `Snapshot ${formatFreshness(snapshot.generatedAt)}`
-                    : "Snapshot freshness pending"}
+                    ? t("ops.snapshot", {
+                        value: t("ops.updatedAt", {
+                          value: formatFreshness(snapshot.generatedAt, formatDateTime),
+                        }),
+                      })
+                    : t("ops.snapshotFreshnessPending")}
                 </span>
               </div>
             </section>
@@ -703,8 +730,8 @@ function OperationsView({
               aria-label="Operational metrics"
             >
               <MetricCell
-                label="Active orders"
-                value={`${snapshot.orders.length}`}
+                label={t("ops.activeOrders")}
+                value={formatNumber(snapshot.orders.length)}
                 detail={
                   openExceptions ? `${openExceptions} need attention` : "No recorded exceptions"
                 }
@@ -712,8 +739,8 @@ function OperationsView({
                 tone="accent"
               />
               <MetricCell
-                label="Available couriers"
-                value={`${availableCouriers}`}
+                label={t("ops.availableCouriers")}
+                value={formatNumber(availableCouriers)}
                 detail={
                   zones ? `Across ${zones} zone${zones === 1 ? "" : "s"}` : "Zone data pending"
                 }
@@ -755,22 +782,27 @@ function OperationsView({
             {openExceptions > 0 && (
               <div className="exception-banner" role="alert">
                 <AlertTriangle size={16} aria-hidden="true" />
-                <strong>{openExceptions} priority exception needs attention</strong>
-                <span>Review the selected order before assigning another route.</span>
+                <strong>
+                  {t("ops.priorityExceptionNeedsAttention", { count: openExceptions })}
+                </strong>
+                <span>{t("ops.reviewSelectedOrder")}</span>
               </div>
             )}
             <section
               className="operations-alerts"
               data-motion-section="alerts"
-              aria-label="Operations alerts and imbalance"
+              aria-label={
+                locale === "en-US"
+                  ? "Operations alerts and imbalance"
+                  : `${t("ops.exceptionQueue")} / ${t("ops.supplyDemand")}`
+              }
             >
               <section className="panel alert-panel">
                 <div className="panel-heading">
                   <div>
-                    <p className="eyebrow">Exception queue</p>
+                    <p className="eyebrow">{t("ops.exceptionQueue")}</p>
                     <h2>
-                      {exceptionOrders.length} recorded alert
-                      {exceptionOrders.length === 1 ? "" : "s"}
+                      {exceptionOrders.length} {t("ops.recorded")} {t("ops.priorityExceptions")}
                     </h2>
                   </div>
                   <AlertTriangle size={17} className="heading-icon" />
@@ -795,29 +827,31 @@ function OperationsView({
                     ))}
                   </div>
                 ) : (
-                  <p className="empty-state">No recorded exceptions in this snapshot.</p>
+                  <p className="empty-state">{t("ops.noRecordedExceptions")}</p>
                 )}
               </section>
               <section className="panel alert-panel">
                 <div className="panel-heading">
                   <div>
-                    <p className="eyebrow">Supply / demand</p>
-                    <h2>{supplyGap > 0 ? `${supplyGap} order gap` : "Covered"}</h2>
+                    <p className="eyebrow">{t("ops.supplyDemand")}</p>
+                    <h2>
+                      {supplyGap > 0 ? t("ops.orderGap", { count: supplyGap }) : t("ops.covered")}
+                    </h2>
                   </div>
                   <Gauge size={17} className="heading-icon" />
                 </div>
                 <dl className="detail-list">
                   <div>
-                    <dt>Orders in snapshot</dt>
+                    <dt>{t("ops.ordersInSnapshot")}</dt>
                     <dd>{snapshot.orders.length}</dd>
                   </div>
                   <div>
-                    <dt>Available couriers</dt>
+                    <dt>{t("ops.availableCouriers")}</dt>
                     <dd>{availableCouriers}</dd>
                   </div>
                   <div>
-                    <dt>Overtime risk</dt>
-                    <dd className="muted-label">Unavailable from source</dd>
+                    <dt>{t("ops.overtimeRisk")}</dt>
+                    <dd className="muted-label">{t("ops.unavailableFromSource")}</dd>
                   </div>
                 </dl>
               </section>
@@ -836,13 +870,15 @@ function OperationsView({
               <section className="panel lifecycle-panel" aria-labelledby="lifecycle-title">
                 <div className="panel-heading">
                   <div>
-                    <p className="eyebrow">Selected order</p>
+                    <p className="eyebrow">{t("ops.selectedOrderLabel")}</p>
                     <h2 id="lifecycle-title">{selectedOrder?.shortId ?? "No order"} lifecycle</h2>
                     <span className="entity-freshness">
                       {snapshot.source} source ·{" "}
                       {snapshot.generatedAt
-                        ? formatFreshness(snapshot.generatedAt)
-                        : "freshness pending"}
+                        ? t("ops.updatedAt", {
+                            value: formatFreshness(snapshot.generatedAt, formatDateTime),
+                          })
+                        : t("ops.snapshotFreshnessPending")}
                     </span>
                   </div>
                   {selectedOrder ? (
@@ -853,20 +889,20 @@ function OperationsView({
                       label={orderStatusLabel[selectedOrder.status]}
                     />
                   ) : (
-                    <StatusPill status="checking" label="No live orders" />
+                    <StatusPill status="checking" label={t("ops.noLiveOrders")} />
                   )}
                 </div>
                 {selectedOrder ? (
                   <LifecycleTimeline order={selectedOrder} />
                 ) : (
-                  <p className="empty-state">No orders are present in the selected source.</p>
+                  <p className="empty-state">{t("ops.noOrders")}</p>
                 )}
               </section>
               <section className="panel activity-panel" aria-labelledby="activity-title">
                 <div className="panel-heading">
                   <div>
-                    <p className="eyebrow">Decision trace</p>
-                    <h2 id="activity-title">Dispatch activity</h2>
+                    <p className="eyebrow">{t("ops.decisionTrace")}</p>
+                    <h2 id="activity-title">{t("ops.dispatchActivity")}</h2>
                   </div>
                   <Route size={17} className="heading-icon" />
                 </div>
@@ -883,23 +919,23 @@ function OperationsView({
                 </div>
                 <dl className="detail-list">
                   <div>
-                    <dt>Selected courier</dt>
+                    <dt>{t("ops.selectedCourierLabel")}</dt>
                     <dd>{snapshot.dispatch.selectedCourier}</dd>
                   </div>
                   <div>
-                    <dt>Decision latency</dt>
+                    <dt>{t("ops.decisionLatency")}</dt>
                     <dd>
                       {snapshot.dispatch.latencyMs === null
-                        ? "Unavailable"
+                        ? t("ops.unavailable")
                         : `${snapshot.dispatch.latencyMs} ms`}
                     </dd>
                   </div>
                   <div>
-                    <dt>Trace</dt>
+                    <dt>{t("ops.trace")}</dt>
                     <dd>
                       {selectedOrder?.operational?.decision.requestId ??
                         snapshot.decisionLedger?.requestId ??
-                        "Unavailable"}
+                        t("ops.unavailable")}
                     </dd>
                   </div>
                 </dl>
@@ -911,7 +947,9 @@ function OperationsView({
                   aria-controls="decision-details"
                   onClick={() => setDecisionDetailsOpen((open) => !open)}
                 >
-                  {decisionDetailsOpen ? "Hide decision details" : "Open decision details"}{" "}
+                  {decisionDetailsOpen
+                    ? t("ops.hideDecisionDetails")
+                    : t("ops.openDecisionDetails")}{" "}
                   <ArrowUpRight size={14} />
                 </button>
                 {decisionDetailsOpen && (
@@ -919,21 +957,24 @@ function OperationsView({
                     className="decision-details"
                     id="decision-details"
                     role="region"
-                    aria-label="Decision details"
+                    aria-label={t("ops.decisionDetails")}
                   >
                     <dl className="detail-list">
                       <div>
-                        <dt>Strategy version</dt>
+                        <dt>{t("ops.strategyVersion")}</dt>
                         <dd>{snapshot.dispatch.version}</dd>
                       </div>
                       <div>
-                        <dt>Decision source</dt>
+                        <dt>{t("ops.decisionSource")}</dt>
                         <dd>
-                          {snapshot.source} · {formatFreshness(snapshot.generatedAt)}
+                          {snapshot.source} ·{" "}
+                          {t("ops.updatedAt", {
+                            value: formatFreshness(snapshot.generatedAt, formatDateTime),
+                          })}
                         </dd>
                       </div>
                       <div>
-                        <dt>Rationale</dt>
+                        <dt>{t("ops.rationale")}</dt>
                         <dd>{snapshot.dispatch.rationale}</dd>
                       </div>
                     </dl>
@@ -949,65 +990,68 @@ function OperationsView({
               <section className="panel entity-drawer">
                 <div className="panel-heading">
                   <div>
-                    <p className="eyebrow">Order detail</p>
-                    <h2>{selectedOrder?.shortId ?? "No order selected"}</h2>
+                    <p className="eyebrow">{t("ops.orderDetail")}</p>
+                    <h2>{selectedOrder?.shortId ?? t("ops.noOrderSelected")}</h2>
                   </div>
                   <PackageCheck size={17} className="heading-icon" />
                 </div>
                 {selectedOrder ? (
                   <dl className="detail-list">
                     <div>
-                      <dt>Route points</dt>
+                      <dt>{t("ops.routePoints")}</dt>
                       <dd>{selectedOrder.route.length || "Unavailable"}</dd>
                     </div>
                     <div>
                       <dt>Order version</dt>
-                      <dd>{selectedOrder.version ?? "Not supplied"}</dd>
+                      <dd>{selectedOrder.version ?? t("ops.unavailable")}</dd>
                     </div>
                     <div>
-                      <dt>Source</dt>
+                      <dt>{t("ops.source")}</dt>
                       <dd>
-                        {snapshot.source} · {formatFreshness(snapshot.generatedAt)}
+                        {snapshot.source} ·{" "}
+                        {t("ops.updatedAt", {
+                          value: formatFreshness(snapshot.generatedAt, formatDateTime),
+                        })}
                       </dd>
                     </div>
                     <div>
-                      <dt>Decision</dt>
+                      <dt>{t("ops.decision")}</dt>
                       <dd>{selectedOrder.operational?.decision.status ?? "Unavailable"}</dd>
                     </div>
                     <div>
-                      <dt>Ledger request</dt>
+                      <dt>{t("ops.ledgerRequest")}</dt>
                       <dd>{selectedOrder.operational?.decision.requestId ?? "Unavailable"}</dd>
                     </div>
                     <div>
-                      <dt>Strategy</dt>
+                      <dt>{t("ops.strategy")}</dt>
                       <dd>
                         {selectedOrder.operational?.decision.strategy ?? "Unavailable"} · v
                         {selectedOrder.operational?.decision.strategyVersion ?? "-"}
                       </dd>
                     </div>
                     <div>
-                      <dt>Route / travel</dt>
+                      <dt>{t("ops.routeTravel")}</dt>
                       <dd>{selectedOrder.operational?.route.status ?? "Unavailable"}</dd>
                     </div>
                     <div>
-                      <dt>Courier freshness</dt>
+                      <dt>{t("ops.courierFreshness")}</dt>
                       <dd>
                         {selectedOrder.operational?.courier.freshness.status ?? "Unavailable"}
                       </dd>
                     </div>
                     <div>
-                      <dt>Order freshness</dt>
+                      <dt>{t("ops.orderFreshness")}</dt>
                       <dd>{selectedOrder.operational?.orderFreshness.status ?? "Unavailable"}</dd>
                     </div>
                   </dl>
                 ) : (
-                  <p className="empty-state">Select an order to inspect its state.</p>
+                  <p className="empty-state">{t("ops.selectOrderToInspect")}</p>
                 )}
               </section>
               <section className="panel entity-drawer">
                 <div className="panel-heading">
                   <div>
-                    <p className="eyebrow">Courier detail</p>
+                    <p className="eyebrow">{t("ops.courierDetail")}</p>
                     <h2>{snapshot.dispatch.selectedCourier}</h2>
                   </div>
                   <Bike size={17} className="heading-icon" />
@@ -1023,15 +1067,15 @@ function OperationsView({
                       return (
                         <>
                           <div>
-                            <dt>Zone</dt>
+                            <dt>{t("ops.zone")}</dt>
                             <dd>{courier.zone}</dd>
                           </div>
                           <div>
-                            <dt>Status</dt>
+                            <dt>{t("ops.status")}</dt>
                             <dd>{courier.status.replace("_", " ")}</dd>
                           </div>
                           <div>
-                            <dt>Position</dt>
+                            <dt>{t("ops.position")}</dt>
                             <dd>
                               {courier.position.x}, {courier.position.y}
                             </dd>
@@ -1041,7 +1085,7 @@ function OperationsView({
                     })()}
                   </dl>
                 ) : (
-                  <p className="empty-state">Courier detail unavailable from this source.</p>
+                  <p className="empty-state">{t("ops.courierUnavailable")}</p>
                 )}
               </section>
             </section>
@@ -1055,21 +1099,18 @@ function OperationsView({
           aria-labelledby="replay-title"
         >
           <div className="chapter-replay-copy">
-            <p className="eyebrow">06 / Simulation + replay</p>
-            <h2 id="replay-title">Move through what happened and what could happen.</h2>
-            <p>
-              Recorded and simulated time become a navigable layer around the same operational
-              world.
-            </p>
+            <p className="eyebrow">06 / {t("chapter.replay")}</p>
+            <h2 id="replay-title">{t("chapter.replay.title")}</h2>
+            <p>{t("chapter.replay.description")}</p>
             <div className="replay-clock" data-pointer-target="hud" data-pointer-id="replay-clock">
-              <span>clock domain</span>
+              <span>{t("ops.clockDomain")}</span>
               <strong>{snapshot.clockDomain}</strong>
               <small>
                 {snapshot.replay?.verified
-                  ? "digest verified"
+                  ? t("ops.digestVerified")
                   : snapshot.simulation
-                    ? `tick ${snapshot.simulation.tick}`
-                    : "snapshot ready"}
+                    ? t("ops.tick", { value: snapshot.simulation.tick })
+                    : t("ops.snapshotReady")}
               </small>
             </div>
           </div>
@@ -1086,9 +1127,9 @@ function OperationsView({
               <ReplayPlaybackPanel snapshot={snapshot.replay} onControl={onReplayControl} />
             ) : (
               <div className="replay-dock-empty">
-                <span className="eyebrow">Replay dock</span>
-                <strong>Choose Replay or Simulation from the source selector.</strong>
-                <span>Controls remain disabled until Replay or Simulation is selected.</span>
+                <span className="eyebrow">{t("ops.replayDock")}</span>
+                <strong>{t("ops.chooseReplay")}</strong>
+                <span>{t("ops.replayDisabled")}</span>
               </div>
             )}
             {(snapshot.source === "simulation" || snapshot.source === "replay") && (
@@ -1104,24 +1145,21 @@ function OperationsView({
           aria-labelledby="research-title"
         >
           <div className="chapter-research-heading">
-            <p className="eyebrow">07 / Reliability + research</p>
-            <h2 id="research-title">Leave an evidence trail behind every route.</h2>
-            <p>
-              Reliability, lineage, and twin fidelity stay visible without breaking the spatial
-              frame.
-            </p>
+            <p className="eyebrow">07 / {t("chapter.research")}</p>
+            <h2 id="research-title">{t("chapter.research.title")}</h2>
+            <p>{t("chapter.research.description")}</p>
           </div>
           <div className="chapter-research-wall">
             <details className="evidence-module evidence-module-primary" open>
-              <summary>Spatial evidence layers</summary>
+              <summary>{t("ops.spatialEvidenceLayers")}</summary>
               <GeoAnalyticalLayersPanel snapshot={snapshot} />
             </details>
             <details className="evidence-module">
-              <summary>Decision lineage and constraints</summary>
+              <summary>{t("ops.decisionLineage")}</summary>
               <DecisionXrayPanel snapshot={snapshot} />
             </details>
             <details className="evidence-module evidence-module-wide">
-              <summary>Reliability invariants and recovery evidence</summary>
+              <summary>{t("ops.reliabilityEvidence")}</summary>
               <ReliabilityCenterPanel snapshot={snapshot} health={health} realtime={realtime} />
             </details>
           </div>
@@ -1168,12 +1206,13 @@ function OrderQueue({
   filtersActive: boolean;
   onClearFilters: () => void;
 }) {
+  const { t } = useLocale();
   return (
     <section className="panel queue-panel" aria-labelledby="queue-title">
       <div className="panel-heading">
         <div>
-          <p className="eyebrow">Demand queue</p>
-          <h2 id="queue-title">Orders in motion</h2>
+          <p className="eyebrow">{t("ops.demandQueue")}</p>
+          <h2 id="queue-title">{t("ops.ordersInMotionTitle")}</h2>
         </div>
         <span className="count-badge">{orders.length}</span>
       </div>
@@ -1181,10 +1220,10 @@ function OrderQueue({
         {orders.length === 0 ? (
           <p className="empty-state queue-empty">
             {availability === "loading"
-              ? "Loading live orders"
+              ? t("ops.loadingLiveOrders")
               : availability === "unavailable"
-                ? "Orders are unavailable from this source"
-                : "No orders are present in the selected source"}
+                ? t("ops.ordersUnavailable")
+                : t("ops.noOrders")}
           </p>
         ) : (
           orders.map((order) => (
@@ -1193,7 +1232,7 @@ function OrderQueue({
               key={order.id}
               onClick={() => onSelectOrder(order.id)}
               type="button"
-              aria-label={`Select order ${order.shortId}`}
+              aria-label={t("ops.selectOrder", { id: order.shortId })}
             >
               <span
                 className={`queue-status status-tone-${statusTone(order.status)}`}
@@ -1221,16 +1260,20 @@ function OrderQueue({
         disabled={!filtersActive}
         onClick={onClearFilters}
       >
-        {filtersActive ? "Show all orders" : "All orders visible"} <ArrowUpRight size={14} />
+        {filtersActive ? t("ops.showAllOrders") : t("ops.allOrdersVisible")}{" "}
+        <ArrowUpRight size={14} />
       </button>
     </section>
   );
 }
 
-function formatFreshness(value: string): string {
-  if (!value) return "freshness pending";
+function formatFreshness(
+  value: string,
+  formatDateTime: (value: Date | string | number, options?: Intl.DateTimeFormatOptions) => string,
+): string {
+  if (!value) return "";
   const date = new Date(value);
   return Number.isNaN(date.getTime())
     ? value
-    : `updated ${date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`;
+    : formatDateTime(date, { hour: "2-digit", minute: "2-digit" });
 }
