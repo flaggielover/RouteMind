@@ -1,6 +1,6 @@
 # RouteMind Handoff
 
-Last Known Commit: `ec5482b` (`docs: align conditional activation record`)
+Last Known Commit: `795420c` (`evidence: record R4-439 OPE readiness`)
 
 Current Branch: main
 
