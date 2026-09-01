@@ -1,6 +1,6 @@
 # RouteMind Handoff
 
-Last Known Commit: Current `HEAD`; resolve with `git rev-parse HEAD`
+Last Known Commit: `ec5482b` (`docs: align conditional activation record`)
 
 Current Branch: main
 
