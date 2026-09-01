@@ -92,8 +92,8 @@ export function AppShell({
   }, [mobileNavOpen]);
 
   return (
-    <div className={`app-shell app-shell-${activeRole}`}>
-      <aside className="sidebar" aria-label={t("shell.sidebar")}>
+    <div className={`app-shell app-shell-${activeRole} rm251-material-shell`}>
+      <aside className="sidebar rm251-material-rail glass-rail" aria-label={t("shell.sidebar")}>
         <div className="sidebar-header">
           <div className="brand-lockup">
             <div className="brand-mark" aria-hidden="true">
@@ -149,8 +149,8 @@ export function AppShell({
           </div>
         </div>
       </aside>
-      <main className="main-column">
-        <header className="topbar">
+      <main className="main-column rm251-material-main">
+        <header className="topbar rm251-material-topbar glass-overlay">
           <div className="topbar-title">
             <p className="eyebrow">{t("shell.routeMindWorkspace")}</p>
             <h1>{t("shell.deliveryControlCenter")}</h1>
@@ -270,7 +270,7 @@ export function AppShell({
             </button>
           </div>
         </header>
-        <div className="content-wrap">{children}</div>
+        <div className="content-wrap rm251-material-content">{children}</div>
       </main>
     </div>
   );

@@ -87,7 +87,10 @@ export function StrategyComparisonPanel({
       : ["Completion", "Overtime", "Distance", "Utilization", "Fairness", "Cost"];
 
   return (
-    <section className="panel strategy-comparison-panel" aria-label={t("strategy.comparisonAria")}>
+    <section
+      className="panel strategy-comparison-panel rm251-surface"
+      aria-label={t("strategy.comparisonAria")}
+    >
       <div className="panel-heading">
         <div>
           <p className="eyebrow">{t("strategy.evidenceEyebrow")}</p>

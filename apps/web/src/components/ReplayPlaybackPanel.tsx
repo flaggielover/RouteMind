@@ -36,7 +36,7 @@ export function ReplayPlaybackPanel({ snapshot, onControl }: ReplayPlaybackPanel
 
   const selected = snapshot.visibleEvents.find((event) => event.eventId === selectedEventId);
   return (
-    <section className="replay-panel panel" aria-label="Verified replay playback">
+    <section className="replay-panel panel rm251-surface" aria-label="Verified replay playback">
       <div className="panel-heading">
         <div>
           <p className="eyebrow">Replay / verified artifact</p>

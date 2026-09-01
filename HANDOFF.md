@@ -6,6 +6,34 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
+## RM-251 Visual Material System Recomposition
+
+State: **PASSED / LOCAL VISUAL CHECKPOINT** (2026-09-02)
+
+The approved Frosted Atlas material system is implemented in the existing React
+19 frontend. It introduces a graphite/slate operational environment with
+silver-blue atmospheric lighting and explicit frosted roles for shell rail,
+topbar overlay, chapter surfaces, analytical/chart surfaces, inspectors, replay
+docks, and compact metrics. MapLibre/Deck.gl geography remains readable and the
+persistent world, pointer lens, city density/LOD, replay, research, and locale
+contracts are unchanged.
+
+Browser review used the current workspace Vite instance at
+`http://localhost:52452/operations` with DEMO selected. Desktop inspection
+covered continuous scroll across the seven chapters and observed pressure,
+risk, strategy, live, replay, and research material hand-offs. A 390x844
+Chromium capture plus the existing mobile overflow/reduced-motion gates confirmed
+that narrow surfaces become more opaque and remain usable. Evidence is in
+`evidence/gates/RM-251/visual-material-audit.md` and the approved design/plan are
+in `docs/superpowers/specs/2026-09-01-rm-251-visual-material-system-design.md`
+and `docs/superpowers/plans/2026-09-01-rm-251-visual-material-system-plan.md`.
+
+Local gates pass: format check, lint, typecheck, 47 Vitest files / 133 tests,
+production build, locale/composition Playwright (3 passed, 1 expected mobile
+skip), and mobile layout Playwright. Scope is presentation-only DEMO / SYNTHETIC
+visual infrastructure; no production telemetry, provider qualification,
+backend, or Digital Twin calibration claim is introduced.
+
 ## RM-250 Operations Motion Language + Bilingual UI
 
 State: **PASSED / LOCAL VISUAL CHECKPOINT** (2026-09-01)

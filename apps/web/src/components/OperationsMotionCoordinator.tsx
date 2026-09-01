@@ -367,7 +367,7 @@ export function OperationsMotionCoordinator({
   }, [onFrame, sceneControllerRef]);
 
   return (
-    <div className="operations-motion-root" ref={rootRef}>
+    <div className="operations-motion-root rm251-motion-root" ref={rootRef}>
       {children}
     </div>
   );

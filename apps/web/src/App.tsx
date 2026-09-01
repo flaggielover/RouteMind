@@ -1158,7 +1158,7 @@ function OperationsView({
               </small>
             </div>
           </div>
-          <div className="chapter-replay-dock">
+          <div className="chapter-replay-dock glass-dock">
             {snapshot.source === "simulation" && snapshot.simulation && onSimulationControl ? (
               <SimulationControlPanel
                 snapshot={snapshot.simulation}

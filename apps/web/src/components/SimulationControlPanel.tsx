@@ -68,7 +68,10 @@ export function SimulationControlPanel({
   const running = snapshot.status === "running";
   const disabled = pending !== null || snapshot.status === "completed";
   return (
-    <section className="simulation-panel panel" aria-label="Digital Twin simulation controls">
+    <section
+      className="simulation-panel panel rm251-surface"
+      aria-label="Digital Twin simulation controls"
+    >
       <div className="panel-heading">
         <div>
           <p className="eyebrow">Simulation / Digital Twin</p>

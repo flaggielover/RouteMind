@@ -781,7 +781,11 @@ export default function PersistentGeoWorld({
         </span>
         <span className="persistent-world-chapter">{worldFrame.chapter.replace("-", " ")}</span>
       </div>
-      <div className="geo-city-selector" role="group" aria-label={t("ops.selectCity")}>
+      <div
+        className="geo-city-selector glass-overlay"
+        role="group"
+        aria-label={t("ops.selectCity")}
+      >
         {cityIds.map((id) => (
           <button
             key={id}
@@ -806,7 +810,7 @@ export default function PersistentGeoWorld({
         </span>
       </div>
       <div
-        className="geo-map-summary"
+        className="geo-map-summary glass-overlay"
         data-pointer-target="hud"
         data-pointer-id="geo-map-summary"
         aria-live="polite"
@@ -832,13 +836,17 @@ export default function PersistentGeoWorld({
           <strong>{formatNumber(dataset.riskZones.length)}</strong>
         </span>
       </div>
-      <div className="geo-inspection" data-pointer-target="hud" data-pointer-id="geo-inspection">
+      <div
+        className="geo-inspection glass-inspector"
+        data-pointer-target="hud"
+        data-pointer-id="geo-inspection"
+      >
         <span>{t("ops.localInspection")}</span>
         <strong>{inspectionText(hovered, dataset)}</strong>
       </div>
       {selected && (
         <div
-          className="geo-selected-route"
+          className="geo-selected-route glass-inspector"
           data-pointer-target="hud"
           data-pointer-id="geo-selected-route"
           aria-live="polite"

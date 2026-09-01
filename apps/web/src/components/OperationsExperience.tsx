@@ -28,7 +28,7 @@ function CapabilityFallbackWorld({
 }) {
   return (
     <aside
-      className="persistent-urban-world persistent-geo-world"
+      className="persistent-urban-world persistent-geo-world rm251-world-surface"
       data-city={cityId}
       data-map-status={status}
       data-world-chapter={worldFrame.chapter}
@@ -36,7 +36,11 @@ function CapabilityFallbackWorld({
       aria-label="Persistent courier operations map fallback"
     >
       <GeoWorldFallback dataset={createCityOperationalDataset(cityId)} reason={reason} />
-      <div className="geo-city-selector" role="group" aria-label="Select operations city">
+      <div
+        className="geo-city-selector glass-overlay"
+        role="group"
+        aria-label="Select operations city"
+      >
         {cityIds.map((id) => (
           <button
             key={id}
@@ -79,9 +83,12 @@ export function OperationsExperience({
     typeof window !== "undefined" && typeof WebGL2RenderingContext !== "undefined";
 
   return (
-    <div className="operations-experience" data-experience-world="persistent">
+    <div
+      className="operations-experience rm251-material-experience"
+      data-experience-world="persistent"
+    >
       <OperationsNavigationRail />
-      <div className="operations-experience-stage">
+      <div className="operations-experience-stage rm251-world-stage">
         {canRenderWebGl ? (
           <Suspense
             fallback={
@@ -114,7 +121,9 @@ export function OperationsExperience({
           />
         )}
       </div>
-      <div className="operations-chapter-track page-stack">{children}</div>
+      <div className="operations-chapter-track page-stack rm251-material-chapter-track">
+        {children}
+      </div>
     </div>
   );
 }

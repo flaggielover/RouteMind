@@ -25,7 +25,10 @@ export function StrategyAnalyticsPanel({ comparison }: StrategyAnalyticsPanelPro
   );
 
   return (
-    <section className="panel strategy-analytics-panel" aria-label={t("analytics.strategySurface")}>
+    <section
+      className="panel strategy-analytics-panel rm251-surface"
+      aria-label={t("analytics.strategySurface")}
+    >
       <div className="panel-heading">
         <div>
           <p className="eyebrow">{t("analytics.strategySurface")} / frontier</p>

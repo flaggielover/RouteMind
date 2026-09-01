@@ -2,6 +2,29 @@
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
+## RM-251 Visual Material System Recomposition
+
+RM-251 passed locally on 2026-09-02 as a presentation-layer visual checkpoint.
+The approved Frosted Atlas direction is now implemented in the existing React 19
+surface: graphite/slate environment, silver-blue atmospheric fields, and
+reusable frosted material roles for rail, overlay, analytical surface, chart
+metric, inspector, dock, and metric instrumentation.
+
+The persistent MapLibre + Deck.gl city world remains the dark geographic anchor
+with full road and district readability. Overview, pressure, SLA/risk, strategy,
+live detail, replay, and research chapters receive distinct tonal hand-offs;
+semantic demand, supply, risk, strategy, and brand accents remain separated.
+Pointer Lens, city switching, courier density/LOD, replay, research, and locale
+contracts are unchanged. Reduced motion keeps the WebGL/map composition and
+freezes nonessential material transitions; narrow rules increase opacity and
+reduce overlap.
+
+Browser evidence is recorded in `evidence/gates/RM-251/visual-material-audit.md`.
+Format, lint, typecheck, 47 Vitest files / 133 tests, production build, focused
+desktop/mobile Playwright gates, and browser continuous-scroll inspection pass.
+This remains DEMO / SYNTHETIC presentation infrastructure only; no production
+telemetry, Google provider, backend, or Digital Twin calibration claim is made.
+
 ## RM-250 Operations Motion Language + Bilingual UI
 
 RM-250 passed locally on 2026-09-01 as a frontend visual and localization

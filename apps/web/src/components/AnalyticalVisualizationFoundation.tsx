@@ -33,7 +33,7 @@ export function OperationsAnalyticalStrip({
   if (focus === "pressure") {
     return (
       <section
-        className="analytics-foundation analytics-focus-pressure"
+        className="analytics-foundation analytics-focus-pressure rm251-analytical-surface glass-surface"
         aria-label={t("analytics.pressureSurface")}
       >
         <div className="analytics-foundation-heading">
@@ -61,7 +61,7 @@ export function OperationsAnalyticalStrip({
   if (focus === "risk") {
     return (
       <section
-        className="analytics-foundation analytics-focus-risk"
+        className="analytics-foundation analytics-focus-risk rm251-analytical-surface glass-surface"
         aria-label={t("analytics.riskSurface")}
       >
         <div className="analytics-foundation-heading">
@@ -94,7 +94,7 @@ export function OperationsAnalyticalStrip({
   if (focus === "strategy") {
     return (
       <section
-        className="analytics-foundation analytics-focus-strategy"
+        className="analytics-foundation analytics-focus-strategy rm251-analytical-surface glass-surface"
         aria-label={t("analytics.strategySurface")}
       >
         <div className="analytics-foundation-heading">
@@ -145,7 +145,10 @@ export function OperationsAnalyticalStrip({
   }
 
   return (
-    <section className="analytics-foundation" aria-labelledby="analytics-foundation-title">
+    <section
+      className="analytics-foundation rm251-analytical-surface glass-surface"
+      aria-labelledby="analytics-foundation-title"
+    >
       <div className="analytics-foundation-heading">
         <div>
           <p className="eyebrow">{t("analytics.foundation")}</p>
@@ -259,7 +262,11 @@ function ChartFrame({
   children: ReactNode;
 }) {
   return (
-    <article className="chart-frame" data-pointer-target="chart" data-pointer-id={title}>
+    <article
+      className="chart-frame rm251-chart-frame glass-metric"
+      data-pointer-target="chart"
+      data-pointer-id={title}
+    >
       <header className="chart-frame-heading">
         <h3>{title}</h3>
         <span>{meta}</span>

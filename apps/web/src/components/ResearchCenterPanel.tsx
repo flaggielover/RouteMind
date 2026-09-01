@@ -35,7 +35,7 @@ export function ResearchCenterPanel({
     return replacements[value] ?? value;
   };
   return (
-    <section className="panel research-center-panel" aria-label={t("research.aria")}>
+    <section className="panel research-center-panel rm251-surface" aria-label={t("research.aria")}>
       <div className="panel-heading">
         <div>
           <p className="eyebrow">{t("research.eyebrow")}</p>
