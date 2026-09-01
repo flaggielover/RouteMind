@@ -9,7 +9,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-import synthetic_observation_campaign as campaign  # noqa: E402
+import synthetic_observation_campaign as campaign  # noqa: E402  # type: ignore[import-not-found]
 
 
 def test_campaign_manifest_binds_frozen_catalog_and_metric_boundary() -> None:

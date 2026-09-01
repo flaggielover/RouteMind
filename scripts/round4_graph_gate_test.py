@@ -129,6 +129,20 @@ class Round4GraphGateTests(unittest.TestCase):
         ):
             validate_graph(mutated, self.active_graph)
 
+    def test_condition_not_met_requires_complete_evaluation(self) -> None:
+        mutated = copy.deepcopy(self.graph)
+        target = next(task for task in mutated["tasks"] if task["id"] == "R4-453")
+        target["status"] = "condition_not_met"
+        active = copy.deepcopy(self.active_graph)
+        active_target = next(task for task in active["tasks"] if task["id"] == "R4-453")
+        active_target["status"] = "condition_not_met"
+        active_target.pop("condition_evaluation", None)
+
+        with self.assertRaisesRegex(
+            Round4GraphError, "condition_not_met evaluation is incomplete"
+        ):
+            validate_graph(mutated, active)
+
 
 if __name__ == "__main__":
     unittest.main()

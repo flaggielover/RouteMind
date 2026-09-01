@@ -95,6 +95,16 @@ HUMAN_APPROVAL_TASKS = {
     "R4-460",
 }
 CONDITIONAL_TASKS = {"R4-437", "R4-440", "R4-453"}
+TERMINAL_CONDITION_STATUS = "condition_not_met"
+CONDITION_EVALUATION_FIELDS = {
+    "condition",
+    "result",
+    "evaluated_at_utc",
+    "checkpoint",
+    "evidence",
+    "reason",
+    "reactivation_rule",
+}
 EXPECTED_CLOSURE_DEPENDENCIES = {
     "R4-409",
     "R4-413",
@@ -176,7 +186,9 @@ def validate_graph(
     if replacement_gates != [EXPECTED_REPLACEMENT_PROVIDER_GATE]:
         raise Round4GraphError("replacement provider gate representation drifted")
     if active_graph.get("replacement_provider_gates") != replacement_gates:
-        raise Round4GraphError("active replacement provider gate representation drifted")
+        raise Round4GraphError(
+            "active replacement provider gate representation drifted"
+        )
 
     source = graph.get("source_round", {})
     if source.get("closure_task") != "R3-365":
@@ -266,9 +278,14 @@ def validate_graph(
             "failed",
             "blocked",
             "deferred_external",
+            TERMINAL_CONDITION_STATUS,
         }:
             raise Round4GraphError(f"active task status is invalid: {task_id}")
-        if state == "CLOSED" and task["status"] not in {"passed", "deferred_external"}:
+        if state == "CLOSED" and task["status"] not in {
+            "passed",
+            "deferred_external",
+            TERMINAL_CONDITION_STATUS,
+        }:
             raise Round4GraphError(f"closed task is not terminal: {task_id}")
         if task["priority"] not in {"critical", "high", "medium", "low"}:
             raise Round4GraphError(f"task priority is invalid: {task_id}")
@@ -291,8 +308,38 @@ def validate_graph(
             raise Round4GraphError(
                 f"conditional activation boundary drifted: {task_id}"
             )
+        if task["status"] == TERMINAL_CONDITION_STATUS:
+            evaluation = task.get("condition_evaluation")
+            if task_id not in CONDITIONAL_TASKS or not isinstance(evaluation, dict):
+                raise Round4GraphError(
+                    f"condition_not_met is only valid for an evaluated conditional task: {task_id}"
+                )
+            if not CONDITION_EVALUATION_FIELDS.issubset(evaluation):
+                raise Round4GraphError(
+                    f"condition_not_met evaluation is incomplete: {task_id}"
+                )
+            if (
+                evaluation.get("result") != "CONDITION_NOT_MET"
+                or not evaluation.get("evidence")
+                or any(
+                    not isinstance(evaluation.get(field), str)
+                    or not evaluation[field].strip()
+                    for field in CONDITION_EVALUATION_FIELDS - {"evidence"}
+                )
+            ):
+                raise Round4GraphError(
+                    f"condition_not_met evaluation is invalid: {task_id}"
+                )
         if state != "PREPARED_NOT_STARTED":
             active_task = active_tasks[task_id]
+            if active_task.get("status") == TERMINAL_CONDITION_STATUS:
+                active_evaluation = active_task.get("condition_evaluation")
+                if not isinstance(
+                    active_evaluation, dict
+                ) or not CONDITION_EVALUATION_FIELDS.issubset(active_evaluation):
+                    raise Round4GraphError(
+                        f"condition_not_met evaluation is incomplete: {task_id}"
+                    )
             mirrored_fields = {
                 "title",
                 "workstream",
@@ -306,6 +353,15 @@ def validate_graph(
                 "evidence",
                 "round3_lineage",
             }
+            if "dependency_scope" in task or "dependency_scope" in active_task:
+                mirrored_fields.add("dependency_scope")
+            if (
+                "local_preparation_status" in task
+                or "local_preparation_status" in active_task
+            ):
+                mirrored_fields.add("local_preparation_status")
+            if "condition_evaluation" in task or "condition_evaluation" in active_task:
+                mirrored_fields.add("condition_evaluation")
             if any(
                 active_task.get(field) != task.get(field) for field in mirrored_fields
             ):

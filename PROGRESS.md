@@ -2,6 +2,33 @@
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
+## Non-Claude-Science Closure Sweep (2026-09-02)
+
+The executable graph was audited and reconciled. The five locally closable
+engineering tasks `R4-430`, `R4-434`, `R4-438`, `R4-451`, and `R4-452` are now
+`passed` with focused executable evidence. `R4-453` is terminal
+`condition_not_met`: its read-only safety condition was evaluated, but no owner
+approved command-side activation exists; the graph records timestamp,
+checkpoint, evidence, reason, and reactivation rule. `R4-405` remains externally
+`blocked` while its local preparation is passed; R4-430/R4-451 explicitly scope
+that dependency to local preparation and do not promote the external target.
+
+Thirteen production/provider/data/powered/reproduction lanes are explicitly
+blocked or deferred with local readiness records. Ten Claude Science packets
+cover the remaining research questions, evidence, commands, dependencies, and
+acceptance criteria in
+`evidence/closure-sweep/2026-09-02/claude-science-work-packets.md`.
+The complete inventory and exact blocker reasons are in
+`evidence/closure-sweep/2026-09-02/external-blockers.md`; the sweep audit,
+counts, and gate record are in
+`evidence/closure-sweep/2026-09-02/closure-sweep.md`.
+
+Current executable counts: 186 / 211 tasks passed, 8 pending research tasks,
+12 blocked external/downstream tasks, 4 deferred-external tasks, and 1 terminal
+`condition_not_met`. `R4-499` remains blocked until its real dependency lanes
+close. Frozen scientific artifacts and historical provider evidence are
+unchanged.
+
 ## RM-251 Visual Material System Recomposition
 
 RM-251 passed locally on 2026-09-02 as a presentation-layer visual checkpoint.
@@ -183,11 +210,11 @@ Hardening Progress: 10 / 10 tasks passed (RM-200, RM-201, RM-202, RM-203, RM-204
 
 Enhancement Progress: 32 / 32 tasks passed (RM-210 through RM-241)
 
-Round 4 Progress: 10 / 38 tasks passed
+Round 4 Progress: 15 / 38 tasks passed
 
-Repository Total: 175 / 205 tasks passed
+Repository Total: 186 / 211 tasks passed
 
-Current Task: R4-422 - GMAIL DELIVERY OBSERVED (NO PRODUCTION CLAIM)
+Current Task: Non-Claude-Science Closure Sweep - graph/evidence reconciliation
 
 R4-422 operator-observed delivery confirmation (2026-08-30): the operator
 confirms receipt of the single synthetic message from the already consumed live

@@ -9,9 +9,15 @@ active.
 
 Tasks move through `pending`, `ready`, `in_progress`, `implemented`,
 `validating`, and `passed`. `blocked`, `failed`, and `deferred_external` retain
-non-success outcomes. A dependency is satisfied only by `passed`; conditional
-or optional work may instead receive a terminal, explicitly reconciled
-disposition before R4-499.
+non-success outcomes. `condition_not_met` is a terminal state only for an
+explicitly conditional or optional task with an activation condition and a
+complete evaluation record (`condition`, result, timestamp, checkpoint,
+evidence, reason, and reactivation rule). A dependency is satisfied only by
+`passed`, except that a local engineering task may declare
+`dependency_scope: {<external-task>: local_preparation}` when that external
+task has `external_gate: true` and `local_preparation_status: passed`; this
+closes only the local preparation and never promotes the external task. The
+graph mirror must carry these fields identically.
 
 ## Evidence scopes
 

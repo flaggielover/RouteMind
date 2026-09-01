@@ -101,10 +101,49 @@ def validate(graph: dict) -> list[str]:
             errors.append(f"{task_id}: task cannot depend on itself")
         if task.get("status") == "passed" and not task.get("evidence"):
             errors.append(f"{task_id}: passed tasks require evidence")
-        if task.get("status") in {"ready", "in_progress", "implemented", "validating", "passed"}:
-            unmet = [dep for dep in dependencies if by_id.get(dep, {}).get("status") != "passed"]
+        if task.get("status") in {
+            "ready",
+            "in_progress",
+            "implemented",
+            "validating",
+            "passed",
+        }:
+            unmet = [
+                dep
+                for dep in dependencies
+                if not _dependency_satisfied(task, dep, by_id)
+            ]
             if unmet:
                 errors.append(f"{task_id}: active state has unmet dependencies {unmet}")
+        if task.get("status") == "condition_not_met":
+            if not task.get("activation_condition"):
+                errors.append(f"{task_id}: condition_not_met requires activation_condition")
+            evaluation = task.get("condition_evaluation")
+            required = {
+                "condition",
+                "result",
+                "evaluated_at_utc",
+                "checkpoint",
+                "evidence",
+                "reason",
+                "reactivation_rule",
+            }
+            if not isinstance(evaluation, dict) or not required.issubset(evaluation):
+                errors.append(
+                    f"{task_id}: condition_not_met requires a complete condition_evaluation"
+                )
+            elif (
+                evaluation.get("result") != "CONDITION_NOT_MET"
+                or not evaluation.get("evidence")
+                or any(
+                    not isinstance(evaluation.get(field), str)
+                    or not evaluation[field].strip()
+                    for field in required - {"evidence"}
+                )
+            ):
+                errors.append(
+                    f"{task_id}: condition_not_met evaluation values are invalid"
+                )
         if str(task_id).startswith("R3-"):
             if task.get("classification") not in RESEARCH_CLASSIFICATIONS:
                 errors.append(
@@ -153,6 +192,19 @@ def validate(graph: dict) -> list[str]:
         visit(task_id)
 
     return errors
+
+
+def _dependency_satisfied(task: dict, dependency: str, by_id: dict[str, dict]) -> bool:
+    selected = by_id.get(dependency, {})
+    if selected.get("status") == "passed":
+        return True
+    scopes = task.get("dependency_scope", {})
+    if not isinstance(scopes, dict) or scopes.get(dependency) != "local_preparation":
+        return False
+    return (
+        selected.get("external_gate") is True
+        and selected.get("local_preparation_status") == "passed"
+    )
 
 
 def main() -> int:

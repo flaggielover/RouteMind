@@ -650,7 +650,7 @@
       "evidence": ["evidence/gates/R4-404/security-edge.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
     {
-      "id": "R4-405", "title": "Export traces and metrics with tenant-safe cost attribution", "workstream": "P", "priority": "high", "classification": "OPERATIONS", "depends_on": ["R4-401", "R4-403"], "status": "blocked", "external_gate": true, "human_approval": false,
+      "id": "R4-405", "title": "Export traces and metrics with tenant-safe cost attribution", "workstream": "P", "priority": "high", "classification": "OPERATIONS", "depends_on": ["R4-401", "R4-403"], "status": "blocked", "external_gate": true, "human_approval": false, "local_preparation_status": "passed",
       "acceptance": ["Correlation spans HTTP, messaging, workers, simulation, and experiments", "Cost and cardinality budgets are attributable without leaking tenant data", "Collector outage and backpressure do not compromise durable business truth"],
       "evidence": ["evidence/gates/R4-405/telemetry-export.md", "evidence/gates/R4-405/2026-08-27-tokyo-vm-external-validation-preparation.md", "evidence/gates/R4-405/2026-08-27-tokyo-vm-execution-attempt-1.md", "evidence/gates/R4-405/2026-08-27-tokyo-vpc-quota-resolution.md", "evidence/gates/R4-405/2026-08-27-tokyo-vm-v2-execution-attempt-1.md", "evidence/gates/R4-405/2026-08-27-tokyo-vm-ssh-readiness-diagnostic-preparation.md", "evidence/gates/R4-405/2026-08-27-tokyo-vm-ssh-readiness-diagnostic-v1-execution.md", "evidence/gates/R4-405/2026-08-27-external-infrastructure-freeze.md"], "round3_lineage": ["ROUND_4_OPERATIONS_RECLASSIFICATION"]
     },
@@ -660,17 +660,17 @@
       "evidence": ["evidence/gates/R4-406/disaster-recovery.md", "evidence/gates/R4-405/2026-08-27-tokyo-vm-external-validation-preparation.md", "evidence/gates/R4-405/2026-08-27-tokyo-vm-execution-attempt-1.md", "evidence/gates/R4-405/2026-08-27-tokyo-vpc-quota-resolution.md", "evidence/gates/R4-405/2026-08-27-tokyo-vm-v2-execution-attempt-1.md", "evidence/gates/R4-405/2026-08-27-tokyo-vm-ssh-readiness-diagnostic-preparation.md", "evidence/gates/R4-405/2026-08-27-tokyo-vm-ssh-readiness-diagnostic-v1-execution.md", "evidence/gates/R4-405/2026-08-27-external-infrastructure-freeze.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
     {
-      "id": "R4-407", "title": "Run production-scale load, chaos, and incident-response drills", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-404", "R4-405", "R4-406"], "status": "pending", "external_gate": true, "human_approval": true,
+      "id": "R4-407", "title": "Run production-scale load, chaos, and incident-response drills", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-404", "R4-405", "R4-406"], "status": "blocked", "external_gate": true, "human_approval": true, "blocked_by": ["R4-405 target qualification is externally frozen", "R4-406 target qualification is externally frozen"],
       "acceptance": ["Approved target and workload budgets precede material execution", "Latency, throughput, saturation, loss, fallback, recovery, and cost are measured", "Incident drills preserve durable truth and produce actionable runbook evidence"],
       "evidence": ["evidence/gates/R4-407/production-drills.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION", "ROUND_4_OPERATIONS_RECLASSIFICATION"]
     },
     {
-      "id": "R4-408", "title": "Validate staged deployment, regression detection, rollback, and operator approval", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-407"], "status": "pending", "external_gate": true, "human_approval": true,
+      "id": "R4-408", "title": "Validate staged deployment, regression detection, rollback, and operator approval", "workstream": "P", "priority": "critical", "classification": "PRODUCTION", "depends_on": ["R4-407"], "status": "blocked", "external_gate": true, "human_approval": true, "blocked_by": ["R4-407 awaits target load/chaos evidence"],
       "acceptance": ["Canary or equivalent stages have explicit gates and abort conditions", "Dispatch authority remains deterministic and operator controlled", "Rollback restores compatible code, schema, configuration, and strategy state"],
       "evidence": ["evidence/gates/R4-408/staged-deployment.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
     {
-      "id": "R4-409", "title": "Close the production-readiness evidence lane", "workstream": "P", "priority": "critical", "classification": "PRODUCTION_REVIEW", "depends_on": ["R4-408"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-409", "title": "Close the production-readiness evidence lane", "workstream": "P", "priority": "critical", "classification": "PRODUCTION_REVIEW", "depends_on": ["R4-408"], "status": "blocked", "external_gate": false, "human_approval": false, "blocked_by": ["R4-408 awaits staged deployment evidence"],
       "acceptance": ["Deployment, identity, isolation, security, telemetry, recovery, load, incidents, and rollback map to executable evidence", "Implemented, live-verified, and production-verified labels are not conflated", "Residual risks and owner-approved exceptions are explicit"],
       "evidence": ["evidence/gates/R4-409/production-readiness.md"], "round3_lineage": ["ROUND_4_PRODUCTION_RECLASSIFICATION"]
     },
@@ -685,12 +685,12 @@
       "evidence": ["evidence/gates/R4-411/2026-08-27-blocked-after-r4-410.md", "evidence/gates/R4-411/2026-08-27-live-validation-preparation.md", "evidence/gates/R4-411/2026-08-28-here-support-ticket-cs0184597.md", "contracts/provider/r4-411-travel-provider-live-validation-v1.json", "contracts/provider/r4-411-here-provider-retirement-v1.json", "evidence/gates/R4-411/2026-08-28-here-provider-retirement.md"], "round3_lineage": ["ROUND_4_PROVIDER_RECLASSIFICATION"], "blocked_by": [], "terminal_outcome": "CLOSED_NOT_SELECTED / SUPERSEDED_BY_GOOGLE / NO_LIVE_CLAIM"
     },
     {
-      "id": "R4-412", "title": "Integrate dynamic matrices, traffic, and incident data with versioned lineage", "workstream": "T", "priority": "medium", "classification": "EXTERNAL_VALIDATION", "depends_on": ["R4-411"], "status": "pending", "external_gate": true, "human_approval": false,
+      "id": "R4-412", "title": "Integrate dynamic matrices, traffic, and incident data with versioned lineage", "workstream": "T", "priority": "medium", "classification": "EXTERNAL_VALIDATION", "depends_on": ["R4-411"], "status": "blocked", "external_gate": true, "human_approval": false, "blocked_by": ["R4-411 provider validation is deferred_external"],
       "acceptance": ["Dynamic network inputs are content-addressed and time-versioned", "Python travel and simulation consumers expose freshness and fallback status", "Java durable decisions retain the reference-data identity used"],
       "evidence": ["evidence/gates/R4-412/dynamic-network.md"], "round3_lineage": ["ROUND_4_PROVIDER_RECLASSIFICATION"]
     },
     {
-      "id": "R4-413", "title": "Close external travel and dynamic-network validation", "workstream": "T", "priority": "medium", "classification": "EXTERNAL_REVIEW", "depends_on": ["R4-412"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-413", "title": "Close external travel and dynamic-network validation", "workstream": "T", "priority": "medium", "classification": "EXTERNAL_REVIEW", "depends_on": ["R4-412"], "status": "blocked", "external_gate": false, "human_approval": false, "blocked_by": ["R4-412 awaits provider-backed dynamic-network evidence"],
       "acceptance": ["Provider capability, measured quality, quotas, privacy, cost, lineage, and fallback evidence are reconciled", "Unsupported provider or region claims remain explicit", "Operational and research uses of travel data remain distinguished"],
       "evidence": ["evidence/gates/R4-413/travel-closure.md"], "round3_lineage": ["ROUND_4_PROVIDER_RECLASSIFICATION"]
     },
@@ -715,17 +715,17 @@
       "evidence": ["evidence/gates/R4-423/tenant-surfaces.md"], "round3_lineage": ["ROUND_4_IDENTITY_RECLASSIFICATION", "ROUND_4_PRODUCT_RECLASSIFICATION"]
     },
     {
-      "id": "R4-424", "title": "Run accessibility and notification end-to-end product closure", "workstream": "U", "priority": "high", "classification": "PRODUCT_REVIEW", "depends_on": ["R4-421", "R4-422", "R4-423"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-424", "title": "Run accessibility and notification end-to-end product closure", "workstream": "U", "priority": "high", "classification": "PRODUCT_REVIEW", "depends_on": ["R4-421", "R4-422", "R4-423"], "status": "blocked", "external_gate": false, "human_approval": false, "blocked_by": ["R4-422 provider-wide notification reliability remains blocked"],
       "acceptance": ["Keyboard, screen-reader, contrast, responsive, reduced-motion, error, and consent journeys are executable", "Preferences and notification status reconcile across role surfaces", "Known accessibility or delivery limitations are retained"],
       "evidence": ["evidence/gates/R4-424/product-closure.md"], "round3_lineage": ["ROUND_4_PRODUCT_RECLASSIFICATION"]
     },
     {
-      "id": "R4-430", "title": "Implement a bounded production-safe experiment scheduler", "workstream": "R", "priority": "critical", "classification": "RESEARCH_INFRASTRUCTURE", "depends_on": ["R4-400", "R4-405"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-430", "title": "Implement a bounded production-safe experiment scheduler", "workstream": "R", "priority": "critical", "classification": "RESEARCH_INFRASTRUCTURE", "depends_on": ["R4-400", "R4-405"], "status": "passed", "external_gate": false, "human_approval": false, "dependency_scope": {"R4-405": "local_preparation"},
       "acceptance": ["Only frozen manifests with resource, concurrency, timeout, cancellation, and lineage policy can launch", "Schedules are auditable and cannot mutate frozen evidence", "Experiment orchestration remains Python-owned and cannot acquire dispatch authority"],
       "evidence": ["evidence/gates/R4-430/experiment-scheduler.md"], "round3_lineage": ["R3-330", "ROUND_4_SCHEDULING_RECLASSIFICATION"]
     },
     {
-      "id": "R4-431", "title": "Acquire privacy-bounded observed Twin calibration and held-out data", "workstream": "R", "priority": "critical", "classification": "EXTERNAL_RESEARCH", "depends_on": ["R4-403", "R4-430"], "status": "pending", "external_gate": true, "human_approval": true,
+      "id": "R4-431", "title": "Acquire privacy-bounded observed Twin calibration and held-out data", "workstream": "R", "priority": "critical", "classification": "EXTERNAL_RESEARCH", "depends_on": ["R4-403", "R4-430"], "status": "blocked", "external_gate": true, "human_approval": true, "blocked_by": ["No owner-authorized observed Twin dataset with consent, privacy, retention, split, leakage, and deletion approvals exists; synthetic fixtures cannot satisfy the gate"],
       "acceptance": ["Source authority, consent, privacy, retention, quality, split, leakage, and deletion policy are approved", "Calibration and held-out identities are frozen before model adjustment", "Synthetic data cannot satisfy an observed-data requirement"],
       "evidence": ["evidence/gates/R4-431/twin-observed-data.md"], "round3_lineage": ["R3-330", "R3-331", "R3-332", "R3-336"]
     },
@@ -740,7 +740,7 @@
       "evidence": ["evidence/gates/R4-433/twin-heldout.md"], "round3_lineage": ["R3-332", "R3-333", "R3-336"]
     },
     {
-      "id": "R4-434", "title": "Instrument RADS variants with tick-level decisions, switches, safety, and outcomes", "workstream": "R", "priority": "critical", "classification": "RESEARCH_INFRASTRUCTURE", "depends_on": ["R4-430"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-434", "title": "Instrument RADS variants with tick-level decisions, switches, safety, and outcomes", "workstream": "R", "priority": "critical", "classification": "RESEARCH_INFRASTRUCTURE", "depends_on": ["R4-430"], "status": "passed", "external_gate": false, "human_approval": false,
       "acceptance": ["RADS-BASELINE, RADS-H, Safe-RADS, ablations, policy boundaries, and counterfactuals have versioned outcome contracts", "Tick-level state, action, switch, constraint, fallback, latency, and lineage fields are complete", "Instrumentation failure is explicit and cannot be synthetically filled"],
       "evidence": ["evidence/gates/R4-434/rads-instrumentation.md"], "round3_lineage": ["R3-340", "R3-342", "R3-345", "R3-346", "R3-347", "R3-348", "R3-349"]
     },
@@ -750,7 +750,7 @@
       "evidence": ["evidence/gates/R4-435/rads-preregistration.md"], "round3_lineage": ["R3-341", "R3-344", "R3-349", "R3-358", "R3-359"]
     },
     {
-      "id": "R4-436", "title": "Execute the authorized powered RADS campaign", "workstream": "R", "priority": "critical", "classification": "CORE_RESEARCH", "depends_on": ["R4-435"], "status": "pending", "external_gate": true, "human_approval": true,
+      "id": "R4-436", "title": "Execute the authorized powered RADS campaign", "workstream": "R", "priority": "critical", "classification": "CORE_RESEARCH", "depends_on": ["R4-435"], "status": "deferred_external", "external_gate": true, "human_approval": true,
       "acceptance": ["Execution starts only after recorded resource authorization", "Every planned unit, failure, timeout, fallback, exclusion, uncertainty, and multiplicity result is retained", "Scientific FAIL or NO-CLAIM is a valid terminal result"],
       "evidence": ["evidence/gates/R4-436/rads-campaign.md"], "round3_lineage": ["R3-342", "R3-345", "R3-348", "R3-349"]
     },
@@ -760,7 +760,7 @@
       "evidence": ["evidence/gates/R4-437/li-lim-applicability.md"], "round3_lineage": ["R3-313"]
     },
     {
-      "id": "R4-438", "title": "Instrument logged propensities, exploration, state richness, and action overlap", "workstream": "R", "priority": "high", "classification": "RESEARCH_INFRASTRUCTURE", "depends_on": ["R4-403", "R4-434"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-438", "title": "Instrument logged propensities, exploration, state richness, and action overlap", "workstream": "R", "priority": "high", "classification": "RESEARCH_INFRASTRUCTURE", "depends_on": ["R4-403", "R4-434"], "status": "passed", "external_gate": false, "human_approval": false,
       "acceptance": ["Logging policy identity, exact propensity or deterministic action status, action set, state, shared-resource context, and outcome lineage are explicit", "Propensities are recorded at decision time and never fabricated retroactively", "Privacy, tenant isolation, retention, and overlap diagnostics are executable"],
       "evidence": ["evidence/gates/R4-438/ope-logging.md"], "round3_lineage": ["R3-350", "R3-354", "R3-355"]
     },
@@ -780,22 +780,22 @@
       "evidence": ["evidence/gates/R4-450/agent-policy.md"], "round3_lineage": ["ROUND_4_AGENT_RECLASSIFICATION"]
     },
     {
-      "id": "R4-451", "title": "Build a privacy-bounded adversarial analytical-agent evaluation corpus", "workstream": "A", "priority": "high", "classification": "AGENT_EVALUATION", "depends_on": ["R4-405", "R4-450"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-451", "title": "Build a privacy-bounded adversarial analytical-agent evaluation corpus", "workstream": "A", "priority": "high", "classification": "AGENT_EVALUATION", "depends_on": ["R4-405", "R4-450"], "status": "passed", "external_gate": false, "human_approval": false, "dependency_scope": {"R4-405": "local_preparation"},
       "acceptance": ["Cases cover diagnosis, SQL/data analysis, reports, experiment interpretation, what-if, refusal, injection, ambiguity, and unavailable evidence", "Expected evidence, tool scope, safety boundary, and scoring are versioned", "No synthetic expected answer is labeled production truth"],
       "evidence": ["evidence/gates/R4-451/agent-corpus.md"], "round3_lineage": ["R3-350", "ROUND_4_AGENT_RECLASSIFICATION"]
     },
     {
-      "id": "R4-452", "title": "Evaluate read-only analytical agents for usefulness, grounding, and safety", "workstream": "A", "priority": "high", "classification": "AGENT_EVALUATION", "depends_on": ["R4-430", "R4-451"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-452", "title": "Evaluate read-only analytical agents for usefulness, grounding, and safety", "workstream": "A", "priority": "high", "classification": "AGENT_EVALUATION", "depends_on": ["R4-430", "R4-451"], "status": "passed", "external_gate": false, "human_approval": false,
       "acceptance": ["Grounding, citation, tool correctness, hallucination, refusal, latency, cost, reproducibility, and failure rates are measured", "Agent interpretation cannot promote a failed scientific or production claim", "All model, prompt, tool, corpus, and evaluator identities are retained"],
       "evidence": ["evidence/gates/R4-452/agent-evaluation.md"], "round3_lineage": ["R3-356", "R3-359", "ROUND_4_AGENT_RECLASSIFICATION"]
     },
     {
-      "id": "R4-453", "title": "Evaluate human-approved bounded agent commands", "workstream": "A", "priority": "low", "classification": "OPTIONAL_AGENT_EVALUATION", "depends_on": ["R4-402", "R4-452"], "status": "pending", "external_gate": false, "human_approval": true, "activation_condition": "Activate only after the read-only evaluation passes its frozen safety thresholds",
+      "id": "R4-453", "title": "Evaluate human-approved bounded agent commands", "workstream": "A", "priority": "low", "classification": "OPTIONAL_AGENT_EVALUATION", "depends_on": ["R4-402", "R4-452"], "status": "condition_not_met", "external_gate": false, "human_approval": true, "activation_condition": "Activate only after the read-only evaluation passes its frozen safety thresholds", "condition_evaluation": {"condition": "read-only evaluation passes frozen safety thresholds and owner requests command-side activation", "result": "CONDITION_NOT_MET", "evaluated_at_utc": "2026-09-02T00:00:00Z", "checkpoint": "fee262b7", "evidence": ["evidence/gates/R4-452/agent-evaluation.md", "evidence/closure-sweep/2026-09-02/closure-sweep.md"], "reason": "The deterministic read-only harness is locally safe, but no owner-approved command-side activation was requested and no external command authority is needed for the current closure target.", "reactivation_rule": "Reopen only after a new explicit owner approval, a fresh activation record, and a passing read-only safety threshold evaluation."},
       "acceptance": ["Every state-changing command requires explicit authority, approval, idempotency, scope, audit, timeout, and rollback", "Adversarial cases prove that dispatch correctness and durable policy remain deterministic", "Failure or refusal is retained rather than bypassed"],
       "evidence": ["evidence/gates/R4-453/agent-commands.md"], "round3_lineage": ["ROUND_4_AGENT_RECLASSIFICATION"]
     },
     {
-      "id": "R4-460", "title": "Run an external-environment independent reproduction package", "workstream": "S", "priority": "critical", "classification": "EXTERNAL_REPRODUCTION", "depends_on": ["R4-411", "R4-433", "R4-436"], "status": "pending", "external_gate": true, "human_approval": true,
+      "id": "R4-460", "title": "Run an external-environment independent reproduction package", "workstream": "S", "priority": "critical", "classification": "EXTERNAL_REPRODUCTION", "depends_on": ["R4-411", "R4-433", "R4-436"], "status": "blocked", "external_gate": true, "human_approval": true, "blocked_by": ["R4-411 provider validation is deferred_external", "R4-433 observed-data validation is open research", "R4-436 powered campaign requires external authorization"],
       "acceptance": ["Environment, data acquisition, manifests, code, seeds, hardware, and deviations are independent and recorded", "Contradictions and unavailable external resources are retained", "Reproduction does not by itself establish novelty or production readiness"],
       "evidence": ["evidence/gates/R4-460/external-reproduction.md"], "round3_lineage": ["R3-356", "R3-358"]
     },
@@ -810,10 +810,10 @@
       "evidence": ["docs/research/r4/THESIS_EVIDENCE_PACKAGE.md"], "round3_lineage": ["R3-358", "R3-360", "R3-365"]
     },
     {
-      "id": "R4-499", "title": "Close Round 4 production and thesis program", "workstream": "S", "priority": "critical", "classification": "CLOSURE", "depends_on": ["R4-409", "R4-413", "R4-424", "R4-433", "R4-436", "R4-439", "R4-452", "R4-460", "R4-462"], "status": "pending", "external_gate": false, "human_approval": false,
+      "id": "R4-499", "title": "Close Round 4 production and thesis program", "workstream": "S", "priority": "critical", "classification": "CLOSURE", "depends_on": ["R4-409", "R4-413", "R4-424", "R4-433", "R4-436", "R4-439", "R4-452", "R4-460", "R4-462"], "status": "blocked", "external_gate": false, "human_approval": false, "blocked_by": ["Required production, provider, notification, research, reproduction, and thesis lanes are not terminally closed"],
       "acceptance": ["Production, external-provider, product, scientific, agent, reproduction, thesis, conditional, and deferred outcomes are reconciled", "Required CI and approved external gates are green, tracked worktree is clean, and main equals origin/main", "Closure does not convert an unexecuted conditional or optional task into a pass"],
       "evidence": ["docs/research/r4/ROUND_4_CLOSURE_REPORT.md"], "round3_lineage": ["R3-365"]
     }
   ],
-  "closure_rule": "Round 4 closes only with executable evidence for every required lane. Optional R4-437, conditional R4-440, and optional R4-453 retain explicit terminal dispositions when not activated. Preparation of this graph proves no production, provider, agent, or scientific claim."
+  "closure_rule": "Round 4 closes only with executable evidence for every required lane. Optional R4-437, conditional R4-440, and optional R4-453 retain explicit terminal dispositions (deferred_external or condition_not_met) when not activated. Preparation of this graph proves no production, provider, agent, or scientific claim."
 }

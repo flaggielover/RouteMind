@@ -16,9 +16,9 @@ The executable graph currently has no dedicated conditional terminal state. Add
 `condition_not_met` to the root status vocabulary and to the Round 4 validator.
 It is terminal only for an explicitly unactivated optional/conditional task and
 must carry an evaluation record, timestamp/checkpoint, activation condition, and
-reactivation rule. `R4-453` will use this state because its prerequisite
-read-only agent evaluation is not yet complete; no state-changing command test
-will be fabricated.
+reactivation rule. `R4-453` will use this state because no owner-approved
+command-side activation exists despite the prerequisite read-only agent
+evaluation being complete; no state-changing command test will be fabricated.
 
 Externally blocked tasks retain `blocked` or `deferred_external` when an
 external credential, target, provider, observed dataset, human approval, or

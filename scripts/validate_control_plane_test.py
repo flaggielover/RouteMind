@@ -66,6 +66,52 @@ class ScientificTaskValidationTests(unittest.TestCase):
             validate_control_plane.validate(graph),
         )
 
+    def test_local_preparation_scope_can_satisfy_an_external_dependency(self) -> None:
+        graph = {
+            "schema_version": 1,
+            "statuses": ["pending", "blocked", "passed", "condition_not_met"],
+            "tasks": [
+                {
+                    "id": "R4-405",
+                    "title": "external telemetry",
+                    "priority": "high",
+                    "status": "blocked",
+                    "depends_on": [],
+                    "acceptance": ["target evidence"],
+                    "gates": ["external"],
+                    "evidence": ["evidence/r4-405.md"],
+                    "external_gate": True,
+                    "local_preparation_status": "passed",
+                },
+                {
+                    "id": "R4-430",
+                    "title": "scheduler",
+                    "priority": "critical",
+                    "status": "passed",
+                    "depends_on": ["R4-405"],
+                    "dependency_scope": {"R4-405": "local_preparation"},
+                    "acceptance": ["bounded scheduler"],
+                    "gates": ["local"],
+                    "evidence": ["evidence/r4-430.md"],
+                },
+            ],
+        }
+        self.assertEqual(validate_control_plane.validate(graph), [])
+
+    def test_condition_not_met_requires_an_evaluation_record(self) -> None:
+        graph = valid_graph()
+        graph["statuses"].append("condition_not_met")
+        task = graph["tasks"][1]
+        task["id"] = "R4-453"
+        task["status"] = "condition_not_met"
+        task["activation_condition"] = "read-only evaluation passes"
+        self.assertTrue(
+            any(
+                "condition_not_met requires a complete" in error
+                for error in validate_control_plane.validate(graph)
+            )
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

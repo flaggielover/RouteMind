@@ -6,6 +6,26 @@ Current Branch: main
 
 Current Phase: Round 4 Final Closure - ACTIVE
 
+## Non-Claude-Science Closure Sweep (2026-09-02)
+
+The current checkpoint closes all five Codex-closable Round 4 engineering tasks:
+`R4-430`, `R4-434`, `R4-438`, `R4-451`, and `R4-452`, with executable focused
+tests and task evidence. `R4-453` is terminal `condition_not_met`, not ordinary
+open work: its compound activation condition (passing read-only safety
+thresholds plus explicit owner command approval) was evaluated as false at
+`2026-09-02T00:00:00Z`, checkpoint `fee262b7`. Its evidence and reactivation
+rule are recorded in the graph and `evidence/gates/R4-453/agent-commands.md`.
+
+External/downstream lanes retain truthful `blocked`/`deferred_external` states;
+R4-405 local preparation is explicitly scoped for R4-430/R4-451 without
+promoting target qualification. Ten Claude Science work packets are in
+`evidence/closure-sweep/2026-09-02/claude-science-work-packets.md`; external
+blockers are enumerated in `external-blockers.md`; the complete sweep record is
+`closure-sweep.md`. `R4-499` remains blocked on its actual dependency closure
+criteria. Current counts are 186/211 passed, 8 pending research, 12 blocked,
+4 deferred-external, and 1 condition-not-met. Frozen scientific artifacts are
+unchanged.
+
 ## RM-251 Visual Material System Recomposition
 
 State: **PASSED / LOCAL VISUAL CHECKPOINT** (2026-09-02)
