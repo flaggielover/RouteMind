@@ -351,16 +351,24 @@ export function AppRoutes({
 }
 
 function UnauthorizedRole({ role }: { role: Role | null }) {
+  const { locale, t } = useLocale();
+  const roleLabels: Record<string, string> = {
+    strategy: locale === "zh-CN" ? "策略" : "strategy",
+    customer: locale === "zh-CN" ? "客户" : "customer",
+    merchant: locale === "zh-CN" ? "商户" : "merchant",
+    courier: locale === "zh-CN" ? "骑手" : "courier",
+    operations: locale === "zh-CN" ? "运营" : "operations",
+  };
   return (
     <section className="access-boundary" role="alert" aria-labelledby="access-boundary-title">
       <AlertTriangle size={22} aria-hidden="true" />
       <div>
-        <p className="eyebrow">Identity boundary</p>
-        <h2 id="access-boundary-title">Workspace access unavailable</h2>
+        <p className="eyebrow">{t("access.identityBoundary")}</p>
+        <h2 id="access-boundary-title">{t("access.workspaceUnavailable")}</h2>
         <p>
           {role
-            ? `The verified session is not authorized for the ${role} workspace.`
-            : "A verified tenant session with a RouteMind role is required."}
+            ? t("access.notAuthorized", { role: roleLabels[role] ?? role })
+            : t("access.verifiedRequired")}
         </p>
       </div>
     </section>
@@ -381,6 +389,23 @@ function OperationsView({
   onReplayControl?: (command: ReplayCommand) => Promise<void>;
 }) {
   const { locale, t, formatNumber, formatDateTime } = useLocale();
+  const orderStatusZh: Record<string, string> = {
+    CREATED: "已创建",
+    CONFIRMED: "已确认",
+    PREPARING: "备餐中",
+    READY_FOR_PICKUP: "待取货",
+    ASSIGNED: "已分配",
+    ACCEPTED: "已接受分配",
+    ARRIVED: "已到达商户",
+    PICKED_UP: "已取货",
+    OUT_FOR_DELIVERY: "配送中",
+    DELIVERED: "已送达",
+  };
+  const sourceDetail =
+    locale === "zh-CN" &&
+    snapshot.sourceDetail === "Deterministic fixture for offline demonstration"
+      ? "用于离线演示的确定性固件"
+      : snapshot.sourceDetail;
   const [selectedOrderId, setSelectedOrderId] = useState(snapshot.orders[0]?.id ?? "");
   const [selectedCityId, setSelectedCityId] = useState<CityId>("shanghai");
   const [selectedTrajectoryId, setSelectedTrajectoryId] = useState<string | null>(null);
@@ -559,7 +584,7 @@ function OperationsView({
                       ? t("ops.degradedProjections")
                       : t("ops.unavailableProjections")}
                 </strong>
-                <span>{snapshot.sourceDetail}</span>
+                <span>{sourceDetail}</span>
               </div>
             )}
           </div>
@@ -711,7 +736,19 @@ function OperationsView({
                       },
                     ]
                 ).map((item) => (
-                  <StatusPill key={item.service} status={item.status} label={item.label} />
+                  <StatusPill
+                    key={item.service}
+                    status={item.status}
+                    label={
+                      locale === "zh-CN"
+                        ? item.service === "business-api"
+                          ? "业务 API"
+                          : item.service === "compute-api"
+                            ? "计算 API"
+                            : item.label
+                        : item.label
+                    }
+                  />
                 ))}
                 <span className="health-freshness">
                   {snapshot.generatedAt
@@ -871,7 +908,10 @@ function OperationsView({
                 <div className="panel-heading">
                   <div>
                     <p className="eyebrow">{t("ops.selectedOrderLabel")}</p>
-                    <h2 id="lifecycle-title">{selectedOrder?.shortId ?? "No order"} lifecycle</h2>
+                    <h2 id="lifecycle-title">
+                      {selectedOrder?.shortId ?? t("ops.noOrder")}{" "}
+                      {locale === "zh-CN" ? "生命周期" : "lifecycle"}
+                    </h2>
                     <span className="entity-freshness">
                       {snapshot.source} source ·{" "}
                       {snapshot.generatedAt
@@ -886,7 +926,11 @@ function OperationsView({
                       status={
                         statusTone(selectedOrder.status) === "success" ? "healthy" : "checking"
                       }
-                      label={orderStatusLabel[selectedOrder.status]}
+                      label={
+                        locale === "zh-CN"
+                          ? orderStatusZh[selectedOrder.status]
+                          : orderStatusLabel[selectedOrder.status]
+                      }
                     />
                   ) : (
                     <StatusPill status="checking" label={t("ops.noLiveOrders")} />
@@ -1206,7 +1250,19 @@ function OrderQueue({
   filtersActive: boolean;
   onClearFilters: () => void;
 }) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const orderStatusZh: Record<string, string> = {
+    CREATED: "已创建",
+    CONFIRMED: "已确认",
+    PREPARING: "备餐中",
+    READY_FOR_PICKUP: "待取货",
+    ASSIGNED: "已分配",
+    ACCEPTED: "已接受分配",
+    ARRIVED: "已到达商户",
+    PICKED_UP: "已取货",
+    OUT_FOR_DELIVERY: "配送中",
+    DELIVERED: "已送达",
+  };
   return (
     <section className="panel queue-panel" aria-labelledby="queue-title">
       <div className="panel-heading">
@@ -1248,7 +1304,11 @@ function OrderQueue({
               </span>
               <span className="queue-side">
                 <strong>{order.eta}</strong>
-                <small>{orderStatusLabel[order.status]}</small>
+                <small>
+                  {locale === "zh-CN"
+                    ? (orderStatusZh[order.status] ?? orderStatusLabel[order.status])
+                    : orderStatusLabel[order.status]}
+                </small>
               </span>
             </button>
           ))

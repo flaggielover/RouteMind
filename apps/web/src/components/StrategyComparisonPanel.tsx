@@ -2,21 +2,13 @@ import { BarChart3, LoaderCircle, Play, RotateCcw, TriangleAlert } from "lucide-
 import { useState } from "react";
 import type { WhatIfComparison, WhatIfMetric, WhatIfVariantInput } from "../domain/model";
 import { fallbackStrategyRegistry } from "../data/strategies";
+import { useLocale } from "../i18n";
 
 interface StrategyComparisonPanelProps {
   onRun: (variants: readonly WhatIfVariantInput[]) => Promise<WhatIfComparison>;
   onComparisonChange?: (comparison: WhatIfComparison | null) => void;
   strategies?: readonly string[];
 }
-
-const unavailableMetrics = [
-  "Completion",
-  "Overtime",
-  "Distance",
-  "Utilization",
-  "Fairness",
-  "Cost",
-];
 
 function variantFor(strategy: string): WhatIfVariantInput {
   return {
@@ -50,6 +42,13 @@ export function StrategyComparisonPanel({
   onComparisonChange,
   strategies = fallbackStrategyRegistry.map((descriptor) => descriptor.name),
 }: StrategyComparisonPanelProps) {
+  const { locale, t } = useLocale();
+  const localize = (value: string): string => {
+    if (locale !== "zh-CN") return value;
+    return value === "scenario comparison; not a causal production claim"
+      ? "场景对比；不是生产因果结论。"
+      : value;
+  };
   const [candidate, setCandidate] = useState("weighted-greedy");
   const [comparison, setComparison] = useState<WhatIfComparison | null>(null);
   const [running, setRunning] = useState(false);
@@ -64,7 +63,7 @@ export function StrategyComparisonPanel({
       onComparisonChange?.(result);
     } catch (cause) {
       setComparison(null);
-      setError(cause instanceof Error ? cause.message : "Strategy comparison unavailable");
+      setError(cause instanceof Error ? cause.message : t("role.unavailable"));
     } finally {
       setRunning(false);
     }
@@ -77,32 +76,31 @@ export function StrategyComparisonPanel({
   };
 
   const actualMetrics: readonly [string, "assignment" | "duration" | "runtime" | "risk"][] = [
-    ["Assignment rate", "assignment"],
-    ["Simulated duration", "duration"],
-    ["Observed compute runtime", "runtime"],
-    ["Scenario risk index", "risk"],
+    [t("strategy.assignmentRate"), "assignment"],
+    [t("strategy.simulatedDuration"), "duration"],
+    [t("strategy.observedRuntime"), "runtime"],
+    [t("strategy.scenarioRisk"), "risk"],
   ];
+  const unavailableMetrics =
+    locale === "zh-CN"
+      ? ["完成率", "超时", "距离", "利用率", "公平性", "成本"]
+      : ["Completion", "Overtime", "Distance", "Utilization", "Fairness", "Cost"];
 
   return (
-    <section
-      className="panel strategy-comparison-panel"
-      aria-label="Strategy comparison visualization"
-    >
+    <section className="panel strategy-comparison-panel" aria-label={t("strategy.comparisonAria")}>
       <div className="panel-heading">
         <div>
-          <p className="eyebrow">Strategy lab / evidence view</p>
-          <h2>See strategies on the same run.</h2>
-          <p className="panel-subtitle">
-            Recorded scenario comparison; no combined production score.
-          </p>
+          <p className="eyebrow">{t("strategy.evidenceEyebrow")}</p>
+          <h2>{t("strategy.sameRunTitle")}</h2>
+          <p className="panel-subtitle">{t("strategy.recordedComparisonHint")}</p>
         </div>
         <BarChart3 size={18} className="heading-icon" aria-hidden="true" />
       </div>
       <div className="strategy-comparison-controls">
         <label>
-          Candidate strategy
+          {t("strategy.candidate")}
           <select
-            aria-label="Comparison candidate strategy"
+            aria-label={t("strategy.candidate")}
             value={candidate}
             onChange={(event) => setCandidate(event.target.value)}
           >
@@ -120,23 +118,23 @@ export function StrategyComparisonPanel({
           onClick={() => void run()}
         >
           {running ? <LoaderCircle className="spin" size={15} /> : <Play size={15} />}
-          {running ? "Comparing strategies" : "Compare strategies"}
+          {running ? t("strategy.comparing") : t("strategy.compare")}
         </button>
         <button
           className="icon-button"
           type="button"
-          title="Clear strategy comparison"
-          aria-label="Clear strategy comparison"
+          title={t("strategy.clear")}
+          aria-label={t("strategy.clear")}
           onClick={clear}
         >
           <RotateCcw size={16} />
         </button>
         <span className="what-if-status" role="status" aria-live="polite">
           {running
-            ? "Running the same recorded scenario"
+            ? t("strategy.runningRecorded")
             : comparison
-              ? "Comparison ready"
-              : "No comparison run"}
+              ? t("strategy.comparisonReady")
+              : t("strategy.noComparison")}
         </span>
       </div>
       {error && (
@@ -146,11 +144,13 @@ export function StrategyComparisonPanel({
         </div>
       )}
       {comparison && (
-        <div className="strategy-comparison-results" aria-label="Strategy comparison results">
+        <div className="strategy-comparison-results" aria-label={t("strategy.comparisonResults")}>
           <div className="what-if-provenance">
-            <span>Recorded run: {comparison.recordedRunId}</span>
+            <span>
+              {t("strategy.recordedRun")}: {comparison.recordedRunId}
+            </span>
             <code>comparison {comparison.comparisonDigest.slice(0, 12)}</code>
-            <small>{comparison.claimLabel}</small>
+            <small>{localize(comparison.claimLabel)}</small>
           </div>
           <div
             className="strategy-visualization"
@@ -169,7 +169,7 @@ export function StrategyComparisonPanel({
                 >
                   <div className="strategy-metric-heading">
                     <strong>{label}</strong>
-                    <small>actual recorded metric</small>
+                    <small>{t("strategy.actualRecordedMetric")}</small>
                   </div>
                   {comparison.results.map((result) => {
                     const value = metricValue(result, key);
@@ -195,15 +195,15 @@ export function StrategyComparisonPanel({
           <div className="strategy-unavailable" aria-label="Unavailable strategy metrics">
             <div className="panel-heading compact-heading">
               <div>
-                <p className="eyebrow">Metric inventory</p>
-                <h3>Unavailable from recorded run</h3>
+                <p className="eyebrow">{t("strategy.metricInventory")}</p>
+                <h3>{t("strategy.unavailableRecorded")}</h3>
               </div>
             </div>
             <ul>
               {unavailableMetrics.map((metric) => (
                 <li key={metric}>
                   <span>{metric}</span>
-                  <small>Unavailable from recorded run</small>
+                  <small>{t("strategy.unavailableRecorded")}</small>
                 </li>
               ))}
             </ul>

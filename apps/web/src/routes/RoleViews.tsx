@@ -39,6 +39,7 @@ import { StrategyComparisonPanel } from "../components/StrategyComparisonPanel";
 import { StrategyAnalyticsPanel } from "../components/StrategyAnalyticsPanel";
 import { ResearchCenterPanel } from "../components/ResearchCenterPanel";
 import { StatusPill } from "../components/StatusPill";
+import { useLocale } from "../i18n";
 
 function RolePage({
   eyebrow,
@@ -70,7 +71,62 @@ function RolePage({
   );
 }
 
+const orderStatusLabelZh: Record<keyof typeof orderStatusLabel, string> = {
+  CREATED: "已创建",
+  CONFIRMED: "已确认",
+  PREPARING: "备餐中",
+  READY_FOR_PICKUP: "待取货",
+  ASSIGNED: "已分配",
+  ACCEPTED: "已接受分配",
+  ARRIVED: "已到达商户",
+  PICKED_UP: "已取货",
+  OUT_FOR_DELIVERY: "配送中",
+  DELIVERED: "已送达",
+  ASSIGNMENT_TIMED_OUT: "分配超时",
+  ASSIGNMENT_REJECTED: "拒绝分配",
+  REASSIGNMENT_PENDING: "等待重新分配",
+  COMPENSATING: "补偿处理中",
+  COMPENSATED: "已补偿",
+  CANCELLED: "已取消",
+};
+
+function displayOrderStatus(status: keyof typeof orderStatusLabel, locale: string): string {
+  return locale === "zh-CN" ? orderStatusLabelZh[status] : orderStatusLabel[status];
+}
+
+function displayCourierStatus(status: string, locale: string): string {
+  if (locale !== "zh-CN") return status.replace("_", " ");
+  return (
+    {
+      on_route: "路线中",
+      available: "可用",
+      offline: "离线",
+      busy: "繁忙",
+    }[status] ?? status.replace("_", " ")
+  );
+}
+
+function displayStrategyDescriptor(value: string, locale: string): string {
+  if (locale !== "zh-CN") return value;
+  return (
+    {
+      baseline: "基线",
+      engineering: "工程",
+      production: "生产候选",
+      research: "研究",
+      dispatch: "调度",
+      "batch-assignment": "批量分配",
+      "risk-scoring": "风险评分",
+      "partitioned-assignment": "分区分配",
+      "local-search": "局部搜索",
+      vrp: "车辆路径",
+      vrptw: "时间窗路径",
+    }[value] ?? value
+  );
+}
+
 export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
+  const { t, locale } = useLocale();
   const [registryOpen, setRegistryOpen] = useState(false);
   const [registry, setRegistry] = useState<readonly StrategyDescriptor[]>(fallbackStrategyRegistry);
   const [comparison, setComparison] = useState<Awaited<
@@ -96,61 +152,63 @@ export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
   ).length;
   const assignmentSignal =
     snapshot.orders.length > 0
-      ? `${assignedOrders}/${snapshot.orders.length} assigned`
-      : "Not recorded";
+      ? locale === "zh-CN"
+        ? `${assignedOrders}/${snapshot.orders.length} 已分配`
+        : `${assignedOrders}/${snapshot.orders.length} assigned`
+      : t("role.notRecorded");
   return (
     <RolePage
-      eyebrow="Strategy lab / control"
-      title="Decisions you can inspect."
-      lede="Compare registered strategies against the same operational snapshot."
+      eyebrow={t("role.strategyEyebrow")}
+      title={t("role.strategyTitle")}
+      lede={t("role.strategyLede")}
       icon={Gauge}
     >
       <section className="content-grid-two">
         <section className="panel">
           <div className="panel-heading">
             <div>
-              <p className="eyebrow">Active policy</p>
+              <p className="eyebrow">{t("role.activePolicy")}</p>
               <h2>{activeStrategy}</h2>
             </div>
             <StatusPill
               status={strategyAvailable ? "healthy" : "unavailable"}
-              label={strategyAvailable ? "Registered" : "Unavailable"}
+              label={strategyAvailable ? t("role.registered") : t("role.unavailable")}
             />
           </div>
           <div className="strategy-score">
-            <span>Recorded assignment signal</span>
+            <span>{t("role.recordedAssignmentSignal")}</span>
             <strong>{assignmentSignal}</strong>
-            <small>Quality and baseline deltas require a recorded comparison run.</small>
+            <small>{t("role.assignmentRecordedHint")}</small>
           </div>
           <dl className="detail-list">
             <div>
-              <dt>Version</dt>
+              <dt>{t("role.version")}</dt>
               <dd>{snapshot.dispatch.version}</dd>
             </div>
             <div>
-              <dt>Last decision</dt>
+              <dt>{t("role.lastDecision")}</dt>
               <dd>
                 {strategyAvailable && snapshot.dispatch.latencyMs !== null
                   ? `${snapshot.dispatch.latencyMs} ms`
-                  : "Unavailable"}
+                  : t("role.unavailable")}
               </dd>
             </div>
             <div>
-              <dt>Shadow mode</dt>
+              <dt>{t("role.shadowMode")}</dt>
               <dd>
                 {snapshot.source === "simulation"
-                  ? "Unavailable for simulation source"
-                  : "Not recorded"}
+                  ? t("role.unavailableSimulation")
+                  : t("role.notRecorded")}
               </dd>
             </div>
             <div>
-              <dt>Replay artifact</dt>
+              <dt>{t("role.replayArtifact")}</dt>
               <dd>
                 {snapshot.replay
                   ? snapshot.replay.verified
-                    ? `Verified · ${snapshot.replay.artifactId}`
-                    : `Unavailable · ${snapshot.replay.verificationError ?? "verification pending"}`
-                  : "Unavailable for this source"}
+                    ? `${t("role.verified")} · ${snapshot.replay.artifactId}`
+                    : `${t("role.unavailable")} · ${snapshot.replay.verificationError ?? t("role.verificationPending")}`
+                  : t("role.unavailableSource")}
               </dd>
             </div>
           </dl>
@@ -158,8 +216,8 @@ export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
         <section className="panel">
           <div className="panel-heading">
             <div>
-              <p className="eyebrow">Baseline comparison</p>
-              <h2>Registered strategies</h2>
+              <p className="eyebrow">{t("role.baselineComparison")}</p>
+              <h2>{t("role.registeredStrategies")}</h2>
             </div>
             <ShieldCheck size={17} className="heading-icon" />
           </div>
@@ -170,15 +228,20 @@ export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
                 <span>
                   <strong>{descriptor.name}</strong>
                   <small>
-                    v{descriptor.version} · {descriptor.maturity.toLowerCase()}
+                    v{descriptor.version} ·{" "}
+                    {displayStrategyDescriptor(descriptor.maturity.toLowerCase(), locale)}
                   </small>
                 </span>
                 <span className="muted-label">
-                  {active ? "Current policy" : descriptor.capabilities.join(" · ")}
+                  {active
+                    ? t("role.currentPolicy")
+                    : descriptor.capabilities
+                        .map((capability) => displayStrategyDescriptor(capability, locale))
+                        .join(" · ")}
                 </span>
                 <StatusPill
                   status={active && strategyAvailable ? "healthy" : "checking"}
-                  label={active && strategyAvailable ? "Registered" : "Available"}
+                  label={active && strategyAvailable ? t("role.registered") : t("role.available")}
                 />
               </div>
             );
@@ -190,7 +253,7 @@ export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
             aria-controls="strategy-registry"
             onClick={() => setRegistryOpen((open) => !open)}
           >
-            {registryOpen ? "Hide strategy registry" : "Open strategy registry"}{" "}
+            {registryOpen ? t("role.hideRegistry") : t("role.openRegistry")}{" "}
             <ArrowUpRight size={14} />
           </button>
           {registryOpen && (
@@ -198,20 +261,21 @@ export function StrategyView({ snapshot }: { snapshot: OperationsSnapshot }) {
               className="strategy-registry"
               id="strategy-registry"
               role="region"
-              aria-label="Strategy registry"
+              aria-label={t("role.strategyRegistry")}
             >
-              <p className="panel-subtitle">Registry/API descriptors for this control surface.</p>
+              <p className="panel-subtitle">{t("role.registryDescription")}</p>
               <ul>
                 {registry.map((descriptor) => (
                   <li key={descriptor.name}>
                     <strong>{descriptor.name}</strong>
                     <span>
-                      v{descriptor.version} · {descriptor.maturity} ·{" "}
+                      v{descriptor.version} ·{" "}
+                      {displayStrategyDescriptor(descriptor.maturity.toLowerCase(), locale)} ·{" "}
                       {descriptor.parameters.length
                         ? descriptor.parameters
                             .map((parameter) => `${parameter.key}=${parameter.default}`)
                             .join(", ")
-                        : "no configurable parameters"}
+                        : t("role.noConfigurableParameters")}
                     </span>
                   </li>
                 ))}
@@ -250,8 +314,14 @@ export function CustomerView({
   realtime: RealtimeConnectionState;
   session?: TenantSession | null;
 }) {
+  const { t, locale } = useLocale();
   const order = snapshot.orders[0];
   const courier = snapshot.couriers[0];
+  const sourceDetail =
+    locale === "zh-CN" &&
+    snapshot.sourceDetail === "Deterministic fixture for offline demonstration"
+      ? "用于离线演示的确定性固件"
+      : snapshot.sourceDetail;
   const [command, setCommand] = useState<CustomerCommandState>(null);
   const [idempotencyKey, setIdempotencyKey] = useState(createIdempotencyKey);
   const commandAvailable =
@@ -266,10 +336,10 @@ export function CustomerView({
         : "unavailable";
   const trackingLabel =
     realtime.status === "connected"
-      ? "Live tracking"
+      ? t("role.liveTracking")
       : realtime.status === "disabled"
-        ? "Tracking paused"
-        : "Tracking degraded";
+        ? t("role.trackingPaused")
+        : t("role.trackingDegraded");
 
   const submitOrder = async () => {
     if (!commandAvailable || !session || command?.kind === "pending") return;
@@ -281,20 +351,22 @@ export function CustomerView({
 
   return (
     <RolePage
-      eyebrow="Customer / order tracking"
-      title="Your delivery, clearly explained."
-      lede="The same lifecycle state, translated into a calm customer view."
+      eyebrow={t("role.customerEyebrow")}
+      title={t("role.customerTitle")}
+      lede={t("role.customerLede")}
       icon={UserRound}
     >
       <section className="content-grid-two">
         <section className="panel customer-order">
           {!order ? (
-            <p className="empty-state">No order is available in the selected source.</p>
+            <p className="empty-state">{t("role.noOrderSource")}</p>
           ) : (
             <>
               <div className="panel-heading">
                 <div>
-                  <p className="eyebrow">Order {order.shortId}</p>
+                  <p className="eyebrow">
+                    {t("role.orderPrefix")} {order.shortId}
+                  </p>
                   <h2>{order.merchantName}</h2>
                 </div>
                 <StatusPill
@@ -305,13 +377,13 @@ export function CustomerView({
                         ? "busy"
                         : "checking"
                   }
-                  label={orderStatusLabel[order.status]}
+                  label={displayOrderStatus(order.status, locale)}
                 />
               </div>
               <div className="customer-destination">
                 <MapPinIcon />
                 <div>
-                  <span>Delivered to</span>
+                  <span>{t("role.deliveredTo")}</span>
                   <strong>{order.destination}</strong>
                 </div>
               </div>
@@ -319,7 +391,7 @@ export function CustomerView({
               <div className="customer-tracking-meta">
                 <StatusPill status={trackingStatus} label={trackingLabel} />
                 <span>
-                  Version {order.version ?? "unknown"} · {snapshot.sourceDetail}
+                  {t("role.orderVersion")} {order.version ?? t("role.unknown")} · {sourceDetail}
                 </span>
               </div>
             </>
@@ -327,12 +399,12 @@ export function CustomerView({
         </section>
         <section className="panel">
           {!courier ? (
-            <p className="empty-state">No courier is available in the selected source.</p>
+            <p className="empty-state">{t("role.noCourierSource")}</p>
           ) : (
             <>
               <div className="panel-heading">
                 <div>
-                  <p className="eyebrow">Courier</p>
+                  <p className="eyebrow">{t("role.courier")}</p>
                   <h2>{courier.name}</h2>
                 </div>
                 <Bike size={18} className="heading-icon" />
@@ -340,26 +412,25 @@ export function CustomerView({
               <div className="courier-card">
                 <div className="avatar">{courier.name.slice(0, 2).toUpperCase()}</div>
                 <div>
-                  <strong>{order ? orderStatusLabel[order.status] : "No active order"}</strong>
+                  <strong>
+                    {order ? displayOrderStatus(order.status, locale) : t("role.noActiveOrder")}
+                  </strong>
                   <p>
-                    {courier.zone} · {courier.status.replace("_", " ")}
+                    {courier.zone} · {displayCourierStatus(courier.status, locale)}
                   </p>
                 </div>
               </div>
             </>
           )}
-          <div className="customer-command" aria-label="Create customer order">
+          <div className="customer-command" aria-label={t("role.customerCommand")}>
             <div className="panel-heading">
               <div>
-                <p className="eyebrow">Java command</p>
-                <h2>Start a new order</h2>
+                <p className="eyebrow">{t("role.javaCommand")}</p>
+                <h2>{t("role.startNewOrder")}</h2>
               </div>
               <RefreshCw size={18} className="heading-icon" />
             </div>
-            <p className="panel-copy">
-              Creates durable order state through the customer command boundary. The same
-              idempotency key is kept for a retry.
-            </p>
+            <p className="panel-copy">{t("role.createOrderDescription")}</p>
             <button
               className="button button-primary"
               type="button"
@@ -367,44 +438,46 @@ export function CustomerView({
               onClick={() => void submitOrder()}
             >
               <RefreshCw size={15} className={command?.kind === "pending" ? "spin" : undefined} />
-              {command?.kind === "pending" ? "Submitting..." : "Create order"}
+              {command?.kind === "pending" ? t("role.submitting") : t("role.createOrder")}
             </button>
             {!commandAvailable && (
               <p className="command-note" role="status">
                 {snapshot.source === "live"
                   ? !session
-                    ? "A verified customer identity is required for commands."
+                    ? t("role.identityRequired", { role: locale === "zh-CN" ? "客户" : "customer" })
                     : snapshot.availability === "degraded"
-                      ? "Live data is degraded; commands are temporarily unavailable."
-                      : "Waiting for the live Java snapshot."
-                  : "Writing is disabled for demo and replay sources."}
+                      ? t("role.liveDegradedCommands")
+                      : t("role.waitingLiveSnapshot")
+                  : t("role.writingDisabled")}
               </p>
             )}
             {command?.kind === "success" && (
               <div className="command-result" role="status">
                 <strong>
-                  {command.replayed ? "Idempotent replay acknowledged" : "Order created"}
+                  {command.replayed ? t("role.replayAcknowledged") : t("role.orderCreated")}
                 </strong>
                 <span>
                   {command.orderId} · {command.status} · version {command.version}
                 </span>
                 <small>
-                  Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+                  {t("role.trace")} {command.traceId ?? t("role.notReturned")} · {t("role.key")}{" "}
+                  {command.idempotencyKey}
                 </small>
               </div>
             )}
             {command?.kind === "error" && (
               <div className="command-result command-error" role="alert">
-                <strong>Command not accepted: {command.code}</strong>
+                <strong>{t("role.commandNotAccepted", { code: command.code })}</strong>
                 <span>
                   {command.failureState === "unavailable" || command.failureState === "timeout"
-                    ? "The same idempotency key can be retried."
+                    ? t("role.retryIdempotency")
                     : command.failureState === "conflict"
-                      ? "Refresh the order before retrying this stale command."
-                      : "Resolve the validation before retrying."}
+                      ? t("role.refreshStaleOrder")
+                      : t("role.resolveValidation")}
                 </span>
                 <small>
-                  Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+                  {t("role.trace")} {command.traceId ?? t("role.notReturned")} · {t("role.key")}{" "}
+                  {command.idempotencyKey}
                 </small>
               </div>
             )}
@@ -422,6 +495,7 @@ export function MerchantView({
   snapshot: OperationsSnapshot;
   session?: TenantSession | null;
 }) {
+  const { t, locale } = useLocale();
   const [command, setCommand] = useState<CustomerCommandState>(null);
   const order =
     snapshot.orders.find((candidate) =>
@@ -429,11 +503,11 @@ export function MerchantView({
     ) ?? snapshot.orders[0];
   const nextCommand = order
     ? order.status === "CREATED"
-      ? { target: "CONFIRMED" as const, label: "Accept order" }
+      ? { target: "CONFIRMED" as const, label: t("role.acceptOrder") }
       : order.status === "CONFIRMED"
-        ? { target: "PREPARING" as const, label: "Start preparation" }
+        ? { target: "PREPARING" as const, label: t("role.startPreparation") }
         : order.status === "PREPARING"
-          ? { target: "READY_FOR_PICKUP" as const, label: "Mark ready" }
+          ? { target: "READY_FOR_PICKUP" as const, label: t("role.markReady") }
           : null
     : null;
   const commandAvailable =
@@ -472,41 +546,41 @@ export function MerchantView({
   };
   return (
     <RolePage
-      eyebrow="Merchant / kitchen queue"
-      title="Prep with the handoff in view."
-      lede="See preparation load and courier handoffs without leaving the order context."
+      eyebrow={t("role.merchantEyebrow")}
+      title={t("role.merchantTitle")}
+      lede={t("role.merchantLede")}
       icon={Store}
     >
       <section className="content-grid-two">
         <section className="panel">
           <div className="panel-heading">
             <div>
-              <p className="eyebrow">Kitchen queue</p>
-              <h2>Today at a glance</h2>
+              <p className="eyebrow">{t("role.kitchenQueue")}</p>
+              <h2>{t("role.todayAtGlance")}</h2>
             </div>
             <StatusPill
               status={queueStatus}
               label={
                 queueStatus === "unavailable"
-                  ? "Unavailable"
+                  ? t("role.unavailable")
                   : queueStatus === "busy"
-                    ? "Busy"
-                    : "Ready"
+                    ? t("role.busy")
+                    : t("role.ready")
               }
             />
           </div>
           <div className="merchant-stats">
             <div>
               <strong>{ordersInPrep ?? "Unavailable"}</strong>
-              <span>orders in prep</span>
+              <span>{t("role.ordersInPrep")}</span>
             </div>
             <div>
-              <strong>{prepMinutes > 0 ? `${prepMinutes}m` : "Unavailable"}</strong>
-              <span>avg prep time</span>
+              <strong>{prepMinutes > 0 ? `${prepMinutes}m` : t("role.unavailable")}</strong>
+              <span>{t("role.avgPrepTime")}</span>
             </div>
             <div>
-              <strong>{handoffsNext ?? "Unavailable"}</strong>
-              <span>handoffs next</span>
+              <strong>{handoffsNext ?? t("role.unavailable")}</strong>
+              <span>{t("role.handoffsNext")}</span>
             </div>
           </div>
           {snapshot.merchants.map((merchant) => (
@@ -514,7 +588,7 @@ export function MerchantView({
               <span>
                 <strong>{merchant.name}</strong>
                 <small>
-                  {merchant.queue} orders queued · {merchant.prepMinutes}m prep
+                  {merchant.queue} {t("role.ordersQueued")} · {merchant.prepMinutes}m
                 </small>
               </span>
               <StatusPill status={merchant.status} />
@@ -524,8 +598,8 @@ export function MerchantView({
         <section className="panel">
           <div className="panel-heading">
             <div>
-              <p className="eyebrow">Next handoff</p>
-              <h2>{order?.shortId ?? "No active handoff"}</h2>
+              <p className="eyebrow">{t("role.nextHandoff")}</p>
+              <h2>{order?.shortId ?? t("role.noActiveHandoff")}</h2>
             </div>
             <PackageCheck size={18} className="heading-icon" />
           </div>
@@ -534,20 +608,22 @@ export function MerchantView({
               <Clock3 size={19} />
             </div>
             <div>
-              <strong>{order ? orderStatusLabel[order.status] : "No order available"}</strong>
+              <strong>
+                {order ? displayOrderStatus(order.status, locale) : t("role.noOrderAvailable")}
+              </strong>
               <p>
                 {order
-                  ? `${order.merchantName} · ${order.shortId} · version ${order.version ?? "unknown"}`
-                  : "Select a live order to operate"}
+                  ? `${order.merchantName} · ${order.shortId} · ${t("role.orderVersion")} ${order.version ?? t("role.unknown")}`
+                  : t("role.selectLiveOrder")}
               </p>
             </div>
           </div>
-          <div className="readiness-details" aria-label="Readiness timing">
+          <div className="readiness-details" aria-label={t("role.readinessTiming")}>
             <span>
-              Expected ready <strong>{order?.eta ?? "Unavailable"}</strong>
+              {t("role.expectedReady")} <strong>{order?.eta ?? t("role.unavailable")}</strong>
             </span>
             <span>
-              Actual ready <strong>{readyEvent?.at ?? "Not recorded"}</strong>
+              {t("role.actualReady")} <strong>{readyEvent?.at ?? t("role.noRecorded")}</strong>
             </span>
           </div>
           {nextCommand && (
@@ -561,45 +637,47 @@ export function MerchantView({
                 size={15}
                 className={command?.kind === "pending" ? "spin" : undefined}
               />
-              {command?.kind === "pending" ? "Submitting..." : nextCommand.label}
+              {command?.kind === "pending" ? t("role.submitting") : nextCommand.label}
             </button>
           )}
           {!commandAvailable && (
             <p className="command-note" role="status">
               {snapshot.source === "live"
                 ? !session
-                  ? "A verified merchant identity is required for commands."
+                  ? t("role.identityRequired", { role: locale === "zh-CN" ? "商户" : "merchant" })
                   : snapshot.availability === "degraded"
-                    ? "Live data is degraded; commands are temporarily unavailable."
-                    : "Waiting for the live Java snapshot."
-                : "Writing is disabled for demo and replay sources."}
+                    ? t("role.liveDegradedCommands")
+                    : t("role.waitingLiveSnapshot")
+                : t("role.writingDisabled")}
             </p>
           )}
           {command?.kind === "success" && (
             <div className="command-result" role="status">
               <strong>
-                {command.replayed ? "Idempotent replay acknowledged" : "Merchant command accepted"}
+                {command.replayed ? t("role.replayAcknowledged") : t("role.merchantAccepted")}
               </strong>
               <span>
                 {command.orderId} · {command.status} · version {command.version}
               </span>
               <small>
-                Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+                {t("role.trace")} {command.traceId ?? t("role.notReturned")} · {t("role.key")}{" "}
+                {command.idempotencyKey}
               </small>
             </div>
           )}
           {command?.kind === "error" && (
             <div className="command-result command-error" role="alert">
-              <strong>Command not accepted: {command.code}</strong>
+              <strong>{t("role.commandNotAccepted", { code: command.code })}</strong>
               <span>
                 {command.failureState === "unavailable" || command.failureState === "timeout"
-                  ? "The same idempotency key can be retried."
+                  ? t("role.retryIdempotency")
                   : command.failureState === "conflict"
-                    ? "Refresh the order before retrying this stale command."
-                    : "Resolve the validation before retrying."}
+                    ? t("role.refreshStaleOrder")
+                    : t("role.resolveValidation")}
               </span>
               <small>
-                Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+                {t("role.trace")} {command.traceId ?? t("role.notReturned")} · {t("role.key")}{" "}
+                {command.idempotencyKey}
               </small>
             </div>
           )}
@@ -616,6 +694,7 @@ export function CourierView({
   snapshot: OperationsSnapshot;
   session?: TenantSession | null;
 }) {
+  const { t, locale } = useLocale();
   const courier = snapshot.couriers[0];
   const [command, setCommand] = useState<CustomerCommandState>(null);
   const [shiftCommand, setShiftCommand] = useState<CourierCommandState>(null);
@@ -630,13 +709,13 @@ export function CourierView({
     ) ?? snapshot.orders.find((candidate) => candidate.status !== "DELIVERED");
   const nextCommand = order
     ? order.status === "ASSIGNED"
-      ? { target: "ACCEPTED" as const, label: "Accept task" }
+      ? { target: "ACCEPTED" as const, label: t("role.acceptTask") }
       : order.status === "ACCEPTED"
-        ? { target: "ARRIVED" as const, label: "Arrive merchant" }
+        ? { target: "ARRIVED" as const, label: t("role.arriveMerchant") }
         : order.status === "ARRIVED"
-          ? { target: "PICKED_UP" as const, label: "Confirm pickup" }
+          ? { target: "PICKED_UP" as const, label: t("role.confirmPickup") }
           : order.status === "PICKED_UP" || order.status === "OUT_FOR_DELIVERY"
-            ? { target: "DELIVERED" as const, label: "Complete delivery" }
+            ? { target: "DELIVERED" as const, label: t("role.completeDelivery") }
             : null
     : null;
   const commandAvailable =
@@ -718,25 +797,25 @@ export function CourierView({
   };
   return (
     <RolePage
-      eyebrow="Courier / active route"
-      title="A focused shift, one next action."
-      lede="A courier view keeps the next handoff and route state legible at a glance."
+      eyebrow={t("role.courierEyebrow")}
+      title={t("role.courierTitle")}
+      lede={t("role.courierLede")}
       icon={Bike}
     >
       <section className="content-grid-two">
         <section className="panel">
           {!courier ? (
-            <p className="empty-state">No courier is available in the selected source.</p>
+            <p className="empty-state">{t("role.noCourierSource")}</p>
           ) : (
             <>
               <div className="panel-heading">
                 <div>
-                  <p className="eyebrow">Shift status</p>
+                  <p className="eyebrow">{t("role.shiftStatus")}</p>
                   <h2>{courier.name}</h2>
                 </div>
                 <StatusPill
                   status={online === "ONLINE" ? "available" : "offline"}
-                  label={online === "ONLINE" ? "Online" : "Offline"}
+                  label={online === "ONLINE" ? t("role.online") : t("role.offline")}
                 />
               </div>
               <div className="shift-summary">
@@ -747,23 +826,27 @@ export function CourierView({
                   <strong>{courier.zone}</strong>
                   <p>
                     {order
-                      ? `${order.shortId} · ${orderStatusLabel[order.status]}`
-                      : "No assigned task"}
+                      ? `${order.shortId} · ${displayOrderStatus(order.status, locale)}`
+                      : t("role.noAssignedTask")}
                   </p>
                 </div>
               </div>
               <div className="courier-metrics">
                 <div>
-                  <span>Shift</span>
-                  <strong>{snapshot.source === "live" ? "Live" : "Fixture"}</strong>
+                  <span>{t("role.shift")}</span>
+                  <strong>{snapshot.source === "live" ? t("role.live") : t("role.fixture")}</strong>
                 </div>
                 <div>
-                  <span>Distance</span>
-                  <strong>{snapshot.source === "live" ? "Projection" : "Fixture"}</strong>
+                  <span>{t("role.distance")}</span>
+                  <strong>
+                    {snapshot.source === "live" ? t("role.projection") : t("role.fixture")}
+                  </strong>
                 </div>
                 <div>
-                  <span>Location</span>
-                  <strong>{snapshot.availability === "ready" ? "Fresh" : "Degraded"}</strong>
+                  <span>{t("role.location")}</span>
+                  <strong>
+                    {snapshot.availability === "ready" ? t("role.fresh") : t("role.degraded")}
+                  </strong>
                 </div>
               </div>
               <div className="courier-actions">
@@ -775,7 +858,7 @@ export function CourierView({
                   }
                   onClick={() => void submitShift("ONLINE")}
                 >
-                  <Bike size={15} /> Go online
+                  <Bike size={15} /> {t("role.goOnline")}
                 </button>
                 <button
                   className="button button-secondary"
@@ -785,7 +868,7 @@ export function CourierView({
                   }
                   onClick={() => void submitShift("OFFLINE")}
                 >
-                  <CircleDot size={15} /> Go offline
+                  <CircleDot size={15} /> {t("role.goOffline")}
                 </button>
                 <button
                   className="button button-secondary"
@@ -793,7 +876,7 @@ export function CourierView({
                   disabled={!commandAvailable || locationCommand?.kind === "pending"}
                   onClick={() => void submitLocation()}
                 >
-                  <NavigationIcon /> Send location
+                  <NavigationIcon /> {t("role.sendLocation")}
                 </button>
               </div>
             </>
@@ -802,27 +885,28 @@ export function CourierView({
             <p className="command-note" role="status">
               {snapshot.source === "live"
                 ? !session
-                  ? "A verified courier identity is required for commands."
+                  ? t("role.identityRequired", { role: locale === "zh-CN" ? "骑手" : "courier" })
                   : snapshot.availability === "degraded"
-                    ? "Live data is degraded; commands are temporarily unavailable."
-                    : "Waiting for the live Java snapshot."
-                : "Writing is disabled for demo and replay sources."}
+                    ? t("role.liveDegradedCommands")
+                    : t("role.waitingLiveSnapshot")
+                : t("role.writingDisabled")}
             </p>
           )}
           {shiftCommand?.kind === "error" && (
             <div className="command-result command-error" role="alert">
-              <strong>Shift command not accepted: {shiftCommand.code}</strong>
+              <strong>{t("role.commandNotAccepted", { code: shiftCommand.code })}</strong>
               <small>
-                Trace {shiftCommand.traceId ?? "not returned"} · key {shiftCommand.idempotencyKey}
+                {t("role.trace")} {shiftCommand.traceId ?? t("role.notReturned")} · {t("role.key")}{" "}
+                {shiftCommand.idempotencyKey}
               </small>
             </div>
           )}
           {locationCommand?.kind === "success" && (
             <div className="command-result" role="status">
-              <strong>Location recorded: {locationCommand.status}</strong>
+              <strong>{t("role.locationRecorded", { status: locationCommand.status })}</strong>
               <small>
-                Trace {locationCommand.traceId ?? "not returned"} · key{" "}
-                {locationCommand.idempotencyKey}
+                {t("role.trace")} {locationCommand.traceId ?? t("role.notReturned")} ·{" "}
+                {t("role.key")} {locationCommand.idempotencyKey}
               </small>
             </div>
           )}
@@ -830,13 +914,13 @@ export function CourierView({
         <section className="panel">
           <div className="panel-heading">
             <div>
-              <p className="eyebrow">Next stop</p>
-              <h2>{order?.shortId ?? "No active route"}</h2>
+              <p className="eyebrow">{t("role.nextStop")}</p>
+              <h2>{order?.shortId ?? t("role.noActiveRoute")}</h2>
             </div>
             <Route size={18} className="heading-icon" />
           </div>
           {!order ? (
-            <p className="empty-state">No active route is available in the selected source.</p>
+            <p className="empty-state">{t("role.noActiveRouteSource")}</p>
           ) : (
             <div className="next-stop">
               <div className="stop-icon">
@@ -845,7 +929,7 @@ export function CourierView({
               <div>
                 <strong>{order.destination}</strong>
                 <p>
-                  {order.customerName} · ETA {order.eta}
+                  {order.customerName} · {t("ops.eta")} {order.eta}
                 </p>
               </div>
             </div>
@@ -861,27 +945,29 @@ export function CourierView({
                 size={15}
                 className={command?.kind === "pending" ? "spin" : undefined}
               />
-              {command?.kind === "pending" ? "Submitting..." : nextCommand.label}
+              {command?.kind === "pending" ? t("role.submitting") : nextCommand.label}
             </button>
           )}
           {command?.kind === "success" && (
             <div className="command-result" role="status">
               <strong>
-                {command.replayed ? "Idempotent replay acknowledged" : "Courier command accepted"}
+                {command.replayed ? t("role.replayAcknowledged") : t("role.courierAccepted")}
               </strong>
               <span>
                 {command.orderId} · {command.status} · version {command.version}
               </span>
               <small>
-                Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+                {t("role.trace")} {command.traceId ?? t("role.notReturned")} · {t("role.key")}{" "}
+                {command.idempotencyKey}
               </small>
             </div>
           )}
           {command?.kind === "error" && (
             <div className="command-result command-error" role="alert">
-              <strong>Command not accepted: {command.code}</strong>
+              <strong>{t("role.commandNotAccepted", { code: command.code })}</strong>
               <small>
-                Trace {command.traceId ?? "not returned"} · key {command.idempotencyKey}
+                {t("role.trace")} {command.traceId ?? t("role.notReturned")} · {t("role.key")}{" "}
+                {command.idempotencyKey}
               </small>
             </div>
           )}

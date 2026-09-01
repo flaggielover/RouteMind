@@ -10,6 +10,7 @@ import {
 } from "../data/preferences";
 import type { DataAvailability, DataSourceMode, Role } from "../domain/model";
 import { actorForRole, type TenantSession } from "../data/session";
+import { useLocale } from "../i18n";
 
 interface PreferencesPanelProps {
   role: Role;
@@ -18,14 +19,8 @@ interface PreferencesPanelProps {
   session: TenantSession | null;
 }
 
-const labels: Record<PreferenceNamespace, string> = {
-  accessibility: "Accessibility",
-  locale: "Locale",
-  notifications: "Notifications",
-  quiet_hours: "Quiet hours",
-};
-
 export function PreferencesPanel({ role, source, availability, session }: PreferencesPanelProps) {
+  const { locale, t } = useLocale();
   const [open, setOpen] = useState(false);
   const [namespace, setNamespace] = useState<PreferenceNamespace>("accessibility");
   const [state, setState] = useState<PreferenceState>(() =>
@@ -39,7 +34,7 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
     setState((current) => ({
       ...current,
       status: "loading",
-      detail: "Loading durable preferences",
+      detail: t("role.preferencesLoading"),
     }));
     if (source !== "live") {
       setState(createPreferenceState(target, "other"));
@@ -49,7 +44,7 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
       setState({
         ...createPreferenceState(target),
         status: "unavailable",
-        detail: "Verified identity is required for durable preferences",
+        detail: t("role.preferencesIdentityRequired"),
       });
       return;
     }
@@ -63,7 +58,7 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
     const markStale = () =>
       setState((current) =>
         current.status === "ready"
-          ? { ...current, status: "stale", detail: "Preferences may have changed elsewhere" }
+          ? { ...current, status: "stale", detail: t("role.preferencesChangedElsewhere") }
           : current,
       );
     window.addEventListener("focus", markStale);
@@ -75,7 +70,7 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
       ...current,
       draft: { ...current.draft, [field]: value },
       status: current.status === "stale" ? "stale" : "ready",
-      detail: "Unsaved changes",
+      detail: t("role.preferencesUnsaved"),
     }));
   const canSave =
     !readOnly &&
@@ -89,7 +84,11 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
   );
   const save = async () => {
     if (!canSave) return;
-    setState((current) => ({ ...current, status: "loading", detail: "Saving durable preference" }));
+    setState((current) => ({
+      ...current,
+      status: "loading",
+      detail: t("role.preferencesLoading"),
+    }));
     if (!session) return;
     setState(
       (await savePreference({ ...state, status: "ready" }, session, role, idempotencyKey)).state,
@@ -102,8 +101,8 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
       <button
         className="icon-button"
         type="button"
-        title="Open durable preferences"
-        aria-label="Open durable preferences"
+        title={t("role.openPreferences")}
+        aria-label={t("role.openPreferences")}
         onClick={() => setOpen(true)}
       >
         <Settings2 size={17} />
@@ -124,23 +123,27 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
           >
             <div className="panel-heading">
               <div>
-                <p className="eyebrow">{actor} workspace</p>
-                <h2 id="preferences-title">Durable preferences</h2>
+                <p className="eyebrow">
+                  {locale === "zh-CN" ? "RouteMind 工作区" : `${actor} workspace`}
+                </p>
+                <h2 id="preferences-title">
+                  {locale === "zh-CN" ? "持久化偏好" : "Durable preferences"}
+                </h2>
               </div>
               <button
                 className="icon-button"
                 type="button"
-                title="Close preferences"
-                aria-label="Close preferences"
+                title={t("role.closePreferences")}
+                aria-label={t("role.closePreferences")}
                 onClick={() => setOpen(false)}
               >
                 <X size={17} />
               </button>
             </div>
             <label className="preference-field">
-              <span>Preference area</span>
+              <span>{t("role.preferenceArea")}</span>
               <select
-                aria-label="Preference area"
+                aria-label={t("role.preferenceArea")}
                 value={namespace}
                 onChange={(event) => {
                   const next = event.target.value as PreferenceNamespace;
@@ -150,7 +153,13 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
               >
                 {preferenceNamespaces.map((item) => (
                   <option value={item} key={item}>
-                    {labels[item]}
+                    {item === "accessibility"
+                      ? t("role.preferenceAccessibility")
+                      : item === "locale"
+                        ? t("role.preferenceLocale")
+                        : item === "notifications"
+                          ? t("role.preferenceNotifications")
+                          : t("role.preferenceQuietHours")}
                   </option>
                 ))}
               </select>
@@ -161,30 +170,30 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
             >
               <strong>
                 {state.status === "ready"
-                  ? "Current"
+                  ? t("role.statusCurrent")
                   : state.status === "stale"
-                    ? "Stale"
+                    ? t("role.statusStale")
                     : state.status === "conflict"
-                      ? "Conflict"
+                      ? t("role.statusConflict")
                       : state.status === "rollback"
-                        ? "Rolled back"
+                        ? t("role.statusRolledBack")
                         : state.status === "loading"
-                          ? "Loading"
-                          : "Unavailable"}
+                          ? t("role.statusLoading")
+                          : t("role.unavailable")}
               </strong>
               <span>{state.detail}</span>
             </div>
             {namespace === "locale" && (
               <>
                 <label className="preference-field">
-                  <span>Locale</span>
+                  <span>{t("role.locale")}</span>
                   <input
                     value={String(state.draft.locale ?? "")}
                     onChange={(event) => update("locale", event.target.value)}
                   />
                 </label>
                 <label className="preference-field">
-                  <span>Time zone</span>
+                  <span>{t("role.timeZone")}</span>
                   <input
                     value={String(state.draft.timeZone ?? "")}
                     onChange={(event) => update("timeZone", event.target.value)}
@@ -200,10 +209,10 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
                     checked={Boolean(state.draft.enabled)}
                     onChange={(event) => update("enabled", event.target.checked)}
                   />
-                  <span>Enable quiet hours</span>
+                  <span>{t("role.enableQuietHours")}</span>
                 </label>
                 <label className="preference-field">
-                  <span>Start local</span>
+                  <span>{t("role.startLocal")}</span>
                   <input
                     type="time"
                     value={String(state.draft.startLocal ?? "22:00")}
@@ -211,7 +220,7 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
                   />
                 </label>
                 <label className="preference-field">
-                  <span>End local</span>
+                  <span>{t("role.endLocal")}</span>
                   <input
                     type="time"
                     value={String(state.draft.endLocal ?? "07:00")}
@@ -237,7 +246,7 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
             {namespace === "accessibility" && (
               <>
                 <label className="preference-field">
-                  <span>Theme</span>
+                  <span>{t("role.theme")}</span>
                   <select
                     value={String(state.draft.theme ?? "system")}
                     onChange={(event) => update("theme", event.target.value)}
@@ -253,7 +262,7 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
                     checked={Boolean(state.draft.visibleFocus)}
                     onChange={(event) => update("visibleFocus", event.target.checked)}
                   />
-                  <span>Visible focus</span>
+                  <span>{t("role.visibleFocus")}</span>
                 </label>
                 <label className="preference-checkbox">
                   <input
@@ -261,7 +270,7 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
                     checked={Boolean(state.draft.colorOnlyStatus)}
                     onChange={(event) => update("colorOnlyStatus", event.target.checked)}
                   />
-                  <span>Allow color-only status</span>
+                  <span>{t("role.allowColorOnlyStatus")}</span>
                 </label>
               </>
             )}
@@ -276,7 +285,7 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
                 onClick={() => void refresh()}
                 disabled={state.status === "loading"}
               >
-                <RotateCcw size={15} /> Refresh
+                <RotateCcw size={15} /> {t("role.refresh")}
               </button>
               <button
                 className="button button-primary"
@@ -284,14 +293,10 @@ export function PreferencesPanel({ role, source, availability, session }: Prefer
                 onClick={() => void save()}
                 disabled={!canSave}
               >
-                <Check size={15} /> Save
+                <Check size={15} /> {t("role.save")}
               </button>
             </div>
-            {readOnly && (
-              <p className="command-note">
-                Writing is disabled for demo, replay, or degraded sources.
-              </p>
-            )}
+            {readOnly && <p className="command-note">{t("role.preferenceWriteDisabled")}</p>}
           </section>
         </div>
       )}
